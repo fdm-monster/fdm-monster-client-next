@@ -1,14 +1,11 @@
-import Vue from "vue";
-import { PrinterDto } from "@/models/printers/printer.model";
-import {
-  convertMultiPrinterFileToQueue,
-  convertPrinterMultiFileToQueue,
-} from "@/utils/uploads-state.utils";
-import { usePrinterStore } from "@/store/printer.store";
-import { useUploadsStore } from "@/store/uploads.store";
-import { useSnackbar } from "@/shared/snackbar.composable";
+import {PrinterDto} from "@/models/printers/printer.model";
+import {convertMultiPrinterFileToQueue, convertPrinterMultiFileToQueue,} from "@/utils/uploads-state.utils";
+import {usePrinterStore} from "@/store/printer.store";
+import {useUploadsStore} from "@/store/uploads.store";
+import {useSnackbar} from "@/shared/snackbar.composable";
+import {App} from "@vue/composition-api";
 
-const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[], context?: Vue) => {
+const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
   const printersStore = usePrinterStore();
   const uploadsStore = useUploadsStore();
   const snackbar = useSnackbar();
@@ -74,8 +71,8 @@ const defaultBorder = "1px solid #2b2a27";
 const defaultTransition = "background-color 0.5s ease";
 const hoverBorder = "1px solid red";
 
-export function registerFileDropDirective() {
-  Vue.directive("drop-upload", {
+export function registerFileDropDirective(app: App<Element>) {
+  app.directive("drop-upload", {
     // When the bound element is inserted into the DOM...
     inserted: (el, binding, vnode) => {
       el.style.border = defaultBorder;

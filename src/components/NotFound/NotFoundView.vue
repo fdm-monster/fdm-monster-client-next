@@ -3,7 +3,7 @@
     <h2 class="text-center mt-lg-12">This page was not found.</h2>
 
     <h1 class="text-center">: (</h1>
-    <br />
+    <br/>
     <h4 class="text-center">
       <v-btn class="align-center" color="primary" to="/" variant="elevated">
         <v-icon class="mr-2">home</v-icon>
@@ -19,18 +19,12 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import {useRouter} from "vue-router";
 
-export default defineComponent({
-  name: "NotFoundView",
-  setup() {},
-  computed: {},
-  created() {},
-  methods: {
-    goBack() {
-      this.$router.go(-1);
-    },
-  },
-});
+const router = useRouter();
+
+const goBack = () => {
+  router.go(-1);
+};
 </script>

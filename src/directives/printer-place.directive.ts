@@ -1,8 +1,8 @@
-import Vue from "vue";
-import { isPrinterPlaceDataTransfer, PrinterPlace } from "@/shared/drag.constants";
-import { FloorService } from "@/backend/floor.service";
-import { useFloorStore } from "@/store/floor.store";
-import { PrinterDto } from "@/models/printers/printer.model";
+import {isPrinterPlaceDataTransfer, PrinterPlace} from "@/shared/drag.constants";
+import {FloorService} from "@/backend/floor.service";
+import {useFloorStore} from "@/store/floor.store";
+import {PrinterDto} from "@/models/printers/printer.model";
+import {App} from "@vue/composition-api";
 
 interface PrinterBindingValue {
   printerSet: PrinterDto | null;
@@ -69,8 +69,8 @@ const bindDropConditionally = (el: HTMLElement, bindingValue: PrinterBindingValu
   };
 };
 
-export function registerPrinterPlaceDirective() {
-  Vue.directive("drop-printer-position", {
+export function registerPrinterPlaceDirective(app: App<Element>) {
+  app.directive("drop-printer-position", {
     inserted: (el, binding, vnode) => {
       bindDropConditionally(el, binding.value);
     },

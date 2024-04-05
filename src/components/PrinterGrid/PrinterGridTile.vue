@@ -39,8 +39,8 @@
           {{ printer?.name }}
         </small>
         <v-menu offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn class="float-right d-inline d-xl-none" icon v-bind="attrs" v-on="on">
+          <template v-slot:activator="{ props }">
+            <v-btn class="float-right d-inline d-xl-none" v-bind="props">
               <v-icon>more_vert</v-icon>
             </v-btn>
           </template>
@@ -78,7 +78,6 @@
               !printerStateStore.isPrinterOperational(printer?.id) &&
               printerStateStore.isApiResponding(printer?.id)
             "
-            icon
             @click.prevent.stop="clickConnectUsb()"
           >
             <v-icon>usb</v-icon>
@@ -89,13 +88,11 @@
             v-if="hasPrinterControlFeature && printerStateStore.isPrinterOperational(printer?.id)"
             bottom
           >
-            <template v-slot:activator="{ on, attrs }">
+            <template v-slot:activator="{ props }">
               <v-btn
                 elevation="4"
-                icon
                 size="36"
-                v-bind="attrs"
-                v-on="on"
+                v-bind="props"
                 @click.prevent.stop="clickOpenPrinterControlDialog()"
               >
                 <v-icon>open_with</v-icon>
@@ -108,13 +105,11 @@
 
           <!-- Emergency stop button -->
           <v-tooltip v-if="printerStateStore.isPrinterOperational(printer?.id)" bottom>
-            <template v-slot:activator="{ on, attrs }">
+            <template v-slot:activator="{ props }">
               <v-btn
                 elevation="4"
-                icon
                 size="36"
-                v-bind="attrs"
-                v-on="on"
+                v-bind="props"
                 @click.prevent.stop="clickEmergencyStop()"
               >
                 <v-icon>dangerous</v-icon>
@@ -130,13 +125,11 @@
             v-if="printer.enabled && printerStateStore.isPrinterNotOnline(printer.id)"
             bottom
           >
-            <template v-slot:activator="{ on, attrs }">
+            <template v-slot:activator="{ props }">
               <v-btn
                 elevation="4"
-                icon
                 size="36"
-                v-bind="attrs"
-                v-on="on"
+                v-bind="props"
                 @click.prevent.stop="clickRefreshSocket()"
               >
                 <v-icon>autorenew</v-icon>
@@ -146,7 +139,7 @@
               <span>Retry connecting to OctoPrint API</span>
             </template>
           </v-tooltip>
-          <v-btn elevation="5" icon @click.prevent.stop="clickInfo()">
+          <v-btn elevation="5" @click.prevent.stop="clickInfo()">
             <v-icon>menu_open</v-icon>
           </v-btn>
         </div>
@@ -156,7 +149,7 @@
             Click to clear
           </strong>
         </div>
-        <br />
+        <br/>
 
         <v-tooltip
           :disabled="!printer?.disabledReason"
@@ -165,11 +158,10 @@
           open-delay="0"
           top
         >
-          <template v-slot:activator="{ on, attrs }">
+          <template v-slot:activator="{ props }">
             <small
               class="xsmall-resized-font text--secondary d-lg-inline d-none"
-              v-bind="attrs"
-              v-on="on"
+              v-bind="props"
             >
               <span v-if="printer?.disabledReason">
                 <small> MAINTENANCE</small>
@@ -180,7 +172,7 @@
               </span>
             </small>
           </template>
-          Maintenance reason: <br />
+          Maintenance reason: <br/>
           {{ printer.disabledReason }}
         </v-tooltip>
         <small v-if="largeTilesEnabled && currentPrintingFilePath">
@@ -200,178 +192,153 @@
         height="13"
       >
         <span class="xsmall-resized-font">{{
-          largeTilesEnabled
-            ? currentJob?.progress?.completion
-              ? currentJob?.progress?.completion?.toFixed(1) + "%"
-              : "-"
-            : currentPrintingFilePath
-        }}</span>
+            largeTilesEnabled
+              ? currentJob?.progress?.completion
+                ? currentJob?.progress?.completion?.toFixed(1) + "%"
+                : "-"
+              : currentPrintingFilePath
+          }}</span>
       </v-progress-linear>
     </v-card>
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
-import { CustomGcodeService } from "@/backend/custom-gcode.service";
-import { PrintersService } from "@/backend";
-import { usePrinterStore } from "@/store/printer.store";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { useGridStore } from "@/store/grid.store";
-import { FloorService } from "@/backend/floor.service";
-import { useSettingsStore } from "@/store/settings.store";
-import { useFloorStore } from "@/store/floor.store";
-import { interpretStates } from "@/shared/printer-state.constants";
-import { usePrinterStateStore } from "@/store/printer-state.store";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { useDialog } from "@/shared/dialog.composable";
-import { useFeatureStore } from "@/store/features.store";
+<script lang="ts" setup>
+import {computed, PropType} from "vue";
+import {CustomGcodeService} from "@/backend/custom-gcode.service";
+import {PrintersService} from "@/backend";
+import {usePrinterStore} from "@/store/printer.store";
+import {DialogName} from "@/components/Generic/Dialogs/dialog.constants";
+import {useGridStore} from "@/store/grid.store";
+import {FloorService} from "@/backend/floor.service";
+import {useSettingsStore} from "@/store/settings.store";
+import {useFloorStore} from "@/store/floor.store";
+import {interpretStates} from "@/shared/printer-state.constants";
+import {usePrinterStateStore} from "@/store/printer-state.store";
+import {PrinterDto} from "@/models/printers/printer.model";
+import {useSnackbar} from "@/shared/snackbar.composable";
+import {useDialog} from "@/shared/dialog.composable";
+import {useFeatureStore} from "@/store/features.store";
 
 const defaultColor = "rgba(100,100,100,0.1)";
 
-export default defineComponent({
-  name: "PrinterGridTile",
-  props: {
-    printer: { type: Object as PropType<PrinterDto | undefined>, required: true },
-    x: { type: Number, required: true },
-    y: { type: Number, required: true },
-  },
-  setup(props) {
-    const printerStore = usePrinterStore();
-    const printerStateStore = usePrinterStateStore();
-    const floorStore = useFloorStore();
-    const featureStore = useFeatureStore();
-    const settingsStore = useSettingsStore();
-    const gridStore = useGridStore();
-    const controlDialog = useDialog(DialogName.PrinterControlDialog);
-    const addOrUpdateDialog = useDialog(DialogName.AddOrUpdatePrinterDialog);
-    const snackbar = useSnackbar();
-
-    const printerId = computed(() => props.printer?.id);
-
-    const selected = computed(() => {
-      if (!printerId.value) return false;
-      return printerStore.isSelectedPrinter(printerId.value);
-    });
-
-    const unselected = computed(() => {
-      return printerStore.selectedPrinters?.length && !selected.value;
-    });
-
-    const hasPrinterControlFeature = computed(() => {
-      return featureStore.hasFeature("printerControlApi");
-    });
-
-    const largeTilesEnabled = computed(() => {
-      return settingsStore.largeTiles;
-    });
-
-    const printerState = computed(() => {
-      if (!printerId.value) return;
-      const printer = printerStore.printer(printerId.value);
-      if (!printer) return;
-
-      const printerEvents = printerStateStore.printerEventsById[printerId.value];
-      const socketState = printerStateStore.socketStatesById[printerId.value];
-      return interpretStates(printer, socketState, printerEvents);
-    });
-
-    const printerStateColor = computed(() => {
-      const states = printerState.value;
-      if (!states) {
-        return defaultColor;
-      }
-      return states.rgb || defaultColor;
-    });
-
-    const currentJob = computed(() => {
-      if (!printerId.value) return;
-      return printerStateStore.printerJobsById[printerId.value];
-    });
-
-    const currentPrintingFilePath = computed(() => {
-      if (!printerId.value) return;
-      return printerStateStore.printingFilePathsByPrinterId[printerId.value];
-    });
-
-    const clickInfo = () => {
-      printerStore.setSideNavPrinter(props.printer);
-    };
-
-    const clickRefreshSocket = async () => {
-      if (!printerId.value) return;
-      await PrintersService.refreshSocket(printerId.value);
-      snackbar.openInfoMessage({
-        title: "Refreshing OctoPrint connection state",
-      });
-    };
-
-    const clickOpenPrinterURL = () => {
-      if (!props.printer) return;
-      PrintersService.openPrinterURL(props.printer.printerURL);
-    };
-
-    const clickOpenSettings = () => {
-      printerStore.setUpdateDialogPrinter(props.printer);
-      addOrUpdateDialog.openDialog();
-    };
-
-    const clickOpenPrinterControlDialog = async () => {
-      if (!printerId.value) {
-        throw new Error("PrinterId not set, cant open dialog");
-      }
-
-      await controlDialog.openDialog({ printerId });
-    };
-
-    const clickEmergencyStop = async () => {
-      if (!printerId.value) return;
-      if (
-        confirm("Are you sure to abort the print in Emergency Stop mode? Please reconnect after.")
-      ) {
-        await CustomGcodeService.postEmergencyM112Command(printerId.value);
-      }
-    };
-
-    const clickConnectUsb = async () => {
-      if (!printerId.value) return;
-      await PrintersService.sendPrinterConnectCommand(printerId.value);
-    };
-
-    const selectOrUnplacePrinter = async () => {
-      if (!props.printer || !printerId.value) return;
-      if (gridStore.gridEditMode) {
-        const floorId = floorStore.selectedFloor?.id;
-        if (!floorId) throw new Error("Cant clear printer, floor not selected");
-        await FloorService.deletePrinterFromFloor(floorId, printerId.value);
-        return;
-      }
-      printerStore.toggleSelectedPrinter(props.printer);
-    };
-
-    return {
-      selected,
-      unselected,
-      largeTilesEnabled,
-      printerState,
-      printerStateColor,
-      currentJob,
-      currentPrintingFilePath,
-      gridStore,
-      printerStateStore,
-      hasPrinterControlFeature,
-      clickInfo,
-      clickRefreshSocket,
-      clickOpenPrinterControlDialog,
-      clickOpenPrinterURL,
-      clickOpenSettings,
-      clickEmergencyStop,
-      clickConnectUsb,
-      selectOrUnplacePrinter,
-    };
-  },
+const props = defineProps({
+  printer: {type: Object as PropType<PrinterDto | undefined>, required: false},
+  x: {type: Number, required: true},
+  y: {type: Number, required: true},
 });
+
+const printerStore = usePrinterStore();
+const printerStateStore = usePrinterStateStore();
+const floorStore = useFloorStore();
+const featureStore = useFeatureStore();
+const settingsStore = useSettingsStore();
+const gridStore = useGridStore();
+const controlDialog = useDialog(DialogName.PrinterControlDialog);
+const addOrUpdateDialog = useDialog(DialogName.AddOrUpdatePrinterDialog);
+const snackbar = useSnackbar();
+
+const printerId = computed(() => props.printer?.id);
+
+const selected = computed(() => {
+  if (!printerId.value) return false;
+  return printerStore.isSelectedPrinter(printerId.value);
+});
+
+const unselected = computed(() => {
+  return printerStore.selectedPrinters?.length && !selected.value;
+});
+
+const hasPrinterControlFeature = computed(() => {
+  return featureStore.hasFeature("printerControlApi");
+});
+
+const largeTilesEnabled = computed(() => {
+  return settingsStore.largeTiles;
+});
+
+const printerState = computed(() => {
+  if (!printerId.value) return;
+  const printer = printerStore.printer(printerId.value);
+  if (!printer) return;
+
+  const printerEvents = printerStateStore.printerEventsById[printerId.value];
+  const socketState = printerStateStore.socketStatesById[printerId.value];
+  return interpretStates(printer, socketState, printerEvents);
+});
+
+const printerStateColor = computed(() => {
+  const states = printerState.value;
+  if (!states) {
+    return defaultColor;
+  }
+  return states.rgb || defaultColor;
+});
+
+const currentJob = computed(() => {
+  if (!printerId.value) return;
+  return printerStateStore.printerJobsById[printerId.value];
+});
+
+const currentPrintingFilePath = computed(() => {
+  if (!printerId.value) return;
+  return printerStateStore.printingFilePathsByPrinterId[printerId.value];
+});
+
+const clickInfo = () => {
+  printerStore.setSideNavPrinter(props.printer);
+};
+
+const clickRefreshSocket = async () => {
+  if (!printerId.value) return;
+  await PrintersService.refreshSocket(printerId.value);
+  snackbar.openInfoMessage({
+    title: "Refreshing OctoPrint connection state",
+  });
+};
+
+const clickOpenPrinterURL = () => {
+  if (!props.printer) return;
+  PrintersService.openPrinterURL(props.printer.printerURL);
+};
+
+const clickOpenSettings = () => {
+  printerStore.setUpdateDialogPrinter(props.printer);
+  addOrUpdateDialog.openDialog();
+};
+
+const clickOpenPrinterControlDialog = async () => {
+  if (!printerId.value) {
+    throw new Error("PrinterId not set, cant open dialog");
+  }
+
+  await controlDialog.openDialog({printerId});
+};
+
+const clickEmergencyStop = async () => {
+  if (!printerId.value) return;
+  if (
+    confirm("Are you sure to abort the print in Emergency Stop mode? Please reconnect after.")
+  ) {
+    await CustomGcodeService.postEmergencyM112Command(printerId.value);
+  }
+};
+
+const clickConnectUsb = async () => {
+  if (!printerId.value) return;
+  await PrintersService.sendPrinterConnectCommand(printerId.value);
+};
+
+const selectOrUnplacePrinter = async () => {
+  if (!props.printer || !printerId.value) return;
+  if (gridStore.gridEditMode) {
+    const floorId = floorStore.selectedFloor?.id;
+    if (!floorId) throw new Error("Cant clear printer, floor not selected");
+    await FloorService.deletePrinterFromFloor(floorId, printerId.value);
+    return;
+  }
+  printerStore.toggleSelectedPrinter(props.printer);
+};
 </script>
 
 <style>
@@ -411,15 +378,5 @@ export default defineComponent({
 
 .xsmall-resized-font {
   font-size: clamp(8px, 1vw, 10px);
-}
-
-.filament-abs-border {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 14px;
-  height: 100%;
-  /*background: repeating-linear-gradient(-30deg, #222, #555 5px, #444 5px, #555 6px);*/
-  border: 2px solid rgba(255, 250, 250, 0.5);
 }
 </style>
