@@ -5,11 +5,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
-import PrintStatistics from "@/components/PrintStatistics/PrintStatistics.vue"
+import { defineComponent } from 'vue'
+import PrintStatistics from '@/components/PrintStatistics/PrintStatistics.vue'
 
 export default defineComponent({
-  name: "PrintStatisticsView",
+  name: 'PrintStatisticsView',
   components: { PrintStatistics },
 })
 </script>

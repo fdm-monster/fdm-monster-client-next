@@ -44,8 +44,8 @@ export type OctoPrintSettingsDto = {
   scripts: {
     gcode?: {
       afterPrintCancelled?: string;
-      "snippets/disable_bed"?: string;
-      "snippets/disable_hotends"?: string;
+      'snippets/disable_bed'?: string;
+      'snippets/disable_hotends'?: string;
     };
   };
   serial: {

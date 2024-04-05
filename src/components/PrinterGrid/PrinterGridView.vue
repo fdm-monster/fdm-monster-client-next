@@ -2,61 +2,83 @@
   <div>
     <HomeToolbar />
 
-    <v-banner v-if="!gridStore.gridEditMode" v-drop-upload="{ printers: selectedPrinters }">
+    <v-banner
+      v-if="!gridStore.gridEditMode"
+      v-drop-upload="{ printers: selectedPrinters }">
       <v-row style="margin-bottom: -5px">
         <v-col style="padding: 5px 0 0 15px">
           <v-chip-group class="d-inline-block">
-            <v-chip v-if="selectedPrinters.length === 0" small>No selected printers</v-chip>
+            <v-chip
+              v-if="selectedPrinters.length === 0"
+              size="small">
+              No selected printers
+            </v-chip>
             <v-chip
               v-for="selectedPrinter in selectedPrinters"
               :key="selectedPrinter.id"
-              close
+              closable
               color="primary"
-              small
+              size="small"
               @click="openPrinter(selectedPrinter)"
-              @click:close="deselectPrinter(selectedPrinter)"
-            >
+              @click:close="deselectPrinter(selectedPrinter)">
               {{ selectedPrinter.name }}
             </v-chip>
           </v-chip-group>
         </v-col>
-        <v-col align="right" style="padding: 0">
-          <v-chip-group v-if="selectedFile" class="float-end">
-            <v-chip close @click:close="deselectFile()">
+        <v-col
+          align="right"
+          style="padding: 0">
+          <v-chip-group
+            v-if="selectedFile"
+            class="float-end">
+            <v-chip
+              closable
+              @click:close="deselectFile()">
               {{ selectedFile.name }}
-              <strong class="pl-1">{{ formatBytes(selectedFile.size) }}</strong>
+              <strong class="pl-1">
+                {{ formatBytes(selectedFile.size) }}
+              </strong>
             </v-chip>
           </v-chip-group>
-          <br />
+          <br>
           <v-btn
             v-if="isBatchReprintFeatureAvailable"
             :disabled="!hasPrintersSelected"
             color="primary"
-            x-small
-            @click="batchReprintFiles()"
-          >
-            <v-icon class="pr-2" small>refresh</v-icon>
+            size="x-small"
+            @click="batchReprintFiles()">
+            <v-icon
+              class="pr-2"
+              size="small">
+              refresh
+            </v-icon>
             Batch reprint
           </v-btn>
           <v-btn
             :color="hasPrintersSelected ? 'primary' : 'secondary'"
             class="ml-2"
-            x-small
-            @click="clearSelectedPrinters()"
-          >
-            <v-icon class="pr-2" small>delete</v-icon>
+            size="x-small"
+            @click="clearSelectedPrinters()">
+            <v-icon
+              class="pr-2"
+              size="small">
+              delete
+            </v-icon>
             Clear all ({{ selectedPrinters.length }})
           </v-btn>
-          <v-btn class="ml-2" color="primary" x-small @click="$refs.fileUpload?.click()">
+          <v-btn
+            class="ml-2"
+            color="primary"
+            size="x-small"
+            @click="$refs.fileUpload?.click()">
             Select gcode file
           </v-btn>
           <v-btn
             :disabled="!selectedFile"
             class="ml-2 mr-5"
             color="green"
-            x-small
-            @click="uploadFile()"
-          >
+            size="x-small"
+            @click="uploadFile()">
             Upload gcode file
           </v-btn>
           <input
@@ -65,8 +87,7 @@
             accept=".gcode"
             style="display: none"
             type="file"
-            @change="filesSelected()"
-          />
+            @change="filesSelected()">
         </v-col>
       </v-row>
     </v-banner>
@@ -76,21 +97,21 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue"
-import PrinterGrid from "@/components/PrinterGrid/PrinterGrid.vue"
-import { PrinterDto } from "@/models/printers/printer.model"
-import { PrintersService } from "@/backend"
-import { formatBytes } from "@/utils/file-size.util"
-import { convertMultiPrinterFileToQueue } from "@/utils/uploads-state.utils"
-import HomeToolbar from "@/components/PrinterGrid/HomeToolbar.vue"
-import { usePrinterStore } from "@/store/printer.store"
-import { useUploadsStore } from "@/store/uploads.store"
-import { useFeatureStore } from "@/store/features.store"
-import { usePrinterStateStore } from "@/store/printer-state.store"
-import { useGridStore } from "@/store/grid.store"
-import { useSnackbar } from "@/shared/snackbar.composable"
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
-import { useDialog } from "@/shared/dialog.composable"
+import { computed, ref } from 'vue'
+import PrinterGrid from '@/components/PrinterGrid/PrinterGrid.vue'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { PrintersService } from '@/backend'
+import { formatBytes } from '@/utils/file-size.util'
+import { convertMultiPrinterFileToQueue } from '@/utils/uploads-state.utils'
+import HomeToolbar from '@/components/PrinterGrid/HomeToolbar.vue'
+import { usePrinterStore } from '@/store/printer.store'
+import { useUploadsStore } from '@/store/uploads.store'
+import { useFeatureStore } from '@/store/features.store'
+import { usePrinterStateStore } from '@/store/printer-state.store'
+import { useGridStore } from '@/store/grid.store'
+import { useSnackbar } from '@/shared/snackbar.composable'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { useDialog } from '@/shared/dialog.composable'
 
 const gridStore = useGridStore()
 const printersStore = usePrinterStore()
@@ -100,14 +121,14 @@ const featureStore = useFeatureStore()
 const snackbar = useSnackbar()
 
 const selectedFile = ref<File | undefined>(undefined)
-const isBatchReprintFeatureAvailable = computed(() => featureStore.hasFeature("batchReprintCalls"))
+const isBatchReprintFeatureAvailable = computed(() => featureStore.hasFeature('batchReprintCalls'))
 const hasPrintersSelected = computed(() => printersStore.selectedPrinters.length > 0)
 const selectedPrinters = computed(() => printersStore.selectedPrinters)
 const fileUpload = ref<HTMLInputElement | null>(null)
 
 const deselectFile = () => {
   if (fileUpload.value) {
-    fileUpload.value.value = ""
+    fileUpload.value.value = ''
     selectedFile.value = undefined
   }
 }
@@ -120,7 +141,7 @@ const batchReprintFiles = async () => {
   const output = await useDialog(DialogName.BatchReprintDialog).handleAsync(
     printersStore.selectedPrinters?.map((p) => p.id)
   )
-  console.log("[PrinterGridView] Dialog completed", output)
+  console.log('[PrinterGridView] Dialog completed', output)
   // await printersStore.batchReprintFiles();
 }
 
@@ -137,7 +158,7 @@ const uploadFile = () => {
   if (incompleteListCount > 0) {
     snackbar.openInfoMessage({
       title: `${incompleteListCount} printers inaccessible`,
-      subtitle: "These were skipped from uploading.",
+      subtitle: 'These were skipped from uploading.',
     })
   }
 
@@ -145,7 +166,7 @@ const uploadFile = () => {
   uploadsStore.queueUploads(uploads)
 
   if (fileUpload.value) {
-    fileUpload.value.value = ""
+    fileUpload.value.value = ''
   }
   clearSelectedPrinters()
 }

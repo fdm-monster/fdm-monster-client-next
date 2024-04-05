@@ -1,12 +1,12 @@
-import { defineStore } from "pinia"
-import { PrinterDto } from "@/models/printers/printer.model"
-import { PrinterStateDto, SocketState } from "@/models/socketio-messages/socketio-message.model"
-import { usePrinterStore } from "./printer.store"
-import { PrinterFileService } from "@/backend"
-import { useSettingsStore } from "./settings.store"
-import { CurrentOrHistoryPayload } from "@/models/printers/printer-current-job.model"
-import { IdType } from "@/utils/id.type"
-import { isPrinterIdling, isPrinterPrinting } from "@/shared/printer-state.constants"
+import { defineStore } from 'pinia'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { PrinterStateDto, SocketState } from '@/models/socketio-messages/socketio-message.model'
+import { usePrinterStore } from './printer.store'
+import { PrinterFileService } from '@/backend'
+import { useSettingsStore } from './settings.store'
+import { CurrentOrHistoryPayload } from '@/models/printers/printer-current-job.model'
+import { IdType } from '@/utils/id.type'
+import { isPrinterIdling, isPrinterPrinting } from '@/shared/printer-state.constants'
 
 interface State {
   printerIds: IdType[];
@@ -14,7 +14,7 @@ interface State {
   socketStatesById: Record<IdType, SocketState>;
 }
 
-export const usePrinterStateStore = defineStore("PrinterState", {
+export const usePrinterStateStore = defineStore('PrinterState', {
   state: (): State => ({
     printerIds: [],
     printerEventsById: {},
@@ -86,7 +86,7 @@ export const usePrinterStateStore = defineStore("PrinterState", {
       const onlinePrinters: Record<IdType, PrinterDto> = {}
       this.printerIds.forEach((id) => {
         const socketState = this.socketStatesById[id]
-        if (socketState?.api === "responding") {
+        if (socketState?.api === 'responding') {
           const printer = printerStore.printer(id)
           if (printer) {
             onlinePrinters[id] = printer
@@ -147,7 +147,7 @@ export const usePrinterStateStore = defineStore("PrinterState", {
 
       if (jobsRendered) {
         // TODO improve summary
-        console.debug("[PrinterStateStore] rendered printerJobsById", printersWithJobById)
+        console.debug('[PrinterStateStore] rendered printerJobsById', printersWithJobById)
       }
       return printersWithJobById
     },
@@ -204,7 +204,7 @@ export const usePrinterStateStore = defineStore("PrinterState", {
       if (!printer) return
 
       if (this.isPrinterPrinting(printerId)) {
-        alert("This printer is printing or not connected! Either way printing is not an option.")
+        alert('This printer is printing or not connected! Either way printing is not an option.')
         return
       }
 

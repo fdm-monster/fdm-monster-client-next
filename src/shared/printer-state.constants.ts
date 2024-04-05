@@ -1,33 +1,33 @@
-import { PrinterStateDto, SocketState } from "@/models/socketio-messages/socketio-message.model"
-import { PrinterDto } from "@/models/printers/printer.model"
-import { useSettingsStore } from "@/store/settings.store"
+import { PrinterStateDto, SocketState } from '@/models/socketio-messages/socketio-message.model'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { useSettingsStore } from '@/store/settings.store'
 
 const COLOR = {
-  danger: "danger",
-  dark: "dark",
-  secondary: "secondary",
-  success: "success",
+  danger: 'danger',
+  dark: 'dark',
+  secondary: 'secondary',
+  success: 'success',
 } as const
 
 const RGB = {
-  DarkBlue: "#050c2e",
-  Black: "#000000",
-  DarkGray: "#262626",
-  LightBrown: "#583c0e",
-  Brown: "#580e47",
-  Red: "#2e0905",
+  DarkBlue: '#050c2e',
+  Black: '#000000',
+  DarkGray: '#262626',
+  LightBrown: '#583c0e',
+  Brown: '#580e47',
+  Red: '#2e0905',
 } as const
 
 const LABEL = {
-  Disabled: "Disabled",
-  Maintenance: "Maintenance",
-  Offline: "Offline",
-  Finding: "Finding",
-  Disconnected: "Disconnected",
-  Error: "Error",
-  Paused: "Paused",
-  Operational: "Operational",
-  Printing: "Printing",
+  Disabled: 'Disabled',
+  Maintenance: 'Maintenance',
+  Offline: 'Offline',
+  Finding: 'Finding',
+  Disconnected: 'Disconnected',
+  Error: 'Error',
+  Paused: 'Paused',
+  Operational: 'Operational',
+  Printing: 'Printing',
 } as const
 
 export function interpretStates(
@@ -59,15 +59,15 @@ export function interpretStates(
   }
 
   // Basic necessity to parse API/Websocket states
-  const responding = socketState?.api === "responding"
-  const authFail = socketState?.api === "authFail"
+  const responding = socketState?.api === 'responding'
+  const authFail = socketState?.api === 'authFail'
   if (!responding || !socketState) {
-    const noResponse = socketState?.api === "noResponse"
+    const noResponse = socketState?.api === 'noResponse'
     return {
       ...state,
       color: COLOR.secondary,
       rgb: RGB.Red,
-      text: authFail ? "API key wrong" : noResponse ? "API unreachable" : socketState?.api || "-",
+      text: authFail ? 'API key wrong' : noResponse ? 'API unreachable' : socketState?.api || '-',
     }
   }
 
@@ -78,13 +78,13 @@ export function interpretStates(
       ...state,
       color: COLOR.danger,
       rgb: RGB.Red,
-      text: authFail ? "API key wrong" : "No API connection",
+      text: authFail ? 'API key wrong' : 'No API connection',
     }
   }
 
   // Second level: socket state
-  const socketAuthenticated = socketState.socket === "authenticated"
-  const socketAuthing = socketState.socket === "authenticating"
+  const socketAuthenticated = socketState.socket === 'authenticated'
+  const socketAuthing = socketState.socket === 'authenticating'
   const currentState = printerState?.current?.payload?.state
 
   // History might be way outdated
@@ -107,12 +107,12 @@ export function interpretStates(
       color: COLOR.danger,
       rgb: RGB.Red,
       // TODO this should not result in S/SA/P label, but in a more descriptive label
-      text: !printerState ? "No USB" : `S${s} SA${sa} | P${p}`,
+      text: !printerState ? 'No USB' : `S${s} SA${sa} | P${p}`,
     }
   }
 
   if (!flags) {
-    console.error("No flags", flags)
+    console.error('No flags', flags)
     return
   }
 
@@ -121,7 +121,7 @@ export function interpretStates(
       ...state,
       color: COLOR.danger,
       rgb: RGB.Red,
-      text: currentState.text?.replace("Offline", "Disconnected") || LABEL.Error,
+      text: currentState.text?.replace('Offline', 'Disconnected') || LABEL.Error,
       description: currentState.error,
     }
   } else if (flags.paused || flags.pausing) {

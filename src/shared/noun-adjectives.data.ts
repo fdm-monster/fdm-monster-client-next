@@ -1,8 +1,8 @@
-import adjectives from "../assets/adjectives.json"
-import nouns from "../assets/nouns.json"
+import adjectives from '../assets/adjectives.json'
+import nouns from '../assets/nouns.json'
 
 function capitalize(val: string) {
-  if (!val) return ""
+  if (!val) return ''
   return val.charAt(0).toUpperCase() + val.slice(1)
 }
 
@@ -14,11 +14,11 @@ export function newRandomNamePair() {
 }
 
 export function generateInitials(name: string) {
-  if (name === null) return "?"
+  if (name === null) return '?'
   const initials = name
-    ?.replace(/[^a-zA-Z ]/g, "")
-    ?.split(" ")
+    ?.replace(/[^a-zA-Z ]/g, '')
+    ?.split(' ')
     .slice(0, 3)
-    .reduce((acc, subname) => acc + subname[0], "")
-  return initials?.replace("undefined", "")
+    .reduce((acc, subname) => acc + subname[0], '')
+  return initials?.replace('undefined', '')
 }

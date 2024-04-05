@@ -2,17 +2,24 @@
   <BaseDialog
     :id="dialog.dialogId"
     :max-width="showChecksPanel ? '900px' : '700px'"
-    @escape="closeDialog()"
-  >
-    <validation-observer ref="validationObserver" v-slot="{ invalid }">
+    @escape="closeDialog()">
+    <validation-observer
+      ref="validationObserver"
+      v-slot="{ invalid }">
       <v-card class="pa-4">
         <v-card-title>
           <span class="text-h5">
-            <v-avatar color="primary" size="56">
+            <v-avatar
+              color="primary"
+              size="56">
               {{ avatarInitials }}
             </v-avatar>
-            <span v-if="isUpdating"> Updating Printer </span>
-            <span v-else> New Printer </span>
+            <span v-if="isUpdating">
+              Updating Printer
+            </span>
+            <span v-else>
+              New Printer
+            </span>
           </span>
         </v-card-title>
         <v-card-text>
@@ -20,7 +27,10 @@
             <v-col :cols="showChecksPanel ? 8 : 12">
               <v-row v-if="formData">
                 <v-col>
-                  <validation-provider v-slot="{ errors }" :rules="printerNameRules" name="Name">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    :rules="printerNameRules"
+                    name="Name">
                     <v-text-field
                       v-model="formData.name"
                       :counter="printerNameRules.max"
@@ -28,20 +38,20 @@
                       autofocus
                       class="ma-1"
                       label="Printer name*"
-                      required
-                    />
+                      required />
                   </validation-provider>
                 </v-col>
                 <v-col>
-                  <validation-provider v-slot="{ errors }" name="Enabled">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="Enabled">
                     <v-checkbox
                       v-model="formData.enabled"
                       :error-messages="errors"
                       hint="Disabling makes the printer passive"
                       label="Enabled*"
                       persistent-hint
-                      required
-                    ></v-checkbox>
+                      required />
                   </validation-provider>
                 </v-col>
               </v-row>
@@ -50,23 +60,20 @@
                 v-slot="{ errors }"
                 name="Printer URL"
                 persistent-hint
-                rules="required|url"
-              >
+                rules="required|url">
                 <v-text-field
                   v-model="formData.printerURL"
                   :error-messages="errors"
                   class="ma-1"
                   hint="F.e. 'octopi.local' or 'https://my.printer.com'"
-                  label="Printer URL*"
-                ></v-text-field>
+                  label="Printer URL*" />
               </validation-provider>
 
               <validation-provider
                 v-slot="{ errors }"
                 :rules="apiKeyRules"
                 name="ApiKey"
-                style="width: 100%"
-              >
+                style="width: 100%">
                 <v-text-field
                   v-model="formData.apiKey"
                   :counter="apiKeyRules.length"
@@ -75,34 +82,50 @@
                   hint="User or Application Key only (Global API key fails)"
                   label="API Key*"
                   persistent-hint
-                  required
-                ></v-text-field>
+                  required />
               </validation-provider>
             </v-col>
 
-            <PrinterChecksPanel v-if="showChecksPanel" :cols="4">
-              <v-btn @click="showChecksPanel = false">Hide checks</v-btn>
+            <PrinterChecksPanel
+              v-if="showChecksPanel"
+              :cols="4">
+              <v-btn @click="showChecksPanel = false">
+                Hide checks
+              </v-btn>
             </PrinterChecksPanel>
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <em class="red--text">* indicates required field</em>
-          <v-spacer></v-spacer>
-          <v-btn text @click="closeDialog()">Close</v-btn>
+          <em class="text-red">
+            * indicates required field
+          </em>
+          <v-spacer />
+          <v-btn
+            variant="text"
+            @click="closeDialog()">
+            Close
+          </v-btn>
           <v-btn
             v-if="isUpdating"
             :disabled="invalid"
             color="gray"
-            text
-            @click="duplicatePrinter()"
-          >
+            variant="text"
+            @click="duplicatePrinter()">
             Duplicate
           </v-btn>
-          <v-btn :disabled="invalid" color="warning" text @click="testPrinter()">
+          <v-btn
+            :disabled="invalid"
+            color="warning"
+            variant="text"
+            @click="testPrinter()">
             Test connection
           </v-btn>
 
-          <v-btn :disabled="invalid" color="blue darken-1" text @click="submit()">
+          <v-btn
+            :disabled="invalid"
+            color="blue-darken-1"
+            variant="text"
+            @click="submit()">
             {{ submitButtonText }}
           </v-btn>
         </v-card-actions>
@@ -112,23 +135,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from "vue"
-import { generateInitials, newRandomNamePair } from "@/shared/noun-adjectives.data"
-import { usePrinterStore } from "@/store/printer.store"
-import { PrintersService } from "@/backend"
-import PrinterChecksPanel from "@/components/Generic/Dialogs/PrinterChecksPanel.vue"
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
-import { useTestPrinterStore } from "@/store/test-printer.store"
+import { defineComponent, inject } from 'vue'
+import { generateInitials, newRandomNamePair } from '@/shared/noun-adjectives.data'
+import { usePrinterStore } from '@/store/printer.store'
+import { PrintersService } from '@/backend'
+import PrinterChecksPanel from '@/components/Generic/Dialogs/PrinterChecksPanel.vue'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { useTestPrinterStore } from '@/store/test-printer.store'
 import {
   CreatePrinter,
   getDefaultCreatePrinter,
   PreCreatePrinter,
-} from "@/models/printers/crud/create-printer.model"
-import { useDialog } from "@/shared/dialog.composable"
-import { AppConstants } from "@/shared/app.constants"
-import { useSnackbar } from "@/shared/snackbar.composable"
+} from '@/models/printers/crud/create-printer.model'
+import { useDialog } from '@/shared/dialog.composable'
+import { AppConstants } from '@/shared/app.constants'
+import { useSnackbar } from '@/shared/snackbar.composable'
 
-const watchedId = "printerId"
+const watchedId = 'printerId'
 
 interface Data {
   showChecksPanel: boolean;
@@ -137,64 +160,76 @@ interface Data {
 }
 
 export default defineComponent({
-  name: "AddOrUpdatePrinterDialog",
+  name: 'AddOrUpdatePrinterDialog',
   components: {
     PrinterChecksPanel,
   },
+
   setup: () => {
     const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
     return {
       printersStore: usePrinterStore(),
       testPrinterStore: useTestPrinterStore(),
       dialog,
-      appConstants: inject("appConstants") as AppConstants,
+      appConstants: inject('appConstants') as AppConstants,
       snackbar: useSnackbar(),
     }
   },
+
   async created() {
     if (this.printerId) {
       const crudeData = this.printersStore.printer(this.printerId) as CreatePrinter
       this.formData = PrintersService.convertPrinterToCreateForm(crudeData)
     }
   },
+
   async mounted() {},
   props: {},
   data: (): Data => ({
     showChecksPanel: false,
-    copyPasteConnectionString: "",
+    copyPasteConnectionString: '',
     formData: getDefaultCreatePrinter(),
   }),
+
   computed: {
     printerId() {
       return this.printersStore.updateDialogPrinter?.id
     },
+
     storedPrinter() {
       return this.printersStore.updateDialogPrinter
     },
+
     isUpdating() {
       return !!this.storedPrinter
     },
+
     submitButtonText() {
-      return this.isUpdating ? "Save" : "Create"
+      return this.isUpdating ? 'Save' : 'Create'
     },
+
     isPasteDisabled() {
       if (!this.isClipboardApiAvailable) {
         return !this.copyPasteConnectionString?.length
       }
       return false
     },
+
     isClipboardApiAvailable() {
       return navigator.clipboard
     },
+
     avatarInitials() {
       if (this.formData) {
         return generateInitials(this.formData?.name)
       }
-      return "?"
+      return '?'
     },
+
     printerNameRules() {
       return { required: true, max: this.appConstants.maxPrinterNameLength }
     },
+
     apiKeyRules() {
       return {
         required: true,
@@ -203,10 +238,12 @@ export default defineComponent({
       }
     },
   },
+
   methods: {
     resetForm() {
       this.formData = getDefaultCreatePrinter()
     },
+
     async quickCopyConnectionString() {
       const printer = this.storedPrinter
       if (!printer) return
@@ -226,9 +263,11 @@ export default defineComponent({
       }
       await navigator.clipboard.writeText(connectionString)
     },
+
     openTestPanel() {
       this.showChecksPanel = true
     },
+
     async testPrinter() {
       if (!(await this.isValid())) return
       if (!this.formData) return
@@ -241,6 +280,7 @@ export default defineComponent({
       )
       this.testPrinterStore.currentCorrelationToken = correlationToken
     },
+
     async pasteFromClipboardOrField() {
       if (!this.formData) return
 
@@ -255,15 +295,18 @@ export default defineComponent({
 
       PrintersService.applyLoginDetailsPatchForm(printerObject, this.formData)
     },
+
     async isValid() {
       return await this.validationObserver.validate()
     },
+
     async createPrinter(newPrinterData: CreatePrinter) {
       await this.printersStore.createPrinter(newPrinterData)
       this.snackbar.openInfoMessage({
         title: `Printer ${newPrinterData.name} created`,
       })
     },
+
     async updatePrinter(updatedPrinter: CreatePrinter) {
       const printerId = updatedPrinter.id
 
@@ -276,6 +319,7 @@ export default defineComponent({
         title: `Printer ${updatedPrinter.name} updated`,
       })
     },
+
     async submit() {
       if (!(await this.isValid())) return
       if (!this.formData) return
@@ -287,19 +331,22 @@ export default defineComponent({
       }
       this.closeDialog()
     },
+
     async duplicatePrinter() {
       this.formData.name = newRandomNamePair()
       this.printersStore.updateDialogPrinter = undefined
     },
+
     closeDialog() {
       this.dialog.closeDialog()
       this.showChecksPanel = false
       this.testPrinterStore.clearEvents()
       this.resetForm()
       this.printersStore.updateDialogPrinter = undefined
-      this.copyPasteConnectionString = ""
+      this.copyPasteConnectionString = ''
     },
   },
+
   watch: {
     [watchedId](val?: string) {
       if (!val) return

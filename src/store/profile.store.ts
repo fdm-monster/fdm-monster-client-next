@@ -1,5 +1,5 @@
-import { defineStore } from "pinia"
-import { UserService } from "@/backend/user.service"
+import { defineStore } from 'pinia'
+import { UserService } from '@/backend/user.service'
 
 interface State {
   username: string | null;
@@ -7,7 +7,7 @@ interface State {
   userId: string | null;
 }
 
-export const useProfileStore = defineStore("profile", {
+export const useProfileStore = defineStore('profile', {
   state: (): State => ({
     username: null,
     isDemoUser: null,

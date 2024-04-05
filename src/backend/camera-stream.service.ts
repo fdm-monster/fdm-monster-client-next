@@ -1,13 +1,13 @@
-import { BaseService } from "./base.service"
-import { CameraStream, CreateCameraStreamDto } from "@/models/camera-streams/camera-stream"
+import { BaseService } from './base.service'
+import { CameraStream, CreateCameraStreamDto } from '@/models/camera-streams/camera-stream'
 
 export class CameraStreamService extends BaseService {
   static async listCameraStreams() {
-    return await this.getApi<CameraStream[]>("api/camera-stream/")
+    return await this.getApi<CameraStream[]>('api/camera-stream/')
   }
 
   static async createCameraStream(cameraStreamDto: CreateCameraStreamDto) {
-    return await this.postApi<CameraStream>("api/camera-stream/", cameraStreamDto)
+    return await this.postApi<CameraStream>('api/camera-stream/', cameraStreamDto)
   }
 
   static async getCameraStream(cameraStreamId: string | number) {

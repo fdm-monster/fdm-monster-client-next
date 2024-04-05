@@ -20,16 +20,16 @@ export class FeaturesModel {
 
 export type TFeatureFlags = keyof FeaturesModel
 export const featureFlagsList: TFeatureFlags[] = [
-  "batchReprintCalls",
-  "batchConnectUsbCalls",
-  "batchConnectSocketCalls",
-  "newSockets",
-  "anonymousDiagnosticsToggle",
-  "pauseResumePrinterCommand",
-  "logDumpZip",
-  "clearLogFiles",
-  "batchTogglePrinterEnabled",
-  "cameraStream",
-  "printerGroupsApi",
-  "printerControlApi",
+  'batchReprintCalls',
+  'batchConnectUsbCalls',
+  'batchConnectSocketCalls',
+  'newSockets',
+  'anonymousDiagnosticsToggle',
+  'pauseResumePrinterCommand',
+  'logDumpZip',
+  'clearLogFiles',
+  'batchTogglePrinterEnabled',
+  'cameraStream',
+  'printerGroupsApi',
+  'printerControlApi',
 ]

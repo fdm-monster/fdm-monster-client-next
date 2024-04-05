@@ -10,7 +10,7 @@ import pinia from '../store'
 
 // Types
 import type {App} from 'vue'
-import {VueQueryPlugin} from "@tanstack/vue-query"
+import {VueQueryPlugin} from '@tanstack/vue-query'
 
 export function registerPlugins(app: App) {
   app

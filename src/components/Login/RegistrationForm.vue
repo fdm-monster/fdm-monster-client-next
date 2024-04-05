@@ -1,37 +1,49 @@
 <template>
-  <v-container fill-height fluid>
-    <v-layout align-content-center justify-center>
+  <v-container
+    fill-height
+    fluid>
+    <v-layout
+      align-content-center
+      justify-center>
       <v-flex
         class="d-flex flex-column align-content-center"
         md4
         sm8
         style="max-width: 450px; margin-top: 10%"
-        xs12
-      >
+        xs12>
         <div class="d-flex flex-column align-center">
           <v-img
             :src="require('@/assets/logo.png')"
             class="shrink mr-1 pt-3 ml-1"
             contain
             style="opacity: 0.85"
-            width="150"
-          ></v-img>
+            width="150" />
 
-          <v-toolbar-title class="text-uppercase red--text">
-            <strong>FDM&nbsp;</strong>
-            <strong>Monster</strong>
+          <v-toolbar-title class="text-uppercase text-red">
+            <strong>
+              FDM&nbsp;
+            </strong>
+            <strong>
+              Monster
+            </strong>
           </v-toolbar-title>
 
-          <v-toolbar-title class="mt-lg-6 mt-sm-5"> Register new account</v-toolbar-title>
-          <v-card-subtitle class="grey--text">
+          <v-toolbar-title class="mt-lg-6 mt-sm-5">
+            Register new account
+          </v-toolbar-title>
+          <v-card-subtitle class="text-grey">
             Welcome! Please register your guest account
           </v-card-subtitle>
         </div>
 
-        <v-card class="elevation-4 pa-4" style="border-radius: 10px">
+        <v-card
+          class="elevation-4 pa-4"
+          style="border-radius: 10px">
           <v-card-text>
             <v-form>
-              <label> Username </label>
+              <label>
+                Username
+              </label>
               <v-text-field
                 v-model="username"
                 :rules="[
@@ -47,8 +59,7 @@
                 name="login"
                 label="Username"
                 prepend-icon="person"
-                type="text"
-              ></v-text-field>
+                type="text" />
               <v-text-field
                 id="password"
                 v-model="password"
@@ -62,8 +73,7 @@
                 ]"
                 password
                 prepend-icon="lock"
-                @click:append="showPassword = !showPassword"
-              ></v-text-field>
+                @click:append="showPassword = !showPassword" />
               <v-text-field
                 id="password"
                 v-model="password2"
@@ -78,9 +88,13 @@
                 password
                 prepend-icon="lock"
                 @click:append="showPassword2 = !showPassword2"
-                @keyup.enter="formIsDisabled || registerAccount()"
-              ></v-text-field>
-              <v-alert v-if="errorMessage" class="mt-6" color="error" dense outlined>
+                @keyup.enter="formIsDisabled || registerAccount()" />
+              <v-alert
+                v-if="errorMessage"
+                class="mt-6"
+                color="error"
+                density="compact"
+                variant="outlined">
                 {{ errorMessage }}
               </v-alert>
             </v-form>
@@ -90,15 +104,18 @@
               :loading="loading"
               class="pa-4"
               color="primary"
-              large
+              size="large"
               style="width: 100%"
-              @click="registerAccount()"
-            >
+              @click="registerAccount()">
               Register account
             </v-btn>
           </v-card-actions>
           <v-card-actions>
-            <v-btn style="width: 100%" class="pa-4" large @click="gotoLogin()">
+            <v-btn
+              style="width: 100%"
+              class="pa-4"
+              size="large"
+              @click="gotoLogin()">
               <v-icon class="mr-2">arrow_left</v-icon>Back to Login
             </v-btn>
           </v-card-actions>
@@ -108,22 +125,22 @@
   </v-container>
 </template>
 <script lang="ts" setup>
-import { AxiosError } from "axios"
-import { computed, onMounted, ref } from "vue"
-import { useAuthStore } from "@/store/auth.store"
-import { useRouter } from "vue-router"
-import { useSnackbar } from "@/shared/snackbar.composable"
-import { AuthService } from "@/backend/auth.service"
-import { RouteNames } from "@/router/route-names"
+import { AxiosError } from 'axios'
+import { computed, onMounted, ref } from 'vue'
+import { useAuthStore } from '@/store/auth.store'
+import { useRouter } from 'vue-router'
+import { useSnackbar } from '@/shared/snackbar.composable'
+import { AuthService } from '@/backend/auth.service'
+import { RouteNames } from '@/router/route-names'
 
 const authStore = useAuthStore()
 const router = useRouter()
-const errorMessage = ref("")
-const username = ref("")
+const errorMessage = ref('')
+const username = ref('')
 const showPassword = ref(false)
 const showPassword2 = ref(false)
-const password = ref("")
-const password2 = ref("")
+const password = ref('')
+const password2 = ref('')
 const loading = ref(false)
 const snackbar = useSnackbar()
 
@@ -133,8 +150,8 @@ async function gotoLogin() {
 
 const formIsDisabled = computed(() => {
   return (
-    (username.value ?? "")?.length < 3 ||
-    (password.value ?? "").length < 3 ||
+    (username.value ?? '')?.length < 3 ||
+    (password.value ?? '').length < 3 ||
     password.value != password2.value
   )
 })
@@ -143,7 +160,7 @@ onMounted(async () => {
   await authStore.logout()
   await authStore.checkAuthenticationRequirements()
   if (!authStore.registration) {
-    snackbar.info("Registration is disabled, please contact your administrator")
+    snackbar.info('Registration is disabled, please contact your administrator')
     await router.push({
       name: RouteNames.Login,
     })
@@ -158,20 +175,20 @@ async function registerAccount() {
   } catch (e) {
     loading.value = false
     if ((e as AxiosError)?.response?.status === 401) {
-      errorMessage.value = "Invalid credentials"
+      errorMessage.value = 'Invalid credentials'
       return
     }
 
     snackbar.openErrorMessage({
-      title: "Error logging in",
-      subtitle: "Please test your connection and try again.",
+      title: 'Error logging in',
+      subtitle: 'Please test your connection and try again.',
     })
 
     return
   }
-  errorMessage.value = ""
+  errorMessage.value = ''
 
-  snackbar.info("Account created, please login")
+  snackbar.info('Account created, please login')
   await gotoLogin()
 }
 </script>

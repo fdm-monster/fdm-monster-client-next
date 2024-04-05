@@ -1,12 +1,12 @@
-import { defineStore } from "pinia"
-import { TFeatureFlags, FeaturesModel, IFeatureFlag } from "@/models/server/features.model"
-import { AppService } from "@/backend/app.service"
+import { defineStore } from 'pinia'
+import { TFeatureFlags, FeaturesModel, IFeatureFlag } from '@/models/server/features.model'
+import { AppService } from '@/backend/app.service'
 
 interface State {
   features: FeaturesModel | undefined;
 }
 
-export const useFeatureStore = defineStore("Feature", {
+export const useFeatureStore = defineStore('Feature', {
   state: (): State => ({
     features: undefined,
   }),
@@ -18,10 +18,10 @@ export const useFeatureStore = defineStore("Feature", {
       (state) =>
       (feature: TFeatureFlags): boolean => {
         if (!state.features) {
-          console.debug("Feature store not loaded")
+          console.debug('Feature store not loaded')
           return false
         } else {
-          console.debug("Feature store loaded")
+          console.debug('Feature store loaded')
         }
 
         const featureDefined = state.features[feature] as IFeatureFlag | undefined

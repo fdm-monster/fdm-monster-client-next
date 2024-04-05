@@ -1,10 +1,10 @@
-import { BaseService } from "@/backend/base.service"
-import { ServerApi } from "@/backend/server.api"
-import { FileUploadCommands } from "@/models/printers/file-upload-commands.model"
-import { ClearedFilesResult, PrinterFileDto } from "@/models/printers/printer-file.model"
-import { PrinterDto } from "@/models/printers/printer.model"
-import { useSnackbar } from "@/shared/snackbar.composable"
-import { IdType } from "@/utils/id.type"
+import { BaseService } from '@/backend/base.service'
+import { ServerApi } from '@/backend/server.api'
+import { FileUploadCommands } from '@/models/printers/file-upload-commands.model'
+import { ClearedFilesResult, PrinterFileDto } from '@/models/printers/printer-file.model'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { useSnackbar } from '@/shared/snackbar.composable'
+import { IdType } from '@/utils/id.type'
 
 export class PrinterFileService extends BaseService {
   static async getFiles(printerId: IdType, recursive = false) {
@@ -40,18 +40,18 @@ export class PrinterFileService extends BaseService {
 
     const formData = new FormData()
     if (commands.select) {
-      formData.append("select", "true")
+      formData.append('select', 'true')
     }
     if (commands.print) {
-      formData.append("print", "true")
+      formData.append('print', 'true')
     }
-    formData.append("files[0]", file)
+    formData.append('files[0]', file)
 
     return this.postUploadApi(path, formData, {
       onUploadProgress: (progress) => {
         const snackbar = useSnackbar()
         snackbar.openProgressMessage(
-          "single-file-upload",
+          'single-file-upload',
           `Uploading file ${file.name}`,
           (100 * progress.loaded) / progress.total!,
           false

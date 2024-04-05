@@ -1,5 +1,5 @@
-import { defineStore } from "pinia"
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import { defineStore } from 'pinia'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 
 interface DialogReference<T = any> {
   id: DialogName;
@@ -17,7 +17,7 @@ interface State {
   dialogsById: DialogsById;
 }
 
-export const useDialogsStore = defineStore("Dialog", {
+export const useDialogsStore = defineStore('Dialog', {
   state: (): State => ({
     ids: [],
     dialogsById: {},
@@ -88,7 +88,7 @@ export const useDialogsStore = defineStore("Dialog", {
       }
     ) {
       if (!id) {
-        throw new Error("Cannot unregister undefined dialog reference")
+        throw new Error('Cannot unregister undefined dialog reference')
       }
 
       console.debug(`[Pinia Dialog ${id}] Registered`)

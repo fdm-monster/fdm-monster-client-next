@@ -2,7 +2,7 @@ export interface ConnectionOptions {
   baudrates: number[];
   baudratePreference: number;
   ports: number[];
-  portPreference: string | "VIRTUAL";
+  portPreference: string | 'VIRTUAL';
   printerProfiles: string[];
-  printerProfilePreference: string | "_default";
+  printerProfilePreference: string | '_default';
 }

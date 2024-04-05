@@ -1,15 +1,15 @@
-import axios, { AxiosError, AxiosRequestConfig, HttpStatusCode } from "axios"
-import { useAuthStore } from "@/store/auth.store"
-import { useEventBus } from "@vueuse/core"
-import { convertAuthErrorReason } from "@/shared/auth.constants"
-import { captureException } from "@sentry/vue"
+import axios, { AxiosError, AxiosRequestConfig, HttpStatusCode } from 'axios'
+import { useAuthStore } from '@/store/auth.store'
+import { useEventBus } from '@vueuse/core'
+import { convertAuthErrorReason } from '@/shared/auth.constants'
+import { captureException } from '@sentry/vue'
 
 /**
  * Made async for future possibility of getting base URI externally or asynchronously
  */
 export async function getBaseUri() {
   // return process.env.NODE_ENV === "development" ? "https://demo.fdm-monster.net" : "";
-  return process.env.NODE_ENV === "development" ? "http://localhost:4000/" : "/" // Same-origin policy
+  return process.env.NODE_ENV === 'development' ? 'http://localhost:4000/' : '/' // Same-origin policy
 }
 
 export async function getHttpClient(withAuth: boolean = true, autoHandle401: boolean = true) {
@@ -40,7 +40,7 @@ export async function getHttpClient(withAuth: boolean = true, autoHandle401: boo
         return config
       },
       (error) => {
-        console.error("Error in axios request interceptor", error)
+        console.error('Error in axios request interceptor', error)
         return Promise.reject(error)
       }
     )
@@ -55,7 +55,7 @@ export async function getHttpClient(withAuth: boolean = true, autoHandle401: boo
     async (error: AxiosError) => {
       const { response, config } = error
       if (!response) {
-        console.error("No response was returned by axios", error)
+        console.error('No response was returned by axios', error)
         return Promise.reject({
           message: `No response was returned by axios - URL ${config?.url}`,
           stack: error.stack,
@@ -64,7 +64,7 @@ export async function getHttpClient(withAuth: boolean = true, autoHandle401: boo
 
       if (![HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden].includes(response.status)) {
         // Timeout issues etc?
-        console.error("Error in axios response interceptor which is not 401 or 403", error)
+        console.error('Error in axios response interceptor which is not 401 or 403', error)
         captureException(error)
         return Promise.reject({
           message: `${error.message} - URL ${config?.url}`,
@@ -78,8 +78,8 @@ export async function getHttpClient(withAuth: boolean = true, autoHandle401: boo
           roles?: string[];
           permissions?: string[];
         }
-        console.error("[HttpClient] 403 Forbidden", data)
-        useEventBus("auth:permission-denied").emit({
+        console.error('[HttpClient] 403 Forbidden', data)
+        useEventBus('auth:permission-denied').emit({
           roles: data?.roles,
           permissions: data?.permissions,
           error: data?.error,
@@ -116,10 +116,10 @@ export async function getHttpClient(withAuth: boolean = true, autoHandle401: boo
       }
       if (success) {
         if (!config?.url) {
-          throw new Error("No URL in axios config, cannot retry")
+          throw new Error('No URL in axios config, cannot retry')
         }
 
-        console.debug("Redoing request without interceptors", config?.url)
+        console.debug('Redoing request without interceptors', config?.url)
         const newConfig: AxiosRequestConfig = config
         if (!newConfig.headers) {
           newConfig.headers = {}
@@ -128,8 +128,8 @@ export async function getHttpClient(withAuth: boolean = true, autoHandle401: boo
         return axios(newConfig)
       }
 
-      console.error("[HttpClient] 401 Unauthorized - emitting 'auth:failure'")
-      useEventBus("auth:failure").emit({
+      console.error('[HttpClient] 401 Unauthorized - emitting \'auth:failure\'')
+      useEventBus('auth:failure').emit({
         url: config?.url,
         error: error.message,
       })

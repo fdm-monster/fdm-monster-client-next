@@ -2,29 +2,39 @@
   <v-snackbar
     v-model="snackbarOpened"
     absolute
-    bottom
+    location="bottom"
     :color="isWarning ? 'warning darken-2' : 'success'"
-    elevation="24"
+    class="elevation-24"
     class="ma-3"
     shaped
     :timeout="timeout"
     style="z-index: 1000"
-    multi-line
-  >
+    multi-line>
     <v-row>
       <v-col cols="2">
-        <v-btn icon large>
+        <v-btn
+          icon
+          size="large">
           <v-icon>info</v-icon>
         </v-btn>
       </v-col>
-      <v-col cols="8" class="d-flex align-center flex-row">
+      <v-col
+        cols="8"
+        class="d-flex align-center flex-row">
         <div>
-          <span class="font-weight-bold text-button">{{ infoTitle }}</span>
-          <div v-if="infoSubtitle?.length">{{ infoSubtitle }}</div>
+          <span class="font-weight-bold text-button">
+            {{ infoTitle }}
+          </span>
+          <div v-if="infoSubtitle?.length">
+            {{ infoSubtitle }}
+          </div>
         </div>
       </v-col>
       <v-col cols="1">
-        <v-btn icon large @click="snackbarOpened = false">
+        <v-btn
+          icon
+          size="large"
+          @click="snackbarOpened = false">
           <v-icon>close</v-icon>
         </v-btn>
       </v-col>
@@ -32,20 +42,20 @@
   </v-snackbar>
 </template>
 <script lang="ts" setup>
-import { InfoMessage, useSnackbar } from "@/shared/snackbar.composable"
-import { onMounted, ref } from "vue"
+import { InfoMessage, useSnackbar } from '@/shared/snackbar.composable'
+import { onMounted, ref } from 'vue'
 
 const snackbar = useSnackbar()
 const snackbarOpened = ref(false)
-const infoTitle = ref("")
-const infoSubtitle = ref("")
+const infoTitle = ref('')
+const infoSubtitle = ref('')
 const timeout = ref(2000)
 const isWarning = ref(false)
 
 onMounted(() => {
   snackbar.onInfoMessage((data: InfoMessage) => {
     infoTitle.value = data.title
-    infoSubtitle.value = data.subtitle ?? ""
+    infoSubtitle.value = data.subtitle ?? ''
     isWarning.value = data.warning ?? false
     timeout.value = data.timeout ?? 2000
     snackbarOpened.value = true

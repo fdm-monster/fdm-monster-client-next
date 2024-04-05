@@ -1,26 +1,26 @@
-import {createRouter, createWebHistory} from "vue-router"
-import PrinterGridView from "@/components/PrinterGrid/PrinterGridView.vue"
-import PrintersView from "@/components/PrinterList/PrintersView.vue"
-import Settings from "@/components/Settings/SettingsView.vue"
-import UserManagementSettings from "@/components/Settings/UserManagementSettings.vue"
-import OctoPrintSettings from "@/components/Settings/OctoPrintSettings.vue"
-import FloorSettings from "@/components/Settings/FloorSettings.vue"
-import AboutView from "@/components/AboutHelp/AboutView.vue"
-import EmergencyCommands from "@/components/Settings/EmergencyCommands.vue"
-import NotFoundView from "@/components/NotFound/NotFoundView.vue"
-import {useAuthStore} from "../store/auth.store"
-import {RouteNames} from "./route-names"
-import PermissionDenied from "../components/Login/PermissionDenied.vue"
-import LoginView from "../components/Login/LoginView.vue"
-import RegistrationView from "../components/Login/RegistrationView.vue"
-import CameraGridView from "../components/CameraGrid/CameraGridView.vue"
-import FirstTimeSetupView from "../components/FirstTimeSetup/FirstTimeSetupView.vue"
-import AccountSettings from "../components/Settings/AccountSettings.vue"
-import GridSettings from "../components/Settings/GridSettings.vue"
-import ServerProtectionSettings from "../components/Settings/ServerProtectionSettings.vue"
-import SoftwareUpgradeSettings from "../components/Settings/SoftwareUpgradeSettings.vue"
-import DiagnosticsSettings from "../components/Settings/DiagnosticsSettings.vue"
-import PrintStatisticsView from "../components/PrintStatistics/PrintStatisticsView.vue"
+import {createRouter, createWebHistory} from 'vue-router'
+import PrinterGridView from '@/components/PrinterGrid/PrinterGridView.vue'
+import PrintersView from '@/components/PrinterList/PrintersView.vue'
+import Settings from '@/components/Settings/SettingsView.vue'
+import UserManagementSettings from '@/components/Settings/UserManagementSettings.vue'
+import OctoPrintSettings from '@/components/Settings/OctoPrintSettings.vue'
+import FloorSettings from '@/components/Settings/FloorSettings.vue'
+import AboutView from '@/components/AboutHelp/AboutView.vue'
+import EmergencyCommands from '@/components/Settings/EmergencyCommands.vue'
+import NotFoundView from '@/components/NotFound/NotFoundView.vue'
+import {useAuthStore} from '../store/auth.store'
+import {RouteNames} from './route-names'
+import PermissionDenied from '../components/Login/PermissionDenied.vue'
+import LoginView from '../components/Login/LoginView.vue'
+import RegistrationView from '../components/Login/RegistrationView.vue'
+import CameraGridView from '../components/CameraGrid/CameraGridView.vue'
+import FirstTimeSetupView from '../components/FirstTimeSetup/FirstTimeSetupView.vue'
+import AccountSettings from '../components/Settings/AccountSettings.vue'
+import GridSettings from '../components/Settings/GridSettings.vue'
+import ServerProtectionSettings from '../components/Settings/ServerProtectionSettings.vue'
+import SoftwareUpgradeSettings from '../components/Settings/SoftwareUpgradeSettings.vue'
+import DiagnosticsSettings from '../components/Settings/DiagnosticsSettings.vue'
+import PrintStatisticsView from '../components/PrintStatistics/PrintStatisticsView.vue'
 
 const NeedsAuth = {
   requiresAuth: true,
@@ -34,92 +34,92 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
+      path: '/',
       name: RouteNames.Home,
       meta: NeedsAuth,
       component: PrinterGridView,
     },
     {
-      path: "/first-time-setup",
+      path: '/first-time-setup',
       name: RouteNames.FirstTimeSetup,
       meta: NoAuth,
       component: FirstTimeSetupView,
     },
     {
-      path: "/login",
+      path: '/login',
       name: RouteNames.Login,
       meta: NoAuth,
       component: LoginView,
     },
     {
-      path: "/registration",
+      path: '/registration',
       name: RouteNames.Registration,
       meta: NoAuth,
       component: RegistrationView,
     },
     {
-      path: "/printers",
+      path: '/printers',
       name: RouteNames.PrintersView,
       meta: NeedsAuth,
       component: PrintersView,
     },
     {
-      path: "/cameras",
+      path: '/cameras',
       name: RouteNames.CameraGridView,
       component: CameraGridView,
     },
     {
-      path: "/settings",
+      path: '/settings',
       component: Settings,
       meta: NeedsAuth,
       children: [
         {
-          path: "",
+          path: '',
           meta: NeedsAuth,
-          redirect: "grid",
+          redirect: 'grid',
         },
         {
-          path: "account",
+          path: 'account',
           meta: NeedsAuth,
           component: AccountSettings,
         },
         {
-          path: "server-protection",
+          path: 'server-protection',
           meta: NeedsAuth,
           component: ServerProtectionSettings,
         },
         {
-          path: "grid",
+          path: 'grid',
           meta: NeedsAuth,
           component: GridSettings,
         },
         {
-          path: "floors",
+          path: 'floors',
           meta: NeedsAuth,
           component: FloorSettings,
         },
         {
-          path: "user-management",
+          path: 'user-management',
           meta: NeedsAuth,
           component: UserManagementSettings,
         },
         {
-          path: "octoprint",
+          path: 'octoprint',
           meta: NeedsAuth,
           component: OctoPrintSettings,
         },
         {
-          path: "emergency-commands",
+          path: 'emergency-commands',
           meta: NeedsAuth,
           component: EmergencyCommands,
         },
         {
-          path: "software-upgrade",
+          path: 'software-upgrade',
           meta: NeedsAuth,
           component: SoftwareUpgradeSettings,
         },
         {
-          path: "diagnostics",
+          path: 'diagnostics',
           meta: NeedsAuth,
           component: DiagnosticsSettings,
         },
@@ -131,25 +131,25 @@ const router = createRouter({
     //   component: RepairLogView,
     // },
     {
-      path: "/statistics",
+      path: '/statistics',
       name: RouteNames.PrintStatistics,
       meta: NeedsAuth,
       component: PrintStatisticsView,
     },
     {
-      path: "/about",
-      name: "About",
+      path: '/about',
+      name: 'About',
       component: AboutView,
     },
     {
-      path: "/permission-denied",
+      path: '/permission-denied',
       name: RouteNames.PermissionDenied,
       meta: NeedsAuth,
       component: PermissionDenied,
     },
     {
-      path: "/:pathMatch(.*)*",
-      name: "NotFound",
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
       component: NotFoundView,
     },
   ],
@@ -176,12 +176,12 @@ router.beforeEach(async (to, from, next) => {
 
   authStore.loadTokens()
   if (!authStore.hasAuthToken && !authStore.hasRefreshToken) {
-    console.debug("Not logged in, redirecting to login page")
-    if (from.path == "/login") {
-      throw new Error("Already on login page, cannot redirect")
+    console.debug('Not logged in, redirecting to login page')
+    if (from.path == '/login') {
+      throw new Error('Already on login page, cannot redirect')
     }
     return next({
-      path: "/login",
+      path: '/login',
       query: {redirect: to.fullPath},
     })
   }

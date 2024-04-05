@@ -2732,7 +2732,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:9.24.0":
+"eslint-plugin-vue@npm:9.24.0, eslint-plugin-vue@npm:^9.6.0":
   version: 9.24.0
   resolution: "eslint-plugin-vue@npm:9.24.0"
   dependencies:
@@ -2747,6 +2747,19 @@ __metadata:
   peerDependencies:
     eslint: ^6.2.0 || ^7.0.0 || ^8.0.0
   checksum: 10c0/4b8a5ec008bd35fe26953c9a916fc285375cdc5fa3025f0c427a16c1032bf38b21c8dfed2d616fa7242efc84bbc133d4872f3fbe5ab0f25e9529370179746f7c
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-vuetify@npm:2.2.0":
+  version: 2.2.0
+  resolution: "eslint-plugin-vuetify@npm:2.2.0"
+  dependencies:
+    eslint-plugin-vue: "npm:^9.6.0"
+    requireindex: "npm:^1.2.0"
+  peerDependencies:
+    eslint: ^8.0.0
+    vuetify: ^3.0.0
+  checksum: 10c0/001770dd982e9bdef00ead5e2e645317215aa2b4086feb9ee946fb80b103fbf4ea42843dd210f330ee5d66b7a429cba6ef096fa973a4a9ef1dc338fb75523e35
   languageName: node
   linkType: hard
 
@@ -2969,7 +2982,9 @@ __metadata:
     eslint-plugin-n: "npm:16.6.2"
     eslint-plugin-promise: "npm:6.1.1"
     eslint-plugin-vue: "npm:9.24.0"
+    eslint-plugin-vuetify: "npm:2.2.0"
     jwt-decode: "npm:3.1.2"
+    material-design-icons-iconfont: "npm:^6.7.0"
     pinia: "npm:2.1.7"
     roboto-fontface: "npm:*"
     sass: "npm:1.74.1"
@@ -4045,6 +4060,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"material-design-icons-iconfont@npm:^6.7.0":
+  version: 6.7.0
+  resolution: "material-design-icons-iconfont@npm:6.7.0"
+  checksum: 10c0/21037623d981c1e964d427d8360d54931b390a3ad1d459a71aeb449fc073946d28517b8a9122d5042699c2ad622264af1088a3be5ba6e907c28f821288555686
+  languageName: node
+  linkType: hard
+
 "merge-stream@npm:^2.0.0":
   version: 2.0.0
   resolution: "merge-stream@npm:2.0.0"
@@ -4759,6 +4781,13 @@ __metadata:
   version: 2.1.1
   resolution: "require-directory@npm:2.1.1"
   checksum: 10c0/83aa76a7bc1531f68d92c75a2ca2f54f1b01463cb566cf3fbc787d0de8be30c9dbc211d1d46be3497dac5785fe296f2dd11d531945ac29730643357978966e99
+  languageName: node
+  linkType: hard
+
+"requireindex@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "requireindex@npm:1.2.0"
+  checksum: 10c0/7fb42aed73bf8de9acc4d6716cf07acc7fbe180e58729433bafcf702e76e7bb10e54f8266c06bfec62d752e0ac14d50e8758833de539e6f4e2cd642077866153
   languageName: node
   linkType: hard
 

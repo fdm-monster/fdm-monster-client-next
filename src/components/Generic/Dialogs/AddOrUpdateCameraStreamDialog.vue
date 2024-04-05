@@ -1,14 +1,26 @@
 <template>
-  <BaseDialog :id="dialog.dialogId" max-width="800px" @escape="closeDialog()">
-    <ValidationObserver ref="validationObserver" v-slot="{ invalid }">
+  <BaseDialog
+    :id="dialog.dialogId"
+    max-width="800px"
+    @escape="closeDialog()">
+    <ValidationObserver
+      ref="validationObserver"
+      v-slot="{ invalid }">
       <v-card>
         <v-card-title>
           <span class="text-h5">
-            <v-avatar class="mr-2" color="primary" size="56">
+            <v-avatar
+              class="mr-2"
+              color="primary"
+              size="56">
               {{ avatarInitials }}
             </v-avatar>
-            <span v-if="isUpdating"> Updating Camera </span>
-            <span v-else> New Camera </span>
+            <span v-if="isUpdating">
+              Updating Camera
+            </span>
+            <span v-else>
+              New Camera
+            </span>
           </span>
         </v-card-title>
 
@@ -16,23 +28,32 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
-                <v-text-field v-model="cameraStream.name" label="Name" required />
+                <v-text-field
+                  v-model="cameraStream.name"
+                  label="Name"
+                  required />
               </v-flex>
               <v-flex xs12>
-                <v-text-field v-model="cameraStream.streamURL" label="Url (MJPEG)" required />
+                <v-text-field
+                  v-model="cameraStream.streamURL"
+                  label="Url (MJPEG)"
+                  required />
               </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
 
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary darken-2" @click="close">Cancel</v-btn>
+          <v-spacer />
+          <v-btn
+            color="primary-darken-2"
+            @click="close">
+            Cancel
+          </v-btn>
           <v-btn
             :disabled="invalid"
             color="primary"
-            @click="isUpdating ? updateCamera() : createCamera()"
-          >
+            @click="isUpdating ? updateCamera() : createCamera()">
             {{ isUpdating ? "Update" : "Create" }}
           </v-btn>
         </v-card-actions>
@@ -42,26 +63,26 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue"
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
-import { useDialog } from "@/shared/dialog.composable"
-import { CameraStream, CameraWithPrinter } from "@/models/camera-streams/camera-stream"
-import { CameraStreamService } from "@/backend/camera-stream.service"
-import { useQueryClient } from "@tanstack/vue-query"
+import { computed, ref, watch } from 'vue'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { useDialog } from '@/shared/dialog.composable'
+import { CameraStream, CameraWithPrinter } from '@/models/camera-streams/camera-stream'
+import { CameraStreamService } from '@/backend/camera-stream.service'
+import { useQueryClient } from '@tanstack/vue-query'
 
 const queryClient = useQueryClient()
 const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
 
 const avatarInitials = computed(() => {
-  return "C"
+  return 'C'
 })
 
 const cameraStream = ref<CameraStream>({
-  name: "",
-  streamURL: "",
+  name: '',
+  streamURL: '',
 })
 
-const isDialogUpdate = () => dialog.context()?.addOrUpdate === "update"
+const isDialogUpdate = () => dialog.context()?.addOrUpdate === 'update'
 
 const isUpdating = computed(() => {
   return isDialogUpdate()
@@ -70,14 +91,14 @@ const isUpdating = computed(() => {
 watch(
   () => dialog.context(),
   (context) => {
-    if (!context || context?.addOrUpdate !== "update") {
-      cameraStream.value.streamURL = ""
-      cameraStream.value.name = ""
+    if (!context || context?.addOrUpdate !== 'update') {
+      cameraStream.value.streamURL = ''
+      cameraStream.value.name = ''
       return
     }
 
     const stream = queryClient
-      .getQueryData<CameraWithPrinter[]>(["cameraStream"])
+      .getQueryData<CameraWithPrinter[]>(['cameraStream'])
       ?.find((cameraStream) => cameraStream.cameraStream.id === context.cameraId)
     cameraStream.value.name = stream?.cameraStream.name
     cameraStream.value.streamURL = stream?.cameraStream.streamURL
@@ -93,7 +114,7 @@ async function createCamera() {
     streamURL: cameraStream.value.streamURL,
     name: cameraStream.value.name,
   })
-  await queryClient.refetchQueries({ queryKey: ["cameraStream"] })
+  await queryClient.refetchQueries({ queryKey: ['cameraStream'] })
   dialog.closeDialog()
 }
 
@@ -102,7 +123,7 @@ async function updateCamera() {
     streamURL: cameraStream.value.streamURL,
     name: cameraStream.value.name,
   })
-  await queryClient.refetchQueries({ queryKey: ["cameraStream"] })
+  await queryClient.refetchQueries({ queryKey: ['cameraStream'] })
   dialog.closeDialog()
 }
 

@@ -1,5 +1,5 @@
-import { newRandomNamePair } from "@/shared/noun-adjectives.data"
-import { IdType } from "@/utils/id.type"
+import { newRandomNamePair } from '@/shared/noun-adjectives.data'
+import { IdType } from '@/utils/id.type'
 
 export interface PrinterInFloorDto {
   id?: IdType;
@@ -25,6 +25,6 @@ export interface PreCreateFloor {
 export const getDefaultCreateFloor = (): PreCreateFloor => ({
   id: undefined,
   name: newRandomNamePair(),
-  floor: "1",
+  floor: '1',
   printers: [],
 })

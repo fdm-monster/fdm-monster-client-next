@@ -1,11 +1,20 @@
 <template>
-  <BaseDialog :id="dialog.dialogId" :max-width="'700px'" @escape="closeDialog()">
-    <ValidationObserver ref="validationObserver" v-slot="{ invalid }">
+  <BaseDialog
+    :id="dialog.dialogId"
+    :max-width="'700px'"
+    @escape="closeDialog()">
+    <ValidationObserver
+      ref="validationObserver"
+      v-slot="{ invalid }">
       <v-card class="pa-4">
         <v-card-title>
-          <span class="text-h5"> Mark '{{ printer?.name }}' for maintenance </span>
+          <span class="text-h5">
+            Mark '{{ printer?.name }}' for maintenance
+          </span>
         </v-card-title>
-        <v-alert color="secondary">Keep this info clear and stick to convention</v-alert>
+        <v-alert color="secondary">
+          Keep this info clear and stick to convention
+        </v-alert>
         <v-card-text>
           <v-row>
             <v-col cols="12">
@@ -21,16 +30,19 @@
                 color="primary"
                 multiple
                 placeholder="Quick select reason"
-                @change="updateText()"
-              ></v-select>
-              <validation-provider v-slot="{ errors }" name="JSON" rules="required">
+                @update:model-value="updateText()" />
+              <validation-provider
+                v-slot="{ errors }"
+                name="JSON"
+                rules="required">
                 <v-textarea
                   v-model="formData.disabledReason"
                   :error-messages="errors"
-                  data-vv-validate-on="change|blur"
-                >
-                  <template v-slot:label>
-                    <div>Type the reason*</div>
+                  data-vv-validate-on="change|blur">
+                  <template #label>
+                    <div>
+                      Type the reason*
+                    </div>
                   </template>
                 </v-textarea>
               </validation-provider>
@@ -38,10 +50,22 @@
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <em class="red--text">* indicates required field</em>
-          <v-spacer></v-spacer>
-          <v-btn text @click="closeDialog()">Close</v-btn>
-          <v-btn :disabled="invalid" color="blue darken-1" text @click="submit()">Save</v-btn>
+          <em class="text-red">
+            * indicates required field
+          </em>
+          <v-spacer />
+          <v-btn
+            variant="text"
+            @click="closeDialog()">
+            Close
+          </v-btn>
+          <v-btn
+            :disabled="invalid"
+            color="blue-darken-1"
+            variant="text"
+            @click="submit()">
+            Save
+          </v-btn>
         </v-card-actions>
       </v-card>
     </ValidationObserver>
@@ -49,38 +73,38 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue"
-import { PrintersService } from "@/backend"
-import { usePrinterStore } from "@/store/printer.store"
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
-import { useDialog } from "@/shared/dialog.composable"
+import { computed, ref } from 'vue'
+import { PrintersService } from '@/backend'
+import { usePrinterStore } from '@/store/printer.store'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { useDialog } from '@/shared/dialog.composable'
 
 const selectedQuickItems = ref([])
 const quickItems = [
-  "Broken part",
-  "Blob",
-  "Maxtemp",
-  "Preheat error",
-  "Cable USB ",
-  "Bed thermal runaway",
-  "Thermistor Heatbed",
-  "Thermistor Heatblock",
-  "Thermal Runaway",
-  "Mintemp Nozzle",
-  "Mintemp Heatbed",
-  "Nozzle",
-  "Nozzle Clog",
-  "Fan Hotend",
-  "Fan Part cooling",
-  "Extruder rattle",
-  "Extruder",
-  "Z Axis",
-  "X Axis",
-  "Y Axis",
-  "Rented",
-  "Motherboard",
-  "Other",
-  "Clean",
+  'Broken part',
+  'Blob',
+  'Maxtemp',
+  'Preheat error',
+  'Cable USB ',
+  'Bed thermal runaway',
+  'Thermistor Heatbed',
+  'Thermistor Heatblock',
+  'Thermal Runaway',
+  'Mintemp Nozzle',
+  'Mintemp Heatbed',
+  'Nozzle',
+  'Nozzle Clog',
+  'Fan Hotend',
+  'Fan Part cooling',
+  'Extruder rattle',
+  'Extruder',
+  'Z Axis',
+  'X Axis',
+  'Y Axis',
+  'Rented',
+  'Motherboard',
+  'Other',
+  'Clean',
 ]
 const formData = ref<{
   disabledReason?: string;
@@ -98,7 +122,7 @@ const isValid = async () => {
 }
 
 const updateText = () => {
-  formData.value.disabledReason = selectedQuickItems.value.join(", ")
+  formData.value.disabledReason = selectedQuickItems.value.join(', ')
 }
 
 const submit = async () => {

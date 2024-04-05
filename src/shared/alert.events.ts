@@ -9,6 +9,6 @@ export const eventTypeToMessage = (type: InfoEventType, count: number) => {
   } else if (type === InfoEventType.UPLOAD_FRONTEND) {
     return `Uploading file(s) to server (${count})`
   } else {
-    return `Uploading file(s)`
+    return 'Uploading file(s)'
   }
 }

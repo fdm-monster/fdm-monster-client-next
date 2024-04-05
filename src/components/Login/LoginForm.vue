@@ -1,8 +1,13 @@
 <template>
-  <v-card class="pa-4" elevation="10" style="border-radius: 10px">
+  <v-card
+    class="pa-4"
+    elevation="10"
+    style="border-radius: 10px">
     <v-card-text>
       <v-form>
-        <label> Username </label>
+        <label>
+          Username
+        </label>
         <v-text-field
           v-model="username"
           autofocus
@@ -11,8 +16,7 @@
           prepend-icon="mdi-account"
           type="text"
           variant="underlined"
-          @keyup.enter="formIsDisabled || login()"
-        ></v-text-field>
+          @keyup.enter="formIsDisabled || login()" />
         <v-text-field
           id="password"
           v-model="password"
@@ -24,19 +28,21 @@
           prepend-icon="mdi-lock"
           variant="underlined"
           @click:append="showPassword = !showPassword"
-          @keyup.enter="formIsDisabled || login()"
-        ></v-text-field>
-        <v-alert v-if="errorMessage" class="mt-6" color="error" density="compact"
-                 variant="outlined">
+          @keyup.enter="formIsDisabled || login()" />
+        <v-alert
+          v-if="errorMessage"
+          class="mt-6"
+          color="error"
+          density="compact"
+          variant="outlined">
           {{ errorMessage }}
         </v-alert>
         <v-alert
           v-if="authStore.lastLogoutReason"
           class="mt-6"
-          color="error darken-1"
+          color="error-darken-1"
           density="compact"
-          variant="outlined"
-        >
+          variant="outlined">
           Reason for automatic logout: {{ authStore.lastLogoutReason }}
         </v-alert>
       </v-form>
@@ -49,8 +55,7 @@
         size="lg"
         variant="flat"
         style="width: 100%"
-        @click="login()"
-      >
+        @click="login()">
         Login
       </v-btn>
     </v-card-actions>
@@ -58,42 +63,43 @@
       <v-btn
         :disabled="!authStore.registration"
         class="pa-4"
-        large
+        size="large"
         size="lg"
         variant="flat"
         style="width: 100%"
-        @click="gotoRegistration()"
-      >
+        @click="gotoRegistration()">
         Register new account {{ authStore.registration ? "" : "(not enabled)" }}
-        <v-icon class="pl-5" icon="mdi-menu-right"/>
+        <v-icon
+          class="pl-5"
+          icon="mdi-menu-right" />
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted, ref} from "vue"
-import {useRoute, useRouter} from "vue-router"
-import {useEventBus} from "@vueuse/core"
-import {AxiosError} from "axios"
-import {useAuthStore} from "@/store/auth.store"
-import {useSnackbar} from "@/shared/snackbar.composable"
-import {RouteNames} from "@/router/route-names"
-import {AUTH_ERROR_REASON, convertAuthErrorReason} from "@/shared/auth.constants"
+import {computed, onMounted, ref} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import {useEventBus} from '@vueuse/core'
+import {AxiosError} from 'axios'
+import {useAuthStore} from '@/store/auth.store'
+import {useSnackbar} from '@/shared/snackbar.composable'
+import {RouteNames} from '@/router/route-names'
+import {AUTH_ERROR_REASON, convertAuthErrorReason} from '@/shared/auth.constants'
 
 const authStore = useAuthStore()
-const errorMessage = ref("")
-const username = ref("")
+const errorMessage = ref('')
+const username = ref('')
 const showPassword = ref(false)
-const password = ref("")
+const password = ref('')
 const router = useRouter()
 const route = useRoute()
 const loading = ref(false)
-const loginEvent = useEventBus("auth:login")
+const loginEvent = useEventBus('auth:login')
 const snackbar = useSnackbar()
 
 const formIsDisabled = computed(() => {
-  return (username.value ?? "")?.length < 3 || (password.value ?? "").length < 3
+  return (username.value ?? '')?.length < 3 || (password.value ?? '').length < 3
 })
 
 onMounted(async () => {
@@ -101,7 +107,7 @@ onMounted(async () => {
   await authStore.checkAuthenticationRequirements()
   if (authStore.loginRequired === false) {
     // As AppLoader might not trigger, we trigger it ourselves
-    console.debug("LoginView, no login required, redirecting to", route.query.redirect, "or home")
+    console.debug('LoginView, no login required, redirecting to', route.query.redirect, 'or home')
     loginEvent.emit(true)
     return await routeToRedirect()
   }
@@ -125,12 +131,12 @@ async function login() {
     loading.value = true
     await authStore.login(username.value, password.value)
     authStore.lastLogoutReason = null
-    password.value = ""
+    password.value = ''
     loading.value = false
   } catch (e) {
     loading.value = false
     if ((e as AxiosError)?.response?.status === 401) {
-      password.value = ""
+      password.value = ''
 
       const reasonCode: keyof typeof AUTH_ERROR_REASON = ((e as AxiosError)?.response?.data as any)
         ?.reasonCode
@@ -138,12 +144,12 @@ async function login() {
       if (reasonCode === AUTH_ERROR_REASON.AccountNotVerified) {
         snackbar.error(
           convertedReason,
-          "Please ask your administrator to verify your account and try again."
+          'Please ask your administrator to verify your account and try again.'
         )
       } else if (reasonCode === AUTH_ERROR_REASON.PasswordChangeRequired) {
         snackbar.error(
           convertedReason,
-          "Your password needs to be changed. This feature is sadly not finished"
+          'Your password needs to be changed. This feature is sadly not finished'
         )
       }
 
@@ -152,16 +158,16 @@ async function login() {
     }
 
     snackbar.openErrorMessage({
-      title: "Error logging in",
-      subtitle: "Please test your connection and try again.",
+      title: 'Error logging in',
+      subtitle: 'Please test your connection and try again.',
     })
-    errorMessage.value = "Error logging in - status code " + (e as AxiosError)?.response?.status
-    password.value = ""
+    errorMessage.value = 'Error logging in - status code ' + (e as AxiosError)?.response?.status
+    password.value = ''
 
     return
   }
 
-  errorMessage.value = ""
+  errorMessage.value = ''
 
   // Trigger AppLoader
   loginEvent.emit(true)
@@ -172,11 +178,11 @@ async function login() {
 async function routeToRedirect() {
   const routePath = route.query.redirect
   if (!routePath) {
-    console.debug("[LoginForm] Redirecting to home")
+    console.debug('[LoginForm] Redirecting to home')
     await router.push({name: RouteNames.Home})
     return
   } else {
-    console.debug("[LoginForm] Redirecting to ", routePath)
+    console.debug('[LoginForm] Redirecting to ', routePath)
     await router.push({
       path: routePath as string,
     })

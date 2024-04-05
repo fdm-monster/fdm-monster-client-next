@@ -4,137 +4,163 @@
       <v-avatar>
         <v-icon>upgrade</v-icon>
       </v-avatar>
-      <v-toolbar-title>Software Upgrade</v-toolbar-title>
+      <v-toolbar-title>
+        Software Upgrade
+      </v-toolbar-title>
     </v-toolbar>
-    <v-list subheader three-line>
-      <v-list-item-content>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title> Current versions in use:</v-list-item-title>
-            <v-list-item-action-text>
-              <strong>Your server's version is:</strong> {{ serverVersion }}
-              <br />
-              <strong>Your client's version is:</strong> {{ version }}
-              <br />
-              <div v-if="monsterPiVersion">
-                MonsterPi:
-                <strong> Your MonsterPi version is: </strong>
-                {{ monsterPiVersion }}<br />
-              </div>
-              <div v-else>
-                <strong>MonsterPi:</strong>
-                <div>No MonsterPi distro was detected.</div>
-              </div>
-            </v-list-item-action-text>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-item-content>
-    </v-list>
-    <v-divider />
-    <v-list subheader three-line>
+    <v-list
+      subheader
+      lines="three">
       <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title> Server upgrade</v-list-item-title>
-          <v-list-item-subtitle>
-            Please visit
-            <a href="https://docs.fdm-monster.net/docs/installing/">
-              the installation documentation
-            </a>
-            for instructions on how to upgrade the server.
-          </v-list-item-subtitle>
-        </v-list-item-content>
+        <v-list-item-title>
+          Current versions in use:
+        </v-list-item-title>
+        <v-list-item-action-text>
+          <strong>
+            Your server's version is:
+          </strong> {{ serverVersion }}
+          <br>
+          <strong>
+            Your client's version is:
+          </strong> {{ version }}
+          <br>
+          <div v-if="monsterPiVersion">
+            MonsterPi:
+            <strong>
+              Your MonsterPi version is:
+            </strong>
+            {{ monsterPiVersion }}<br>
+          </div>
+          <div v-else>
+            <strong>
+              MonsterPi:
+            </strong>
+            <div>
+              No MonsterPi distro was detected.
+            </div>
+          </div>
+        </v-list-item-action-text>
       </v-list-item>
     </v-list>
     <v-divider />
-    <v-list subheader three-line>
+    <v-list
+      subheader
+      lines="three">
       <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title> Client upgrade</v-list-item-title>
-          <v-list-item-subtitle>
-            Please visit
-            <a href="https://docs.fdm-monster.net/docs/configuration/updating_client_bundle">
-              the installation documentation
-            </a>
-            for instructions on how to upgrade the client bundle.
-          </v-list-item-subtitle>
-          <v-list-item-subtitle>
-            Upgrade the client webapp for quickly retrieving small fixes and features
-          </v-list-item-subtitle>
-        </v-list-item-content>
+        <v-list-item-title>
+          Server upgrade
+        </v-list-item-title>
+        <v-list-item-subtitle>
+          Please visit
+          <a href="https://docs.fdm-monster.net/docs/installing/">
+            the installation documentation
+          </a>
+          for instructions on how to upgrade the server.
+        </v-list-item-subtitle>
+      </v-list-item>
+    </v-list>
+    <v-divider />
+    <v-list
+      subheader
+      lines="three">
+      <v-list-item>
+        <v-list-item-title>
+          Client upgrade
+        </v-list-item-title>
+        <v-list-item-subtitle>
+          Please visit
+          <a href="https://docs.fdm-monster.net/docs/configuration/updating_client_bundle">
+            the installation documentation
+          </a>
+          for instructions on how to upgrade the client bundle.
+        </v-list-item-subtitle>
+        <v-list-item-subtitle>
+          Upgrade the client webapp for quickly retrieving small fixes and features
+        </v-list-item-subtitle>
       </v-list-item>
       <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title> Select a release to upgrade to:</v-list-item-title>
-          <v-list-item-subtitle class="mt-2">
-            Minimum required version: {{ minimum?.tag_name }}
-          </v-list-item-subtitle>
+        <v-list-item-title>
+          Select a release to upgrade to:
+        </v-list-item-title>
+        <v-list-item-subtitle class="mt-2">
+          Minimum required version: {{ minimum?.tag_name }}
+        </v-list-item-subtitle>
 
-          <span v-if="loading"> <v-alert>Loading releases...</v-alert></span>
-          <v-alert v-if="!loading && !filteredReleases?.length">No releases to show.</v-alert>
-          <v-radio-group v-model="selectedRelease">
-            <v-radio
-              v-for="release in filteredReleases"
-              :key="release.tag_name"
-              :disabled="
-                isCurrentRelease(release) ||
+        <span v-if="loading">
+          <v-alert>
+            Loading releases...
+          </v-alert>
+        </span>
+        <v-alert v-if="!loading && !filteredReleases?.length">
+          No releases to show.
+        </v-alert>
+        <v-radio-group v-model="selectedRelease">
+          <v-radio
+            v-for="release in filteredReleases"
+            :key="release.tag_name"
+            :disabled="
+              isCurrentRelease(release) ||
                 !isUpgradeOrAllowedDowngrade(release, current) ||
                 isBelowMinimum(release)
-              "
-              :label="`${release.tag_name}${
-                isCurrentRelease(release) ? ', currently installed' : ''
-              }${!isUpgradeOrAllowedDowngrade(release, current) ? ', downgrade not allowed' : ''}${
-                isBelowMinimum(release) ? ', below minimum' : ''
-              }${isVersionUnstable(release) ? ', unstable version' : ''}`"
-              :value="release.tag_name"
-            >
-            </v-radio>
-          </v-radio-group>
-          <div>
-            <v-alert v-if="showPrereleases" color="primary" max-width="500px">
-              You are viewing prereleases, please install such versions at your own risk!
-            </v-alert>
-          </div>
-          <div>
-            <v-checkbox v-model="allowDowngrade" label="Allow downgrade"></v-checkbox>
-            <v-checkbox
-              v-model="showPrereleases"
-              :disabled="getIsCurrentUnstable"
-              :label="
-                getIsCurrentUnstable
-                  ? 'Show prerelease versions (Currently already on prerelease version)'
-                  : 'Show prerelease versions'
-              "
-            ></v-checkbox>
-          </div>
-          <v-btn class="mt-2 mr-4" color="secondary" @click="loadReleases()">
-            Reload release version list
-          </v-btn>
-          <v-btn
-            :disabled="!selectedRelease?.length || selectedRelease === current?.tag_name"
-            class="mt-2"
+            "
+            :label="`${release.tag_name}${
+              isCurrentRelease(release) ? ', currently installed' : ''
+            }${!isUpgradeOrAllowedDowngrade(release, current) ? ', downgrade not allowed' : ''}${
+              isBelowMinimum(release) ? ', below minimum' : ''
+            }${isVersionUnstable(release) ? ', unstable version' : ''}`"
+            :value="release.tag_name" />
+        </v-radio-group>
+        <div>
+          <v-alert
+            v-if="showPrereleases"
             color="primary"
-            variant="flat"
-            @click="clickUpdateClient(selectedRelease)"
-          >
-            <v-icon>upgrade</v-icon>
-            Upgrade/downgrade client
-          </v-btn>
-        </v-list-item-content>
+            max-width="500px">
+            You are viewing prereleases, please install such versions at your own risk!
+          </v-alert>
+        </div>
+        <div>
+          <v-checkbox
+            v-model="allowDowngrade"
+            label="Allow downgrade" />
+          <v-checkbox
+            v-model="showPrereleases"
+            :disabled="getIsCurrentUnstable"
+            :label="
+              getIsCurrentUnstable
+                ? 'Show prerelease versions (Currently already on prerelease version)'
+                : 'Show prerelease versions'
+            " />
+        </div>
+        <v-btn
+          class="mt-2 mr-4"
+          color="secondary"
+          @click="loadReleases()">
+          Reload release version list
+        </v-btn>
+        <v-btn
+          :disabled="!selectedRelease?.length || selectedRelease === current?.tag_name"
+          class="mt-2"
+          color="primary"
+          variant="flat"
+          @click="clickUpdateClient(selectedRelease)">
+          <v-icon>upgrade</v-icon>
+          Upgrade/downgrade client
+        </v-btn>
       </v-list-item>
     </v-list>
   </v-card>
 </template>
 <script lang="ts" setup>
-import { AppService } from "@/backend/app.service"
-import { computed, onMounted, ref } from "vue"
-import { version as packageJsonVersion } from "../../../package.json"
-import { IRelease } from "@/models/server/client-releases.model"
-import { compare, minor } from "semver"
+import { AppService } from '@/backend/app.service'
+import { computed, onMounted, ref } from 'vue'
+import { version as packageJsonVersion } from '../../../package.json'
+import { IRelease } from '@/models/server/client-releases.model'
+import { compare, minor } from 'semver'
 
 const loading = ref(true)
 const allowDowngrade = ref(false)
-const serverVersion = ref("")
-const monsterPiVersion = ref<string | null>("")
+const serverVersion = ref('')
+const monsterPiVersion = ref<string | null>('')
 const version = ref(packageJsonVersion)
 const current = ref<IRelease>()
 const minimum = ref<IRelease>()
@@ -186,7 +212,7 @@ function isCurrentUnstable() {
 function isVersionUnstable(release?: IRelease) {
   if (release?.tag_name?.length) {
     return (
-      release.prerelease || release.tag_name.includes("rc") || release.tag_name.includes("unstable")
+      release.prerelease || release.tag_name.includes('rc') || release.tag_name.includes('unstable')
     )
   }
   return false
@@ -199,7 +225,7 @@ function isBelowMinimum(release: IRelease) {
 function isUpgradeOrAllowedDowngrade(release: IRelease, current?: IRelease) {
   // If no current release is known, we need to throw
   if (!current) {
-    throw new Error("No current release is known, cannot compare.")
+    throw new Error('No current release is known, cannot compare.')
   }
   if (allowDowngrade.value) {
     return true
@@ -216,7 +242,7 @@ function isCurrentRelease(release: IRelease) {
 }
 
 async function clickUpdateClient(version?: string) {
-  if (!confirm("Are you sure? This might cause breaking changes, if the server is outdated")) {
+  if (!confirm('Are you sure? This might cause breaking changes, if the server is outdated')) {
     return
   }
 

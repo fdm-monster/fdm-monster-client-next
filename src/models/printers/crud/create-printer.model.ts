@@ -1,11 +1,11 @@
-import { newRandomNamePair } from "@/shared/noun-adjectives.data"
-import { IdType } from "@/utils/id.type"
+import { newRandomNamePair } from '@/shared/noun-adjectives.data'
+import { IdType } from '@/utils/id.type'
 
 export const getDefaultCreatePrinter = (): PreCreatePrinter => ({
   id: undefined,
   name: newRandomNamePair(),
-  apiKey: "",
-  printerURL: "",
+  apiKey: '',
+  printerURL: '',
   enabled: true,
 })
 

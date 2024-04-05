@@ -1,6 +1,6 @@
-import { ServerApi } from "@/backend/server.api"
-import { BaseService } from "@/backend/base.service"
-import { Role, User } from "@/models/user.model"
+import { ServerApi } from '@/backend/server.api'
+import { BaseService } from '@/backend/base.service'
+import { Role, User } from '@/models/user.model'
 
 export class UserService extends BaseService {
   static async listUsers() {

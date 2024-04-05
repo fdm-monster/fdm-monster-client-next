@@ -1,36 +1,63 @@
 <template>
-  <BaseDialog :id="dialog.dialogId" max-width="700px" @escape="closeDialog()">
-    <validation-observer ref="validationObserver" v-slot="{ invalid }">
+  <BaseDialog
+    :id="dialog.dialogId"
+    max-width="700px"
+    @escape="closeDialog()">
+    <validation-observer
+      ref="validationObserver"
+      v-slot="{ invalid }">
       <v-card class="pa-4">
         <v-card-title>
-          <span class="text-h5"> Batch Import JSON printers </span>
+          <span class="text-h5">
+            Batch Import JSON printers
+          </span>
         </v-card-title>
         <v-card-text>
           <v-row>
             <v-col cols="12">
-              <validation-provider v-slot="{ errors }" name="JSON" rules="required|json">
+              <validation-provider
+                v-slot="{ errors }"
+                name="JSON"
+                rules="required|json">
                 <v-textarea
                   v-model="formData.json"
                   :error-messages="errors"
                   data-vv-validate-on="change|blur"
                   rows="10"
-                  @change="updatePrinterCount()"
-                >
-                  <template v-slot:label>
-                    <div>JSON import <small>(optional)</small></div>
+                  @change="updatePrinterCount()">
+                  <template #label>
+                    <div>
+                      JSON import <small>
+                        (optional)
+                      </small>
+                    </div>
                   </template>
                 </v-textarea>
               </validation-provider>
               {{ numPrinters }} printers found
             </v-col>
           </v-row>
-          <v-btn class="mt-2">Validate printers</v-btn>
+          <v-btn class="mt-2">
+            Validate printers
+          </v-btn>
         </v-card-text>
         <v-card-actions>
-          <em class="red--text">* indicates required field</em>
-          <v-spacer></v-spacer>
-          <v-btn text @click="closeDialog()">Close</v-btn>
-          <v-btn :disabled="invalid" color="blue darken-1" text @click="submit()">Create</v-btn>
+          <em class="text-red">
+            * indicates required field
+          </em>
+          <v-spacer />
+          <v-btn
+            variant="text"
+            @click="closeDialog()">
+            Close
+          </v-btn>
+          <v-btn
+            :disabled="invalid"
+            color="blue-darken-1"
+            variant="text"
+            @click="submit()">
+            Create
+          </v-btn>
         </v-card-actions>
       </v-card>
     </validation-observer>
@@ -38,12 +65,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
-import { PrintersService } from "@/backend"
-import { usePrinterStore } from "@/store/printer.store"
-import { useDialogsStore } from "@/store/dialog.store"
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
-import { useDialog } from "@/shared/dialog.composable"
+import { defineComponent } from 'vue'
+import { PrintersService } from '@/backend'
+import { usePrinterStore } from '@/store/printer.store'
+import { useDialogsStore } from '@/store/dialog.store'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { useDialog } from '@/shared/dialog.composable'
 
 // setInteractionMode("eager");
 // extend("json", {
@@ -67,7 +94,7 @@ interface Data {
 }
 
 export default defineComponent({
-  name: "BatchJsonCreateDialog",
+  name: 'BatchJsonCreateDialog',
   setup: () => {
     const dialog = useDialog(DialogName.BatchJsonCreate)
     return {
@@ -76,17 +103,21 @@ export default defineComponent({
       dialog,
     }
   },
+
   async created() {
     this.numPrinters = 0
   },
+
   async mounted() {},
   props: {},
   data: (): Data => ({
     formData: {
-      json: "",
+      json: '',
     },
+
     numPrinters: 0,
   }),
+
   // computed: {
   //   validationObserver() {
   //     return this.$refs.validationObserver as InstanceType<typeof ValidationObserver>;
@@ -96,6 +127,7 @@ export default defineComponent({
     async isValid() {
       return await this.validationObserver.validate()
     },
+
     async parsedPrinters() {
       if (!this.$refs.validationObserver) return []
       if (!(await this.isValid())) return []
@@ -105,9 +137,11 @@ export default defineComponent({
 
       return data
     },
+
     async updatePrinterCount() {
       this.numPrinters = (await this.parsedPrinters()).length
     },
+
     async submit() {
       if (!(await this.isValid())) return
       const printers = await this.parsedPrinters()
@@ -116,23 +150,23 @@ export default defineComponent({
       const answer = confirm(`Are you sure to import ${numPrinters} printers?`)
       if (answer) {
         printers.forEach((p) => {
-          if (p["_id"]) {
-            delete p["_id"]
+          if (p['_id']) {
+            delete p['_id']
           }
-          if (p["apikey"]) {
-            p.apiKey = p["apikey"]
-            delete p["apikey"]
+          if (p['apikey']) {
+            p.apiKey = p['apikey']
+            delete p['apikey']
           }
-          if (p["settingsApperance"]) {
-            p.settingsAppearance = p["settingsApperance"]
-            delete p["settingsApperance"]
+          if (p['settingsApperance']) {
+            p.settingsAppearance = p['settingsApperance']
+            delete p['settingsApperance']
           }
-          if (p["name"]) {
+          if (p['name']) {
             if (!p.settingsAppearance) {
               p.settingsAppearance = {}
             }
-            p.settingsAppearance.name = p["name"]
-            delete p["name"]
+            p.settingsAppearance.name = p['name']
+            delete p['name']
           }
         })
         await PrintersService.batchImportPrinters(printers)
@@ -140,10 +174,12 @@ export default defineComponent({
 
       this.closeDialog()
     },
+
     closeDialog() {
       this.dialog.closeDialog()
     },
   },
+
   watch: {},
 })
 </script>

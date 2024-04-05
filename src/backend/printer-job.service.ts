@@ -1,6 +1,6 @@
-import { ServerApi } from "@/backend/server.api"
-import { BaseService } from "@/backend/base.service"
-import { IdType } from "@/utils/id.type"
+import { ServerApi } from '@/backend/server.api'
+import { BaseService } from '@/backend/base.service'
+import { IdType } from '@/utils/id.type'
 
 export class PrinterJobService extends BaseService {
   static async stopPrintJob(printerId: IdType) {

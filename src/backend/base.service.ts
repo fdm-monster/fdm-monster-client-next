@@ -1,5 +1,5 @@
-import { AxiosRequestConfig } from "axios"
-import { getHttpClient } from "@/shared/http-client"
+import { AxiosRequestConfig } from 'axios'
+import { getHttpClient } from '@/shared/http-client'
 
 export class BaseService {
   protected static async getApi<R>(path: string) {
@@ -33,7 +33,7 @@ export class BaseService {
     const httpClient = await getHttpClient(true)
     const response = await httpClient.request<T>({
       url: path,
-      method: "delete",
+      method: 'delete',
       data: body,
     })
     return response.data

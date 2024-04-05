@@ -1,9 +1,9 @@
-import { IdType } from "@/utils/id.type"
+import { IdType } from '@/utils/id.type'
 
-export const dragAppId = "FDM-Monster-Client-Vue2"
+export const dragAppId = 'FDM-Monster-Client-Vue2'
 
 export enum INTENT {
-  PRINTER_PLACE = "PRINTER_PLACE",
+  PRINTER_PLACE = 'PRINTER_PLACE',
 }
 
 export function isPrinterPlaceDataTransfer(data: PrinterPlace) {

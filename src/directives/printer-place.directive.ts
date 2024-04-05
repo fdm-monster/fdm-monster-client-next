@@ -1,8 +1,8 @@
-import {isPrinterPlaceDataTransfer, PrinterPlace} from "@/shared/drag.constants"
-import {FloorService} from "@/backend/floor.service"
-import {useFloorStore} from "@/store/floor.store"
-import {PrinterDto} from "@/models/printers/printer.model"
-import {App} from "@vue/composition-api"
+import {isPrinterPlaceDataTransfer, PrinterPlace} from '@/shared/drag.constants'
+import {FloorService} from '@/backend/floor.service'
+import {useFloorStore} from '@/store/floor.store'
+import {PrinterDto} from '@/models/printers/printer.model'
+import {App} from '@vue/composition-api'
 
 interface PrinterBindingValue {
   printerSet: PrinterDto | null;
@@ -10,8 +10,8 @@ interface PrinterBindingValue {
   y: number;
 }
 
-const defaultBorder = "1px solid #2b2a27"
-const hoverBorder = "1px solid gray"
+const defaultBorder = '1px solid #2b2a27'
+const hoverBorder = '1px solid gray'
 
 const bindDropConditionally = (el: HTMLElement, bindingValue: PrinterBindingValue) => {
   const floorStore = useFloorStore()
@@ -33,18 +33,18 @@ const bindDropConditionally = (el: HTMLElement, bindingValue: PrinterBindingValu
       return
     }
 
-    const buffer = e.dataTransfer.getData("text")
+    const buffer = e.dataTransfer.getData('text')
     const data = JSON.parse(buffer) as PrinterPlace
     const isRecognized = isPrinterPlaceDataTransfer(data)
     if (!isRecognized) {
-      console.debug("Drop not recognized", data)
+      console.debug('Drop not recognized', data)
       return
     }
 
     const floorId = floorStore.selectedFloor?.id
-    if (!floorId) throw new Error("Floor is not set")
+    if (!floorId) throw new Error('Floor is not set')
     const printerId = data.printerId
-    if (!printerId) throw new Error("PrinterId was not provided")
+    if (!printerId) throw new Error('PrinterId was not provided')
 
     await FloorService.addPrinterToFloor(floorId, {
       printerId,
@@ -57,7 +57,7 @@ const bindDropConditionally = (el: HTMLElement, bindingValue: PrinterBindingValu
       return
     }
 
-    if (ev.dataTransfer && [...ev!.dataTransfer.items].filter((i) => i.kind === "file").length) {
+    if (ev.dataTransfer && [...ev!.dataTransfer.items].filter((i) => i.kind === 'file').length) {
       return
     }
     el.style.border = hoverBorder
@@ -70,7 +70,7 @@ const bindDropConditionally = (el: HTMLElement, bindingValue: PrinterBindingValu
 }
 
 export function registerPrinterPlaceDirective(app: App<Element>) {
-  app.directive("drop-printer-position", {
+  app.directive('drop-printer-position', {
     inserted: (el, binding, vnode) => {
       bindDropConditionally(el, binding.value)
     },

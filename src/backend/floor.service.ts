@@ -1,8 +1,8 @@
-import { BaseService } from "@/backend/base.service"
-import { ServerApi } from "@/backend/server.api"
-import { newRandomNamePair } from "@/shared/noun-adjectives.data"
-import { FloorDto, getDefaultCreateFloor, PreCreateFloor } from "@/models/floors/floor.model"
-import { IdType } from "@/utils/id.type"
+import { BaseService } from '@/backend/base.service'
+import { ServerApi } from '@/backend/server.api'
+import { newRandomNamePair } from '@/shared/noun-adjectives.data'
+import { FloorDto, getDefaultCreateFloor, PreCreateFloor } from '@/models/floors/floor.model'
+import { IdType } from '@/utils/id.type'
 
 export class FloorService extends BaseService {
   static convertPrinterFloorToCreateForm(printerFloor?: FloorDto): PreCreateFloor {
@@ -25,7 +25,7 @@ export class FloorService extends BaseService {
     modifiedData.floor = parseInt(modifiedData.floor)
 
     if (Number.isNaN(modifiedData.floor)) {
-      throw new Error("Floor number did not convert to number.")
+      throw new Error('Floor number did not convert to number.')
     }
 
     return modifiedData as FloorDto

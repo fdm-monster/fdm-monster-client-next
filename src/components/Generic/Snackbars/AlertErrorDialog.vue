@@ -1,37 +1,55 @@
 <template>
-  <v-dialog v-model="dialogOpened" max-width="800" persistent>
+  <v-dialog
+    v-model="dialogOpened"
+    max-width="800"
+    persistent>
     <v-card>
-      <v-card-title class="text-h5"> Upload problem occurred</v-card-title>
+      <v-card-title class="text-h5">
+        Upload problem occurred
+      </v-card-title>
       <v-layout justify-center>
-        <v-icon color="red" size="100">error_outline</v-icon>
+        <v-icon
+          color="red"
+          size="100">
+          error_outline
+        </v-icon>
       </v-layout>
       <v-card-text>
         Please check: Was the printer connected and printing in OctoPrint? If yes, please reload.
-        this page. <br />
+        this page. <br>
 
-        Error type: {{ errorType }}<br />
+        Error type: {{ errorType }}<br>
         Failed uploads:
         <ul>
-          <li v-for="(upload, index) in failedUploads" :key="index">
-            File: {{ upload.file?.name }}<br />
-            Printer: {{ upload.printer?.name }}<br />
-            Reason: <small>{{ upload?.error }}</small>
+          <li
+            v-for="(upload, index) in failedUploads"
+            :key="index">
+            File: {{ upload.file?.name }}<br>
+            Printer: {{ upload.printer?.name }}<br>
+            Reason: <small>
+              {{ upload?.error }}
+            </small>
           </li>
         </ul>
       </v-card-text>
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="red" text @click="dialogOpened = false"> Close</v-btn>
+        <v-spacer />
+        <v-btn
+          color="red"
+          variant="text"
+          @click="dialogOpened = false">
+          Close
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue"
-import { AxiosError } from "axios"
-import { FailedQueuedUpload } from "../../../models/uploads/queued-upload.model"
-import { usePrinterStore } from "../../../store/printer.store"
-import { useUploadsStore } from "../../../store/uploads.store"
+import { defineComponent } from 'vue'
+import { AxiosError } from 'axios'
+import { FailedQueuedUpload } from '@/models/uploads/queued-upload.model'
+import { usePrinterStore } from '@/store/printer.store'
+import { useUploadsStore } from '@/store/uploads.store'
 
 interface Data {
   dialogOpened: boolean;
@@ -41,7 +59,7 @@ interface Data {
 }
 
 export default defineComponent({
-  name: "AlertErrorDialog",
+  name: 'AlertErrorDialog',
   components: {},
   setup: () => {
     return {
@@ -49,6 +67,7 @@ export default defineComponent({
       uploadsStore: useUploadsStore(),
     }
   },
+
   created() {},
   beforeDestroyed() {},
   async mounted() {},
@@ -57,22 +76,25 @@ export default defineComponent({
     dialogOpened: false,
     errorCode: undefined,
     failedUploads: [],
-    errorType: "",
+    errorType: '',
   }),
+
   computed: {},
   methods: {
     uploadFailureHandler(e: AxiosError<any>) {
-      this.errorType = "Upload error(s)"
+      this.errorType = 'Upload error(s)'
       this.errorCode = e.response?.status
       this.dialogOpened = true
       this.failedUploads = this.uploadsStore.failedUploads
     },
+
     uploadOtherHandler(_e: any) {
-      this.errorType = "Unknown error"
+      this.errorType = 'Unknown error'
       this.errorCode = undefined
       this.dialogOpened = true
     },
   },
+
   watch: {},
 })
 </script>

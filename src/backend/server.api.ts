@@ -1,7 +1,7 @@
-import { IdType } from "@/utils/id.type"
+import { IdType } from '@/utils/id.type'
 
 export class ServerApi {
-  static base = "/api"
+  static base = '/api'
 
   static firstTimeSetupRoute = `${ServerApi.base}/first-time-setup`
   static completeFirstTimeSetupRoute = `${ServerApi.firstTimeSetupRoute}/complete`

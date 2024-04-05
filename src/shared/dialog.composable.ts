@@ -1,6 +1,6 @@
-import { useDialogsStore } from "@/store/dialog.store"
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
-import { watchEffect } from "vue"
+import { useDialogsStore } from '@/store/dialog.store'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { watchEffect } from 'vue'
 
 export function useDialog<T = any, O = any>(dialogId: DialogName) {
   const dialogStore = useDialogsStore()

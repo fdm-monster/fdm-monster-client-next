@@ -4,51 +4,88 @@
       alt="FDM Monster Background"
       class="grid-bg-img align-content-center"
       src="/img/logo.svg"
-      style="opacity: 0.08"
-    />
-    <v-stepper v-model="stepper" class="grey darken-4">
+      style="opacity: 0.08">
+    <v-stepper
+      v-model="stepper"
+      class="bg-grey-darken-4">
       <v-stepper-header>
-        <v-stepper-step :complete="stepper > 1" step="1"> Introduction</v-stepper-step>
+        <v-stepper-step
+          :complete="stepper > 1"
+          step="1">
+          Introduction
+        </v-stepper-step>
 
-        <v-divider></v-divider>
+        <v-divider />
 
-        <v-stepper-step :complete="stepper > 2" step="2"> Login and registration</v-stepper-step>
+        <v-stepper-step
+          :complete="stepper > 2"
+          step="2">
+          Login and registration
+        </v-stepper-step>
 
-        <v-divider></v-divider>
+        <v-divider />
 
-        <v-stepper-step step="3"> Summary</v-stepper-step>
+        <v-stepper-step step="3">
+          Summary
+        </v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items>
-        <v-stepper-content class="align-content-center align-center text-center" step="1">
+        <v-stepper-content
+          class="align-content-center align-center text-center"
+          step="1">
           <div class="align-content-center align-center text-center">
-            <img class="rounded-pill ma-4" src="/img/OIG.jpg" style="opacity: 0.7" width="400" />
-            <h1>FDM Monster</h1>
-            <small>This server is still unconfigured.</small>
+            <img
+              class="rounded-pill ma-4"
+              src="/img/OIG.jpg"
+              style="opacity: 0.7"
+              width="400">
+            <h1>
+              FDM Monster
+            </h1>
+            <small>
+              This server is still unconfigured.
+            </small>
           </div>
-          <v-btn class="mt-14 mb-14" color="primary" @click="stepper = 2">Start Setup</v-btn>
+          <v-btn
+            class="mt-14 mb-14"
+            color="primary"
+            @click="stepper = 2">
+            Start Setup
+          </v-btn>
 
           <div class="mt-6 border_all">
             <v-icon class="mr-6">question_mark</v-icon>
             <small>
               If you have questions at any point, reach out on
-              <a href="https://github.com/fdm-monster/fdm-monster/issues">Github</a> or on
-              <a href="https://discord.gg/mwA8uP8CMc">Discord</a>.</small
-            >
+              <a href="https://github.com/fdm-monster/fdm-monster/issues">
+                Github
+              </a> or on
+              <a href="https://discord.gg/mwA8uP8CMc">
+                Discord
+              </a>.
+            </small>
           </div>
         </v-stepper-content>
-        <v-stepper-content class="align-content-center align-center text-center" step="2">
-          <h4><v-icon class="mr-2">settings</v-icon> Login</h4>
+        <v-stepper-content
+          class="align-content-center align-center text-center"
+          step="2">
+          <h4>
+            <v-icon class="mr-2">settings</v-icon> Login
+          </h4>
 
           <v-form v-model="formValid">
-            <v-switch v-model="formStep1.loginRequired" :hint="true" class="mt-5" persistent-hint>
-              <template v-slot:message>
+            <v-switch
+              v-model="formStep1.loginRequired"
+              :hint="true"
+              class="mt-5"
+              persistent-hint>
+              <template #message>
                 <span class="d-flex flex-row align-center">
                   <v-icon
                     :color="formStep1.loginRequired ? 'success' : ''"
                     :disabled="!formStep1.loginRequired"
-                    class="ml-3 mr-3"
-                  >
+                    class="ml-3 mr-3">
                     check
                   </v-icon>
                   Login is required.
@@ -58,35 +95,38 @@
                   <v-icon
                     :color="!formStep1.loginRequired ? 'error' : ''"
                     :disabled="formStep1.loginRequired"
-                    class="ml-3 mr-3"
-                  >
+                    class="ml-3 mr-3">
                     close
                   </v-icon>
                   No login is required. The admin role is assumed.
                 </span>
               </template>
-              <template v-slot:label>Enable Login</template>
+              <template #label>
+                Enable Login
+              </template>
             </v-switch>
 
-            <v-alert v-if="!formStep1.loginRequired" color="error darken-4 mt-4">
+            <v-alert
+              v-if="!formStep1.loginRequired"
+              color="error-darken-4">
               You might be exposing your FDM Monster server publicly. Please take care evaluating
               the
-              <strong>Enable Login</strong> option.
+              <strong>
+                Enable Login
+              </strong> option.
             </v-alert>
 
             <v-switch
               v-model="formStep1.registration"
               :hint="true"
               class="mt-10 mb-10"
-              persistent-hint
-            >
-              <template v-slot:message>
+              persistent-hint>
+              <template #message>
                 <span class="d-flex flex-row align-center">
                   <v-icon
                     :color="formStep1.registration ? 'success' : ''"
                     :disabled="!formStep1.registration"
-                    class="ml-3 mr-3"
-                  >
+                    class="ml-3 mr-3">
                     check
                   </v-icon>
                   Accounts can be registered with a guest role.
@@ -95,28 +135,30 @@
                   <v-icon
                     :color="!formStep1.registration ? 'error' : ''"
                     :disabled="formStep1.registration"
-                    class="ml-3 mr-3"
-                  >
+                    class="ml-3 mr-3">
                     close
                   </v-icon>
                   No other accounts can be registered.
                 </span>
               </template>
-              <template v-slot:label>Enable Registration</template>
+              <template #label>
+                Enable Registration
+              </template>
             </v-switch>
 
             <v-divider />
 
-            <h4 class="mt-4"><v-icon class="mr-2">shield</v-icon> Admin account</h4>
+            <h4 class="mt-4">
+              <v-icon class="mr-2">shield</v-icon> Admin account
+            </h4>
 
             <v-text-field
               v-model="formStep2.rootUsername"
               :rules="[(v) => !!v || 'Username is required']"
               class="mt-5"
               label="Username"
-              prepend-icon="person"
-            >
-              <template v-slot:prepend>
+              prepend-icon="person">
+              <template #prepend>
                 <v-icon>person</v-icon>
               </template>
             </v-text-field>
@@ -130,9 +172,8 @@
                 (v) => (!!v && v?.length >= 8) || 'Password must be of length 8 or greater',
               ]"
               class="mt-5"
-              label="Password"
-            >
-              <template v-slot:prepend>
+              label="Password">
+              <template #prepend>
                 <v-icon>password</v-icon>
               </template>
             </v-text-field>
@@ -146,19 +187,25 @@
                 (v) => v === formStep2.rootPassword || 'Passwords are not equal',
               ]"
               class="mt-5"
-              label="Repeated Password"
-            >
-              <template v-slot:prepend>
+              label="Repeated Password">
+              <template #prepend>
                 <v-icon>password</v-icon>
               </template>
             </v-text-field>
           </v-form>
 
           <div class="mt-4">
-            <v-btn class="mr-4" @click="stepper = 1">Back</v-btn>
-            <v-btn :disabled="!formValid" color="primary" @click="submitWizard()">
-              Verify & Submit</v-btn
-            >
+            <v-btn
+              class="mr-4"
+              @click="stepper = 1">
+              Back
+            </v-btn>
+            <v-btn
+              :disabled="!formValid"
+              color="primary"
+              @click="submitWizard()">
+              Verify & Submit
+            </v-btn>
           </div>
 
           <v-divider class="mt-4" />
@@ -167,27 +214,47 @@
             <v-icon class="mr-6">question_mark</v-icon>
             <small>
               If you have questions at any point, reach out on
-              <a href="https://github.com/fdm-monster/fdm-monster/issues">Github</a> or on
-              <a href="https://discord.gg/mwA8uP8CMc">Discord</a>.</small
-            >
+              <a href="https://github.com/fdm-monster/fdm-monster/issues">
+                Github
+              </a> or on
+              <a href="https://discord.gg/mwA8uP8CMc">
+                Discord
+              </a>.
+            </small>
           </div>
         </v-stepper-content>
-        <v-stepper-content class="align-content-center align-center text-center" step="3">
+        <v-stepper-content
+          class="align-content-center align-center text-center"
+          step="3">
           <div class="mb-5 mt-10">
-            <v-icon size="100" class="mr-5" color="green circle">check_circle</v-icon> Setup
+            <v-icon
+              size="100"
+              class="mr-5"
+              color="green circle">
+              check_circle
+            </v-icon> Setup
             Completed
           </div>
 
-          <br />
-          <v-btn color="primary" class="mr-4" @click="continueNext()">Let's continue</v-btn>
+          <br>
+          <v-btn
+            color="primary"
+            class="mr-4"
+            @click="continueNext()">
+            Let's continue
+          </v-btn>
 
           <div class="mt-14">
             <v-icon class="mr-6">question_mark</v-icon>
             <small>
               If you have questions at any point, reach out on
-              <a href="https://github.com/fdm-monster/fdm-monster/issues">Github</a> or on
-              <a href="https://discord.gg/mwA8uP8CMc">Discord</a>.</small
-            >
+              <a href="https://github.com/fdm-monster/fdm-monster/issues">
+                Github
+              </a> or on
+              <a href="https://discord.gg/mwA8uP8CMc">
+                Discord
+              </a>.
+            </small>
           </div>
         </v-stepper-content>
       </v-stepper-items>
@@ -195,11 +262,11 @@
   </v-container>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from "vue"
-import { FirstTimeSetupService } from "@/backend/first-time-setup.service"
-import { useSnackbar } from "@/shared/snackbar.composable"
-import { useRouter } from "vue-router"
-import { useAuthStore } from "@/store/auth.store"
+import { onMounted, ref } from 'vue'
+import { FirstTimeSetupService } from '@/backend/first-time-setup.service'
+import { useSnackbar } from '@/shared/snackbar.composable'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/store/auth.store'
 
 const router = useRouter()
 const snackbar = useSnackbar()
@@ -210,9 +277,9 @@ const formStep1 = ref({
   registration: false,
 })
 const formStep2 = ref({
-  rootUsername: "admin",
-  rootPassword: "",
-  rootPassword2: "",
+  rootUsername: 'admin',
+  rootPassword: '',
+  rootPassword2: '',
 })
 
 const stepper = ref(1)
@@ -221,18 +288,18 @@ onMounted(async () => {
   await authStore.checkAuthenticationRequirements()
 
   if (authStore.wizardState?.wizardCompleted) {
-    snackbar.info("Setup already completed.")
+    snackbar.info('Setup already completed.')
     if (authStore.loginRequired) {
-      await router.push({ name: "Login" })
+      await router.push({ name: 'Login' })
     } else {
-      await router.push({ name: "Home" })
+      await router.push({ name: 'Home' })
     }
   }
 })
 
 async function submitWizard() {
   if (!formValid.value) {
-    snackbar.error("Please fill out all required fields.")
+    snackbar.error('Please fill out all required fields.')
     return
   }
 
@@ -244,12 +311,12 @@ async function submitWizard() {
     rootUsername: form2Value.rootUsername,
     rootPassword: form2Value.rootPassword,
   })
-  snackbar.openInfoMessage({ title: "Setup completed" })
+  snackbar.openInfoMessage({ title: 'Setup completed' })
   stepper.value = 3
 }
 
 async function continueNext() {
-  await router.push({ name: "Login" })
+  await router.push({ name: 'Login' })
 }
 </script>
 <style>

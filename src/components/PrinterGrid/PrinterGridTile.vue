@@ -14,169 +14,196 @@
           !gridStore.gridEditMode || !printer ? printerStateColor : 'rgba(1,1,1,0)',
       }"
       class="tile fill-height"
-      outlined
+      variant="outlined"
       tile
-      @click="selectOrUnplacePrinter()"
-    >
+      @click="selectOrUnplacePrinter()">
       <v-icon
         v-if="printerState?.text.includes('API')"
         color="primary"
         size="70"
-        style="opacity: 0.2; position: absolute; top: 5%; right: 10%"
-      >
+        style="opacity: 0.2; position: absolute; top: 5%; right: 10%">
         wifi_off
       </v-icon>
       <v-icon
         v-if="printerState?.text.includes('USB')"
         color="primary"
         size="70"
-        style="opacity: 0.2; position: absolute; top: 5%; right: 10%"
-      >
+        style="opacity: 0.2; position: absolute; top: 5%; right: 10%">
         usb_off
       </v-icon>
-      <v-container v-if="printer?.id" class="tile-inner fill-height">
+      <v-container
+        v-if="printer?.id"
+        class="tile-inner fill-height">
         <small class="small-resized-font">
           {{ printer?.name }}
         </small>
         <v-menu offset-y>
-          <template v-slot:activator="{ props }">
-            <v-btn class="float-right d-inline d-xl-none" v-bind="props">
+          <template #activator="{ props }">
+            <v-btn
+              class="float-right d-inline d-xl-none"
+              v-bind="props">
               <v-icon>more_vert</v-icon>
             </v-btn>
           </template>
           <v-list>
-            <v-list-item :close-on-click="true" @click="clickInfo()">
+            <v-list-item
+              :close-on-click="true"
+              @click="clickInfo()">
               <v-icon>info</v-icon>
               &nbsp;Details
             </v-list-item>
             <v-list-item
               v-if="hasPrinterControlFeature"
               :close-on-click="true"
-              @click="clickOpenPrinterControlDialog()"
-            >
+              @click="clickOpenPrinterControlDialog()">
               <v-icon>open_with</v-icon>
               &nbsp;Control
             </v-list-item>
-            <v-list-item :close-on-click="true" @click="clickOpenPrinterURL()">
+            <v-list-item
+              :close-on-click="true"
+              @click="clickOpenPrinterURL()">
               <v-icon>directions</v-icon>
               &nbsp;Visit OctoPrint
             </v-list-item>
-            <v-list-item :close-on-click="true" @click="clickOpenSettings()">
+            <v-list-item
+              :close-on-click="true"
+              @click="clickOpenSettings()">
               <v-icon>settings</v-icon>
               &nbsp;Edit Printer
             </v-list-item>
-            <v-list-item :close-on-click="true" @click="clickEmergencyStop()">
+            <v-list-item
+              :close-on-click="true"
+              @click="clickEmergencyStop()">
               <v-icon>stop</v-icon>
               &nbsp;Emergency stop
             </v-list-item>
           </v-list>
         </v-menu>
-        <div v-if="!gridStore.gridEditMode" class="float-right d-none d-xl-inline">
+        <div
+          v-if="!gridStore.gridEditMode"
+          class="float-right d-none d-xl-inline">
           <!-- Connect USB -->
           <v-btn
             v-if="
               !printerStateStore.isPrinterOperational(printer?.id) &&
-              printerStateStore.isApiResponding(printer?.id)
+                printerStateStore.isApiResponding(printer?.id)
             "
-            @click.prevent.stop="clickConnectUsb()"
-          >
+            @click.prevent.stop="clickConnectUsb()">
             <v-icon>usb</v-icon>
           </v-btn>
 
           <!-- Emergency stop button -->
           <v-tooltip
             v-if="hasPrinterControlFeature && printerStateStore.isPrinterOperational(printer?.id)"
-            bottom
-          >
-            <template v-slot:activator="{ props }">
+            location="bottom">
+            <template #activator="{ props }">
               <v-btn
                 elevation="4"
                 size="36"
                 v-bind="props"
-                @click.prevent.stop="clickOpenPrinterControlDialog()"
-              >
+                @click.prevent.stop="clickOpenPrinterControlDialog()">
                 <v-icon>open_with</v-icon>
               </v-btn>
             </template>
-            <template v-slot:default>
-              <span>Control your printer head or extruder.</span>
+            <template #default>
+              <span>
+                Control your printer head or extruder.
+              </span>
             </template>
           </v-tooltip>
 
           <!-- Emergency stop button -->
-          <v-tooltip v-if="printerStateStore.isPrinterOperational(printer?.id)" bottom>
-            <template v-slot:activator="{ props }">
+          <v-tooltip
+            v-if="printerStateStore.isPrinterOperational(printer?.id)"
+            location="bottom">
+            <template #activator="{ props }">
               <v-btn
                 elevation="4"
                 size="36"
                 v-bind="props"
-                @click.prevent.stop="clickEmergencyStop()"
-              >
+                @click.prevent.stop="clickEmergencyStop()">
                 <v-icon>dangerous</v-icon>
               </v-btn>
             </template>
-            <template v-slot:default>
-              <span>Send an emergency stop, causing USB to be disconnected.</span>
+            <template #default>
+              <span>
+                Send an emergency stop, causing USB to be disconnected.
+              </span>
             </template>
           </v-tooltip>
 
           <!-- Refresh connectivity button -->
           <v-tooltip
             v-if="printer.enabled && printerStateStore.isPrinterNotOnline(printer.id)"
-            bottom
-          >
-            <template v-slot:activator="{ props }">
+            location="bottom">
+            <template #activator="{ props }">
               <v-btn
                 elevation="4"
                 size="36"
                 v-bind="props"
-                @click.prevent.stop="clickRefreshSocket()"
-              >
+                @click.prevent.stop="clickRefreshSocket()">
                 <v-icon>autorenew</v-icon>
               </v-btn>
             </template>
-            <template v-slot:default>
-              <span>Retry connecting to OctoPrint API</span>
+            <template #default>
+              <span>
+                Retry connecting to OctoPrint API
+              </span>
             </template>
           </v-tooltip>
-          <v-btn elevation="5" @click.prevent.stop="clickInfo()">
+          <v-btn
+            elevation="5"
+            @click.prevent.stop="clickInfo()">
             <v-icon>menu_open</v-icon>
           </v-btn>
         </div>
-        <div v-else class="float-end">
-          <strong class="pl-5 pr-5" color="primary">
+        <div
+          v-else
+          class="float-end">
+          <strong
+            class="pl-5 pr-5"
+            color="primary">
             <v-icon>disabled_visible</v-icon>
             Click to clear
           </strong>
         </div>
-        <br/>
+        <br>
 
         <v-tooltip
           :disabled="!printer?.disabledReason"
           close-delay="100"
           color="danger"
           open-delay="0"
-          top
-        >
-          <template v-slot:activator="{ props }">
+          location="top">
+          <template #activator="{ props }">
             <small
               class="xsmall-resized-font text--secondary d-lg-inline d-none"
-              v-bind="props"
-            >
+              v-bind="props">
               <span v-if="printer?.disabledReason">
-                <small> MAINTENANCE</small>
-                <v-icon class="d-none d-xl-inline" color="primary" small>info</v-icon>
+                <small>
+                  MAINTENANCE
+                </small>
+                <v-icon
+                  class="d-none d-xl-inline"
+                  color="primary"
+                  size="small">
+                  info
+                </v-icon>
               </span>
               <span v-else>
-                <small>{{ printerState?.text?.toUpperCase() }}</small>
+                <small>
+                  {{ printerState?.text?.toUpperCase() }}
+                </small>
               </span>
             </small>
           </template>
-          Maintenance reason: <br/>
+          Maintenance reason: <br>
           {{ printer.disabledReason }}
         </v-tooltip>
         <small v-if="largeTilesEnabled && currentPrintingFilePath">
-          <strong>File:</strong> {{ currentPrintingFilePath }}
+          <strong>
+            File:
+          </strong> {{ currentPrintingFilePath }}
         </small>
       </v-container>
       <v-container v-else-if="gridStore.gridEditMode">
@@ -185,42 +212,43 @@
       </v-container>
       <v-progress-linear
         v-if="currentJob?.progress"
-        :value="currentJob.progress.completion"
+        :model-value="currentJob.progress.completion"
         absolute
         bottom
         color="green"
-        height="13"
-      >
-        <span class="xsmall-resized-font">{{
+        height="13">
+        <span class="xsmall-resized-font">
+          {{
             largeTilesEnabled
               ? currentJob?.progress?.completion
                 ? currentJob?.progress?.completion?.toFixed(1) + "%"
                 : "-"
               : currentPrintingFilePath
-          }}</span>
+          }}
+        </span>
       </v-progress-linear>
     </v-card>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {computed, PropType} from "vue"
-import {CustomGcodeService} from "@/backend/custom-gcode.service"
-import {PrintersService} from "@/backend"
-import {usePrinterStore} from "@/store/printer.store"
-import {DialogName} from "@/components/Generic/Dialogs/dialog.constants"
-import {useGridStore} from "@/store/grid.store"
-import {FloorService} from "@/backend/floor.service"
-import {useSettingsStore} from "@/store/settings.store"
-import {useFloorStore} from "@/store/floor.store"
-import {interpretStates} from "@/shared/printer-state.constants"
-import {usePrinterStateStore} from "@/store/printer-state.store"
-import {PrinterDto} from "@/models/printers/printer.model"
-import {useSnackbar} from "@/shared/snackbar.composable"
-import {useDialog} from "@/shared/dialog.composable"
-import {useFeatureStore} from "@/store/features.store"
+import {computed, PropType} from 'vue'
+import {CustomGcodeService} from '@/backend/custom-gcode.service'
+import {PrintersService} from '@/backend'
+import {usePrinterStore} from '@/store/printer.store'
+import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
+import {useGridStore} from '@/store/grid.store'
+import {FloorService} from '@/backend/floor.service'
+import {useSettingsStore} from '@/store/settings.store'
+import {useFloorStore} from '@/store/floor.store'
+import {interpretStates} from '@/shared/printer-state.constants'
+import {usePrinterStateStore} from '@/store/printer-state.store'
+import {PrinterDto} from '@/models/printers/printer.model'
+import {useSnackbar} from '@/shared/snackbar.composable'
+import {useDialog} from '@/shared/dialog.composable'
+import {useFeatureStore} from '@/store/features.store'
 
-const defaultColor = "rgba(100,100,100,0.1)"
+const defaultColor = 'rgba(100,100,100,0.1)'
 
 const props = defineProps({
   printer: {type: Object as PropType<PrinterDto | undefined>, required: false},
@@ -250,7 +278,7 @@ const unselected = computed(() => {
 })
 
 const hasPrinterControlFeature = computed(() => {
-  return featureStore.hasFeature("printerControlApi")
+  return featureStore.hasFeature('printerControlApi')
 })
 
 const largeTilesEnabled = computed(() => {
@@ -293,7 +321,7 @@ const clickRefreshSocket = async () => {
   if (!printerId.value) return
   await PrintersService.refreshSocket(printerId.value)
   snackbar.openInfoMessage({
-    title: "Refreshing OctoPrint connection state",
+    title: 'Refreshing OctoPrint connection state',
   })
 }
 
@@ -309,7 +337,7 @@ const clickOpenSettings = () => {
 
 const clickOpenPrinterControlDialog = async () => {
   if (!printerId.value) {
-    throw new Error("PrinterId not set, cant open dialog")
+    throw new Error('PrinterId not set, cant open dialog')
   }
 
   await controlDialog.openDialog({printerId})
@@ -318,7 +346,7 @@ const clickOpenPrinterControlDialog = async () => {
 const clickEmergencyStop = async () => {
   if (!printerId.value) return
   if (
-    confirm("Are you sure to abort the print in Emergency Stop mode? Please reconnect after.")
+    confirm('Are you sure to abort the print in Emergency Stop mode? Please reconnect after.')
   ) {
     await CustomGcodeService.postEmergencyM112Command(printerId.value)
   }
@@ -333,7 +361,7 @@ const selectOrUnplacePrinter = async () => {
   if (!props.printer || !printerId.value) return
   if (gridStore.gridEditMode) {
     const floorId = floorStore.selectedFloor?.id
-    if (!floorId) throw new Error("Cant clear printer, floor not selected")
+    if (!floorId) throw new Error('Cant clear printer, floor not selected')
     await FloorService.deletePrinterFromFloor(floorId, printerId.value)
     return
   }

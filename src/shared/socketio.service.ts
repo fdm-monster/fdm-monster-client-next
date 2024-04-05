@@ -1,29 +1,29 @@
 import {
   PrinterStateDto,
   SocketIoUpdateMessage,
-} from "@/models/socketio-messages/socketio-message.model"
-import { usePrinterStore } from "@/store/printer.store"
-import { useFloorStore } from "@/store/floor.store"
-import { usePrinterStateStore } from "@/store/printer-state.store"
-import { useTestPrinterStore } from "@/store/test-printer.store"
-import { useSnackbar } from "./snackbar.composable"
-import { getBaseUri } from "@/shared/http-client"
-import { useAuthStore } from "@/store/auth.store"
-import { IdType } from "@/utils/id.type"
+} from '@/models/socketio-messages/socketio-message.model'
+import { usePrinterStore } from '@/store/printer.store'
+import { useFloorStore } from '@/store/floor.store'
+import { usePrinterStateStore } from '@/store/printer-state.store'
+import { useTestPrinterStore } from '@/store/test-printer.store'
+import { useSnackbar } from './snackbar.composable'
+import { getBaseUri } from '@/shared/http-client'
+import { useAuthStore } from '@/store/auth.store'
+import { IdType } from '@/utils/id.type'
 import {
   appSocketIO,
   constructSocket,
   deconstructSocket,
   getSocketState,
   resetSocketConnection,
-} from "@/store/connection.store"
+} from '@/store/connection.store'
 
 enum IO_MESSAGES {
-  LegacyUpdate = "legacy-update",
-  TestPrinterState = "test-printer-state",
+  LegacyUpdate = 'legacy-update',
+  TestPrinterState = 'test-printer-state',
   // CompletionEvent = "completion-event",
-  HostState = "host-state",
-  ApiAccessibility = "api-accessibility",
+  HostState = 'host-state',
+  ApiAccessibility = 'api-accessibility',
 }
 
 export class SocketIoService {
@@ -38,7 +38,7 @@ export class SocketIoService {
   }
 
   async setupSocketConnection() {
-    console.debug("Setting up socket.io client")
+    console.debug('Setting up socket.io client')
     const apiBase = await getBaseUri()
     const authStore = useAuthStore()
     authStore.loadTokens()
@@ -57,14 +57,14 @@ export class SocketIoService {
 
   reconnect() {
     if (appSocketIO) {
-      console.debug("Resetting socket.io client connection")
+      console.debug('Resetting socket.io client connection')
       resetSocketConnection()
     }
   }
 
   onMessage(message: SocketIoUpdateMessage) {
     if (message.trackedUploads.current?.length || message.trackedUploads.failed?.length) {
-      console.debug("[SocketIO] trackedUploads message received")
+      console.debug('[SocketIO] trackedUploads message received')
       message.trackedUploads.current.forEach((u) => {
         this.snackbar.openProgressMessage(
           u.correlationToken,

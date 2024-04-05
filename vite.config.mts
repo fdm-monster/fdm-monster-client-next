@@ -8,7 +8,7 @@ import Vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
 // Utilities
 import {defineConfig} from 'vite'
 import {fileURLToPath, URL} from 'url'
-import packageJson from "./package.json"
+import packageJson from './package.json'
 // import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 // https://vitejs.dev/config/
@@ -68,7 +68,7 @@ export default defineConfig({
   ],
   define: {
     'process.env': {},
-    "import.meta.env.PACKAGE_VERSION": JSON.stringify(packageJson.version),
+    'import.meta.env.PACKAGE_VERSION': JSON.stringify(packageJson.version),
   },
   resolve: {
     alias: {
@@ -82,9 +82,9 @@ export default defineConfig({
       '.ts',
       '.tsx',
       '.vue',
-      ".png",
-      ".css",
-      ".scss"
+      '.png',
+      '.css',
+      '.scss'
     ],
   },
   // test: {

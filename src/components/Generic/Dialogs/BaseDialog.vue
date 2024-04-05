@@ -2,25 +2,26 @@
   <v-dialog
     :max-width="maxWidth"
     :retain-focus="false"
-    :value="showingDialog"
+    :model-value="showingDialog"
     persistent
-    @close="emitEscape()"
-  >
+    @close="emitEscape()">
     <slot>
       <div class="pa-3 text--primary">
         No content defined in dialog.
-        <v-btn @click="dialog.closeDialog()"><v-icon class="mr-3">close</v-icon>Close</v-btn>
-      </div></slot
-    >
+        <v-btn @click="dialog.closeDialog()">
+          <v-icon class="mr-3">close</v-icon>Close
+        </v-btn>
+      </div>
+    </slot>
   </v-dialog>
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, onMounted } from "vue"
-import { useDialogsStore } from "@/store/dialog.store"
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
-import { onKeyStroke } from "@vueuse/core"
-import { useDialog } from "@/shared/dialog.composable"
+import { computed, onBeforeUnmount, onMounted } from 'vue'
+import { useDialogsStore } from '@/store/dialog.store'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { onKeyStroke } from '@vueuse/core'
+import { useDialog } from '@/shared/dialog.composable'
 
 const props = defineProps({
   id: {
@@ -29,23 +30,23 @@ const props = defineProps({
   },
   maxWidth: {
     type: String,
-    default: "400px",
+    default: '400px',
   },
 })
 const dialogsStore = useDialogsStore()
-const emit = defineEmits(["escape", "opened", "beforeOpened"])
+const emit = defineEmits(['escape', 'opened', 'beforeOpened'])
 const dialog = useDialog(props.id)
 
 function openedCallback(input: any) {
-  return emit("opened", input)
+  return emit('opened', input)
 }
 
 function beforeOpenedCallback(input: any) {
-  return emit("beforeOpened", input)
+  return emit('beforeOpened', input)
 }
 
 onMounted(async () => {
-  onKeyStroke("Escape", (e) => {
+  onKeyStroke('Escape', (e) => {
     if (showingDialog.value) {
       e.preventDefault()
       emitEscape()
@@ -72,6 +73,6 @@ const showingDialog = computed(() => {
 })
 
 function emitEscape() {
-  emit("escape")
+  emit('escape')
 }
 </script>

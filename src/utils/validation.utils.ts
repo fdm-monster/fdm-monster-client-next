@@ -1,5 +1,5 @@
 export function isValidIPOrMask(str: string) {
-  const splitArray = str.split(".")
+  const splitArray = str.split('.')
   const subAddresses = splitArray.length
   const arr = splitArray.filter((el) => {
     return !/^0.|\D/g.test(el)

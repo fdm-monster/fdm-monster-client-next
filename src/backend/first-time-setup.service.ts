@@ -1,5 +1,5 @@
-import { BaseService } from "@/backend/base.service"
-import { ServerApi } from "@/backend/server.api"
+import { BaseService } from '@/backend/base.service'
+import { ServerApi } from '@/backend/server.api'
 
 interface FirstTimeSetupData {
   loginRequired: boolean;

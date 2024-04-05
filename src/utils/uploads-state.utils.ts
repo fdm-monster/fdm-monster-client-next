@@ -1,6 +1,6 @@
-import { FileUploadCommands } from "@/models/printers/file-upload-commands.model"
-import { PrinterDto } from "@/models/printers/printer.model"
-import { QueuedUpload } from "@/models/uploads/queued-upload.model"
+import { FileUploadCommands } from '@/models/printers/file-upload-commands.model'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { QueuedUpload } from '@/models/uploads/queued-upload.model'
 
 /**
  * Multiple files => 1 printer

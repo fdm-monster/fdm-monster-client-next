@@ -1,13 +1,24 @@
 <template>
-  <v-app-bar app color="primary" dark>
-    <v-toolbar-title class="text-uppercase white--text">
-      <span class="font-weight-light">FDM</span>
-      <strong>Monster</strong>
+  <v-app-bar
+    app
+    color="primary"
+    dark>
+    <v-toolbar-title class="text-uppercase text-white">
+      <span class="font-weight-light">
+        FDM
+      </span>
+      <strong>
+        Monster
+      </strong>
     </v-toolbar-title>
 
     <v-spacer v-if="isDemoMode" />
-    <h2 v-if="isDemoMode" class="text-uppercase text--white">DEMO MODE</h2>
-    <v-spacer></v-spacer>
+    <h2
+      v-if="isDemoMode"
+      class="text-uppercase text--white">
+      DEMO MODE
+    </h2>
+    <v-spacer />
 
     <PrintJobsMenu />
 
@@ -15,22 +26,30 @@
       v-if="authStore.hasAuthToken && !authStore.isLoginExpired"
       :close-on-content-click="false"
       :nudge-width="200"
-      bottom
+      location="bottom right"
       offset-x
       offset-y
       open-on-hover
-      right
-      transition="slide-y-transition"
-    >
-      <template v-slot:activator="{ props }">
-        <v-btn class="ml-2" color="secondary" dark nuxt v-bind="props">
+
+      transition="slide-y-transition">
+      <template #activator="{ props }">
+        <!--Theme?-->
+        <v-btn
+          class="ml-2"
+          color="secondary"
+          theme="dark"
+          v-bind="props">
           <v-icon class="mr-2">person</v-icon>
           {{ username }}
         </v-btn>
       </template>
 
       <v-list>
-        <v-list-item v-for="(item, index) in items" :key="index" :to="item.path" link>
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="index"
+          :to="item.path"
+          link>
           <v-list-item-title>
             <v-list-item-avatar>
               <v-icon>{{ item.icon }}</v-icon>
@@ -41,16 +60,26 @@
       </v-list>
     </v-menu>
 
-    <span v-if="isDevEnv && expiry" class="ml-2"> AuthExp {{ expiry }} </span>
+    <span
+      v-if="isDevEnv && expiry"
+      class="ml-2">
+      AuthExp {{ expiry }}
+    </span>
 
-    <span v-if="isDevEnv" class="ml-2">
+    <span
+      v-if="isDevEnv"
+      class="ml-2">
       <small>
         S{{ socketState.setup ? 1 : 0 }} C{{ socketState.connected ? 1 : 0 }}
         {{ socketState.id }}
       </small>
     </span>
 
-    <v-btn v-if="authStore.loginRequired === true" class="ml-2" color="secondary" @click="logout()">
+    <v-btn
+      v-if="authStore.loginRequired === true"
+      class="ml-2"
+      color="secondary"
+      @click="logout()">
       <v-icon class="mr-2">logout</v-icon>
       Logout
     </v-btn>
@@ -63,13 +92,14 @@
       fullscreen
       style="background-color: white"
       transition="dialog-bottom-transition"
-      width="90%"
-    >
-      <v-btn @click="showHelp = false"
-        >Close Help
+      width="90%">
+      <v-btn @click="showHelp = false">
+        Close Help
         <v-icon>close</v-icon>
       </v-btn>
-      <v-card height="100%" width="100%">
+      <v-card
+        height="100%"
+        width="100%">
         <v-toolbar color="primary">
           <v-icon class="mr-2">help</v-icon>
           Showing help from docs.fdm-monster.net
@@ -79,28 +109,27 @@
           height="100%"
           src="https://docs.fdm-monster.net"
           style="background-color: white"
-          width="100%"
-        />
+          width="100%" />
       </v-card>
     </v-dialog>
   </v-app-bar>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue"
-import { useRouter } from "vue-router"
-import { useIntervalFn } from "@vueuse/core"
-import PrintJobsMenu from "@/components/Generic/PrintJobsMenu.vue"
-import { useAuthStore } from "@/store/auth.store"
-import { useProfileStore } from "@/store/profile.store"
-import { routeToLogin } from "@/router/utils"
-import { isDevEnv, isProdEnv } from "@/shared/app.constants"
-import { socketState } from "@/store/connection.store"
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useIntervalFn } from '@vueuse/core'
+import PrintJobsMenu from '@/components/Generic/PrintJobsMenu.vue'
+import { useAuthStore } from '@/store/auth.store'
+import { useProfileStore } from '@/store/profile.store'
+import { routeToLogin } from '@/router/utils'
+import { isDevEnv, isProdEnv } from '@/shared/app.constants'
+import { socketState } from '@/store/connection.store'
 
 const profileStore = useProfileStore()
 const authStore = useAuthStore()
 const router = useRouter()
-const items = [{ title: "Open Profile", icon: "person", path: "/settings/account" }]
+const items = [{ title: 'Open Profile', icon: 'person', path: '/settings/account' }]
 
 const showHelp = ref(false)
 
@@ -113,10 +142,10 @@ if (isDevEnv) {
 
 const expiry = computed(() => {
   if (isProdEnv) {
-    return ""
+    return ''
   }
   if (!authStore.tokenClaims?.exp) {
-    return ""
+    return ''
   }
   const diffValue = authStore.tokenClaims.exp - now.value / 1000
   return `${Math.round(diffValue)}s`

@@ -1,7 +1,7 @@
-import { PrinterDto } from "@/models/printers/printer.model"
-import { FloorDto } from "../floors/floor.model"
-import { IdType } from "@/utils/id.type"
-import { CurrentOrHistoryPayload } from "@/models/printers/printer-current-job.model"
+import { PrinterDto } from '@/models/printers/printer.model'
+import { FloorDto } from '../floors/floor.model'
+import { IdType } from '@/utils/id.type'
+import { CurrentOrHistoryPayload } from '@/models/printers/printer-current-job.model'
 
 export interface TrackedUpload {
   correlationToken: string;

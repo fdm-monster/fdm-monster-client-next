@@ -1,9 +1,9 @@
-import {PrinterDto} from "@/models/printers/printer.model"
-import {convertMultiPrinterFileToQueue, convertPrinterMultiFileToQueue,} from "@/utils/uploads-state.utils"
-import {usePrinterStore} from "@/store/printer.store"
-import {useUploadsStore} from "@/store/uploads.store"
-import {useSnackbar} from "@/shared/snackbar.composable"
-import {App} from "@vue/composition-api"
+import {PrinterDto} from '@/models/printers/printer.model'
+import {convertMultiPrinterFileToQueue, convertPrinterMultiFileToQueue,} from '@/utils/uploads-state.utils'
+import {usePrinterStore} from '@/store/printer.store'
+import {useUploadsStore} from '@/store/uploads.store'
+import {useSnackbar} from '@/shared/snackbar.composable'
+import {App} from '@vue/composition-api'
 
 const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
   const printersStore = usePrinterStore()
@@ -26,7 +26,7 @@ const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
       if (isSinglePrinter) {
         const printedFilename = clonedFiles.length === 1 ? clonedFiles[0].name : null
         console.debug(
-          "Single printer upload mode",
+          'Single printer upload mode',
           printers.length,
           clonedFiles.length,
           printedFilename
@@ -40,9 +40,9 @@ const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
         )
       } else {
         if (clonedFiles.length > 1) {
-          throw "Cannot upload multiple files to multiple printers"
+          throw 'Cannot upload multiple files to multiple printers'
         }
-        console.debug("Multi printer upload mode", printers.length, clonedFiles.length)
+        console.debug('Multi printer upload mode', printers.length, clonedFiles.length)
         const clonedFile = clonedFiles[0]
         convertedUploads = convertMultiPrinterFileToQueue(printers, clonedFile, {
           select: true,
@@ -59,20 +59,20 @@ const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
       e.preventDefault()
       el.style.border = defaultBorder
       snackbar.openInfoMessage({
-        title: "No action performed",
-        subtitle: "Please select one or more printers",
+        title: 'No action performed',
+        subtitle: 'Please select one or more printers',
         warning: true,
       })
     }
   }
 }
 
-const defaultBorder = "1px solid #2b2a27"
-const defaultTransition = "background-color 0.5s ease"
-const hoverBorder = "1px solid red"
+const defaultBorder = '1px solid #2b2a27'
+const defaultTransition = 'background-color 0.5s ease'
+const hoverBorder = '1px solid red'
 
 export function registerFileDropDirective(app: App<Element>) {
-  app.directive("drop-upload", {
+  app.directive('drop-upload', {
     // When the bound element is inserted into the DOM...
     inserted: (el, binding, vnode) => {
       el.style.border = defaultBorder

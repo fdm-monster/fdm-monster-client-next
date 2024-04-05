@@ -3,43 +3,51 @@
     v-model="snackbarOpened"
     :timeout="progressTimeout"
     absolute
-    bottom
+    location="bottom right"
     class="ma-3"
     min-width="450px"
-    elevation="24"
+    class="elevation-24"
     multi-line
-    right
+    
     style="z-index: 1000"
-    shaped
-  >
+    shaped>
     <v-row>
       <v-col cols="2">
-        <v-btn icon large>
+        <v-btn
+          icon
+          size="large">
           <v-icon>file_upload</v-icon>
         </v-btn>
       </v-col>
-      <v-col class="d-flex align-center flex-row" cols="8">
+      <v-col
+        class="d-flex align-center flex-row"
+        cols="8">
         <div style="width: 100%">
           <span class="font-weight-bold text-button">
             {{ snackbarTitle }}
           </span>
-          <div v-for="(progress, index) in progressTracked" :key="index" class="mb-2">
+          <div
+            v-for="(progress, index) in progressTracked"
+            :key="index"
+            class="mb-2">
             <v-icon v-if="progress.completed">check</v-icon>
             <v-icon v-else-if="progress.timeoutAt">pause</v-icon>
             <v-icon v-else>hourglass_bottom</v-icon>
             {{ progress.title }}
             {{ (progress.completed ? 100 : progress.value).toFixed(1) }}%
-            <br />
+            <br>
             <v-progress-linear
               :key="progress.key"
-              :value="progress.completed ? 100 : progress.value"
-              :color="progress.timeoutAt ? 'red' : 'success'"
-            ></v-progress-linear>
+              :model-value="progress.completed ? 100 : progress.value"
+              :color="progress.timeoutAt ? 'red' : 'success'" />
           </div>
         </div>
       </v-col>
       <v-col cols="1">
-        <v-btn icon large @click="snackbarOpened = false">
+        <v-btn
+          icon
+          size="large"
+          @click="snackbarOpened = false">
           <v-icon>close</v-icon>
         </v-btn>
       </v-col>
@@ -47,17 +55,17 @@
   </v-snackbar>
 </template>
 <script lang="ts" setup>
-import { ProgressMessage, useSnackbar } from "../../../shared/snackbar.composable"
-import { onMounted, ref } from "vue"
+import { ProgressMessage, useSnackbar } from '../../../shared/snackbar.composable'
+import { onMounted, ref } from 'vue'
 import {
   TrackedUpload,
   UploadStates,
-} from "../../../models/socketio-messages/socketio-message.model"
-import { eventTypeToMessage, InfoEventType } from "../../../shared/alert.events"
+} from '../../../models/socketio-messages/socketio-message.model'
+import { eventTypeToMessage, InfoEventType } from '../../../shared/alert.events'
 
 const snackbar = useSnackbar()
 const snackbarOpened = ref(false)
-const snackbarTitle = ref("")
+const snackbarTitle = ref('')
 
 // Merged upload progress tracking
 interface ProgressTracked {
@@ -120,7 +128,7 @@ onMounted(() => {
     if (!progressTracked.value.length) {
       // Dwell the notification snackbar for a timeout duration
       progressTimeout.value = 2000
-      snackbarTitle.value = "Upload ended"
+      snackbarTitle.value = 'Upload ended'
       console.debug(`[AppSnackbars] Setting timeout to ${progressTimeout.value}`)
     } else {
       progressTimeout.value = -1
@@ -141,12 +149,12 @@ onMounted(() => {
       record.value = value
       record.completed = completed
     }
-    snackbarTitle.value = "Uploading files"
+    snackbarTitle.value = 'Uploading files'
   })
 })
 
 function getUploadingFileName(state: TrackedUpload) {
-  if (!state.multerFile?.length) return ""
+  if (!state.multerFile?.length) return ''
   return state.multerFile[0].originalname
 }
 

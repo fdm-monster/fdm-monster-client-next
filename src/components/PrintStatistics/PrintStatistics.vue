@@ -1,5 +1,7 @@
 <template>
-  <v-sheet height="100%" width="100%">
+  <v-sheet
+    height="100%"
+    width="100%">
     <v-container>
       <v-row>
         <v-col>
@@ -13,47 +15,81 @@
             clearable
             label="Search"
             prepend-icon="search"
-            single-line
-          ></v-text-field>
+            single-line />
         </v-col>
       </v-row>
     </v-container>
     <v-alert>
       Please reload here if you want updated results:
-      <v-btn color="primary" x-small @click="loadCompletions()">Reload</v-btn>
+      <v-btn
+        color="primary"
+        size="x-small"
+        @click="loadCompletions()">
+        Reload
+      </v-btn>
     </v-alert>
-    <v-simple-table dark>
-      <template v-slot:default>
+    <v-table dark>
+      <template #default>
         <thead>
           <tr>
-            <th class="text-left">Printer name</th>
-            <th class="text-left">Floor</th>
-            <th class="text-left">Fail/ Success/ Total</th>
-            <th class="text-left">Last success</th>
-            <th class="text-left">Last failure</th>
-            <th class="text-left">Successes (week/48H/24H)</th>
-            <th class="text-left">Failures (week/48H/24H)</th>
+            <th class="text-left">
+              Printer name
+            </th>
+            <th class="text-left">
+              Floor
+            </th>
+            <th class="text-left">
+              Fail/ Success/ Total
+            </th>
+            <th class="text-left">
+              Last success
+            </th>
+            <th class="text-left">
+              Last failure
+            </th>
+            <th class="text-left">
+              Successes (week/48H/24H)
+            </th>
+            <th class="text-left">
+              Failures (week/48H/24H)
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in shownCompletions" :key="item.id">
-            <td>{{ printer(item.printerId)?.name ?? "?" }}</td>
-            <td>{{ floorOfPrinter(item.printerId)?.name ?? "?" }}</td>
+          <tr
+            v-for="item in shownCompletions"
+            :key="item.id">
+            <td>
+              {{ printer(item.printerId)?.name ?? "?" }}
+            </td>
+            <td>
+              {{ floorOfPrinter(item.printerId)?.name ?? "?" }}
+            </td>
             <td>
               &#215; {{ item.failureCount }} / &#128504; {{ item.successCount }}
-              <strong>~{{ item.printCount }}</strong>
+              <strong>
+                ~{{ item.printCount }}
+              </strong>
             </td>
-            <td>{{ Date.now() - item.lastSuccess?.createdAt || "-" }}</td>
             <td>
-              <v-tooltip bottom>
-                <template v-if="item.lastFailure?.status" v-slot:activator="{ on, attrs }">
-                  <v-icon v-bind="attrs" v-on="on">info</v-icon>
+              {{ Date.now() - item.lastSuccess?.createdAt || "-" }}
+            </td>
+            <td>
+              <v-tooltip location="bottom">
+                <template
+                  v-if="item.lastFailure?.status"
+                  #activator="{ props }">
+                  <v-icon v-bind="props">info</v-icon>
                 </template>
                 <span>
-                  {{ item.lastFailure?.status || "-" }} <br />
-                  {{ item.lastFailure?.createdAt }} <br />
-                  <small>{{ item.lastFailure?.fileName }}</small> <br />
-                  <strong>{{ item.lastFailure?.completionLog }}</strong> <br />
+                  {{ item.lastFailure?.status || "-" }} <br>
+                  {{ item.lastFailure?.createdAt }} <br>
+                  <small>
+                    {{ item.lastFailure?.fileName }}
+                  </small> <br>
+                  <strong>
+                    {{ item.lastFailure?.completionLog }}
+                  </strong> <br>
                 </span>
               </v-tooltip>
             </td>
@@ -68,20 +104,20 @@
           </tr>
         </tbody>
       </template>
-    </v-simple-table>
+    </v-table>
   </v-sheet>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue"
-import { PrintCompletionsService } from "@/backend/print-completions.service"
-import { PrinterCompletions } from "@/models/print-completions/print-completions.model"
-import { usePrinterStore } from "@/store/printer.store"
-import { useFloorStore } from "@/store/floor.store"
+import { onMounted, ref, watch } from 'vue'
+import { PrintCompletionsService } from '@/backend/print-completions.service'
+import { PrinterCompletions } from '@/models/print-completions/print-completions.model'
+import { usePrinterStore } from '@/store/printer.store'
+import { useFloorStore } from '@/store/floor.store'
 
 const loadedCompletions = ref<PrinterCompletions[]>([])
 const shownCompletions = ref<PrinterCompletions[]>([])
-const printerNameSearch = ref<string>("")
+const printerNameSearch = ref<string>('')
 
 const printerStore = usePrinterStore()
 const floorStore = useFloorStore()
@@ -117,7 +153,7 @@ const updatePrinters = () => {
     ? loadedCompletions.value.filter((c) => pIds.includes(c.printerId))
     : loadedCompletions.value
 
-  console.log("pre", preSearchPrints, printerNameSearch.value?.length)
+  console.log('pre', preSearchPrints, printerNameSearch.value?.length)
 
   const preSortPrints = printerNameSearch.value?.length
     ? preSearchPrints.filter((p) => {
@@ -130,7 +166,7 @@ const updatePrinters = () => {
       })
     : preSearchPrints
 
-  console.log("presort", preSortPrints)
+  console.log('presort', preSortPrints)
 
   shownCompletions.value = preSortPrints.sort((p1, p2) => {
     if (p1.failureCount === p2.failureCount) {
@@ -139,6 +175,6 @@ const updatePrinters = () => {
     return p1.failureCount > p2.failureCount ? -1 : 1
   })
 
-  console.log("post", shownCompletions.value)
+  console.log('post', shownCompletions.value)
 }
 </script>

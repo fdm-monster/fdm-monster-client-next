@@ -1,6 +1,6 @@
-import { IdType } from "@/utils/id.type"
-import { OctoPrintStatisticsDto, Prints, Refs } from "@/models/printers/printer-file.model"
-import { GcodeAnalysisDto } from "@/models/printers/gcode/gcode-analysis.model"
+import { IdType } from '@/utils/id.type'
+import { OctoPrintStatisticsDto, Prints, Refs } from '@/models/printers/printer-file.model'
+import { GcodeAnalysisDto } from '@/models/printers/gcode/gcode-analysis.model'
 
 export interface ReprintFileDto {
   file?: CreateOrUpdatePrinterFileDto;
@@ -16,25 +16,25 @@ export enum ReprintState {
 }
 
 export type ConnectionState =
-  | "Operational"
-  | "Printing"
-  | "Starting print from SD"
-  | "Starting to send file to SD"
-  | "Printing from SD"
-  | "Transferring file to SD"
-  | "Sending file to SD"
-  | "Starting"
-  | "Pausing"
-  | "Paused"
-  | "Resuming"
-  | "Finishing"
-  | "Cancelling"
-  | "Error"
-  | "Offline"
-  | "Offline after error"
-  | "Opening serial connection"
-  | "Detecting serial connection"
-  | "Unknown State"
+  | 'Operational'
+  | 'Printing'
+  | 'Starting print from SD'
+  | 'Starting to send file to SD'
+  | 'Printing from SD'
+  | 'Transferring file to SD'
+  | 'Sending file to SD'
+  | 'Starting'
+  | 'Pausing'
+  | 'Paused'
+  | 'Resuming'
+  | 'Finishing'
+  | 'Cancelling'
+  | 'Error'
+  | 'Offline'
+  | 'Offline after error'
+  | 'Opening serial connection'
+  | 'Detecting serial connection'
+  | 'Unknown State'
 
 export class CreateOrUpdatePrinterFileDto {
   id?: IdType

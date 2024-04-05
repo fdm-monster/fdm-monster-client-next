@@ -1,11 +1,11 @@
-import { defineStore } from "pinia"
-import { useJwt } from "@vueuse/integrations/useJwt"
-import type { JwtPayload } from "jwt-decode"
-import { AuthService, type Tokens } from "@/backend/auth.service"
-import { AxiosError, HttpStatusCode } from "axios"
-import { WizardSettingsDto } from "@/models/settings/settings.model"
-import { AUTH_ERROR_REASON, convertAuthErrorReason } from "@/shared/auth.constants"
-import { useEventBus } from "@vueuse/core/index"
+import { defineStore } from 'pinia'
+import { useJwt } from '@vueuse/integrations/useJwt'
+import type { JwtPayload } from 'jwt-decode'
+import { AuthService, type Tokens } from '@/backend/auth.service'
+import { AxiosError, HttpStatusCode } from 'axios'
+import { WizardSettingsDto } from '@/models/settings/settings.model'
+import { AUTH_ERROR_REASON, convertAuthErrorReason } from '@/shared/auth.constants'
+import { useEventBus } from '@vueuse/core/index'
 
 export interface IClaims extends JwtPayload {
   name: string;
@@ -21,7 +21,7 @@ export interface AuthState {
   lastLogoutReason: string | null;
 }
 
-export const useAuthStore = defineStore("auth", {
+export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
     isDemoMode: null,
     token: null,
@@ -46,7 +46,7 @@ export const useAuthStore = defineStore("auth", {
           }
         })
         .catch((e: AxiosError) => {
-          console.error("authRequired: failed to check login required", e.response?.status)
+          console.error('authRequired: failed to check login required', e.response?.status)
           throw e
         })
     },
@@ -58,7 +58,7 @@ export const useAuthStore = defineStore("auth", {
           return response.data
         })
         .catch((e: AxiosError) => {
-          console.error("login: failed to login", e.response?.status)
+          console.error('login: failed to login', e.response?.status)
           throw e
         })
     },
@@ -71,7 +71,7 @@ export const useAuthStore = defineStore("auth", {
         try {
           await AuthService.logout()
         } catch (e) {
-          console.error("Server could not process logout, but local logout was successful", e)
+          console.error('Server could not process logout, but local logout was successful', e)
         }
       }
       this.setIdToken(undefined)
@@ -82,12 +82,12 @@ export const useAuthStore = defineStore("auth", {
         await AuthService.verifyLogin()
         return { success: true }
       } catch (e1) {
-        console.error("[AuthStore.verifyOrRefreshLoginOnce]: failed to verify login", e1)
+        console.error('[AuthStore.verifyOrRefreshLoginOnce]: failed to verify login', e1)
 
         const error = e1 as AxiosError
         if (!error.response || error.response?.status !== HttpStatusCode.Unauthorized) {
           // Ensure no request-retry is done, nor other error processing
-          console.error("[AuthStore.verifyOrRefreshLoginOnce]: unknown error", error.status)
+          console.error('[AuthStore.verifyOrRefreshLoginOnce]: unknown error', error.status)
           // This is meant to be caught by AppLoader, which know how to break the flow and extract the error data (body, url)
           throw e1
         }
@@ -122,7 +122,7 @@ export const useAuthStore = defineStore("auth", {
           if (error.response?.status === HttpStatusCode.Unauthorized) {
             await this.logout(false)
             console.error(
-              "[AuthStore.verifyOrRefreshLoginOnce]: failed to refresh token",
+              '[AuthStore.verifyOrRefreshLoginOnce]: failed to refresh token',
               error.status
             )
             // Refresh was successful
@@ -143,7 +143,7 @@ export const useAuthStore = defineStore("auth", {
       // - PasswordChangeRequired the user needs to change their password
       const reasonCode: keyof typeof AUTH_ERROR_REASON = (error?.response?.data as any)?.reasonCode
       if (reasonCode) {
-        console.error("[AuthStore] 401 Unauthorized - Checking received reason code", reasonCode)
+        console.error('[AuthStore] 401 Unauthorized - Checking received reason code', reasonCode)
       }
       if (
         reasonCode &&
@@ -156,12 +156,12 @@ export const useAuthStore = defineStore("auth", {
       return { reasonCode: null, url: null }
     },
     loadTokens() {
-      this.token = localStorage.getItem("token")
-      this.refreshToken = localStorage.getItem("refreshToken")
+      this.token = localStorage.getItem('token')
+      this.refreshToken = localStorage.getItem('refreshToken')
     },
     async refreshLoginToken() {
       if (!this.refreshToken) {
-        throw new Error("refreshLoginToken: no refresh token")
+        throw new Error('refreshLoginToken: no refresh token')
       }
       return await AuthService.refreshLogin(this.refreshToken)
         .then((response) => {
@@ -175,12 +175,12 @@ export const useAuthStore = defineStore("auth", {
           if (e.response?.status == HttpStatusCode.Unauthorized) {
             this.setTokens(undefined, undefined)
             console.error(
-              "refreshLoginToken: authentication error, failed to refresh tokens",
+              'refreshLoginToken: authentication error, failed to refresh tokens',
               e.response?.status
             )
           } else {
             console.error(
-              "refreshLoginToken: unknown error, failed to refresh tokens",
+              'refreshLoginToken: unknown error, failed to refresh tokens',
               e.response?.status
             )
           }
@@ -193,17 +193,17 @@ export const useAuthStore = defineStore("auth", {
     },
     setIdToken(token?: string) {
       if (!token?.length) {
-        localStorage.removeItem("token")
+        localStorage.removeItem('token')
       } else {
-        localStorage.setItem("token", token as string)
+        localStorage.setItem('token', token as string)
         this.token = token
       }
     },
     setRefreshToken(refreshToken?: string) {
       if (!refreshToken?.length) {
-        localStorage.removeItem("refreshToken")
+        localStorage.removeItem('refreshToken')
       } else {
-        localStorage.setItem("refreshToken", refreshToken as string)
+        localStorage.setItem('refreshToken', refreshToken as string)
         this.refreshToken = refreshToken
       }
     },

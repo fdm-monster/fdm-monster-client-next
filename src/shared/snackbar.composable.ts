@@ -1,14 +1,14 @@
-import type { EventBusKey } from "@vueuse/core"
-import { useEventBus } from "@vueuse/core"
+import type { EventBusKey } from '@vueuse/core'
+import { useEventBus } from '@vueuse/core'
 
-export const progressMessageKey: EventBusKey<{ name: "progress-message" }> = Symbol(
-  "Progress snackbar message event symbol"
+export const progressMessageKey: EventBusKey<{ name: 'progress-message' }> = Symbol(
+  'Progress snackbar message event symbol'
 )
-export const infoMessageKey: EventBusKey<{ name: "info-message" }> = Symbol(
-  "Info snackbar message event symbol"
+export const infoMessageKey: EventBusKey<{ name: 'info-message' }> = Symbol(
+  'Info snackbar message event symbol'
 )
-export const errorMessageKey: EventBusKey<{ name: "error-message" }> = Symbol(
-  "Error snackbar message event symbol"
+export const errorMessageKey: EventBusKey<{ name: 'error-message' }> = Symbol(
+  'Error snackbar message event symbol'
 )
 
 export interface InfoMessage {

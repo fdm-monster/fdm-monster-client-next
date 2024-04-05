@@ -1,13 +1,13 @@
-import { ServerApi } from "@/backend/server.api"
-import { BaseService } from "@/backend/base.service"
-import { LoginDetails, PrinterDto } from "@/models/printers/printer.model"
+import { ServerApi } from '@/backend/server.api'
+import { BaseService } from '@/backend/base.service'
+import { LoginDetails, PrinterDto } from '@/models/printers/printer.model'
 import {
   CreatePrinter,
   getDefaultCreatePrinter,
   PreCreatePrinter,
-} from "@/models/printers/crud/create-printer.model"
-import { newRandomNamePair } from "@/shared/noun-adjectives.data"
-import { IdType } from "@/utils/id.type"
+} from '@/models/printers/crud/create-printer.model'
+import { newRandomNamePair } from '@/shared/noun-adjectives.data'
+import { IdType } from '@/utils/id.type'
 
 export class PrintersService extends BaseService {
   static applyLoginDetailsPatchForm(

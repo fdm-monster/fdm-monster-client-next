@@ -1,6 +1,11 @@
 <template>
-  <div v-if="loading" :style="getWrapperStyle()">
-    <div v-for="index in 9" :key="index" :style="getCircleStyle(random(100))"></div>
+  <div
+    v-if="loading"
+    :style="getWrapperStyle()">
+    <div
+      v-for="index in 9"
+      :key="index"
+      :style="getCircleStyle(random(100))" />
   </div>
 </template>
 
@@ -8,14 +13,15 @@
 const random = (top) => Math.random() * top
 
 export default {
-  name: "GridLoader",
+  name: 'GridLoader',
   props: {
     loading: { type: Boolean, default: true },
-    color: { type: String, default: `#000000` },
+    color: { type: String, default: '#000000' },
     size: { type: Number, default: 15 },
-    margin: { type: String, default: `2px` },
-    sizeUnit: { type: String, default: `px` },
+    margin: { type: String, default: '2px' },
+    sizeUnit: { type: String, default: 'px' },
   },
+
   methods: {
     random,
     getWrapperStyle() {
@@ -25,16 +31,17 @@ export default {
         fontSize: 0,
       }
     },
+
     getCircleStyle(rand) {
       const animation = `grid ${rand / 100 + 0.6}s ${rand / 100 - 0.2}s infinite ease`
       return {
-        display: "inline-block",
+        display: 'inline-block',
         backgroundColor: this.color,
         width: `${this.size}${this.sizeUnit}`,
         height: `${this.size}${this.sizeUnit}`,
         margin: this.margin,
-        borderRadius: "100%",
-        animationFillMode: "both",
+        borderRadius: '100%',
+        animationFillMode: 'both',
         animation: animation,
       }
     },

@@ -1,7 +1,7 @@
-import { defineStore } from "pinia"
-import { FrontendSettings, SettingsDto, TimeoutSettings } from "@/models/settings/settings.model"
-import { SettingsService } from "@/backend"
-import { ServerSettingsDto } from "@/models/settings/server-settings.dto"
+import { defineStore } from 'pinia'
+import { FrontendSettings, SettingsDto, TimeoutSettings } from '@/models/settings/settings.model'
+import { SettingsService } from '@/backend'
+import { ServerSettingsDto } from '@/models/settings/server-settings.dto'
 
 export interface FrontendDebugSettings {
   showPrinterStateUpdateSideNav: boolean;
@@ -15,7 +15,7 @@ export interface SettingsState {
 }
 
 export const useSettingsStore = defineStore({
-  id: "Settings",
+  id: 'Settings',
   state: (): SettingsState => ({
     settings: undefined,
     frontendDebugSettings: {

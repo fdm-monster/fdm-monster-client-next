@@ -1,16 +1,16 @@
-import { defineStore } from "pinia"
-import { PrinterDto } from "@/models/printers/printer.model"
-import { ClearedFilesResult, PrinterFileDto } from "@/models/printers/printer-file.model"
-import { PrinterFileService, PrintersService } from "@/backend"
-import { CreatePrinter } from "@/models/printers/crud/create-printer.model"
-import { PrinterJobService } from "@/backend/printer-job.service"
-import { usePrinterStateStore } from "./printer-state.store"
-import { IdType } from "@/utils/id.type"
+import { defineStore } from 'pinia'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { ClearedFilesResult, PrinterFileDto } from '@/models/printers/printer-file.model'
+import { PrinterFileService, PrintersService } from '@/backend'
+import { CreatePrinter } from '@/models/printers/crud/create-printer.model'
+import { PrinterJobService } from '@/backend/printer-job.service'
+import { usePrinterStateStore } from './printer-state.store'
+import { IdType } from '@/utils/id.type'
 import {
   isPrinterDisabled,
   isPrinterDisconnected,
   isPrinterInMaintenance,
-} from "@/shared/printer-state.constants"
+} from '@/shared/printer-state.constants'
 
 interface State {
   printers: PrinterDto[];
@@ -22,7 +22,7 @@ interface State {
   maintenanceDialogPrinter?: PrinterDto;
 }
 
-export const usePrinterStore = defineStore("Printers", {
+export const usePrinterStore = defineStore('Printers', {
   state: (): State => ({
     printers: [],
     printerFileCache: {},
@@ -130,7 +130,7 @@ export const usePrinterStore = defineStore("Printers", {
       if (printerIndex !== -1) {
         this.printers.splice(printerIndex, 1)
       } else {
-        console.warn("Printer was not popped as it did not occur in state", printerId)
+        console.warn('Printer was not popped as it did not occur in state', printerId)
       }
     },
     _replacePrinter({ printerId, printer }: { printerId: IdType; printer: PrinterDto }) {
@@ -139,16 +139,16 @@ export const usePrinterStore = defineStore("Printers", {
       if (printerIndex !== -1) {
         this.printers[printerIndex] = printer
       } else {
-        console.warn("Printer was not purged as it did not occur in state", printerId)
+        console.warn('Printer was not purged as it did not occur in state', printerId)
       }
     },
     async clearPrinterFiles(printerId: IdType) {
       if (!printerId) {
-        throw new Error("No printerId was provided")
+        throw new Error('No printerId was provided')
       }
       const result = (await PrinterFileService.clearFiles(printerId)) as ClearedFilesResult
       if (!result?.failedFiles) {
-        throw new Error("No failed files were returned")
+        throw new Error('No failed files were returned')
       }
       const bucket = this.printerFileCache[printerId]
       if (bucket) {
@@ -170,7 +170,7 @@ export const usePrinterStore = defineStore("Printers", {
 
       const fileBucket = this.printerFileCache[printerId]
       if (!fileBucket?.length) {
-        console.warn("Printer file list was nonexistent", printerId)
+        console.warn('Printer file list was nonexistent', printerId)
         return
       }
 
@@ -179,7 +179,7 @@ export const usePrinterStore = defineStore("Printers", {
       if (deletedFileIndex !== -1) {
         fileBucket.splice(deletedFileIndex, 1)
       } else {
-        console.warn("File was not purged as it did not occur in state", fullPath)
+        console.warn('File was not purged as it did not occur in state', fullPath)
       }
 
       return this.printerFiles(printerId)
@@ -191,8 +191,8 @@ export const usePrinterStore = defineStore("Printers", {
       if (!printer) return
 
       const question = !printerStateStore.isPrinterPrinting(printerId)
-        ? "The printer is still printing - are you sure to stop it?"
-        : "The printer seems idle - do you want to command it to stop anyway?"
+        ? 'The printer is still printing - are you sure to stop it?'
+        : 'The printer seems idle - do you want to command it to stop anyway?'
 
       const answer = confirm(question)
       if (answer) {

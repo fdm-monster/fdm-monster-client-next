@@ -1,5 +1,5 @@
-import { ServerSettingsDto } from "./server-settings.dto"
-import { FileCleanSettings } from "./printer-file-clean-settings.model"
+import { ServerSettingsDto } from './server-settings.dto'
+import { FileCleanSettings } from './printer-file-clean-settings.model'
 
 export type FileCleanSubSetting = {
   fileClean: FileCleanSettings;

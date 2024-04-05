@@ -1,17 +1,17 @@
-import { defineStore } from "pinia"
-import { FloorDto } from "@/models/floors/floor.model"
-import { useSettingsStore } from "./settings.store"
-import { PrinterDto } from "@/models/printers/printer.model"
-import { usePrinterStore } from "./printer.store"
-import { FloorService } from "@/backend/floor.service"
-import { IdType } from "@/utils/id.type"
+import { defineStore } from 'pinia'
+import { FloorDto } from '@/models/floors/floor.model'
+import { useSettingsStore } from './settings.store'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { usePrinterStore } from './printer.store'
+import { FloorService } from '@/backend/floor.service'
+import { IdType } from '@/utils/id.type'
 
 export interface State {
   floors: FloorDto[];
   selectedFloor: FloorDto | null;
 }
 
-export const useFloorStore = defineStore("Floors", {
+export const useFloorStore = defineStore('Floors', {
   state: (): State => ({
     floors: [],
     selectedFloor: null,

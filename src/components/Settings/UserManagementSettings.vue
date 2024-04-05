@@ -4,50 +4,75 @@
       <v-avatar>
         <v-icon>settings</v-icon>
       </v-avatar>
-      <v-toolbar-title>Users</v-toolbar-title>
+      <v-toolbar-title>
+        Users
+      </v-toolbar-title>
     </v-toolbar>
     <GridLoader
       v-if="loading"
       :size="20"
       color="#a70015"
-      style="margin: 250px; position: absolute"
-    />
-    <v-list subheader three-line>
-      <v-subheader>Showing all users</v-subheader>
+      style="margin: 250px; position: absolute" />
+    <v-list
+      subheader
+      lines="three">
+      <v-subheader>
+        Showing all users
+      </v-subheader>
 
       <v-list-item
         v-for="(user, index) in users"
         :key="index"
         class="pl-6"
-        style="max-width: 800px; border-top: 1px solid grey; border-bottom: 1px solid grey"
-      >
+        style="max-width: 800px; border-top: 1px solid grey; border-bottom: 1px solid grey">
         <v-list-item-content
-          :class="isCurrentAccount(user) ? 'pl-6 grey darken-3' : 'pl-6 grey darken-4'"
-        >
+          :class="isCurrentAccount(user) ? 'pl-6 grey darken-3' : 'pl-6 grey darken-4'">
           <v-list-item-title>
             User '{{ user.username }}'
-            <strong v-if="isCurrentAccount(user)" class="text--primary float-end mr-5 mt-2">
+            <strong
+              v-if="isCurrentAccount(user)"
+              class="text--primary float-end mr-5 mt-2">
               Your account
             </strong>
           </v-list-item-title>
-          <v-list-item-subtitle></v-list-item-subtitle>
-          <span class="grey--text darken-4">
+          <v-list-item-subtitle />
+          <span class="text-grey darken-4">
             <ul>
               <li>
-                <span v-if="user.isVerified" class="success--text">Account verified</span>
-                <span v-else class="error--text">Account not verified</span>
+                <span
+                  v-if="user.isVerified"
+                  class="text-success">
+                  Account verified
+                </span>
+                <span
+                  v-else
+                  class="text-error">
+                  Account not verified
+                </span>
               </li>
-              <li>Created at {{ formatIntlDate(user.createdAt) }}</li>
-              <li v-if="user.isDemoUser">Demo user account</li>
+              <li>
+                Created at {{ formatIntlDate(user.createdAt) }}
+              </li>
+              <li v-if="user.isDemoUser">
+                Demo user account
+              </li>
 
               <li>
                 Role(s)
                 <ul>
                   <li v-if="user.isRootUser">
-                    <v-chip class="mb-2 mt-2" small> OWNER </v-chip>
+                    <v-chip
+                      class="mb-2 mt-2"
+                      size="small">
+                      OWNER
+                    </v-chip>
                   </li>
-                  <li v-for="role of convertRoles(user.roles)" :key="role">
-                    <v-chip class="mb-2 mt-2" small>
+                  <li
+                    v-for="role of convertRoles(user.roles)"
+                    :key="role">
+                    <v-chip
+                      class="mb-2 mt-2"
+                      size="small">
                       {{ role }}
                     </v-chip>
                   </li>
@@ -60,28 +85,33 @@
           <v-btn
             :disabled="isCurrentAccount(user) || user.isRootUser"
             :color="user.isVerified ? 'error darken-4' : 'success'"
-            @click="verifyUser(user, !user.isVerified)"
-          >
+            @click="verifyUser(user, !user.isVerified)">
             <v-icon class="mr-2">shield</v-icon>
-            <span v-if="!user.isVerified">Verify account</span>
-            <span v-if="user.isVerified">Unverify account</span>
+            <span v-if="!user.isVerified">
+              Verify account
+            </span>
+            <span v-if="user.isVerified">
+              Unverify account
+            </span>
           </v-btn>
           <v-btn
             :color="user.isRootUser ? 'error darken-4' : 'success'"
             :disabled="isCurrentAccount(user) || !profile?.isRootUser"
             class="mt-2"
-            @click="setRootUser(user, !user.isRootUser)"
-          >
+            @click="setRootUser(user, !user.isRootUser)">
             <v-icon class="mr-2">key</v-icon>
-            <span v-if="user.isRootUser">Remove owner</span>
-            <span v-if="!user.isRootUser">Set owner</span>
+            <span v-if="user.isRootUser">
+              Remove owner
+            </span>
+            <span v-if="!user.isRootUser">
+              Set owner
+            </span>
           </v-btn>
           <v-btn
             :disabled="isCurrentAccount(user) || user.isRootUser"
             class="mt-2"
-            color="error darken-2"
-            @click="deleteUser(user)"
-          >
+            color="error-darken-2"
+            @click="deleteUser(user)">
             <v-icon class="mr-2">delete</v-icon>
             Delete
           </v-btn>
@@ -92,13 +122,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue"
-import { UserService } from "@/backend/user.service"
-import { Role, User } from "@/models/user.model"
-import { formatIntlDate } from "@/utils/date.utils"
-import GridLoader from "@/components/Generic/Loaders/GridLoader.vue"
-import { useQuery } from "@tanstack/vue-query"
-import { useSnackbar } from "@/shared/snackbar.composable"
+import { ref } from 'vue'
+import { UserService } from '@/backend/user.service'
+import { Role, User } from '@/models/user.model'
+import { formatIntlDate } from '@/utils/date.utils'
+import GridLoader from '@/components/Generic/Loaders/GridLoader.vue'
+import { useQuery } from '@tanstack/vue-query'
+import { useSnackbar } from '@/shared/snackbar.composable'
 
 const snackbar = useSnackbar()
 const loading = ref<boolean>(false)
@@ -128,7 +158,7 @@ async function loadData() {
 }
 
 const userQuery = useQuery({
-  queryKey: ["userRolesProfile"],
+  queryKey: ['userRolesProfile'],
   queryFn: loadData,
 })
 
@@ -161,11 +191,11 @@ async function deleteUser(user: User) {
 
 async function verifyUser(user: User, isVerified: boolean = true) {
   if (user.isRootUser) {
-    snackbar.error("You are not allowed to do perform this action on an owner")
+    snackbar.error('You are not allowed to do perform this action on an owner')
     return
   }
   if (
-    !confirm(`Are you sure you want to ${isVerified ? "verify" : "unverify"} ${user.username}?`)
+    !confirm(`Are you sure you want to ${isVerified ? 'verify' : 'unverify'} ${user.username}?`)
   ) {
     return
   }
@@ -186,12 +216,12 @@ async function verifyUser(user: User, isVerified: boolean = true) {
 
 async function setRootUser(user: User, isRootUser: boolean = true) {
   if (!profile.value?.isRootUser) {
-    snackbar.error("You are not allowed to do perform this action as you're not an owner")
+    snackbar.error('You are not allowed to do perform this action as you\'re not an owner')
   }
 
   if (
     !confirm(
-      `You are about to ${isRootUser ? "set" : "remove"} owner rights on ${
+      `You are about to ${isRootUser ? 'set' : 'remove'} owner rights on ${
         user.username
       }. Are you sure?`
     )

@@ -1,17 +1,17 @@
-import { io, Socket } from "socket.io-client"
-import { reactive } from "vue"
+import { io, Socket } from 'socket.io-client'
+import { reactive } from 'vue'
 
 export let appSocketIO: Socket | null = null
 
 export const socketState = reactive({
   connected: false,
   setup: false,
-  id: "",
+  id: '',
 })
 
 export function constructSocket(apiBase: string, token?: string | null) {
   if (socketState.setup) {
-    throw new Error("Socket already set up")
+    throw new Error('Socket already set up')
   }
   socketState.setup = false
   appSocketIO = io(apiBase, {
@@ -19,13 +19,13 @@ export function constructSocket(apiBase: string, token?: string | null) {
   })
   socketState.setup = true
 
-  appSocketIO.on("connect", () => {
-    socketState.id = appSocketIO!.id || ""
+  appSocketIO.on('connect', () => {
+    socketState.id = appSocketIO!.id || ''
     socketState.connected = true
   })
 
-  appSocketIO.on("disconnect", () => {
-    socketState.id = ""
+  appSocketIO.on('disconnect', () => {
+    socketState.id = ''
     socketState.connected = false
   })
 }
@@ -43,12 +43,12 @@ export function deconstructSocket() {
   appSocketIO = null
   socketState.setup = false
   socketState.connected = false
-  socketState.id = ""
+  socketState.id = ''
 }
 
 export function getSocketState() {
   if (!appSocketIO) {
-    console.warn("Socket not set-up")
+    console.warn('Socket not set-up')
     return {
       setup: false,
     }

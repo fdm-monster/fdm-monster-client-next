@@ -1,6 +1,6 @@
-import { defineStore } from "pinia"
-import { CreatePrinter } from "@/models/printers/crud/create-printer.model"
-import { PrintersService } from "@/backend"
+import { defineStore } from 'pinia'
+import { CreatePrinter } from '@/models/printers/crud/create-printer.model'
+import { PrintersService } from '@/backend'
 
 export interface TestEvent {
   correlationToken: string;
@@ -14,7 +14,7 @@ interface State {
   testPrinterEvents?: TestEvent[];
 }
 
-export const useTestPrinterStore = defineStore("TestPrinter", {
+export const useTestPrinterStore = defineStore('TestPrinter', {
   state: (): State => ({
     currentCorrelationToken: undefined,
     testPrinter: undefined,
@@ -30,26 +30,26 @@ export const useTestPrinterStore = defineStore("TestPrinter", {
         )
           .filter(
             (e) =>
-              (e.event !== "API_STATE_UPDATED" || e.payload !== "unset") &&
-              (e.event !== "WS_STATE_UPDATED" || e.payload !== "unopened")
+              (e.event !== 'API_STATE_UPDATED' || e.payload !== 'unset') &&
+              (e.event !== 'WS_STATE_UPDATED' || e.payload !== 'unopened')
           )
           .map((e) => {
-            const event = e.event.startsWith("WS_") ? "Socket" : "API"
+            const event = e.event.startsWith('WS_') ? 'Socket' : 'API'
             return {
               event,
               payload: e.payload
                 ?.toString()
-                ?.replace("noResponse", "unreachable")
-                .replace("authFail", "authentication failure"),
+                ?.replace('noResponse', 'unreachable')
+                .replace('authFail', 'authentication failure'),
               failure: [
-                "authFail",
-                "noResponse",
-                "aborted",
-                "globalKey",
-                "error",
-                "connection error",
-                "closed",
-                "connection closed",
+                'authFail',
+                'noResponse',
+                'aborted',
+                'globalKey',
+                'error',
+                'connection error',
+                'closed',
+                'connection closed',
               ].includes(e.payload?.toString()),
             }
           })

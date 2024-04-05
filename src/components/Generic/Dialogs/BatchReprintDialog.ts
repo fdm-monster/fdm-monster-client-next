@@ -1,4 +1,4 @@
-import { IdType } from "@/utils/id.type"
+import { IdType } from '@/utils/id.type'
 
 interface ReprintPrinterIds {
   printerIds: IdType[];

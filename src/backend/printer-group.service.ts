@@ -1,6 +1,6 @@
-import { BaseService } from "@/backend/base.service"
-import { ServerApi } from "@/backend/server.api"
-import { IdType } from "@/utils/id.type"
+import { BaseService } from '@/backend/base.service'
+import { ServerApi } from '@/backend/server.api'
+import { IdType } from '@/utils/id.type'
 
 export class PrinterGroupDto<KeyType = number> {
   printerId: KeyType

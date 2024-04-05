@@ -12,10 +12,9 @@
               v-for="printer of floorStore.floorlessPrinters"
               :key="printer.id"
               draggable
-              small
+              size="small"
               style="cursor: move"
-              @dragstart="onDragStart(printer, $event)"
-            >
+              @dragstart="onDragStart(printer, $event)">
               {{ printer.name }}
             </v-chip>
           </v-chip-group>
@@ -31,38 +30,46 @@
         </v-col>
       </v-row>
     </v-banner>
-    <v-row v-for="y in rows" :key="y" class="ma-1" no-gutters>
-      <v-col v-for="x in columns" :key="x" :cols="columnWidth" :sm="columnWidth">
-        <v-row class="test-top" no-gutters>
+    <v-row
+      v-for="y in rows"
+      :key="y"
+      class="ma-1"
+      no-gutters>
+      <v-col
+        v-for="x in columns"
+        :key="x"
+        :cols="columnWidth"
+        :sm="columnWidth">
+        <v-row
+          class="test-top"
+          no-gutters>
           <v-col cols="6">
             <PrinterGridTile
               :printer="getPrinter(2 * (x - 1), 2 * (y - 1))"
               :x="2 * (x - 1)"
-              :y="2 * (y - 1)"
-            />
+              :y="2 * (y - 1)" />
           </v-col>
           <v-col cols="6">
             <PrinterGridTile
               :printer="getPrinter(2 * (x - 1) + 1, 2 * (y - 1))"
               :x="2 * (x - 1) + 1"
-              :y="2 * (y - 1)"
-            />
+              :y="2 * (y - 1)" />
           </v-col>
         </v-row>
-        <v-row class="test-bottom" no-gutters>
+        <v-row
+          class="test-bottom"
+          no-gutters>
           <v-col cols="6">
             <PrinterGridTile
               :printer="getPrinter(2 * (x - 1), 2 * (y - 1) + 1)"
               :x="2 * (x - 1)"
-              :y="2 * (y - 1) + 1"
-            />
+              :y="2 * (y - 1) + 1" />
           </v-col>
           <v-col cols="6">
             <PrinterGridTile
               :printer="getPrinter(2 * (x - 1) + 1, 2 * (y - 1) + 1)"
               :x="2 * (x - 1) + 1"
-              :y="2 * (y - 1) + 1"
-            />
+              :y="2 * (y - 1) + 1" />
           </v-col>
         </v-row>
       </v-col>
@@ -71,23 +78,22 @@
       alt="FDM Monster Background"
       class="grid-bg-img align-content-center"
       src="/img/logo.svg"
-      style="opacity: 0.08; pointer-events: none"
-    />
+      style="opacity: 0.08; pointer-events: none">
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from "vue"
-import PrinterGridTile from "@/components/PrinterGrid/PrinterGridTile.vue"
-import { totalVuetifyColumnCount } from "@/shared/printer-grid.constants"
-import { usePrinterStore } from "@/store/printer.store"
-import { PrinterDto } from "@/models/printers/printer.model"
-import { useGridStore } from "@/store/grid.store"
-import { dragAppId, INTENT, PrinterPlace } from "@/shared/drag.constants"
-import { useSettingsStore } from "@/store/settings.store"
-import { useFloorStore } from "@/store/floor.store"
+import { computed, onMounted } from 'vue'
+import PrinterGridTile from '@/components/PrinterGrid/PrinterGridTile.vue'
+import { totalVuetifyColumnCount } from '@/shared/printer-grid.constants'
+import { usePrinterStore } from '@/store/printer.store'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { useGridStore } from '@/store/grid.store'
+import { dragAppId, INTENT, PrinterPlace } from '@/shared/drag.constants'
+import { useSettingsStore } from '@/store/settings.store'
+import { useFloorStore } from '@/store/floor.store'
 
-console.debug("Setup grid")
+console.debug('Setup grid')
 
 const printerStore = usePrinterStore()
 const floorStore = useFloorStore()
@@ -109,7 +115,7 @@ function onDragStart(printer: PrinterDto, ev: DragEvent) {
   if (!printer.id) return
 
   ev.dataTransfer.setData(
-    "text",
+    'text',
     JSON.stringify({
       appId: dragAppId,
       intent: INTENT.PRINTER_PLACE,
