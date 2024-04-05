@@ -2,17 +2,21 @@
   "compilerOptions": {
     "target": "ESNext",
     "jsx": "preserve",
-    "lib": ["DOM", "ESNext"],
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
     "baseUrl": "./",
     "module": "ESNext",
     "moduleResolution": "node",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
     "resolveJsonModule": true,
     "types": [
-      "vite/client",
-      "vite-plugin-vue-layouts/client"
+      "vite/client"
     ],
     "allowJs": true,
     "strict": true,
@@ -28,6 +32,14 @@
     "./@package/**/*",
     "env.d.ts"
   ],
-  "exclude": ["dist", "node_modules", "cypress"],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "cypress"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }

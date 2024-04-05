@@ -2,9 +2,7 @@
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import Fonts from 'unplugin-fonts/vite'
-import Layouts from 'vite-plugin-vue-layouts'
 import Vue from '@vitejs/plugin-vue'
-import VueRouter from 'unplugin-vue-router/vite'
 import Vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
 
 // Utilities
@@ -22,16 +20,9 @@ export default defineConfig({
     //     test: { setupFiles: ["@vitest/web-worker", "./vitest/beforeall.ts"] },
     //   }),
     // },
-    VueRouter({
-      dts: 'src/typed-router.d.ts',
-    }),
-    Layouts(),
     AutoImport({
       imports: [
         'vue',
-        {
-          'vue-router/auto': ['useRoute', 'useRouter'],
-        }
       ],
       dts: 'src/auto-imports.d.ts',
       eslintrc: {

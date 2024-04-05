@@ -1338,25 +1338,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue-macros/common@npm:^1.10.1":
-  version: 1.10.2
-  resolution: "@vue-macros/common@npm:1.10.2"
-  dependencies:
-    "@babel/types": "npm:^7.24.0"
-    "@rollup/pluginutils": "npm:^5.1.0"
-    "@vue/compiler-sfc": "npm:^3.4.21"
-    ast-kit: "npm:^0.12.1"
-    local-pkg: "npm:^0.5.0"
-    magic-string-ast: "npm:^0.3.0"
-  peerDependencies:
-    vue: ^2.7.0 || ^3.2.25
-  peerDependenciesMeta:
-    vue:
-      optional: true
-  checksum: 10c0/fd130aaf73fadf4f23d236c36d763e19187163374f96c310097c803ccfe2cf7b5403f78c8aeacdf719ca273daf0998e7aed1d59c4099ed22db15620cee48a428
-  languageName: node
-  linkType: hard
-
 "@vue/compiler-core@npm:3.4.21":
   version: 3.4.21
   resolution: "@vue/compiler-core@npm:3.4.21"
@@ -1380,7 +1361,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/compiler-sfc@npm:3.4.21, @vue/compiler-sfc@npm:^3.4.21":
+"@vue/compiler-sfc@npm:3.4.21":
   version: 3.4.21
   resolution: "@vue/compiler-sfc@npm:3.4.21"
   dependencies:
@@ -1814,26 +1795,6 @@ __metadata:
   version: 1.1.0
   resolution: "assertion-error@npm:1.1.0"
   checksum: 10c0/25456b2aa333250f01143968e02e4884a34588a8538fbbf65c91a637f1dbfb8069249133cd2f4e530f10f624d206a664e7df30207830b659e9f5298b00a4099b
-  languageName: node
-  linkType: hard
-
-"ast-kit@npm:^0.12.1":
-  version: 0.12.1
-  resolution: "ast-kit@npm:0.12.1"
-  dependencies:
-    "@babel/parser": "npm:^7.23.9"
-    pathe: "npm:^1.1.2"
-  checksum: 10c0/615cdb1e0a3a314d429158472598597c117fb8aa3877370f3ecb05bf93a55fd676ea479c5b5d346378c7b029c8609519030291e3c81d6a7e4e35824b5f61e243
-  languageName: node
-  linkType: hard
-
-"ast-walker-scope@npm:^0.6.0":
-  version: 0.6.1
-  resolution: "ast-walker-scope@npm:0.6.1"
-  dependencies:
-    "@babel/parser": "npm:^7.24.0"
-    ast-kit: "npm:^0.12.1"
-  checksum: 10c0/e781f03a7206c5126065eb288317c12d29344765df7946410823e3c5d63aa35e1334c4c09260f8018ff49b3bea453e7c22dfa5c51b30ca3fa202408b42f49177
   languageName: node
   linkType: hard
 
@@ -3019,9 +2980,7 @@ __metadata:
     unplugin-auto-import: "npm:0.17.5"
     unplugin-fonts: "npm:1.1.1"
     unplugin-vue-components: "npm:0.26.0"
-    unplugin-vue-router: "npm:0.8.5"
     vite: "npm:5.2.8"
-    vite-plugin-vue-layouts: "npm:0.11.0"
     vite-plugin-vuetify: "npm:2.0.3"
     vitest: "npm:1.4.0"
     vue: "npm:3.4.21"
@@ -4040,15 +3999,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string-ast@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "magic-string-ast@npm:0.3.0"
-  dependencies:
-    magic-string: "npm:^0.30.2"
-  checksum: 10c0/f9aa9e372ecd2ccbe1178eb9a2d206307291c4b93cef0aa40802aa1036d02f0e878d975841579e0345cdf01466112c13bb8e4502f856e2463f5b5ea87d5bd1d7
-  languageName: node
-  linkType: hard
-
 "magic-string@npm:0.30.8":
   version: 0.30.8
   resolution: "magic-string@npm:0.30.8"
@@ -4058,7 +4008,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.30.2, magic-string@npm:^0.30.3, magic-string@npm:^0.30.5, magic-string@npm:^0.30.7":
+"magic-string@npm:^0.30.3, magic-string@npm:^0.30.5, magic-string@npm:^0.30.7":
   version: 0.30.9
   resolution: "magic-string@npm:0.30.9"
   dependencies:
@@ -4285,7 +4235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mlly@npm:^1.2.0, mlly@npm:^1.4.2, mlly@npm:^1.6.1":
+"mlly@npm:^1.2.0, mlly@npm:^1.4.2":
   version: 1.6.1
   resolution: "mlly@npm:1.6.1"
   dependencies:
@@ -4996,7 +4946,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scule@npm:^1.1.1, scule@npm:^1.3.0":
+"scule@npm:^1.1.1":
   version: 1.3.0
   resolution: "scule@npm:1.3.0"
   checksum: 10c0/5d1736daa10622c420f2aa74e60d3c722e756bfb139fa784ae5c66669fdfe92932d30ed5072e4ce3107f9c3053e35ad73b2461cb18de45b867e1d4dea63f8823
@@ -5679,32 +5629,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-vue-router@npm:0.8.5":
-  version: 0.8.5
-  resolution: "unplugin-vue-router@npm:0.8.5"
-  dependencies:
-    "@babel/types": "npm:^7.24.0"
-    "@rollup/pluginutils": "npm:^5.1.0"
-    "@vue-macros/common": "npm:^1.10.1"
-    ast-walker-scope: "npm:^0.6.0"
-    chokidar: "npm:^3.6.0"
-    fast-glob: "npm:^3.3.2"
-    json5: "npm:^2.2.3"
-    local-pkg: "npm:^0.5.0"
-    mlly: "npm:^1.6.1"
-    pathe: "npm:^1.1.2"
-    scule: "npm:^1.3.0"
-    unplugin: "npm:^1.9.0"
-    yaml: "npm:^2.4.1"
-  peerDependencies:
-    vue-router: ^4.3.0
-  peerDependenciesMeta:
-    vue-router:
-      optional: true
-  checksum: 10c0/0518318a5f57464cf601f565c649674da6219a597c6779720993b4ef9f12f802c6dbf843f642af8a45eb043215a34390dfcc3f226b040db3f41ef15a014d10c3
-  languageName: node
-  linkType: hard
-
 "unplugin@npm:1.0.1":
   version: 1.0.1
   resolution: "unplugin@npm:1.0.1"
@@ -5717,7 +5641,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin@npm:^1.3.1, unplugin@npm:^1.4.0, unplugin@npm:^1.5.1, unplugin@npm:^1.6.0, unplugin@npm:^1.9.0":
+"unplugin@npm:^1.3.1, unplugin@npm:^1.4.0, unplugin@npm:^1.5.1, unplugin@npm:^1.6.0":
   version: 1.10.1
   resolution: "unplugin@npm:1.10.1"
   dependencies:
@@ -5789,20 +5713,6 @@ __metadata:
   bin:
     vite-node: vite-node.mjs
   checksum: 10c0/bc8eb01dd03c2cc306be2bf35efe789d6a3e8ca1d89d635d3154a9af0213f7609c94ef849f30a01f04535b31e729aee49468275e267693a42c32845fbd2a6721
-  languageName: node
-  linkType: hard
-
-"vite-plugin-vue-layouts@npm:0.11.0":
-  version: 0.11.0
-  resolution: "vite-plugin-vue-layouts@npm:0.11.0"
-  dependencies:
-    debug: "npm:^4.3.4"
-    fast-glob: "npm:^3.3.2"
-  peerDependencies:
-    vite: ^4.0.0 || ^5.0.0
-    vue: ^3.2.4
-    vue-router: ^4.0.11
-  checksum: 10c0/b987285b4af8f134f29a5f0b176f35a45797010f1b65492c6e24d4c98275f35e2f798ec8c397bc1b059d799ae68a3f0ba5d266b1e09f4e97f3bc77db2191a300
   languageName: node
   linkType: hard
 
@@ -6225,15 +6135,6 @@ __metadata:
   version: 4.0.0
   resolution: "yallist@npm:4.0.0"
   checksum: 10c0/2286b5e8dbfe22204ab66e2ef5cc9bbb1e55dfc873bbe0d568aa943eb255d131890dfd5bf243637273d31119b870f49c18fcde2c6ffbb7a7a092b870dc90625a
-  languageName: node
-  linkType: hard
-
-"yaml@npm:^2.4.1":
-  version: 2.4.1
-  resolution: "yaml@npm:2.4.1"
-  bin:
-    yaml: bin.mjs
-  checksum: 10c0/816057dbaea16a7dfb0b868ace930f143dece96bbb4c4fbb6f38aa389166f897240d9fa535dbfd6b1b0d9442416f4abcc698e63f82394d0c67b329aa6c2be576
   languageName: node
   linkType: hard
 
