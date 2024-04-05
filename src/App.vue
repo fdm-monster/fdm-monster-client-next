@@ -3,7 +3,6 @@
     <AppInfoSnackbar />
     <AppErrorSnackbar />
     <AppProgressSnackbar />
-    <AlertErrorDialog />
 
     <NavigationDrawer
       v-if="(authStore.hasAuthToken && !authStore.isLoginExpired) || !authStore.loginRequired" />

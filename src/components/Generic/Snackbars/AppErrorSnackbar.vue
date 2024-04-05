@@ -6,8 +6,8 @@
     location="bottom"
     class="ml-16 mb-16 ma-3 elevation-24"
     color="error-darken-1"
+    rounded="pill"
     multi-line
-    shaped
     style="z-index: 1000"
     width="450">
     <v-row>
@@ -33,7 +33,6 @@
 
       <v-col cols="1">
         <v-btn
-          icon
           size="large"
           @click="snackbarOpened = false">
           <v-icon>close</v-icon>

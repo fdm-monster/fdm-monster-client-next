@@ -4,16 +4,14 @@
     absolute
     location="bottom"
     :color="isWarning ? 'warning darken-2' : 'success'"
-    class="elevation-24"
-    class="ma-3"
-    shaped
+    class="ma-3 elevation-24"
+    rounded="pill"
     :timeout="timeout"
     style="z-index: 1000"
     multi-line>
     <v-row>
       <v-col cols="2">
         <v-btn
-          icon
           size="large">
           <v-icon>info</v-icon>
         </v-btn>
@@ -32,7 +30,6 @@
       </v-col>
       <v-col cols="1">
         <v-btn
-          icon
           size="large"
           @click="snackbarOpened = false">
           <v-icon>close</v-icon>

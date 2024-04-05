@@ -3,134 +3,107 @@
     :id="dialog.dialogId"
     :max-width="showChecksPanel ? '900px' : '700px'"
     @escape="closeDialog()">
-    <validation-observer
-      ref="validationObserver"
-      v-slot="{ invalid }">
-      <v-card class="pa-4">
-        <v-card-title>
-          <span class="text-h5">
-            <v-avatar
-              color="primary"
-              size="56">
-              {{ avatarInitials }}
-            </v-avatar>
-            <span v-if="isUpdating">
-              Updating Printer
-            </span>
-            <span v-else>
-              New Printer
-            </span>
+    <v-card class="pa-4">
+      <v-card-title>
+        <span class="text-h5">
+          <v-avatar
+            color="primary"
+            size="56">
+            {{ avatarInitials }}
+          </v-avatar>
+          <span v-if="isUpdating">
+            Updating Printer
           </span>
-        </v-card-title>
-        <v-card-text>
-          <v-row>
-            <v-col :cols="showChecksPanel ? 8 : 12">
-              <v-row v-if="formData">
-                <v-col>
-                  <validation-provider
-                    v-slot="{ errors }"
-                    :rules="printerNameRules"
-                    name="Name">
-                    <v-text-field
-                      v-model="formData.name"
-                      :counter="printerNameRules.max"
-                      :error-messages="errors"
-                      autofocus
-                      class="ma-1"
-                      label="Printer name*"
-                      required />
-                  </validation-provider>
-                </v-col>
-                <v-col>
-                  <validation-provider
-                    v-slot="{ errors }"
-                    name="Enabled">
-                    <v-checkbox
-                      v-model="formData.enabled"
-                      :error-messages="errors"
-                      hint="Disabling makes the printer passive"
-                      label="Enabled*"
-                      persistent-hint
-                      required />
-                  </validation-provider>
-                </v-col>
-              </v-row>
-
-              <validation-provider
-                v-slot="{ errors }"
-                name="Printer URL"
-                persistent-hint
-                rules="required|url">
+          <span v-else>
+            New Printer
+          </span>
+        </span>
+      </v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col :cols="showChecksPanel ? 8 : 12">
+            <v-row v-if="formData">
+              <v-col>
+                <!--                  :rules="printerNameRules"-->
                 <v-text-field
-                  v-model="formData.printerURL"
-                  :error-messages="errors"
+                  v-model="formData.name"
+                  :counter="printerNameRules.max"
+                  autofocus
                   class="ma-1"
-                  hint="F.e. 'octopi.local' or 'https://my.printer.com'"
-                  label="Printer URL*" />
-              </validation-provider>
-
-              <validation-provider
-                v-slot="{ errors }"
-                :rules="apiKeyRules"
-                name="ApiKey"
-                style="width: 100%">
-                <v-text-field
-                  v-model="formData.apiKey"
-                  :counter="apiKeyRules.length"
-                  :error-messages="errors"
-                  class="ma-1"
-                  hint="User or Application Key only (Global API key fails)"
-                  label="API Key*"
+                  label="Printer name*"
+                  required />
+              </v-col>
+              <v-col>
+                <v-checkbox
+                  v-model="formData.enabled"
+                  hint="Disabling makes the printer passive"
+                  label="Enabled*"
                   persistent-hint
                   required />
-              </validation-provider>
-            </v-col>
+              </v-col>
+            </v-row>
 
-            <PrinterChecksPanel
-              v-if="showChecksPanel"
-              :cols="4">
-              <v-btn @click="showChecksPanel = false">
-                Hide checks
-              </v-btn>
-            </PrinterChecksPanel>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <em class="text-red">
-            * indicates required field
-          </em>
-          <v-spacer />
-          <v-btn
-            variant="text"
-            @click="closeDialog()">
-            Close
-          </v-btn>
-          <v-btn
-            v-if="isUpdating"
-            :disabled="invalid"
-            color="gray"
-            variant="text"
-            @click="duplicatePrinter()">
-            Duplicate
-          </v-btn>
-          <v-btn
-            :disabled="invalid"
-            color="warning"
-            variant="text"
-            @click="testPrinter()">
-            Test connection
-          </v-btn>
+            <!--              persistent-hint-->
+            <!--              rules="required|url">-->
+            <v-text-field
+              v-model="formData.printerURL"
+              class="ma-1"
+              hint="F.e. 'octopi.local' or 'https://my.printer.com'"
+              label="Printer URL*" />
 
-          <v-btn
-            :disabled="invalid"
-            color="blue-darken-1"
-            variant="text"
-            @click="submit()">
-            {{ submitButtonText }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </validation-observer>
+            <!--              :rules="apiKeyRules"-->
+            <v-text-field
+              v-model="formData.apiKey"
+              :counter="apiKeyRules.length"
+              class="ma-1"
+              hint="User or Application Key only (Global API key fails)"
+              label="API Key*"
+              persistent-hint
+              required />
+            <!--            </validation-provider>-->
+          </v-col>
+
+          <PrinterChecksPanel
+            v-if="showChecksPanel"
+            :cols="4">
+            <v-btn @click="showChecksPanel = false">
+              Hide checks
+            </v-btn>
+          </PrinterChecksPanel>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <em class="text-red">
+          * indicates required field
+        </em>
+        <v-spacer />
+        <v-btn
+          variant="text"
+          @click="closeDialog()">
+          Close
+        </v-btn>
+        <v-btn
+          v-if="isUpdating"
+          color="gray"
+          variant="text"
+          @click="duplicatePrinter()">
+          Duplicate
+        </v-btn>
+        <v-btn
+          color="warning"
+          variant="text"
+          @click="testPrinter()">
+          Test connection
+        </v-btn>
+
+        <v-btn
+          color="blue-darken-1"
+          variant="text"
+          @click="submit()">
+          {{ submitButtonText }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </BaseDialog>
 </template>
 
@@ -269,7 +242,6 @@ export default defineComponent({
     },
 
     async testPrinter() {
-      if (!(await this.isValid())) return
       if (!this.formData) return
 
       this.testPrinterStore.clearEvents()
@@ -294,10 +266,6 @@ export default defineComponent({
       const printerObject = JSON.parse(jsonData)
 
       PrintersService.applyLoginDetailsPatchForm(printerObject, this.formData)
-    },
-
-    async isValid() {
-      return await this.validationObserver.validate()
     },
 
     async createPrinter(newPrinterData: CreatePrinter) {

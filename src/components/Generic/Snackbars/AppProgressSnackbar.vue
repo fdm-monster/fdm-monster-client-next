@@ -4,13 +4,11 @@
     :timeout="progressTimeout"
     absolute
     location="bottom right"
-    class="ma-3"
+    class="ma-3 elevation-24"
     min-width="450px"
-    class="elevation-24"
     multi-line
-    
-    style="z-index: 1000"
-    shaped>
+    rounded="pill"
+    style="z-index: 1000">
     <v-row>
       <v-col cols="2">
         <v-btn
@@ -152,23 +150,4 @@ onMounted(() => {
     snackbarTitle.value = 'Uploading files'
   })
 })
-
-function getUploadingFileName(state: TrackedUpload) {
-  if (!state.multerFile?.length) return ''
-  return state.multerFile[0].originalname
-}
-
-function uploadTracker(type: InfoEventType, uploadProgress: UploadStates) {
-  if (
-    !uploadProgress.current?.length &&
-    !this.uploadsStore.hasPendingUploads &&
-    !this.uploadsStore.isUploadingNow
-  ) {
-    this.progressSnackbarOpened = false
-    return
-  }
-  this.progressInfo = eventTypeToMessage(type, uploadProgress.current?.length)
-  this.progressStates = uploadProgress.current
-  this.progressSnackbarOpened = true
-}
 </script>

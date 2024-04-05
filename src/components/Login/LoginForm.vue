@@ -63,7 +63,6 @@
       <v-btn
         :disabled="!authStore.registration"
         class="pa-4"
-        size="large"
         size="lg"
         variant="flat"
         style="width: 100%"

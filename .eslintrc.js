@@ -9,8 +9,8 @@ module.exports = {
     node: true,
   },
   extends: [
-    'plugin:vue/vue3-essential',
     'eslint:recommended',
+    'plugin:vue/vue3-essential',
     '@vue/eslint-config-typescript',
     'plugin:vue/vue3-strongly-recommended',
     'plugin:vuetify/base'
@@ -56,7 +56,7 @@ module.exports = {
           'singleline': 'never',
           'multiline': 'never'
         }
-    }],
+      }],
     'vue/new-line-between-multi-line-property': ['error', {
       'minLineOfMultilineProperty': 2
     }],
@@ -76,6 +76,7 @@ module.exports = {
     'vue/valid-v-on': ['error', {
       'modifiers': []
     }],
-    'quotes':['error','single']
+    'quotes':['error','single'],
+    '@typescript-eslint/indent': ['error',2]
   }
 }
