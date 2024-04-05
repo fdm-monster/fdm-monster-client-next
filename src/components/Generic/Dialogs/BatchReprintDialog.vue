@@ -79,55 +79,55 @@
   </BaseDialog>
 </template>
 <script lang="ts" setup>
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { useDialog } from "@/shared/dialog.composable";
-import { onBeforeUnmount, onMounted, ref } from "vue";
-import { BatchService } from "@/backend/batch.service";
-import { IdType } from "@/utils/id.type";
-import { ReprintFileDto, ReprintState } from "@/models/batch/reprint.dto";
-import { usePrinterStore } from "@/store/printer.store";
-import { errorSummary } from "@/utils/error.utils";
-import { useSnackbar } from "@/shared/snackbar.composable";
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import { useDialog } from "@/shared/dialog.composable"
+import { onBeforeUnmount, onMounted, ref } from "vue"
+import { BatchService } from "@/backend/batch.service"
+import { IdType } from "@/utils/id.type"
+import { ReprintFileDto, ReprintState } from "@/models/batch/reprint.dto"
+import { usePrinterStore } from "@/store/printer.store"
+import { errorSummary } from "@/utils/error.utils"
+import { useSnackbar } from "@/shared/snackbar.composable"
 
-const printerStore = usePrinterStore();
-const inputPrinterIds = ref();
-const dialog = useDialog(DialogName.BatchReprintDialog);
-const loading = ref(false);
-const submitting = ref(false);
-const reprintableFiles = ref<ReprintFileDto[]>([]);
-const selectedItems = ref<ReprintFileDto[]>([]);
-const errorLoading = ref("");
-const snackbar = useSnackbar();
+const printerStore = usePrinterStore()
+const inputPrinterIds = ref()
+const dialog = useDialog(DialogName.BatchReprintDialog)
+const loading = ref(false)
+const submitting = ref(false)
+const reprintableFiles = ref<ReprintFileDto[]>([])
+const selectedItems = ref<ReprintFileDto[]>([])
+const errorLoading = ref("")
+const snackbar = useSnackbar()
 
 onMounted(() => {
-  console.debug("Mounted");
-});
+  console.debug("Mounted")
+})
 
 onBeforeUnmount(() => {
-  console.debug("Unmount");
-});
+  console.debug("Unmount")
+})
 
 function onBeforeDialogOpened(_: IdType[]) {
-  loading.value = true;
+  loading.value = true
 }
 
 async function onDialogOpened(printerIds: IdType[]) {
-  inputPrinterIds.value = printerIds;
+  inputPrinterIds.value = printerIds
   try {
-    const response = await BatchService.batchGetLastPrintedFiles(inputPrinterIds.value);
-    reprintableFiles.value = response;
+    const response = await BatchService.batchGetLastPrintedFiles(inputPrinterIds.value)
+    reprintableFiles.value = response
     selectedItems.value = response.filter(
       (r) => r.connectionState === "Operational" && r.reprintState == ReprintState.LastPrintReady
-    );
+    )
   } catch (e: any) {
-    errorLoading.value = e.code.toString() ?? "";
+    errorLoading.value = e.code.toString() ?? ""
   }
 
-  loading.value = false;
+  loading.value = false
 }
 
 async function submitBatchReprints() {
-  submitting.value = true;
+  submitting.value = true
   try {
     await BatchService.batchReprintFiles(
       selectedItems.value
@@ -136,18 +136,18 @@ async function submitBatchReprints() {
           printerId: v.printerId,
           path: v.file?.path || "",
         }))
-    );
-    printerStore.clearSelectedPrinters();
-    snackbar.info("Action completed", "Your reprinted jobs are starting", 5000);
-    closeDialog();
+    )
+    printerStore.clearSelectedPrinters()
+    snackbar.info("Action completed", "Your reprinted jobs are starting", 5000)
+    closeDialog()
   } catch (e: any) {
-    errorLoading.value = errorSummary(e);
+    errorLoading.value = errorSummary(e)
   } finally {
-    submitting.value = false;
+    submitting.value = false
   }
 }
 
 function closeDialog() {
-  dialog.closeDialog(dialog.context());
+  dialog.closeDialog(dialog.context())
 }
 </script>

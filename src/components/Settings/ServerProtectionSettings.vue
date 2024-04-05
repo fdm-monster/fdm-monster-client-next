@@ -180,138 +180,138 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from "vue";
-import {whitelistSettingsHidden} from "@/shared/experimental.constants";
-import {isValidIPOrMask} from "@/utils/validation.utils";
-import {SettingsService} from "@/backend";
-import {useSnackbar} from "@/shared/snackbar.composable";
-import {useAuthStore} from "@/store/auth.store";
-import {useRouter} from "vue-router";
-import {RouteNames} from "@/router/route-names";
+import {onMounted, ref} from "vue"
+import {whitelistSettingsHidden} from "@/shared/experimental.constants"
+import {isValidIPOrMask} from "@/utils/validation.utils"
+import {SettingsService} from "@/backend"
+import {useSnackbar} from "@/shared/snackbar.composable"
+import {useAuthStore} from "@/store/auth.store"
+import {useRouter} from "vue-router"
+import {RouteNames} from "@/router/route-names"
 
-const router = useRouter();
-const snackbar = useSnackbar();
-const authStore = useAuthStore();
+const router = useRouter()
+const snackbar = useSnackbar()
+const authStore = useAuthStore()
 
-const ipAddress = ref<string>("");
-const whitelistEnabled = ref<boolean>(false);
-const whitelistedIpAddresses = ref<string[]>([]);
+const ipAddress = ref<string>("")
+const whitelistEnabled = ref<boolean>(false)
+const whitelistedIpAddresses = ref<string[]>([])
 
-const loginRequired = ref<boolean>(false);
-const registrationEnabled = ref<boolean>(false);
+const loginRequired = ref<boolean>(false)
+const registrationEnabled = ref<boolean>(false)
 
-const jwtExpiresIn = ref<number>(3200);
-const refreshTokenAttemptsEnabled = ref<boolean>(false);
-const refreshTokenAttempts = ref<number>(-1);
-const refreshTokenExpiry = ref<number>(14);
+const jwtExpiresIn = ref<number>(3200)
+const refreshTokenAttemptsEnabled = ref<boolean>(false)
+const refreshTokenAttempts = ref<number>(-1)
+const refreshTokenExpiry = ref<number>(14)
 
-const ipAddressRule = (val: string) => (isValidIPOrMask(val) ? true : "Not a valid IP Address");
+const ipAddressRule = (val: string) => (isValidIPOrMask(val) ? true : "Not a valid IP Address")
 
 onMounted(async () => {
-  const settings = await SettingsService.getSettings();
-  loginRequired.value = settings.server.loginRequired;
-  registrationEnabled.value = settings.server.registration;
+  const settings = await SettingsService.getSettings()
+  loginRequired.value = settings.server.loginRequired
+  registrationEnabled.value = settings.server.registration
 
-  ipAddress.value = settings.connection?.clientIp ?? "127.0.0.1";
-  whitelistEnabled.value = settings.server.whitelistEnabled;
-  whitelistedIpAddresses.value = settings.server.whitelistedIpAddresses;
+  ipAddress.value = settings.connection?.clientIp ?? "127.0.0.1"
+  whitelistEnabled.value = settings.server.whitelistEnabled
+  whitelistedIpAddresses.value = settings.server.whitelistedIpAddresses
 
-  const sensitiveSettings = await SettingsService.getSettingsSensitive();
-  jwtExpiresIn.value = sensitiveSettings.credentials.jwtExpiresIn / 60;
-  refreshTokenAttemptsEnabled.value = sensitiveSettings.credentials.refreshTokenAttempts !== -1;
-  refreshTokenAttempts.value = sensitiveSettings.credentials.refreshTokenAttempts;
-  refreshTokenExpiry.value = sensitiveSettings.credentials.refreshTokenExpiry / 24 / 3600;
-});
+  const sensitiveSettings = await SettingsService.getSettingsSensitive()
+  jwtExpiresIn.value = sensitiveSettings.credentials.jwtExpiresIn / 60
+  refreshTokenAttemptsEnabled.value = sensitiveSettings.credentials.refreshTokenAttempts !== -1
+  refreshTokenAttempts.value = sensitiveSettings.credentials.refreshTokenAttempts
+  refreshTokenExpiry.value = sensitiveSettings.credentials.refreshTokenExpiry / 24 / 3600
+})
 
 function onRefreshTokenEnabledChange() {
   if (!refreshTokenAttemptsEnabled.value) {
-    refreshTokenAttempts.value = -1;
+    refreshTokenAttempts.value = -1
   }
 }
 
 function removeIpWhitelist(removedIp: string) {
   whitelistedIpAddresses.value = whitelistedIpAddresses.value.filter(
     (ip) => ip.toLowerCase() !== removedIp.toLowerCase()
-  );
+  )
 }
 
 function appendIpAddress(ip: string) {
-  if (!isValidIPOrMask(ip)) return;
-  whitelistedIpAddresses.value.push(ip.toLowerCase());
+  if (!isValidIPOrMask(ip)) return
+  whitelistedIpAddresses.value.push(ip.toLowerCase())
 }
 
 async function resetWhitelistSettingsToDefault() {
-  whitelistedIpAddresses.value = ["127.0.0.1", "::12"];
-  whitelistEnabled.value = false;
-  await setWhitelistSettings(false);
-  snackbar.info("Whitelist settings reset to default");
+  whitelistedIpAddresses.value = ["127.0.0.1", "::12"]
+  whitelistEnabled.value = false
+  await setWhitelistSettings(false)
+  snackbar.info("Whitelist settings reset to default")
 }
 
 async function setWhitelistSettings(showSuccess = true) {
   const settingsDto = await SettingsService.setWhitelistSettings({
     whitelistedIpAddresses: whitelistedIpAddresses.value,
     whitelistEnabled: whitelistEnabled.value,
-  });
-  whitelistedIpAddresses.value = settingsDto.server?.whitelistedIpAddresses;
-  whitelistEnabled.value = settingsDto.server?.whitelistEnabled;
+  })
+  whitelistedIpAddresses.value = settingsDto.server?.whitelistedIpAddresses
+  whitelistEnabled.value = settingsDto.server?.whitelistEnabled
   if (showSuccess) {
-    snackbar.info("Whitelist settings updated");
+    snackbar.info("Whitelist settings updated")
   }
 }
 
 async function setLoginRequired() {
-  const loginRequiredVal = loginRequired.value;
+  const loginRequiredVal = loginRequired.value
   if (!loginRequiredVal && !confirm("Disabling login will expose your server. Continue?")) {
-    return;
+    return
   }
 
-  await SettingsService.updateLoginRequiredSettings(loginRequiredVal);
+  await SettingsService.updateLoginRequiredSettings(loginRequiredVal)
 
-  await authStore.logout(true);
+  await authStore.logout(true)
 
-  await authStore.checkAuthenticationRequirements();
+  await authStore.checkAuthenticationRequirements()
   if (!loginRequiredVal) {
-    await router.push({name: RouteNames.Home});
+    await router.push({name: RouteNames.Home})
   } else {
-    await router.push({name: RouteNames.Login});
+    await router.push({name: RouteNames.Login})
   }
-  snackbar.info("Login Required settings updated");
+  snackbar.info("Login Required settings updated")
 }
 
 async function setRegistrationEnabled() {
-  await SettingsService.updateRegistrationEnabledSettings(registrationEnabled.value);
-  await authStore.checkAuthenticationRequirements();
-  snackbar.info("Registration settings updated");
+  await SettingsService.updateRegistrationEnabledSettings(registrationEnabled.value)
+  await authStore.checkAuthenticationRequirements()
+  snackbar.info("Registration settings updated")
 }
 
 async function resetLoginExpirySettingsToDefault() {
-  jwtExpiresIn.value = 120;
-  refreshTokenAttemptsEnabled.value = false;
-  refreshTokenAttempts.value = -1;
-  refreshTokenExpiry.value = 14;
-  await saveLoginExpirySettings();
-  snackbar.info("Login expiry settings reset to default");
+  jwtExpiresIn.value = 120
+  refreshTokenAttemptsEnabled.value = false
+  refreshTokenAttempts.value = -1
+  refreshTokenExpiry.value = 14
+  await saveLoginExpirySettings()
+  snackbar.info("Login expiry settings reset to default")
 }
 
 async function saveLoginExpirySettings(showSnackbar = true) {
   if (jwtExpiresIn.value < 2 || jwtExpiresIn.value > 120) {
-    throw new Error("JWT Expiry must be between 2 and 120 minutes");
+    throw new Error("JWT Expiry must be between 2 and 120 minutes")
   }
   if (
     refreshTokenAttemptsEnabled.value &&
     (refreshTokenAttempts.value < 50 || refreshTokenAttempts.value > 1000)
   ) {
-    throw new Error("Refresh Token Attempts must be between 50 and 1000");
+    throw new Error("Refresh Token Attempts must be between 50 and 1000")
   }
   if (refreshTokenExpiry.value < 1 || refreshTokenExpiry.value > 30) {
-    throw new Error("Refresh Token Expiry must be between 1 and 30 days");
+    throw new Error("Refresh Token Expiry must be between 1 and 30 days")
   }
 
   await SettingsService.updateCredentialSettings(
     jwtExpiresIn.value * 60,
     refreshTokenAttempts.value,
     refreshTokenExpiry.value * 24 * 3600
-  );
-  snackbar.info("Login expiry settings updated");
+  )
+  snackbar.info("Login expiry settings updated")
 }
 </script>

@@ -38,41 +38,41 @@
 </template>
 
 <script lang="ts" setup>
-import { CameraStreamService } from "@/backend/camera-stream.service";
-import { useDialog } from "@/shared/dialog.composable";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { useMutation, useQuery } from "@tanstack/vue-query";
-import { CameraStream, CameraWithPrinter } from "@/models/camera-streams/camera-stream";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { usePrinterStore } from "@/store/printer.store";
+import { CameraStreamService } from "@/backend/camera-stream.service"
+import { useDialog } from "@/shared/dialog.composable"
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import { useMutation, useQuery } from "@tanstack/vue-query"
+import { CameraStream, CameraWithPrinter } from "@/models/camera-streams/camera-stream"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { usePrinterStore } from "@/store/printer.store"
 
-const printerStore = usePrinterStore();
-const dialog = useDialog(DialogName.AddOrUpdateCameraDialog);
+const printerStore = usePrinterStore()
+const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
 const camerasWithPrinter = async (): Promise<CameraWithPrinter[]> => {
-  const streams = await CameraStreamService.listCameraStreams();
+  const streams = await CameraStreamService.listCameraStreams()
   return streams.map((cameraStream) => ({
     printer: printerStore.printers.find((printer) => printer.id === cameraStream.printerId),
     cameraStream,
-  })) as CameraWithPrinter[];
-};
+  })) as CameraWithPrinter[]
+}
 const query = useQuery({
   queryKey: ["cameraStream"],
   queryFn: camerasWithPrinter,
-});
+})
 const deleteMutation = useMutation({
   mutationFn: (cameraId: string | number) => CameraStreamService.deleteCameraStream(cameraId),
   onSuccess: () => query.refetch(),
-});
+})
 
 function addCamera() {
-  dialog.openDialog({ addOrUpdate: "add" });
+  dialog.openDialog({ addOrUpdate: "add" })
 }
 
 function updateCamera(cameraId: string | number) {
-  dialog.openDialog({ addOrUpdate: "update", cameraId });
+  dialog.openDialog({ addOrUpdate: "update", cameraId })
 }
 
 function deleteCamera(cameraId: string | number) {
-  deleteMutation.mutateAsync(cameraId);
+  deleteMutation.mutateAsync(cameraId)
 }
 </script>

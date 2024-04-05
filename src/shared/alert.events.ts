@@ -5,10 +5,10 @@ export enum InfoEventType {
 
 export const eventTypeToMessage = (type: InfoEventType, count: number) => {
   if (type === InfoEventType.UPLOAD_BACKEND) {
-    return `Server is sending file(s) (${count})`;
+    return `Server is sending file(s) (${count})`
   } else if (type === InfoEventType.UPLOAD_FRONTEND) {
-    return `Uploading file(s) to server (${count})`;
+    return `Uploading file(s) to server (${count})`
   } else {
-    return `Uploading file(s)`;
+    return `Uploading file(s)`
   }
-};
+}

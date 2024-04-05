@@ -65,59 +65,59 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
-import { AppService } from "@/backend/app.service";
-import { useSettingsStore } from "@/store/settings.store";
-import { SettingsService } from "@/backend";
-import { setSentryEnabled } from "@/utils/sentry.util";
-import { ServerPrivateService } from "@/backend/server-private.service";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { captureException } from "@sentry/vue";
+import { onMounted, ref } from "vue"
+import { AppService } from "@/backend/app.service"
+import { useSettingsStore } from "@/store/settings.store"
+import { SettingsService } from "@/backend"
+import { setSentryEnabled } from "@/utils/sentry.util"
+import { ServerPrivateService } from "@/backend/server-private.service"
+import { useSnackbar } from "@/shared/snackbar.composable"
+import { captureException } from "@sentry/vue"
 
-const snackBar = useSnackbar();
-const settingsStore = useSettingsStore();
-const hasAnonymousDiagnosticsToggleFeature = ref(false);
-const hasLogDumpFeature = ref(false);
-const hasLogClearFeature = ref(false);
-const sentryDiagnosticsEnabled = ref(false);
+const snackBar = useSnackbar()
+const settingsStore = useSettingsStore()
+const hasAnonymousDiagnosticsToggleFeature = ref(false)
+const hasLogDumpFeature = ref(false)
+const hasLogClearFeature = ref(false)
+const sentryDiagnosticsEnabled = ref(false)
 onMounted(async () => {
-  const features = await AppService.getFeatures();
+  const features = await AppService.getFeatures()
   hasAnonymousDiagnosticsToggleFeature.value =
-    features.anonymousDiagnosticsToggle?.available || false;
-  hasLogDumpFeature.value = features.logDumpZip?.available || false;
-  hasLogClearFeature.value = features.clearLogFiles?.available || false;
+    features.anonymousDiagnosticsToggle?.available || false
+  hasLogDumpFeature.value = features.logDumpZip?.available || false
+  hasLogClearFeature.value = features.clearLogFiles?.available || false
 
-  await settingsStore.loadSettings();
-  sentryDiagnosticsEnabled.value = settingsStore.serverSettings?.sentryDiagnosticsEnabled || false;
-});
+  await settingsStore.loadSettings()
+  sentryDiagnosticsEnabled.value = settingsStore.serverSettings?.sentryDiagnosticsEnabled || false
+})
 
 async function saveSentryDiagnosticsSettings() {
-  await SettingsService.setSentryDiagnosticsSettings(sentryDiagnosticsEnabled.value);
-  setSentryEnabled(sentryDiagnosticsEnabled.value);
+  await SettingsService.setSentryDiagnosticsSettings(sentryDiagnosticsEnabled.value)
+  setSentryEnabled(sentryDiagnosticsEnabled.value)
 }
 
 async function sendTestSentryException() {
-  const text = `Test Error ${Date.now()} Sentry enabled: ${sentryDiagnosticsEnabled.value}`;
+  const text = `Test Error ${Date.now()} Sentry enabled: ${sentryDiagnosticsEnabled.value}`
   try {
-    throw new Error(text);
+    throw new Error(text)
   } catch (e) {
-    captureException(e);
+    captureException(e)
     snackBar.openInfoMessage({
       title: "Test report was sent",
       subtitle: `Content: ${text}`,
-    });
+    })
   }
 }
 
 async function downloadLogDump() {
-  await ServerPrivateService.downloadLogDump();
+  await ServerPrivateService.downloadLogDump()
 }
 
 async function clearOldLogFiles() {
-  await ServerPrivateService.clearLogFilesOlderThanWeek();
+  await ServerPrivateService.clearLogFilesOlderThanWeek()
   snackBar.openInfoMessage({
     title: "Action success",
     subtitle: "Log files older than a week have been deleted",
-  });
+  })
 }
 </script>

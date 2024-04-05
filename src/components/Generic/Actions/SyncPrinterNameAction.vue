@@ -18,10 +18,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { PrinterSettingsService } from "@/backend/printer-settings.service";
-import { useSnackbar } from "../../../shared/snackbar.composable";
+import { defineComponent, PropType } from "vue"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { PrinterSettingsService } from "@/backend/printer-settings.service"
+import { useSnackbar } from "../../../shared/snackbar.composable"
 
 export default defineComponent({
   name: "SyncPrinterNameAction",
@@ -31,20 +31,20 @@ export default defineComponent({
   setup() {
     return {
       snackbar: useSnackbar(),
-    };
+    }
   },
   computed: {
     printerId() {
-      return this.printer!.id;
+      return this.printer!.id
     },
   },
   methods: {
     async syncPrinterName(printer: PrinterDto) {
-      await PrinterSettingsService.syncPrinterName(printer.id);
+      await PrinterSettingsService.syncPrinterName(printer.id)
       this.snackbar.openInfoMessage({
         title: "Synced printer name to OctoPrint",
-      });
+      })
     },
   },
-});
+})
 </script>

@@ -7,39 +7,22 @@
   </v-col>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import { useTestPrinterStore } from "../../../store/test-printer.store";
+<script lang="ts" setup>
 
-interface Data {
-  cols: 4;
-}
+import {useTestPrinterStore} from "../../../store/test-printer.store"
 
-const errorCol = "error";
-const successCol = "success";
+const errorCol = "error"
+const successCol = "success"
+const testPrinterStore = useTestPrinterStore()
+const cols = ref(4)
 
-export default defineComponent({
-  name: "PrinterChecksPanel",
-  components: {},
-  setup: () => {
+function getEvents() {
+  return testPrinterStore.getEvents().map((e) => {
     return {
-      testPrinterStore: useTestPrinterStore(),
-    };
-  },
-  data: (): Data => ({
-    cols: 4,
-  }),
-  computed: {},
-  methods: {
-    getEvents() {
-      return this.testPrinterStore.getEvents().map((e) => {
-        return {
-          label: e.event,
-          text: e.payload,
-          color: e.failure ? errorCol : successCol,
-        };
-      });
-    },
-  },
-});
+      label: e.event,
+      text: e.payload,
+      color: e.failure ? errorCol : successCol,
+    }
+  })
+}
 </script>

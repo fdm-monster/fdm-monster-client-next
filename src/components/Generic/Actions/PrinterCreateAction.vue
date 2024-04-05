@@ -11,9 +11,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { useDialogsStore } from "../../../store/dialog.store";
-import { DialogName } from "../Dialogs/dialog.constants";
+import { defineComponent } from "vue"
+import { useDialogsStore } from "../../../store/dialog.store"
+import { DialogName } from "../Dialogs/dialog.constants"
 
 export default defineComponent({
   name: "PrinterCreateAction",
@@ -21,13 +21,13 @@ export default defineComponent({
   setup: () => {
     return {
       dialogsStore: useDialogsStore(),
-    };
+    }
   },
   computed: {},
   methods: {
     openCreatePrinterDialog() {
-      this.dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog);
+      this.dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog)
     },
   },
-});
+})
 </script>

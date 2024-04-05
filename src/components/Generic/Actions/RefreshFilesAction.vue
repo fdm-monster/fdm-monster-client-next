@@ -6,9 +6,9 @@
 </template>
 
 <script lang="ts">
-import { usePrinterStore } from "@/store/printer.store";
-import { defineComponent, PropType } from "vue";
-import { PrinterDto } from "@/models/printers/printer.model";
+import { usePrinterStore } from "@/store/printer.store"
+import { defineComponent, PropType } from "vue"
+import { PrinterDto } from "@/models/printers/printer.model"
 
 interface Data {
   property: number;
@@ -20,7 +20,7 @@ export default defineComponent({
   setup: () => {
     return {
       printersStore: usePrinterStore(),
-    };
+    }
   },
   async created() {},
   async mounted() {},
@@ -33,11 +33,11 @@ export default defineComponent({
   computed: {},
   methods: {
     async getFiles() {
-      if (!this.printer) return;
+      if (!this.printer) return
 
-      await this.printersStore.loadPrinterFiles(this.printer.id, false);
+      await this.printersStore.loadPrinterFiles(this.printer.id, false)
     },
   },
   watch: {},
-});
+})
 </script>

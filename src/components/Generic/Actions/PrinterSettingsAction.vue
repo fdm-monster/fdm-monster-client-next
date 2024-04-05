@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { PrinterDto } from "@/models/printers/printer.model";
+import { defineComponent, PropType } from "vue"
+import { PrinterDto } from "@/models/printers/printer.model"
 
 export default defineComponent({
   name: "PrinterSettingsAction",
@@ -15,13 +15,13 @@ export default defineComponent({
   },
   computed: {
     printerId() {
-      return this.printer!.id;
+      return this.printer!.id
     },
   },
   methods: {
     openSettings() {
-      this.$emit("update:show", this.printer!.id);
+      this.$emit("update:show", this.printer!.id)
     },
   },
-});
+})
 </script>

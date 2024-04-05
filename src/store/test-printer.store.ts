@@ -1,6 +1,6 @@
-import { defineStore } from "pinia";
-import { CreatePrinter } from "@/models/printers/crud/create-printer.model";
-import { PrintersService } from "@/backend";
+import { defineStore } from "pinia"
+import { CreatePrinter } from "@/models/printers/crud/create-printer.model"
+import { PrintersService } from "@/backend"
 
 export interface TestEvent {
   correlationToken: string;
@@ -34,7 +34,7 @@ export const useTestPrinterStore = defineStore("TestPrinter", {
               (e.event !== "WS_STATE_UPDATED" || e.payload !== "unopened")
           )
           .map((e) => {
-            const event = e.event.startsWith("WS_") ? "Socket" : "API";
+            const event = e.event.startsWith("WS_") ? "Socket" : "API"
             return {
               event,
               payload: e.payload
@@ -51,20 +51,20 @@ export const useTestPrinterStore = defineStore("TestPrinter", {
                 "closed",
                 "connection closed",
               ].includes(e.payload?.toString()),
-            };
-          });
+            }
+          })
     },
   },
   actions: {
     clearEvents() {
-      this.testPrinterEvents = [];
+      this.testPrinterEvents = []
     },
     async createTestPrinter(newPrinter: CreatePrinter) {
-      this.testPrinter = newPrinter;
-      return await PrintersService.testConnection(newPrinter);
+      this.testPrinter = newPrinter
+      return await PrintersService.testConnection(newPrinter)
     },
     saveEvent(event: TestEvent) {
-      this.testPrinterEvents?.push(event);
+      this.testPrinterEvents?.push(event)
     },
   },
-});
+})

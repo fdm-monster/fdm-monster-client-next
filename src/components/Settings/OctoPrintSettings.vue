@@ -82,14 +82,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { PrinterFileService, SettingsService } from "@/backend";
-import { PrinterSettingsService } from "@/backend/printer-settings.service";
-import { FileCleanSettings } from "@/models/settings/printer-file-clean-settings.model";
-import { usePrinterStore } from "@/store/printer.store";
-import { usePrinterStateStore } from "@/store/printer-state.store";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { useSettingsStore } from "@/store/settings.store";
+import { defineComponent } from "vue"
+import { PrinterFileService, SettingsService } from "@/backend"
+import { PrinterSettingsService } from "@/backend/printer-settings.service"
+import { FileCleanSettings } from "@/models/settings/printer-file-clean-settings.model"
+import { usePrinterStore } from "@/store/printer.store"
+import { usePrinterStateStore } from "@/store/printer-state.store"
+import { useSnackbar } from "@/shared/snackbar.composable"
+import { useSettingsStore } from "@/store/settings.store"
 
 interface Data {
   fileHandlingSettings: FileCleanSettings;
@@ -103,7 +103,7 @@ export default defineComponent({
       printersStore: usePrinterStore(),
       snackbar: useSnackbar(),
       printerStateStore: usePrinterStateStore(),
-    };
+    }
   },
   props: {},
   data: (): Data => ({
@@ -114,48 +114,48 @@ export default defineComponent({
     },
   }),
   async created() {
-    const settings = await SettingsService.getSettings();
-    this.fileHandlingSettings = settings.printerFileClean;
+    const settings = await SettingsService.getSettings()
+    this.fileHandlingSettings = settings.printerFileClean
   },
   mounted() {},
   computed: {},
   methods: {
     async updateTimeoutSettings() {
       if (!this.settingsStore.settings?.timeout?.apiTimeout) {
-        this.snackbar.error("Timeout not set");
-        return;
+        this.snackbar.error("Timeout not set")
+        return
       }
       if (this.settingsStore.settings.timeout.apiTimeout < 1000) {
-        this.snackbar.error("Timeout is too low - please set it to at least 1000 milliseconds");
+        this.snackbar.error("Timeout is too low - please set it to at least 1000 milliseconds")
       } else {
-        await this.settingsStore.updateTimeoutSettings(this.settingsStore.settings?.timeout);
-        this.snackbar.info("Timeout settings updated");
+        await this.settingsStore.updateTimeoutSettings(this.settingsStore.settings?.timeout)
+        this.snackbar.info("Timeout settings updated")
       }
     },
     async setFileCleanSettings() {
-      const serverSettings = await SettingsService.setFileCleanSettings(this.fileHandlingSettings);
-      this.fileHandlingSettings = serverSettings.printerFileClean;
+      const serverSettings = await SettingsService.setFileCleanSettings(this.fileHandlingSettings)
+      this.fileHandlingSettings = serverSettings.printerFileClean
     },
     async purgeFiles() {
-      await PrinterFileService.purgeFiles();
+      await PrinterFileService.purgeFiles()
 
       this.snackbar.openInfoMessage({
         title: `Successfully purged all references to printer files!`,
-      });
+      })
     },
     async bulkDisableGCodeAnalysis() {
-      const printers = this.printerStateStore.onlinePrinters;
+      const printers = this.printerStateStore.onlinePrinters
       this.snackbar.openInfoMessage({
         title: `Trying to disable gcode analysis for ${printers.length} online printers.`,
-      });
+      })
       for (const printer of Object.values(printers)) {
-        await PrinterSettingsService.setGCodeAnalysis(printer.id, false);
+        await PrinterSettingsService.setGCodeAnalysis(printer.id, false)
       }
       this.snackbar.openInfoMessage({
         title: `Finished disabling gcode analysis for ${printers.length} online printers.`,
-      });
+      })
     },
   },
   watch: {},
-});
+})
 </script>

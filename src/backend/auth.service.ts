@@ -1,5 +1,5 @@
-import { getHttpClient } from "@/shared/http-client";
-import { WizardSettingsDto } from "@/models/settings/settings.model";
+import { getHttpClient } from "@/shared/http-client"
+import { WizardSettingsDto } from "@/models/settings/settings.model"
 
 export interface Tokens {
   token: string;
@@ -15,40 +15,40 @@ export interface LoginRequiredResponse {
 
 export class AuthService {
   static async getLoginRequired() {
-    const httpClient = await getHttpClient(false, false);
-    return await httpClient.get<LoginRequiredResponse>("api/auth/login-required");
+    const httpClient = await getHttpClient(false, false)
+    return await httpClient.get<LoginRequiredResponse>("api/auth/login-required")
   }
 
   static async postLogin(username: string, password: string) {
-    const httpClient = await getHttpClient(false, false);
+    const httpClient = await getHttpClient(false, false)
     return await httpClient.post<Tokens>("api/auth/login", {
       username,
       password,
-    });
+    })
   }
 
   static async logout() {
-    const httpClient = await getHttpClient(true, false);
-    return await httpClient.post("api/auth/logout");
+    const httpClient = await getHttpClient(true, false)
+    return await httpClient.post("api/auth/logout")
   }
 
   static async refreshLogin(refreshToken: string) {
-    const httpClient = await getHttpClient(false, false);
+    const httpClient = await getHttpClient(false, false)
     return await httpClient.post<{
       token: string;
-    }>("api/auth/refresh", { refreshToken });
+    }>("api/auth/refresh", { refreshToken })
   }
 
   static async verifyLogin() {
-    const httpClient = await getHttpClient(true, false);
-    return await httpClient.post("api/auth/verify");
+    const httpClient = await getHttpClient(true, false)
+    return await httpClient.post("api/auth/verify")
   }
 
   static async registerAccount(username: string, password: string) {
-    const httpClient = await getHttpClient(true, false);
+    const httpClient = await getHttpClient(true, false)
     return await httpClient.post("api/auth/register", {
       username,
       password,
-    });
+    })
   }
 }

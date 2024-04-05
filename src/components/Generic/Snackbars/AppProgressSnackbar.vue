@@ -47,17 +47,17 @@
   </v-snackbar>
 </template>
 <script lang="ts" setup>
-import { ProgressMessage, useSnackbar } from "../../../shared/snackbar.composable";
-import { onMounted, ref } from "vue";
+import { ProgressMessage, useSnackbar } from "../../../shared/snackbar.composable"
+import { onMounted, ref } from "vue"
 import {
   TrackedUpload,
   UploadStates,
-} from "../../../models/socketio-messages/socketio-message.model";
-import { eventTypeToMessage, InfoEventType } from "../../../shared/alert.events";
+} from "../../../models/socketio-messages/socketio-message.model"
+import { eventTypeToMessage, InfoEventType } from "../../../shared/alert.events"
 
-const snackbar = useSnackbar();
-const snackbarOpened = ref(false);
-const snackbarTitle = ref("");
+const snackbar = useSnackbar()
+const snackbarOpened = ref(false)
+const snackbarTitle = ref("")
 
 // Merged upload progress tracking
 interface ProgressTracked {
@@ -70,11 +70,11 @@ interface ProgressTracked {
   timeoutAt?: number;
 }
 
-const progressTracked = ref<ProgressTracked[]>([]);
-const progressTimeout = ref<number>(100);
+const progressTracked = ref<ProgressTracked[]>([])
+const progressTimeout = ref<number>(100)
 
 function getProgressByKey(key: string) {
-  return progressTracked.value.find((p) => p.key === key);
+  return progressTracked.value.find((p) => p.key === key)
 }
 
 function addProgressTracker(
@@ -85,7 +85,7 @@ function addProgressTracker(
   completed: boolean = false,
   expiresAt: number = Date.now() + 1500
 ) {
-  console.log(`[AppProgressSnackbar] Adding ${key} tracker with progress ${value}`);
+  console.log(`[AppProgressSnackbar] Adding ${key} tracker with progress ${value}`)
   progressTracked.value.push({
     key,
     title,
@@ -94,60 +94,60 @@ function addProgressTracker(
     startedAt: Date.now(),
     expiresAt,
     timeoutAt: undefined,
-  });
+  })
 }
 
 function removeProgressTracker(key: string) {
-  progressTracked.value = progressTracked.value.filter((p) => p.key !== key);
+  progressTracked.value = progressTracked.value.filter((p) => p.key !== key)
 }
 
 onMounted(() => {
   setInterval(() => {
     if (!progressTracked.value.length) {
-      return;
+      return
     }
 
     for (const progress of progressTracked.value) {
-      const { value, completed, expiresAt, key } = progress;
+      const { value, completed, expiresAt, key } = progress
       if ((completed || value >= 100) && expiresAt < Date.now()) {
-        removeProgressTracker(key);
+        removeProgressTracker(key)
       } else if (progress.timeoutAt && progress.timeoutAt < Date.now()) {
-        removeProgressTracker(key);
+        removeProgressTracker(key)
       } else if (!progress.timeoutAt && expiresAt < Date.now()) {
-        progress.timeoutAt = Date.now() + 5000;
+        progress.timeoutAt = Date.now() + 5000
       }
     }
     if (!progressTracked.value.length) {
       // Dwell the notification snackbar for a timeout duration
-      progressTimeout.value = 2000;
-      snackbarTitle.value = "Upload ended";
-      console.debug(`[AppSnackbars] Setting timeout to ${progressTimeout.value}`);
+      progressTimeout.value = 2000
+      snackbarTitle.value = "Upload ended"
+      console.debug(`[AppSnackbars] Setting timeout to ${progressTimeout.value}`)
     } else {
-      progressTimeout.value = -1;
-      snackbarOpened.value = true;
+      progressTimeout.value = -1
+      snackbarOpened.value = true
     }
-  }, 1000);
+  }, 1000)
   snackbar.onProgressMessage((data: ProgressMessage) => {
-    const { key, value, title, completed } = data;
-    const record = getProgressByKey(key);
+    const { key, value, title, completed } = data
+    const record = getProgressByKey(key)
     if (!record) {
       if (value >= 100) {
         // If the value is above 100, don't consider it (bug/noise)
-        return;
+        return
       }
-      addProgressTracker(key, title, value, false, Date.now() + 1500);
+      addProgressTracker(key, title, value, false, Date.now() + 1500)
     } else if (Math.min(100, value) >= record.value) {
-      record.expiresAt = Date.now() + 1500;
-      record.value = value;
-      record.completed = completed;
+      record.expiresAt = Date.now() + 1500
+      record.value = value
+      record.completed = completed
     }
-    snackbarTitle.value = "Uploading files";
-  });
-});
+    snackbarTitle.value = "Uploading files"
+  })
+})
 
 function getUploadingFileName(state: TrackedUpload) {
-  if (!state.multerFile?.length) return "";
-  return state.multerFile[0].originalname;
+  if (!state.multerFile?.length) return ""
+  return state.multerFile[0].originalname
 }
 
 function uploadTracker(type: InfoEventType, uploadProgress: UploadStates) {
@@ -156,11 +156,11 @@ function uploadTracker(type: InfoEventType, uploadProgress: UploadStates) {
     !this.uploadsStore.hasPendingUploads &&
     !this.uploadsStore.isUploadingNow
   ) {
-    this.progressSnackbarOpened = false;
-    return;
+    this.progressSnackbarOpened = false
+    return
   }
-  this.progressInfo = eventTypeToMessage(type, uploadProgress.current?.length);
-  this.progressStates = uploadProgress.current;
-  this.progressSnackbarOpened = true;
+  this.progressInfo = eventTypeToMessage(type, uploadProgress.current?.length)
+  this.progressStates = uploadProgress.current
+  this.progressSnackbarOpened = true
 }
 </script>

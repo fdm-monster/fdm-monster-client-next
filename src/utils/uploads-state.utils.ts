@@ -1,6 +1,6 @@
-import { FileUploadCommands } from "@/models/printers/file-upload-commands.model";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { QueuedUpload } from "@/models/uploads/queued-upload.model";
+import { FileUploadCommands } from "@/models/printers/file-upload-commands.model"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { QueuedUpload } from "@/models/uploads/queued-upload.model"
 
 /**
  * Multiple files => 1 printer
@@ -13,23 +13,23 @@ export function convertPrinterMultiFileToQueue(
   files: File[],
   printedFileName: string | null
 ): QueuedUpload[] {
-  if (!printer) return [];
+  if (!printer) return []
 
   return files.map((f) => {
     const commands: FileUploadCommands = {
       select: false,
       print: false,
-    };
+    }
     if (f.name === printedFileName) {
-      commands.print = true;
+      commands.print = true
     }
 
     return {
       file: f,
       printer,
       commands,
-    };
-  }) as QueuedUpload[];
+    }
+  }) as QueuedUpload[]
 }
 
 /**
@@ -46,13 +46,13 @@ export function convertMultiPrinterFileToQueue(
     print: true,
   }
 ) {
-  if (!printers?.length || !file) return [];
+  if (!printers?.length || !file) return []
 
   return printers.map((p) => {
     return {
       file,
       printer: p,
       commands,
-    };
-  }) as QueuedUpload[];
+    }
+  }) as QueuedUpload[]
 }

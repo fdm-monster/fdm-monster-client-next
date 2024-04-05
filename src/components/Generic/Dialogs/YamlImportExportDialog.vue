@@ -60,14 +60,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { usePrinterStore } from "@/store/printer.store";
-import { useDialogsStore } from "@/store/dialog.store";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { ServerPrivateService } from "@/backend/server-private.service";
-import { useDialog } from "@/shared/dialog.composable";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { useFeatureStore } from "@/store/features.store";
+import { defineComponent } from "vue"
+import { usePrinterStore } from "@/store/printer.store"
+import { useDialogsStore } from "@/store/dialog.store"
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import { ServerPrivateService } from "@/backend/server-private.service"
+import { useDialog } from "@/shared/dialog.composable"
+import { useSnackbar } from "@/shared/snackbar.composable"
+import { useFeatureStore } from "@/store/features.store"
 
 interface Data {
   selectedMode: number;
@@ -83,18 +83,18 @@ export default defineComponent({
   name: "YamlImportExportDialog",
   components: {},
   setup: () => {
-    const dialog = useDialog(DialogName.YamlImportExport);
+    const dialog = useDialog(DialogName.YamlImportExport)
     return {
       printersStore: usePrinterStore(),
       dialogsStore: useDialogsStore(),
       featureStore: useFeatureStore(),
       dialog,
       snackbar: useSnackbar(),
-    };
+    }
   },
   async created() {
-    await this.featureStore.loadFeatures();
-    this.exportGroups = this.featureStore.hasFeature("printerGroupsApi");
+    await this.featureStore.loadFeatures()
+    this.exportGroups = this.featureStore.hasFeature("printerGroupsApi")
   },
   async mounted() {},
   props: {},
@@ -109,19 +109,19 @@ export default defineComponent({
   }),
   computed: {
     disableExportGroups() {
-      return !this.featureStore.hasFeature("printerGroupsApi");
+      return !this.featureStore.hasFeature("printerGroupsApi")
     },
     isFileProvided() {
-      return !!this.importFile;
+      return !!this.importFile
     },
     isImportMode() {
-      return this.selectedMode === 0;
+      return this.selectedMode === 0
     },
   },
   methods: {
     async downloadExportYamlFile() {
       if (this.exportFloorGrid) {
-        this.exportPrinters = true;
+        this.exportPrinters = true
       }
 
       await ServerPrivateService.downloadYamlExport({
@@ -132,27 +132,27 @@ export default defineComponent({
         exportFloors: this.exportFloors,
         floorComparisonStrategiesByPriority: "floor",
         notes: this.notes,
-      });
+      })
       this.snackbar.openInfoMessage({
         title: "Downloaded the YAML file",
-      });
-      this.notes = "";
+      })
+      this.notes = ""
     },
     async uploadAndImportYamlFile() {
       if (!this.importFile) {
-        throw new Error("The import file was not specified");
+        throw new Error("The import file was not specified")
       }
-      await ServerPrivateService.uploadAndImportYaml(this.importFile);
-      this.importFile = undefined;
+      await ServerPrivateService.uploadAndImportYaml(this.importFile)
+      this.importFile = undefined
       this.snackbar.openInfoMessage({
         title: "Imported the YAML file",
-      });
-      this.closeDialog();
+      })
+      this.closeDialog()
     },
     closeDialog() {
-      this.dialog.closeDialog();
+      this.dialog.closeDialog()
     },
   },
   watch: {},
-});
+})
 </script>

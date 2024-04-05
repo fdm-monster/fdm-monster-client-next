@@ -1,5 +1,5 @@
-import { BaseService } from "@/backend/base.service";
-import { ServerApi } from "@/backend/server.api";
+import { BaseService } from "@/backend/base.service"
+import { ServerApi } from "@/backend/server.api"
 
 interface FirstTimeSetupData {
   loginRequired: boolean;
@@ -10,8 +10,8 @@ interface FirstTimeSetupData {
 
 export class FirstTimeSetupService extends BaseService {
   static async postFirstTimeSetup(data: FirstTimeSetupData) {
-    const path = ServerApi.completeFirstTimeSetupRoute;
+    const path = ServerApi.completeFirstTimeSetupRoute
 
-    return await this.postApi(path, data);
+    return await this.postApi(path, data)
   }
 }

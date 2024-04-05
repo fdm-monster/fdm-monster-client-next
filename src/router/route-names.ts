@@ -11,4 +11,4 @@ export const RouteNames = {
   NotFound: "NotFound",
   FirstTimeSetup: "FirstTimeSetup",
   ServerProtection: "ServerProtection",
-};
+}

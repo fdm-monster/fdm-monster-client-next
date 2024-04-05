@@ -1,12 +1,12 @@
-import { BaseService } from "@/backend/base.service";
-import { ServerApi } from "@/backend/server.api";
-import { IdType } from "@/utils/id.type";
+import { BaseService } from "@/backend/base.service"
+import { ServerApi } from "@/backend/server.api"
+import { IdType } from "@/utils/id.type"
 
 export class PrinterSettingsService extends BaseService {
   static async getSettings(printerId: IdType) {
-    const path = `${ServerApi.getPrinterSettingsRoute(printerId)}`;
+    const path = `${ServerApi.getPrinterSettingsRoute(printerId)}`
 
-    return await this.getApi(path);
+    return await this.getApi(path)
   }
 
   /**
@@ -15,14 +15,14 @@ export class PrinterSettingsService extends BaseService {
    * @param enabled
    */
   static async setGCodeAnalysis(printerId: IdType, enabled = false) {
-    const path = `${ServerApi.setPrinterSettingsGCodeAnalysisRoute(printerId)}`;
+    const path = `${ServerApi.setPrinterSettingsGCodeAnalysisRoute(printerId)}`
 
-    return await this.postApi(path, { enabled });
+    return await this.postApi(path, { enabled })
   }
 
   static async syncPrinterName(printerId: IdType) {
-    const path = `${ServerApi.syncPrinterNameSettingRoute(printerId)}`;
+    const path = `${ServerApi.syncPrinterNameSettingRoute(printerId)}`
 
-    return await this.postApi(path);
+    return await this.postApi(path)
   }
 }

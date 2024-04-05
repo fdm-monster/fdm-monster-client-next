@@ -16,5 +16,9 @@ module.exports = {
   ],
   rules: {
     'vue/multi-word-component-names': 'off',
+    // Note: you must disable the base rule as it can report incorrect errors
+    "semi": ["error", "never"],
+    "@typescript-eslint/semi": ["error", "never"],
+    "no-multiple-empty-lines": "warn"
   },
 }

@@ -16,9 +16,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { PrinterFileDto } from "@/models/printers/printer-file.model";
-import { usePrinterStore } from "@/store/printer.store";
+import { defineComponent, PropType } from "vue"
+import { PrinterFileDto } from "@/models/printers/printer-file.model"
+import { usePrinterStore } from "@/store/printer.store"
 
 export default defineComponent({
   name: "FileControlList",
@@ -26,7 +26,7 @@ export default defineComponent({
   setup: () => {
     return {
       printersStore: usePrinterStore(),
-    };
+    }
   },
   async created() {},
   async mounted() {},
@@ -37,11 +37,11 @@ export default defineComponent({
   computed: {},
   methods: {
     async deleteFile(file: PrinterFileDto) {
-      if (!this.fileList || !this.printerId) return;
+      if (!this.fileList || !this.printerId) return
 
-      await this.printersStore.deletePrinterFile(this.printerId, file.path);
+      await this.printersStore.deletePrinterFile(this.printerId, file.path)
     },
   },
   watch: {},
-});
+})
 </script>

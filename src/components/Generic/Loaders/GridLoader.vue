@@ -5,7 +5,7 @@
 </template>
 
 <script>
-const random = (top) => Math.random() * top;
+const random = (top) => Math.random() * top
 
 export default {
   name: "GridLoader",
@@ -19,14 +19,14 @@ export default {
   methods: {
     random,
     getWrapperStyle() {
-      const width = `${parseFloat(this.size) * 3 + parseFloat(this.margin) * 6}${this.sizeUnit}`;
+      const width = `${parseFloat(this.size) * 3 + parseFloat(this.margin) * 6}${this.sizeUnit}`
       return {
         width: width,
         fontSize: 0,
-      };
+      }
     },
     getCircleStyle(rand) {
-      const animation = `grid ${rand / 100 + 0.6}s ${rand / 100 - 0.2}s infinite ease`;
+      const animation = `grid ${rand / 100 + 0.6}s ${rand / 100 - 0.2}s infinite ease`
       return {
         display: "inline-block",
         backgroundColor: this.color,
@@ -36,10 +36,10 @@ export default {
         borderRadius: "100%",
         animationFillMode: "both",
         animation: animation,
-      };
+      }
     },
   },
-};
+}
 </script>
 
 <style>

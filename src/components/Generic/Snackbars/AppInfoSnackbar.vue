@@ -32,23 +32,23 @@
   </v-snackbar>
 </template>
 <script lang="ts" setup>
-import { InfoMessage, useSnackbar } from "@/shared/snackbar.composable";
-import { onMounted, ref } from "vue";
+import { InfoMessage, useSnackbar } from "@/shared/snackbar.composable"
+import { onMounted, ref } from "vue"
 
-const snackbar = useSnackbar();
-const snackbarOpened = ref(false);
-const infoTitle = ref("");
-const infoSubtitle = ref("");
-const timeout = ref(2000);
-const isWarning = ref(false);
+const snackbar = useSnackbar()
+const snackbarOpened = ref(false)
+const infoTitle = ref("")
+const infoSubtitle = ref("")
+const timeout = ref(2000)
+const isWarning = ref(false)
 
 onMounted(() => {
   snackbar.onInfoMessage((data: InfoMessage) => {
-    infoTitle.value = data.title;
-    infoSubtitle.value = data.subtitle ?? "";
-    isWarning.value = data.warning ?? false;
-    timeout.value = data.timeout ?? 2000;
-    snackbarOpened.value = true;
-  });
-});
+    infoTitle.value = data.title
+    infoSubtitle.value = data.subtitle ?? ""
+    isWarning.value = data.warning ?? false
+    timeout.value = data.timeout ?? 2000
+    snackbarOpened.value = true
+  })
+})
 </script>

@@ -7,5 +7,5 @@
 </template>
 
 <script lang="ts" setup>
-import RegistrationForm from "@/components/Login/RegistrationForm.vue";
+import RegistrationForm from "@/components/Login/RegistrationForm.vue"
 </script>

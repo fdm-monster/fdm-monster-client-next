@@ -1,4 +1,4 @@
-import { IdType } from "@/utils/id.type";
+import { IdType } from "@/utils/id.type"
 
 export interface ShortEvent {
   printerId: string;
@@ -25,7 +25,7 @@ export type PrintJobEvents = {
   correlationId: string;
   events: ShortEvent[]; // ... others
   lastEvent: ShortEvent;
-};
+}
 
 export interface PrinterCompletions {
   printerId: IdType;
@@ -47,4 +47,4 @@ export interface PrinterCompletions {
   correlationIds: string[];
 }
 
-export type PrintCompletionsModel = PrinterCompletions[];
+export type PrintCompletionsModel = PrinterCompletions[]

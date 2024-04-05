@@ -1,33 +1,34 @@
-import {createRouter, createWebHistory} from "vue-router";
-import PrinterGridView from "@/components/PrinterGrid/PrinterGridView.vue";
-import PrintersView from "@/components/PrinterList/PrintersView.vue";
-import Settings from "@/components/Settings/SettingsView.vue";
-import UserManagementSettings from "@/components/Settings/UserManagementSettings.vue";
-import OctoPrintSettings from "@/components/Settings/OctoPrintSettings.vue";
-import FloorSettings from "@/components/Settings/FloorSettings.vue";
-import AboutView from "@/components/AboutHelp/AboutView.vue";
-import EmergencyCommands from "@/components/Settings/EmergencyCommands.vue";
-import NotFoundView from "@/components/NotFound/NotFoundView.vue";
-import {useAuthStore} from "../store/auth.store";
-import {RouteNames} from "./route-names";
-import PermissionDenied from "../components/Login/PermissionDenied.vue";
-import LoginView from "../components/Login/LoginView.vue";
-import RegistrationView from "../components/Login/RegistrationView.vue";
-import CameraGridView from "../components/CameraGrid/CameraGridView.vue";
-import FirstTimeSetupView from "../components/FirstTimeSetup/FirstTimeSetupView.vue";
-import AccountSettings from "../components/Settings/AccountSettings.vue";
-import GridSettings from "../components/Settings/GridSettings.vue";
-import ServerProtectionSettings from "../components/Settings/ServerProtectionSettings.vue";
-import SoftwareUpgradeSettings from "../components/Settings/SoftwareUpgradeSettings.vue";
-import DiagnosticsSettings from "../components/Settings/DiagnosticsSettings.vue";
-import PrintStatisticsView from "../components/PrintStatistics/PrintStatisticsView.vue";
+import {createRouter, createWebHistory} from "vue-router"
+import PrinterGridView from "@/components/PrinterGrid/PrinterGridView.vue"
+import PrintersView from "@/components/PrinterList/PrintersView.vue"
+import Settings from "@/components/Settings/SettingsView.vue"
+import UserManagementSettings from "@/components/Settings/UserManagementSettings.vue"
+import OctoPrintSettings from "@/components/Settings/OctoPrintSettings.vue"
+import FloorSettings from "@/components/Settings/FloorSettings.vue"
+import AboutView from "@/components/AboutHelp/AboutView.vue"
+import EmergencyCommands from "@/components/Settings/EmergencyCommands.vue"
+import NotFoundView from "@/components/NotFound/NotFoundView.vue"
+import {useAuthStore} from "../store/auth.store"
+import {RouteNames} from "./route-names"
+import PermissionDenied from "../components/Login/PermissionDenied.vue"
+import LoginView from "../components/Login/LoginView.vue"
+import RegistrationView from "../components/Login/RegistrationView.vue"
+import CameraGridView from "../components/CameraGrid/CameraGridView.vue"
+import FirstTimeSetupView from "../components/FirstTimeSetup/FirstTimeSetupView.vue"
+import AccountSettings from "../components/Settings/AccountSettings.vue"
+import GridSettings from "../components/Settings/GridSettings.vue"
+import ServerProtectionSettings from "../components/Settings/ServerProtectionSettings.vue"
+import SoftwareUpgradeSettings from "../components/Settings/SoftwareUpgradeSettings.vue"
+import DiagnosticsSettings from "../components/Settings/DiagnosticsSettings.vue"
+import PrintStatisticsView from "../components/PrintStatistics/PrintStatisticsView.vue"
 
 const NeedsAuth = {
   requiresAuth: true,
-};
+}
+
 const NoAuth = {
   requiresAuth: false,
-};
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -152,16 +153,16 @@ const router = createRouter({
       component: NotFoundView,
     },
   ],
-});
+})
 
 router.beforeEach(async (to, from, next) => {
   // This prevents login page from being shown when already logged in
-  const authStore = useAuthStore();
+  const authStore = useAuthStore()
 
   // Note that we do not let loginRequired === null coerce to false as that means its not loaded
   if (!to?.meta?.requiresAuth || authStore.loginRequired === false) {
-    console.debug(`No auth required on route ${to.fullPath}`);
-    return next();
+    console.debug(`No auth required on route ${to.fullPath}`)
+    return next()
   }
     // TODO why is this here again? This causes the app not to initialize properly (SocketIO/settings in AppLoader)
     // else if (authStore.loginRequired === null) {
@@ -170,22 +171,22 @@ router.beforeEach(async (to, from, next) => {
   else {
     console.debug(
       `Auth required on route ${to.fullPath} (loginRequired=${authStore.loginRequired}, registration=${authStore.registration}, wizardState=${authStore.wizardState}, requiresAuth=${to?.meta?.requiresAuth})`
-    );
+    )
   }
 
-  authStore.loadTokens();
+  authStore.loadTokens()
   if (!authStore.hasAuthToken && !authStore.hasRefreshToken) {
-    console.debug("Not logged in, redirecting to login page");
+    console.debug("Not logged in, redirecting to login page")
     if (from.path == "/login") {
-      throw new Error("Already on login page, cannot redirect");
+      throw new Error("Already on login page, cannot redirect")
     }
     return next({
       path: "/login",
       query: {redirect: to.fullPath},
-    });
+    })
   }
 
-  return next();
-});
+  return next()
+})
 
-export default router;
+export default router

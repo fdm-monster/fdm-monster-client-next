@@ -195,61 +195,61 @@
   </v-container>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
-import { FirstTimeSetupService } from "@/backend/first-time-setup.service";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/store/auth.store";
+import { onMounted, ref } from "vue"
+import { FirstTimeSetupService } from "@/backend/first-time-setup.service"
+import { useSnackbar } from "@/shared/snackbar.composable"
+import { useRouter } from "vue-router"
+import { useAuthStore } from "@/store/auth.store"
 
-const router = useRouter();
-const snackbar = useSnackbar();
-const formValid = ref(false);
-const authStore = useAuthStore();
+const router = useRouter()
+const snackbar = useSnackbar()
+const formValid = ref(false)
+const authStore = useAuthStore()
 const formStep1 = ref({
   loginRequired: true,
   registration: false,
-});
+})
 const formStep2 = ref({
   rootUsername: "admin",
   rootPassword: "",
   rootPassword2: "",
-});
+})
 
-const stepper = ref(1);
+const stepper = ref(1)
 
 onMounted(async () => {
-  await authStore.checkAuthenticationRequirements();
+  await authStore.checkAuthenticationRequirements()
 
   if (authStore.wizardState?.wizardCompleted) {
-    snackbar.info("Setup already completed.");
+    snackbar.info("Setup already completed.")
     if (authStore.loginRequired) {
-      await router.push({ name: "Login" });
+      await router.push({ name: "Login" })
     } else {
-      await router.push({ name: "Home" });
+      await router.push({ name: "Home" })
     }
   }
-});
+})
 
 async function submitWizard() {
   if (!formValid.value) {
-    snackbar.error("Please fill out all required fields.");
-    return;
+    snackbar.error("Please fill out all required fields.")
+    return
   }
 
-  const formValue = formStep1.value;
-  const form2Value = formStep2.value;
+  const formValue = formStep1.value
+  const form2Value = formStep2.value
   await FirstTimeSetupService.postFirstTimeSetup({
     loginRequired: formValue.loginRequired,
     registration: formValue.registration,
     rootUsername: form2Value.rootUsername,
     rootPassword: form2Value.rootPassword,
-  });
-  snackbar.openInfoMessage({ title: "Setup completed" });
-  stepper.value = 3;
+  })
+  snackbar.openInfoMessage({ title: "Setup completed" })
+  stepper.value = 3
 }
 
 async function continueNext() {
-  await router.push({ name: "Login" });
+  await router.push({ name: "Login" })
 }
 </script>
 <style>

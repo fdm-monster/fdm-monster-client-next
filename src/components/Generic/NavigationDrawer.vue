@@ -1,11 +1,11 @@
 <template>
-  <v-navigation-drawer app mini-variant class="gradient-bg" dark :permanent="true">
+  <v-navigation-drawer :permanent="true" app class="gradient-bg" dark mini-variant>
     <v-list-item class="px-2">
       <v-list-item-content>
         <v-list-item-title class="text-h5">
           <div class="d-flex align-center">
             <v-img
-              :src="require('@/assets/logo.png')"
+              :src="imgLogo"
               alt="FDM Monster Logo"
               class="shrink mr-1 pt-3 ml-1"
               contain
@@ -33,31 +33,25 @@
   </v-navigation-drawer>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import imgLogo from '@/assets/logo.png'
+import {useRouter} from "vue-router"
 
-export default defineComponent({
-  name: "NavigationDrawer",
-  data() {
-    return {
-      drawer: true,
-      items: [
-        ["home", "Devices", "/"],
-        ["printer", "Printers", "/printers"],
-        ["camera_alt", "CameraGridView", "/cameras"],
-        ["settings", "Settings", "/settings"],
-        ["timeline", "PrintStatistics", "/statistics"],
-        ["contact_support", "About", "/about"],
-      ],
-    };
-  },
-  computed: {
-    routes() {
-      if (!this.$router.options.routes) return [];
-      return this.$router.options.routes.filter((route) => !route.meta || !route.meta.hidden);
-    },
-  },
-});
+const drawer = ref(true)
+const router = useRouter()
+const items = [
+  ["home", "Devices", "/"],
+  ["printer", "Printers", "/printers"],
+  ["camera_alt", "CameraGridView", "/cameras"],
+  ["settings", "Settings", "/settings"],
+  ["timeline", "PrintStatistics", "/statistics"],
+  ["contact_support", "About", "/about"],
+]
+
+const routes = computed(() => {
+  if (!router.options.routes) return []
+  return router.options.routes.filter((route) => !route.meta || !route.meta.hidden)
+})
 </script>
 
 <style>

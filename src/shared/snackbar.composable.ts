@@ -1,15 +1,15 @@
-import type { EventBusKey } from "@vueuse/core";
-import { useEventBus } from "@vueuse/core";
+import type { EventBusKey } from "@vueuse/core"
+import { useEventBus } from "@vueuse/core"
 
 export const progressMessageKey: EventBusKey<{ name: "progress-message" }> = Symbol(
   "Progress snackbar message event symbol"
-);
+)
 export const infoMessageKey: EventBusKey<{ name: "info-message" }> = Symbol(
   "Info snackbar message event symbol"
-);
+)
 export const errorMessageKey: EventBusKey<{ name: "error-message" }> = Symbol(
   "Error snackbar message event symbol"
-);
+)
 
 export interface InfoMessage {
   title: string;
@@ -35,9 +35,9 @@ export interface ProgressMessage {
 
 export function useSnackbar() {
   const { emit: emitProgessMessage, on: onProgressMessage } =
-    useEventBus<ProgressMessage>(progressMessageKey);
-  const { emit: emitInfoMessage, on: onInfoMessage } = useEventBus<InfoMessage>(infoMessageKey);
-  const { emit: emitErrorMessage, on: onErrorMessage } = useEventBus<ErrorMessage>(errorMessageKey);
+    useEventBus<ProgressMessage>(progressMessageKey)
+  const { emit: emitInfoMessage, on: onInfoMessage } = useEventBus<InfoMessage>(infoMessageKey)
+  const { emit: emitErrorMessage, on: onErrorMessage } = useEventBus<ErrorMessage>(errorMessageKey)
 
   return {
     openProgressMessage: (key: string, title: string, value: number, completed: boolean) =>
@@ -55,5 +55,5 @@ export function useSnackbar() {
     onProgressMessage,
     onInfoMessage,
     onErrorMessage,
-  };
+  }
 }

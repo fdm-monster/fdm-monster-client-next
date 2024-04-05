@@ -125,102 +125,102 @@
   </v-card>
 </template>
 <script lang="ts" setup>
-import { AppService } from "@/backend/app.service";
-import { computed, onMounted, ref } from "vue";
-import { version as packageJsonVersion } from "../../../package.json";
-import { IRelease } from "@/models/server/client-releases.model";
-import { compare, minor } from "semver";
+import { AppService } from "@/backend/app.service"
+import { computed, onMounted, ref } from "vue"
+import { version as packageJsonVersion } from "../../../package.json"
+import { IRelease } from "@/models/server/client-releases.model"
+import { compare, minor } from "semver"
 
-const loading = ref(true);
-const allowDowngrade = ref(false);
-const serverVersion = ref("");
-const monsterPiVersion = ref<string | null>("");
-const version = ref(packageJsonVersion);
-const current = ref<IRelease>();
-const minimum = ref<IRelease>();
-const selectedRelease = ref<string>();
-const showPrereleases = ref<boolean>(false);
-const loadedClientReleases = ref<IRelease[]>([]);
+const loading = ref(true)
+const allowDowngrade = ref(false)
+const serverVersion = ref("")
+const monsterPiVersion = ref<string | null>("")
+const version = ref(packageJsonVersion)
+const current = ref<IRelease>()
+const minimum = ref<IRelease>()
+const selectedRelease = ref<string>()
+const showPrereleases = ref<boolean>(false)
+const loadedClientReleases = ref<IRelease[]>([])
 
 onMounted(async () => {
-  await loadReleases();
+  await loadReleases()
 
-  const versionSpec = await AppService.getVersion();
-  serverVersion.value = versionSpec.version;
-  monsterPiVersion.value = versionSpec.monsterPi;
-});
+  const versionSpec = await AppService.getVersion()
+  serverVersion.value = versionSpec.version
+  monsterPiVersion.value = versionSpec.monsterPi
+})
 
 async function loadReleases() {
-  loading.value = true;
-  const clientReleases = await AppService.getClientReleases();
-  current.value = clientReleases.current;
-  minimum.value = clientReleases.minimum;
-  loadedClientReleases.value = clientReleases.releases;
-  loading.value = false;
+  loading.value = true
+  const clientReleases = await AppService.getClientReleases()
+  current.value = clientReleases.current
+  minimum.value = clientReleases.minimum
+  loadedClientReleases.value = clientReleases.releases
+  loading.value = false
 }
 
 const filteredReleases = computed(() => {
   return loadedClientReleases.value.filter((release) => {
-    const isMinimumVersionOrHigher = minor(release.tag_name) === minor(minimum.value!.tag_name);
-    const isReleaseCandidate = isVersionUnstable(release);
-    const isDraft = release.draft;
+    const isMinimumVersionOrHigher = minor(release.tag_name) === minor(minimum.value!.tag_name)
+    const isReleaseCandidate = isVersionUnstable(release)
+    const isDraft = release.draft
 
     return (
       isMinimumVersionOrHigher &&
       (isCurrentUnstable() || showPrereleases.value || !isReleaseCandidate) &&
       !isDraft
-    );
-  });
-});
+    )
+  })
+})
 
 const getIsCurrentUnstable = computed(() => {
-  return isCurrentUnstable();
-});
+  return isCurrentUnstable()
+})
 
 function isCurrentUnstable() {
   // Determine if current is rc/unstable, meaning we should ignore prerelease filter checkbox
-  const currentRelease = current.value;
-  return isVersionUnstable(currentRelease);
+  const currentRelease = current.value
+  return isVersionUnstable(currentRelease)
 }
 
 function isVersionUnstable(release?: IRelease) {
   if (release?.tag_name?.length) {
     return (
       release.prerelease || release.tag_name.includes("rc") || release.tag_name.includes("unstable")
-    );
+    )
   }
-  return false;
+  return false
 }
 
 function isBelowMinimum(release: IRelease) {
-  return compare(release.tag_name, minimum.value!.tag_name) === -1;
+  return compare(release.tag_name, minimum.value!.tag_name) === -1
 }
 
 function isUpgradeOrAllowedDowngrade(release: IRelease, current?: IRelease) {
   // If no current release is known, we need to throw
   if (!current) {
-    throw new Error("No current release is known, cannot compare.");
+    throw new Error("No current release is known, cannot compare.")
   }
   if (allowDowngrade.value) {
-    return true;
+    return true
   }
 
   return (
     compare(release.tag_name, current.tag_name) !== -1 &&
     compare(minimum.value!.tag_name, current.tag_name) !== -1
-  );
+  )
 }
 
 function isCurrentRelease(release: IRelease) {
-  return release.tag_name === current.value?.tag_name;
+  return release.tag_name === current.value?.tag_name
 }
 
 async function clickUpdateClient(version?: string) {
   if (!confirm("Are you sure? This might cause breaking changes, if the server is outdated")) {
-    return;
+    return
   }
 
-  await AppService.updateClientDistGithub(version, allowDowngrade.value);
-  location.reload();
+  await AppService.updateClientDistGithub(version, allowDowngrade.value)
+  location.reload()
 }
 </script>

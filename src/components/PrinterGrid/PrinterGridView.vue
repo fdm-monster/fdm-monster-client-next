@@ -76,93 +76,93 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import PrinterGrid from "@/components/PrinterGrid/PrinterGrid.vue";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { PrintersService } from "@/backend";
-import { formatBytes } from "@/utils/file-size.util";
-import { convertMultiPrinterFileToQueue } from "@/utils/uploads-state.utils";
-import HomeToolbar from "@/components/PrinterGrid/HomeToolbar.vue";
-import { usePrinterStore } from "@/store/printer.store";
-import { useUploadsStore } from "@/store/uploads.store";
-import { useFeatureStore } from "@/store/features.store";
-import { usePrinterStateStore } from "@/store/printer-state.store";
-import { useGridStore } from "@/store/grid.store";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { useDialog } from "@/shared/dialog.composable";
+import { computed, ref } from "vue"
+import PrinterGrid from "@/components/PrinterGrid/PrinterGrid.vue"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { PrintersService } from "@/backend"
+import { formatBytes } from "@/utils/file-size.util"
+import { convertMultiPrinterFileToQueue } from "@/utils/uploads-state.utils"
+import HomeToolbar from "@/components/PrinterGrid/HomeToolbar.vue"
+import { usePrinterStore } from "@/store/printer.store"
+import { useUploadsStore } from "@/store/uploads.store"
+import { useFeatureStore } from "@/store/features.store"
+import { usePrinterStateStore } from "@/store/printer-state.store"
+import { useGridStore } from "@/store/grid.store"
+import { useSnackbar } from "@/shared/snackbar.composable"
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import { useDialog } from "@/shared/dialog.composable"
 
-const gridStore = useGridStore();
-const printersStore = usePrinterStore();
-const printerStateStore = usePrinterStateStore();
-const uploadsStore = useUploadsStore();
-const featureStore = useFeatureStore();
-const snackbar = useSnackbar();
+const gridStore = useGridStore()
+const printersStore = usePrinterStore()
+const printerStateStore = usePrinterStateStore()
+const uploadsStore = useUploadsStore()
+const featureStore = useFeatureStore()
+const snackbar = useSnackbar()
 
-const selectedFile = ref<File | undefined>(undefined);
-const isBatchReprintFeatureAvailable = computed(() => featureStore.hasFeature("batchReprintCalls"));
-const hasPrintersSelected = computed(() => printersStore.selectedPrinters.length > 0);
-const selectedPrinters = computed(() => printersStore.selectedPrinters);
-const fileUpload = ref<HTMLInputElement | null>(null);
+const selectedFile = ref<File | undefined>(undefined)
+const isBatchReprintFeatureAvailable = computed(() => featureStore.hasFeature("batchReprintCalls"))
+const hasPrintersSelected = computed(() => printersStore.selectedPrinters.length > 0)
+const selectedPrinters = computed(() => printersStore.selectedPrinters)
+const fileUpload = ref<HTMLInputElement | null>(null)
 
 const deselectFile = () => {
   if (fileUpload.value) {
-    fileUpload.value.value = "";
-    selectedFile.value = undefined;
+    fileUpload.value.value = ""
+    selectedFile.value = undefined
   }
-};
+}
 
 const clearSelectedPrinters = () => {
-  printersStore.clearSelectedPrinters();
-};
+  printersStore.clearSelectedPrinters()
+}
 
 const batchReprintFiles = async () => {
   const output = await useDialog(DialogName.BatchReprintDialog).handleAsync(
     printersStore.selectedPrinters?.map((p) => p.id)
-  );
-  console.log("[PrinterGridView] Dialog completed", output);
+  )
+  console.log("[PrinterGridView] Dialog completed", output)
   // await printersStore.batchReprintFiles();
-};
+}
 
 const uploadFile = () => {
-  const selectedPrintersValue = selectedPrinters.value;
+  const selectedPrintersValue = selectedPrinters.value
   const accessiblePrinters = selectedPrintersValue.filter((p) =>
     printerStateStore.isApiResponding(p.id)
-  );
+  )
 
-  if (!selectedFile.value) return;
+  if (!selectedFile.value) return
 
   // Checking and informing user
-  const incompleteListCount = selectedPrintersValue.length - accessiblePrinters.length;
+  const incompleteListCount = selectedPrintersValue.length - accessiblePrinters.length
   if (incompleteListCount > 0) {
     snackbar.openInfoMessage({
       title: `${incompleteListCount} printers inaccessible`,
       subtitle: "These were skipped from uploading.",
-    });
+    })
   }
 
-  const uploads = convertMultiPrinterFileToQueue(accessiblePrinters, selectedFile.value);
-  uploadsStore.queueUploads(uploads);
+  const uploads = convertMultiPrinterFileToQueue(accessiblePrinters, selectedFile.value)
+  uploadsStore.queueUploads(uploads)
 
   if (fileUpload.value) {
-    fileUpload.value.value = "";
+    fileUpload.value.value = ""
   }
-  clearSelectedPrinters();
-};
+  clearSelectedPrinters()
+}
 
 const filesSelected = () => {
   if (fileUpload.value && fileUpload.value.files) {
-    selectedFile.value = fileUpload.value.files[0];
+    selectedFile.value = fileUpload.value.files[0]
   } else {
-    selectedFile.value = undefined;
+    selectedFile.value = undefined
   }
-};
+}
 
 const deselectPrinter = (printer: PrinterDto) => {
-  printersStore.toggleSelectedPrinter(printer);
-};
+  printersStore.toggleSelectedPrinter(printer)
+}
 
 const openPrinter = (printer: PrinterDto) => {
-  PrintersService.openPrinterURL(printer.printerURL);
-};
+  PrintersService.openPrinterURL(printer.printerURL)
+}
 </script>

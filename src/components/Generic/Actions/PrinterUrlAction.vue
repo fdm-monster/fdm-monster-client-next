@@ -11,9 +11,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { PrintersService } from "@/backend";
+import { defineComponent, PropType } from "vue"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { PrintersService } from "@/backend"
 
 export default defineComponent({
   name: "PrinterUrlAction",
@@ -22,13 +22,13 @@ export default defineComponent({
   },
   computed: {
     printerId() {
-      return this.printer!.id;
+      return this.printer!.id
     },
   },
   methods: {
     openPrinterURL(printer: PrinterDto) {
-      PrintersService.openPrinterURL(printer.printerURL);
+      PrintersService.openPrinterURL(printer.printerURL)
     },
   },
-});
+})
 </script>

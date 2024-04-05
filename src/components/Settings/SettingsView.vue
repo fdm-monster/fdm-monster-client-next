@@ -30,8 +30,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { usePrinterStore } from "@/store/printer.store";
+import { defineComponent } from "vue"
+import { usePrinterStore } from "@/store/printer.store"
 
 interface Data {
   items: any[];
@@ -43,7 +43,7 @@ export default defineComponent({
   setup: () => {
     return {
       printersStore: usePrinterStore(),
-    };
+    }
   },
   async created() {},
   async mounted() {},
@@ -84,5 +84,5 @@ export default defineComponent({
   computed: {},
   methods: {},
   watch: {},
-});
+})
 </script>

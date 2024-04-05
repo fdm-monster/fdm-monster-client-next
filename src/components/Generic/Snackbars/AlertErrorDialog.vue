@@ -27,11 +27,11 @@
   </v-dialog>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { AxiosError } from "axios";
-import { FailedQueuedUpload } from "../../../models/uploads/queued-upload.model";
-import { usePrinterStore } from "../../../store/printer.store";
-import { useUploadsStore } from "../../../store/uploads.store";
+import { defineComponent } from "vue"
+import { AxiosError } from "axios"
+import { FailedQueuedUpload } from "../../../models/uploads/queued-upload.model"
+import { usePrinterStore } from "../../../store/printer.store"
+import { useUploadsStore } from "../../../store/uploads.store"
 
 interface Data {
   dialogOpened: boolean;
@@ -47,7 +47,7 @@ export default defineComponent({
     return {
       printersStore: usePrinterStore(),
       uploadsStore: useUploadsStore(),
-    };
+    }
   },
   created() {},
   beforeDestroyed() {},
@@ -62,17 +62,17 @@ export default defineComponent({
   computed: {},
   methods: {
     uploadFailureHandler(e: AxiosError<any>) {
-      this.errorType = "Upload error(s)";
-      this.errorCode = e.response?.status;
-      this.dialogOpened = true;
-      this.failedUploads = this.uploadsStore.failedUploads;
+      this.errorType = "Upload error(s)"
+      this.errorCode = e.response?.status
+      this.dialogOpened = true
+      this.failedUploads = this.uploadsStore.failedUploads
     },
     uploadOtherHandler(_e: any) {
-      this.errorType = "Unknown error";
-      this.errorCode = undefined;
-      this.dialogOpened = true;
+      this.errorType = "Unknown error"
+      this.errorCode = undefined
+      this.dialogOpened = true
     },
   },
   watch: {},
-});
+})
 </script>

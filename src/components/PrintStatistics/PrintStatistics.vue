@@ -73,72 +73,72 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
-import { PrintCompletionsService } from "@/backend/print-completions.service";
-import { PrinterCompletions } from "@/models/print-completions/print-completions.model";
-import { usePrinterStore } from "@/store/printer.store";
-import { useFloorStore } from "@/store/floor.store";
+import { onMounted, ref, watch } from "vue"
+import { PrintCompletionsService } from "@/backend/print-completions.service"
+import { PrinterCompletions } from "@/models/print-completions/print-completions.model"
+import { usePrinterStore } from "@/store/printer.store"
+import { useFloorStore } from "@/store/floor.store"
 
-const loadedCompletions = ref<PrinterCompletions[]>([]);
-const shownCompletions = ref<PrinterCompletions[]>([]);
-const printerNameSearch = ref<string>("");
+const loadedCompletions = ref<PrinterCompletions[]>([])
+const shownCompletions = ref<PrinterCompletions[]>([])
+const printerNameSearch = ref<string>("")
 
-const printerStore = usePrinterStore();
-const floorStore = useFloorStore();
+const printerStore = usePrinterStore()
+const floorStore = useFloorStore()
 
 onMounted(async () => {
-  await loadCompletions();
-});
+  await loadCompletions()
+})
 
 watch([() => printerNameSearch.value], () => {
-  updatePrinters();
-});
+  updatePrinters()
+})
 
 const loadCompletions = async () => {
-  loadedCompletions.value = [];
-  shownCompletions.value = [];
-  loadedCompletions.value = await PrintCompletionsService.getCompletions();
-  updatePrinters();
-};
+  loadedCompletions.value = []
+  shownCompletions.value = []
+  loadedCompletions.value = await PrintCompletionsService.getCompletions()
+  updatePrinters()
+}
 
 const printer = (printerId: string) => {
-  return printerStore.printer(printerId);
-};
+  return printerStore.printer(printerId)
+}
 
 const floorOfPrinter = (printerId: string) => {
-  return floorStore.floorOfPrinter(printerId);
-};
+  return floorStore.floorOfPrinter(printerId)
+}
 
 const updatePrinters = () => {
-  const pIds = printerStore.printers.map((p) => p.id);
+  const pIds = printerStore.printers.map((p) => p.id)
 
   // Determine printers from store, any unknown ID's filtered out
   const preSearchPrints = pIds.length
     ? loadedCompletions.value.filter((c) => pIds.includes(c.printerId))
-    : loadedCompletions.value;
+    : loadedCompletions.value
 
-  console.log("pre", preSearchPrints, printerNameSearch.value?.length);
+  console.log("pre", preSearchPrints, printerNameSearch.value?.length)
 
   const preSortPrints = printerNameSearch.value?.length
     ? preSearchPrints.filter((p) => {
-        const printer = printerStore.printers.find((spr) => spr.id === p.printerId);
-        if (!printer) return false;
+        const printer = printerStore.printers.find((spr) => spr.id === p.printerId)
+        if (!printer) return false
 
         return (printer.name + printer.printerURL)
           .toLowerCase()
-          .includes(printerNameSearch.value.toLowerCase());
+          .includes(printerNameSearch.value.toLowerCase())
       })
-    : preSearchPrints;
+    : preSearchPrints
 
-  console.log("presort", preSortPrints);
+  console.log("presort", preSortPrints)
 
   shownCompletions.value = preSortPrints.sort((p1, p2) => {
     if (p1.failureCount === p2.failureCount) {
-      return p1.printCount > p2.printCount ? -1 : 1;
+      return p1.printCount > p2.printCount ? -1 : 1
     }
-    return p1.failureCount > p2.failureCount ? -1 : 1;
-  });
+    return p1.failureCount > p2.failureCount ? -1 : 1
+  })
 
-  console.log("post", shownCompletions.value);
-};
+  console.log("post", shownCompletions.value)
+}
 </script>

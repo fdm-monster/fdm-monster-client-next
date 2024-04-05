@@ -84,50 +84,50 @@
 </template>
 
 <script lang="ts" setup>
-import { useDialog } from "@/shared/dialog.composable";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { computed, ref } from "vue";
-import { usePrinterStore } from "@/store/printer.store";
-import { IdType } from "@/utils/id.type";
-import { usePrinterStateStore } from "@/store/printer-state.store";
-import { PrintersService } from "@/backend";
+import { useDialog } from "@/shared/dialog.composable"
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import { computed, ref } from "vue"
+import { usePrinterStore } from "@/store/printer.store"
+import { IdType } from "@/utils/id.type"
+import { usePrinterStateStore } from "@/store/printer-state.store"
+import { PrintersService } from "@/backend"
 
-const dialog = useDialog<{ printerId: IdType }>(DialogName.PrinterControlDialog);
-const printerStore = usePrinterStore();
-const printerStateStore = usePrinterStateStore();
-const printerId = computed(() => dialog.context()?.printerId);
+const dialog = useDialog<{ printerId: IdType }>(DialogName.PrinterControlDialog)
+const printerStore = usePrinterStore()
+const printerStateStore = usePrinterStateStore()
+const printerId = computed(() => dialog.context()?.printerId)
 const printer = computed(() => {
-  if (!printerId.value) return;
+  if (!printerId.value) return
 
-  return printerStore.printer(printerId.value);
-});
+  return printerStore.printer(printerId.value)
+})
 
-const multiplier = ref<number>(10);
+const multiplier = ref<number>(10)
 
 const printerTemps = computed(() => {
-  const events = printerStateStore.printerEventsById[printerId.value];
+  const events = printerStateStore.printerEventsById[printerId.value]
   if (
     events?.current?.payload?.temps?.length &&
     events?.current?.payload?.temps[0]?.tool0?.actual
   ) {
-    return events?.current?.payload?.temps[0]?.tool0;
+    return events?.current?.payload?.temps[0]?.tool0
   }
-  return null;
-});
+  return null
+})
 
 const jogPrinterHead = async (x: number, y: number, z: number) => {
   await PrintersService.sendPrinterJogCommand(printerId.value, {
     x: x * multiplier.value,
     y: y * multiplier.value,
     z: z * multiplier.value,
-  });
-};
+  })
+}
 
 const homeAxes = async (axes: string[]) => {
-  await PrintersService.sendPrinterHomeCommand(printerId.value, axes);
-};
+  await PrintersService.sendPrinterHomeCommand(printerId.value, axes)
+}
 
 const closeDialog = () => {
-  dialog.closeDialog();
-};
+  dialog.closeDialog()
+}
 </script>

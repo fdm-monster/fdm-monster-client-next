@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
-import { UserService } from "@/backend/user.service";
+import { defineStore } from "pinia"
+import { UserService } from "@/backend/user.service"
 
 interface State {
   username: string | null;
@@ -16,10 +16,10 @@ export const useProfileStore = defineStore("profile", {
   actions: {
     async getProfile() {
       return await UserService.getProfile().then((response) => {
-        this.username = response.username;
-        this.userId = response.id;
-        this.isDemoUser = response.isDemoUser;
-      });
+        this.username = response.username
+        this.userId = response.id
+        this.isDemoUser = response.isDemoUser
+      })
     },
   },
-});
+})

@@ -77,36 +77,36 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from "vue";
-import PrinterGridTile from "@/components/PrinterGrid/PrinterGridTile.vue";
-import { totalVuetifyColumnCount } from "@/shared/printer-grid.constants";
-import { usePrinterStore } from "@/store/printer.store";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { useGridStore } from "@/store/grid.store";
-import { dragAppId, INTENT, PrinterPlace } from "@/shared/drag.constants";
-import { useSettingsStore } from "@/store/settings.store";
-import { useFloorStore } from "@/store/floor.store";
+import { computed, onMounted } from "vue"
+import PrinterGridTile from "@/components/PrinterGrid/PrinterGridTile.vue"
+import { totalVuetifyColumnCount } from "@/shared/printer-grid.constants"
+import { usePrinterStore } from "@/store/printer.store"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { useGridStore } from "@/store/grid.store"
+import { dragAppId, INTENT, PrinterPlace } from "@/shared/drag.constants"
+import { useSettingsStore } from "@/store/settings.store"
+import { useFloorStore } from "@/store/floor.store"
 
-console.debug("Setup grid");
+console.debug("Setup grid")
 
-const printerStore = usePrinterStore();
-const floorStore = useFloorStore();
-const settingsStore = useSettingsStore();
-const gridStore = useGridStore();
+const printerStore = usePrinterStore()
+const floorStore = useFloorStore()
+const settingsStore = useSettingsStore()
+const gridStore = useGridStore()
 
 onMounted(async () => {
-  await printerStore.loadPrinters();
-  await floorStore.loadFloors();
-});
+  await printerStore.loadPrinters()
+  await floorStore.loadFloors()
+})
 
-const printerMatrix = computed(() => floorStore.gridSortedPrinters);
-const columns = computed(() => settingsStore.gridCols / 2);
-const columnWidth = computed(() => totalVuetifyColumnCount / columns.value);
-const rows = computed(() => settingsStore.gridRows / 2);
+const printerMatrix = computed(() => floorStore.gridSortedPrinters)
+const columns = computed(() => settingsStore.gridCols / 2)
+const columnWidth = computed(() => totalVuetifyColumnCount / columns.value)
+const rows = computed(() => settingsStore.gridRows / 2)
 
 function onDragStart(printer: PrinterDto, ev: DragEvent) {
-  if (!ev.dataTransfer) return;
-  if (!printer.id) return;
+  if (!ev.dataTransfer) return
+  if (!printer.id) return
 
   ev.dataTransfer.setData(
     "text",
@@ -115,14 +115,14 @@ function onDragStart(printer: PrinterDto, ev: DragEvent) {
       intent: INTENT.PRINTER_PLACE,
       printerId: printer.id,
     } as PrinterPlace)
-  );
+  )
 }
 
 function getPrinter(col: number, row: number) {
-  const x = col;
-  const y = row;
-  if (!printerMatrix.value?.length || !printerMatrix.value[x]) return undefined;
-  return printerMatrix.value[x][y];
+  const x = col
+  const y = row
+  if (!printerMatrix.value?.length || !printerMatrix.value[x]) return undefined
+  return printerMatrix.value[x][y]
 }
 </script>
 

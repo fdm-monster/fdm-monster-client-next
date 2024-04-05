@@ -11,9 +11,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { CustomGcodeService } from "@/backend/custom-gcode.service";
+import { defineComponent, PropType } from "vue"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { CustomGcodeService } from "@/backend/custom-gcode.service"
 
 export default defineComponent({
   name: "PrinterEmergencyAction",
@@ -22,15 +22,15 @@ export default defineComponent({
   },
   computed: {
     printerId() {
-      return this.printer!.id;
+      return this.printer!.id
     },
   },
   methods: {
     async clickEmergencyStop() {
       if (confirm("Are you sure to abort the print? Please reconnect after.")) {
-        await CustomGcodeService.postEmergencyM112Command(this.printer!.id);
+        await CustomGcodeService.postEmergencyM112Command(this.printer!.id)
       }
     },
   },
-});
+})
 </script>

@@ -38,27 +38,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { extend, setInteractionMode, ValidationObserver, ValidationProvider } from "vee-validate";
-import { PrintersService } from "@/backend";
-import { usePrinterStore } from "@/store/printer.store";
-import { useDialogsStore } from "@/store/dialog.store";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { useDialog } from "@/shared/dialog.composable";
+import { defineComponent } from "vue"
+import { PrintersService } from "@/backend"
+import { usePrinterStore } from "@/store/printer.store"
+import { useDialogsStore } from "@/store/dialog.store"
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import { useDialog } from "@/shared/dialog.composable"
 
-setInteractionMode("eager");
-extend("json", {
-  validate: (value) => {
-    try {
-      JSON.parse(value);
-      return true;
-    } catch (e) {
-      console.error("Error parsing JSON for validation", e);
-      return false;
-    }
-  },
-  message: "{_field_} needs to be valid JSON.",
-});
+// setInteractionMode("eager");
+// extend("json", {
+//   validate: (value) => {
+//     try {
+//       JSON.parse(value);
+//       return true;
+//     } catch (e) {
+//       console.error("Error parsing JSON for validation", e);
+//       return false;
+//     }
+//   },
+//   message: "{_field_} needs to be valid JSON.",
+// });
 
 interface Data {
   formData: {
@@ -69,20 +68,16 @@ interface Data {
 
 export default defineComponent({
   name: "BatchJsonCreateDialog",
-  components: {
-    ValidationProvider,
-    ValidationObserver,
-  },
   setup: () => {
-    const dialog = useDialog(DialogName.BatchJsonCreate);
+    const dialog = useDialog(DialogName.BatchJsonCreate)
     return {
       printersStore: usePrinterStore(),
       dialogsStore: useDialogsStore(),
       dialog,
-    };
+    }
   },
   async created() {
-    this.numPrinters = 0;
+    this.numPrinters = 0
   },
   async mounted() {},
   props: {},
@@ -92,63 +87,63 @@ export default defineComponent({
     },
     numPrinters: 0,
   }),
-  computed: {
-    validationObserver() {
-      return this.$refs.validationObserver as InstanceType<typeof ValidationObserver>;
-    },
-  },
+  // computed: {
+  //   validationObserver() {
+  //     return this.$refs.validationObserver as InstanceType<typeof ValidationObserver>;
+  //   },
+  // },
   methods: {
     async isValid() {
-      return await this.validationObserver.validate();
+      return await this.validationObserver.validate()
     },
     async parsedPrinters() {
-      if (!this.$refs.validationObserver) return [];
-      if (!(await this.isValid())) return [];
+      if (!this.$refs.validationObserver) return []
+      if (!(await this.isValid())) return []
 
-      const data = JSON.parse(this.formData.json);
-      if (!Array.isArray(data)) return [];
+      const data = JSON.parse(this.formData.json)
+      if (!Array.isArray(data)) return []
 
-      return data;
+      return data
     },
     async updatePrinterCount() {
-      this.numPrinters = (await this.parsedPrinters()).length;
+      this.numPrinters = (await this.parsedPrinters()).length
     },
     async submit() {
-      if (!(await this.isValid())) return;
-      const printers = await this.parsedPrinters();
+      if (!(await this.isValid())) return
+      const printers = await this.parsedPrinters()
 
-      const numPrinters = printers.length;
-      const answer = confirm(`Are you sure to import ${numPrinters} printers?`);
+      const numPrinters = printers.length
+      const answer = confirm(`Are you sure to import ${numPrinters} printers?`)
       if (answer) {
         printers.forEach((p) => {
           if (p["_id"]) {
-            delete p["_id"];
+            delete p["_id"]
           }
           if (p["apikey"]) {
-            p.apiKey = p["apikey"];
-            delete p["apikey"];
+            p.apiKey = p["apikey"]
+            delete p["apikey"]
           }
           if (p["settingsApperance"]) {
-            p.settingsAppearance = p["settingsApperance"];
-            delete p["settingsApperance"];
+            p.settingsAppearance = p["settingsApperance"]
+            delete p["settingsApperance"]
           }
           if (p["name"]) {
             if (!p.settingsAppearance) {
-              p.settingsAppearance = {};
+              p.settingsAppearance = {}
             }
-            p.settingsAppearance.name = p["name"];
-            delete p["name"];
+            p.settingsAppearance.name = p["name"]
+            delete p["name"]
           }
-        });
-        await PrintersService.batchImportPrinters(printers);
+        })
+        await PrintersService.batchImportPrinters(printers)
       }
 
-      this.closeDialog();
+      this.closeDialog()
     },
     closeDialog() {
-      this.dialog.closeDialog();
+      this.dialog.closeDialog()
     },
   },
   watch: {},
-});
+})
 </script>

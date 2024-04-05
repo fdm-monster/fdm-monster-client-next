@@ -109,17 +109,17 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
-import { AppService } from "@/backend/app.service";
-import { version as clientVersion } from "../../../package.json";
+import { onMounted, ref } from "vue"
+import { AppService } from "@/backend/app.service"
+import { version as clientVersion } from "../../../package.json"
 
-const serverVersion = ref("");
-const monsterPiVersion = ref<string | null>("");
-const version = ref(clientVersion);
+const serverVersion = ref("")
+const monsterPiVersion = ref<string | null>("")
+const version = ref(clientVersion)
 
 onMounted(async () => {
-  const versionSpec = await AppService.getVersion();
-  serverVersion.value = versionSpec.version;
-  monsterPiVersion.value = versionSpec.monsterPi;
-});
+  const versionSpec = await AppService.getVersion()
+  serverVersion.value = versionSpec.version
+  monsterPiVersion.value = versionSpec.monsterPi
+})
 </script>

@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
-import { FrontendSettings, SettingsDto, TimeoutSettings } from "@/models/settings/settings.model";
-import { SettingsService } from "@/backend";
-import { ServerSettingsDto } from "@/models/settings/server-settings.dto";
+import { defineStore } from "pinia"
+import { FrontendSettings, SettingsDto, TimeoutSettings } from "@/models/settings/settings.model"
+import { SettingsService } from "@/backend"
+import { ServerSettingsDto } from "@/models/settings/server-settings.dto"
 
 export interface FrontendDebugSettings {
   showPrinterStateUpdateSideNav: boolean;
@@ -26,33 +26,33 @@ export const useSettingsStore = defineStore({
   }),
   actions: {
     async loadSettings(): Promise<SettingsDto> {
-      const response = await SettingsService.getSettings();
-      this.settings = response;
-      return response;
+      const response = await SettingsService.getSettings()
+      this.settings = response
+      return response
     },
     async updateFrontendSettings(update: FrontendSettings): Promise<SettingsDto> {
-      const response = await SettingsService.updateFrontendSettings(update);
-      this.settings = response;
-      return response;
+      const response = await SettingsService.updateFrontendSettings(update)
+      this.settings = response
+      return response
     },
     async updateTimeoutSettings(update: TimeoutSettings): Promise<SettingsDto> {
-      const response = await SettingsService.updateTimeoutSettings(update);
-      this.settings = response;
-      return response;
+      const response = await SettingsService.updateTimeoutSettings(update)
+      this.settings = response
+      return response
     },
   },
   getters: {
     serverSettings(): ServerSettingsDto | undefined {
-      return this.settings?.server;
+      return this.settings?.server
     },
     largeTiles(): boolean {
-      return this.settings?.frontend?.largeTiles || false;
+      return this.settings?.frontend?.largeTiles || false
     },
     gridCols(): number {
-      return this.settings?.frontend?.gridCols || 8;
+      return this.settings?.frontend?.gridCols || 8
     },
     gridRows(): number {
-      return this.settings?.frontend?.gridRows || 8;
+      return this.settings?.frontend?.gridRows || 8
     },
   },
-});
+})

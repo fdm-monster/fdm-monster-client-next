@@ -27,7 +27,7 @@
       </v-card-title>
 
       <v-data-table
-        :expanded.sync="expanded"
+        v-model:expanded="expanded"
         :headers="tableHeaders"
         :items="printers"
         :search="search"
@@ -205,46 +205,46 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import { PrintersService } from "@/backend/printers.service";
-import PrinterDetails from "@/components/PrinterList/PrinterDetails.vue";
-import PrinterUrlAction from "@/components/Generic/Actions/PrinterUrlAction.vue";
-import PrinterSettingsAction from "@/components/Generic/Actions/PrinterSettingsAction.vue";
-import PrinterConnectionAction from "@/components/Generic/Actions/PrinterConnectionAction.vue";
-import PrinterEmergencyStopAction from "@/components/Generic/Actions/PrinterEmergencyStopAction.vue";
-import SyncPrinterNameAction from "@/components/Generic/Actions/SyncPrinterNameAction.vue";
+import { computed, ref } from "vue"
+import { PrintersService } from "@/backend/printers.service"
+import PrinterDetails from "@/components/PrinterList/PrinterDetails.vue"
+import PrinterUrlAction from "@/components/Generic/Actions/PrinterUrlAction.vue"
+import PrinterSettingsAction from "@/components/Generic/Actions/PrinterSettingsAction.vue"
+import PrinterConnectionAction from "@/components/Generic/Actions/PrinterConnectionAction.vue"
+import PrinterEmergencyStopAction from "@/components/Generic/Actions/PrinterEmergencyStopAction.vue"
+import SyncPrinterNameAction from "@/components/Generic/Actions/SyncPrinterNameAction.vue"
 
-import { usePrinterStore } from "@/store/printer.store";
-import { useDialogsStore } from "@/store/dialog.store";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import PrinterCreateAction from "@/components/Generic/Actions/PrinterCreateAction.vue";
-import PrinterDeleteAction from "@/components/Generic/Actions/PrinterDeleteAction.vue";
-import { useFloorStore } from "@/store/floor.store";
-import { usePrinterStateStore } from "@/store/printer-state.store";
-import { IdType } from "@/utils/id.type";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { useFeatureStore } from "@/store/features.store";
-import { useQuery } from "@tanstack/vue-query";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { GroupWithPrintersDto, PrinterGroupService } from "@/backend/printer-group.service";
-import { AppService } from "@/backend/app.service";
+import { usePrinterStore } from "@/store/printer.store"
+import { useDialogsStore } from "@/store/dialog.store"
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import PrinterCreateAction from "@/components/Generic/Actions/PrinterCreateAction.vue"
+import PrinterDeleteAction from "@/components/Generic/Actions/PrinterDeleteAction.vue"
+import { useFloorStore } from "@/store/floor.store"
+import { usePrinterStateStore } from "@/store/printer-state.store"
+import { IdType } from "@/utils/id.type"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { useFeatureStore } from "@/store/features.store"
+import { useQuery } from "@tanstack/vue-query"
+import { useSnackbar } from "@/shared/snackbar.composable"
+import { GroupWithPrintersDto, PrinterGroupService } from "@/backend/printer-group.service"
+import { AppService } from "@/backend/app.service"
 
-const snackbar = useSnackbar();
-const printerStore = usePrinterStore();
-const loading = ref<boolean>(false);
-const printerStateStore = usePrinterStateStore();
-const floorStore = useFloorStore();
-const dialogsStore = useDialogsStore();
-const featureStore = useFeatureStore();
-const groupsWithPrinters = ref<GroupWithPrintersDto<IdType>[]>([]);
-const filteredGroupsWithPrinters = ref<GroupWithPrintersDto<IdType>[]>([]);
-const newGroupName = ref("");
-const updatedGroupName = ref("");
-const selectedGroup = ref<number>();
+const snackbar = useSnackbar()
+const printerStore = usePrinterStore()
+const loading = ref<boolean>(false)
+const printerStateStore = usePrinterStateStore()
+const floorStore = useFloorStore()
+const dialogsStore = useDialogsStore()
+const featureStore = useFeatureStore()
+const groupsWithPrinters = ref<GroupWithPrintersDto<IdType>[]>([])
+const filteredGroupsWithPrinters = ref<GroupWithPrintersDto<IdType>[]>([])
+const newGroupName = ref("")
+const updatedGroupName = ref("")
+const selectedGroup = ref<number>()
 
-const search = ref("");
-const expanded = ref([]);
-const hasPrinterGroupFeature = computed(() => featureStore.hasFeature("printerGroupsApi"));
+const search = ref("")
+const expanded = ref([])
+const hasPrinterGroupFeature = computed(() => featureStore.hasFeature("printerGroupsApi"))
 const tableHeaders = computed(() => [
   { text: "Enabled", value: "enabled" },
   { text: "Printer Name", align: "start", sortable: true, value: "name" },
@@ -255,157 +255,157 @@ const tableHeaders = computed(() => [
   { text: "Actions", value: "actions", sortable: false },
   { text: "Socket Update", value: "socketupdate", sortable: false },
   { text: "", value: "data-table-expand" },
-]);
+])
 
 async function loadData() {
-  loading.value = true;
-  await featureStore.loadFeatures();
+  loading.value = true
+  await featureStore.loadFeatures()
   if (featureStore.hasFeature("printerGroupsApi")) {
-    const response = await PrinterGroupService.getGroupsWithPrinters();
-    groupsWithPrinters.value = response;
+    const response = await PrinterGroupService.getGroupsWithPrinters()
+    groupsWithPrinters.value = response
   }
-  loading.value = false;
-  return groupsWithPrinters;
+  loading.value = false
+  return groupsWithPrinters
 }
 
 const printerGroupsQuery = useQuery({
   queryKey: ["printerGroups"],
   queryFn: loadData,
-});
+})
 
 const printers = computed(() => {
   if (!featureStore.hasFeature("printerGroupsApi") || !filteredGroupsWithPrinters.value?.length) {
-    return printerStore.printers;
+    return printerStore.printers
   }
   const printerIdsInFilteredGroups =
-    filteredGroupsWithPrinters.value.flatMap((g) => g.printers.map((p) => p.printerId)) || [];
-  return printerStore.printers.filter((p) => printerIdsInFilteredGroups.includes(p.id));
-});
+    filteredGroupsWithPrinters.value.flatMap((g) => g.printers.map((p) => p.printerId)) || []
+  return printerStore.printers.filter((p) => printerIdsInFilteredGroups.includes(p.id))
+})
 
-const currentEventReceivedAt = computed(() => printerStateStore.printerCurrentEventReceivedAtById);
+const currentEventReceivedAt = computed(() => printerStateStore.printerCurrentEventReceivedAtById)
 const selectedGroupObject = computed(() => {
-  if (!selectedGroup.value && selectedGroup.value !== 0) return;
+  if (!selectedGroup.value && selectedGroup.value !== 0) return
 
-  return groupsWithPrinters.value[selectedGroup.value];
-});
+  return groupsWithPrinters.value[selectedGroup.value]
+})
 
 const diffSeconds = (timestamp: number) => {
-  if (!timestamp) return;
-  const now = Date.now();
-  return (now - timestamp) / 1000;
-};
+  if (!timestamp) return
+  const now = Date.now()
+  return (now - timestamp) / 1000
+}
 
 const groupsOfPrinter = (printerId: IdType) => {
-  return groupsWithPrinters.value.filter((g) => g.printers.find((p) => p.printerId === printerId));
-};
+  return groupsWithPrinters.value.filter((g) => g.printers.find((p) => p.printerId === printerId))
+}
 
 const nonGroupsOfPrinter = (printerId: IdType) => {
-  return groupsWithPrinters.value.filter((g) => !g.printers.find((p) => p.printerId === printerId));
-};
+  return groupsWithPrinters.value.filter((g) => !g.printers.find((p) => p.printerId === printerId))
+}
 
 const floorOfPrinter = (printerId: IdType) => {
-  return floorStore.floorOfPrinter(printerId);
-};
+  return floorStore.floorOfPrinter(printerId)
+}
 
 const openEditDialog = (printer: PrinterDto) => {
-  printerStore.setUpdateDialogPrinter(printer);
-  dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog);
-};
+  printerStore.setUpdateDialogPrinter(printer)
+  dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog)
+}
 
 const openCreatePrinterDialog = () => {
-  dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog);
-};
+  dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog)
+}
 
 const clickRow = (item: PrinterDto, event: any) => {
   if (event.isExpanded) {
-    const index = expanded.value.findIndex((i) => i === item);
-    expanded.value.splice(index, 1);
+    const index = expanded.value.findIndex((i) => i === item)
+    expanded.value.splice(index, 1)
   } else {
-    expanded.value.push(item);
+    expanded.value.push(item)
   }
-  console.log(event);
-};
+  console.log(event)
+}
 
 const openImportJsonPrintersDialog = () => {
-  dialogsStore.openDialogWithContext(DialogName.BatchJsonCreate);
-};
+  dialogsStore.openDialogWithContext(DialogName.BatchJsonCreate)
+}
 
 const openYamlImportExportDialog = () => {
-  dialogsStore.openDialogWithContext(DialogName.YamlImportExport);
-};
+  dialogsStore.openDialogWithContext(DialogName.YamlImportExport)
+}
 
 const createGroup = async () => {
   if (!newGroupName.value?.trim()?.length) {
-    throw new Error("Please set a non-empty group name");
+    throw new Error("Please set a non-empty group name")
   }
 
-  await PrinterGroupService.createGroup(newGroupName.value.trim());
-  await printerGroupsQuery.refetch();
-  newGroupName.value = "";
-  snackbar.info("Created group");
-};
+  await PrinterGroupService.createGroup(newGroupName.value.trim())
+  await printerGroupsQuery.refetch()
+  newGroupName.value = ""
+  snackbar.info("Created group")
+}
 
 const selectGroupForUpdatingName = () => {
-  if (!selectedGroupObject.value) return;
+  if (!selectedGroupObject.value) return
 
-  updatedGroupName.value = selectedGroupObject.value?.name;
-};
+  updatedGroupName.value = selectedGroupObject.value?.name
+}
 
 const updateGroupName = async (group?: GroupWithPrintersDto) => {
   if (!group?.id) {
-    throw new Error("Group id was not defined");
+    throw new Error("Group id was not defined")
   }
-  const existingGroup = groupsWithPrinters.value.find((g) => g.id === group.id);
+  const existingGroup = groupsWithPrinters.value.find((g) => g.id === group.id)
   if (!existingGroup) {
-    throw new Error("Group was not found, please reload the page");
+    throw new Error("Group was not found, please reload the page")
   }
   if (!updatedGroupName.value?.trim()?.length) {
-    throw new Error("Please set a non-empty group name");
+    throw new Error("Please set a non-empty group name")
   }
 
-  await PrinterGroupService.updateGroupName(group.id, updatedGroupName.value.trim());
-  await printerGroupsQuery.refetch();
-};
+  await PrinterGroupService.updateGroupName(group.id, updatedGroupName.value.trim())
+  await printerGroupsQuery.refetch()
+}
 
 const deleteGroup = async (groupId: IdType) => {
-  const existingGroup = groupsWithPrinters.value.find((g) => g.id === groupId);
+  const existingGroup = groupsWithPrinters.value.find((g) => g.id === groupId)
   if (!existingGroup) {
-    throw new Error("Group was not found, please reload the page");
+    throw new Error("Group was not found, please reload the page")
   }
 
-  const printerCount = existingGroup.printers.length;
+  const printerCount = existingGroup.printers.length
   if (
     printerCount > 0 &&
     !confirm(`This group contains ${printerCount} printers, are you sure to delete it?`)
   ) {
-    return;
+    return
   }
 
-  await PrinterGroupService.deleteGroup(groupId);
-  await printerGroupsQuery.refetch();
-  snackbar.info("Deleted group");
-};
+  await PrinterGroupService.deleteGroup(groupId)
+  await printerGroupsQuery.refetch()
+  snackbar.info("Deleted group")
+}
 
 const addPrinterToGroup = async (groupId: IdType, printerId: IdType) => {
-  await PrinterGroupService.addPrinterToGroup(groupId, printerId);
-  await printerGroupsQuery.refetch();
-  snackbar.info("Added printer to group");
-};
+  await PrinterGroupService.addPrinterToGroup(groupId, printerId)
+  await printerGroupsQuery.refetch()
+  snackbar.info("Added printer to group")
+}
 
 const deletePrinterFromGroup = async (groupId: IdType, printerId: IdType) => {
-  await PrinterGroupService.deletePrinterFromGroup(groupId, printerId);
-  await printerGroupsQuery.refetch();
-  snackbar.info("Removed printer from group");
-};
+  await PrinterGroupService.deletePrinterFromGroup(groupId, printerId)
+  await printerGroupsQuery.refetch()
+  snackbar.info("Removed printer from group")
+}
 
 const toggleEnabled = async (printer: PrinterDto) => {
   if (!printer.id) {
-    throw new Error("Printer ID not set, cant toggle enabled");
+    throw new Error("Printer ID not set, cant toggle enabled")
   }
 
-  printer.enabled = !printer.enabled;
-  await PrintersService.toggleEnabled(printer.id, printer.enabled);
-};
+  printer.enabled = !printer.enabled
+  await PrintersService.toggleEnabled(printer.id, printer.enabled)
+}
 </script>
 
 <style lang="scss">

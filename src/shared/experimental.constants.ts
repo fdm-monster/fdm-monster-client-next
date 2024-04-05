@@ -1,1 +1,1 @@
-export const whitelistSettingsHidden = true;
+export const whitelistSettingsHidden = true

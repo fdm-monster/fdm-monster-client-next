@@ -57,10 +57,10 @@
   </v-card>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { useSettingsStore } from "../../store/settings.store";
-import { colOptions, rowOptions } from "../../shared/printer-grid.constants";
-import { useSnackbar } from "@/shared/snackbar.composable";
+import { defineComponent } from "vue"
+import { useSettingsStore } from "../../store/settings.store"
+import { colOptions, rowOptions } from "../../shared/printer-grid.constants"
+import { useSnackbar } from "@/shared/snackbar.composable"
 
 interface Data {
   property: number;
@@ -73,7 +73,7 @@ export default defineComponent({
     return {
       settingsStore: useSettingsStore(),
       snackbar: useSnackbar(),
-    };
+    }
   },
   async created() {},
   async mounted() {},
@@ -83,25 +83,25 @@ export default defineComponent({
   }),
   computed: {
     largeTilesSettings() {
-      return this.settingsStore.largeTiles;
+      return this.settingsStore.largeTiles
     },
   },
   methods: {
     rowOptions() {
-      return rowOptions;
+      return rowOptions
     },
     colOptions() {
-      return colOptions;
+      return colOptions
     },
     async updateGridSettings() {
       await this.settingsStore.updateFrontendSettings({
         gridCols: this.settingsStore.gridCols,
         gridRows: this.settingsStore.gridRows,
         largeTiles: this.largeTilesSettings,
-      });
-      this.snackbar.info("Grid settings updated");
+      })
+      this.snackbar.info("Grid settings updated")
     },
   },
   watch: {},
-});
+})
 </script>

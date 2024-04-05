@@ -1,4 +1,4 @@
-import { IdType } from "@/utils/id.type";
+import { IdType } from "@/utils/id.type"
 
 export interface BatchSingletonModel {
   success?: boolean;
@@ -8,4 +8,4 @@ export interface BatchSingletonModel {
   error?: string;
 }
 
-export type BatchModel = BatchSingletonModel[];
+export type BatchModel = BatchSingletonModel[]

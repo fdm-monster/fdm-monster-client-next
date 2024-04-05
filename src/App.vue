@@ -31,22 +31,24 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, watch} from 'vue';
-import {useUploadsStore} from "./store/uploads.store";
-import {uploadProgressTest} from "./utils/test.util";
-import {useAuthStore} from "./store/auth.store";
+import {onMounted, watch} from 'vue'
+import {useUploadsStore} from "./store/uploads.store"
+import {uploadProgressTest} from "./utils/test.util"
+import {useAuthStore} from "./store/auth.store"
+import AppLoader from "./AppLoader.vue"
 
-const uploadsStore = useUploadsStore();
-const authStore = useAuthStore();
 
-const queuedUploads = uploadsStore.queuedUploads;
+const uploadsStore = useUploadsStore()
+const authStore = useAuthStore()
+
+const queuedUploads = uploadsStore.queuedUploads
 
 watch(queuedUploads, async () => {
-  await uploadsStore.handleNextUpload();
-});
+  await uploadsStore.handleNextUpload()
+})
 
 onMounted(() => {
-  console.debug(`App.vue mounted. Logged in: ${authStore.hasAuthToken}, Expired: ${authStore.isLoginExpired}`);
-  uploadProgressTest(false);
-});
+  console.debug(`App.vue mounted. Logged in: ${authStore.hasAuthToken}, Expired: ${authStore.isLoginExpired}`)
+  uploadProgressTest(false)
+})
 </script>

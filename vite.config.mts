@@ -8,7 +8,7 @@ import Vuetify, {transformAssetUrls} from 'vite-plugin-vuetify'
 // Utilities
 import {defineConfig} from 'vite'
 import {fileURLToPath, URL} from 'url'
-import packageJson from "./package.json";
+import packageJson from "./package.json"
 // import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 // https://vitejs.dev/config/

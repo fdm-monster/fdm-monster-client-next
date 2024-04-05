@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { usePrinterStore } from "../../../store/printer.store";
+import { defineComponent, PropType } from "vue"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { usePrinterStore } from "../../../store/printer.store"
 
 export default defineComponent({
   name: "PrinterDeleteAction",
@@ -15,7 +15,7 @@ export default defineComponent({
   setup: () => {
     return {
       printersStore: usePrinterStore(),
-    };
+    }
   },
   async created() {},
   async mounted() {},
@@ -24,14 +24,14 @@ export default defineComponent({
   },
   computed: {
     printerId() {
-      return this.printer!.id;
+      return this.printer!.id
     },
   },
   methods: {
     async deletePrinter() {
-      if (!confirm("Are you sure to delete this printer?")) return;
-      await this.printersStore.deletePrinter(this.printerId);
+      if (!confirm("Are you sure to delete this printer?")) return
+      await this.printersStore.deletePrinter(this.printerId)
     },
   },
-});
+})
 </script>

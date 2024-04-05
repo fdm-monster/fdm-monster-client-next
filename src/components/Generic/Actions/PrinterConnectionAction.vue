@@ -23,11 +23,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { PrintersService } from "@/backend";
-import { usePrinterStore } from "../../../store/printer.store";
-import { usePrinterStateStore } from "../../../store/printer-state.store";
+import { defineComponent, PropType } from "vue"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { PrintersService } from "@/backend"
+import { usePrinterStore } from "../../../store/printer.store"
+import { usePrinterStateStore } from "../../../store/printer-state.store"
 
 export default defineComponent({
   name: "PrinterConnectionAction",
@@ -36,7 +36,7 @@ export default defineComponent({
     return {
       printersStore: usePrinterStore(),
       printerStateStore: usePrinterStateStore(),
-    };
+    }
   },
   async created() {},
   async mounted() {},
@@ -45,28 +45,28 @@ export default defineComponent({
   },
   computed: {
     printerId() {
-      return this.printer!.id;
+      return this.printer!.id
     },
   },
   methods: {
     isPrinterOperational() {
       if (!this.printerId) {
-        return false;
+        return false
       }
-      return this.printerStateStore.isPrinterOperational(this.printerId);
+      return this.printerStateStore.isPrinterOperational(this.printerId)
     },
     isPrinterPrinting() {
       if (!this.printerId) {
-        return false;
+        return false
       }
-      return this.printerStateStore.isPrinterPrinting(this.printerId);
+      return this.printerStateStore.isPrinterPrinting(this.printerId)
     },
     async togglePrinterConnection() {
       if (this.isPrinterOperational()) {
-        return PrintersService.sendPrinterDisconnectCommand(this.printerId);
+        return PrintersService.sendPrinterDisconnectCommand(this.printerId)
       }
-      await PrintersService.sendPrinterConnectCommand(this.printerId);
+      await PrintersService.sendPrinterConnectCommand(this.printerId)
     },
   },
-});
+})
 </script>

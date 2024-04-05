@@ -1,5 +1,5 @@
-export const isDevEnv = process.env.NODE_ENV === "development";
-export const isProdEnv = process.env.NODE_ENV === "production";
+export const isDevEnv = process.env.NODE_ENV === "development"
+export const isProdEnv = process.env.NODE_ENV === "production"
 
 export interface AppConstants {
   apiKeyLength: number;
@@ -20,4 +20,4 @@ export const generateAppConstants = (): Readonly<AppConstants> =>
     maxPrinterGroupLocationX: 4,
     maxPrinterGroupLocationY: 4,
     minPrinterFloorNameLength: 3,
-  }) as Readonly<AppConstants>;
+  }) as Readonly<AppConstants>

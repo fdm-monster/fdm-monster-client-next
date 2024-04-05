@@ -81,9 +81,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { usePrinterStore } from "@/store/printer.store";
-import { usePrinterStateStore } from "@/store/printer-state.store";
+import { defineComponent } from "vue"
+import { usePrinterStore } from "@/store/printer.store"
+import { usePrinterStateStore } from "@/store/printer-state.store"
 
 interface Data {
   search: string;
@@ -97,7 +97,7 @@ export default defineComponent({
     return {
       printersStore: usePrinterStore(),
       printerStateStore: usePrinterStateStore(),
-    };
+    }
   },
   async created() {},
   async mounted() {},
@@ -109,38 +109,38 @@ export default defineComponent({
   computed: {
     activePrintJobs() {
       return this.printerStateStore.printersWithJob.filter((p) => {
-        const fileName = p.job?.job?.file.name;
-        const fileNameSearch = fileName?.toLowerCase() || "";
-        const printerUrlSearch = p.printer.printerURL?.toLowerCase() || "";
-        const searchSearch = p.printer.name?.toLowerCase() || "";
+        const fileName = p.job?.job?.file.name
+        const fileNameSearch = fileName?.toLowerCase() || ""
+        const printerUrlSearch = p.printer.printerURL?.toLowerCase() || ""
+        const searchSearch = p.printer.name?.toLowerCase() || ""
 
-        const combineSearch = `${fileNameSearch} ${printerUrlSearch} ${searchSearch}`;
-        return !this.search || combineSearch.includes(this.search.toLowerCase());
-      });
+        const combineSearch = `${fileNameSearch} ${printerUrlSearch} ${searchSearch}`
+        return !this.search || combineSearch.includes(this.search.toLowerCase())
+      })
     },
     activePrintCount() {
-      return this.activePrintJobs.length || 0;
+      return this.activePrintJobs.length || 0
     },
     currentJob() {
       return (printerId: string) => {
-        if (!printerId?.length) return;
-        return this.printerStateStore.printerJobsById[printerId];
-      };
+        if (!printerId?.length) return
+        return this.printerStateStore.printerJobsById[printerId]
+      }
     },
   },
   methods: {
     closeMenu() {
-      this.menu = false;
+      this.menu = false
     },
     truncateProgress(progress: number) {
-      if (!progress) return "";
-      return progress?.toFixed(0);
+      if (!progress) return ""
+      return progress?.toFixed(0)
     },
   },
   watch: {
     menu() {
-      this.search = "";
+      this.search = ""
     },
   },
-});
+})
 </script>

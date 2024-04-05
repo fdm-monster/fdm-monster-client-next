@@ -56,10 +56,10 @@
   </v-container>
 </template>
 <script lang="ts" setup>
-import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { computed } from "vue"
+import { useRoute } from "vue-router"
 
-const route = useRoute();
+const route = useRoute()
 
 interface PermissionDeniedQuery {
   roles: string[];
@@ -70,6 +70,6 @@ interface PermissionDeniedQuery {
 }
 
 const permissionProblems = computed(() => {
-  return route.query as any as PermissionDeniedQuery;
-});
+  return route.query as any as PermissionDeniedQuery
+})
 </script>

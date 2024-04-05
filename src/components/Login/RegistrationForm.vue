@@ -108,27 +108,27 @@
   </v-container>
 </template>
 <script lang="ts" setup>
-import { AxiosError } from "axios";
-import { computed, onMounted, ref } from "vue";
-import { useAuthStore } from "@/store/auth.store";
-import { useRouter } from "vue-router";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { AuthService } from "@/backend/auth.service";
-import { RouteNames } from "@/router/route-names";
+import { AxiosError } from "axios"
+import { computed, onMounted, ref } from "vue"
+import { useAuthStore } from "@/store/auth.store"
+import { useRouter } from "vue-router"
+import { useSnackbar } from "@/shared/snackbar.composable"
+import { AuthService } from "@/backend/auth.service"
+import { RouteNames } from "@/router/route-names"
 
-const authStore = useAuthStore();
-const router = useRouter();
-const errorMessage = ref("");
-const username = ref("");
-const showPassword = ref(false);
-const showPassword2 = ref(false);
-const password = ref("");
-const password2 = ref("");
-const loading = ref(false);
-const snackbar = useSnackbar();
+const authStore = useAuthStore()
+const router = useRouter()
+const errorMessage = ref("")
+const username = ref("")
+const showPassword = ref(false)
+const showPassword2 = ref(false)
+const password = ref("")
+const password2 = ref("")
+const loading = ref(false)
+const snackbar = useSnackbar()
 
 async function gotoLogin() {
-  return await router.push({ name: RouteNames.Login });
+  return await router.push({ name: RouteNames.Login })
 }
 
 const formIsDisabled = computed(() => {
@@ -136,42 +136,42 @@ const formIsDisabled = computed(() => {
     (username.value ?? "")?.length < 3 ||
     (password.value ?? "").length < 3 ||
     password.value != password2.value
-  );
-});
+  )
+})
 
 onMounted(async () => {
-  await authStore.logout();
-  await authStore.checkAuthenticationRequirements();
+  await authStore.logout()
+  await authStore.checkAuthenticationRequirements()
   if (!authStore.registration) {
-    snackbar.info("Registration is disabled, please contact your administrator");
+    snackbar.info("Registration is disabled, please contact your administrator")
     await router.push({
       name: RouteNames.Login,
-    });
+    })
   }
-});
+})
 
 async function registerAccount() {
   try {
-    loading.value = true;
-    await AuthService.registerAccount(username.value, password.value);
-    loading.value = false;
+    loading.value = true
+    await AuthService.registerAccount(username.value, password.value)
+    loading.value = false
   } catch (e) {
-    loading.value = false;
+    loading.value = false
     if ((e as AxiosError)?.response?.status === 401) {
-      errorMessage.value = "Invalid credentials";
-      return;
+      errorMessage.value = "Invalid credentials"
+      return
     }
 
     snackbar.openErrorMessage({
       title: "Error logging in",
       subtitle: "Please test your connection and try again.",
-    });
+    })
 
-    return;
+    return
   }
-  errorMessage.value = "";
+  errorMessage.value = ""
 
-  snackbar.info("Account created, please login");
-  await gotoLogin();
+  snackbar.info("Account created, please login")
+  await gotoLogin()
 }
 </script>

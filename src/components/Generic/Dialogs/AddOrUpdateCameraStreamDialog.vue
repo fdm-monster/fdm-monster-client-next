@@ -42,72 +42,71 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onUpdated, ref, watch } from "vue";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { useDialog } from "@/shared/dialog.composable";
-import { CameraStream, CameraWithPrinter } from "@/models/camera-streams/camera-stream";
-import { ValidationObserver } from "vee-validate";
-import { CameraStreamService } from "@/backend/camera-stream.service";
-import { useQueryClient } from "@tanstack/vue-query";
+import { computed, ref, watch } from "vue"
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import { useDialog } from "@/shared/dialog.composable"
+import { CameraStream, CameraWithPrinter } from "@/models/camera-streams/camera-stream"
+import { CameraStreamService } from "@/backend/camera-stream.service"
+import { useQueryClient } from "@tanstack/vue-query"
 
-const queryClient = useQueryClient();
-const dialog = useDialog(DialogName.AddOrUpdateCameraDialog);
+const queryClient = useQueryClient()
+const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
 
 const avatarInitials = computed(() => {
-  return "C";
-});
+  return "C"
+})
 
 const cameraStream = ref<CameraStream>({
   name: "",
   streamURL: "",
-});
+})
 
-const isDialogUpdate = () => dialog.context()?.addOrUpdate === "update";
+const isDialogUpdate = () => dialog.context()?.addOrUpdate === "update"
 
 const isUpdating = computed(() => {
-  return isDialogUpdate();
-});
+  return isDialogUpdate()
+})
 
 watch(
   () => dialog.context(),
   (context) => {
     if (!context || context?.addOrUpdate !== "update") {
-      cameraStream.value.streamURL = "";
-      cameraStream.value.name = "";
-      return;
+      cameraStream.value.streamURL = ""
+      cameraStream.value.name = ""
+      return
     }
 
     const stream = queryClient
       .getQueryData<CameraWithPrinter[]>(["cameraStream"])
-      ?.find((cameraStream) => cameraStream.cameraStream.id === context.cameraId);
-    cameraStream.value.name = stream?.cameraStream.name;
-    cameraStream.value.streamURL = stream?.cameraStream.streamURL;
+      ?.find((cameraStream) => cameraStream.cameraStream.id === context.cameraId)
+    cameraStream.value.name = stream?.cameraStream.name
+    cameraStream.value.streamURL = stream?.cameraStream.streamURL
   }
-);
+)
 
 function closeDialog() {
-  dialog.closeDialog();
+  dialog.closeDialog()
 }
 
 async function createCamera() {
   await CameraStreamService.createCameraStream({
     streamURL: cameraStream.value.streamURL,
     name: cameraStream.value.name,
-  });
-  await queryClient.refetchQueries({ queryKey: ["cameraStream"] });
-  dialog.closeDialog();
+  })
+  await queryClient.refetchQueries({ queryKey: ["cameraStream"] })
+  dialog.closeDialog()
 }
 
 async function updateCamera() {
   await CameraStreamService.updateCameraStream(dialog.context()?.cameraId, {
     streamURL: cameraStream.value.streamURL,
     name: cameraStream.value.name,
-  });
-  await queryClient.refetchQueries({ queryKey: ["cameraStream"] });
-  dialog.closeDialog();
+  })
+  await queryClient.refetchQueries({ queryKey: ["cameraStream"] })
+  dialog.closeDialog()
 }
 
 function close() {
-  dialog.closeDialog();
+  dialog.closeDialog()
 }
 </script>

@@ -49,14 +49,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import { ValidationObserver, ValidationProvider } from "vee-validate";
-import { PrintersService } from "@/backend";
-import { usePrinterStore } from "@/store/printer.store";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { useDialog } from "@/shared/dialog.composable";
+import { computed, ref } from "vue"
+import { PrintersService } from "@/backend"
+import { usePrinterStore } from "@/store/printer.store"
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import { useDialog } from "@/shared/dialog.composable"
 
-const selectedQuickItems = ref([]);
+const selectedQuickItems = ref([])
 const quickItems = [
   "Broken part",
   "Blob",
@@ -82,46 +81,46 @@ const quickItems = [
   "Motherboard",
   "Other",
   "Clean",
-];
+]
 const formData = ref<{
   disabledReason?: string;
-}>({});
-const printersStore = usePrinterStore();
-const dialog = useDialog(DialogName.PrinterMaintenanceDialog);
+}>({})
+const printersStore = usePrinterStore()
+const dialog = useDialog(DialogName.PrinterMaintenanceDialog)
 
-const validationObserver = ref(null);
-const printer = computed(() => printersStore.maintenanceDialogPrinter);
+const validationObserver = ref(null)
+const printer = computed(() => printersStore.maintenanceDialogPrinter)
 
 const isValid = async () => {
-  if (!validationObserver.value) return false;
+  if (!validationObserver.value) return false
 
-  return await validationObserver.value.validate();
-};
+  return await validationObserver.value.validate()
+}
 
 const updateText = () => {
-  formData.value.disabledReason = selectedQuickItems.value.join(", ");
-};
+  formData.value.disabledReason = selectedQuickItems.value.join(", ")
+}
 
 const submit = async () => {
-  if (!(await isValid())) return;
+  if (!(await isValid())) return
 
-  const printerId = printer.value?.id;
+  const printerId = printer.value?.id
   if (!printerId) {
-    formData.value = {};
-    closeDialog();
-    return;
+    formData.value = {}
+    closeDialog()
+    return
   }
 
-  const disabledReason = formData.value.disabledReason;
-  await PrintersService.updatePrinterMaintenance(printerId, disabledReason);
+  const disabledReason = formData.value.disabledReason
+  await PrintersService.updatePrinterMaintenance(printerId, disabledReason)
 
-  formData.value = {};
-  closeDialog();
-};
+  formData.value = {}
+  closeDialog()
+}
 
 const closeDialog = () => {
-  selectedQuickItems.value = [];
-  dialog.closeDialog();
-  printersStore.setMaintenanceDialogPrinter();
-};
+  selectedQuickItems.value = []
+  dialog.closeDialog()
+  printersStore.setMaintenanceDialogPrinter()
+}
 </script>

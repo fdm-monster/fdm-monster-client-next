@@ -52,24 +52,24 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import { usePrinterStore } from "@/store/printer.store";
-import { useGridStore } from "@/store/grid.store";
-import { useFloorStore } from "@/store/floor.store";
-import { usePrinterStateStore } from "@/store/printer-state.store";
+import { computed, ref } from "vue"
+import { usePrinterStore } from "@/store/printer.store"
+import { useGridStore } from "@/store/grid.store"
+import { useFloorStore } from "@/store/floor.store"
+import { usePrinterStateStore } from "@/store/printer-state.store"
 
-const printerStore = usePrinterStore();
-const printerStateStore = usePrinterStateStore();
-const floorStore = useFloorStore();
-const gridStore = useGridStore();
-const selectedFloorToggleIndex = ref<number>(0);
+const printerStore = usePrinterStore()
+const printerStateStore = usePrinterStateStore()
+const floorStore = useFloorStore()
+const gridStore = useGridStore()
+const selectedFloorToggleIndex = ref<number>(0)
 
 const floors = computed(() => {
-  return floorStore.floors;
-});
+  return floorStore.floors
+})
 
 function changeFloorIndex(index: any) {
-  floorStore.changeSelectedFloorByIndex(index);
-  selectedFloorToggleIndex.value = index;
+  floorStore.changeSelectedFloorByIndex(index)
+  selectedFloorToggleIndex.value = index
 }
 </script>

@@ -58,7 +58,7 @@
                 <template v-slot:input>
                   <v-text-field
                     v-model="editedFloorName"
-                    :return-value.sync="editedFloorName"
+                    v-model:return-value="editedFloorName"
                     counter
                     label="Edit"
                     single-line
@@ -85,7 +85,7 @@
                 <template v-slot:input>
                   <v-text-field
                     v-model="editedFloorNumber"
-                    :return-value.sync="editedFloorNumber"
+                    v-model:return-value="editedFloorNumber"
                     label="Edit"
                     single-line
                     type="number"
@@ -125,14 +125,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { FloorDto } from "@/models/floors/floor.model";
-import { usePrinterStore } from "@/store/printer.store";
-import { useDialogsStore } from "@/store/dialog.store";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { useFloorStore } from "@/store/floor.store";
-import { useSnackbar } from "@/shared/snackbar.composable";
+import { defineComponent } from "vue"
+import { FloorDto } from "@/models/floors/floor.model"
+import { usePrinterStore } from "@/store/printer.store"
+import { useDialogsStore } from "@/store/dialog.store"
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants"
+import { PrinterDto } from "@/models/printers/printer.model"
+import { useFloorStore } from "@/store/floor.store"
+import { useSnackbar } from "@/shared/snackbar.composable"
 
 interface Data {
   editedFloorName: string;
@@ -148,7 +148,7 @@ export default defineComponent({
       floorStore: useFloorStore(),
       dialogsStore: useDialogsStore(),
       snackbar: useSnackbar(),
-    };
+    }
   },
   props: {},
   data: (): Data => ({
@@ -160,72 +160,72 @@ export default defineComponent({
   mounted() {},
   computed: {
     floors() {
-      return this.floorStore.floors;
+      return this.floorStore.floors
     },
     selectedFloor() {
-      return this.floorStore.floors[this.selectedItem];
+      return this.floorStore.floors[this.selectedItem]
     },
     showAddedPrinters() {
-      return this.selectedFloor.printers?.length + 1;
+      return this.selectedFloor.printers?.length + 1
     },
     unassignedPrinters() {
-      return this.floorStore.floorlessPrinters;
+      return this.floorStore.floorlessPrinters
     },
   },
   methods: {
     printerInFloor(floor: FloorDto, index: number): PrinterDto | undefined {
-      if (!floor?.printers) return;
+      if (!floor?.printers) return
 
-      const floorPrinter = floor.printers[index - 1];
-      if (!floorPrinter) return;
-      return this.printersStore.printer(floorPrinter.printerId);
+      const floorPrinter = floor.printers[index - 1]
+      if (!floorPrinter) return
+      return this.printersStore.printer(floorPrinter.printerId)
     },
     async createFloor() {
-      this.dialogsStore.openDialogWithContext(DialogName.AddOrUpdateFloorDialog);
+      this.dialogsStore.openDialogWithContext(DialogName.AddOrUpdateFloorDialog)
     },
     setEditedPrinterFloorName() {
-      this.editedFloorName = this.selectedFloor.name;
+      this.editedFloorName = this.selectedFloor.name
     },
     setEditedPrinterFloorNumber() {
-      this.editedFloorNumber = this.selectedFloor.floor;
+      this.editedFloorNumber = this.selectedFloor.floor
     },
     async updatePrinterFloorName() {
-      if (!this.selectedFloor?.id) return;
-      const { id: floorId } = this.selectedFloor;
+      if (!this.selectedFloor?.id) return
+      const { id: floorId } = this.selectedFloor
       await this.floorStore.updateFloorName({
         floorId,
         name: this.editedFloorName,
-      });
-      this.snackbar.info("Floor name updated");
+      })
+      this.snackbar.info("Floor name updated")
     },
     async updatePrinterFloorNumber() {
-      if (!this.selectedFloor?.id) return;
-      const { id: floorId } = this.selectedFloor;
+      if (!this.selectedFloor?.id) return
+      const { id: floorId } = this.selectedFloor
       await this.floorStore.updateFloorNumber({
         floorId,
         floorNumber: this.editedFloorNumber,
-      });
-      this.snackbar.info("Floor level updated");
+      })
+      this.snackbar.info("Floor level updated")
       // Adapt to potential sort change
-      this.selectedItem = -1;
+      this.selectedItem = -1
     },
     async clickDeleteFloor() {
-      if (!this.selectedFloor?.id) return;
+      if (!this.selectedFloor?.id) return
 
-      await this.floorStore.deleteFloor(this.selectedFloor.id);
-      this.snackbar.info("Floor deleted");
+      await this.floorStore.deleteFloor(this.selectedFloor.id)
+      this.snackbar.info("Floor deleted")
     },
     async deletePrinterFromFloor(floor: FloorDto, index: number) {
-      const printer = this.printerInFloor(floor, index);
-      if (!floor?.id || !printer?.id) return;
+      const printer = this.printerInFloor(floor, index)
+      if (!floor?.id || !printer?.id) return
 
       await this.floorStore.deletePrinterFromFloor({
         floorId: floor.id,
         printerId: printer.id,
-      });
-      this.snackbar.info("Printer removed from floor");
+      })
+      this.snackbar.info("Printer removed from floor")
     },
   },
   watch: {},
-});
+})
 </script>

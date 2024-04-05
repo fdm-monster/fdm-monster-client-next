@@ -1,23 +1,23 @@
-import VueRouter from "vue-router";
-import { RouteNames } from "./route-names";
+import VueRouter from "vue-router"
+import { RouteNames } from "./route-names"
 
 export async function routeToPath(router: VueRouter, name: string) {
-  return router.push({ name: name });
+  return router.push({ name: name })
 }
 
 export async function routeToLogin(router: VueRouter) {
   // Prevent redundant or circular routing
   if (router.currentRoute.path === "/login") {
-    console.log("routeToLogin: already at login page");
-    return;
+    console.log("routeToLogin: already at login page")
+    return
   }
-  return routeToPath(router, RouteNames.Login);
+  return routeToPath(router, RouteNames.Login)
 }
 
 export async function routeToHome(router: VueRouter) {
   // Prevent redundant or circular routing
   if (router.currentRoute.path === "/") {
-    return;
+    return
   }
-  return routeToPath(router, RouteNames.Home);
+  return routeToPath(router, RouteNames.Home)
 }

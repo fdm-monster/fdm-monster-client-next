@@ -91,11 +91,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import { ServerPrivateService } from "@/backend/server-private.service";
-import { BatchService } from "@/backend/batch.service";
-import { usePrinterStore } from "@/store/printer.store";
-import { useFeatureStore } from "@/store/features.store";
+import { computed, ref } from "vue"
+import { ServerPrivateService } from "@/backend/server-private.service"
+import { BatchService } from "@/backend/batch.service"
+import { usePrinterStore } from "@/store/printer.store"
+import { useFeatureStore } from "@/store/features.store"
 import {
   BarElement,
   CategoryScale,
@@ -106,13 +106,13 @@ import {
   LinearScale,
   Title,
   Tooltip,
-} from "chart.js";
-import { Bar } from "vue-chartjs";
-import { IdType } from "@/utils/id.type";
-import { OctoPrintSettingsDto } from "@/backend/dto/octoprint-settings.dto";
-import { sleep } from "@/utils/time.utils";
+} from "chart.js"
+import { Bar } from "vue-chartjs"
+import { IdType } from "@/utils/id.type"
+import { OctoPrintSettingsDto } from "@/backend/dto/octoprint-settings.dto"
+import { sleep } from "@/utils/time.utils"
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export type BatchOctoPrintSettingsDto = {
   success: boolean;
@@ -120,18 +120,18 @@ export type BatchOctoPrintSettingsDto = {
   time: number;
   value?: OctoPrintSettingsDto;
   error?: string;
-};
+}
 
-const printerStore = usePrinterStore();
-const featureStore = useFeatureStore();
+const printerStore = usePrinterStore()
+const featureStore = useFeatureStore()
 
-const namesFetched = ref(false);
-const fetchedNames = ref<string[]>([]);
+const namesFetched = ref(false)
+const fetchedNames = ref<string[]>([])
 
-const failedPrinters = ref<any[]>([]);
-const responseTimesAvg = ref(NaN);
-const responseTimesMax = ref(NaN);
-const responseTimesMin = ref(NaN);
+const failedPrinters = ref<any[]>([])
+const responseTimesAvg = ref(NaN)
+const responseTimesMax = ref(NaN)
+const responseTimesMin = ref(NaN)
 const chartConfig = ref<ChartData>({
   labels: [],
   datasets: [
@@ -142,7 +142,7 @@ const chartConfig = ref<ChartData>({
       backgroundColor: "#ffffff",
     },
   ],
-});
+})
 
 const chartOptions: ChartOptions = {
   color: "white",
@@ -154,32 +154,32 @@ const chartOptions: ChartOptions = {
     },
   },
   responsive: true,
-};
+}
 
 const hasConnectUsbFeature = computed(() => {
-  return featureStore.hasFeature("batchConnectUsbCalls");
-});
+  return featureStore.hasFeature("batchConnectUsbCalls")
+})
 const hasConnectSocketFeature = computed(() => {
-  return featureStore.hasFeature("batchConnectSocketCalls");
-});
+  return featureStore.hasFeature("batchConnectSocketCalls")
+})
 
 async function clickFetchNameState() {
-  const printerIds = printerStore.printers.map((p) => p.id);
+  const printerIds = printerStore.printers.map((p) => p.id)
   const printerSettingsBatch = (await BatchService.batchSettingsGet(
     printerIds
-  )) as BatchOctoPrintSettingsDto[];
-  const names = printerSettingsBatch.map((s) => s.value?.appearance?.name || "ERROR");
+  )) as BatchOctoPrintSettingsDto[]
+  const names = printerSettingsBatch.map((s) => s.value?.appearance?.name || "ERROR")
   failedPrinters.value = printerSettingsBatch
     .filter((nb) => !nb.success)
     .map((e) => ({
       message: e.error,
-    }));
+    }))
 
-  const times = printerSettingsBatch.map((n) => n.time);
-  const labels = printerSettingsBatch.map((n) => n.value?.appearance?.name);
-  responseTimesAvg.value = times.reduce((a: number, b: number) => a + b, 0) / times.length;
-  responseTimesMin.value = Math.min(...times);
-  responseTimesMax.value = Math.max(...times);
+  const times = printerSettingsBatch.map((n) => n.time)
+  const labels = printerSettingsBatch.map((n) => n.value?.appearance?.name)
+  responseTimesAvg.value = times.reduce((a: number, b: number) => a + b, 0) / times.length
+  responseTimesMin.value = Math.min(...times)
+  responseTimesMax.value = Math.max(...times)
   chartConfig.value = {
     labels,
     datasets: [
@@ -190,40 +190,40 @@ async function clickFetchNameState() {
         backgroundColor: "#ffffff",
       },
     ],
-  };
+  }
 
-  await sleep(500);
+  await sleep(500)
 
-  namesFetched.value = true;
-  fetchedNames.value = names;
+  namesFetched.value = true
+  fetchedNames.value = names
 }
 
 async function restartServer() {
-  await ServerPrivateService.restartServer();
+  await ServerPrivateService.restartServer()
 }
 
 async function batchToggleEnabled(enabled: boolean) {
   if (!confirm("Are you sure you want to toggle all printers?")) {
-    return;
+    return
   }
 
-  const printerIds = printerStore.printers.map((p) => p.id);
-  await BatchService.batchToggleEnabled(printerIds, enabled);
+  const printerIds = printerStore.printers.map((p) => p.id)
+  await BatchService.batchToggleEnabled(printerIds, enabled)
 }
 
 async function connectUSBs() {
   if (!confirm("Are you sure you want to connect all USBs?")) {
-    return;
+    return
   }
-  const printerIds = printerStore.printers.map((p) => p.id);
-  await BatchService.batchConnectUsb(printerIds);
+  const printerIds = printerStore.printers.map((p) => p.id)
+  await BatchService.batchConnectUsb(printerIds)
 }
 
 async function connectSockets() {
   if (!confirm("Are you sure you want to connect all sockets?")) {
-    return;
+    return
   }
-  const printerIds = printerStore.printers.map((p) => p.id);
-  await BatchService.batchConnectSocket(printerIds);
+  const printerIds = printerStore.printers.map((p) => p.id)
+  await BatchService.batchConnectSocket(printerIds)
 }
 </script>

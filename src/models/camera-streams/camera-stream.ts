@@ -1,5 +1,5 @@
-import { PrinterDto } from "@/models/printers/printer.model";
-import { IdType } from "@/utils/id.type";
+import { PrinterDto } from "@/models/printers/printer.model"
+import { IdType } from "@/utils/id.type"
 
 export interface CreateCameraStreamDto {
   streamURL: string;

@@ -22,8 +22,8 @@
       right
       transition="slide-y-transition"
     >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn class="ml-2" color="secondary" dark nuxt v-bind="attrs" v-on="on">
+      <template v-slot:activator="{ props }">
+        <v-btn class="ml-2" color="secondary" dark nuxt v-bind="props">
           <v-icon class="mr-2">person</v-icon>
           {{ username }}
         </v-btn>
@@ -54,7 +54,7 @@
       <v-icon class="mr-2">logout</v-icon>
       Logout
     </v-btn>
-    <v-btn icon @click="showHelp = true">
+    <v-btn @click="showHelp = true">
       <v-icon>help</v-icon>
     </v-btn>
     <v-dialog
@@ -87,56 +87,52 @@
 </template>
 
 <script lang="ts" setup>
-import PrintJobsMenu from "@/components/Generic/PrintJobsMenu.vue";
-import { useAuthStore } from "@/store/auth.store";
-import { computed, ref } from "vue";
-import { useProfileStore } from "@/store/profile.store";
-import { useRouter } from "vue-router";
-import { routeToLogin } from "@/router/utils";
-import { useIntervalFn } from "@vueuse/core";
-import { isDevEnv, isProdEnv } from "@/shared/app.constants";
-import { getSocketState, socketState } from "@/store/connection.store";
+import { computed, ref } from "vue"
+import { useRouter } from "vue-router"
+import { useIntervalFn } from "@vueuse/core"
+import PrintJobsMenu from "@/components/Generic/PrintJobsMenu.vue"
+import { useAuthStore } from "@/store/auth.store"
+import { useProfileStore } from "@/store/profile.store"
+import { routeToLogin } from "@/router/utils"
+import { isDevEnv, isProdEnv } from "@/shared/app.constants"
+import { socketState } from "@/store/connection.store"
 
-const profileStore = useProfileStore();
-const authStore = useAuthStore();
-const router = useRouter();
-const items = [{ title: "Open Profile", icon: "person", path: "/settings/account" }];
+const profileStore = useProfileStore()
+const authStore = useAuthStore()
+const router = useRouter()
+const items = [{ title: "Open Profile", icon: "person", path: "/settings/account" }]
 
-const showHelp = ref(false);
+const showHelp = ref(false)
 
-const now = ref(Date.now());
+const now = ref(Date.now())
 if (isDevEnv) {
   useIntervalFn(() => {
-    now.value = Date.now();
-  }, 1000);
+    now.value = Date.now()
+  }, 1000)
 }
 
 const expiry = computed(() => {
   if (isProdEnv) {
-    return "";
+    return ""
   }
   if (!authStore.tokenClaims?.exp) {
-    return "";
+    return ""
   }
-  const diffValue = authStore.tokenClaims.exp - now.value / 1000;
-  return `${Math.round(diffValue)}s`;
-});
-
-// const socketState = computed(() => {
-//   return getSocketState();
-// });
+  const diffValue = authStore.tokenClaims.exp - now.value / 1000
+  return `${Math.round(diffValue)}s`
+})
 
 const username = computed(() => {
-  return profileStore.username;
-});
+  return profileStore.username
+})
 
 const isDemoMode = computed(() => {
-  return authStore.isDemoMode;
-});
+  return authStore.isDemoMode
+})
 
 async function logout() {
-  await authStore.logout(true);
-  await routeToLogin(router);
+  await authStore.logout(true)
+  await routeToLogin(router)
 }
 </script>
 

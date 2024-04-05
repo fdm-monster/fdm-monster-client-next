@@ -1,6 +1,6 @@
-import { IdType } from "@/utils/id.type";
-import { OctoPrintStatisticsDto, Prints, Refs } from "@/models/printers/printer-file.model";
-import { GcodeAnalysisDto } from "@/models/printers/gcode/gcode-analysis.model";
+import { IdType } from "@/utils/id.type"
+import { OctoPrintStatisticsDto, Prints, Refs } from "@/models/printers/printer-file.model"
+import { GcodeAnalysisDto } from "@/models/printers/gcode/gcode-analysis.model"
 
 export interface ReprintFileDto {
   file?: CreateOrUpdatePrinterFileDto;
@@ -34,28 +34,28 @@ export type ConnectionState =
   | "Offline after error"
   | "Opening serial connection"
   | "Detecting serial connection"
-  | "Unknown State";
+  | "Unknown State"
 
 export class CreateOrUpdatePrinterFileDto {
-  id?: IdType;
-  printerId?: IdType;
+  id?: IdType
+  printerId?: IdType
 
-  name: string;
-  date: number;
-  display: string;
-  gcodeAnalysis?: GcodeAnalysisDto;
+  name: string
+  date: number
+  display: string
+  gcodeAnalysis?: GcodeAnalysisDto
 
-  hash: string;
-  origin: string;
-  path: string;
-  prints: Prints;
-  refs: Refs;
-  size: number;
-  statistics: OctoPrintStatisticsDto;
-  type: string;
-  typePath: string[]; // machinecode gcode
+  hash: string
+  origin: string
+  path: string
+  prints: Prints
+  refs: Refs
+  size: number
+  statistics: OctoPrintStatisticsDto
+  type: string
+  typePath: string[] // machinecode gcode
 
-  customData?: OctoPrintCustomDto;
+  customData?: OctoPrintCustomDto
 }
 
 export interface OctoPrintCustomDto {

@@ -1,1 +1,1 @@
-export type IdType = number | string;
+export type IdType = number | string

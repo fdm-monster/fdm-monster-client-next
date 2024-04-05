@@ -36,21 +36,21 @@
   </v-snackbar>
 </template>
 <script lang="ts" setup>
-import { ErrorMessage, useSnackbar } from "@/shared/snackbar.composable";
-import { onMounted, ref } from "vue";
+import { ErrorMessage, useSnackbar } from "@/shared/snackbar.composable"
+import { onMounted, ref } from "vue"
 
-const snackbar = useSnackbar();
-const snackbarTimeout = ref(-1);
-const snackbarOpened = ref(false);
-const snackbarTitle = ref("");
-const snackbarSubtitle = ref("");
+const snackbar = useSnackbar()
+const snackbarTimeout = ref(-1)
+const snackbarOpened = ref(false)
+const snackbarTitle = ref("")
+const snackbarSubtitle = ref("")
 
 onMounted(() => {
   snackbar.onErrorMessage((data: ErrorMessage) => {
-    snackbarTitle.value = data.title;
-    snackbarSubtitle.value = data.subtitle ?? "";
-    snackbarOpened.value = true;
-    snackbarTimeout.value = data.timeout ?? 10000;
-  });
-});
+    snackbarTitle.value = data.title
+    snackbarSubtitle.value = data.subtitle ?? ""
+    snackbarOpened.value = true
+    snackbarTimeout.value = data.timeout ?? 10000
+  })
+})
 </script>

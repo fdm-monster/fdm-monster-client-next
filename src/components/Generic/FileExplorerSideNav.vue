@@ -403,100 +403,100 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue";
-import { generateInitials } from "@/shared/noun-adjectives.data";
-import { PrinterFileService, PrintersService } from "@/backend";
-import { PrinterFileDto } from "@/models/printers/printer-file.model";
-import { formatBytes } from "@/utils/file-size.util";
-import { usePrinterStore } from "@/store/printer.store";
-import { DialogName } from "./Dialogs/dialog.constants";
-import { useDialogsStore } from "@/store/dialog.store";
-import { PrinterJobService } from "@/backend/printer-job.service";
-import { usePrinterStateStore } from "@/store/printer-state.store";
-import { interpretStates } from "@/shared/printer-state.constants";
-import { useSettingsStore } from "@/store/settings.store";
-import { useFeatureStore } from "@/store/features.store";
+import { computed, ref, watch } from "vue"
+import { generateInitials } from "@/shared/noun-adjectives.data"
+import { PrinterFileService, PrintersService } from "@/backend"
+import { PrinterFileDto } from "@/models/printers/printer-file.model"
+import { formatBytes } from "@/utils/file-size.util"
+import { usePrinterStore } from "@/store/printer.store"
+import { DialogName } from "./Dialogs/dialog.constants"
+import { useDialogsStore } from "@/store/dialog.store"
+import { PrinterJobService } from "@/backend/printer-job.service"
+import { usePrinterStateStore } from "@/store/printer-state.store"
+import { interpretStates } from "@/shared/printer-state.constants"
+import { useSettingsStore } from "@/store/settings.store"
+import { useFeatureStore } from "@/store/features.store"
 
-const printersStore = usePrinterStore();
-const printerStateStore = usePrinterStateStore();
-const dialogsStore = useDialogsStore();
-const featureStore = useFeatureStore();
+const printersStore = usePrinterStore()
+const printerStateStore = usePrinterStateStore()
+const dialogsStore = useDialogsStore()
+const featureStore = useFeatureStore()
 
-const fileSearch = ref<string | undefined>(undefined);
-const shownFileCache = ref<PrinterFileDto[] | undefined>(undefined);
-const drawerOpened = ref(false);
-const loading = ref(true);
+const fileSearch = ref<string | undefined>(undefined)
+const shownFileCache = ref<PrinterFileDto[] | undefined>(undefined)
+const drawerOpened = ref(false)
+const loading = ref(true)
 
-const storedSideNavPrinter = computed(() => printersStore.sideNavPrinter);
-const printerId = computed(() => storedSideNavPrinter.value?.id);
+const storedSideNavPrinter = computed(() => printersStore.sideNavPrinter)
+const printerId = computed(() => storedSideNavPrinter.value?.id)
 const isOnline = computed(() =>
   printerId.value ? printerStateStore.isApiResponding(printerId.value) : false
-);
+)
 const isOperational = computed(() =>
   printerId.value ? printerStateStore.isPrinterOperational(printerId.value) : false
-);
+)
 
 const isEnabled = computed(() => {
-  return storedSideNavPrinter.value?.enabled;
-});
+  return storedSideNavPrinter.value?.enabled
+})
 
 const isUnderMaintenance = computed(() => {
-  return !!storedSideNavPrinter.value?.disabledReason?.length;
-});
+  return !!storedSideNavPrinter.value?.disabledReason?.length
+})
 
 const isPrinting = computed(() => {
-  return printerId.value ? printerStateStore.isPrinterPrinting(printerId.value) : false;
-});
+  return printerId.value ? printerStateStore.isPrinterPrinting(printerId.value) : false
+})
 
 const filesListed = computed(() => {
-  if (!shownFileCache.value?.length) return [];
+  if (!shownFileCache.value?.length) return []
   return (
     shownFileCache.value.filter((f) =>
       fileSearch.value?.length
         ? `${f.name}${f.path}`.toLowerCase().includes(fileSearch.value)
         : true
     ) || []
-  );
-});
+  )
+})
 
 const isStoppable = computed(() => {
-  if (!storedSideNavPrinter.value || !printerId.value) return false;
-  return printerStateStore.isPrinterStoppable(printerId.value);
-});
+  if (!storedSideNavPrinter.value || !printerId.value) return false
+  return printerStateStore.isPrinterStoppable(printerId.value)
+})
 
 const isPaused = computed(() => {
-  if (!storedSideNavPrinter.value || !printerId.value) return false;
-  return printerStateStore.isPrinterPaused(printerId.value);
-});
+  if (!storedSideNavPrinter.value || !printerId.value) return false
+  return printerStateStore.isPrinterPaused(printerId.value)
+})
 const canBeCleared = computed(() => {
   if (!printerId.value) {
-    return false;
+    return false
   }
-  return shownFileCache.value?.length && printerStateStore.isApiResponding(printerId.value);
-});
+  return shownFileCache.value?.length && printerStateStore.isApiResponding(printerId.value)
+})
 
 const currentJob = computed(() => {
   if (!printerId.value) {
-    throw new Error("Printer ID not set, cannot get current job");
+    throw new Error("Printer ID not set, cannot get current job")
   }
-  return printerStateStore.printerJobsById[printerId.value];
-});
+  return printerStateStore.printerJobsById[printerId.value]
+})
 const currentPrintingFilePath = computed(() => {
   if (!printerId.value) {
-    throw new Error("Printer ID not set, cannot get current printing file name");
+    throw new Error("Printer ID not set, cannot get current printing file name")
   }
-  return printerStateStore.printingFilePathsByPrinterId[printerId.value];
-});
+  return printerStateStore.printingFilePathsByPrinterId[printerId.value]
+})
 
 const printerState = computed(() => {
-  if (!printerId.value || !storedSideNavPrinter.value) return null;
+  if (!printerId.value || !storedSideNavPrinter.value) return null
 
-  const printerEvents = printerStateStore.printerEventsById[printerId.value];
-  const socketState = printerStateStore.socketStatesById[printerId.value];
-  const states = interpretStates(storedSideNavPrinter.value, socketState, printerEvents);
+  const printerEvents = printerStateStore.printerEventsById[printerId.value]
+  const socketState = printerStateStore.socketStatesById[printerId.value]
+  const states = interpretStates(storedSideNavPrinter.value, socketState, printerEvents)
 
   const debugInterpretedState =
-    useSettingsStore().frontendDebugSettings?.showInterpretedPrinterState;
+    useSettingsStore().frontendDebugSettings?.showInterpretedPrinterState
   if (debugInterpretedState) {
     console.debug(
       "[FileExplorerSideNav] rendered for printerId",
@@ -504,164 +504,164 @@ const printerState = computed(() => {
       states?.text,
       states?.color,
       states?.rgb
-    );
+    )
   }
-  return states;
-});
+  return states
+})
 
 const refreshFiles = async () => {
-  loading.value = true;
-  const currentPrinterId = storedSideNavPrinter.value?.id;
-  if (!currentPrinterId) return;
+  loading.value = true
+  const currentPrinterId = storedSideNavPrinter.value?.id
+  if (!currentPrinterId) return
 
   if (printerStateStore.isApiResponding(currentPrinterId)) {
-    shownFileCache.value = await printersStore.loadPrinterFiles(currentPrinterId, false);
+    shownFileCache.value = await printersStore.loadPrinterFiles(currentPrinterId, false)
   } else {
-    shownFileCache.value = await PrinterFileService.getFileCache(currentPrinterId);
+    shownFileCache.value = await PrinterFileService.getFileCache(currentPrinterId)
   }
-  loading.value = false;
-};
+  loading.value = false
+}
 
 const deleteFile = async (file: PrinterFileDto) => {
-  if (!printerId.value) return;
-  await printersStore.deletePrinterFile(printerId.value, file.path);
-};
+  if (!printerId.value) return
+  await printersStore.deletePrinterFile(printerId.value, file.path)
+}
 
 // ... (continue with other methods)
 
 watch(storedSideNavPrinter, async (viewedPrinter, oldVal) => {
-  drawerOpened.value = !!viewedPrinter;
-  const currentPrinterId = viewedPrinter?.id;
+  drawerOpened.value = !!viewedPrinter
+  const currentPrinterId = viewedPrinter?.id
   if (!viewedPrinter || !currentPrinterId) {
-    return;
+    return
   }
 
   if (!shownFileCache.value || viewedPrinter.id !== oldVal?.id || !oldVal) {
-    await refreshFiles();
+    await refreshFiles()
   }
-});
+})
 
 watch(drawerOpened, (newVal) => {
   if (!newVal) {
-    printersStore.setSideNavPrinter(undefined);
+    printersStore.setSideNavPrinter(undefined)
   }
-});
+})
 
 function truncateProgress(progress?: number) {
-  if (!progress) return "";
-  return progress?.toFixed(1);
+  if (!progress) return ""
+  return progress?.toFixed(1)
 }
 
 function isFileBeingPrinted(file: PrinterFileDto) {
   if (!printerId.value) {
-    return false;
+    return false
   }
 
-  const jobFilePath = printerStateStore.printingFilePathsByPrinterId[printerId.value];
-  return jobFilePath === file.name;
+  const jobFilePath = printerStateStore.printingFilePathsByPrinterId[printerId.value]
+  return jobFilePath === file.name
 }
 
 function avatarInitials() {
-  const viewedPrinter = storedSideNavPrinter.value;
+  const viewedPrinter = storedSideNavPrinter.value
   if (viewedPrinter && drawerOpened.value) {
-    return generateInitials(viewedPrinter.name);
+    return generateInitials(viewedPrinter.name)
   }
 }
 
 function openPrinterURL() {
-  if (!storedSideNavPrinter.value) return;
-  PrintersService.openPrinterURL(storedSideNavPrinter.value.printerURL);
-  closeDrawer();
+  if (!storedSideNavPrinter.value) return
+  PrintersService.openPrinterURL(storedSideNavPrinter.value.printerURL)
+  closeDrawer()
 }
 
 async function togglePrinterConnection() {
-  if (!printerId.value) return;
+  if (!printerId.value) return
   if (printerStateStore.isPrinterOperational(printerId.value)) {
-    return await PrintersService.sendPrinterDisconnectCommand(printerId.value);
+    return await PrintersService.sendPrinterDisconnectCommand(printerId.value)
   }
-  await PrintersService.sendPrinterConnectCommand(printerId.value);
+  await PrintersService.sendPrinterConnectCommand(printerId.value)
 }
 
 async function toggleEnabled() {
   if (!printerId.value) {
-    throw new Error("Printer ID not set, cant toggle enabled");
+    throw new Error("Printer ID not set, cant toggle enabled")
   }
   if (!storedSideNavPrinter.value) {
-    throw new Error("Cant toggle enabled, sidenav printer unset");
+    throw new Error("Cant toggle enabled, sidenav printer unset")
   }
-  const newSetting = !storedSideNavPrinter.value.enabled;
-  await PrintersService.toggleEnabled(printerId.value, newSetting);
+  const newSetting = !storedSideNavPrinter.value.enabled
+  await PrintersService.toggleEnabled(printerId.value, newSetting)
 }
 
 async function toggleMaintenance() {
   if (!printerId.value) {
-    throw new Error("Printer ID not set, cant toggle maintenance");
+    throw new Error("Printer ID not set, cant toggle maintenance")
   }
   if (!storedSideNavPrinter.value) {
-    throw new Error("Cant toggle enabled, sidenav printer unset");
+    throw new Error("Cant toggle enabled, sidenav printer unset")
   }
   if (isUnderMaintenance.value) {
-    await PrintersService.updatePrinterMaintenance(printerId.value);
-    return;
+    await PrintersService.updatePrinterMaintenance(printerId.value)
+    return
   }
 
-  printersStore.setMaintenanceDialogPrinter(storedSideNavPrinter.value);
-  dialogsStore.openDialogWithContext(DialogName.PrinterMaintenanceDialog);
-  closeDrawer();
+  printersStore.setMaintenanceDialogPrinter(storedSideNavPrinter.value)
+  dialogsStore.openDialogWithContext(DialogName.PrinterMaintenanceDialog)
+  closeDrawer()
 }
 
 async function refreshSocketState() {
-  await PrintersService.refreshSocket(printerId.value);
+  await PrintersService.refreshSocket(printerId.value)
 }
 
 async function clickStopPrint() {
-  if (!printerId.value) return;
+  if (!printerId.value) return
 
   if (confirm("Are you sure to cancel the current print job?")) {
-    await PrinterJobService.stopPrintJob(printerId.value);
+    await PrinterJobService.stopPrintJob(printerId.value)
   }
 }
 
 async function clickPausePrint() {
-  if (!printerId.value) return;
+  if (!printerId.value) return
 
-  await PrinterJobService.pausePrintJob(printerId.value);
+  await PrinterJobService.pausePrintJob(printerId.value)
 }
 
 async function clickResumePrint() {
-  if (!printerId.value) return;
-  await PrinterJobService.resumePrintJob(printerId.value);
+  if (!printerId.value) return
+  await PrinterJobService.resumePrintJob(printerId.value)
 }
 
 async function clickClearFiles() {
-  if (!printerId.value) return;
-  loading.value = true;
-  await printersStore.clearPrinterFiles(printerId.value);
-  loading.value = false;
-  shownFileCache.value = printersStore.printerFiles(printerId.value);
+  if (!printerId.value) return
+  loading.value = true
+  await printersStore.clearPrinterFiles(printerId.value)
+  loading.value = false
+  shownFileCache.value = printersStore.printerFiles(printerId.value)
 }
 
 function clickSettings() {
-  if (!storedSideNavPrinter.value) return;
-  printersStore.setUpdateDialogPrinter(storedSideNavPrinter.value);
-  dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog);
-  closeDrawer();
+  if (!storedSideNavPrinter.value) return
+  printersStore.setUpdateDialogPrinter(storedSideNavPrinter.value)
+  dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog)
+  closeDrawer()
 }
 
 async function clickPrintFile(file: PrinterFileDto) {
-  if (!printerId.value) return;
+  if (!printerId.value) return
   await printerStateStore.selectAndPrintFile({
     printerId: printerId.value,
     fullPath: file.path,
-  });
+  })
 }
 
 function clickDownloadFile(file: PrinterFileDto) {
-  PrinterFileService.downloadFile(file);
+  PrinterFileService.downloadFile(file)
 }
 
 function closeDrawer() {
-  printersStore.setSideNavPrinter(undefined);
+  printersStore.setSideNavPrinter(undefined)
 }
 </script>
 

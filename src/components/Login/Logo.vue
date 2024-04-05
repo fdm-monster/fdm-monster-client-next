@@ -9,5 +9,5 @@
 </template>
 
 <script lang="ts" setup>
-import imgUrl from '@/assets/logo.png';
+import imgUrl from '@/assets/logo.png'
 </script>

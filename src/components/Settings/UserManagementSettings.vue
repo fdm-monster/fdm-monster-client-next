@@ -92,101 +92,101 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { UserService } from "@/backend/user.service";
-import { Role, User } from "@/models/user.model";
-import { formatIntlDate } from "@/utils/date.utils";
-import GridLoader from "@/components/Generic/Loaders/GridLoader.vue";
-import { useQuery } from "@tanstack/vue-query";
-import { useSnackbar } from "@/shared/snackbar.composable";
+import { ref } from "vue"
+import { UserService } from "@/backend/user.service"
+import { Role, User } from "@/models/user.model"
+import { formatIntlDate } from "@/utils/date.utils"
+import GridLoader from "@/components/Generic/Loaders/GridLoader.vue"
+import { useQuery } from "@tanstack/vue-query"
+import { useSnackbar } from "@/shared/snackbar.composable"
 
-const snackbar = useSnackbar();
-const loading = ref<boolean>(false);
-const profile = ref<User>();
-const users = ref<User[]>([]);
-const roles = ref<Role[]>([]);
+const snackbar = useSnackbar()
+const loading = ref<boolean>(false)
+const profile = ref<User>()
+const users = ref<User[]>([])
+const roles = ref<Role[]>([])
 
 async function loadData() {
-  loading.value = true;
+  loading.value = true
   try {
-    profile.value = await UserService.getProfile();
-    roles.value = await UserService.listRoles();
-    users.value = await UserService.listUsers();
+    profile.value = await UserService.getProfile()
+    roles.value = await UserService.listRoles()
+    users.value = await UserService.listUsers()
   } catch (e) {
-    loading.value = false;
-    console.error(e);
-    throw e;
+    loading.value = false
+    console.error(e)
+    throw e
   }
 
-  loading.value = false;
+  loading.value = false
 
   return {
     users,
     roles,
     profile,
-  };
+  }
 }
 
 const userQuery = useQuery({
   queryKey: ["userRolesProfile"],
   queryFn: loadData,
-});
+})
 
 function convertRoles(roleIds: (string | number)[]): (string | undefined)[] {
-  return roleIds.map((roleId) => roles.value.find((r) => r.id == roleId)?.name);
+  return roleIds.map((roleId) => roles.value.find((r) => r.id == roleId)?.name)
 }
 
 function isCurrentAccount(user: User): boolean {
-  return user.id == profile.value?.id;
+  return user.id == profile.value?.id
 }
 
 async function deleteUser(user: User) {
   if (!confirm(`Are you sure you want to delete ${user.username}?`)) {
-    return;
+    return
   }
 
   try {
-    loading.value = true;
-    await UserService.deleteUser(user.id);
-    await userQuery.refetch();
+    loading.value = true
+    await UserService.deleteUser(user.id)
+    await userQuery.refetch()
   } catch (e) {
-    loading.value = false;
-    console.error(e);
-    throw e;
+    loading.value = false
+    console.error(e)
+    throw e
   }
-  loading.value = false;
+  loading.value = false
 
-  snackbar.info(`User ${user.username} deleted`);
+  snackbar.info(`User ${user.username} deleted`)
 }
 
 async function verifyUser(user: User, isVerified: boolean = true) {
   if (user.isRootUser) {
-    snackbar.error("You are not allowed to do perform this action on an owner");
-    return;
+    snackbar.error("You are not allowed to do perform this action on an owner")
+    return
   }
   if (
     !confirm(`Are you sure you want to ${isVerified ? "verify" : "unverify"} ${user.username}?`)
   ) {
-    return;
+    return
   }
 
   try {
-    loading.value = true;
-    await UserService.setUserVerified(user.id, isVerified);
-    await userQuery.refetch();
+    loading.value = true
+    await UserService.setUserVerified(user.id, isVerified)
+    await userQuery.refetch()
   } catch (e) {
-    loading.value = false;
-    console.error(e);
-    throw e;
+    loading.value = false
+    console.error(e)
+    throw e
   }
-  loading.value = false;
+  loading.value = false
 
-  snackbar.info(isVerified ? `User ${user.username} verified` : `User ${user.username} unverified`);
+  snackbar.info(isVerified ? `User ${user.username} verified` : `User ${user.username} unverified`)
 }
 
 async function setRootUser(user: User, isRootUser: boolean = true) {
   if (!profile.value?.isRootUser) {
-    snackbar.error("You are not allowed to do perform this action as you're not an owner");
+    snackbar.error("You are not allowed to do perform this action as you're not an owner")
   }
 
   if (
@@ -196,22 +196,22 @@ async function setRootUser(user: User, isRootUser: boolean = true) {
       }. Are you sure?`
     )
   ) {
-    return;
+    return
   }
 
   try {
-    loading.value = true;
-    await UserService.setRootUser(user.id, isRootUser);
-    await userQuery.refetch();
+    loading.value = true
+    await UserService.setRootUser(user.id, isRootUser)
+    await userQuery.refetch()
   } catch (e) {
-    loading.value = false;
-    console.error(e);
-    throw e;
+    loading.value = false
+    console.error(e)
+    throw e
   }
-  loading.value = false;
+  loading.value = false
 
   snackbar.info(
     isRootUser ? `User ${user.username} set to owner` : `User ${user.username} is no longer owner`
-  );
+  )
 }
 </script>

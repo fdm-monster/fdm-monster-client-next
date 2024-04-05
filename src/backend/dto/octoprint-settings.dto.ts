@@ -165,4 +165,4 @@ export type OctoPrintSettingsDto = {
     watermark?: boolean;
     webcamEnabled?: boolean;
   };
-};
+}

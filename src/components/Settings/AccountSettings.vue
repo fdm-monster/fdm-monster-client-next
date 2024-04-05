@@ -91,70 +91,70 @@
 </template>
 
 <script lang="ts" setup>
-import { useProfileStore } from "@/store/profile.store";
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-import { UserService } from "@/backend/user.service";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { useAuthStore } from "@/store/auth.store";
-import { routeToLogin } from "@/router/utils";
-import { useSettingsStore } from "@/store/settings.store";
+import { useProfileStore } from "@/store/profile.store"
+import { onMounted, ref } from "vue"
+import { useRouter } from "vue-router"
+import { UserService } from "@/backend/user.service"
+import { useSnackbar } from "@/shared/snackbar.composable"
+import { useAuthStore } from "@/store/auth.store"
+import { routeToLogin } from "@/router/utils"
+import { useSettingsStore } from "@/store/settings.store"
 
-const settingsStore = useSettingsStore();
-const profileStore = useProfileStore();
-const authStore = useAuthStore();
-const router = useRouter();
-const snackbar = useSnackbar();
-const loginEnabled = ref<boolean>();
-const userId = ref<string>("");
+const settingsStore = useSettingsStore()
+const profileStore = useProfileStore()
+const authStore = useAuthStore()
+const router = useRouter()
+const snackbar = useSnackbar()
+const loginEnabled = ref<boolean>()
+const userId = ref<string>("")
 const formData = ref<{
   username: string;
   oldPassword: string;
   newPassword: string;
   repeatPassword: string;
-}>({ username: "", newPassword: "", oldPassword: "", repeatPassword: "" });
+}>({ username: "", newPassword: "", oldPassword: "", repeatPassword: "" })
 
 onMounted(async () => {
-  await settingsStore.loadSettings();
+  await settingsStore.loadSettings()
   if (!settingsStore.settings?.server.loginRequired) {
-    loginEnabled.value = settingsStore.settings?.server.loginRequired;
+    loginEnabled.value = settingsStore.settings?.server.loginRequired
   }
-  await profileStore.getProfile();
-  formData.value.username = profileStore.username as string;
-  userId.value = profileStore.userId as string;
-});
+  await profileStore.getProfile()
+  formData.value.username = profileStore.username as string
+  userId.value = profileStore.userId as string
+})
 
 async function changeUsername() {
   if (!userId.value?.length) {
-    snackbar.openErrorMessage({ title: "User not loaded" });
-    return;
+    snackbar.openErrorMessage({ title: "User not loaded" })
+    return
   }
-  await UserService.changeUsername(userId.value, formData.value.username);
+  await UserService.changeUsername(userId.value, formData.value.username)
 
-  await profileStore.getProfile();
-  formData.value.username = profileStore.username as string;
-  snackbar.openInfoMessage({ title: "Username changed" });
+  await profileStore.getProfile()
+  formData.value.username = profileStore.username as string
+  snackbar.openInfoMessage({ title: "Username changed" })
 }
 
 async function changePassword() {
   if (!userId.value?.length) {
-    snackbar.openErrorMessage({ title: "User not loaded" });
-    return;
+    snackbar.openErrorMessage({ title: "User not loaded" })
+    return
   }
   if (formData.value.newPassword !== formData.value.repeatPassword) {
-    snackbar.openErrorMessage({ title: "Passwords do not match" });
-    return;
+    snackbar.openErrorMessage({ title: "Passwords do not match" })
+    return
   }
   await UserService.changePassword(
     userId.value,
     formData.value.oldPassword,
     formData.value.newPassword
-  );
-  formData.value.oldPassword = "";
-  formData.value.newPassword = "";
-  formData.value.repeatPassword = "";
-  snackbar.openInfoMessage({ title: "Password changed" });
-  await authStore.logout(true);
-  await routeToLogin(router);
+  )
+  formData.value.oldPassword = ""
+  formData.value.newPassword = ""
+  formData.value.repeatPassword = ""
+  snackbar.openInfoMessage({ title: "Password changed" })
+  await authStore.logout(true)
+  await routeToLogin(router)
 }
 </script>
