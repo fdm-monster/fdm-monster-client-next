@@ -11,7 +11,7 @@
     "test:e2e": "start-server-and-test preview http://127.0.0.1:5050/ 'cypress open'"
   },
   "dependencies": {
-    "@mdi/font": "6.9.96",
+    "@mdi/font": "7.4.47",
     "core-js": "3.36.1",
     "roboto-fontface": "*",
     "vue": "3.4.21",
