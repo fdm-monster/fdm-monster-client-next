@@ -569,10 +569,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdi/font@npm:6.2.95":
-  version: 6.2.95
-  resolution: "@mdi/font@npm:6.2.95"
-  checksum: 10c0/2626d586a26f790ae26bd17a6ba81d2faa661f2bbbebb001969d317ab5b169fd24c3e9f2dedb6322830a608e6867b1a08a9841369edd7777a16234a69f64e2a7
+"@mdi/font@npm:6.9.96":
+  version: 6.9.96
+  resolution: "@mdi/font@npm:6.9.96"
+  checksum: 10c0/1cb6fc33e02cf0a8392ae2c527ae2708b5843faa5fe0fe7a8c6e2d43055c75a5699c917a2da65afb64052af3b3dc31098ef5cff63b9553ef915bc02ba435053b
   languageName: node
   linkType: hard
 
@@ -2996,7 +2996,7 @@ __metadata:
   resolution: "fdm-monster-client@workspace:."
   dependencies:
     "@babel/types": "npm:7.24.0"
-    "@mdi/font": "npm:6.2.95"
+    "@mdi/font": "npm:6.9.96"
     "@sentry/tracing": "npm:7.109.0"
     "@sentry/vite-plugin": "npm:2.16.1"
     "@sentry/vue": "npm:7.109.0"
