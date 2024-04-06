@@ -13,6 +13,7 @@ import {browserTracingIntegration, captureException, replayIntegration} from '@s
 import {registerFileDropDirective} from './directives/file-upload.directive'
 import {registerPrinterPlaceDirective} from './directives/printer-place.directive'
 import router from './router'
+import {generateAppConstants} from '@/shared/app.constants'
 
 // console.log(
 //   `[DEV: ${import.meta.env.DEV}][PROD: ${import.meta.env.PROD}]`,
@@ -42,7 +43,7 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
 })
 
-app.config.errorHandler = (err: unknown) => {
+app.config.errorHandler = (err: AxiosError | any) => {
   if (err instanceof AxiosError) {
     console.error(`An error was caught [${err.name}]:\n ${err.message}\n ${err.config?.url}\n${err.stack}`)
     useSnackbar().openErrorMessage({
@@ -60,6 +61,6 @@ app.config.errorHandler = (err: unknown) => {
 }
 
 registerPlugins(app)
-
+app.provide('appConstants', generateAppConstants())
 app.use(router)
 app.mount('#app')

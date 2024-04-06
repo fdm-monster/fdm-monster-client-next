@@ -12,9 +12,9 @@
     <v-list
       subheader
       lines="three">
-      <v-subheader>
+      <v-list-subheader>
         Floors
-      </v-subheader>
+      </v-list-subheader>
 
       <v-list-item>
         <v-list-item-title>
@@ -47,7 +47,7 @@
               <v-list-item-subtitle>
                 {{ floor.printers.length || 0 }} assigned
               </v-list-item-subtitle>
-              
+
               <v-list-item-action-text>
                 Floor number: {{ floor.floor }}
               </v-list-item-action-text>
@@ -151,14 +151,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { FloorDto } from '@/models/floors/floor.model'
-import { usePrinterStore } from '@/store/printer.store'
-import { useDialogsStore } from '@/store/dialog.store'
-import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { PrinterDto } from '@/models/printers/printer.model'
-import { useFloorStore } from '@/store/floor.store'
-import { useSnackbar } from '@/shared/snackbar.composable'
+import {defineComponent} from 'vue'
+import {FloorDto} from '@/models/floors/floor.model'
+import {usePrinterStore} from '@/store/printer.store'
+import {useDialogsStore} from '@/store/dialog.store'
+import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
+import {PrinterDto} from '@/models/printers/printer.model'
+import {useFloorStore} from '@/store/floor.store'
+import {useSnackbar} from '@/shared/snackbar.composable'
 
 interface Data {
   editedFloorName: string;
@@ -184,8 +184,12 @@ export default defineComponent({
     editedFloorNumber: 0,
   }),
 
-  created() {},
-  mounted() {},
+  created() {
+  },
+
+  mounted() {
+  },
+
   computed: {
     floors() {
       return this.floorStore.floors
@@ -227,7 +231,7 @@ export default defineComponent({
 
     async updatePrinterFloorName() {
       if (!this.selectedFloor?.id) return
-      const { id: floorId } = this.selectedFloor
+      const {id: floorId} = this.selectedFloor
       await this.floorStore.updateFloorName({
         floorId,
         name: this.editedFloorName,
@@ -237,7 +241,7 @@ export default defineComponent({
 
     async updatePrinterFloorNumber() {
       if (!this.selectedFloor?.id) return
-      const { id: floorId } = this.selectedFloor
+      const {id: floorId} = this.selectedFloor
       await this.floorStore.updateFloorNumber({
         floorId,
         floorNumber: this.editedFloorNumber,

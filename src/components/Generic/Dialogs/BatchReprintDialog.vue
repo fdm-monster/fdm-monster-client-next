@@ -22,10 +22,10 @@
         </span>
         <div v-else>
           <v-list density="compact">
-            <v-subheader>
+            <v-list-subheader>
               Reprinted Files - Select from list
-            </v-subheader>
-            <v-list-item-group
+            </v-list-subheader>
+            <v-list-group
               v-model="selectedItems"
               multiple>
               <v-list-item
@@ -36,7 +36,7 @@
                   item.connectionState !== 'Operational' ||
                     item.reprintState !== ReprintState.LastPrintReady
                 ">
-                <v-list-item-icon>
+                <template #prepend>
                   <v-icon v-if="item.reprintState == ReprintState.LastPrintReady">checklist</v-icon>
                   <v-icon v-if="item.reprintState == ReprintState.NoLastPrint">
                     question_mark
@@ -44,8 +44,8 @@
                   <v-icon v-if="item.reprintState == ReprintState.PrinterNotAvailable">
                     signal_disconnected
                   </v-icon>
-                </v-list-item-icon>
-                
+                </template>
+
                 <v-list-item-title v-if="item.file?.path?.length">
                   {{ item.file?.path }}
                   <v-chip v-if="item.connectionState !== 'Operational'">
@@ -62,7 +62,7 @@
                   Printer '{{ printerStore.printer(item.printerId)?.name ?? "Unknown printer" }}'
                 </v-list-item-subtitle>
               </v-list-item>
-            </v-list-item-group>
+            </v-list-group>
           </v-list>
         </div>
 
@@ -101,15 +101,15 @@
   </BaseDialog>
 </template>
 <script lang="ts" setup>
-import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { useDialog } from '@/shared/dialog.composable'
-import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { BatchService } from '@/backend/batch.service'
-import { IdType } from '@/utils/id.type'
-import { ReprintFileDto, ReprintState } from '@/models/batch/reprint.dto'
-import { usePrinterStore } from '@/store/printer.store'
-import { errorSummary } from '@/utils/error.utils'
-import { useSnackbar } from '@/shared/snackbar.composable'
+import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
+import {useDialog} from '@/shared/dialog.composable'
+import {onBeforeUnmount, onMounted, ref} from 'vue'
+import {BatchService} from '@/backend/batch.service'
+import {IdType} from '@/utils/id.type'
+import {ReprintFileDto, ReprintState} from '@/models/batch/reprint.dto'
+import {usePrinterStore} from '@/store/printer.store'
+import {errorSummary} from '@/utils/error.utils'
+import {useSnackbar} from '@/shared/snackbar.composable'
 
 const printerStore = usePrinterStore()
 const inputPrinterIds = ref()

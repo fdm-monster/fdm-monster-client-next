@@ -9,6 +9,7 @@ module.exports = {
     node: true,
   },
   extends: [
+    // "plugin:@typescript-eslint/recommended",
     'eslint:recommended',
     'plugin:vue/vue3-essential',
     '@vue/eslint-config-typescript',
@@ -68,6 +69,8 @@ module.exports = {
         }
       }],
     'vue/no-unused-vars': ['error', {}],
+    // Throws an error ast undefined
+    '@typescript-eslint/no-unused-vars': ['off'],
     'vue/no-ref-object-reactivity-loss': ['error'],
     // "vue/no-undef-components": ["error", {
     //   "ignorePatterns": []
@@ -76,7 +79,7 @@ module.exports = {
     'vue/valid-v-on': ['error', {
       'modifiers': []
     }],
-    'quotes':['error','single'],
-    '@typescript-eslint/indent': ['error',2]
+    'quotes': ['error', 'single'],
+    '@typescript-eslint/indent': ['error', 2]
   }
 }

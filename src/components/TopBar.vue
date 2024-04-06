@@ -1,8 +1,5 @@
 <template>
-  <v-app-bar
-    app
-    color="primary"
-    dark>
+  <v-app-bar color="primary">
     <v-toolbar-title class="text-uppercase text-white">
       <span class="font-weight-light">
         FDM
@@ -25,12 +22,8 @@
     <v-menu
       v-if="authStore.hasAuthToken && !authStore.isLoginExpired"
       :close-on-content-click="false"
-      :nudge-width="200"
       location="bottom right"
-      offset-x
-      offset-y
       open-on-hover
-
       transition="slide-y-transition">
       <template #activator="{ props }">
         <!--Theme?-->
@@ -49,14 +42,9 @@
           v-for="(item, index) in items"
           :key="index"
           :to="item.path"
-          link>
-          <v-list-item-title>
-            <v-list-item-avatar>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-avatar>
-            {{ item.title }}
-          </v-list-item-title>
-        </v-list-item>
+          :title="item.title"
+          :prepend-avatar="item.icon"
+          link />
       </v-list>
     </v-menu>
 
@@ -116,20 +104,20 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useIntervalFn } from '@vueuse/core'
+import {computed, ref} from 'vue'
+import {useRouter} from 'vue-router'
+import {useIntervalFn} from '@vueuse/core'
 import PrintJobsMenu from '@/components/Generic/PrintJobsMenu.vue'
-import { useAuthStore } from '@/store/auth.store'
-import { useProfileStore } from '@/store/profile.store'
-import { routeToLogin } from '@/router/utils'
-import { isDevEnv, isProdEnv } from '@/shared/app.constants'
-import { socketState } from '@/store/connection.store'
+import {useAuthStore} from '@/store/auth.store'
+import {useProfileStore} from '@/store/profile.store'
+import {routeToLogin} from '@/router/utils'
+import {isDevEnv, isProdEnv} from '@/shared/app.constants'
+import {socketState} from '@/store/connection.store'
 
 const profileStore = useProfileStore()
 const authStore = useAuthStore()
 const router = useRouter()
-const items = [{ title: 'Open Profile', icon: 'person', path: '/settings/account' }]
+const items = [{title: 'Open Profile', icon: 'person', path: '/settings/account'}]
 
 const showHelp = ref(false)
 

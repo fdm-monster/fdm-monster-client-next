@@ -133,9 +133,9 @@
             <v-list
               density="compact"
               style="border: 1px solid dimgray">
-              <v-subheader>
+              <v-list-subheader>
                 ADD TO GROUP
-              </v-subheader>
+              </v-list-subheader>
               <v-list-item-group>
                 <v-list-item
                   @click="addPrinterToGroup(group.id, item.id)"
@@ -245,8 +245,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import { PrintersService } from '@/backend/printers.service'
+import {computed, ref} from 'vue'
+import {PrintersService} from '@/backend/printers.service'
 import PrinterDetails from '@/components/PrinterList/PrinterDetails.vue'
 import PrinterUrlAction from '@/components/Generic/Actions/PrinterUrlAction.vue'
 import PrinterSettingsAction from '@/components/Generic/Actions/PrinterSettingsAction.vue'
@@ -254,20 +254,20 @@ import PrinterConnectionAction from '@/components/Generic/Actions/PrinterConnect
 import PrinterEmergencyStopAction from '@/components/Generic/Actions/PrinterEmergencyStopAction.vue'
 import SyncPrinterNameAction from '@/components/Generic/Actions/SyncPrinterNameAction.vue'
 
-import { usePrinterStore } from '@/store/printer.store'
-import { useDialogsStore } from '@/store/dialog.store'
-import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import {usePrinterStore} from '@/store/printer.store'
+import {useDialogsStore} from '@/store/dialog.store'
+import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
 import PrinterCreateAction from '@/components/Generic/Actions/PrinterCreateAction.vue'
 import PrinterDeleteAction from '@/components/Generic/Actions/PrinterDeleteAction.vue'
-import { useFloorStore } from '@/store/floor.store'
-import { usePrinterStateStore } from '@/store/printer-state.store'
-import { IdType } from '@/utils/id.type'
-import { PrinterDto } from '@/models/printers/printer.model'
-import { useFeatureStore } from '@/store/features.store'
-import { useQuery } from '@tanstack/vue-query'
-import { useSnackbar } from '@/shared/snackbar.composable'
-import { GroupWithPrintersDto, PrinterGroupService } from '@/backend/printer-group.service'
-import { AppService } from '@/backend/app.service'
+import {useFloorStore} from '@/store/floor.store'
+import {usePrinterStateStore} from '@/store/printer-state.store'
+import {IdType} from '@/utils/id.type'
+import {PrinterDto} from '@/models/printers/printer.model'
+import {useFeatureStore} from '@/store/features.store'
+import {useQuery} from '@tanstack/vue-query'
+import {useSnackbar} from '@/shared/snackbar.composable'
+import {GroupWithPrintersDto, PrinterGroupService} from '@/backend/printer-group.service'
+import {AppService} from '@/backend/app.service'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -286,15 +286,15 @@ const search = ref('')
 const expanded = ref([])
 const hasPrinterGroupFeature = computed(() => featureStore.hasFeature('printerGroupsApi'))
 const tableHeaders = computed(() => [
-  { text: 'Enabled', value: 'enabled' },
-  { text: 'Printer Name', align: 'start', sortable: true, value: 'name' },
-  { text: 'Floor', value: 'floor', sortable: false },
+  {text: 'Enabled', value: 'enabled'},
+  {text: 'Printer Name', align: 'start', sortable: true, value: 'name'},
+  {text: 'Floor', value: 'floor', sortable: false},
   ...(featureStore.hasFeature('printerGroupsApi')
-    ? [{ text: 'Group(s)', value: 'group', sortable: true }]
+    ? [{text: 'Group(s)', value: 'group', sortable: true}]
     : []),
-  { text: 'Actions', value: 'actions', sortable: false },
-  { text: 'Socket Update', value: 'socketupdate', sortable: false },
-  { text: '', value: 'data-table-expand' },
+  {text: 'Actions', value: 'actions', sortable: false},
+  {text: 'Socket Update', value: 'socketupdate', sortable: false},
+  {text: '', value: 'data-table-expand'},
 ])
 
 async function loadData() {

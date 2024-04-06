@@ -11,9 +11,9 @@
     <v-list
       subheader
       lines="three">
-      <v-subheader>
+      <v-list-subheader>
         Emergency Commands to rectify problematic situations
-      </v-subheader>
+      </v-list-subheader>
 
       <v-list-item>
         <v-list-item-title>
@@ -128,11 +128,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import { ServerPrivateService } from '@/backend/server-private.service'
-import { BatchService } from '@/backend/batch.service'
-import { usePrinterStore } from '@/store/printer.store'
-import { useFeatureStore } from '@/store/features.store'
+import {computed, ref} from 'vue'
+import {ServerPrivateService} from '@/backend/server-private.service'
+import {BatchService} from '@/backend/batch.service'
+import {usePrinterStore} from '@/store/printer.store'
+import {useFeatureStore} from '@/store/features.store'
 import {
   BarElement,
   CategoryScale,
@@ -144,10 +144,10 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
-import { Bar } from 'vue-chartjs'
-import { IdType } from '@/utils/id.type'
-import { OctoPrintSettingsDto } from '@/backend/dto/octoprint-settings.dto'
-import { sleep } from '@/utils/time.utils'
+import {Bar} from 'vue-chartjs'
+import {IdType} from '@/utils/id.type'
+import {OctoPrintSettingsDto} from '@/backend/dto/octoprint-settings.dto'
+import {sleep} from '@/utils/time.utils'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 

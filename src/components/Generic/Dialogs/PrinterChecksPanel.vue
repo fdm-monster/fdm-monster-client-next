@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 
-import {useTestPrinterStore} from '../../../store/test-printer.store'
+import {useTestPrinterStore} from '@/store/test-printer.store'
 
 const errorCol = 'error'
 const successCol = 'success'
@@ -29,7 +29,7 @@ function getEvents() {
     return {
       label: e.event,
       text: e.payload,
-      color: e.failure ? errorCol : successCol,
+      color: (e.failure ? errorCol : successCol) as 'success' | 'error' | 'warning' | 'info' | undefined,
     }
   })
 }

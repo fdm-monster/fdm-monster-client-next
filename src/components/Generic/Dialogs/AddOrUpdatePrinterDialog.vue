@@ -107,220 +107,143 @@
   </BaseDialog>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject } from 'vue'
-import { generateInitials, newRandomNamePair } from '@/shared/noun-adjectives.data'
-import { usePrinterStore } from '@/store/printer.store'
-import { PrintersService } from '@/backend'
-import PrinterChecksPanel from '@/components/Generic/Dialogs/PrinterChecksPanel.vue'
-import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { useTestPrinterStore } from '@/store/test-printer.store'
+<script lang="ts" setup>
+import {inject} from 'vue'
+import {generateInitials, newRandomNamePair} from '@/shared/noun-adjectives.data'
+import {usePrinterStore} from '@/store/printer.store'
+import {PrintersService} from '@/backend'
+import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
+import {useTestPrinterStore} from '@/store/test-printer.store'
 import {
   CreatePrinter,
   getDefaultCreatePrinter,
-  PreCreatePrinter,
 } from '@/models/printers/crud/create-printer.model'
-import { useDialog } from '@/shared/dialog.composable'
-import { AppConstants } from '@/shared/app.constants'
-import { useSnackbar } from '@/shared/snackbar.composable'
+import {useDialog} from '@/shared/dialog.composable'
+import {AppConstants} from '@/shared/app.constants'
+import {useSnackbar} from '@/shared/snackbar.composable'
 
-const watchedId = 'printerId'
+const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
+const printersStore = usePrinterStore()
+const testPrinterStore = useTestPrinterStore()
 
-interface Data {
-  showChecksPanel: boolean;
-  copyPasteConnectionString: string;
-  formData: PreCreatePrinter;
+const appConstants = inject('appConstants') as AppConstants
+const snackbar = useSnackbar()
+const showChecksPanel = ref(false)
+const copyPasteConnectionString = ref('')
+const formData = ref(getDefaultCreatePrinter())
+
+onMounted(async () => {
+  if (printerId.value) {
+    const crudeData = printersStore.printer(printerId.value) as CreatePrinter
+    formData.value = PrintersService.convertPrinterToCreateForm(crudeData)
+  }
+})
+
+const printerId = computed(() => {
+  return printersStore.updateDialogPrinter?.id
+})
+
+const storedPrinter = computed(() => {
+  return printersStore.updateDialogPrinter
+})
+
+const isUpdating = computed(() => {
+  return !!storedPrinter
+})
+
+const submitButtonText = computed(() => {
+  return isUpdating ? 'Save' : 'Create'
+})
+
+const avatarInitials = computed(() => {
+  if (formData) {
+    return generateInitials(formData.value?.name)
+  }
+  return '?'
+})
+
+const printerNameRules = computed(() => {
+  return {required: true, max: appConstants.maxPrinterNameLength}
+})
+
+const apiKeyRules = computed(() => {
+  return {
+    required: true,
+    length: appConstants.apiKeyLength,
+    alpha_num: true,
+  }
+})
+
+function resetForm() {
+  formData.value = getDefaultCreatePrinter()
 }
 
-export default defineComponent({
-  name: 'AddOrUpdatePrinterDialog',
-  components: {
-    PrinterChecksPanel,
-  },
+function openTestPanel() {
+  showChecksPanel.value = true
+}
 
-  setup: () => {
-    const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
-    return {
-      printersStore: usePrinterStore(),
-      testPrinterStore: useTestPrinterStore(),
-      dialog,
-      appConstants: inject('appConstants') as AppConstants,
-      snackbar: useSnackbar(),
-    }
-  },
+async function testPrinter() {
+  if (!formData) return
 
-  async created() {
-    if (this.printerId) {
-      const crudeData = this.printersStore.printer(this.printerId) as CreatePrinter
-      this.formData = PrintersService.convertPrinterToCreateForm(crudeData)
-    }
-  },
+  testPrinterStore.clearEvents()
+  openTestPanel()
 
-  async mounted() {},
-  props: {},
-  data: (): Data => ({
-    showChecksPanel: false,
-    copyPasteConnectionString: '',
-    formData: getDefaultCreatePrinter(),
-  }),
+  const {correlationToken} = await testPrinterStore.createTestPrinter(
+    formData.value as CreatePrinter
+  )
+  testPrinterStore.currentCorrelationToken = correlationToken
+}
 
-  computed: {
-    printerId() {
-      return this.printersStore.updateDialogPrinter?.id
-    },
+async function createPrinter(newPrinterData: CreatePrinter) {
+  await printersStore.createPrinter(newPrinterData)
+  snackbar.openInfoMessage({
+    title: `Printer ${newPrinterData.name} created`,
+  })
+}
 
-    storedPrinter() {
-      return this.printersStore.updateDialogPrinter
-    },
+async function updatePrinter(updatedPrinter: CreatePrinter) {
+  const printerId = updatedPrinter.id
 
-    isUpdating() {
-      return !!this.storedPrinter
-    },
+  await printersStore.updatePrinter({
+    printerId: printerId as string,
+    updatedPrinter,
+  })
 
-    submitButtonText() {
-      return this.isUpdating ? 'Save' : 'Create'
-    },
+  snackbar.openInfoMessage({
+    title: `Printer ${updatedPrinter.name} updated`,
+  })
+}
 
-    isPasteDisabled() {
-      if (!this.isClipboardApiAvailable) {
-        return !this.copyPasteConnectionString?.length
-      }
-      return false
-    },
+async function submit() {
+  // if (!(await isValid())) return
+  if (!formData) return
+  const createdPrinter = formData.value as CreatePrinter
+  if (isUpdating) {
+    await updatePrinter(createdPrinter)
+  } else {
+    await createPrinter(createdPrinter)
+  }
+  closeDialog()
+}
 
-    isClipboardApiAvailable() {
-      return navigator.clipboard
-    },
+async function duplicatePrinter() {
+  formData.value.name = newRandomNamePair()
+  printersStore.updateDialogPrinter = undefined
+}
 
-    avatarInitials() {
-      if (this.formData) {
-        return generateInitials(this.formData?.name)
-      }
-      return '?'
-    },
+function closeDialog() {
+  dialog.closeDialog()
+  showChecksPanel.value = false
+  testPrinterStore.clearEvents()
+  resetForm()
+  printersStore.updateDialogPrinter = undefined
+  copyPasteConnectionString.value = ''
+}
 
-    printerNameRules() {
-      return { required: true, max: this.appConstants.maxPrinterNameLength }
-    },
-
-    apiKeyRules() {
-      return {
-        required: true,
-        length: this.appConstants.apiKeyLength,
-        alpha_num: true,
-      }
-    },
-  },
-
-  methods: {
-    resetForm() {
-      this.formData = getDefaultCreatePrinter()
-    },
-
-    async quickCopyConnectionString() {
-      const printer = this.storedPrinter
-      if (!printer) return
-      const loginDetails = await PrintersService.getPrinterLoginDetails(printer.id)
-      const connectionString = `{"printerURL": "${loginDetails.printerURL}", "apiKey": "${loginDetails.apiKey}", "name": "${printer.name}"}`
-
-      if (!this.isClipboardApiAvailable) {
-        this.copyPasteConnectionString = connectionString
-        return
-      }
-
-      // Likely happens in Firefox
-      if (!navigator.clipboard) {
-        throw new Error(
-          `Clipboard API is not available. Secure context: ${window.isSecureContext}`
-        )
-      }
-      await navigator.clipboard.writeText(connectionString)
-    },
-
-    openTestPanel() {
-      this.showChecksPanel = true
-    },
-
-    async testPrinter() {
-      if (!this.formData) return
-
-      this.testPrinterStore.clearEvents()
-      this.openTestPanel()
-
-      const { correlationToken } = await this.testPrinterStore.createTestPrinter(
-        this.formData as CreatePrinter
-      )
-      this.testPrinterStore.currentCorrelationToken = correlationToken
-    },
-
-    async pasteFromClipboardOrField() {
-      if (!this.formData) return
-
-      if (!this.isClipboardApiAvailable && !this.copyPasteConnectionString?.length) {
-        return
-      }
-
-      const jsonData = this.isClipboardApiAvailable
-        ? await navigator.clipboard.readText()
-        : this.copyPasteConnectionString
-      const printerObject = JSON.parse(jsonData)
-
-      PrintersService.applyLoginDetailsPatchForm(printerObject, this.formData)
-    },
-
-    async createPrinter(newPrinterData: CreatePrinter) {
-      await this.printersStore.createPrinter(newPrinterData)
-      this.snackbar.openInfoMessage({
-        title: `Printer ${newPrinterData.name} created`,
-      })
-    },
-
-    async updatePrinter(updatedPrinter: CreatePrinter) {
-      const printerId = updatedPrinter.id
-
-      await this.printersStore.updatePrinter({
-        printerId: printerId as string,
-        updatedPrinter,
-      })
-
-      this.snackbar.openInfoMessage({
-        title: `Printer ${updatedPrinter.name} updated`,
-      })
-    },
-
-    async submit() {
-      if (!(await this.isValid())) return
-      if (!this.formData) return
-      const createPrinter = this.formData as CreatePrinter
-      if (this.isUpdating) {
-        await this.updatePrinter(createPrinter)
-      } else {
-        await this.createPrinter(createPrinter)
-      }
-      this.closeDialog()
-    },
-
-    async duplicatePrinter() {
-      this.formData.name = newRandomNamePair()
-      this.printersStore.updateDialogPrinter = undefined
-    },
-
-    closeDialog() {
-      this.dialog.closeDialog()
-      this.showChecksPanel = false
-      this.testPrinterStore.clearEvents()
-      this.resetForm()
-      this.printersStore.updateDialogPrinter = undefined
-      this.copyPasteConnectionString = ''
-    },
-  },
-
-  watch: {
-    [watchedId](val?: string) {
-      if (!val) return
-      const printer = this.printersStore.printer(val) as CreatePrinter
-      this.formData = PrintersService.convertPrinterToCreateForm(printer)
-    },
-  },
-})
+watch(printerId,
+  (val) => {
+    if (!val) return
+    const printer = printersStore.printer(val) as CreatePrinter
+    formData.value = PrintersService.convertPrinterToCreateForm(printer)
+  })
 </script>

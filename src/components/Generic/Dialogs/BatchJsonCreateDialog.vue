@@ -3,183 +3,116 @@
     :id="dialog.dialogId"
     max-width="700px"
     @escape="closeDialog()">
-    <validation-observer
-      ref="validationObserver"
-      v-slot="{ invalid }">
-      <v-card class="pa-4">
-        <v-card-title>
-          <span class="text-h5">
-            Batch Import JSON printers
-          </span>
-        </v-card-title>
-        <v-card-text>
-          <v-row>
-            <v-col cols="12">
-              <validation-provider
-                v-slot="{ errors }"
-                name="JSON"
-                rules="required|json">
-                <v-textarea
-                  v-model="formData.json"
-                  :error-messages="errors"
-                  data-vv-validate-on="change|blur"
-                  rows="10"
-                  @change="updatePrinterCount()">
-                  <template #label>
-                    <div>
-                      JSON import <small>
-                        (optional)
-                      </small>
-                    </div>
-                  </template>
-                </v-textarea>
-              </validation-provider>
-              {{ numPrinters }} printers found
-            </v-col>
-          </v-row>
-          <v-btn class="mt-2">
-            Validate printers
-          </v-btn>
-        </v-card-text>
-        <v-card-actions>
-          <em class="text-red">
-            * indicates required field
-          </em>
-          <v-spacer />
-          <v-btn
-            variant="text"
-            @click="closeDialog()">
-            Close
-          </v-btn>
-          <v-btn
-            :disabled="invalid"
-            color="blue-darken-1"
-            variant="text"
-            @click="submit()">
-            Create
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </validation-observer>
+    <v-card class="pa-4">
+      <v-card-title>
+        <span class="text-h5">
+          Batch Import JSON printers
+        </span>
+      </v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="12">
+            v-slot="{ errors }"
+            name="JSON"
+            rules="required|json">
+            <v-textarea
+              v-model="formData.json"
+              data-vv-validate-on="change|blur"
+              rows="10"
+              @change="updatePrinterCount()">
+              <template #label>
+                <div>
+                  JSON import <small>
+                    (optional)
+                  </small>
+                </div>
+              </template>
+            </v-textarea>
+            {{ numPrinters }} printers found
+          </v-col>
+        </v-row>
+        <v-btn class="mt-2">
+          Validate printers
+        </v-btn>
+      </v-card-text>
+      <v-card-actions>
+        <em class="text-red">
+          * indicates required field
+        </em>
+        <v-spacer />
+        <v-btn
+          variant="text"
+          @click="closeDialog()">
+          Close
+        </v-btn>
+        <v-btn
+          color="blue-darken-1"
+          variant="text"
+          @click="submit()">
+          Create
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </BaseDialog>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { PrintersService } from '@/backend'
-import { usePrinterStore } from '@/store/printer.store'
-import { useDialogsStore } from '@/store/dialog.store'
-import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { useDialog } from '@/shared/dialog.composable'
+<script lang="ts" setup>
+import {PrintersService} from '@/backend'
+import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
+import {useDialog} from '@/shared/dialog.composable'
 
-// setInteractionMode("eager");
-// extend("json", {
-//   validate: (value) => {
-//     try {
-//       JSON.parse(value);
-//       return true;
-//     } catch (e) {
-//       console.error("Error parsing JSON for validation", e);
-//       return false;
-//     }
-//   },
-//   message: "{_field_} needs to be valid JSON.",
-// });
+const dialog = useDialog(DialogName.BatchJsonCreate)
 
-interface Data {
-  formData: {
-    json: string;
-  };
-  numPrinters: number;
+const formData = {
+  json: ''
 }
 
-export default defineComponent({
-  name: 'BatchJsonCreateDialog',
-  setup: () => {
-    const dialog = useDialog(DialogName.BatchJsonCreate)
-    return {
-      printersStore: usePrinterStore(),
-      dialogsStore: useDialogsStore(),
-      dialog,
-    }
-  },
+let numPrinters = 0
 
-  async created() {
-    this.numPrinters = 0
-  },
+const parsedPrinters = async () => {
+  const data = JSON.parse(formData.json)
+  if (!Array.isArray(data)) return []
+  return data
+}
 
-  async mounted() {},
-  props: {},
-  data: (): Data => ({
-    formData: {
-      json: '',
-    },
+const updatePrinterCount = async () => {
+  numPrinters = (await parsedPrinters()).length
+}
 
-    numPrinters: 0,
-  }),
+const submit = async () => {
+  const printers = await parsedPrinters()
 
-  // computed: {
-  //   validationObserver() {
-  //     return this.$refs.validationObserver as InstanceType<typeof ValidationObserver>;
-  //   },
-  // },
-  methods: {
-    async isValid() {
-      return await this.validationObserver.validate()
-    },
-
-    async parsedPrinters() {
-      if (!this.$refs.validationObserver) return []
-      if (!(await this.isValid())) return []
-
-      const data = JSON.parse(this.formData.json)
-      if (!Array.isArray(data)) return []
-
-      return data
-    },
-
-    async updatePrinterCount() {
-      this.numPrinters = (await this.parsedPrinters()).length
-    },
-
-    async submit() {
-      if (!(await this.isValid())) return
-      const printers = await this.parsedPrinters()
-
-      const numPrinters = printers.length
-      const answer = confirm(`Are you sure to import ${numPrinters} printers?`)
-      if (answer) {
-        printers.forEach((p) => {
-          if (p['_id']) {
-            delete p['_id']
-          }
-          if (p['apikey']) {
-            p.apiKey = p['apikey']
-            delete p['apikey']
-          }
-          if (p['settingsApperance']) {
-            p.settingsAppearance = p['settingsApperance']
-            delete p['settingsApperance']
-          }
-          if (p['name']) {
-            if (!p.settingsAppearance) {
-              p.settingsAppearance = {}
-            }
-            p.settingsAppearance.name = p['name']
-            delete p['name']
-          }
-        })
-        await PrintersService.batchImportPrinters(printers)
+  const numPrinters = printers.length
+  const answer = confirm(`Are you sure to import ${numPrinters} printers?`)
+  if (answer) {
+    printers.forEach((p) => {
+      if (p['_id']) {
+        delete p['_id']
       }
+      if (p['apikey']) {
+        p.apiKey = p['apikey']
+        delete p['apikey']
+      }
+      if (p['settingsApperance']) {
+        p.settingsAppearance = p['settingsApperance']
+        delete p['settingsApperance']
+      }
+      if (p['name']) {
+        if (!p.settingsAppearance) {
+          p.settingsAppearance = {}
+        }
+        p.settingsAppearance.name = p['name']
+        delete p['name']
+      }
+    })
+    await PrintersService.batchImportPrinters(printers)
+  }
 
-      this.closeDialog()
-    },
+  closeDialog()
+}
 
-    closeDialog() {
-      this.dialog.closeDialog()
-    },
-  },
+const closeDialog = () => {
+  dialog.closeDialog()
+}
 
-  watch: {},
-})
 </script>

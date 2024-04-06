@@ -3,93 +3,75 @@
     :id="dialog.dialogId"
     :max-width="'700px'"
     @escape="closeDialog()">
-    <validation-observer
-      ref="validationObserver"
-      v-slot="{ invalid }">
-      <v-card>
-        <v-card-title>
-          <span class="text-h5">
-            <v-avatar
-              color="primary"
-              size="56">
-              {{ avatarInitials }}
-            </v-avatar>
-            New Floor
-          </span>
-        </v-card-title>
-        <v-card-text>
-          <v-row>
-            <v-col :cols="12">
-              <v-container>
-                <v-row>
-                  <v-col
-                    v-if="formData"
-                    cols="12"
-                    md="6">
-                    <validation-provider
-                      v-slot="{ errors }"
-                      :rules="printerFloorNameRules"
-                      name="Name">
-                      <v-text-field
-                        v-model="formData.name"
-                        :error-messages="errors"
-                        autofocus
-                        label="Floor name*"
-                        required />
-                    </validation-provider>
-
-                    <validation-provider
-                      v-slot="{ errors }"
-                      :rules="floorNumberRules"
-                      name="FloorNumber">
-                      <v-text-field
-                        v-model="formData.floor"
-                        :error-messages="errors"
-                        label="Floor number"
-                        required
-                        type="number" />
-                    </validation-provider>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <em class="text-red">
-            * indicates required field
-          </em>
-          <v-spacer />
-          <v-btn
-            variant="text"
-            @click="dialog.closeDialog()">
-            Close
-          </v-btn>
-          <v-btn
-            :disabled="invalid"
-            color="blue-darken-1"
-            variant="text"
-            @click="submit()">
-            Create
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </validation-observer>
+    <v-card>
+      <v-card-title>
+        <span class="text-h5">
+          <v-avatar
+            color="primary"
+            size="56">
+            {{ avatarInitials }}
+          </v-avatar>
+          New Floor
+        </span>
+      </v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col :cols="12">
+            <v-container>
+              <v-row>
+                <v-col
+                  v-if="formData"
+                  cols="12"
+                  md="6">
+                  <v-text-field
+                    v-model="formData.name"
+                    autofocus
+                    label="Floor name*"
+                    required />
+                  <v-text-field
+                    v-model="formData.floor"
+                    label="Floor number"
+                    required
+                    type="number" />
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <em class="text-red">
+          * indicates required field
+        </em>
+        <v-spacer />
+        <v-btn
+          variant="text"
+          @click="dialog.closeDialog()">
+          Close
+        </v-btn>
+        <v-btn
+          color="blue-darken-1"
+          variant="text"
+          @click="submit()">
+          Create
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </BaseDialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue'
-import { generateInitials, newRandomNamePair } from '../../../shared/noun-adjectives.data'
-import { usePrinterStore } from '../../../store/printer.store'
-import { FloorService } from '../../../backend/floor.service'
-import { useDialogsStore } from '@/store/dialog.store'
-import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { useFloorStore } from '../../../store/floor.store'
-import { useDialog } from '../../../shared/dialog.composable'
-import { AppConstants } from '../../../shared/app.constants'
-import { getDefaultCreateFloor, PreCreateFloor } from '../../../models/floors/floor.model'
-import { useSnackbar } from '../../../shared/snackbar.composable'
+import {defineComponent, inject} from 'vue'
+import {generateInitials, newRandomNamePair} from '@/shared/noun-adjectives.data'
+import {usePrinterStore} from '@/store/printer.store'
+import {FloorService} from '@/backend/floor.service'
+import {useDialogsStore} from '@/store/dialog.store'
+import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
+import {useFloorStore} from '@/store/floor.store'
+import {useDialog} from '@/shared/dialog.composable'
+import {AppConstants} from '@/shared/app.constants'
+import {getDefaultCreateFloor, PreCreateFloor} from '@/models/floors/floor.model'
+import {useSnackbar} from '@/shared/snackbar.composable'
 
 const watchedId = 'printerFloorId'
 
@@ -121,7 +103,9 @@ export default defineComponent({
     }
   },
 
-  async mounted() {},
+  async mounted() {
+  },
+
   props: {},
   data: (): Data => ({
     formData: getDefaultCreateFloor(),
@@ -133,7 +117,7 @@ export default defineComponent({
     },
 
     printerFloorNameRules() {
-      return { required: true, min: this.appConstants.minPrinterFloorNameLength }
+      return {required: true, min: this.appConstants.minPrinterFloorNameLength}
     },
 
     floorNumberRules() {
@@ -153,10 +137,6 @@ export default defineComponent({
   },
 
   methods: {
-    async isValid() {
-      return await this.validationObserver.validate()
-    },
-
     async submit() {
       if (!(await this.isValid())) return
       const formData = this.formData

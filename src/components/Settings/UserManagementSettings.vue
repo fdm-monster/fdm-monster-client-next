@@ -16,9 +16,9 @@
     <v-list
       subheader
       lines="three">
-      <v-subheader>
+      <v-list-subheader>
         Showing all users
-      </v-subheader>
+      </v-list-subheader>
 
       <v-list-item
         v-for="(user, index) in users"
@@ -122,13 +122,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { UserService } from '@/backend/user.service'
-import { Role, User } from '@/models/user.model'
-import { formatIntlDate } from '@/utils/date.utils'
+import {ref} from 'vue'
+import {UserService} from '@/backend/user.service'
+import {Role, User} from '@/models/user.model'
+import {formatIntlDate} from '@/utils/date.utils'
 import GridLoader from '@/components/Generic/Loaders/GridLoader.vue'
-import { useQuery } from '@tanstack/vue-query'
-import { useSnackbar } from '@/shared/snackbar.composable'
+import {useQuery} from '@tanstack/vue-query'
+import {useSnackbar} from '@/shared/snackbar.composable'
 
 const snackbar = useSnackbar()
 const loading = ref<boolean>(false)

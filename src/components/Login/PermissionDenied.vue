@@ -3,9 +3,7 @@
     fill-height
     fluid>
     <v-app-bar
-      app
-      color="primary"
-      dark>
+      color="primary">
       <v-toolbar-title class="text-uppercase text-white">
         <span class="font-weight-light">
           FDM
@@ -91,8 +89,8 @@
   </v-container>
 </template>
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import {computed} from 'vue'
+import {useRoute} from 'vue-router'
 
 const route = useRoute()
 

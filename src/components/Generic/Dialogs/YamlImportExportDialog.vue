@@ -92,14 +92,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { usePrinterStore } from '@/store/printer.store'
-import { useDialogsStore } from '@/store/dialog.store'
-import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { ServerPrivateService } from '@/backend/server-private.service'
-import { useDialog } from '@/shared/dialog.composable'
-import { useSnackbar } from '@/shared/snackbar.composable'
-import { useFeatureStore } from '@/store/features.store'
+import {defineComponent} from 'vue'
+import {usePrinterStore} from '@/store/printer.store'
+import {useDialogsStore} from '@/store/dialog.store'
+import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
+import {ServerPrivateService} from '@/backend/server-private.service'
+import {useDialog} from '@/shared/dialog.composable'
+import {useSnackbar} from '@/shared/snackbar.composable'
+import {useFeatureStore} from '@/store/features.store'
 
 interface Data {
   selectedMode: number;
@@ -113,7 +113,6 @@ interface Data {
 
 export default defineComponent({
   name: 'YamlImportExportDialog',
-  components: {},
   setup: () => {
     const dialog = useDialog(DialogName.YamlImportExport)
     return {
@@ -130,8 +129,6 @@ export default defineComponent({
     this.exportGroups = this.featureStore.hasFeature('printerGroupsApi')
   },
 
-  async mounted() {},
-  props: {},
   data: (): Data => ({
     selectedMode: 0,
     exportFloors: true,
@@ -192,8 +189,6 @@ export default defineComponent({
     closeDialog() {
       this.dialog.closeDialog()
     },
-  },
-
-  watch: {},
+  }
 })
 </script>

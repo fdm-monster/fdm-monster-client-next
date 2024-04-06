@@ -12,9 +12,9 @@
     <v-list
       subheader
       lines="three">
-      <v-subheader>
+      <v-list-subheader>
         Grid Rows and Columns
-      </v-subheader>
+      </v-list-subheader>
       <v-list-item>
         <v-row v-if="settingsStore.settings?.frontend">
           <v-col cols="2">
@@ -45,9 +45,9 @@
     <v-list
       subheader
       lines="three">
-      <v-subheader>
+      <v-list-subheader>
         Large or Compact Tiles
-      </v-subheader>
+      </v-list-subheader>
       <v-list-item>
         <v-row v-if="settingsStore.settings?.frontend">
           <v-col cols="5">
@@ -68,10 +68,10 @@
   </v-card>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { useSettingsStore } from '../../store/settings.store'
-import { colOptions, rowOptions } from '../../shared/printer-grid.constants'
-import { useSnackbar } from '@/shared/snackbar.composable'
+import {defineComponent} from 'vue'
+import {useSettingsStore} from '../../store/settings.store'
+import {colOptions, rowOptions} from '../../shared/printer-grid.constants'
+import {useSnackbar} from '@/shared/snackbar.composable'
 
 interface Data {
   property: number;
@@ -87,8 +87,12 @@ export default defineComponent({
     }
   },
 
-  async created() {},
-  async mounted() {},
+  async created() {
+  },
+
+  async mounted() {
+  },
+
   props: {},
   data: (): Data => ({
     property: 0,

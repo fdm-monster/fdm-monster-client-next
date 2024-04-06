@@ -11,9 +11,9 @@
     <v-list
       subheader
       lines="three">
-      <v-subheader>
+      <v-list-subheader>
         Diagnostics to provide bug reports to the developers of this software
-      </v-subheader>
+      </v-list-subheader>
 
       <v-list-item v-if="hasAnonymousDiagnosticsToggleFeature">
         <v-list-item-title>
@@ -76,14 +76,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-import { AppService } from '@/backend/app.service'
-import { useSettingsStore } from '@/store/settings.store'
-import { SettingsService } from '@/backend'
-import { setSentryEnabled } from '@/utils/sentry.util'
-import { ServerPrivateService } from '@/backend/server-private.service'
-import { useSnackbar } from '@/shared/snackbar.composable'
-import { captureException } from '@sentry/vue'
+import {onMounted, ref} from 'vue'
+import {AppService} from '@/backend/app.service'
+import {useSettingsStore} from '@/store/settings.store'
+import {SettingsService} from '@/backend'
+import {setSentryEnabled} from '@/utils/sentry.util'
+import {ServerPrivateService} from '@/backend/server-private.service'
+import {useSnackbar} from '@/shared/snackbar.composable'
+import {captureException} from '@sentry/vue'
 
 const snackBar = useSnackbar()
 const settingsStore = useSettingsStore()

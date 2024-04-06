@@ -3,81 +3,70 @@
     :id="dialog.dialogId"
     :max-width="'700px'"
     @escape="closeDialog()">
-    <ValidationObserver
-      ref="validationObserver"
-      v-slot="{ invalid }">
-      <v-card class="pa-4">
-        <v-card-title>
-          <span class="text-h5">
-            Mark '{{ printer?.name }}' for maintenance
-          </span>
-        </v-card-title>
-        <v-alert color="secondary">
-          Keep this info clear and stick to convention
-        </v-alert>
-        <v-card-text>
-          <v-row>
-            <v-col cols="12">
-              <v-select
-                v-model="selectedQuickItems"
-                :chips="true"
-                :items="quickItems"
-                :menu-props="{
-                  closeOnClick: true,
-                  closeOnContentClick: true,
-                }"
-                clearable
-                color="primary"
-                multiple
-                placeholder="Quick select reason"
-                @update:model-value="updateText()" />
-              <validation-provider
-                v-slot="{ errors }"
-                name="JSON"
-                rules="required">
-                <v-textarea
-                  v-model="formData.disabledReason"
-                  :error-messages="errors"
-                  data-vv-validate-on="change|blur">
-                  <template #label>
-                    <div>
-                      Type the reason*
-                    </div>
-                  </template>
-                </v-textarea>
-              </validation-provider>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <em class="text-red">
-            * indicates required field
-          </em>
-          <v-spacer />
-          <v-btn
-            variant="text"
-            @click="closeDialog()">
-            Close
-          </v-btn>
-          <v-btn
-            :disabled="invalid"
-            color="blue-darken-1"
-            variant="text"
-            @click="submit()">
-            Save
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </ValidationObserver>
+    <v-card class="pa-4">
+      <v-card-title>
+        <span class="text-h5">
+          Mark '{{ printer?.name }}' for maintenance
+        </span>
+      </v-card-title>
+      <v-alert color="secondary">
+        Keep this info clear and stick to convention
+      </v-alert>
+      <v-card-text>
+        <v-row>
+          <v-col cols="12">
+            <v-select
+              v-model="selectedQuickItems"
+              :chips="true"
+              :items="quickItems"
+              :menu-props="{
+                closeOnBack: true,
+                closeOnContentClick: true,
+              }"
+              clearable
+              color="primary"
+              multiple
+              placeholder="Quick select reason"
+              @update:model-value="updateText()" />
+            <v-textarea
+              v-model="formData.disabledReason"
+              data-vv-validate-on="change|blur">
+              <template #label>
+                <div>
+                  Type the reason*
+                </div>
+              </template>
+            </v-textarea>
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <em class="text-red">
+          * indicates required field
+        </em>
+        <v-spacer />
+        <v-btn
+          variant="text"
+          @click="closeDialog()">
+          Close
+        </v-btn>
+        <v-btn
+          color="blue-darken-1"
+          variant="text"
+          @click="submit()">
+          Save
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </BaseDialog>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import { PrintersService } from '@/backend'
-import { usePrinterStore } from '@/store/printer.store'
-import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { useDialog } from '@/shared/dialog.composable'
+import {computed, ref} from 'vue'
+import {PrintersService} from '@/backend'
+import {usePrinterStore} from '@/store/printer.store'
+import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
+import {useDialog} from '@/shared/dialog.composable'
 
 const selectedQuickItems = ref([])
 const quickItems = [
@@ -111,23 +100,13 @@ const formData = ref<{
 }>({})
 const printersStore = usePrinterStore()
 const dialog = useDialog(DialogName.PrinterMaintenanceDialog)
-
-const validationObserver = ref(null)
 const printer = computed(() => printersStore.maintenanceDialogPrinter)
-
-const isValid = async () => {
-  if (!validationObserver.value) return false
-
-  return await validationObserver.value.validate()
-}
 
 const updateText = () => {
   formData.value.disabledReason = selectedQuickItems.value.join(', ')
 }
 
 const submit = async () => {
-  if (!(await isValid())) return
-
   const printerId = printer.value?.id
   if (!printerId) {
     formData.value = {}

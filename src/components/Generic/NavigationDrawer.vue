@@ -1,23 +1,17 @@
 <template>
   <v-navigation-drawer
-    :permanent="true"
-    app
-    class="gradient-bg"
-    dark
-    rail>
-    <v-list-item class="px-2">
-      <v-list-item-title class="text-h5">
-        <div class="d-flex align-center">
-          <v-img
-            :src="imgLogo"
-            alt="FDM Monster Logo"
-            class="shrink mr-1 pt-3 ml-1"
-            contain
-            transition="scale-transition"
-            width="40" />
-        </div>
-      </v-list-item-title>
-    </v-list-item>
+    permanent
+    rail
+    theme="dark"
+    class="nav-side-background">
+    <v-app-bar-nav-icon class="ml-1 mt-2">
+      <v-img
+        alt="FDM Monster Logo"
+        :src="imgLogo"
+        class="shrink mr-1 pt-3 ml-1"
+        transition="scale-transition"
+        width="40" />
+    </v-app-bar-nav-icon>
 
     <v-divider />
 
@@ -28,26 +22,17 @@
         v-for="([icon, title, path], i) in items"
         :key="i"
         :to="path"
-        link
-        router-link>
-        <v-list-item-icon>
-          <v-icon>{{ icon }}</v-icon>
-        </v-list-item-icon>
-        
-        <v-list-item-title>
-          {{ title }}
-        </v-list-item-title>
-      </v-list-item>
+        :prepend-icon="icon"
+        :title="title"
+        density="comfortable"
+        router-link />
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts" setup>
 import imgLogo from '@/assets/logo.png'
-import {useRouter} from 'vue-router'
 
-const drawer = ref(true)
-const router = useRouter()
 const items = [
   ['home', 'Devices', '/'],
   ['printer', 'Printers', '/printers'],
@@ -56,18 +41,25 @@ const items = [
   ['timeline', 'PrintStatistics', '/statistics'],
   ['contact_support', 'About', '/about'],
 ]
-
-const routes = computed(() => {
-  if (!router.options.routes) return []
-  return router.options.routes.filter((route) => !route.meta || !route.meta.hidden)
-})
 </script>
 
 <style>
-.gradient-bg {
-  background: -moz-linear-gradient(45deg, rgba(46, 49, 146, 1), rgba(155, 5, 5, 1) 100%);
-  background: -webkit-linear-gradient(45deg, rgba(46, 49, 146, 1), rgba(155, 5, 5, 1) 100%);
-  background: linear-gradient(45deg, rgba(18, 18, 18, 1), rgba(155, 5, 5, 1) 100%);
-  /*margin-bottom: -100px !important;*/
+/*https://mdbootstrap.com/docs/vue/css/background-image/*/
+.nav-side-background {
+  background: -moz-linear-gradient(
+    45deg,
+    rgba(18, 18, 18, 1),
+    rgba(155, 5, 5, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(18, 18, 18, 1),
+    rgba(155, 5, 5, 1) 100%
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(18, 18, 18, 1),
+    rgba(155, 5, 5, 1) 100%
+  );
 }
 </style>
