@@ -16,22 +16,22 @@ export const useFeatureStore = defineStore('Feature', {
     },
     hasFeature:
       (state) =>
-      (feature: TFeatureFlags): boolean => {
-        if (!state.features) {
-          console.debug('Feature store not loaded')
-          return false
-        } else {
-          console.debug('Feature store loaded')
-        }
+        (feature: TFeatureFlags): boolean => {
+          if (!state.features) {
+            console.debug('Feature store not loaded')
+            return false
+          } else {
+            console.debug('Feature store loaded')
+          }
 
-        const featureDefined = state.features[feature] as IFeatureFlag | undefined
-        if (!featureDefined) {
-          console.debug(`Feature ${feature} not defined. Options:`, Object.keys(state.features))
-          return false
-        }
+          const featureDefined = state.features[feature] as IFeatureFlag | undefined
+          if (!featureDefined) {
+            console.debug(`Feature ${feature} not defined. Options:`, Object.keys(state.features))
+            return false
+          }
 
-        return featureDefined?.available
-      },
+          return featureDefined?.available
+        },
   },
   actions: {
     async loadFeatures() {

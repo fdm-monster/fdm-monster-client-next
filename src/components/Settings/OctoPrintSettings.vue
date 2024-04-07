@@ -9,7 +9,6 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-list
-      subheader
       lines="three">
       <v-list-item>
         <v-list-item-title>
@@ -96,14 +95,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { PrinterFileService, SettingsService } from '@/backend'
-import { PrinterSettingsService } from '@/backend/printer-settings.service'
-import { FileCleanSettings } from '@/models/settings/printer-file-clean-settings.model'
-import { usePrinterStore } from '@/store/printer.store'
-import { usePrinterStateStore } from '@/store/printer-state.store'
-import { useSnackbar } from '@/shared/snackbar.composable'
-import { useSettingsStore } from '@/store/settings.store'
+import {defineComponent} from 'vue'
+import {PrinterFileService, SettingsService} from '@/backend'
+import {PrinterSettingsService} from '@/backend/printer-settings.service'
+import {FileCleanSettings} from '@/models/settings/printer-file-clean-settings.model'
+import {usePrinterStore} from '@/store/printer.store'
+import {usePrinterStateStore} from '@/store/printer-state.store'
+import {useSnackbar} from '@/shared/snackbar.composable'
+import {useSettingsStore} from '@/store/settings.store'
 
 interface Data {
   fileHandlingSettings: FileCleanSettings;
@@ -134,7 +133,9 @@ export default defineComponent({
     this.fileHandlingSettings = settings.printerFileClean
   },
 
-  mounted() {},
+  mounted() {
+  },
+
   computed: {},
   methods: {
     async updateTimeoutSettings() {

@@ -1,7 +1,7 @@
 <template>
-  <div v-drop-printer-position="{ x, y, printerSet: printer }">
+  <div v-drop-printer-position="{x, y, printerSet: printer}">
     <v-card
-      v-drop-upload="{ printers: [printer] }"
+      v-drop-upload="{printers: [printer]}"
       :class="{
         'tile-large': largeTilesEnabled,
         'tile-selected': selected,
@@ -38,7 +38,7 @@
           {{ printer?.name }}
         </small>
         <v-menu offset-y>
-          <template #activator="{ props }">
+          <template #activator="{props}">
             <v-btn
               class="float-right d-inline d-xl-none"
               v-bind="props">
@@ -96,7 +96,7 @@
           <v-tooltip
             v-if="hasPrinterControlFeature && printerStateStore.isPrinterOperational(printer?.id)"
             location="bottom">
-            <template #activator="{ props }">
+            <template #activator="{props}">
               <v-btn
                 elevation="4"
                 size="36"
@@ -116,7 +116,7 @@
           <v-tooltip
             v-if="printerStateStore.isPrinterOperational(printer?.id)"
             location="bottom">
-            <template #activator="{ props }">
+            <template #activator="{props}">
               <v-btn
                 elevation="4"
                 size="36"
@@ -136,7 +136,7 @@
           <v-tooltip
             v-if="printer.enabled && printerStateStore.isPrinterNotOnline(printer.id)"
             location="bottom">
-            <template #activator="{ props }">
+            <template #activator="{props}">
               <v-btn
                 elevation="4"
                 size="36"
@@ -175,7 +175,7 @@
           color="danger"
           open-delay="0"
           location="top">
-          <template #activator="{ props }">
+          <template #activator="{props}">
             <small
               class="xsmall-resized-font text--secondary d-lg-inline d-none"
               v-bind="props">

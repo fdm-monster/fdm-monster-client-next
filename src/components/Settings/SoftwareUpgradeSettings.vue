@@ -9,7 +9,6 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-list
-      subheader
       lines="three">
       <v-list-item>
         <v-list-item-title>
@@ -61,7 +60,6 @@
     </v-list>
     <v-divider />
     <v-list
-      subheader
       lines="three">
       <v-list-item>
         <v-list-item-title>
@@ -151,11 +149,11 @@
   </v-card>
 </template>
 <script lang="ts" setup>
-import { AppService } from '@/backend/app.service'
-import { computed, onMounted, ref } from 'vue'
-import { version as packageJsonVersion } from '../../../package.json'
-import { IRelease } from '@/models/server/client-releases.model'
-import { compare, minor } from 'semver'
+import {AppService} from '@/backend/app.service'
+import {computed, onMounted, ref} from 'vue'
+import {version as packageJsonVersion} from '../../../package.json'
+import {IRelease} from '@/models/server/client-releases.model'
+import {compare, minor} from 'semver'
 
 const loading = ref(true)
 const allowDowngrade = ref(false)

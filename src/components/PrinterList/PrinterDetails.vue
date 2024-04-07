@@ -1,7 +1,7 @@
 <template>
   <v-container
     v-if="printer"
-    v-drop-upload="{ printers: [printer] }"
+    v-drop-upload="{printers: [printer]}"
     :style="dragging ? 'background-color:red' : ''"
     transition="scale-transition">
     <v-row>

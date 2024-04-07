@@ -1,114 +1,113 @@
 <template>
-  <span>
-    <v-overlay
-      v-model="overlay"
-      opacity="0.98"
-      style="z-index: 7">
-      <GridLoader
-        v-if="loading"
-        :size="20"
-        class="ma-auto"
-        color="#a70015" />
-      <br>
+  <v-overlay
+    v-model="overlay"
+    opacity="0.98"
+    style="z-index: 7">
+    <GridLoader
+      v-if="loading"
+      :size="20"
+      class="ma-auto"
+      color="#a70015" />
+    <br>
 
-      <div
-        v-if="errorCaught"
-        style="margin: 50px">
-        <h1>
-          FDM Monster Server Error
-        </h1>
-        <p>
-          Did not expect this answer from the server. Please check your configuration and logs.
-        </p>
-        <v-sheet
-          class="pa-4 rounded"
-          color="grey-darken-2"
-          width="80%">
-          Details:
-          <div class="mt-2 mb-2">
-            {{ JSON.stringify(errorCaught, null, 4) }}
-          </div>
-          <div
-            v-if="errorUrl"
-            class="mt-2 mb-2">
-            Original URL: {{ errorUrl }}
-          </div>
-          <div
-            v-if="errorResponse"
-            class="mt-2 mb-2">
-            Response body: {{ errorResponse }}
-          </div>
-          <br>
-          <v-btn
-            class="mb-2"
-            color="secondary"
-            @click="copyError()">
-            <v-icon class="mr-2">content_copy</v-icon>
-            Copy error details
-          </v-btn>
-          <br>
-          <v-btn
-            color="primary mb-2"
-            @click="reloadPage()">
-            <v-icon class="mr-2">refresh</v-icon>reload the page
-          </v-btn>
-          <br>
-          <v-btn
-            color="darken-2 mb-2"
-            href="https://docs.fdm-monster.net"
-            style="color: white"
-            target="_blank">
-            <v-icon class="mr-2">menu_book</v-icon>
-            view documentation
-          </v-btn>
-          <br>
-          <v-btn
-            color="purple-darken-4"
-            href="https://discord.gg/mwA8uP8CMc"
-            style="color: white"
-            target="_blank">
-            <v-icon class="mr-2">chat</v-icon>
-            join our Discord
-          </v-btn>
-        </v-sheet>
+    <div
+      v-if="errorCaught"
+      style="margin: 50px">
+      <h1>
+        FDM Monster Server Error
+      </h1>
+      <p>
+        Did not expect this answer from the server. Please check your configuration and logs.
+      </p>
+      <v-sheet
+        class="pa-4 rounded"
+        color="grey-darken-2"
+        width="80%">
+        Details:
+        <div class="mt-2 mb-2">
+          {{ JSON.stringify(errorCaught, null, 4) }}
+        </div>
+        <div
+          v-if="errorUrl"
+          class="mt-2 mb-2">
+          Original URL: {{ errorUrl }}
+        </div>
+        <div
+          v-if="errorResponse"
+          class="mt-2 mb-2">
+          Response body: {{ errorResponse }}
+        </div>
+        <br>
+        <v-btn
+          class="mb-2"
+          color="secondary"
+          @click="copyError()">
+          <v-icon class="mr-2">content_copy</v-icon>
+          Copy error details
+        </v-btn>
+        <br>
+        <v-btn
+          color="primary mb-2"
+          @click="reloadPage()">
+          <v-icon class="mr-2">refresh</v-icon>
+          reload the page
+        </v-btn>
+        <br>
+        <v-btn
+          color="darken-2 mb-2"
+          href="https://docs.fdm-monster.net"
+          style="color: white"
+          target="_blank">
+          <v-icon class="mr-2">menu_book</v-icon>
+          view documentation
+        </v-btn>
+        <br>
+        <v-btn
+          color="purple-darken-4"
+          href="https://discord.gg/mwA8uP8CMc"
+          style="color: white"
+          target="_blank">
+          <v-icon class="mr-2">chat</v-icon>
+          join our Discord
+        </v-btn>
+      </v-sheet>
 
-        <img
-          class="justify-center align-center align-content-center rounded-pill mt-8 ma-4"
-          src="/img/OIG.JYDC2RaWdz7g9.jpg"
-          style="opacity: 0.9"
-          width="400">
-      </div>
+      <img
+        class="justify-center align-center align-content-center rounded-pill mt-8 ma-4"
+        src="/img/OIG.JYDC2RaWdz7g9.jpg"
+        style="opacity: 0.9"
+        width="400">
+    </div>
 
-      <!-- Fade-in -->
-      <!-- Slow scroll fade-out vtexts -->
-      <div
-        v-if="loading"
-        style="animation: fadeIn 0.75s">
-        {{ overlayMessage }}
-      </div>
-    </v-overlay>
-    <slot v-if="!overlay" />
-  </span>
+    <!-- Fade-in -->
+    <!-- Slow scroll fade-out vtexts -->
+    <div
+      v-if="loading"
+      style="animation: fadeIn 0.75s">
+      {{ overlayMessage }}
+    </div>
+  </v-overlay>
+  <slot v-if="!overlay" />
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onUnmounted, ref } from 'vue'
-import { useEventBus } from '@vueuse/core'
-import { useRouter } from 'vue-router'
-import { AxiosError } from 'axios'
-import { captureException } from '@sentry/vue'
+import {onBeforeMount, onUnmounted, ref} from 'vue'
+import {useEventBus} from '@vueuse/core'
+import {useRouter} from 'vue-router'
+import {AxiosError} from 'axios'
+import {captureException} from '@sentry/vue'
 import GridLoader from './components/Generic/Loaders/GridLoader.vue'
-import { useAuthStore } from './store/auth.store'
-import { useSnackbar } from '@/shared/snackbar.composable'
-import { useSettingsStore } from '@/store/settings.store'
-import { setSentryEnabled } from '@/utils/sentry.util'
-import { useFeatureStore } from '@/store/features.store'
-import { useProfileStore } from '@/store/profile.store'
-import { sleep } from '@/utils/time.utils'
-import { RouteNames } from '@/router/route-names'
-import { AppService } from '@/backend/app.service'
-import { AUTH_ERROR_REASON } from '@/shared/auth.constants'
-import { SocketIoService } from '@/shared/socketio.service'
+import {useAuthStore} from './store/auth.store'
+import {useSnackbar} from '@/shared/snackbar.composable'
+import {useSettingsStore} from '@/store/settings.store'
+import {setSentryEnabled} from '@/utils/sentry.util'
+import {useFeatureStore} from '@/store/features.store'
+import {useProfileStore} from '@/store/profile.store'
+import {sleep} from '@/utils/time.utils'
+import {RouteNames} from '@/router/route-names'
+import {AppService} from '@/backend/app.service'
+import {AUTH_ERROR_REASON} from '@/shared/auth.constants'
+import {SocketIoService} from '@/shared/socketio.service'
 
 const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
@@ -201,7 +200,7 @@ authFailKey.on(async (event: any) => {
   setOverlay(true, 'Authentication failed, going back to login')
 
   if (router.currentRoute.name !== RouteNames.Login) {
-    await router.push({ name: RouteNames.Login })
+    await router.push({name: RouteNames.Login})
   }
   setOverlay(false)
 })
@@ -223,7 +222,7 @@ accountNotVerifiedEventKey.on(async () => {
   snackbar.error('Account not verified, please ask an administrator to verify your account.')
   setOverlay(true, 'Account not verified, please ask an administrator to verify your account.')
   if (router.currentRoute.name !== RouteNames.Login) {
-    await router.push({ name: RouteNames.Login })
+    await router.push({name: RouteNames.Login})
   }
   setOverlay(false)
 })
@@ -239,7 +238,7 @@ passwordChangeRequiredEventKey.on(async () => {
   snackbar.error('Password change required, please change your password.')
   setOverlay(true, 'Password change required, please change your password.')
   if (router.currentRoute.name !== RouteNames.Login) {
-    await router.push({ name: RouteNames.Login })
+    await router.push({name: RouteNames.Login})
   }
   setOverlay(false)
 })
@@ -283,12 +282,12 @@ onBeforeMount(async () => {
   }
 
   // If the route is wrong about login requirements, an error will be shown
-  const { loginRequired, wizardState } = await authStore.checkAuthenticationRequirements()
+  const {loginRequired, wizardState} = await authStore.checkAuthenticationRequirements()
   if (!wizardState.wizardCompleted) {
     console.debug('[AppLoader] Wizard not completed, going to wizard')
     await authStore.logout(false)
     if (router.currentRoute.name !== RouteNames.FirstTimeSetup) {
-      await router.replace({ name: RouteNames.FirstTimeSetup })
+      await router.replace({name: RouteNames.FirstTimeSetup})
     }
     setOverlay(false)
     return
@@ -311,7 +310,7 @@ onBeforeMount(async () => {
   setOverlay(true, 'Refreshing login')
   console.debug('[AppLoader] Verifying or refreshing login once')
   try {
-    const { success, handled } = await authStore.verifyOrRefreshLoginOnceOrLogout()
+    const {success, handled} = await authStore.verifyOrRefreshLoginOnceOrLogout()
     if (handled) {
       console.debug('[AppLoader] received handled event, hiding overlay')
       return
@@ -323,7 +322,7 @@ onBeforeMount(async () => {
 
       await sleep(500)
       if (router.currentRoute.name !== RouteNames.Login) {
-        await router.push({ name: RouteNames.Login })
+        await router.push({name: RouteNames.Login})
       }
       setOverlay(false)
       // Dont load app as it will be redirected to login

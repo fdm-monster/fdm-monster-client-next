@@ -13,7 +13,7 @@
       lines="two">
       <template #prepend>
         <v-tooltip location="left">
-          <template #activator="{ props }">
+          <template #activator="{props}">
             <v-btn
               :size="iconSize"
               v-bind="props"
@@ -69,7 +69,7 @@
           class="mt-1 mb-1"
           height="8px" />
         <v-tooltip location="bottom">
-          <template #activator="{ props }">
+          <template #activator="{props}">
             <v-btn
               variant="outlined"
               size="small"
@@ -111,14 +111,14 @@
     <v-divider />
 
     <v-list
-      v-drop-upload="{ printers: [storedSideNavPrinter] }"
+      v-drop-upload="{printers: [storedSideNavPrinter]}"
       density="compact">
       <v-list-subheader inset>
         Manage FDM Monster instance
       </v-list-subheader>
 
       <v-tooltip location="left">
-        <template #activator="{ props }">
+        <template #activator="{props}">
           <v-list-item
             class="extra-dense-list-item"
             link
@@ -142,7 +142,7 @@
       </v-tooltip>
 
       <v-tooltip location="left">
-        <template #activator="{ props }">
+        <template #activator="{props}">
           <v-list-item
             class="extra-dense-list-item"
             link
@@ -172,7 +172,7 @@
       </v-tooltip>
 
       <v-tooltip location="left">
-        <template #activator="{ props }">
+        <template #activator="{props}">
           <v-list-item
             class="extra-dense-list-item"
             link
@@ -200,7 +200,7 @@
       </v-tooltip>
 
       <v-tooltip location="left">
-        <template #activator="{ props }">
+        <template #activator="{props}">
           <v-list-item
             class="extra-dense-list-item"
             link
@@ -231,7 +231,7 @@
         Commands
       </v-list-subheader>
       <v-tooltip location="left">
-        <template #activator="{ props }">
+        <template #activator="{props}">
           <v-list-item
             :disabled="!storedSideNavPrinter?.enabled || !isOnline"
             class="extra-dense-list-item"
@@ -262,7 +262,7 @@
       <v-tooltip
         v-if="featureStore.hasFeature('pauseResumePrinterCommand')"
         location="left">
-        <template #activator="{ props }">
+        <template #activator="{props}">
           <v-list-item
             :disabled="!isOnline || !isPrinting"
             class="extra-dense-list-item"
@@ -286,7 +286,7 @@
       </v-tooltip>
 
       <v-tooltip location="left">
-        <template #activator="{ props }">
+        <template #activator="{props}">
           <v-list-item
             :disabled="!isStoppable"
             class="extra-dense-list-item"
@@ -307,7 +307,7 @@
       </v-tooltip>
 
       <v-tooltip location="left">
-        <template #activator="{ props }">
+        <template #activator="{props}">
           <v-list-item
             :disabled="!canBeCleared"
             class="extra-dense-list-item"
@@ -328,7 +328,7 @@
       </v-tooltip>
 
       <v-tooltip location="left">
-        <template #activator="{ props }">
+        <template #activator="{props}">
           <v-list-item
             class="extra-dense-list-item"
             link
@@ -348,7 +348,7 @@
       </v-tooltip>
 
       <v-tooltip location="left">
-        <template #activator="{ props }">
+        <template #activator="{props}">
           <v-list-item
             class="extra-dense-list-item"
             link
@@ -371,7 +371,7 @@
     <v-divider />
 
     <v-list
-      v-drop-upload="{ printers: [storedSideNavPrinter] }"
+      v-drop-upload="{printers: [storedSideNavPrinter]}"
       density="compact">
       <v-list-subheader inset>
         Files - drag 'n drop!
@@ -406,7 +406,7 @@
         style="padding-top: 0">
         <v-avatar :size="iconSize">
           <v-tooltip location="left">
-            <template #activator="{ props }">
+            <template #activator="{props}">
               <v-btn
                 v-bind="props"
                 @click="clickDownloadFile(file)">
@@ -423,7 +423,7 @@
 
         <v-list-item-action>
           <v-tooltip location="left">
-            <template #activator="{ props }">
+            <template #activator="{props}">
               <v-btn
                 :disabled="isFileBeingPrinted(file)"
                 icon
@@ -441,9 +441,9 @@
         </v-list-item-action>
 
         <v-tooltip location="left">
-          <template #activator="{ props }">
+          <template #activator="{props}">
             <span
-              :class="{ 'current-file-print': isFileBeingPrinted(file) }"
+              :class="{'current-file-print': isFileBeingPrinted(file)}"
               v-bind="props">
               {{ file.name }}
             </span>
@@ -459,7 +459,7 @@
 
         <v-list-item-action>
           <v-tooltip location="left">
-            <template #activator="{ props }">
+            <template #activator="{props}">
               <v-btn
                 :disabled="isFileBeingPrinted(file)"
                 v-bind="props"

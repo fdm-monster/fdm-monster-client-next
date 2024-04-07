@@ -58,7 +58,7 @@
 
       <v-col>
         <v-toolbar>
-          <v-hover v-slot="{ hover }">
+          <v-hover v-slot="{hover}">
             <v-toolbar-title>
               <v-edit-dialog
                 v-if="selectedFloor"
@@ -89,7 +89,7 @@
             </v-toolbar-title>
           </v-hover>
 
-          <v-hover v-slot="{ hover }">
+          <v-hover v-slot="{hover}">
             <v-toolbar-title>
               <v-edit-dialog
                 v-if="selectedFloor"

@@ -9,7 +9,6 @@
       </v-toolbar-title>
     </v-toolbar>
     <v-list
-      subheader
       lines="three">
       <v-list-item v-if="!whitelistSettingsHidden">
         <v-list-item-title>
@@ -141,7 +140,7 @@
         <v-list-item-title>
           Login Expiry Settings (advanced)
         </v-list-item-title>
-        
+
         <v-list-item-subtitle>
           <v-row>
             <v-col

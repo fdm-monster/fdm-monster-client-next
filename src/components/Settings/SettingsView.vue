@@ -21,15 +21,9 @@
             :key="item.title"
             :to="item.path"
             link
-            router-link>
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            
-            <v-list-item-title>
-              {{ item.title }}
-            </v-list-item-title>
-          </v-list-item>
+            :prepend-icon="item.icon"
+            :title="item.title"
+            router-link />
         </v-list>
       </v-navigation-drawer>
     </div>
@@ -38,62 +32,36 @@
   </v-row>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { usePrinterStore } from '@/store/printer.store'
-
-interface Data {
-  items: any[];
-}
-
-export default defineComponent({
-  name: 'SettingsView',
-  components: {},
-  setup: () => {
-    return {
-      printersStore: usePrinterStore(),
-    }
+<script lang="ts" setup>
+const items = ref([
+  {
+    title: 'Grid',
+    icon: 'grid_on',
+    path: '/settings/grid',
   },
-
-  async created() {},
-  async mounted() {},
-  props: {},
-  data: (): Data => ({
-    items: [
-      {
-        title: 'Grid',
-        icon: 'grid_on',
-        path: '/settings/grid',
-      },
-      {
-        title: 'Floors',
-        icon: 'house_siding',
-        path: '/settings/floors',
-      },
-      {
-        title: 'User Management',
-        icon: 'group',
-        path: '/settings/user-management',
-      },
-      {
-        title: 'Account Settings',
-        icon: 'account_circle',
-        path: '/settings/account',
-      },
-      {
-        title: 'Server Protection',
-        icon: 'security',
-        path: '/settings/server-protection',
-      },
-      { title: 'OctoPrint Settings', icon: 'image', path: '/settings/octoprint' },
-      { title: 'Emergency Commands', icon: 'warning', path: '/settings/emergency-commands' },
-      { title: 'Software Upgrade', icon: 'upgrade', path: '/settings/software-upgrade' },
-      { title: 'Diagnostics', icon: 'bug_report', path: '/settings/diagnostics' },
-    ],
-  }),
-
-  computed: {},
-  methods: {},
-  watch: {},
-})
+  {
+    title: 'Floors',
+    icon: 'house_siding',
+    path: '/settings/floors',
+  },
+  {
+    title: 'User Management',
+    icon: 'group',
+    path: '/settings/user-management',
+  },
+  {
+    title: 'Account Settings',
+    icon: 'account_circle',
+    path: '/settings/account',
+  },
+  {
+    title: 'Server Protection',
+    icon: 'security',
+    path: '/settings/server-protection',
+  },
+  {title: 'OctoPrint Settings', icon: 'image', path: '/settings/octoprint'},
+  {title: 'Emergency Commands', icon: 'warning', path: '/settings/emergency-commands'},
+  {title: 'Software Upgrade', icon: 'upgrade', path: '/settings/software-upgrade'},
+  {title: 'Diagnostics', icon: 'bug_report', path: '/settings/diagnostics'},
+])
 </script>

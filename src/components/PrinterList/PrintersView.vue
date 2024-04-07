@@ -81,7 +81,7 @@
             <v-spacer />
           </v-toolbar>
         </template>
-        <template #item.enabled="{ item }">
+        <template #item.enabled="{item}">
           <v-switch
             v-model="item.enabled"
             color="primary"
@@ -91,14 +91,14 @@
             {{ item.enabled }}
           </v-switch>
         </template>
-        <template #item.name="{ item }">
+        <template #item.name="{item}">
           <v-chip
             color="primary"
             dark>
             {{ item.name || item.printerURL }}
           </v-chip>
         </template>
-        <template #item.floor="{ item }">
+        <template #item.floor="{item}">
           <v-chip
             v-if="item.id"
             color="primary">
@@ -107,7 +107,7 @@
         </template>
         <template
           v-if="hasPrinterGroupFeature"
-          #item.group="{ item }">
+          #item.group="{item}">
           <v-chip
             v-for="group of groupsOfPrinter(item.id)"
             :key="group.id"
@@ -119,7 +119,7 @@
           </v-chip>
 
           <v-menu offset-y>
-            <template #activator="{ props }">
+            <template #activator="{props}">
               <v-chip
                 :disabled="!groupsWithPrinters.length"
                 class="ml-2"
@@ -149,7 +149,7 @@
             </v-list>
           </v-menu>
         </template>
-        <template #item.actions="{ item }">
+        <template #item.actions="{item}">
           <PrinterUrlAction :printer="item" />
           <PrinterConnectionAction :printer="item" />
           <PrinterEmergencyStopAction :printer="item" />
@@ -159,7 +159,7 @@
             :printer="item"
             @update:show="openEditDialog(item)" />
         </template>
-        <template #item.socketupdate="{ item }">
+        <template #item.socketupdate="{item}">
           <span v-if="currentEventReceivedAt[item.id]">
             Updated {{ diffSeconds(currentEventReceivedAt[item.id]) }} seconds ago
           </span>
@@ -167,7 +167,7 @@
             No update received (silence)
           </span>
         </template>
-        <template #expanded-item="{ headers, item }">
+        <template #expanded-item="{headers, item}">
           <td :colspan="headers.length">
             <PrinterDetails :printer="item" />
           </td>

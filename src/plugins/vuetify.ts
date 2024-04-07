@@ -5,9 +5,9 @@
  */
 
 // Styles
-import '@mdi/font/css/materialdesignicons.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'vuetify/styles'
-import { aliases, md } from 'vuetify/iconsets/md'
+import {aliases, md} from 'vuetify/iconsets/md'
 
 // Composables
 import {createVuetify} from 'vuetify'
@@ -16,6 +16,32 @@ import {createVuetify} from 'vuetify'
 export default createVuetify({
   theme: {
     defaultTheme: 'dark',
+    themes: {
+      dark: {
+        dark: true,
+        colors: {
+          primary: '#9B0505',
+          secondary: '#424242',
+          accent: '#82B1FF',
+          error: '#FF5252',
+          info: '#2196F3',
+          success: '#4CAF50',
+          warning: '#FFC107',
+        }
+      },
+      light: {
+        dark: false,
+        colors: {
+          primary: '#9B0505',
+          secondary: '#424242',
+          accent: '#82B1FF',
+          error: '#FF5252',
+          info: '#2196F3',
+          success: '#4CAF50',
+          warning: '#FFC107',
+        }
+      },
+    }
   },
   icons: {
     defaultSet: 'md',

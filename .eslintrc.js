@@ -80,6 +80,8 @@ module.exports = {
       'modifiers': []
     }],
     'quotes': ['error', 'single'],
-    '@typescript-eslint/indent': ['error', 2]
+    '@typescript-eslint/indent': ['error', 2],
+    // {var:val} in f.e. template activator
+    'vue/object-curly-spacing': 'error'
   }
 }

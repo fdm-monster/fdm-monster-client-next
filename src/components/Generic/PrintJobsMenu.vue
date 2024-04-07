@@ -9,7 +9,7 @@
       offset-y
 
       transition="slide-x-transition">
-      <template #activator="{ props }">
+      <template #activator="{props}">
         <v-btn
           :color="activePrintCount ? 'green' : 'secondary'"
           dark
@@ -68,7 +68,7 @@
             No active prints
           </v-list-item>
           <v-list-item
-            v-for="{ printer, job } of activePrintJobs"
+            v-for="{printer, job} of activePrintJobs"
             :key="printer.id"
             lines="two">
             <template #prepend>

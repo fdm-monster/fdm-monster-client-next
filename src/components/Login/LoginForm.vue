@@ -20,12 +20,12 @@
         <v-text-field
           id="password"
           v-model="password"
-          :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+          :append-icon="showPassword ? 'visibility_off' : 'visibility'"
           :type="showPassword ? 'text' : 'password'"
           label="Password"
           name="password"
           password
-          prepend-icon="mdi-lock"
+          prepend-icon="lock"
           variant="underlined"
           @click:append="showPassword = !showPassword"
           @keyup.enter="formIsDisabled || login()" />
@@ -70,7 +70,7 @@
         Register new account {{ authStore.registration ? "" : "(not enabled)" }}
         <v-icon
           class="pl-5"
-          icon="mdi-menu-right" />
+          icon="right" />
       </v-btn>
     </v-card-actions>
   </v-card>

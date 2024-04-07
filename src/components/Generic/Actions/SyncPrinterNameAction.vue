@@ -1,6 +1,6 @@
 <template>
   <v-tooltip location="top">
-    <template #activator="{ props }">
+    <template #activator="{props}">
       <v-btn
         v-bind="props"
         v-on="on"

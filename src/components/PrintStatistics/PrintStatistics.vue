@@ -78,7 +78,7 @@
               <v-tooltip location="bottom">
                 <template
                   v-if="item.lastFailure?.status"
-                  #activator="{ props }">
+                  #activator="{props}">
                   <v-icon v-bind="props">info</v-icon>
                 </template>
                 <span>
@@ -157,13 +157,13 @@ const updatePrinters = () => {
 
   const preSortPrints = printerNameSearch.value?.length
     ? preSearchPrints.filter((p) => {
-        const printer = printerStore.printers.find((spr) => spr.id === p.printerId)
-        if (!printer) return false
+      const printer = printerStore.printers.find((spr) => spr.id === p.printerId)
+      if (!printer) return false
 
-        return (printer.name + printer.printerURL)
-          .toLowerCase()
-          .includes(printerNameSearch.value.toLowerCase())
-      })
+      return (printer.name + printer.printerURL)
+        .toLowerCase()
+        .includes(printerNameSearch.value.toLowerCase())
+    })
     : preSearchPrints
 
   console.log('presort', preSortPrints)

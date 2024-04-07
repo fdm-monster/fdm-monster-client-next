@@ -25,7 +25,7 @@
       location="bottom right"
       open-on-hover
       transition="slide-y-transition">
-      <template #activator="{ props }">
+      <template #activator="{props}">
         <!--Theme?-->
         <v-btn
           class="ml-2"
@@ -63,43 +63,22 @@
       </small>
     </span>
 
+    <TooltipButton
+      v-if="authStore.loginRequired === true"
+      tooltip="Go back to login"
+      text="Logout"
+      color="secondary"
+      @click="logout()"
+      icon="logout" />
+
     <v-btn
       v-if="authStore.loginRequired === true"
-      class="ml-2"
-      color="secondary"
-      @click="logout()">
+      class="ml-2">
       <v-icon class="mr-2">logout</v-icon>
       Logout
     </v-btn>
-    <v-btn @click="showHelp = true">
-      <v-icon>help</v-icon>
-    </v-btn>
-    <v-dialog
-      v-model="showHelp"
-      eager
-      fullscreen
-      style="background-color: white"
-      transition="dialog-bottom-transition"
-      width="90%">
-      <v-btn @click="showHelp = false">
-        Close Help
-        <v-icon>close</v-icon>
-      </v-btn>
-      <v-card
-        height="100%"
-        width="100%">
-        <v-toolbar color="primary">
-          <v-icon class="mr-2">help</v-icon>
-          Showing help from docs.fdm-monster.net
-        </v-toolbar>
 
-        <iframe
-          height="100%"
-          src="https://docs.fdm-monster.net"
-          style="background-color: white"
-          width="100%" />
-      </v-card>
-    </v-dialog>
+    <HelpOverlay />
   </v-app-bar>
 </template>
 
@@ -118,8 +97,6 @@ const profileStore = useProfileStore()
 const authStore = useAuthStore()
 const router = useRouter()
 const items = [{title: 'Open Profile', icon: 'person', path: '/settings/account'}]
-
-const showHelp = ref(false)
 
 const now = ref(Date.now())
 if (isDevEnv) {

@@ -8,7 +8,7 @@ import FloorSettings from '@/components/Settings/FloorSettings.vue'
 import AboutView from '@/components/AboutHelp/AboutView.vue'
 import EmergencyCommands from '@/components/Settings/EmergencyCommands.vue'
 import NotFoundView from '@/components/NotFound/NotFoundView.vue'
-import {useAuthStore} from '../store/auth.store'
+import {useAuthStore} from '@/store/auth.store'
 import {RouteNames} from './route-names'
 import PermissionDenied from '../components/Login/PermissionDenied.vue'
 import LoginView from '../components/Login/LoginView.vue'
@@ -76,7 +76,7 @@ const router = createRouter({
         {
           path: '',
           meta: NeedsAuth,
-          redirect: 'grid',
+          redirect: '/settings/grid',
         },
         {
           path: 'account',
@@ -164,9 +164,9 @@ router.beforeEach(async (to, from, next) => {
     console.debug(`No auth required on route ${to.fullPath}`)
     return next()
   }
-    // TODO why is this here again? This causes the app not to initialize properly (SocketIO/settings in AppLoader)
-    // else if (authStore.loginRequired === null) {
-    //   return next();
+  // TODO why is this here again? This causes the app not to initialize properly (SocketIO/settings in AppLoader)
+  // else if (authStore.loginRequired === null) {
+  //   return next();
   // }
   else {
     console.debug(

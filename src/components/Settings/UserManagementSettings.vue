@@ -14,7 +14,6 @@
       color="#a70015"
       style="margin: 250px; position: absolute" />
     <v-list
-      subheader
       lines="three">
       <v-list-subheader>
         Showing all users
@@ -36,7 +35,8 @@
             </strong>
           </v-list-item-title>
           <v-list-item-subtitle />
-          <span class="text-grey darken-4">
+          <span
+            class="text-grey-darken-4">
             <ul>
               <li>
                 <span

@@ -12,12 +12,12 @@ export interface ContextEvent extends ShortEvent {
   context?: {
     correlationId: string;
     [k: string]:
-      | string
-      | {
-          status: string;
-          createdAt: number;
-          printerId: IdType;
-        };
+    | string
+    | {
+      status: string;
+      createdAt: number;
+      printerId: IdType;
+    };
   };
 }
 
