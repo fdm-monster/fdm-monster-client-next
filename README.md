@@ -2,6 +2,18 @@
 
 This is the official scaffolding tool for Vuetify, designed to give you a head start in building your new Vuetify application. It sets up a base template with all the necessary configurations and standard directory structure, enabling you to begin development without the hassle of setting up the project from scratch.
 
+## Notes to self
+
+- Example to fix alias includes https://github.com/mutoe/vue3-realworld-example-app/blob/master/tsconfig.json
+```json
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ],
+```
+
 ## ❗️ Important Links
 
 - 📄 [Docs](https://vuetifyjs.com/)
