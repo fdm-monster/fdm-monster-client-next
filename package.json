@@ -23,7 +23,7 @@
     "@sentry/vite-plugin": "2.16.1",
     "@sentry/vue": "7.109.0",
     "@tanstack/vue-query": "^5.28.13",
-    "@types/node": "20.12.6",
+    "@types/node": "20.12.7",
     "@types/semver": "7.5.8",
     "@vitejs/plugin-vue": "5.0.4",
     "@vitest/ui": "1.4.0",
