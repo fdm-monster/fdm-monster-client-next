@@ -2752,16 +2752,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vuetify@npm:2.2.0":
-  version: 2.2.0
-  resolution: "eslint-plugin-vuetify@npm:2.2.0"
+"eslint-plugin-vuetify@npm:2.3.0":
+  version: 2.3.0
+  resolution: "eslint-plugin-vuetify@npm:2.3.0"
   dependencies:
     eslint-plugin-vue: "npm:^9.6.0"
     requireindex: "npm:^1.2.0"
   peerDependencies:
     eslint: ^8.0.0
     vuetify: ^3.0.0
-  checksum: 10c0/001770dd982e9bdef00ead5e2e645317215aa2b4086feb9ee946fb80b103fbf4ea42843dd210f330ee5d66b7a429cba6ef096fa973a4a9ef1dc338fb75523e35
+  checksum: 10c0/da9aa3659fb7774896d009989f7d10a47a92878fb5ffab45f16dd4e791147ec69869b8c7cb787778f476e6a5e9f566314bd556c1471ee42af8dd75e780414fde
   languageName: node
   linkType: hard
 
@@ -2983,7 +2983,7 @@ __metadata:
     eslint-plugin-n: "npm:17.1.0"
     eslint-plugin-promise: "npm:6.1.1"
     eslint-plugin-vue: "npm:9.24.1"
-    eslint-plugin-vuetify: "npm:2.2.0"
+    eslint-plugin-vuetify: "npm:2.3.0"
     jwt-decode: "npm:3.1.2"
     material-design-icons-iconfont: "npm:6.7.0"
     pinia: "npm:2.1.7"
