@@ -29,10 +29,6 @@
           class="d-flex justify-end" />
       </v-col>
     </v-row>
-
-    <FileControlList
-      :file-list="printer.fileList"
-      :printer-id="printerId" />
   </v-container>
 </template>
 

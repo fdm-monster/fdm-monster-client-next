@@ -4,8 +4,8 @@ import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 interface DialogReference<T = any> {
   id: DialogName;
   opened: boolean;
-  beforeOpenedCallback?: (input?: T) => void;
-  openedCallback?: (input?: T) => void;
+  beforeOpenedCallback?: (input?: T) => void | Promise<void>;
+  openedCallback?: (input?: T) => void | Promise<void>;
   context?: any;
   output?: any;
 }
@@ -94,7 +94,9 @@ export const useDialogsStore = defineStore('Dialog', {
       console.debug(`[Pinia Dialog ${id}] Registered`)
       const existingDialog = this.dialogsById[id]
       if (existingDialog) {
-        console.debug(`[Pinia Dialog ${id}]  Already registered dialog, not registering again`)
+        console.debug(
+          `[Pinia Dialog ${id}]  Already registered dialog, not registering again`
+        )
         return existingDialog
       }
 

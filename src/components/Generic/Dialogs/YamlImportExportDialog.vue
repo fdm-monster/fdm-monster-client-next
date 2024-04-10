@@ -2,7 +2,9 @@
   <BaseDialog
     :id="dialog.dialogId"
     max-width="700px"
-    @escape="closeDialog()">
+    @before-opened="onBeforeDialogOpened"
+    @escape="closeDialog()"
+  >
     <v-card class="pa-4">
       <v-card-title>
         <span class="text-h5">
@@ -124,11 +126,6 @@ export default defineComponent({
     }
   },
 
-  async created() {
-    await this.featureStore.loadFeatures()
-    this.exportGroups = this.featureStore.hasFeature('printerGroupsApi')
-  },
-
   data: (): Data => ({
     selectedMode: 0,
     exportFloors: true,
@@ -150,10 +147,19 @@ export default defineComponent({
 
     isImportMode() {
       return this.selectedMode === 0
-    },
+    }
+  },
+
+  async created() {
+    // Do not perform actions that might cause 401/403 handlers, or ensure they are safely handled
   },
 
   methods: {
+    async onBeforeDialogOpened() {
+      await this.featureStore.loadFeatures()
+      this.exportGroups = this.featureStore.hasFeature('printerGroupsApi')
+    },
+
     async downloadExportYamlFile() {
       if (this.exportFloorGrid) {
         this.exportPrinters = true

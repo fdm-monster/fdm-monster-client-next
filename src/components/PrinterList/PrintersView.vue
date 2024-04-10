@@ -371,7 +371,7 @@ const openImportJsonPrintersDialog = () => {
 }
 
 const openYamlImportExportDialog = () => {
-  dialogsStore.openDialogWithContext(DialogName.YamlImportExport)
+  useDialog(DialogName.YamlImportExport).openDialog()
 }
 
 const createGroup = async () => {
