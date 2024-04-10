@@ -4,7 +4,8 @@
     :color="isPrinterOperational(printer) ? 'green' : 'red'"
     bordered
     class="ma-2"
-    overlap>
+    overlap
+  >
     <template #badge>
       <v-icon v-if="isPrinterOperational(printer)">check</v-icon>
       <v-icon v-else>close</v-icon>
@@ -14,7 +15,8 @@
       :disabled="isPrinterPrinting()"
       fab
       size="small"
-      @click.c.capture.native.stop="togglePrinterConnection()">
+      @click.c.capture.native.stop="togglePrinterConnection()"
+    >
       <v-icon>usb</v-icon>
     </v-btn>
   </v-badge>
@@ -30,24 +32,24 @@ import { usePrinterStateStore } from '../../../store/printer-state.store'
 export default defineComponent({
   name: 'PrinterConnectionAction',
   components: {},
+  props: {
+    printer: Object as PropType<PrinterDto>
+  },
   setup: () => {
     return {
       printersStore: usePrinterStore(),
-      printerStateStore: usePrinterStateStore(),
+      printerStateStore: usePrinterStateStore()
     }
-  },
-
-  async created() {},
-  async mounted() {},
-  props: {
-    printer: Object as PropType<PrinterDto>,
   },
 
   computed: {
     printerId() {
       return this.printer!.id
-    },
+    }
   },
+
+  async created() {},
+  async mounted() {},
 
   methods: {
     isPrinterOperational() {
@@ -69,7 +71,7 @@ export default defineComponent({
         return PrintersService.sendPrinterDisconnectCommand(this.printerId)
       }
       await PrintersService.sendPrinterConnectCommand(this.printerId)
-    },
-  },
+    }
+  }
 })
 </script>

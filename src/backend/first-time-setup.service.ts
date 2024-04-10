@@ -2,10 +2,10 @@ import { BaseService } from '@/backend/base.service'
 import { ServerApi } from '@/backend/server.api'
 
 interface FirstTimeSetupData {
-  loginRequired: boolean;
-  registration: boolean;
-  rootUsername: string;
-  rootPassword: string;
+  loginRequired: boolean
+  registration: boolean
+  rootUsername: string
+  rootPassword: string
 }
 
 export class FirstTimeSetupService extends BaseService {

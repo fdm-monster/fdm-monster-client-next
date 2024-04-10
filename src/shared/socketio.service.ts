@@ -1,6 +1,6 @@
 import {
   PrinterStateDto,
-  SocketIoUpdateMessage,
+  SocketIoUpdateMessage
 } from '@/models/socketio-messages/socketio-message.model'
 import { usePrinterStore } from '@/store/printer.store'
 import { useFloorStore } from '@/store/floor.store'
@@ -15,7 +15,7 @@ import {
   constructSocket,
   deconstructSocket,
   getSocketState,
-  resetSocketConnection,
+  resetSocketConnection
 } from '@/store/connection.store'
 
 enum IO_MESSAGES {
@@ -23,7 +23,7 @@ enum IO_MESSAGES {
   TestPrinterState = 'test-printer-state',
   // CompletionEvent = "completion-event",
   HostState = 'host-state',
-  ApiAccessibility = 'api-accessibility',
+  ApiAccessibility = 'api-accessibility'
 }
 
 export class SocketIoService {
@@ -42,9 +42,14 @@ export class SocketIoService {
     const apiBase = await getBaseUri()
     const authStore = useAuthStore()
     authStore.loadTokens()
-    constructSocket(apiBase, authStore.loginRequired ? authStore.token : undefined)
+    constructSocket(
+      apiBase,
+      authStore.loginRequired ? authStore.token : undefined
+    )
 
-    appSocketIO?.on(IO_MESSAGES.LegacyUpdate, (data) => this.onMessage(JSON.parse(data)))
+    appSocketIO?.on(IO_MESSAGES.LegacyUpdate, (data) =>
+      this.onMessage(JSON.parse(data))
+    )
     appSocketIO?.on(IO_MESSAGES.TestPrinterState, (data) => {
       this.testPrinterStore.saveEvent(data)
       console.log(data)
@@ -63,7 +68,10 @@ export class SocketIoService {
   }
 
   onMessage(message: SocketIoUpdateMessage) {
-    if (message.trackedUploads.current?.length || message.trackedUploads.failed?.length) {
+    if (
+      message.trackedUploads.current?.length ||
+      message.trackedUploads.failed?.length
+    ) {
       console.debug('[SocketIO] trackedUploads message received')
       message.trackedUploads.current.forEach((u) => {
         this.snackbar.openProgressMessage(

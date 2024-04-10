@@ -2,22 +2,20 @@
   <BaseDialog
     :id="dialog.dialogId"
     max-width="800px"
-    @escape="closeDialog()">
+    @escape="closeDialog()"
+  >
     <v-card>
       <v-card-title>
         <span class="text-h5">
           <v-avatar
             class="mr-2"
             color="primary"
-            size="56">
+            size="56"
+          >
             {{ avatarInitials }}
           </v-avatar>
-          <span v-if="isUpdating">
-            Updating Camera
-          </span>
-          <span v-else>
-            New Camera
-          </span>
+          <span v-if="isUpdating"> Updating Camera </span>
+          <span v-else> New Camera </span>
         </span>
       </v-card-title>
 
@@ -27,11 +25,13 @@
             <v-text-field
               v-model="cameraStream.name"
               label="Name"
-              required />
+              required
+            />
             <v-text-field
               v-model="cameraStream.streamURL"
               label="Url (MJPEG)"
-              required />
+              required
+            />
           </v-layout>
         </v-container>
       </v-card-text>
@@ -40,13 +40,15 @@
         <v-spacer />
         <v-btn
           color="primary-darken-2"
-          @click="close">
+          @click="close"
+        >
           Cancel
         </v-btn>
         <v-btn
           color="primary"
-          @click="isUpdating ? updateCamera() : createCamera()">
-          {{ isUpdating ? "Update" : "Create" }}
+          @click="isUpdating ? updateCamera() : createCamera()"
+        >
+          {{ isUpdating ? 'Update' : 'Create' }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -54,12 +56,15 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref, watch} from 'vue'
-import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
-import {useDialog} from '@/shared/dialog.composable'
-import {CameraStream, CameraWithPrinter} from '@/models/camera-streams/camera-stream'
-import {CameraStreamService} from '@/backend/camera-stream.service'
-import {useQueryClient} from '@tanstack/vue-query'
+import { computed, ref, watch } from 'vue'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { useDialog } from '@/shared/dialog.composable'
+import {
+  CameraStream,
+  CameraWithPrinter
+} from '@/models/camera-streams/camera-stream'
+import { CameraStreamService } from '@/backend/camera-stream.service'
+import { useQueryClient } from '@tanstack/vue-query'
 
 const queryClient = useQueryClient()
 const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
@@ -70,7 +75,7 @@ const avatarInitials = computed(() => {
 
 const cameraStream = ref<CameraStream>({
   name: '',
-  streamURL: '',
+  streamURL: ''
 })
 
 const isDialogUpdate = () => dialog.context()?.addOrUpdate === 'update'
@@ -90,7 +95,9 @@ watch(
 
     const stream = queryClient
       .getQueryData<CameraWithPrinter[]>(['cameraStream'])
-      ?.find((cameraStream) => cameraStream.cameraStream.id === context.cameraId)
+      ?.find(
+        (cameraStream) => cameraStream.cameraStream.id === context.cameraId
+      )
     cameraStream.value.name = stream?.cameraStream.name
     cameraStream.value.streamURL = stream?.cameraStream.streamURL || ''
   }
@@ -103,18 +110,18 @@ function closeDialog() {
 async function createCamera() {
   await CameraStreamService.createCameraStream({
     streamURL: cameraStream.value.streamURL,
-    name: cameraStream.value.name,
+    name: cameraStream.value.name
   })
-  await queryClient.refetchQueries({queryKey: ['cameraStream']})
+  await queryClient.refetchQueries({ queryKey: ['cameraStream'] })
   dialog.closeDialog()
 }
 
 async function updateCamera() {
   await CameraStreamService.updateCameraStream(dialog.context()?.cameraId, {
     streamURL: cameraStream.value.streamURL,
-    name: cameraStream.value.name,
+    name: cameraStream.value.name
   })
-  await queryClient.refetchQueries({queryKey: ['cameraStream']})
+  await queryClient.refetchQueries({ queryKey: ['cameraStream'] })
   dialog.closeDialog()
 }
 

@@ -18,7 +18,8 @@ export function uploadProgressTest(enabled: boolean) {
     }
     snackbar.openProgressMessage('3', 'file3.gcode to Beast', i, i > 80)
     snackbar.openProgressMessage('4', 'file4.gcode to Beast', i, i > 80)
-    if (j > 20) snackbar.openProgressMessage('5', 'file5.gcode to Beast', i, i > 60)
+    if (j > 20)
+      snackbar.openProgressMessage('5', 'file5.gcode to Beast', i, i > 60)
     snackbar.openProgressMessage('6', 'file6.gcode to Beast', i, i > 65)
     snackbar.openProgressMessage('7', 'file7.gcode to Beast', i, i > 80)
 

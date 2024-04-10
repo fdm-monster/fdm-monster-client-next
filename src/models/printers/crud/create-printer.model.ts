@@ -6,21 +6,21 @@ export const getDefaultCreatePrinter = (): PreCreatePrinter => ({
   name: newRandomNamePair(),
   apiKey: '',
   printerURL: '',
-  enabled: true,
+  enabled: true
 })
 
 export interface PreCreatePrinter {
-  id?: IdType; // Only in case of update
-  enabled: boolean;
-  name: string;
-  printerURL: string | undefined;
-  apiKey: string;
+  id?: IdType // Only in case of update
+  enabled: boolean
+  name: string
+  printerURL: string | undefined
+  apiKey: string
 }
 
 export interface CreatePrinter {
-  id?: IdType; // Only in case of update
-  enabled: boolean;
-  name: string;
-  printerURL: string;
-  apiKey: string;
+  id?: IdType // Only in case of update
+  enabled: boolean
+  name: string
+  printerURL: string
+  apiKey: string
 }

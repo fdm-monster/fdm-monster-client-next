@@ -2,25 +2,25 @@ import { defineStore } from 'pinia'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 
 interface DialogReference<T = any> {
-  id: DialogName;
-  opened: boolean;
-  beforeOpenedCallback?: (input?: T) => void | Promise<void>;
-  openedCallback?: (input?: T) => void | Promise<void>;
-  context?: any;
-  output?: any;
+  id: DialogName
+  opened: boolean
+  beforeOpenedCallback?: (input?: T) => void | Promise<void>
+  openedCallback?: (input?: T) => void | Promise<void>
+  context?: any
+  output?: any
 }
 
 export type DialogsById = { [k: string]: DialogReference }
 
 interface State {
-  ids: DialogName[];
-  dialogsById: DialogsById;
+  ids: DialogName[]
+  dialogsById: DialogsById
 }
 
 export const useDialogsStore = defineStore('Dialog', {
   state: (): State => ({
     ids: [],
-    dialogsById: {},
+    dialogsById: {}
   }),
   getters: {
     dialogs(): DialogReference[] {
@@ -46,7 +46,7 @@ export const useDialogsStore = defineStore('Dialog', {
       return (id: DialogName) => {
         return this.dialogsById[id]?.opened
       }
-    },
+    }
   },
   actions: {
     openDialogWithContext<T = any>(id: DialogName, context?: T) {
@@ -58,7 +58,7 @@ export const useDialogsStore = defineStore('Dialog', {
       dialog.context = context
       // Vue 2 reactivity issue
       this.dialogsById = {
-        ...this.dialogsById,
+        ...this.dialogsById
       }
       console.debug(`[Pinia Dialog ${id}] Opened with context`, context)
     },
@@ -72,7 +72,7 @@ export const useDialogsStore = defineStore('Dialog', {
       dialog.output = output
       // Vue 2 reactivity issue
       this.dialogsById = {
-        ...this.dialogsById,
+        ...this.dialogsById
       }
       console.debug(`[Pinia Dialog ${id}] Closed`)
     },
@@ -83,8 +83,8 @@ export const useDialogsStore = defineStore('Dialog', {
     registerDialogReference<T = any>(
       id?: DialogName,
       callbacks?: {
-        beforeOpenedCallback?: (input?: T) => void;
-        openedCallback?: (input?: T) => void;
+        beforeOpenedCallback?: (input?: T) => void
+        openedCallback?: (input?: T) => void
       }
     ) {
       if (!id) {
@@ -104,11 +104,11 @@ export const useDialogsStore = defineStore('Dialog', {
         id,
         opened: false,
         beforeOpenedCallback: callbacks?.beforeOpenedCallback,
-        openedCallback: callbacks?.openedCallback,
+        openedCallback: callbacks?.openedCallback
       }
       this.dialogsById[id] = dialogRef
       this.ids.push(id)
       return dialogRef
-    },
-  },
+    }
+  }
 })

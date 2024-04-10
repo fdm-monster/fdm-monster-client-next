@@ -4,81 +4,79 @@
       <v-avatar>
         <v-icon>account_circle</v-icon>
       </v-avatar>
-      <v-toolbar-title>
-        Account Settings
-      </v-toolbar-title>
+      <v-toolbar-title> Account Settings </v-toolbar-title>
     </v-toolbar>
     <v-list
       subheader
-      lines="three">
+      lines="three"
+    >
       <v-list-item>
         <v-list-item-content v-if="!loginEnabled">
           <v-alert color="primary">
-            Login is currently disabled. To adjust your username and password, please enable that
-            setting at the Server Protection settings page. Then log in and visit this page.
+            Login is currently disabled. To adjust your username and password,
+            please enable that setting at the Server Protection settings page.
+            Then log in and visit this page.
           </v-alert>
         </v-list-item-content>
       </v-list-item>
     </v-list>
     <v-list
       subheader
-      lines="three">
+      lines="three"
+    >
       <v-list-item>
-        <v-list-item-title>
-          Username
-        </v-list-item-title>
+        <v-list-item-title> Username </v-list-item-title>
         <v-list-item-action-text>
           <v-text-field
             v-model="formData.username"
             :disabled="!loginEnabled"
-            label="Fill in your username" />
+            label="Fill in your username"
+          />
         </v-list-item-action-text>
       </v-list-item>
       <div class="ml-4 mb-4">
         <v-btn
           :disabled="!loginEnabled"
           color="primary"
-          @click="changeUsername()">
+          @click="changeUsername()"
+        >
           Change username
         </v-btn>
       </div>
       <v-divider />
-      <br>
+      <br />
 
       <v-list-item>
-        <v-list-item-title>
-          Old Password
-        </v-list-item-title>
+        <v-list-item-title> Old Password </v-list-item-title>
         <v-list-item-action-text>
           <v-text-field
             v-model="formData.oldPassword"
             :disabled="!loginEnabled"
             placeholder="Old password"
-            type="password" />
+            type="password"
+          />
         </v-list-item-action-text>
       </v-list-item>
       <v-list-item>
-        <v-list-item-title>
-          New Password
-        </v-list-item-title>
+        <v-list-item-title> New Password </v-list-item-title>
         <v-list-item-action-text>
           <v-text-field
             v-model="formData.newPassword"
             :disabled="!loginEnabled"
             placeholder="New password"
-            type="password" />
+            type="password"
+          />
         </v-list-item-action-text>
       </v-list-item>
       <v-list-item>
-        <v-list-item-title>
-          Repeat New Password
-        </v-list-item-title>
+        <v-list-item-title> Repeat New Password </v-list-item-title>
         <v-list-item-action-text>
           <v-text-field
             v-model="formData.repeatPassword"
             :disabled="!loginEnabled"
             placeholder="Repeat new password"
-            type="password" />
+            type="password"
+          />
         </v-list-item-action-text>
       </v-list-item>
     </v-list>
@@ -86,7 +84,8 @@
       <v-btn
         :disabled="!loginEnabled"
         color="primary"
-        @click="changePassword()">
+        @click="changePassword()"
+      >
         Change password
       </v-btn>
     </div>
@@ -112,10 +111,10 @@ const snackbar = useSnackbar()
 const loginEnabled = ref<boolean>()
 const userId = ref<string>('')
 const formData = ref<{
-  username: string;
-  oldPassword: string;
-  newPassword: string;
-  repeatPassword: string;
+  username: string
+  oldPassword: string
+  newPassword: string
+  repeatPassword: string
 }>({ username: '', newPassword: '', oldPassword: '', repeatPassword: '' })
 
 onMounted(async () => {

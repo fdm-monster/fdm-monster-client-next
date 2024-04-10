@@ -2,53 +2,45 @@
   <BaseDialog
     :id="dialog.dialogId"
     max-width="700px"
-    @escape="closeDialog()">
+    @escape="closeDialog()"
+  >
     <v-card class="pa-4">
       <v-card-title>
-        <span class="text-h5">
-          Batch Import JSON printers
-        </span>
+        <span class="text-h5"> Batch Import JSON printers </span>
       </v-card-title>
       <v-card-text>
         <v-row>
           <v-col cols="12">
-            v-slot="{ errors }"
-            name="JSON"
-            rules="required|json">
+            v-slot="{ errors }" name="JSON" rules="required|json">
             <v-textarea
               v-model="formData.json"
               data-vv-validate-on="change|blur"
               rows="10"
-              @change="updatePrinterCount()">
+              @change="updatePrinterCount()"
+            >
               <template #label>
-                <div>
-                  JSON import <small>
-                    (optional)
-                  </small>
-                </div>
+                <div>JSON import <small> (optional) </small></div>
               </template>
             </v-textarea>
             {{ numPrinters }} printers found
           </v-col>
         </v-row>
-        <v-btn class="mt-2">
-          Validate printers
-        </v-btn>
+        <v-btn class="mt-2"> Validate printers </v-btn>
       </v-card-text>
       <v-card-actions>
-        <em class="text-red">
-          * indicates required field
-        </em>
+        <em class="text-red"> * indicates required field </em>
         <v-spacer />
         <v-btn
           variant="text"
-          @click="closeDialog()">
+          @click="closeDialog()"
+        >
           Close
         </v-btn>
         <v-btn
           color="blue-darken-1"
           variant="text"
-          @click="submit()">
+          @click="submit()"
+        >
           Create
         </v-btn>
       </v-card-actions>
@@ -57,9 +49,9 @@
 </template>
 
 <script lang="ts" setup>
-import {PrintersService} from '@/backend'
-import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
-import {useDialog} from '@/shared/dialog.composable'
+import { PrintersService } from '@/backend'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { useDialog } from '@/shared/dialog.composable'
 
 const dialog = useDialog(DialogName.BatchJsonCreate)
 
@@ -114,5 +106,4 @@ const submit = async () => {
 const closeDialog = () => {
   dialog.closeDialog()
 }
-
 </script>

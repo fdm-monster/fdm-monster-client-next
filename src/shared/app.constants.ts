@@ -2,13 +2,13 @@ export const isDevEnv = true // process.env.NODE_ENV === 'development'
 export const isProdEnv = false // process.env.NODE_ENV === 'production'
 
 export interface AppConstants {
-  apiKeyLength: number;
-  maxPort: number;
-  maxPrinterNameLength: number;
-  maxPrinterGroupNameLength: number;
-  maxPrinterGroupLocationX: number;
-  maxPrinterGroupLocationY: number;
-  minPrinterFloorNameLength: number;
+  apiKeyLength: number
+  maxPort: number
+  maxPrinterNameLength: number
+  maxPrinterGroupNameLength: number
+  maxPrinterGroupLocationX: number
+  maxPrinterGroupLocationY: number
+  minPrinterFloorNameLength: number
 }
 
 export const generateAppConstants = (): Readonly<AppConstants> =>
@@ -19,5 +19,5 @@ export const generateAppConstants = (): Readonly<AppConstants> =>
     maxPrinterGroupNameLength: 30, // Doesn't exist on backend
     maxPrinterGroupLocationX: 4,
     maxPrinterGroupLocationY: 4,
-    minPrinterFloorNameLength: 3,
+    minPrinterFloorNameLength: 3
   }) as Readonly<AppConstants>

@@ -7,85 +7,92 @@
   >
     <v-card class="pa-4">
       <v-card-title>
-        <span class="text-h5">
-          YAML export and import
-        </span>
+        <span class="text-h5"> YAML export and import </span>
       </v-card-title>
       <v-card-text>
-        <div>
-          Choose mode:
-        </div>
+        <div>Choose mode:</div>
         <v-row>
-          <br>
+          <br />
           <v-radio-group
             v-model="selectedMode"
             class="ml-3"
-            inline>
+            inline
+          >
             <v-radio
               :value="0"
-              label="Import YAML" />
+              label="Import YAML"
+            />
             <v-radio
               :value="1"
-              label="Export YAML" />
+              label="Export YAML"
+            />
           </v-radio-group>
         </v-row>
 
         <div>
           <div
             v-if="isImportMode"
-            class="pl-2">
+            class="pl-2"
+          >
             <v-file-input
               v-model="importFile"
               accept=".yaml"
-              label="Select a YAML file for import *" />
+              label="Select a YAML file for import *"
+            />
           </div>
           <div v-else>
             <v-checkbox
               v-model="exportFloors"
               class="pa-0 ma-0 mt-2 ml-2"
-              label="Include floors" />
+              label="Include floors"
+            />
             <v-checkbox
               v-model="exportGroups"
               :disabled="disableExportGroups"
               class="pa-0 ma-0 mt-2 ml-2"
-              label="Include groups" />
+              label="Include groups"
+            />
             <v-checkbox
               v-model="exportPrinters"
               class="pa-0 ma-0 ml-2"
-              label="Include printers" />
+              label="Include printers"
+            />
             <v-checkbox
               v-model="exportFloorGrid"
               class="pa-0 ma-0 ml-2"
-              label="Include grid positions (auto-includes printers)" />
+              label="Include grid positions (auto-includes printers)"
+            />
 
             Include notes (for yourself):
             <v-textarea
               v-model="notes"
-              rows="1" />
+              rows="1"
+            />
           </div>
           <v-btn
             v-if="!isImportMode"
-            @click="downloadExportYamlFile()">
+            @click="downloadExportYamlFile()"
+          >
             <v-icon>download</v-icon>
             Export YAML file
           </v-btn>
           <v-btn
             v-if="isImportMode"
             :disabled="!isFileProvided"
-            @click="uploadAndImportYamlFile()">
+            @click="uploadAndImportYamlFile()"
+          >
             <v-icon>upload</v-icon>
             Import YAML data
           </v-btn>
         </div>
       </v-card-text>
       <v-card-actions>
-        <em class="text-red">
-          * indicates required field
-        </em>
+        <em class="text-red"> * indicates required field </em>
         <v-spacer />
         <v-btn
           variant="text"
-          @click="closeDialog()">
+          @click="closeDialog()"
+        >
           Close
         </v-btn>
       </v-card-actions>
@@ -94,23 +101,23 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
-import {usePrinterStore} from '@/store/printer.store'
-import {useDialogsStore} from '@/store/dialog.store'
-import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
-import {ServerPrivateService} from '@/backend/server-private.service'
-import {useDialog} from '@/shared/dialog.composable'
-import {useSnackbar} from '@/shared/snackbar.composable'
-import {useFeatureStore} from '@/store/features.store'
+import { defineComponent } from 'vue'
+import { usePrinterStore } from '@/store/printer.store'
+import { useDialogsStore } from '@/store/dialog.store'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { ServerPrivateService } from '@/backend/server-private.service'
+import { useDialog } from '@/shared/dialog.composable'
+import { useSnackbar } from '@/shared/snackbar.composable'
+import { useFeatureStore } from '@/store/features.store'
 
 interface Data {
-  selectedMode: number;
-  exportFloors: boolean;
-  exportFloorGrid: boolean;
-  exportGroups: boolean;
-  exportPrinters: boolean;
-  notes?: string;
-  importFile?: File;
+  selectedMode: number
+  exportFloors: boolean
+  exportFloorGrid: boolean
+  exportGroups: boolean
+  exportPrinters: boolean
+  notes?: string
+  importFile?: File
 }
 
 export default defineComponent({
@@ -122,7 +129,7 @@ export default defineComponent({
       dialogsStore: useDialogsStore(),
       featureStore: useFeatureStore(),
       dialog,
-      snackbar: useSnackbar(),
+      snackbar: useSnackbar()
     }
   },
 
@@ -133,7 +140,7 @@ export default defineComponent({
     exportGroups: true,
     exportPrinters: true,
     importFile: undefined,
-    notes: '',
+    notes: ''
   }),
 
   computed: {
@@ -172,10 +179,10 @@ export default defineComponent({
         printerComparisonStrategiesByPriority: ['name', 'url'],
         exportFloors: this.exportFloors,
         floorComparisonStrategiesByPriority: 'floor',
-        notes: this.notes,
+        notes: this.notes
       })
       this.snackbar.openInfoMessage({
-        title: 'Downloaded the YAML file',
+        title: 'Downloaded the YAML file'
       })
       this.notes = ''
     },
@@ -187,14 +194,14 @@ export default defineComponent({
       await ServerPrivateService.uploadAndImportYaml(this.importFile)
       this.importFile = undefined
       this.snackbar.openInfoMessage({
-        title: 'Imported the YAML file',
+        title: 'Imported the YAML file'
       })
       this.closeDialog()
     },
 
     closeDialog() {
       this.dialog.closeDialog()
-    },
+    }
   }
 })
 </script>

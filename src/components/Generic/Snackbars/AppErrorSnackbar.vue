@@ -9,18 +9,19 @@
     rounded="pill"
     multi-line
     style="z-index: 1000"
-    width="450">
+    width="450"
+  >
     <v-row>
       <v-col cols="2">
-        <v-btn
-          size="large">
+        <v-btn size="large">
           <v-icon>error</v-icon>
           <v-icon />
         </v-btn>
       </v-col>
       <v-col
         class="d-flex align-center flex-row"
-        cols="8">
+        cols="8"
+      >
         <div>
           <span class="font-weight-bold text-button">
             {{ snackbarTitle }}
@@ -34,7 +35,8 @@
       <v-col cols="1">
         <v-btn
           size="large"
-          @click="snackbarOpened = false">
+          @click="snackbarOpened = false"
+        >
           <v-icon>close</v-icon>
         </v-btn>
       </v-col>

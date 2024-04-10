@@ -1,10 +1,12 @@
 <template>
   <v-container
     fill-height
-    fluid>
+    fluid
+  >
     <v-layout
       align-center
-      justify-center>
+      justify-center
+    >
       <RegistrationForm />
     </v-layout>
   </v-container>

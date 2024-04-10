@@ -18,7 +18,7 @@ export function convertPrinterMultiFileToQueue(
   return files.map((f) => {
     const commands: FileUploadCommands = {
       select: false,
-      print: false,
+      print: false
     }
     if (f.name === printedFileName) {
       commands.print = true
@@ -27,7 +27,7 @@ export function convertPrinterMultiFileToQueue(
     return {
       file: f,
       printer,
-      commands,
+      commands
     }
   }) as QueuedUpload[]
 }
@@ -43,7 +43,7 @@ export function convertMultiPrinterFileToQueue(
   file: File,
   commands: FileUploadCommands = {
     select: true,
-    print: true,
+    print: true
   }
 ) {
   if (!printers?.length || !file) return []
@@ -52,7 +52,7 @@ export function convertMultiPrinterFileToQueue(
     return {
       file,
       printer: p,
-      commands,
+      commands
     }
   }) as QueuedUpload[]
 }

@@ -20,7 +20,11 @@ export class UserService extends BaseService {
     return await this.getApi<User>(path)
   }
 
-  static async changePassword(id: string, oldPassword: string, newPassword: string) {
+  static async changePassword(
+    id: string,
+    oldPassword: string,
+    newPassword: string
+  ) {
     const path = ServerApi.userChangePasswordRoute(id)
     return await this.postApi(path, { oldPassword, newPassword })
   }

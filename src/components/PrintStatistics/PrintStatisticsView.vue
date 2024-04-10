@@ -10,6 +10,6 @@ import PrintStatistics from '@/components/PrintStatistics/PrintStatistics.vue'
 
 export default defineComponent({
   name: 'PrintStatisticsView',
-  components: { PrintStatistics },
+  components: { PrintStatistics }
 })
 </script>

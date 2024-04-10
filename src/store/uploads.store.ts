@@ -1,19 +1,22 @@
 import { defineStore } from 'pinia'
-import { FailedQueuedUpload, QueuedUpload } from '@/models/uploads/queued-upload.model'
+import {
+  FailedQueuedUpload,
+  QueuedUpload
+} from '@/models/uploads/queued-upload.model'
 import { PrinterFileService } from '@/backend'
 import { useSnackbar } from '@/shared/snackbar.composable'
 
 export interface UploadsState {
-  queuedUploads: QueuedUpload[];
-  failedUploads: FailedQueuedUpload[];
-  uploadingNow: boolean;
+  queuedUploads: QueuedUpload[]
+  failedUploads: FailedQueuedUpload[]
+  uploadingNow: boolean
 }
 
 export const useUploadsStore = defineStore('Uploads', {
   state: (): UploadsState => ({
     queuedUploads: [],
     failedUploads: [],
-    uploadingNow: false,
+    uploadingNow: false
   }),
   getters: {
     hasPendingUploads(state) {
@@ -24,7 +27,7 @@ export const useUploadsStore = defineStore('Uploads', {
     },
     nextUpload(state) {
       return state.queuedUploads[0]
-    },
+    }
   },
   actions: {
     queueUploads(uploads: QueuedUpload[]) {
@@ -52,21 +55,21 @@ export const useUploadsStore = defineStore('Uploads', {
             file,
             printer,
             commands,
-            error: e,
+            error: e
           }
           this.failedUploads.push(failedUpload)
           snackbar.openErrorMessage({
             title: 'Upload failure',
-            subtitle: `File ${file.name}Upload failed for  to printer ${printer.name}`,
+            subtitle: `File ${file.name}Upload failed for  to printer ${printer.name}`
           })
         } else {
           snackbar.openErrorMessage({
             title: 'Upload failure',
-            subtitle: 'Unknown upload error occurred',
+            subtitle: 'Unknown upload error occurred'
           })
         }
       }
       this.uploadingNow = false
-    },
-  },
+    }
+  }
 })

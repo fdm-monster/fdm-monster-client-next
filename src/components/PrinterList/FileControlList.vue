@@ -1,12 +1,11 @@
 <template>
   <div v-if="fileList && printerId">
-    <strong>
-      Files:
-    </strong>
+    <strong> Files: </strong>
     <v-list color="primary">
       <v-list-item
         v-for="file in fileList.files"
-        :key="file.path">
+        :key="file.path"
+      >
         {{ file.path }}
         <small class="ml-4 mr-4">
           {{ new Date(file.date).toUTCString() }}
@@ -29,28 +28,28 @@ import { usePrinterStore } from '@/store/printer.store'
 export default defineComponent({
   name: 'FileControlList',
   components: {},
+  props: {
+    fileList: Object as PropType<PrinterFileDto[]>,
+    printerId: String
+  },
   setup: () => {
     return {
-      printersStore: usePrinterStore(),
+      printersStore: usePrinterStore()
     }
   },
 
+  computed: {},
+
+  watch: {},
+
   async created() {},
   async mounted() {},
-  props: {
-    fileList: Object as PropType<PrinterFileDto[]>,
-    printerId: String,
-  },
-
-  computed: {},
   methods: {
     async deleteFile(file: PrinterFileDto) {
       if (!this.fileList || !this.printerId) return
 
       await this.printersStore.deletePrinterFile(this.printerId, file.path)
-    },
-  },
-
-  watch: {},
+    }
+  }
 })
 </script>

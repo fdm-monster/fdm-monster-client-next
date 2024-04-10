@@ -2,12 +2,11 @@
   <v-card
     class="pa-4"
     elevation="10"
-    style="border-radius: 10px">
+    style="border-radius: 10px"
+  >
     <v-card-text>
       <v-form>
-        <label>
-          Username
-        </label>
+        <label> Username </label>
         <v-text-field
           v-model="username"
           autofocus
@@ -16,7 +15,8 @@
           prepend-icon="mdi-account"
           type="text"
           variant="underlined"
-          @keyup.enter="formIsDisabled || login()" />
+          @keyup.enter="formIsDisabled || login()"
+        />
         <v-text-field
           id="password"
           v-model="password"
@@ -28,13 +28,15 @@
           prepend-icon="lock"
           variant="underlined"
           @click:append="showPassword = !showPassword"
-          @keyup.enter="formIsDisabled || login()" />
+          @keyup.enter="formIsDisabled || login()"
+        />
         <v-alert
           v-if="errorMessage"
           class="mt-6"
           color="error"
           density="compact"
-          variant="outlined">
+          variant="outlined"
+        >
           {{ errorMessage }}
         </v-alert>
         <v-alert
@@ -42,7 +44,8 @@
           class="mt-6"
           color="error-darken-1"
           density="compact"
-          variant="outlined">
+          variant="outlined"
+        >
           Reason for automatic logout: {{ authStore.lastLogoutReason }}
         </v-alert>
       </v-form>
@@ -55,7 +58,8 @@
         size="lg"
         variant="flat"
         style="width: 100%"
-        @click="login()">
+        @click="login()"
+      >
         Login
       </v-btn>
     </v-card-actions>
@@ -66,25 +70,30 @@
         size="lg"
         variant="flat"
         style="width: 100%"
-        @click="gotoRegistration()">
-        Register new account {{ authStore.registration ? "" : "(not enabled)" }}
+        @click="gotoRegistration()"
+      >
+        Register new account {{ authStore.registration ? '' : '(not enabled)' }}
         <v-icon
           class="pl-5"
-          icon="right" />
+          icon="right"
+        />
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted, ref} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
-import {useEventBus} from '@vueuse/core'
-import {AxiosError} from 'axios'
-import {useAuthStore} from '@/store/auth.store'
-import {useSnackbar} from '@/shared/snackbar.composable'
-import {RouteNames} from '@/router/route-names'
-import {AUTH_ERROR_REASON, convertAuthErrorReason} from '@/shared/auth.constants'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useEventBus } from '@vueuse/core'
+import { AxiosError } from 'axios'
+import { useAuthStore } from '@/store/auth.store'
+import { useSnackbar } from '@/shared/snackbar.composable'
+import { RouteNames } from '@/router/route-names'
+import {
+  AUTH_ERROR_REASON,
+  convertAuthErrorReason
+} from '@/shared/auth.constants'
 
 const authStore = useAuthStore()
 const errorMessage = ref('')
@@ -106,7 +115,11 @@ onMounted(async () => {
   await authStore.checkAuthenticationRequirements()
   if (authStore.loginRequired === false) {
     // As AppLoader might not trigger, we trigger it ourselves
-    console.debug('LoginView, no login required, redirecting to', route.query.redirect, 'or home')
+    console.debug(
+      'LoginView, no login required, redirecting to',
+      route.query.redirect,
+      'or home'
+    )
     loginEvent.emit(true)
     return await routeToRedirect()
   }
@@ -122,7 +135,7 @@ onMounted(async () => {
 })
 
 async function gotoRegistration() {
-  return await router.push({name: RouteNames.Registration})
+  return await router.push({ name: RouteNames.Registration })
 }
 
 async function login() {
@@ -137,8 +150,9 @@ async function login() {
     if ((e as AxiosError)?.response?.status === 401) {
       password.value = ''
 
-      const reasonCode: keyof typeof AUTH_ERROR_REASON = ((e as AxiosError)?.response?.data as any)
-        ?.reasonCode
+      const reasonCode: keyof typeof AUTH_ERROR_REASON = (
+        (e as AxiosError)?.response?.data as any
+      )?.reasonCode
       const convertedReason = convertAuthErrorReason(reasonCode)
       if (reasonCode === AUTH_ERROR_REASON.AccountNotVerified) {
         snackbar.error(
@@ -158,9 +172,10 @@ async function login() {
 
     snackbar.openErrorMessage({
       title: 'Error logging in',
-      subtitle: 'Please test your connection and try again.',
+      subtitle: 'Please test your connection and try again.'
     })
-    errorMessage.value = 'Error logging in - status code ' + (e as AxiosError)?.response?.status
+    errorMessage.value =
+      'Error logging in - status code ' + (e as AxiosError)?.response?.status
     password.value = ''
 
     return
@@ -178,12 +193,12 @@ async function routeToRedirect() {
   const routePath = route.query.redirect
   if (!routePath) {
     console.debug('[LoginForm] Redirecting to home')
-    await router.push({name: RouteNames.Home})
+    await router.push({ name: RouteNames.Home })
     return
   } else {
     console.debug('[LoginForm] Redirecting to ', routePath)
     await router.push({
-      path: routePath as string,
+      path: routePath as string
     })
     return
   }

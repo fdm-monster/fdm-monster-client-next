@@ -1,18 +1,22 @@
 import { IdType } from '@/utils/id.type'
-import { OctoPrintStatisticsDto, Prints, Refs } from '@/models/printers/printer-file.model'
+import {
+  OctoPrintStatisticsDto,
+  Prints,
+  Refs
+} from '@/models/printers/printer-file.model'
 import { GcodeAnalysisDto } from '@/models/printers/gcode/gcode-analysis.model'
 
 export interface ReprintFileDto {
-  file?: CreateOrUpdatePrinterFileDto;
-  reprintState: ReprintState;
-  connectionState: ConnectionState | null;
-  printerId: IdType;
+  file?: CreateOrUpdatePrinterFileDto
+  reprintState: ReprintState
+  connectionState: ConnectionState | null
+  printerId: IdType
 }
 
 export enum ReprintState {
   PrinterNotAvailable = 0,
   NoLastPrint = 1,
-  LastPrintReady = 2,
+  LastPrintReady = 2
 }
 
 export type ConnectionState =
@@ -60,16 +64,16 @@ export class CreateOrUpdatePrinterFileDto {
 
 export interface OctoPrintCustomDto {
   // Custom metadata that is updated on hash changes only
-  userdata?: any;
+  userdata?: any
 
   // Optional parts due to plugins and such
-  displayLayerProgress?: DisplayLayerProgressDto;
-  thumbnail?: string;
-  thumbnail_src?: string;
-  [k: string]: any;
+  displayLayerProgress?: DisplayLayerProgressDto
+  thumbnail?: string
+  thumbnail_src?: string
+  [k: string]: any
 }
 
 export interface DisplayLayerProgressDto {
   // numberstring
-  totalLayerCountWithoutOffset: string;
+  totalLayerCountWithoutOffset: string
 }

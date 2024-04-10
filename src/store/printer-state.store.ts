@@ -1,24 +1,30 @@
 import { defineStore } from 'pinia'
 import { PrinterDto } from '@/models/printers/printer.model'
-import { PrinterStateDto, SocketState } from '@/models/socketio-messages/socketio-message.model'
+import {
+  PrinterStateDto,
+  SocketState
+} from '@/models/socketio-messages/socketio-message.model'
 import { usePrinterStore } from './printer.store'
 import { PrinterFileService } from '@/backend'
 import { useSettingsStore } from './settings.store'
 import { CurrentOrHistoryPayload } from '@/models/printers/printer-current-job.model'
 import { IdType } from '@/utils/id.type'
-import { isPrinterIdling, isPrinterPrinting } from '@/shared/printer-state.constants'
+import {
+  isPrinterIdling,
+  isPrinterPrinting
+} from '@/shared/printer-state.constants'
 
 interface State {
-  printerIds: IdType[];
-  printerEventsById: Record<IdType, PrinterStateDto>;
-  socketStatesById: Record<IdType, SocketState>;
+  printerIds: IdType[]
+  printerEventsById: Record<IdType, PrinterStateDto>
+  socketStatesById: Record<IdType, SocketState>
 }
 
 export const usePrinterStateStore = defineStore('PrinterState', {
   state: (): State => ({
     printerIds: [],
     printerEventsById: {},
-    socketStatesById: {},
+    socketStatesById: {}
   }),
   getters: {
     operationalPrintersById() {
@@ -31,7 +37,9 @@ export const usePrinterStateStore = defineStore('PrinterState', {
           if (printer) {
             printersById[id] = printer
           } else {
-            throw new Error(`PrinterStore contains no printer with id ${id} but events are known`)
+            throw new Error(
+              `PrinterStore contains no printer with id ${id} but events are known`
+            )
           }
         }
       })
@@ -76,7 +84,8 @@ export const usePrinterStateStore = defineStore('PrinterState', {
       this.printerIds.forEach((id) => {
         const printerEvents = this.printerEventsById[id]
         if (printerEvents?.current?.receivedAt) {
-          printerCurrentEventReceivedAtById[id] = printerEvents.current.receivedAt
+          printerCurrentEventReceivedAtById[id] =
+            printerEvents.current.receivedAt
         }
       })
       return printerCurrentEventReceivedAtById
@@ -99,18 +108,21 @@ export const usePrinterStateStore = defineStore('PrinterState', {
       })
       return onlinePrinters
     },
-    onlinePrintersWithStates(): { printerState: PrinterStateDto; printer: PrinterDto }[] {
+    onlinePrintersWithStates(): {
+      printerState: PrinterStateDto
+      printer: PrinterDto
+    }[] {
       return Object.values(this.onlinePrinters).map((printer) => {
         return {
           printer,
-          printerState: this.printerEventsById[printer.id],
+          printerState: this.printerEventsById[printer.id]
         }
       })
     },
     printingCount(): number {
       const printerStateStore = usePrinterStateStore()
-      return Object.values(printerStateStore.onlinePrintersWithStates).filter((p) =>
-        isPrinterPrinting(p.printerState)
+      return Object.values(printerStateStore.onlinePrintersWithStates).filter(
+        (p) => isPrinterPrinting(p.printerState)
       ).length
     },
     operationalNotPrintingCount(): number {
@@ -130,7 +142,8 @@ export const usePrinterStateStore = defineStore('PrinterState', {
     },
     printerJobsById() {
       const printerStore = usePrinterStore()
-      const jobsRendered = useSettingsStore().frontendDebugSettings.showJobsRendered
+      const jobsRendered =
+        useSettingsStore().frontendDebugSettings.showJobsRendered
       const printersWithJobById: Record<IdType, CurrentOrHistoryPayload> = {}
       this.printerIds.forEach((id) => {
         const printerEvents = this.printerEventsById[id]
@@ -140,20 +153,28 @@ export const usePrinterStateStore = defineStore('PrinterState', {
           if (printer) {
             printersWithJobById[printer.id] = printerEvents?.current?.payload
           } else {
-            throw new Error(`PrinterStore contains no printer with id ${id} but events are known`)
+            throw new Error(
+              `PrinterStore contains no printer with id ${id} but events are known`
+            )
           }
         }
       })
 
       if (jobsRendered) {
         // TODO improve summary
-        console.debug('[PrinterStateStore] rendered printerJobsById', printersWithJobById)
+        console.debug(
+          '[PrinterStateStore] rendered printerJobsById',
+          printersWithJobById
+        )
       }
       return printersWithJobById
     },
     printersWithJob() {
       const printerStore = usePrinterStore()
-      const printersWithJobById: { printer: PrinterDto; job: CurrentOrHistoryPayload }[] = []
+      const printersWithJobById: {
+        printer: PrinterDto
+        job: CurrentOrHistoryPayload
+      }[] = []
       this.printerIds.forEach((id) => {
         const printerEvents = this.printerEventsById[id]
         const flags = printerEvents?.current?.payload?.state?.flags
@@ -162,10 +183,12 @@ export const usePrinterStateStore = defineStore('PrinterState', {
           if (printer) {
             printersWithJobById.push({
               printer,
-              job: printerEvents?.current?.payload,
+              job: printerEvents?.current?.payload
             })
           } else {
-            throw new Error(`PrinterStore contains no printer with id ${id} but events are known`)
+            throw new Error(
+              `PrinterStore contains no printer with id ${id} but events are known`
+            )
           }
         }
       })
@@ -178,11 +201,12 @@ export const usePrinterStateStore = defineStore('PrinterState', {
         const flags = printerEvents?.current?.payload?.state?.flags
         if (flags?.printing || flags?.paused) {
           // TODO decide on comparing with name or path
-          printingFilesByPrinterId[id] = printerEvents?.current?.payload?.job?.file?.path
+          printingFilesByPrinterId[id] =
+            printerEvents?.current?.payload?.job?.file?.path
         }
       })
       return printingFilesByPrinterId
-    },
+    }
   },
   actions: {
     setSocketStates(socketStates: Record<IdType, SocketState>) {
@@ -197,18 +221,26 @@ export const usePrinterStateStore = defineStore('PrinterState', {
       delete this.printerEventsById[printerId]
       this.printerIds = Object.keys(this.printerEventsById)
     },
-    async selectAndPrintFile({ printerId, fullPath }: { printerId: IdType; fullPath: string }) {
+    async selectAndPrintFile({
+      printerId,
+      fullPath
+    }: {
+      printerId: IdType
+      fullPath: string
+    }) {
       if (!printerId) return
       const printerStore = usePrinterStore()
       const printer = printerStore.printer(printerId)
       if (!printer) return
 
       if (this.isPrinterPrinting(printerId)) {
-        alert('This printer is printing or not connected! Either way printing is not an option.')
+        alert(
+          'This printer is printing or not connected! Either way printing is not an option.'
+        )
         return
       }
 
       await PrinterFileService.selectAndPrintFile(printerId, fullPath, true)
-    },
-  },
+    }
+  }
 })

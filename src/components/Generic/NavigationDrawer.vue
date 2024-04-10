@@ -3,21 +3,24 @@
     permanent
     rail
     theme="dark"
-    class="nav-side-background">
+    class="nav-side-background"
+  >
     <v-app-bar-nav-icon class="ml-1 mt-2">
       <v-img
         alt="FDM Monster Logo"
         :src="imgLogo"
         class="shrink mr-1 pt-3 ml-1"
         transition="scale-transition"
-        width="40" />
+        width="40"
+      />
     </v-app-bar-nav-icon>
 
     <v-divider />
 
     <v-list
       density="compact"
-      nav>
+      nav
+    >
       <v-list-item
         v-for="([icon, title, path], i) in items"
         :key="i"
@@ -25,7 +28,8 @@
         :prepend-icon="icon"
         :title="title"
         density="comfortable"
-        router-link />
+        router-link
+      />
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -39,7 +43,7 @@ const items = [
   ['camera_alt', 'CameraGridView', '/cameras'],
   ['settings', 'Settings', '/settings'],
   ['timeline', 'PrintStatistics', '/statistics'],
-  ['contact_support', 'About', '/about'],
+  ['contact_support', 'About', '/about']
 ]
 </script>
 

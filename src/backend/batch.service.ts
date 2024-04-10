@@ -17,7 +17,10 @@ export class BatchService extends BaseService {
   }
 
   static async batchToggleEnabled(printerIds: IdType[], enabled: boolean) {
-    return await this.postApi('api/batch/toggle-enabled', { printerIds, enabled })
+    return await this.postApi('api/batch/toggle-enabled', {
+      printerIds,
+      enabled
+    })
   }
 
   static async batchGetLastPrintedFiles(printerIds: IdType[]) {
@@ -25,7 +28,9 @@ export class BatchService extends BaseService {
     return await this.postApi<ReprintFileDto[]>(path, { printerIds })
   }
 
-  static async batchReprintFiles(prints: { printerId: IdType; path: string }[]) {
+  static async batchReprintFiles(
+    prints: { printerId: IdType; path: string }[]
+  ) {
     const path = ServerApi.batchReprintFilesRoute
     return await this.postApi(path, { prints })
   }

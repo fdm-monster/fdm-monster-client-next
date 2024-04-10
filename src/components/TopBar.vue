@@ -1,18 +1,15 @@
 <template>
   <v-app-bar color="primary">
     <v-toolbar-title class="text-uppercase text-white">
-      <span class="font-weight-light">
-        FDM
-      </span>
-      <strong>
-        Monster
-      </strong>
+      <span class="font-weight-light"> FDM </span>
+      <strong> Monster </strong>
     </v-toolbar-title>
 
     <v-spacer v-if="isDemoMode" />
     <h2
       v-if="isDemoMode"
-      class="text-uppercase text--white">
+      class="text-uppercase text--white"
+    >
       DEMO MODE
     </h2>
     <v-spacer />
@@ -24,14 +21,16 @@
       :close-on-content-click="false"
       location="bottom right"
       open-on-hover
-      transition="slide-y-transition">
-      <template #activator="{props}">
+      transition="slide-y-transition"
+    >
+      <template #activator="{ props }">
         <!--Theme?-->
         <v-btn
           class="ml-2"
           color="secondary"
           theme="dark"
-          v-bind="props">
+          v-bind="props"
+        >
           <v-icon class="mr-2">person</v-icon>
           {{ username }}
         </v-btn>
@@ -44,19 +43,22 @@
           :to="item.path"
           :title="item.title"
           :prepend-avatar="item.icon"
-          link />
+          link
+        />
       </v-list>
     </v-menu>
 
     <span
       v-if="isDevEnv && expiry"
-      class="ml-2">
+      class="ml-2"
+    >
       AuthExp {{ expiry }}
     </span>
 
     <span
       v-if="isDevEnv"
-      class="ml-2">
+      class="ml-2"
+    >
       <small>
         S{{ socketState.setup ? 1 : 0 }} C{{ socketState.connected ? 1 : 0 }}
         {{ socketState.id }}
@@ -68,12 +70,14 @@
       tooltip="Go back to login"
       text="Logout"
       color="secondary"
+      icon="logout"
       @click="logout()"
-      icon="logout" />
+    />
 
     <v-btn
       v-if="authStore.loginRequired === true"
-      class="ml-2">
+      class="ml-2"
+    >
       <v-icon class="mr-2">logout</v-icon>
       Logout
     </v-btn>
@@ -83,20 +87,22 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref} from 'vue'
-import {useRouter} from 'vue-router'
-import {useIntervalFn} from '@vueuse/core'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useIntervalFn } from '@vueuse/core'
 import PrintJobsMenu from '@/components/Generic/PrintJobsMenu.vue'
-import {useAuthStore} from '@/store/auth.store'
-import {useProfileStore} from '@/store/profile.store'
-import {routeToLogin} from '@/router/utils'
-import {isDevEnv, isProdEnv} from '@/shared/app.constants'
-import {socketState} from '@/store/connection.store'
+import { useAuthStore } from '@/store/auth.store'
+import { useProfileStore } from '@/store/profile.store'
+import { routeToLogin } from '@/router/utils'
+import { isDevEnv, isProdEnv } from '@/shared/app.constants'
+import { socketState } from '@/store/connection.store'
 
 const profileStore = useProfileStore()
 const authStore = useAuthStore()
 const router = useRouter()
-const items = [{title: 'Open Profile', icon: 'person', path: '/settings/account'}]
+const items = [
+  { title: 'Open Profile', icon: 'person', path: '/settings/account' }
+]
 
 const now = ref(Date.now())
 if (isDevEnv) {

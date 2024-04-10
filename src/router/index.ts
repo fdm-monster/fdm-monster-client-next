@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import PrinterGridView from '@/components/PrinterGrid/PrinterGridView.vue'
 import PrintersView from '@/components/PrinterList/PrintersView.vue'
 import Settings from '@/components/Settings/SettingsView.vue'
@@ -8,8 +8,8 @@ import FloorSettings from '@/components/Settings/FloorSettings.vue'
 import AboutView from '@/components/AboutHelp/AboutView.vue'
 import EmergencyCommands from '@/components/Settings/EmergencyCommands.vue'
 import NotFoundView from '@/components/NotFound/NotFoundView.vue'
-import {useAuthStore} from '@/store/auth.store'
-import {RouteNames} from './route-names'
+import { useAuthStore } from '@/store/auth.store'
+import { RouteNames } from './route-names'
 import PermissionDenied from '../components/Login/PermissionDenied.vue'
 import LoginView from '../components/Login/LoginView.vue'
 import RegistrationView from '../components/Login/RegistrationView.vue'
@@ -23,11 +23,11 @@ import DiagnosticsSettings from '../components/Settings/DiagnosticsSettings.vue'
 import PrintStatisticsView from '../components/PrintStatistics/PrintStatisticsView.vue'
 
 const NeedsAuth = {
-  requiresAuth: true,
+  requiresAuth: true
 }
 
 const NoAuth = {
-  requiresAuth: false,
+  requiresAuth: false
 }
 
 const router = createRouter({
@@ -37,36 +37,36 @@ const router = createRouter({
       path: '/',
       name: RouteNames.Home,
       meta: NeedsAuth,
-      component: PrinterGridView,
+      component: PrinterGridView
     },
     {
       path: '/first-time-setup',
       name: RouteNames.FirstTimeSetup,
       meta: NoAuth,
-      component: FirstTimeSetupView,
+      component: FirstTimeSetupView
     },
     {
       path: '/login',
       name: RouteNames.Login,
       meta: NoAuth,
-      component: LoginView,
+      component: LoginView
     },
     {
       path: '/registration',
       name: RouteNames.Registration,
       meta: NoAuth,
-      component: RegistrationView,
+      component: RegistrationView
     },
     {
       path: '/printers',
       name: RouteNames.PrintersView,
       meta: NeedsAuth,
-      component: PrintersView,
+      component: PrintersView
     },
     {
       path: '/cameras',
       name: RouteNames.CameraGridView,
-      component: CameraGridView,
+      component: CameraGridView
     },
     {
       path: '/settings',
@@ -76,54 +76,54 @@ const router = createRouter({
         {
           path: '',
           meta: NeedsAuth,
-          redirect: '/settings/grid',
+          redirect: '/settings/grid'
         },
         {
           path: 'account',
           meta: NeedsAuth,
-          component: AccountSettings,
+          component: AccountSettings
         },
         {
           path: 'server-protection',
           meta: NeedsAuth,
-          component: ServerProtectionSettings,
+          component: ServerProtectionSettings
         },
         {
           path: 'grid',
           meta: NeedsAuth,
-          component: GridSettings,
+          component: GridSettings
         },
         {
           path: 'floors',
           meta: NeedsAuth,
-          component: FloorSettings,
+          component: FloorSettings
         },
         {
           path: 'user-management',
           meta: NeedsAuth,
-          component: UserManagementSettings,
+          component: UserManagementSettings
         },
         {
           path: 'octoprint',
           meta: NeedsAuth,
-          component: OctoPrintSettings,
+          component: OctoPrintSettings
         },
         {
           path: 'emergency-commands',
           meta: NeedsAuth,
-          component: EmergencyCommands,
+          component: EmergencyCommands
         },
         {
           path: 'software-upgrade',
           meta: NeedsAuth,
-          component: SoftwareUpgradeSettings,
+          component: SoftwareUpgradeSettings
         },
         {
           path: 'diagnostics',
           meta: NeedsAuth,
-          component: DiagnosticsSettings,
-        },
-      ],
+          component: DiagnosticsSettings
+        }
+      ]
     },
     // {
     //   path: "/repair-log",
@@ -134,25 +134,25 @@ const router = createRouter({
       path: '/statistics',
       name: RouteNames.PrintStatistics,
       meta: NeedsAuth,
-      component: PrintStatisticsView,
+      component: PrintStatisticsView
     },
     {
       path: '/about',
       name: 'About',
-      component: AboutView,
+      component: AboutView
     },
     {
       path: '/permission-denied',
       name: RouteNames.PermissionDenied,
       meta: NeedsAuth,
-      component: PermissionDenied,
+      component: PermissionDenied
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
-      component: NotFoundView,
-    },
-  ],
+      component: NotFoundView
+    }
+  ]
 })
 
 router.beforeEach(async (to, from, next) => {
@@ -182,7 +182,7 @@ router.beforeEach(async (to, from, next) => {
     }
     return next({
       path: '/login',
-      query: {redirect: to.fullPath},
+      query: { redirect: to.fullPath }
     })
   }
 

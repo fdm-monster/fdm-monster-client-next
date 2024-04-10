@@ -2,21 +2,19 @@
   <BaseDialog
     :id="dialog.dialogId"
     :max-width="showChecksPanel ? '900px' : '700px'"
-    @escape="closeDialog()">
+    @escape="closeDialog()"
+  >
     <v-card class="pa-4">
       <v-card-title>
         <span class="text-h5">
           <v-avatar
             color="primary"
-            size="56">
+            size="56"
+          >
             {{ avatarInitials }}
           </v-avatar>
-          <span v-if="isUpdating">
-            Updating Printer
-          </span>
-          <span v-else>
-            New Printer
-          </span>
+          <span v-if="isUpdating"> Updating Printer </span>
+          <span v-else> New Printer </span>
         </span>
       </v-card-title>
       <v-card-text>
@@ -31,7 +29,8 @@
                   autofocus
                   class="ma-1"
                   label="Printer name*"
-                  required />
+                  required
+                />
               </v-col>
               <v-col>
                 <v-checkbox
@@ -39,7 +38,8 @@
                   hint="Disabling makes the printer passive"
                   label="Enabled*"
                   persistent-hint
-                  required />
+                  required
+                />
               </v-col>
             </v-row>
 
@@ -49,7 +49,8 @@
               v-model="formData.printerURL"
               class="ma-1"
               hint="F.e. 'octopi.local' or 'https://my.printer.com'"
-              label="Printer URL*" />
+              label="Printer URL*"
+            />
 
             <!--              :rules="apiKeyRules"-->
             <v-text-field
@@ -59,47 +60,49 @@
               hint="User or Application Key only (Global API key fails)"
               label="API Key*"
               persistent-hint
-              required />
+              required
+            />
             <!--            </validation-provider>-->
           </v-col>
 
           <PrinterChecksPanel
             v-if="showChecksPanel"
-            :cols="4">
-            <v-btn @click="showChecksPanel = false">
-              Hide checks
-            </v-btn>
+            :cols="4"
+          >
+            <v-btn @click="showChecksPanel = false"> Hide checks </v-btn>
           </PrinterChecksPanel>
         </v-row>
       </v-card-text>
       <v-card-actions>
-        <em class="text-red">
-          * indicates required field
-        </em>
+        <em class="text-red"> * indicates required field </em>
         <v-spacer />
         <v-btn
           variant="text"
-          @click="closeDialog()">
+          @click="closeDialog()"
+        >
           Close
         </v-btn>
         <v-btn
           v-if="isUpdating"
           color="gray"
           variant="text"
-          @click="duplicatePrinter()">
+          @click="duplicatePrinter()"
+        >
           Duplicate
         </v-btn>
         <v-btn
           color="warning"
           variant="text"
-          @click="testPrinter()">
+          @click="testPrinter()"
+        >
           Test connection
         </v-btn>
 
         <v-btn
           color="blue-darken-1"
           variant="text"
-          @click="submit()">
+          @click="submit()"
+        >
           {{ submitButtonText }}
         </v-btn>
       </v-card-actions>
@@ -108,19 +111,22 @@
 </template>
 
 <script lang="ts" setup>
-import {inject} from 'vue'
-import {generateInitials, newRandomNamePair} from '@/shared/noun-adjectives.data'
-import {usePrinterStore} from '@/store/printer.store'
-import {PrintersService} from '@/backend'
-import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
-import {useTestPrinterStore} from '@/store/test-printer.store'
+import { inject } from 'vue'
+import {
+  generateInitials,
+  newRandomNamePair
+} from '@/shared/noun-adjectives.data'
+import { usePrinterStore } from '@/store/printer.store'
+import { PrintersService } from '@/backend'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { useTestPrinterStore } from '@/store/test-printer.store'
 import {
   CreatePrinter,
-  getDefaultCreatePrinter,
+  getDefaultCreatePrinter
 } from '@/models/printers/crud/create-printer.model'
-import {useDialog} from '@/shared/dialog.composable'
-import {AppConstants} from '@/shared/app.constants'
-import {useSnackbar} from '@/shared/snackbar.composable'
+import { useDialog } from '@/shared/dialog.composable'
+import { AppConstants } from '@/shared/app.constants'
+import { useSnackbar } from '@/shared/snackbar.composable'
 
 const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 const printersStore = usePrinterStore()
@@ -163,14 +169,14 @@ const avatarInitials = computed(() => {
 })
 
 const printerNameRules = computed(() => {
-  return {required: true, max: appConstants.maxPrinterNameLength}
+  return { required: true, max: appConstants.maxPrinterNameLength }
 })
 
 const apiKeyRules = computed(() => {
   return {
     required: true,
     length: appConstants.apiKeyLength,
-    alpha_num: true,
+    alpha_num: true
   }
 })
 
@@ -188,7 +194,7 @@ async function testPrinter() {
   testPrinterStore.clearEvents()
   openTestPanel()
 
-  const {correlationToken} = await testPrinterStore.createTestPrinter(
+  const { correlationToken } = await testPrinterStore.createTestPrinter(
     formData.value as CreatePrinter
   )
   testPrinterStore.currentCorrelationToken = correlationToken
@@ -197,7 +203,7 @@ async function testPrinter() {
 async function createPrinter(newPrinterData: CreatePrinter) {
   await printersStore.createPrinter(newPrinterData)
   snackbar.openInfoMessage({
-    title: `Printer ${newPrinterData.name} created`,
+    title: `Printer ${newPrinterData.name} created`
   })
 }
 
@@ -206,11 +212,11 @@ async function updatePrinter(updatedPrinter: CreatePrinter) {
 
   await printersStore.updatePrinter({
     printerId: printerId as string,
-    updatedPrinter,
+    updatedPrinter
   })
 
   snackbar.openInfoMessage({
-    title: `Printer ${updatedPrinter.name} updated`,
+    title: `Printer ${updatedPrinter.name} updated`
   })
 }
 
@@ -240,10 +246,9 @@ function closeDialog() {
   copyPasteConnectionString.value = ''
 }
 
-watch(printerId,
-  (val) => {
-    if (!val) return
-    const printer = printersStore.printer(val) as CreatePrinter
-    formData.value = PrintersService.convertPrinterToCreateForm(printer)
-  })
+watch(printerId, (val) => {
+  if (!val) return
+  const printer = printersStore.printer(val) as CreatePrinter
+  formData.value = PrintersService.convertPrinterToCreateForm(printer)
+})
 </script>

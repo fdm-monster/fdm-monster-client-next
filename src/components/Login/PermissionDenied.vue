@@ -1,16 +1,12 @@
 <template>
   <v-container
     fill-height
-    fluid>
-    <v-app-bar
-      color="primary">
+    fluid
+  >
+    <v-app-bar color="primary">
       <v-toolbar-title class="text-uppercase text-white">
-        <span class="font-weight-light">
-          FDM
-        </span>
-        <strong>
-          Monster
-        </strong>
+        <span class="font-weight-light"> FDM </span>
+        <strong> Monster </strong>
       </v-toolbar-title>
     </v-app-bar>
 
@@ -18,24 +14,26 @@
       alt="FDM Monster Background"
       class="grid-bg-img align-content-center"
       src="/img/logo.svg"
-      style="opacity: 0.06">
+      style="opacity: 0.06"
+    />
 
     <v-layout
       align-center
       column
-      justify-center>
+      justify-center
+    >
       <v-card
         class="flex align-center justify-center pa-lg-16 pa-sm-10"
-        style="width: 80%">
+        style="width: 80%"
+      >
         <v-card-title>
           <v-icon
             class="mr-4"
-            size="50">
+            size="50"
+          >
             lock
           </v-icon>
-          <h3>
-            Permission Denied
-          </h3>
+          <h3>Permission Denied</h3>
         </v-card-title>
         <v-card-subtitle class="mt-1">
           You do not have permission to access a specific resource on this page.
@@ -43,7 +41,8 @@
 
         <v-card-text v-if="permissionProblems">
           <div v-if="permissionProblems.page">
-            Page: <strong>
+            Page:
+            <strong>
               {{ permissionProblems?.page }}
             </strong>
           </div>
@@ -51,14 +50,15 @@
             Required permission(s):
             <strong
               v-for="perm of permissionProblems.permissions"
-              :key="perm">
+              :key="perm"
+            >
               {{ perm }}
             </strong>
           </div>
           <div v-if="permissionProblems.roles">
             Usable roles:
             <strong>
-              {{ permissionProblems.roles?.join(", ") }}
+              {{ permissionProblems.roles?.join(', ') }}
             </strong>
           </div>
           <div v-if="permissionProblems.url">
@@ -79,7 +79,8 @@
             class="align-center"
             color="primary"
             to="/"
-            variant="elevated">
+            variant="elevated"
+          >
             <v-icon class="mr-2">home</v-icon>
             Go home
           </v-btn>
@@ -89,17 +90,17 @@
   </v-container>
 </template>
 <script lang="ts" setup>
-import {computed} from 'vue'
-import {useRoute} from 'vue-router'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
 interface PermissionDeniedQuery {
-  roles: string[];
-  permissions?: string[];
-  url?: string;
-  page?: string;
-  error?: string;
+  roles: string[]
+  permissions?: string[]
+  url?: string
+  page?: string
+  error?: string
 }
 
 const permissionProblems = computed(() => {

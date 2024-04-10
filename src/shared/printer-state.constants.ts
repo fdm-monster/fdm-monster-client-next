@@ -1,4 +1,7 @@
-import { PrinterStateDto, SocketState } from '@/models/socketio-messages/socketio-message.model'
+import {
+  PrinterStateDto,
+  SocketState
+} from '@/models/socketio-messages/socketio-message.model'
 import { PrinterDto } from '@/models/printers/printer.model'
 import { useSettingsStore } from '@/store/settings.store'
 
@@ -6,7 +9,7 @@ const COLOR = {
   danger: 'danger',
   dark: 'dark',
   secondary: 'secondary',
-  success: 'success',
+  success: 'success'
 } as const
 
 const RGB = {
@@ -15,7 +18,7 @@ const RGB = {
   DarkGray: '#262626',
   LightBrown: '#583c0e',
   Brown: '#580e47',
-  Red: '#2e0905',
+  Red: '#2e0905'
 } as const
 
 const LABEL = {
@@ -27,7 +30,7 @@ const LABEL = {
   Error: 'Error',
   Paused: 'Paused',
   Operational: 'Operational',
-  Printing: 'Printing',
+  Printing: 'Printing'
 } as const
 
 export function interpretStates(
@@ -47,14 +50,14 @@ export function interpretStates(
         ...state,
         color: COLOR.danger,
         rgb: RGB.Black,
-        text: LABEL.Maintenance,
+        text: LABEL.Maintenance
       }
     }
     return {
       ...state,
       color: COLOR.secondary,
       rgb: RGB.DarkBlue,
-      text: LABEL.Disabled,
+      text: LABEL.Disabled
     }
   }
 
@@ -67,7 +70,11 @@ export function interpretStates(
       ...state,
       color: COLOR.secondary,
       rgb: RGB.Red,
-      text: authFail ? 'API key wrong' : noResponse ? 'API unreachable' : socketState?.api || '-',
+      text: authFail
+        ? 'API key wrong'
+        : noResponse
+          ? 'API unreachable'
+          : socketState?.api || '-'
     }
   }
 
@@ -78,7 +85,7 @@ export function interpretStates(
       ...state,
       color: COLOR.danger,
       rgb: RGB.Red,
-      text: authFail ? 'API key wrong' : 'No API connection',
+      text: authFail ? 'API key wrong' : 'No API connection'
     }
   }
 
@@ -107,7 +114,7 @@ export function interpretStates(
       color: COLOR.danger,
       rgb: RGB.Red,
       // TODO this should not result in S/SA/P label, but in a more descriptive label
-      text: !printerState ? 'No USB' : `S${s} SA${sa} | P${p}`,
+      text: !printerState ? 'No USB' : `S${s} SA${sa} | P${p}`
     }
   }
 
@@ -121,22 +128,23 @@ export function interpretStates(
       ...state,
       color: COLOR.danger,
       rgb: RGB.Red,
-      text: currentState.text?.replace('Offline', 'Disconnected') || LABEL.Error,
-      description: currentState.error,
+      text:
+        currentState.text?.replace('Offline', 'Disconnected') || LABEL.Error,
+      description: currentState.error
     }
   } else if (flags.paused || flags.pausing) {
     return {
       ...state,
       color: COLOR.success,
       rgb: RGB.Brown,
-      text: LABEL.Paused,
+      text: LABEL.Paused
     }
   } else if (flags.printing) {
     return {
       ...state,
       color: COLOR.success,
       rgb: RGB.LightBrown,
-      text: LABEL.Printing,
+      text: LABEL.Printing
     }
   } else {
     return {
@@ -144,20 +152,25 @@ export function interpretStates(
       color: COLOR.dark,
       rgb: RGB.DarkGray,
       text: LABEL.Operational,
-      description: currentState.error,
+      description: currentState.error
     }
   }
 }
 
-const toCurrentState = (printerState: PrinterStateDto) => printerState?.current?.payload?.state
+const toCurrentState = (printerState: PrinterStateDto) =>
+  printerState?.current?.payload?.state
 
 export const isPrinterPrinting = (printerState: PrinterStateDto) =>
   toCurrentState(printerState)?.flags.printing
 
 export const isPrinterPaused = (printerState: PrinterStateDto) =>
-  toCurrentState(printerState)?.flags?.paused || toCurrentState(printerState)?.flags?.pausing
+  toCurrentState(printerState)?.flags?.paused ||
+  toCurrentState(printerState)?.flags?.pausing
 
-export const isPrinterDisconnected = (printer: PrinterDto, printerState: PrinterStateDto) =>
+export const isPrinterDisconnected = (
+  printer: PrinterDto,
+  printerState: PrinterStateDto
+) =>
   (!isPrinterInMaintenance(printer) &&
     printer?.enabled &&
     !toCurrentState(printerState)?.flags.operational) ||
@@ -170,7 +183,10 @@ export const isPrinterDisabled = (printer: PrinterDto) =>
 export const isPrinterInMaintenance = (printer?: PrinterDto) =>
   !printer?.enabled && printer?.disabledReason?.length
 
-export const isPrinterIdling = (printer: PrinterDto, printerState: PrinterStateDto) =>
+export const isPrinterIdling = (
+  printer: PrinterDto,
+  printerState: PrinterStateDto
+) =>
   toCurrentState(printerState)?.flags &&
   !toCurrentState(printerState)?.flags.printing &&
   toCurrentState(printerState)?.flags.operational &&

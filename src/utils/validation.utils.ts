@@ -8,7 +8,7 @@ export function isValidIPOrMask(str: string) {
   if (subAddresses <= 1) return false
 
   return (
-    arr.filter((el) => el.length && parseInt(el) >= 0 && parseInt(el) <= 255).length ===
-    subAddresses
+    arr.filter((el) => el.length && parseInt(el) >= 0 && parseInt(el) <= 255)
+      .length === subAddresses
   )
 }

@@ -1,6 +1,6 @@
 export interface IFeatureFlag {
-  available: boolean;
-  version: number;
+  available: boolean
+  version: number
 }
 
 export class FeaturesModel {
@@ -31,5 +31,5 @@ export const featureFlagsList: TFeatureFlags[] = [
   'batchTogglePrinterEnabled',
   'cameraStream',
   'printerGroupsApi',
-  'printerControlApi',
+  'printerControlApi'
 ]

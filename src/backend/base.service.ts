@@ -34,7 +34,7 @@ export class BaseService {
     const response = await httpClient.request<T>({
       url: path,
       method: 'delete',
-      data: body,
+      data: body
     })
     return response.data
   }

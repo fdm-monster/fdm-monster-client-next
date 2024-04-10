@@ -6,7 +6,7 @@ export let appSocketIO: Socket | null = null
 export const socketState = reactive({
   connected: false,
   setup: false,
-  id: '',
+  id: ''
 })
 
 export function constructSocket(apiBase: string, token?: string | null) {
@@ -15,7 +15,7 @@ export function constructSocket(apiBase: string, token?: string | null) {
   }
   socketState.setup = false
   appSocketIO = io(apiBase, {
-    auth: token?.length ? { token } : undefined,
+    auth: token?.length ? { token } : undefined
   })
   socketState.setup = true
 
@@ -50,7 +50,7 @@ export function getSocketState() {
   if (!appSocketIO) {
     console.warn('Socket not set-up')
     return {
-      setup: false,
+      setup: false
     }
   }
 
@@ -59,7 +59,7 @@ export function getSocketState() {
     active: appSocketIO.active,
     connected: appSocketIO.connected,
     id: appSocketIO.id,
-    recovered: appSocketIO.recovered,
+    recovered: appSocketIO.recovered
   }
   console.warn(state)
   return state

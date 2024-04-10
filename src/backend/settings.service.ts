@@ -5,7 +5,7 @@ import {
   FileCleanSubSetting,
   SettingsDto,
   TimeoutSettings,
-  SettingsSensitiveDto,
+  SettingsSensitiveDto
 } from '@/models/settings/settings.model'
 import { FileCleanSettings } from '@/models/settings/printer-file-clean-settings.model'
 import { WhitelistSettings } from '@/models/settings/server-settings.dto'
@@ -40,13 +40,20 @@ export class SettingsService extends BaseService {
   ) {
     const path = `${ServerApi.updateCredentialSettings}`
 
-    return await this.putApi(path, { jwtExpiresIn, refreshTokenAttempts, refreshTokenExpiry })
+    return await this.putApi(path, {
+      jwtExpiresIn,
+      refreshTokenAttempts,
+      refreshTokenExpiry
+    })
   }
 
   static async updateFrontendSettings(frontendSettings: FrontendSettings) {
     const path = `${ServerApi.updateFrontendSettingsRoute}`
 
-    return (await this.putApi(path, frontendSettings as FrontendSettings)) as SettingsDto
+    return (await this.putApi(
+      path,
+      frontendSettings as FrontendSettings
+    )) as SettingsDto
   }
 
   static async setSentryDiagnosticsSettings(enabled: boolean) {
@@ -63,14 +70,17 @@ export class SettingsService extends BaseService {
   static async updateTimeoutSettings(subSettings: TimeoutSettings) {
     const path = `${ServerApi.updateTimeoutSettingRoute}`
 
-    return (await this.putApi(path, subSettings as TimeoutSettings)) as SettingsDto
+    return (await this.putApi(
+      path,
+      subSettings as TimeoutSettings
+    )) as SettingsDto
   }
 
   static async setFileCleanSettings(subSettings: FileCleanSettings) {
     const path = `${ServerApi.fileCleanSettingsRoute}`
 
     return (await this.putApi(path, {
-      fileClean: subSettings,
+      fileClean: subSettings
     } as FileCleanSubSetting)) as SettingsDto
   }
 }

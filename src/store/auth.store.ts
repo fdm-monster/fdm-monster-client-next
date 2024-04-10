@@ -4,21 +4,24 @@ import type { JwtPayload } from 'jwt-decode'
 import { AuthService, type Tokens } from '@/backend/auth.service'
 import { AxiosError, HttpStatusCode } from 'axios'
 import { WizardSettingsDto } from '@/models/settings/settings.model'
-import { AUTH_ERROR_REASON, convertAuthErrorReason } from '@/shared/auth.constants'
+import {
+  AUTH_ERROR_REASON,
+  convertAuthErrorReason
+} from '@/shared/auth.constants'
 import { useEventBus } from '@vueuse/core/index'
 
 export interface IClaims extends JwtPayload {
-  name: string;
+  name: string
 }
 
 export interface AuthState {
-  isDemoMode: boolean | null;
-  loginRequired: boolean | null;
-  refreshToken: string | null;
-  registration: boolean | null;
-  token: string | null;
-  wizardState: WizardSettingsDto | null;
-  lastLogoutReason: string | null;
+  isDemoMode: boolean | null
+  loginRequired: boolean | null
+  refreshToken: string | null
+  registration: boolean | null
+  token: string | null
+  wizardState: WizardSettingsDto | null
+  lastLogoutReason: string | null
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -29,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
     loginRequired: null,
     registration: null,
     wizardState: null,
-    lastLogoutReason: null,
+    lastLogoutReason: null
   }),
   actions: {
     async checkAuthenticationRequirements() {
@@ -42,11 +45,14 @@ export const useAuthStore = defineStore('auth', {
           return {
             loginRequired: this.loginRequired,
             wizardState: this.wizardState,
-            registration: this.registration,
+            registration: this.registration
           }
         })
         .catch((e: AxiosError) => {
-          console.error('authRequired: failed to check login required', e.response?.status)
+          console.error(
+            'authRequired: failed to check login required',
+            e.response?.status
+          )
           throw e
         })
     },
@@ -71,7 +77,10 @@ export const useAuthStore = defineStore('auth', {
         try {
           await AuthService.logout()
         } catch (e) {
-          console.error('Server could not process logout, but local logout was successful', e)
+          console.error(
+            'Server could not process logout, but local logout was successful',
+            e
+          )
         }
       }
       this.setIdToken(undefined)
@@ -82,18 +91,29 @@ export const useAuthStore = defineStore('auth', {
         await AuthService.verifyLogin()
         return { success: true }
       } catch (e1) {
-        console.error('[AuthStore.verifyOrRefreshLoginOnce]: failed to verify login', e1)
+        console.error(
+          '[AuthStore.verifyOrRefreshLoginOnce]: failed to verify login',
+          e1
+        )
 
         const error = e1 as AxiosError
-        if (!error.response || error.response?.status !== HttpStatusCode.Unauthorized) {
+        if (
+          !error.response ||
+          error.response?.status !== HttpStatusCode.Unauthorized
+        ) {
           // Ensure no request-retry is done, nor other error processing
-          console.error('[AuthStore.verifyOrRefreshLoginOnce]: unknown error', error.status)
+          console.error(
+            '[AuthStore.verifyOrRefreshLoginOnce]: unknown error',
+            error.status
+          )
           // This is meant to be caught by AppLoader, which know how to break the flow and extract the error data (body, url)
           throw e1
         }
 
         // Detect reasons for which we should not refresh, and handle the emitted event to change the UI page
-        const { reasonCode, url } = this.extractSpecialReasonCode(e1 as AxiosError)
+        const { reasonCode, url } = this.extractSpecialReasonCode(
+          e1 as AxiosError
+        )
         if (reasonCode) {
           await this.logout(false, convertAuthErrorReason(reasonCode))
           console.error(
@@ -102,7 +122,7 @@ export const useAuthStore = defineStore('auth', {
           useEventBus(`auth:${reasonCode}`).emit({
             url,
             error: error.message,
-            reasonCode,
+            reasonCode
           })
           // The caller must abort their action, but avoid rerouting to login - special case
           return { success: false, handled: true }
@@ -141,9 +161,14 @@ export const useAuthStore = defineStore('auth', {
       // Detect reasons for which we should not retry
       // - AccountNotVerified the admin has not verified the account yet and this needs to be shown to the user
       // - PasswordChangeRequired the user needs to change their password
-      const reasonCode: keyof typeof AUTH_ERROR_REASON = (error?.response?.data as any)?.reasonCode
+      const reasonCode: keyof typeof AUTH_ERROR_REASON = (
+        error?.response?.data as any
+      )?.reasonCode
       if (reasonCode) {
-        console.error('[AuthStore] 401 Unauthorized - Checking received reason code', reasonCode)
+        console.error(
+          '[AuthStore] 401 Unauthorized - Checking received reason code',
+          reasonCode
+        )
       }
       if (
         reasonCode &&
@@ -206,7 +231,7 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('refreshToken', refreshToken as string)
         this.refreshToken = refreshToken
       }
-    },
+    }
   },
   getters: {
     hasRefreshToken(): boolean {
@@ -225,6 +250,6 @@ export const useAuthStore = defineStore('auth', {
       const data = useJwt<IClaims>(this.token, { fallbackValue: null })
       if (!data) return null
       return data.payload.value
-    },
-  },
+    }
+  }
 })
