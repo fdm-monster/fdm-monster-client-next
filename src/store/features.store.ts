@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia'
-import { TFeatureFlags, FeaturesModel, IFeatureFlag } from '@/models/server/features.model'
+import {
+  TFeatureFlags,
+  FeaturesModel,
+  IFeatureFlag,
+} from '@/models/server/features.model'
 import { AppService } from '@/backend/app.service'
 
 interface State {
@@ -20,13 +24,16 @@ export const useFeatureStore = defineStore('Feature', {
           if (!state.features) {
             console.debug('Feature store not loaded')
             return false
-          } else {
-            console.debug('Feature store loaded')
           }
 
-          const featureDefined = state.features[feature] as IFeatureFlag | undefined
+          const featureDefined = state.features[feature] as
+          | IFeatureFlag
+          | undefined
           if (!featureDefined) {
-            console.debug(`Feature ${feature} not defined. Options:`, Object.keys(state.features))
+            console.debug(
+              `Feature ${feature} not defined. Options:`,
+              Object.keys(state.features)
+            )
             return false
           }
 
@@ -35,6 +42,7 @@ export const useFeatureStore = defineStore('Feature', {
   },
   actions: {
     async loadFeatures() {
+      debugger
       try {
         const features = await AppService.getFeatures()
         this.setFeatures(features)
