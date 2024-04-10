@@ -1,4 +1,4 @@
 export interface FileUploadCommands {
-  select: boolean;
-  print: boolean;
+  select: boolean
+  print: boolean
 }

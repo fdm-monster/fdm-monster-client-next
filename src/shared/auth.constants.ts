@@ -4,7 +4,7 @@ export const AUTH_ERROR_REASON = {
   InvalidOrExpiredAuthToken: 'InvalidOrExpiredAuthToken',
   PasswordChangeRequired: 'PasswordChangeRequired',
   LoginRequired: 'LoginRequired',
-  AccountNotVerified: 'AccountNotVerified',
+  AccountNotVerified: 'AccountNotVerified'
 }
 
 export function convertAuthErrorReason(error: string) {

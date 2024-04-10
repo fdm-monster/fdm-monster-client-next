@@ -36,6 +36,6 @@ export function useDialog<T = any, O = any>(dialogId: DialogName) {
           }
         })
       })
-    },
+    }
   }
 }

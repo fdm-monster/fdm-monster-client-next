@@ -4,7 +4,8 @@
     color="primary"
     fab
     size="small"
-    @click.c.capture.native.stop="openPrinterURL(printer)">
+    @click.c.capture.native.stop="openPrinterURL(printer)"
+  >
     <v-icon>directions</v-icon>
   </v-btn>
 </template>
@@ -17,19 +18,19 @@ import { PrintersService } from '@/backend'
 export default defineComponent({
   name: 'PrinterUrlAction',
   props: {
-    printer: Object as PropType<PrinterDto>,
+    printer: Object as PropType<PrinterDto>
   },
 
   computed: {
     printerId() {
       return this.printer!.id
-    },
+    }
   },
 
   methods: {
     openPrinterURL(printer: PrinterDto) {
       PrintersService.openPrinterURL(printer.printerURL)
-    },
-  },
+    }
+  }
 })
 </script>

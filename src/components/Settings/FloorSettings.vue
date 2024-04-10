@@ -4,28 +4,24 @@
       <v-avatar>
         <v-icon>settings</v-icon>
       </v-avatar>
-      <v-toolbar-title>
-        Floor Management
-      </v-toolbar-title>
+      <v-toolbar-title> Floor Management </v-toolbar-title>
     </v-toolbar>
 
     <v-list
       subheader
-      lines="three">
-      <v-list-subheader>
-        Floors
-      </v-list-subheader>
+      lines="three"
+    >
+      <v-list-subheader> Floors </v-list-subheader>
 
       <v-list-item>
-        <v-list-item-title>
-          Create new floor
-        </v-list-item-title>
+        <v-list-item-title> Create new floor </v-list-item-title>
         <v-list-item-subtitle>
           Creates an empty department/floor to view printer groups
-          <br>
+          <br />
           <v-btn
             color="primary"
-            @click="createFloor()">
+            @click="createFloor()"
+          >
             Create floor
           </v-btn>
         </v-list-item-subtitle>
@@ -40,7 +36,8 @@
           <v-list-item-group v-model="selectedItem">
             <v-list-item
               v-for="floor of floors"
-              :key="floor.id">
+              :key="floor.id"
+            >
               <v-list-item-title>
                 {{ floor.name }}
               </v-list-item-title>
@@ -58,16 +55,18 @@
 
       <v-col>
         <v-toolbar>
-          <v-hover v-slot="{hover}">
+          <v-hover v-slot="{ hover }">
             <v-toolbar-title>
               <v-edit-dialog
                 v-if="selectedFloor"
                 @open="setEditedPrinterFloorName"
-                @save="updatePrinterFloorName">
+                @save="updatePrinterFloorName"
+              >
                 <v-btn color="secondary">
                   <v-icon
                     v-if="hover"
-                    size="small">
+                    size="small"
+                  >
                     edit
                   </v-icon>
                   {{ selectedFloor.name }}
@@ -79,26 +78,27 @@
                     v-model:return-value="editedFloorName"
                     counter
                     label="Edit"
-                    single-line />
+                    single-line
+                  />
                 </template>
               </v-edit-dialog>
 
-              <span v-else>
-                Select a floor on the left
-              </span>
+              <span v-else> Select a floor on the left </span>
             </v-toolbar-title>
           </v-hover>
 
-          <v-hover v-slot="{hover}">
+          <v-hover v-slot="{ hover }">
             <v-toolbar-title>
               <v-edit-dialog
                 v-if="selectedFloor"
                 @open="setEditedPrinterFloorNumber"
-                @save="updatePrinterFloorNumber">
+                @save="updatePrinterFloorNumber"
+              >
                 <v-btn color="secondary">
                   <v-icon
                     v-if="hover"
-                    size="small">
+                    size="small"
+                  >
                     edit
                   </v-icon>
                   {{ selectedFloor.floor }}
@@ -110,7 +110,8 @@
                     v-model:return-value="editedFloorNumber"
                     label="Edit"
                     single-line
-                    type="number" />
+                    type="number"
+                  />
                 </template>
               </v-edit-dialog>
             </v-toolbar-title>
@@ -121,7 +122,8 @@
           <v-btn
             v-if="selectedFloor"
             color="primary"
-            @click="clickDeleteFloor()">
+            @click="clickDeleteFloor()"
+          >
             <v-icon>delete</v-icon>
             Delete floor
           </v-btn>
@@ -130,7 +132,8 @@
         <v-list v-if="selectedFloor">
           <v-list-item
             v-for="x in showAddedPrinters"
-            :key="x">
+            :key="x"
+          >
             <v-list-item-content v-if="printerInFloor(selectedFloor, x)">
               <v-list-item-title>
                 {{ printerInFloor(selectedFloor, x)?.name }}
@@ -151,44 +154,38 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
-import {FloorDto} from '@/models/floors/floor.model'
-import {usePrinterStore} from '@/store/printer.store'
-import {useDialogsStore} from '@/store/dialog.store'
-import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
-import {PrinterDto} from '@/models/printers/printer.model'
-import {useFloorStore} from '@/store/floor.store'
-import {useSnackbar} from '@/shared/snackbar.composable'
+import { defineComponent } from 'vue'
+import { FloorDto } from '@/models/floors/floor.model'
+import { usePrinterStore } from '@/store/printer.store'
+import { useDialogsStore } from '@/store/dialog.store'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { useFloorStore } from '@/store/floor.store'
+import { useSnackbar } from '@/shared/snackbar.composable'
 
 interface Data {
-  editedFloorName: string;
-  editedFloorNumber: number;
-  selectedItem: number;
+  editedFloorName: string
+  editedFloorNumber: number
+  selectedItem: number
 }
 
 export default defineComponent({
   name: 'FloorSettings',
+
+  props: {},
   setup: () => {
     return {
       printersStore: usePrinterStore(),
       floorStore: useFloorStore(),
       dialogsStore: useDialogsStore(),
-      snackbar: useSnackbar(),
+      snackbar: useSnackbar()
     }
   },
-
-  props: {},
   data: (): Data => ({
     selectedItem: 0,
     editedFloorName: '',
-    editedFloorNumber: 0,
+    editedFloorNumber: 0
   }),
-
-  created() {
-  },
-
-  mounted() {
-  },
 
   computed: {
     floors() {
@@ -205,8 +202,14 @@ export default defineComponent({
 
     unassignedPrinters() {
       return this.floorStore.floorlessPrinters
-    },
+    }
   },
+
+  watch: {},
+
+  created() {},
+
+  mounted() {},
 
   methods: {
     printerInFloor(floor: FloorDto, index: number): PrinterDto | undefined {
@@ -231,20 +234,20 @@ export default defineComponent({
 
     async updatePrinterFloorName() {
       if (!this.selectedFloor?.id) return
-      const {id: floorId} = this.selectedFloor
+      const { id: floorId } = this.selectedFloor
       await this.floorStore.updateFloorName({
         floorId,
-        name: this.editedFloorName,
+        name: this.editedFloorName
       })
       this.snackbar.info('Floor name updated')
     },
 
     async updatePrinterFloorNumber() {
       if (!this.selectedFloor?.id) return
-      const {id: floorId} = this.selectedFloor
+      const { id: floorId } = this.selectedFloor
       await this.floorStore.updateFloorNumber({
         floorId,
-        floorNumber: this.editedFloorNumber,
+        floorNumber: this.editedFloorNumber
       })
       this.snackbar.info('Floor level updated')
       // Adapt to potential sort change
@@ -264,12 +267,10 @@ export default defineComponent({
 
       await this.floorStore.deletePrinterFromFloor({
         floorId: floor.id,
-        printerId: printer.id,
+        printerId: printer.id
       })
       this.snackbar.info('Printer removed from floor')
-    },
-  },
-
-  watch: {},
+    }
+  }
 })
 </script>

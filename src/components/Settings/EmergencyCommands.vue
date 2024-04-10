@@ -4,75 +4,70 @@
       <v-avatar>
         <v-icon>settings</v-icon>
       </v-avatar>
-      <v-toolbar-title>
-        Emergency Commands
-      </v-toolbar-title>
+      <v-toolbar-title> Emergency Commands </v-toolbar-title>
     </v-toolbar>
     <v-list
       subheader
-      lines="three">
+      lines="three"
+    >
       <v-list-subheader>
         Emergency Commands to rectify problematic situations
       </v-list-subheader>
 
       <v-list-item>
-        <v-list-item-title>
-          Server commands
-        </v-list-item-title>
+        <v-list-item-title> Server commands </v-list-item-title>
         <v-list-item-subtitle>
           Restart the server
-          <br>
+          <br />
           <v-btn
             color="primary"
             disabled
-            @click="restartServer()">
+            @click="restartServer()"
+          >
             Restart server (does not work yet)
           </v-btn>
         </v-list-item-subtitle>
       </v-list-item>
 
       <v-list-item>
-        <v-list-item-title>
-          Batch disabling
-        </v-list-item-title>
+        <v-list-item-title> Batch disabling </v-list-item-title>
         <v-list-item-subtitle>
           Disable all printers in batch (will not affect print)
-          <br>
+          <br />
           <v-btn
             color="primary"
-            @click="batchToggleEnabled(false)">
+            @click="batchToggleEnabled(false)"
+          >
             Batch disable
           </v-btn>
         </v-list-item-subtitle>
       </v-list-item>
 
       <v-list-item>
-        <v-list-item-title>
-          Batch enabling
-        </v-list-item-title>
+        <v-list-item-title> Batch enabling </v-list-item-title>
         <v-list-item-subtitle>
-          Enabling all printers in batch (will not affect print and it will skip printers in
-          maintenance mode)
-          <br>
+          Enabling all printers in batch (will not affect print and it will skip
+          printers in maintenance mode)
+          <br />
           <v-btn
             color="primary"
-            @click="batchToggleEnabled(true)">
+            @click="batchToggleEnabled(true)"
+          >
             Batch enable
           </v-btn>
         </v-list-item-subtitle>
       </v-list-item>
 
       <v-list-item>
-        <v-list-item-title>
-          Batch USB connect
-        </v-list-item-title>
+        <v-list-item-title> Batch USB connect </v-list-item-title>
         <v-list-item-subtitle>
           Connect all USB devices
-          <br>
+          <br />
           <v-btn
             :disabled="!hasConnectUsbFeature"
             color="primary"
-            @click="connectUSBs()">
+            @click="connectUSBs()"
+          >
             <v-icon class="mr-2">usb</v-icon>
             Connect USBs
           </v-btn>
@@ -83,11 +78,12 @@
         </v-list-item-subtitle>
         <v-list-item-subtitle class="mt-2">
           Connect all Sockets
-          <br>
+          <br />
           <v-btn
             :disabled="!hasConnectSocketFeature"
             color="primary"
-            @click="connectSockets()">
+            @click="connectSockets()"
+          >
             <v-icon class="mr-2">hub</v-icon>
             Connect Sockets
           </v-btn>
@@ -100,25 +96,23 @@
     </v-list>
 
     <div class="ma-3">
-      <v-alert>
-        Test all OctoPrint response times
-      </v-alert>
+      <v-alert> Test all OctoPrint response times </v-alert>
       <div class="ml-6">
         <v-btn
           color="primary"
-          @click="clickFetchNameState()">
+          @click="clickFetchNameState()"
+        >
           Measure response times
         </v-btn>
       </div>
       <div class="ml-7 mt-3">
-        <span v-if="namesFetched">
-          Response times:
-        </span>
+        <span v-if="namesFetched"> Response times: </span>
         <Bar
           v-if="namesFetched"
           :data="chartConfig"
           :options="chartOptions"
-          height="40" />
+          height="40"
+        />
         <span v-else>
           A graph will be shown, presenting the times in milliseconds (ms)
         </span>
@@ -128,11 +122,11 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref} from 'vue'
-import {ServerPrivateService} from '@/backend/server-private.service'
-import {BatchService} from '@/backend/batch.service'
-import {usePrinterStore} from '@/store/printer.store'
-import {useFeatureStore} from '@/store/features.store'
+import { computed, ref } from 'vue'
+import { ServerPrivateService } from '@/backend/server-private.service'
+import { BatchService } from '@/backend/batch.service'
+import { usePrinterStore } from '@/store/printer.store'
+import { useFeatureStore } from '@/store/features.store'
 import {
   BarElement,
   CategoryScale,
@@ -142,21 +136,21 @@ import {
   Legend,
   LinearScale,
   Title,
-  Tooltip,
+  Tooltip
 } from 'chart.js'
-import {Bar} from 'vue-chartjs'
-import {IdType} from '@/utils/id.type'
-import {OctoPrintSettingsDto} from '@/backend/dto/octoprint-settings.dto'
-import {sleep} from '@/utils/time.utils'
+import { Bar } from 'vue-chartjs'
+import { IdType } from '@/utils/id.type'
+import { OctoPrintSettingsDto } from '@/backend/dto/octoprint-settings.dto'
+import { sleep } from '@/utils/time.utils'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export type BatchOctoPrintSettingsDto = {
-  success: boolean;
-  printerId: IdType;
-  time: number;
-  value?: OctoPrintSettingsDto;
-  error?: string;
+  success: boolean
+  printerId: IdType
+  time: number
+  value?: OctoPrintSettingsDto
+  error?: string
 }
 
 const printerStore = usePrinterStore()
@@ -176,9 +170,9 @@ const chartConfig = ref<ChartData>({
       label: 'OctoPrint Settings response times (ms)',
       data: [],
       borderColor: '#FF6384',
-      backgroundColor: '#ffffff',
-    },
-  ],
+      backgroundColor: '#ffffff'
+    }
+  ]
 })
 
 const chartOptions: ChartOptions = {
@@ -187,10 +181,10 @@ const chartOptions: ChartOptions = {
     title: {
       color: 'red',
       text: 'Response times (ms)',
-      display: true,
-    },
+      display: true
+    }
   },
-  responsive: true,
+  responsive: true
 }
 
 const hasConnectUsbFeature = computed(() => {
@@ -205,16 +199,19 @@ async function clickFetchNameState() {
   const printerSettingsBatch = (await BatchService.batchSettingsGet(
     printerIds
   )) as BatchOctoPrintSettingsDto[]
-  const names = printerSettingsBatch.map((s) => s.value?.appearance?.name || 'ERROR')
+  const names = printerSettingsBatch.map(
+    (s) => s.value?.appearance?.name || 'ERROR'
+  )
   failedPrinters.value = printerSettingsBatch
     .filter((nb) => !nb.success)
     .map((e) => ({
-      message: e.error,
+      message: e.error
     }))
 
   const times = printerSettingsBatch.map((n) => n.time)
   const labels = printerSettingsBatch.map((n) => n.value?.appearance?.name)
-  responseTimesAvg.value = times.reduce((a: number, b: number) => a + b, 0) / times.length
+  responseTimesAvg.value =
+    times.reduce((a: number, b: number) => a + b, 0) / times.length
   responseTimesMin.value = Math.min(...times)
   responseTimesMax.value = Math.max(...times)
   chartConfig.value = {
@@ -224,9 +221,9 @@ async function clickFetchNameState() {
         label: 'OctoPrint Settings response times (ms)',
         data: times,
         borderColor: '#FF6384',
-        backgroundColor: '#ffffff',
-      },
-    ],
+        backgroundColor: '#ffffff'
+      }
+    ]
   }
 
   await sleep(500)

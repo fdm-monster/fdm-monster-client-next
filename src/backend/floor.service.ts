@@ -1,11 +1,17 @@
 import { BaseService } from '@/backend/base.service'
 import { ServerApi } from '@/backend/server.api'
 import { newRandomNamePair } from '@/shared/noun-adjectives.data'
-import { FloorDto, getDefaultCreateFloor, PreCreateFloor } from '@/models/floors/floor.model'
+import {
+  FloorDto,
+  getDefaultCreateFloor,
+  PreCreateFloor
+} from '@/models/floors/floor.model'
 import { IdType } from '@/utils/id.type'
 
 export class FloorService extends BaseService {
-  static convertPrinterFloorToCreateForm(printerFloor?: FloorDto): PreCreateFloor {
+  static convertPrinterFloorToCreateForm(
+    printerFloor?: FloorDto
+  ): PreCreateFloor {
     // Inverse transformation
     const newFormData = getDefaultCreateFloor()
 

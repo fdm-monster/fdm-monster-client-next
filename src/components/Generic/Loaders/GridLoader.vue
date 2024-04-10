@@ -1,11 +1,13 @@
 <template>
   <div
     v-if="loading"
-    :style="getWrapperStyle()">
+    :style="getWrapperStyle()"
+  >
     <div
       v-for="index in 9"
       :key="index"
-      :style="getCircleStyle(random(100))" />
+      :style="getCircleStyle(random(100))"
+    />
   </div>
 </template>
 
@@ -19,7 +21,7 @@ export default {
     color: { type: String, default: '#000000' },
     size: { type: Number, default: 15 },
     margin: { type: String, default: '2px' },
-    sizeUnit: { type: String, default: 'px' },
+    sizeUnit: { type: String, default: 'px' }
   },
 
   methods: {
@@ -28,7 +30,7 @@ export default {
       const width = `${parseFloat(this.size) * 3 + parseFloat(this.margin) * 6}${this.sizeUnit}`
       return {
         width: width,
-        fontSize: 0,
+        fontSize: 0
       }
     },
 
@@ -42,10 +44,10 @@ export default {
         margin: this.margin,
         borderRadius: '100%',
         animationFillMode: 'both',
-        animation: animation,
+        animation: animation
       }
-    },
-  },
+    }
+  }
 }
 </script>
 

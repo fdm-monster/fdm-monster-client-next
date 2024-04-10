@@ -1,7 +1,8 @@
 <template>
   <v-sheet
     height="100%"
-    width="100%">
+    width="100%"
+  >
     <v-container>
       <v-row>
         <v-col>
@@ -15,7 +16,8 @@
             clearable
             label="Search"
             prepend-icon="search"
-            single-line />
+            single-line
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -24,7 +26,8 @@
       <v-btn
         color="primary"
         size="x-small"
-        @click="loadCompletions()">
+        @click="loadCompletions()"
+      >
         Reload
       </v-btn>
     </v-alert>
@@ -32,64 +35,52 @@
       <template #default>
         <thead>
           <tr>
-            <th class="text-left">
-              Printer name
-            </th>
-            <th class="text-left">
-              Floor
-            </th>
-            <th class="text-left">
-              Fail/ Success/ Total
-            </th>
-            <th class="text-left">
-              Last success
-            </th>
-            <th class="text-left">
-              Last failure
-            </th>
-            <th class="text-left">
-              Successes (week/48H/24H)
-            </th>
-            <th class="text-left">
-              Failures (week/48H/24H)
-            </th>
+            <th class="text-left">Printer name</th>
+            <th class="text-left">Floor</th>
+            <th class="text-left">Fail/ Success/ Total</th>
+            <th class="text-left">Last success</th>
+            <th class="text-left">Last failure</th>
+            <th class="text-left">Successes (week/48H/24H)</th>
+            <th class="text-left">Failures (week/48H/24H)</th>
           </tr>
         </thead>
         <tbody>
           <tr
             v-for="item in shownCompletions"
-            :key="item.id">
+            :key="item.id"
+          >
             <td>
-              {{ printer(item.printerId)?.name ?? "?" }}
+              {{ printer(item.printerId)?.name ?? '?' }}
             </td>
             <td>
-              {{ floorOfPrinter(item.printerId)?.name ?? "?" }}
+              {{ floorOfPrinter(item.printerId)?.name ?? '?' }}
             </td>
             <td>
               &#215; {{ item.failureCount }} / &#128504; {{ item.successCount }}
-              <strong>
-                ~{{ item.printCount }}
-              </strong>
+              <strong> ~{{ item.printCount }} </strong>
             </td>
             <td>
-              {{ Date.now() - item.lastSuccess?.createdAt || "-" }}
+              {{ Date.now() - item.lastSuccess?.createdAt || '-' }}
             </td>
             <td>
               <v-tooltip location="bottom">
                 <template
                   v-if="item.lastFailure?.status"
-                  #activator="{props}">
+                  #activator="{ props }"
+                >
                   <v-icon v-bind="props">info</v-icon>
                 </template>
                 <span>
-                  {{ item.lastFailure?.status || "-" }} <br>
-                  {{ item.lastFailure?.createdAt }} <br>
+                  {{ item.lastFailure?.status || '-' }} <br />
+                  {{ item.lastFailure?.createdAt }} <br />
                   <small>
                     {{ item.lastFailure?.fileName }}
-                  </small> <br>
+                  </small>
+                  <br />
                   <strong>
                     {{ item.lastFailure?.completionLog }}
-                  </strong> <br>
+                  </strong>
+                  <br />
                 </span>
               </v-tooltip>
             </td>
@@ -157,13 +148,15 @@ const updatePrinters = () => {
 
   const preSortPrints = printerNameSearch.value?.length
     ? preSearchPrints.filter((p) => {
-      const printer = printerStore.printers.find((spr) => spr.id === p.printerId)
-      if (!printer) return false
+        const printer = printerStore.printers.find(
+          (spr) => spr.id === p.printerId
+        )
+        if (!printer) return false
 
-      return (printer.name + printer.printerURL)
-        .toLowerCase()
-        .includes(printerNameSearch.value.toLowerCase())
-    })
+        return (printer.name + printer.printerURL)
+          .toLowerCase()
+          .includes(printerNameSearch.value.toLowerCase())
+      })
     : preSearchPrints
 
   console.log('presort', preSortPrints)

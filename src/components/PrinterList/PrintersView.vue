@@ -6,21 +6,23 @@
         <v-spacer />
         <v-select
           v-if="hasPrinterGroupFeature && groupsWithPrinters.length"
+          v-model="filteredGroupsWithPrinters"
           multiple
           :items="groupsWithPrinters"
           item-title="name"
           :return-object="true"
-          v-model="filteredGroupsWithPrinters"
           placeholder="Select group to filter by"
           prepend-icon="filter_list"
-          label="Filter by groups" />
+          label="Filter by groups"
+        />
         <v-text-field
           v-model="search"
           class="p-2"
           clearable
           label="Printer search"
           prepend-icon="search"
-          single-line />
+          single-line
+        />
       </v-card-title>
 
       <v-data-table
@@ -32,20 +34,17 @@
         class="elevation-1"
         item-key="id"
         show-expand
-        @click:row="clickRow">
+        @click:row="clickRow"
+      >
         <template #no-results>
           <div class="mt-4 mb-4">
-            <h3>
-              No printer has been found. Create one here:
-            </h3>
+            <h3>No printer has been found. Create one here:</h3>
             <PrinterCreateAction />
           </div>
         </template>
         <template #no-data>
           <div class="mt-4 mb-4">
-            <h3>
-              No printer has been created yet. Create one here:
-            </h3>
+            <h3>No printer has been created yet. Create one here:</h3>
             <PrinterCreateAction />
           </div>
         </template>
@@ -58,7 +57,8 @@
               class="ml-3"
               variant="outlined"
               type="button"
-              @click="openImportJsonPrintersDialog()">
+              @click="openImportJsonPrintersDialog()"
+            >
               <v-icon>publish</v-icon>
               Import OctoFarm Printers
             </v-btn>
@@ -66,7 +66,8 @@
               class="ml-3"
               variant="outlined"
               type="button"
-              @click="openCreatePrinterDialog()">
+              @click="openCreatePrinterDialog()"
+            >
               <v-icon>add</v-icon>
               Create Printer
             </v-btn>
@@ -74,73 +75,80 @@
               class="ml-3"
               color="primary"
               type="button"
-              @click="openYamlImportExportDialog()">
+              @click="openYamlImportExportDialog()"
+            >
               <v-icon>publish</v-icon>
               Import/Export YAML
             </v-btn>
             <v-spacer />
           </v-toolbar>
         </template>
-        <template #item.enabled="{item}">
+        <template #item.enabled="{ item }">
           <v-switch
             v-model="item.enabled"
             color="primary"
             dark
             inset
-            @click.native.capture.stop="toggleEnabled(item)">
+            @click.native.capture.stop="toggleEnabled(item)"
+          >
             {{ item.enabled }}
           </v-switch>
         </template>
-        <template #item.name="{item}">
+        <template #item.name="{ item }">
           <v-chip
             color="primary"
-            dark>
+            dark
+          >
             {{ item.name || item.printerURL }}
           </v-chip>
         </template>
-        <template #item.floor="{item}">
+        <template #item.floor="{ item }">
           <v-chip
             v-if="item.id"
-            color="primary">
+            color="primary"
+          >
             {{ floorOfPrinter(item.id)?.name }}
           </v-chip>
         </template>
         <template
           v-if="hasPrinterGroupFeature"
-          #item.group="{item}">
+          #item.group="{ item }"
+        >
           <v-chip
             v-for="group of groupsOfPrinter(item.id)"
             :key="group.id"
             closable
             size="small"
             class="ml-2"
-            @click:close="deletePrinterFromGroup(group.id, item.id)">
+            @click:close="deletePrinterFromGroup(group.id, item.id)"
+          >
             {{ group.name }}
           </v-chip>
 
           <v-menu offset-y>
-            <template #activator="{props}">
+            <template #activator="{ props }">
               <v-chip
                 :disabled="!groupsWithPrinters.length"
                 class="ml-2"
                 size="small"
                 v-bind="props"
-                v-on="on">
+                v-on="on"
+              >
                 <v-icon size="small">add</v-icon>
               </v-chip>
             </template>
 
             <v-list
               density="compact"
-              style="border: 1px solid dimgray">
-              <v-list-subheader>
-                ADD TO GROUP
-              </v-list-subheader>
+              style="border: 1px solid dimgray"
+            >
+              <v-list-subheader> ADD TO GROUP </v-list-subheader>
               <v-list-item-group>
                 <v-list-item
-                  @click="addPrinterToGroup(group.id, item.id)"
                   v-for="(group, index) in nonGroupsOfPrinter(item.id)"
-                  :key="index">
+                  :key="index"
+                  @click="addPrinterToGroup(group.id, item.id)"
+                >
                   <v-list-item-title>
                     {{ group.name }}
                   </v-list-item-title>
@@ -149,7 +157,7 @@
             </v-list>
           </v-menu>
         </template>
-        <template #item.actions="{item}">
+        <template #item.actions="{ item }">
           <PrinterUrlAction :printer="item" />
           <PrinterConnectionAction :printer="item" />
           <PrinterEmergencyStopAction :printer="item" />
@@ -157,17 +165,17 @@
           <PrinterDeleteAction :printer="item" />
           <PrinterSettingsAction
             :printer="item"
-            @update:show="openEditDialog(item)" />
+            @update:show="openEditDialog(item)"
+          />
         </template>
-        <template #item.socketupdate="{item}">
+        <template #item.socketupdate="{ item }">
           <span v-if="currentEventReceivedAt[item.id]">
-            Updated {{ diffSeconds(currentEventReceivedAt[item.id]) }} seconds ago
+            Updated {{ diffSeconds(currentEventReceivedAt[item.id]) }} seconds
+            ago
           </span>
-          <span v-else>
-            No update received (silence)
-          </span>
+          <span v-else> No update received (silence) </span>
         </template>
-        <template #expanded-item="{headers, item}">
+        <template #expanded-item="{ headers, item }">
           <td :colspan="headers.length">
             <PrinterDetails :printer="item" />
           </td>
@@ -176,47 +184,45 @@
     </v-card>
 
     <v-card
+      v-if="hasPrinterGroupFeature"
       class="mt-4"
-      v-if="hasPrinterGroupFeature">
-      <v-card-title>
-        Printer Groups
-      </v-card-title>
+    >
+      <v-card-title> Printer Groups </v-card-title>
 
       <v-card-text>
-        <h3>
-          Existing groups:
-        </h3>
+        <h3>Existing groups:</h3>
 
         <v-container>
           <v-chip-group
             v-model="selectedGroup"
-            @update:model-value="selectGroupForUpdatingName()"
             selected-class="primary--text"
-            column>
+            column
+            @update:model-value="selectGroupForUpdatingName()"
+          >
             <v-chip
-              size="small"
               v-for="group of groupsWithPrinters"
               :key="group.id"
+              size="small"
               closable
+              class="mr-3"
               @click:close="deleteGroup(group.id)"
-              class="mr-3">
+            >
               {{ group.name }}
             </v-chip>
           </v-chip-group>
         </v-container>
 
-        <h3 class="mt-3">
-          Update group name
-        </h3>
+        <h3 class="mt-3">Update group name</h3>
         <v-container>
           <v-alert v-if="!selectedGroupObject">
             Select a group to update its name.
           </v-alert>
           <v-text-field
-            :disabled="!selectedGroupObject"
             v-model="updatedGroupName"
+            :disabled="!selectedGroupObject"
             label="Group Name"
-            placeholder="Type group name here">
+            placeholder="Type group name here"
+          >
             Name
           </v-text-field>
           <v-btn @click="updateGroupName(selectedGroupObject)">
@@ -224,20 +230,17 @@
           </v-btn>
         </v-container>
 
-        <h3 class="mt-3">
-          Add group
-        </h3>
+        <h3 class="mt-3">Add group</h3>
 
         <v-container>
           <v-text-field
             v-model="newGroupName"
             label="Group Name"
-            placeholder="Type group name here">
+            placeholder="Type group name here"
+          >
             Name
           </v-text-field>
-          <v-btn @click="createGroup()">
-            Create new group
-          </v-btn>
+          <v-btn @click="createGroup()"> Create new group </v-btn>
         </v-container>
       </v-card-text>
     </v-card>
@@ -245,8 +248,8 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref} from 'vue'
-import {PrintersService} from '@/backend/printers.service'
+import { computed, ref } from 'vue'
+import { PrintersService } from '@/backend/printers.service'
 import PrinterDetails from '@/components/PrinterList/PrinterDetails.vue'
 import PrinterUrlAction from '@/components/Generic/Actions/PrinterUrlAction.vue'
 import PrinterSettingsAction from '@/components/Generic/Actions/PrinterSettingsAction.vue'
@@ -254,20 +257,23 @@ import PrinterConnectionAction from '@/components/Generic/Actions/PrinterConnect
 import PrinterEmergencyStopAction from '@/components/Generic/Actions/PrinterEmergencyStopAction.vue'
 import SyncPrinterNameAction from '@/components/Generic/Actions/SyncPrinterNameAction.vue'
 
-import {usePrinterStore} from '@/store/printer.store'
-import {useDialogsStore} from '@/store/dialog.store'
-import {DialogName} from '@/components/Generic/Dialogs/dialog.constants'
+import { usePrinterStore } from '@/store/printer.store'
+import { useDialogsStore } from '@/store/dialog.store'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import PrinterCreateAction from '@/components/Generic/Actions/PrinterCreateAction.vue'
 import PrinterDeleteAction from '@/components/Generic/Actions/PrinterDeleteAction.vue'
-import {useFloorStore} from '@/store/floor.store'
-import {usePrinterStateStore} from '@/store/printer-state.store'
-import {IdType} from '@/utils/id.type'
-import {PrinterDto} from '@/models/printers/printer.model'
-import {useFeatureStore} from '@/store/features.store'
-import {useQuery} from '@tanstack/vue-query'
-import {useSnackbar} from '@/shared/snackbar.composable'
-import {GroupWithPrintersDto, PrinterGroupService} from '@/backend/printer-group.service'
-import {AppService} from '@/backend/app.service'
+import { useFloorStore } from '@/store/floor.store'
+import { usePrinterStateStore } from '@/store/printer-state.store'
+import { IdType } from '@/utils/id.type'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { useFeatureStore } from '@/store/features.store'
+import { useQuery } from '@tanstack/vue-query'
+import { useSnackbar } from '@/shared/snackbar.composable'
+import {
+  GroupWithPrintersDto,
+  PrinterGroupService
+} from '@/backend/printer-group.service'
+import { useDialog } from '@/shared/dialog.composable'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -284,17 +290,19 @@ const selectedGroup = ref<number>()
 
 const search = ref('')
 const expanded = ref([])
-const hasPrinterGroupFeature = computed(() => featureStore.hasFeature('printerGroupsApi'))
+const hasPrinterGroupFeature = computed(() =>
+  featureStore.hasFeature('printerGroupsApi')
+)
 const tableHeaders = computed(() => [
-  {text: 'Enabled', value: 'enabled'},
-  {text: 'Printer Name', align: 'start', sortable: true, value: 'name'},
-  {text: 'Floor', value: 'floor', sortable: false},
+  { text: 'Enabled', value: 'enabled' },
+  { text: 'Printer Name', align: 'start', sortable: true, value: 'name' },
+  { text: 'Floor', value: 'floor', sortable: false },
   ...(featureStore.hasFeature('printerGroupsApi')
-    ? [{text: 'Group(s)', value: 'group', sortable: true}]
+    ? [{ text: 'Group(s)', value: 'group', sortable: true }]
     : []),
-  {text: 'Actions', value: 'actions', sortable: false},
-  {text: 'Socket Update', value: 'socketupdate', sortable: false},
-  {text: '', value: 'data-table-expand'},
+  { text: 'Actions', value: 'actions', sortable: false },
+  { text: 'Socket Update', value: 'socketupdate', sortable: false },
+  { text: '', value: 'data-table-expand' }
 ])
 
 async function loadData() {
@@ -310,19 +318,28 @@ async function loadData() {
 
 const printerGroupsQuery = useQuery({
   queryKey: ['printerGroups'],
-  queryFn: loadData,
+  queryFn: loadData
 })
 
 const printers = computed(() => {
-  if (!featureStore.hasFeature('printerGroupsApi') || !filteredGroupsWithPrinters.value?.length) {
+  if (
+    !featureStore.hasFeature('printerGroupsApi') ||
+    !filteredGroupsWithPrinters.value?.length
+  ) {
     return printerStore.printers
   }
   const printerIdsInFilteredGroups =
-    filteredGroupsWithPrinters.value.flatMap((g) => g.printers.map((p) => p.printerId)) || []
-  return printerStore.printers.filter((p) => printerIdsInFilteredGroups.includes(p.id))
+    filteredGroupsWithPrinters.value.flatMap((g) =>
+      g.printers.map((p) => p.printerId)
+    ) || []
+  return printerStore.printers.filter((p) =>
+    printerIdsInFilteredGroups.includes(p.id)
+  )
 })
 
-const currentEventReceivedAt = computed(() => printerStateStore.printerCurrentEventReceivedAtById)
+const currentEventReceivedAt = computed(
+  () => printerStateStore.printerCurrentEventReceivedAtById
+)
 const selectedGroupObject = computed(() => {
   if (!selectedGroup.value && selectedGroup.value !== 0) return
 
@@ -336,11 +353,15 @@ const diffSeconds = (timestamp: number) => {
 }
 
 const groupsOfPrinter = (printerId: IdType) => {
-  return groupsWithPrinters.value.filter((g) => g.printers.find((p) => p.printerId === printerId))
+  return groupsWithPrinters.value.filter((g) =>
+    g.printers.find((p) => p.printerId === printerId)
+  )
 }
 
 const nonGroupsOfPrinter = (printerId: IdType) => {
-  return groupsWithPrinters.value.filter((g) => !g.printers.find((p) => p.printerId === printerId))
+  return groupsWithPrinters.value.filter(
+    (g) => !g.printers.find((p) => p.printerId === printerId)
+  )
 }
 
 const floorOfPrinter = (printerId: IdType) => {
@@ -403,7 +424,10 @@ const updateGroupName = async (group?: GroupWithPrintersDto) => {
     throw new Error('Please set a non-empty group name')
   }
 
-  await PrinterGroupService.updateGroupName(group.id, updatedGroupName.value.trim())
+  await PrinterGroupService.updateGroupName(
+    group.id,
+    updatedGroupName.value.trim()
+  )
   await printerGroupsQuery.refetch()
 }
 
@@ -416,7 +440,9 @@ const deleteGroup = async (groupId: IdType) => {
   const printerCount = existingGroup.printers.length
   if (
     printerCount > 0 &&
-    !confirm(`This group contains ${printerCount} printers, are you sure to delete it?`)
+    !confirm(
+      `This group contains ${printerCount} printers, are you sure to delete it?`
+    )
   ) {
     return
   }

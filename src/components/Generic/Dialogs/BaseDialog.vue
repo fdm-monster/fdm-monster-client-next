@@ -4,7 +4,8 @@
     :retain-focus="false"
     :model-value="showingDialog"
     persistent
-    @close="emitEscape()">
+    @close="emitEscape()"
+  >
     <slot>
       <div class="pa-3 text--primary">
         No content defined in dialog.
@@ -26,12 +27,12 @@ import { useDialog } from '@/shared/dialog.composable'
 const props = defineProps({
   id: {
     type: String as () => DialogName,
-    required: true,
+    required: true
   },
   maxWidth: {
     type: String,
-    default: '400px',
-  },
+    default: '400px'
+  }
 })
 const dialogsStore = useDialogsStore()
 const emit = defineEmits(['escape', 'opened', 'beforeOpened'])
@@ -54,7 +55,7 @@ onMounted(async () => {
   })
   dialogsStore.registerDialogReference(props.id, {
     beforeOpenedCallback,
-    openedCallback,
+    openedCallback
   })
 })
 
@@ -67,7 +68,9 @@ const showingDialog = computed(() => {
 
   const isOpened = dialogsStore.isDialogOpened(props.id)
   if (isOpened) {
-    console.debug(`[BaseDialog ${props.id}] Showing dialog: ${dialog?.isDialogOpened()}`)
+    console.debug(
+      `[BaseDialog ${props.id}] Showing dialog: ${dialog?.isDialogOpened()}`
+    )
   }
   return isOpened
 })

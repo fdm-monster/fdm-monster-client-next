@@ -8,18 +8,21 @@
     min-width="450px"
     multi-line
     rounded="pill"
-    style="z-index: 1000">
+    style="z-index: 1000"
+  >
     <v-row>
       <v-col cols="2">
         <v-btn
           icon
-          size="large">
+          size="large"
+        >
           <v-icon>file_upload</v-icon>
         </v-btn>
       </v-col>
       <v-col
         class="d-flex align-center flex-row"
-        cols="8">
+        cols="8"
+      >
         <div style="width: 100%">
           <span class="font-weight-bold text-button">
             {{ snackbarTitle }}
@@ -27,17 +30,19 @@
           <div
             v-for="(progress, index) in progressTracked"
             :key="index"
-            class="mb-2">
+            class="mb-2"
+          >
             <v-icon v-if="progress.completed">check</v-icon>
             <v-icon v-else-if="progress.timeoutAt">pause</v-icon>
             <v-icon v-else>hourglass_bottom</v-icon>
             {{ progress.title }}
             {{ (progress.completed ? 100 : progress.value).toFixed(1) }}%
-            <br>
+            <br />
             <v-progress-linear
               :key="progress.key"
               :model-value="progress.completed ? 100 : progress.value"
-              :color="progress.timeoutAt ? 'red' : 'success'" />
+              :color="progress.timeoutAt ? 'red' : 'success'"
+            />
           </div>
         </div>
       </v-col>
@@ -45,7 +50,8 @@
         <v-btn
           icon
           size="large"
-          @click="snackbarOpened = false">
+          @click="snackbarOpened = false"
+        >
           <v-icon>close</v-icon>
         </v-btn>
       </v-col>
@@ -53,11 +59,14 @@
   </v-snackbar>
 </template>
 <script lang="ts" setup>
-import { ProgressMessage, useSnackbar } from '../../../shared/snackbar.composable'
+import {
+  ProgressMessage,
+  useSnackbar
+} from '../../../shared/snackbar.composable'
 import { onMounted, ref } from 'vue'
 import {
   TrackedUpload,
-  UploadStates,
+  UploadStates
 } from '../../../models/socketio-messages/socketio-message.model'
 import { eventTypeToMessage, InfoEventType } from '../../../shared/alert.events'
 
@@ -67,13 +76,13 @@ const snackbarTitle = ref('')
 
 // Merged upload progress tracking
 interface ProgressTracked {
-  value: number;
-  key: string;
-  title: string;
-  completed: boolean;
-  startedAt: number;
-  expiresAt: number;
-  timeoutAt?: number;
+  value: number
+  key: string
+  title: string
+  completed: boolean
+  startedAt: number
+  expiresAt: number
+  timeoutAt?: number
 }
 
 const progressTracked = ref<ProgressTracked[]>([])
@@ -91,7 +100,9 @@ function addProgressTracker(
   completed: boolean = false,
   expiresAt: number = Date.now() + 1500
 ) {
-  console.log(`[AppProgressSnackbar] Adding ${key} tracker with progress ${value}`)
+  console.log(
+    `[AppProgressSnackbar] Adding ${key} tracker with progress ${value}`
+  )
   progressTracked.value.push({
     key,
     title,
@@ -99,7 +110,7 @@ function addProgressTracker(
     completed,
     startedAt: Date.now(),
     expiresAt,
-    timeoutAt: undefined,
+    timeoutAt: undefined
   })
 }
 
@@ -127,7 +138,9 @@ onMounted(() => {
       // Dwell the notification snackbar for a timeout duration
       progressTimeout.value = 2000
       snackbarTitle.value = 'Upload ended'
-      console.debug(`[AppSnackbars] Setting timeout to ${progressTimeout.value}`)
+      console.debug(
+        `[AppSnackbars] Setting timeout to ${progressTimeout.value}`
+      )
     } else {
       progressTimeout.value = -1
       snackbarOpened.value = true

@@ -3,22 +3,22 @@ import { CreatePrinter } from '@/models/printers/crud/create-printer.model'
 import { PrintersService } from '@/backend'
 
 export interface TestEvent {
-  correlationToken: string;
-  event: string;
-  payload: string;
+  correlationToken: string
+  event: string
+  payload: string
 }
 
 interface State {
-  currentCorrelationToken?: string;
-  testPrinter?: CreatePrinter;
-  testPrinterEvents?: TestEvent[];
+  currentCorrelationToken?: string
+  testPrinter?: CreatePrinter
+  testPrinterEvents?: TestEvent[]
 }
 
 export const useTestPrinterStore = defineStore('TestPrinter', {
   state: (): State => ({
     currentCorrelationToken: undefined,
     testPrinter: undefined,
-    testPrinterEvents: [],
+    testPrinterEvents: []
   }),
   getters: {
     getEvents() {
@@ -49,11 +49,11 @@ export const useTestPrinterStore = defineStore('TestPrinter', {
                 'error',
                 'connection error',
                 'closed',
-                'connection closed',
-              ].includes(e.payload?.toString()),
+                'connection closed'
+              ].includes(e.payload?.toString())
             }
           })
-    },
+    }
   },
   actions: {
     clearEvents() {
@@ -65,6 +65,6 @@ export const useTestPrinterStore = defineStore('TestPrinter', {
     },
     saveEvent(event: TestEvent) {
       this.testPrinterEvents?.push(event)
-    },
-  },
+    }
+  }
 })

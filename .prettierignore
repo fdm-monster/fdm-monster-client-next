@@ -1,14 +1,10 @@
 # Ignore transient folders
 .idea
 .git
-**/logs
 **/coverage
 **/.github
-**/docker
 **/docs
 **/images
-**/fdm-monster
-**/file-storage
 
 # Ignore unuseful folders
 **/node_modules
@@ -16,5 +12,4 @@
 **/dist
 
 # Ignore root files
-CHANGELOG.md
 **/README.md

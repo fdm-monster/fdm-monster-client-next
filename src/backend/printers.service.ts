@@ -4,7 +4,7 @@ import { LoginDetails, PrinterDto } from '@/models/printers/printer.model'
 import {
   CreatePrinter,
   getDefaultCreatePrinter,
-  PreCreatePrinter,
+  PreCreatePrinter
 } from '@/models/printers/crud/create-printer.model'
 import { newRandomNamePair } from '@/shared/noun-adjectives.data'
 import { IdType } from '@/utils/id.type'
@@ -109,7 +109,10 @@ export class PrintersService extends BaseService {
     return (await this.patchApi(path, printer)) as PrinterDto
   }
 
-  static async updatePrinterMaintenance(printerId: IdType, disabledReason: string | null = null) {
+  static async updatePrinterMaintenance(
+    printerId: IdType,
+    disabledReason: string | null = null
+  ) {
     const path = ServerApi.postPrinterDisabledReasonRoute(printerId)
 
     return (await this.patchApi(path, { disabledReason })) as PrinterDto

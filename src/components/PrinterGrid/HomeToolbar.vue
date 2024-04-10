@@ -1,17 +1,17 @@
 <template>
   <v-toolbar flat>
-    <v-toolbar-title>
-      Floors
-    </v-toolbar-title>
+    <v-toolbar-title> Floors </v-toolbar-title>
     <v-btn-toggle
       :model-value="selectedFloorToggleIndex"
       class="ml-7"
       mandatory
       rounded
-      @update:model-value="changeFloorIndex">
+      @update:model-value="changeFloorIndex"
+    >
       <v-btn
         v-for="f in floors"
-        :key="f._id">
+        :key="f._id"
+      >
         <v-icon>format_align_left</v-icon>
         {{ f.name }}
       </v-btn>
@@ -21,20 +21,23 @@
       v-if="!printerStore.printers?.length"
       class="mt-0 ml-6"
       color="primary"
-      to="/printers">
+      to="/printers"
+    >
       You have no printers. Click here to start!
     </v-btn>
     <v-alert
       v-if="floorStore.floorlessPrinters.length"
       class="mt-4 ml-12"
-      color="primary">
+      color="primary"
+    >
       <v-icon>warning</v-icon>
       {{ floorStore.floorlessPrinters.length }} unplaced printer(s)!
     </v-alert>
     <div class="ma-4 pt-6">
       <v-switch
         v-model="gridStore.gridEditMode"
-        label="Printer Relocate Mode" />
+        label="Printer Relocate Mode"
+      />
     </div>
 
     <v-spacer />

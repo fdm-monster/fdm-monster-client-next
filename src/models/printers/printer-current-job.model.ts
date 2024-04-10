@@ -1,90 +1,90 @@
 export interface BusyFile {
-  origin: string;
-  path: string;
+  origin: string
+  path: string
 }
 
 export interface Marking {
-  time: number;
-  type: string;
+  time: number
+  type: string
 }
 
 export interface Offsets {
-  bedTemp?: number;
-  tool0Temp?: number;
-  tool1Temp?: number;
+  bedTemp?: number
+  tool0Temp?: number
+  tool1Temp?: number
 }
 
 export interface ToolTemp {
-  actual: number;
-  target: number;
+  actual: number
+  target: number
 }
 
 export interface Temp {
-  bed: ToolTemp;
-  chamber: ToolTemp;
-  time: number;
-  tool0: ToolTemp;
-  tool1?: ToolTemp;
+  bed: ToolTemp
+  chamber: ToolTemp
+  time: number
+  tool0: ToolTemp
+  tool1?: ToolTemp
 }
 
 export interface CurrentOrHistoryPayload {
-  busyFiles: BusyFile[];
-  currentZ?: number;
-  markings: Marking[];
-  logs: string[];
-  messages: string[];
-  offsets: Offsets;
+  busyFiles: BusyFile[]
+  currentZ?: number
+  markings: Marking[]
+  logs: string[]
+  messages: string[]
+  offsets: Offsets
   progress: {
-    completion: number;
-    filepos: number;
-    printTime: number;
-    printTimeLeft: number;
-    printTimeLeftOrigin: string;
-  };
+    completion: number
+    filepos: number
+    printTime: number
+    printTimeLeft: number
+    printTimeLeftOrigin: string
+  }
   job: {
     file: {
-      date: number;
-      display: string;
-      name: string;
-      origin: string;
-      path: string;
-      size: number;
-    };
-    averagePrintTime: number;
-    estimatedPrintTime: number;
+      date: number
+      display: string
+      name: string
+      origin: string
+      path: string
+      size: number
+    }
+    averagePrintTime: number
+    estimatedPrintTime: number
     filament: {
       tool0: {
-        length: number;
-        volume: number;
-      };
-    };
-    lastPrintTime: number;
-    user: string;
-  };
+        length: number
+        volume: number
+      }
+    }
+    lastPrintTime: number
+    user: string
+  }
   resends: {
-    count: number;
-    ratio: number;
-    transmitted: number;
-  };
-  serverTime: number;
+    count: number
+    ratio: number
+    transmitted: number
+  }
+  serverTime: number
   state: {
-    error: string;
+    error: string
     flags: {
-      cancelling: boolean;
-      closedOrError: boolean;
-      error: boolean;
-      finishing: boolean;
-      operational: boolean;
-      paused: boolean;
-      pausing: boolean;
-      printing: boolean;
-      ready: boolean;
-      resuming: boolean;
-      sdReady: boolean;
-      starting: boolean;
-      updating: boolean;
-    };
-    text: string;
-  };
-  temps: Temp[];
+      cancelling: boolean
+      closedOrError: boolean
+      error: boolean
+      finishing: boolean
+      operational: boolean
+      paused: boolean
+      pausing: boolean
+      printing: boolean
+      ready: boolean
+      resuming: boolean
+      sdReady: boolean
+      starting: boolean
+      updating: boolean
+    }
+    text: string
+  }
+  temps: Temp[]
 }

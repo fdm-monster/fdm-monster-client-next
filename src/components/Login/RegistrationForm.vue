@@ -1,31 +1,31 @@
 <template>
   <v-container
     fill-height
-    fluid>
+    fluid
+  >
     <v-layout
       align-content-center
-      justify-center>
+      justify-center
+    >
       <v-flex
         class="d-flex flex-column align-content-center"
         md4
         sm8
         style="max-width: 450px; margin-top: 10%"
-        xs12>
+        xs12
+      >
         <div class="d-flex flex-column align-center">
           <v-img
             :src="require('@/assets/logo.png')"
             class="shrink mr-1 pt-3 ml-1"
             contain
             style="opacity: 0.85"
-            width="150" />
+            width="150"
+          />
 
           <v-toolbar-title class="text-uppercase text-red">
-            <strong>
-              FDM&nbsp;
-            </strong>
-            <strong>
-              Monster
-            </strong>
+            <strong> FDM&nbsp; </strong>
+            <strong> Monster </strong>
           </v-toolbar-title>
 
           <v-toolbar-title class="mt-lg-6 mt-sm-5">
@@ -38,28 +38,34 @@
 
         <v-card
           class="elevation-4 pa-4"
-          style="border-radius: 10px">
+          style="border-radius: 10px"
+        >
           <v-card-text>
             <v-form>
-              <label>
-                Username
-              </label>
+              <label> Username </label>
               <v-text-field
                 v-model="username"
                 :rules="[
                   (v) => !!v || 'Username is required',
-                  (v) => (v?.length ?? 0) >= 3 || 'Username must be of length 3 or greater',
                   (v) =>
-                    !v.toLowerCase().includes('admin') || 'Username may not contain the word admin',
+                    (v?.length ?? 0) >= 3 ||
+                    'Username must be of length 3 or greater',
                   (v) =>
-                    !v.toLowerCase().includes('root') || 'Username may not contain the word root',
-                  (v) => !(v.toLowerCase() === 'demo') || 'Username may not equal the word demo',
+                    !v.toLowerCase().includes('admin') ||
+                    'Username may not contain the word admin',
+                  (v) =>
+                    !v.toLowerCase().includes('root') ||
+                    'Username may not contain the word root',
+                  (v) =>
+                    !(v.toLowerCase() === 'demo') ||
+                    'Username may not equal the word demo'
                 ]"
                 autofocus
                 name="login"
                 label="Username"
                 prepend-icon="person"
-                type="text" />
+                type="text"
+              />
               <v-text-field
                 id="password"
                 v-model="password"
@@ -69,11 +75,14 @@
                 name="password"
                 :rules="[
                   (v) => !!v || 'Password is required',
-                  (v) => (!!v && v?.length >= 8) || 'Password must be of length 8 or greater',
+                  (v) =>
+                    (!!v && v?.length >= 8) ||
+                    'Password must be of length 8 or greater'
                 ]"
                 password
                 prepend-icon="lock"
-                @click:append="showPassword = !showPassword" />
+                @click:append="showPassword = !showPassword"
+              />
               <v-text-field
                 id="password"
                 v-model="password2"
@@ -81,20 +90,22 @@
                 :type="showPassword2 ? 'text' : 'password'"
                 :rules="[
                   (v) => !!v || 'Repeated password is required',
-                  (v) => v === password || 'Passwords are not equal',
+                  (v) => v === password || 'Passwords are not equal'
                 ]"
                 label="Repeated Password"
                 name="password"
                 password
                 prepend-icon="lock"
                 @click:append="showPassword2 = !showPassword2"
-                @keyup.enter="formIsDisabled || registerAccount()" />
+                @keyup.enter="formIsDisabled || registerAccount()"
+              />
               <v-alert
                 v-if="errorMessage"
                 class="mt-6"
                 color="error"
                 density="compact"
-                variant="outlined">
+                variant="outlined"
+              >
                 {{ errorMessage }}
               </v-alert>
             </v-form>
@@ -106,7 +117,8 @@
               color="primary"
               size="large"
               style="width: 100%"
-              @click="registerAccount()">
+              @click="registerAccount()"
+            >
               Register account
             </v-btn>
           </v-card-actions>
@@ -115,7 +127,8 @@
               style="width: 100%"
               class="pa-4"
               size="large"
-              @click="gotoLogin()">
+              @click="gotoLogin()"
+            >
               <v-icon class="mr-2">arrow_left</v-icon>Back to Login
             </v-btn>
           </v-card-actions>
@@ -162,7 +175,7 @@ onMounted(async () => {
   if (!authStore.registration) {
     snackbar.info('Registration is disabled, please contact your administrator')
     await router.push({
-      name: RouteNames.Login,
+      name: RouteNames.Login
     })
   }
 })
@@ -181,7 +194,7 @@ async function registerAccount() {
 
     snackbar.openErrorMessage({
       title: 'Error logging in',
-      subtitle: 'Please test your connection and try again.',
+      subtitle: 'Please test your connection and try again.'
     })
 
     return

@@ -4,13 +4,15 @@
 
     <v-banner
       v-if="!gridStore.gridEditMode"
-      v-drop-upload="{printers: selectedPrinters}">
+      v-drop-upload="{ printers: selectedPrinters }"
+    >
       <v-row style="margin-bottom: -5px">
         <v-col style="padding: 5px 0 0 15px">
           <v-chip-group class="d-inline-block">
             <v-chip
               v-if="selectedPrinters.length === 0"
-              size="small">
+              size="small"
+            >
               No selected printers
             </v-chip>
             <v-chip
@@ -20,36 +22,42 @@
               color="primary"
               size="small"
               @click="openPrinter(selectedPrinter)"
-              @click:close="deselectPrinter(selectedPrinter)">
+              @click:close="deselectPrinter(selectedPrinter)"
+            >
               {{ selectedPrinter.name }}
             </v-chip>
           </v-chip-group>
         </v-col>
         <v-col
           align="right"
-          style="padding: 0">
+          style="padding: 0"
+        >
           <v-chip-group
             v-if="selectedFile"
-            class="float-end">
+            class="float-end"
+          >
             <v-chip
               closable
-              @click:close="deselectFile()">
+              @click:close="deselectFile()"
+            >
               {{ selectedFile.name }}
               <strong class="pl-1">
                 {{ formatBytes(selectedFile.size) }}
               </strong>
             </v-chip>
           </v-chip-group>
-          <br>
+          <br />
           <v-btn
             v-if="isBatchReprintFeatureAvailable"
             :disabled="!hasPrintersSelected"
             color="primary"
             size="x-small"
-            @click="batchReprintFiles()">
+            @click="batchReprintFiles()"
+          >
             <v-icon
               class="pr-2"
-              size="small">
+              size="small"
+            >
               refresh
             </v-icon>
             Batch reprint
@@ -58,10 +66,12 @@
             :color="hasPrintersSelected ? 'primary' : 'secondary'"
             class="ml-2"
             size="x-small"
-            @click="clearSelectedPrinters()">
+            @click="clearSelectedPrinters()"
+          >
             <v-icon
               class="pr-2"
-              size="small">
+              size="small"
+            >
               delete
             </v-icon>
             Clear all ({{ selectedPrinters.length }})
@@ -70,7 +80,8 @@
             class="ml-2"
             color="primary"
             size="x-small"
-            @click="$refs.fileUpload?.click()">
+            @click="$refs.fileUpload?.click()"
+          >
             Select gcode file
           </v-btn>
           <v-btn
@@ -78,7 +89,8 @@
             class="ml-2 mr-5"
             color="green"
             size="x-small"
-            @click="uploadFile()">
+            @click="uploadFile()"
+          >
             Upload gcode file
           </v-btn>
           <input
@@ -87,7 +99,8 @@
             accept=".gcode"
             style="display: none"
             type="file"
-            @change="filesSelected()">
+            @change="filesSelected()"
+          />
         </v-col>
       </v-row>
     </v-banner>
@@ -121,8 +134,12 @@ const featureStore = useFeatureStore()
 const snackbar = useSnackbar()
 
 const selectedFile = ref<File | undefined>(undefined)
-const isBatchReprintFeatureAvailable = computed(() => featureStore.hasFeature('batchReprintCalls'))
-const hasPrintersSelected = computed(() => printersStore.selectedPrinters.length > 0)
+const isBatchReprintFeatureAvailable = computed(() =>
+  featureStore.hasFeature('batchReprintCalls')
+)
+const hasPrintersSelected = computed(
+  () => printersStore.selectedPrinters.length > 0
+)
 const selectedPrinters = computed(() => printersStore.selectedPrinters)
 const fileUpload = ref<HTMLInputElement | null>(null)
 
@@ -154,15 +171,19 @@ const uploadFile = () => {
   if (!selectedFile.value) return
 
   // Checking and informing user
-  const incompleteListCount = selectedPrintersValue.length - accessiblePrinters.length
+  const incompleteListCount =
+    selectedPrintersValue.length - accessiblePrinters.length
   if (incompleteListCount > 0) {
     snackbar.openInfoMessage({
       title: `${incompleteListCount} printers inaccessible`,
-      subtitle: 'These were skipped from uploading.',
+      subtitle: 'These were skipped from uploading.'
     })
   }
 
-  const uploads = convertMultiPrinterFileToQueue(accessiblePrinters, selectedFile.value)
+  const uploads = convertMultiPrinterFileToQueue(
+    accessiblePrinters,
+    selectedFile.value
+  )
   uploadsStore.queueUploads(uploads)
 
   if (fileUpload.value) {

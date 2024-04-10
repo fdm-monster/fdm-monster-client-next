@@ -1,14 +1,14 @@
 export interface VersionModel {
-  version: string;
-  isDockerContainer: boolean;
-  isNodemon: boolean;
-  isNode: boolean;
-  isPm2: boolean;
-  os: string;
-  monsterPi: string | null;
+  version: string
+  isDockerContainer: boolean
+  isNodemon: boolean
+  isNode: boolean
+  isPm2: boolean
+  os: string
+  monsterPi: string | null
   update: {
-    synced: boolean;
-    updateAvailable: boolean;
-    airGapped: boolean;
-  };
+    synced: boolean
+    updateAvailable: boolean
+    airGapped: boolean
+  }
 }

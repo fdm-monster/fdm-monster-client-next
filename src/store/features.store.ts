@@ -2,17 +2,17 @@ import { defineStore } from 'pinia'
 import {
   TFeatureFlags,
   FeaturesModel,
-  IFeatureFlag,
+  IFeatureFlag
 } from '@/models/server/features.model'
 import { AppService } from '@/backend/app.service'
 
 interface State {
-  features: FeaturesModel | undefined;
+  features: FeaturesModel | undefined
 }
 
 export const useFeatureStore = defineStore('Feature', {
   state: (): State => ({
-    features: undefined,
+    features: undefined
   }),
   getters: {
     getFeatures(): FeaturesModel | undefined {
@@ -20,25 +20,25 @@ export const useFeatureStore = defineStore('Feature', {
     },
     hasFeature:
       (state) =>
-        (feature: TFeatureFlags): boolean => {
-          if (!state.features) {
-            console.debug('Feature store not loaded')
-            return false
-          }
+      (feature: TFeatureFlags): boolean => {
+        if (!state.features) {
+          console.debug('Feature store not loaded')
+          return false
+        }
 
-          const featureDefined = state.features[feature] as
+        const featureDefined = state.features[feature] as
           | IFeatureFlag
           | undefined
-          if (!featureDefined) {
-            console.debug(
-              `Feature ${feature} not defined. Options:`,
-              Object.keys(state.features)
-            )
-            return false
-          }
+        if (!featureDefined) {
+          console.debug(
+            `Feature ${feature} not defined. Options:`,
+            Object.keys(state.features)
+          )
+          return false
+        }
 
-          return featureDefined?.available
-        },
+        return featureDefined?.available
+      }
   },
   actions: {
     async loadFeatures() {
@@ -52,6 +52,6 @@ export const useFeatureStore = defineStore('Feature', {
     },
     setFeatures(features: FeaturesModel) {
       this.features = features
-    },
-  },
+    }
+  }
 })

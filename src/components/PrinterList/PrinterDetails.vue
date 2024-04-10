@@ -1,23 +1,24 @@
 <template>
   <v-container
     v-if="printer"
-    v-drop-upload="{printers: [printer]}"
+    v-drop-upload="{ printers: [printer] }"
     :style="dragging ? 'background-color:red' : ''"
-    transition="scale-transition">
+    transition="scale-transition"
+  >
     <v-row>
       <v-col>
-        Name: {{ printer.name }} <br>
-        URL: {{ printer.printerURL }} <br>
+        Name: {{ printer.name }} <br />
+        URL: {{ printer.printerURL }} <br />
         Host:
         <v-chip size="small">
           {{ apiState }}
         </v-chip>
-        <br>
+        <br />
         WebSocket:
         <v-chip size="small">
           {{ socketState }}
         </v-chip>
-        <br>
+        <br />
         Printer:
         <v-chip size="small">
           {{ printerTextState }}
@@ -26,7 +27,8 @@
       <v-col>
         <RefreshFilesAction
           :printer="printer"
-          class="d-flex justify-end" />
+          class="d-flex justify-end"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -34,38 +36,34 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import FileControlList from '@/components/PrinterList/FileControlList.vue'
 import { PrinterDto } from '@/models/printers/printer.model'
 import RefreshFilesAction from '@/components/Generic/Actions/RefreshFilesAction.vue'
-import { usePrinterStore } from '../../store/printer.store'
-import { usePrinterStateStore } from '../../store/printer-state.store'
+import { usePrinterStore } from '@/store/printer.store'
+import { usePrinterStateStore } from '@/store/printer-state.store'
 
 interface Data {
-  dragging: boolean;
+  dragging: boolean
 }
 
 export default defineComponent({
   name: 'PrinterDetails',
   components: {
-    FileControlList,
-    RefreshFilesAction,
+    // FileControlList,
+    RefreshFilesAction
+  },
+  props: {
+    printer: Object as PropType<PrinterDto>
   },
 
   setup: () => {
     return {
       printersStore: usePrinterStore(),
-      printerStateStore: usePrinterStateStore(),
+      printerStateStore: usePrinterStateStore()
     }
   },
 
-  async created() {},
-  async mounted() {},
-  props: {
-    printer: Object as PropType<PrinterDto>,
-  },
-
   data: (): Data => ({
-    dragging: false,
+    dragging: false
   }),
 
   computed: {
@@ -85,11 +83,9 @@ export default defineComponent({
 
     printerTextState() {
       if (!this.printerId) return
-      return this.printerStateStore.printerEventsById[this.printerId]?.current?.payload?.state.text
-    },
-  },
-
-  methods: {},
-  watch: {},
+      return this.printerStateStore.printerEventsById[this.printerId]?.current
+        ?.payload?.state.text
+    }
+  }
 })
 </script>

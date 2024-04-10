@@ -1,27 +1,27 @@
 <template>
   <v-row
     class="position-relative"
-    no-gutters>
+    no-gutters
+  >
     <v-col
       cols="12"
-      lg="12">
+      lg="12"
+    >
       <v-container>
         <div
           class="d-flex align-center"
-          style="min-height: calc(100vh - 148px)">
+          style="min-height: calc(100vh - 148px)"
+        >
           <v-row
             justify="center"
-            class="align-content-center">
+            class="align-content-center"
+          >
             <div class="pt-6 pl-6 d-flex flex-column align-center">
               <Logo />
 
               <v-toolbar-title class="text-uppercase text-red">
-                <strong>
-                  FDM&nbsp;
-                </strong>
-                <strong>
-                  Monster
-                </strong>
+                <strong> FDM&nbsp; </strong>
+                <strong> Monster </strong>
               </v-toolbar-title>
 
               <v-toolbar-title class="mt-lg-6 mt-sm-5 mb-md-5">
@@ -35,7 +35,8 @@
 
             <v-col
               cols="12"
-              md="12">
+              md="12"
+            >
               <LoginForm class="login-card" />
             </v-col>
           </v-row>

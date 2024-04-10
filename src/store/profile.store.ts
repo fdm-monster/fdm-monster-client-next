@@ -2,16 +2,16 @@ import { defineStore } from 'pinia'
 import { UserService } from '@/backend/user.service'
 
 interface State {
-  username: string | null;
-  isDemoUser: boolean | null;
-  userId: string | null;
+  username: string | null
+  isDemoUser: boolean | null
+  userId: string | null
 }
 
 export const useProfileStore = defineStore('profile', {
   state: (): State => ({
     username: null,
     isDemoUser: null,
-    userId: null,
+    userId: null
   }),
   actions: {
     async getProfile() {
@@ -20,6 +20,6 @@ export const useProfileStore = defineStore('profile', {
         this.userId = response.id
         this.isDemoUser = response.isDemoUser
       })
-    },
-  },
+    }
+  }
 })

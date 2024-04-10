@@ -1,9 +1,12 @@
-import {PrinterDto} from '@/models/printers/printer.model'
-import {convertMultiPrinterFileToQueue, convertPrinterMultiFileToQueue,} from '@/utils/uploads-state.utils'
-import {usePrinterStore} from '@/store/printer.store'
-import {useUploadsStore} from '@/store/uploads.store'
-import {useSnackbar} from '@/shared/snackbar.composable'
-import {App} from '@vue/composition-api'
+import { PrinterDto } from '@/models/printers/printer.model'
+import {
+  convertMultiPrinterFileToQueue,
+  convertPrinterMultiFileToQueue
+} from '@/utils/uploads-state.utils'
+import { usePrinterStore } from '@/store/printer.store'
+import { useUploadsStore } from '@/store/uploads.store'
+import { useSnackbar } from '@/shared/snackbar.composable'
+import { App } from '@vue/composition-api'
 
 const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
   const printersStore = usePrinterStore()
@@ -24,7 +27,8 @@ const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
       const clonedFiles = [...Array.from(filesArray)]
       let convertedUploads = []
       if (isSinglePrinter) {
-        const printedFilename = clonedFiles.length === 1 ? clonedFiles[0].name : null
+        const printedFilename =
+          clonedFiles.length === 1 ? clonedFiles[0].name : null
         console.debug(
           'Single printer upload mode',
           printers.length,
@@ -42,12 +46,20 @@ const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
         if (clonedFiles.length > 1) {
           throw 'Cannot upload multiple files to multiple printers'
         }
-        console.debug('Multi printer upload mode', printers.length, clonedFiles.length)
+        console.debug(
+          'Multi printer upload mode',
+          printers.length,
+          clonedFiles.length
+        )
         const clonedFile = clonedFiles[0]
-        convertedUploads = convertMultiPrinterFileToQueue(printers, clonedFile, {
-          select: true,
-          print: true,
-        })
+        convertedUploads = convertMultiPrinterFileToQueue(
+          printers,
+          clonedFile,
+          {
+            select: true,
+            print: true
+          }
+        )
       }
 
       uploadsStore.queueUploads(convertedUploads)
@@ -61,7 +73,7 @@ const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
       snackbar.openInfoMessage({
         title: 'No action performed',
         subtitle: 'Please select one or more printers',
-        warning: true,
+        warning: true
       })
     }
   }
@@ -94,6 +106,6 @@ export function registerFileDropDirective(app: App<Element>) {
     },
     update: (el, binding, vnode) => {
       bindDropConditionally(el, binding.value?.printers, vnode.context)
-    },
+    }
   })
 }

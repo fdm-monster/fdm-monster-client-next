@@ -4,7 +4,8 @@
     color="primary"
     fab
     size="small"
-    @click.c.capture.native.stop="openCreatePrinterDialog()">
+    @click.c.capture.native.stop="openCreatePrinterDialog()"
+  >
     <v-icon>add</v-icon>
   </v-btn>
 </template>
@@ -19,15 +20,17 @@ export default defineComponent({
   props: {},
   setup: () => {
     return {
-      dialogsStore: useDialogsStore(),
+      dialogsStore: useDialogsStore()
     }
   },
 
   computed: {},
   methods: {
     openCreatePrinterDialog() {
-      this.dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog)
-    },
-  },
+      this.dialogsStore.openDialogWithContext(
+        DialogName.AddOrUpdatePrinterDialog
+      )
+    }
+  }
 })
 </script>

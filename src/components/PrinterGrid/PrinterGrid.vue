@@ -4,8 +4,8 @@
       <v-row style="margin-bottom: -5px">
         <v-col>
           <span>
-            Drag {{ floorStore.floorlessPrinters.length }} unplaced printer(s) from here to place it
-            on the grid.
+            Drag {{ floorStore.floorlessPrinters.length }} unplaced printer(s)
+            from here to place it on the grid.
           </span>
           <v-chip-group>
             <v-chip
@@ -14,7 +14,8 @@
               draggable
               size="small"
               style="cursor: move"
-              @dragstart="onDragStart(printer, $event)">
+              @dragstart="onDragStart(printer, $event)"
+            >
               {{ printer.name }}
             </v-chip>
           </v-chip-group>
@@ -34,42 +35,50 @@
       v-for="y in rows"
       :key="y"
       class="ma-1"
-      no-gutters>
+      no-gutters
+    >
       <v-col
         v-for="x in columns"
         :key="x"
         :cols="columnWidth"
-        :sm="columnWidth">
+        :sm="columnWidth"
+      >
         <v-row
           class="test-top"
-          no-gutters>
+          no-gutters
+        >
           <v-col cols="6">
             <PrinterGridTile
               :printer="getPrinter(2 * (x - 1), 2 * (y - 1))"
               :x="2 * (x - 1)"
-              :y="2 * (y - 1)" />
+              :y="2 * (y - 1)"
+            />
           </v-col>
           <v-col cols="6">
             <PrinterGridTile
               :printer="getPrinter(2 * (x - 1) + 1, 2 * (y - 1))"
               :x="2 * (x - 1) + 1"
-              :y="2 * (y - 1)" />
+              :y="2 * (y - 1)"
+            />
           </v-col>
         </v-row>
         <v-row
           class="test-bottom"
-          no-gutters>
+          no-gutters
+        >
           <v-col cols="6">
             <PrinterGridTile
               :printer="getPrinter(2 * (x - 1), 2 * (y - 1) + 1)"
               :x="2 * (x - 1)"
-              :y="2 * (y - 1) + 1" />
+              :y="2 * (y - 1) + 1"
+            />
           </v-col>
           <v-col cols="6">
             <PrinterGridTile
               :printer="getPrinter(2 * (x - 1) + 1, 2 * (y - 1) + 1)"
               :x="2 * (x - 1) + 1"
-              :y="2 * (y - 1) + 1" />
+              :y="2 * (y - 1) + 1"
+            />
           </v-col>
         </v-row>
       </v-col>
@@ -78,7 +87,8 @@
       alt="FDM Monster Background"
       class="grid-bg-img align-content-center"
       src="/img/logo.svg"
-      style="opacity: 0.08; pointer-events: none">
+      style="opacity: 0.08; pointer-events: none"
+    />
   </div>
 </template>
 
@@ -119,7 +129,7 @@ function onDragStart(printer: PrinterDto, ev: DragEvent) {
     JSON.stringify({
       appId: dragAppId,
       intent: INTENT.PRINTER_PLACE,
-      printerId: printer.id,
+      printerId: printer.id
     } as PrinterPlace)
   )
 }

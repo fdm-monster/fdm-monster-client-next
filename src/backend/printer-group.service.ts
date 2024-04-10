@@ -8,20 +8,20 @@ export class PrinterGroupDto<KeyType = number> {
 }
 
 export interface GroupDto<KeyType extends string | number = number> {
-  id: KeyType;
-  name: string;
+  id: KeyType
+  name: string
 }
 
 export interface GroupWithPrintersDto<KeyType extends string | number = number>
   extends GroupDto<KeyType> {
-  printers: PrinterGroupDto<KeyType>[];
+  printers: PrinterGroupDto<KeyType>[]
 }
 
 export class PrinterGroupService extends BaseService {
   static async createGroup(name: string) {
     const path = `${ServerApi.createGroupRoute}`
     const body = {
-      name,
+      name
     }
     return (await this.postApi(path, body)) as void
   }
@@ -39,7 +39,7 @@ export class PrinterGroupService extends BaseService {
   static async addPrinterToGroup(groupId: IdType, printerId: IdType) {
     const path = `${ServerApi.addPrinterToGroupRoute(groupId)}`
     const body = {
-      printerId,
+      printerId
     }
     return (await this.postApi(path, body)) as GroupWithPrintersDto<IdType>[]
   }
@@ -47,7 +47,7 @@ export class PrinterGroupService extends BaseService {
   static async deletePrinterFromGroup(groupId: IdType, printerId: IdType) {
     const path = `${ServerApi.deletePrinterFromGroupRoute(groupId)}`
     const body = {
-      printerId,
+      printerId
     }
     return (await this.deleteApi(path, body)) as GroupWithPrintersDto<IdType>[]
   }
@@ -55,7 +55,7 @@ export class PrinterGroupService extends BaseService {
   static async updateGroupName(groupId: IdType, name: string) {
     const path = `${ServerApi.updateGroupNameRoute(groupId)}`
     const body = {
-      name,
+      name
     }
     return (await this.patchApi(path, body)) as GroupWithPrintersDto<IdType>[]
   }

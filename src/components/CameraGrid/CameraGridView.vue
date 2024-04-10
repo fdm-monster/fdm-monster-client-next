@@ -1,12 +1,11 @@
 <template>
   <div>
     <v-toolbar>
-      <v-toolbar-title class="mr-4">
-        Camera Overview
-      </v-toolbar-title>
+      <v-toolbar-title class="mr-4"> Camera Overview </v-toolbar-title>
       <v-btn
         color="primary"
-        @click="addCamera()">
+        @click="addCamera()"
+      >
         <v-icon class="mr-2">add</v-icon>
         Add camera
       </v-btn>
@@ -17,39 +16,46 @@
         :key="camera.cameraStream.id"
         class="ma-4"
         style="border: 1px solid grey; margin: 0"
-        width="300">
+        width="300"
+      >
         <v-card
           class="pb-2 pl-2 pr-2"
-          width="300">
+          width="300"
+        >
           <v-card-title>
             <v-icon
               v-if="camera.cameraStream.printerId"
               class="mr-2"
-              size="small">
+              size="small"
+            >
               print
             </v-icon>
             <v-icon
               v-else
               class="mr-2"
-              size="small">
+              size="small"
+            >
               camera_alt
             </v-icon>
-            {{ camera?.cameraStream.name ?? camera?.printer?.name ?? "Camera" }}
+            {{ camera?.cameraStream.name ?? camera?.printer?.name ?? 'Camera' }}
           </v-card-title>
           <img
             :src="camera.cameraStream?.streamURL"
-            width="100%">
-          <br>
+            width="100%"
+          />
+          <br />
           <v-btn
             class="mr-1"
             size="small"
-            @click="updateCamera(camera.cameraStream.id)">
+            @click="updateCamera(camera.cameraStream.id)"
+          >
             <v-icon class="mr-2">edit</v-icon>
             Update
           </v-btn>
           <v-btn
             size="small"
-            @click="deleteCamera(camera.cameraStream.id)">
+            @click="deleteCamera(camera.cameraStream.id)"
+          >
             <v-icon class="mr-2">delete</v-icon>
             Delete
           </v-btn>
@@ -64,7 +70,10 @@ import { CameraStreamService } from '@/backend/camera-stream.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useMutation, useQuery } from '@tanstack/vue-query'
-import { CameraStream, CameraWithPrinter } from '@/models/camera-streams/camera-stream'
+import {
+  CameraStream,
+  CameraWithPrinter
+} from '@/models/camera-streams/camera-stream'
 import { PrinterDto } from '@/models/printers/printer.model'
 import { usePrinterStore } from '@/store/printer.store'
 
@@ -73,17 +82,20 @@ const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
 const camerasWithPrinter = async (): Promise<CameraWithPrinter[]> => {
   const streams = await CameraStreamService.listCameraStreams()
   return streams.map((cameraStream) => ({
-    printer: printerStore.printers.find((printer) => printer.id === cameraStream.printerId),
-    cameraStream,
+    printer: printerStore.printers.find(
+      (printer) => printer.id === cameraStream.printerId
+    ),
+    cameraStream
   })) as CameraWithPrinter[]
 }
 const query = useQuery({
   queryKey: ['cameraStream'],
-  queryFn: camerasWithPrinter,
+  queryFn: camerasWithPrinter
 })
 const deleteMutation = useMutation({
-  mutationFn: (cameraId: string | number) => CameraStreamService.deleteCameraStream(cameraId),
-  onSuccess: () => query.refetch(),
+  mutationFn: (cameraId: string | number) =>
+    CameraStreamService.deleteCameraStream(cameraId),
+  onSuccess: () => query.refetch()
 })
 
 function addCamera() {

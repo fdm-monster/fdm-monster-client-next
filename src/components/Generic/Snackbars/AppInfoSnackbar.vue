@@ -8,17 +8,18 @@
     rounded="pill"
     :timeout="timeout"
     style="z-index: 1000"
-    multi-line>
+    multi-line
+  >
     <v-row>
       <v-col cols="2">
-        <v-btn
-          size="large">
+        <v-btn size="large">
           <v-icon>info</v-icon>
         </v-btn>
       </v-col>
       <v-col
         cols="8"
-        class="d-flex align-center flex-row">
+        class="d-flex align-center flex-row"
+      >
         <div>
           <span class="font-weight-bold text-button">
             {{ infoTitle }}
@@ -31,7 +32,8 @@
       <v-col cols="1">
         <v-btn
           size="large"
-          @click="snackbarOpened = false">
+          @click="snackbarOpened = false"
+        >
           <v-icon>close</v-icon>
         </v-btn>
       </v-col>

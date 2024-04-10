@@ -1,19 +1,25 @@
-import {isPrinterPlaceDataTransfer, PrinterPlace} from '@/shared/drag.constants'
-import {FloorService} from '@/backend/floor.service'
-import {useFloorStore} from '@/store/floor.store'
-import {PrinterDto} from '@/models/printers/printer.model'
-import {App} from '@vue/composition-api'
+import {
+  isPrinterPlaceDataTransfer,
+  PrinterPlace
+} from '@/shared/drag.constants'
+import { FloorService } from '@/backend/floor.service'
+import { useFloorStore } from '@/store/floor.store'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { App } from '@vue/composition-api'
 
 interface PrinterBindingValue {
-  printerSet: PrinterDto | null;
-  x: number;
-  y: number;
+  printerSet: PrinterDto | null
+  x: number
+  y: number
 }
 
 const defaultBorder = '1px solid #2b2a27'
 const hoverBorder = '1px solid gray'
 
-const bindDropConditionally = (el: HTMLElement, bindingValue: PrinterBindingValue) => {
+const bindDropConditionally = (
+  el: HTMLElement,
+  bindingValue: PrinterBindingValue
+) => {
   const floorStore = useFloorStore()
 
   const printerSet = bindingValue?.printerSet
@@ -49,7 +55,7 @@ const bindDropConditionally = (el: HTMLElement, bindingValue: PrinterBindingValu
     await FloorService.addPrinterToFloor(floorId, {
       printerId,
       x: bindingValue.x,
-      y: bindingValue.y,
+      y: bindingValue.y
     })
   }
   el.ondragover = (ev: DragEvent) => {
@@ -57,7 +63,10 @@ const bindDropConditionally = (el: HTMLElement, bindingValue: PrinterBindingValu
       return
     }
 
-    if (ev.dataTransfer && [...ev!.dataTransfer.items].filter((i) => i.kind === 'file').length) {
+    if (
+      ev.dataTransfer &&
+      [...ev!.dataTransfer.items].filter((i) => i.kind === 'file').length
+    ) {
       return
     }
     el.style.border = hoverBorder
@@ -76,6 +85,6 @@ export function registerPrinterPlaceDirective(app: App<Element>) {
     },
     update: (el, binding, vnode) => {
       bindDropConditionally(el, binding.value)
-    },
+    }
   })
 }

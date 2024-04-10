@@ -14,7 +14,8 @@ export function downloadFileByBlob(data: ArrayBuffer, fileName: string) {
 
 export async function downloadFileByUrl(url: string, fileName: string) {
   const apiBase = await getBaseUri()
-  const isAbsolute = url.indexOf('http://') === 0 || url.indexOf('https://') === 0
+  const isAbsolute =
+    url.indexOf('http://') === 0 || url.indexOf('https://') === 0
   const finalUrl = isAbsolute ? url : `${apiBase}/${url}`
   const link = document.createElement('a')
   link.href = finalUrl

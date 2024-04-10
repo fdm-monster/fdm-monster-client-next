@@ -1,17 +1,21 @@
 import { defineStore } from 'pinia'
-import { FrontendSettings, SettingsDto, TimeoutSettings } from '@/models/settings/settings.model'
+import {
+  FrontendSettings,
+  SettingsDto,
+  TimeoutSettings
+} from '@/models/settings/settings.model'
 import { SettingsService } from '@/backend'
 import { ServerSettingsDto } from '@/models/settings/server-settings.dto'
 
 export interface FrontendDebugSettings {
-  showPrinterStateUpdateSideNav: boolean;
-  showInterpretedPrinterState: boolean;
-  showJobsRendered: boolean;
+  showPrinterStateUpdateSideNav: boolean
+  showInterpretedPrinterState: boolean
+  showJobsRendered: boolean
 }
 
 export interface SettingsState {
-  settings?: SettingsDto;
-  frontendDebugSettings: FrontendDebugSettings;
+  settings?: SettingsDto
+  frontendDebugSettings: FrontendDebugSettings
 }
 
 export const useSettingsStore = defineStore({
@@ -21,8 +25,8 @@ export const useSettingsStore = defineStore({
     frontendDebugSettings: {
       showPrinterStateUpdateSideNav: false,
       showInterpretedPrinterState: false,
-      showJobsRendered: false,
-    },
+      showJobsRendered: false
+    }
   }),
   actions: {
     async loadSettings(): Promise<SettingsDto> {
@@ -30,7 +34,9 @@ export const useSettingsStore = defineStore({
       this.settings = response
       return response
     },
-    async updateFrontendSettings(update: FrontendSettings): Promise<SettingsDto> {
+    async updateFrontendSettings(
+      update: FrontendSettings
+    ): Promise<SettingsDto> {
       const response = await SettingsService.updateFrontendSettings(update)
       this.settings = response
       return response
@@ -39,7 +45,7 @@ export const useSettingsStore = defineStore({
       const response = await SettingsService.updateTimeoutSettings(update)
       this.settings = response
       return response
-    },
+    }
   },
   getters: {
     serverSettings(): ServerSettingsDto | undefined {
@@ -53,6 +59,6 @@ export const useSettingsStore = defineStore({
     },
     gridRows(): number {
       return this.settings?.frontend?.gridRows || 8
-    },
-  },
+    }
+  }
 })

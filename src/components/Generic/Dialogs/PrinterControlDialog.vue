@@ -2,17 +2,16 @@
   <BaseDialog
     :id="dialog.dialogId"
     :max-width="'700px'"
-    @escape="closeDialog()">
+    @escape="closeDialog()"
+  >
     <v-card>
-      <v-card-title>
-        Printer Controls
-      </v-card-title>
+      <v-card-title> Printer Controls </v-card-title>
       <v-card-text>
         <v-container v-if="printer">
           <v-row>
             <v-col :cols="12">
               Printer: {{ printer?.name }}
-              <br>
+              <br />
               <v-chip color="primary">
                 {{ printerTemps?.actual }}C / {{ printerTemps?.target }}C
               </v-chip>
@@ -21,97 +20,109 @@
           <v-row>
             <v-col :cols="8">
               X/Y
-              <br>
+              <br />
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="jogPrinterHead(-1, 1, 0)">
+                @click="jogPrinterHead(-1, 1, 0)"
+              >
                 <v-icon>north_west</v-icon>
               </v-btn>
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="jogPrinterHead(0, 1, 0)">
+                @click="jogPrinterHead(0, 1, 0)"
+              >
                 <v-icon>north</v-icon>
               </v-btn>
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="jogPrinterHead(1, 1, 0)">
+                @click="jogPrinterHead(1, 1, 0)"
+              >
                 <v-icon>north_east</v-icon>
               </v-btn>
-              <br>
+              <br />
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="jogPrinterHead(-1, 0, 0)">
+                @click="jogPrinterHead(-1, 0, 0)"
+              >
                 <v-icon>west</v-icon>
               </v-btn>
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="homeAxes(['x', 'y'])">
+                @click="homeAxes(['x', 'y'])"
+              >
                 <v-icon>home</v-icon>
               </v-btn>
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="jogPrinterHead(1, 0, 0)">
+                @click="jogPrinterHead(1, 0, 0)"
+              >
                 <v-icon>east</v-icon>
               </v-btn>
-              <br>
+              <br />
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="jogPrinterHead(-1, -1, 0)">
+                @click="jogPrinterHead(-1, -1, 0)"
+              >
                 <v-icon>south_west</v-icon>
               </v-btn>
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="jogPrinterHead(0, -1, 0)">
+                @click="jogPrinterHead(0, -1, 0)"
+              >
                 <v-icon>south</v-icon>
               </v-btn>
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="jogPrinterHead(1, -1, 0)">
+                @click="jogPrinterHead(1, -1, 0)"
+              >
                 <v-icon>south_east</v-icon>
               </v-btn>
             </v-col>
             <v-col cols="4">
               Z
-              <br>
+              <br />
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="jogPrinterHead(0, 0, 1)">
+                @click="jogPrinterHead(0, 0, 1)"
+              >
                 <v-icon>north</v-icon>
               </v-btn>
-              <br>
+              <br />
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="homeAxes(['z'])">
+                @click="homeAxes(['z'])"
+              >
                 <v-icon>home</v-icon>
               </v-btn>
-              <br>
+              <br />
               <v-btn
                 class="bg-primary"
                 variant="outlined"
                 size="x-large"
-                @click="jogPrinterHead(1, 0, 1)">
+                @click="jogPrinterHead(1, 0, 1)"
+              >
                 <v-icon>south</v-icon>
               </v-btn>
             </v-col>
@@ -119,18 +130,10 @@
           <v-row>
             <v-col cols="12">
               <v-btn-toggle v-model="multiplier">
-                <v-btn :value="0.1">
-                  0.1
-                </v-btn>
-                <v-btn :value="1">
-                  1
-                </v-btn>
-                <v-btn :value="10">
-                  10
-                </v-btn>
-                <v-btn :value="100">
-                  100
-                </v-btn>
+                <v-btn :value="0.1"> 0.1 </v-btn>
+                <v-btn :value="1"> 1 </v-btn>
+                <v-btn :value="10"> 10 </v-btn>
+                <v-btn :value="100"> 100 </v-btn>
               </v-btn-toggle>
             </v-col>
           </v-row>
@@ -140,7 +143,8 @@
         <v-spacer />
         <v-btn
           variant="text"
-          @click="closeDialog()">
+          @click="closeDialog()"
+        >
           Close
         </v-btn>
       </v-card-actions>
@@ -184,7 +188,7 @@ const jogPrinterHead = async (x: number, y: number, z: number) => {
   await PrintersService.sendPrinterJogCommand(printerId.value, {
     x: x * multiplier.value,
     y: y * multiplier.value,
-    z: z * multiplier.value,
+    z: z * multiplier.value
   })
 }
 

@@ -1,7 +1,10 @@
 import { BaseService } from '@/backend/base.service'
 import { ServerApi } from '@/backend/server.api'
 import { FileUploadCommands } from '@/models/printers/file-upload-commands.model'
-import { ClearedFilesResult, PrinterFileDto } from '@/models/printers/printer-file.model'
+import {
+  ClearedFilesResult,
+  PrinterFileDto
+} from '@/models/printers/printer-file.model'
 import { PrinterDto } from '@/models/printers/printer.model'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { IdType } from '@/utils/id.type'
@@ -23,7 +26,11 @@ export class PrinterFileService extends BaseService {
     return (await this.getApi(path)) as PrinterFileDto[]
   }
 
-  static async selectAndPrintFile(printerId: IdType, filePath: string, print = true) {
+  static async selectAndPrintFile(
+    printerId: IdType,
+    filePath: string,
+    print = true
+  ) {
     const path = ServerApi.printerFilesSelectAndPrintRoute(printerId)
     return await this.postApi(path, { filePath, print })
   }
@@ -33,7 +40,7 @@ export class PrinterFileService extends BaseService {
     file: File,
     commands: FileUploadCommands = {
       select: true,
-      print: true,
+      print: true
     }
   ) {
     const path = ServerApi.printerFilesUploadRoute(printer.id)
@@ -56,7 +63,7 @@ export class PrinterFileService extends BaseService {
           (100 * progress.loaded) / progress.total!,
           false
         )
-      },
+      }
     })
   }
 
