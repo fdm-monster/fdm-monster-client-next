@@ -19,7 +19,7 @@
         href="https://nodejs.org/en"
         target="_blank"
       >
-        <strong> NodeJS framework </strong>
+        <strong> Node.js framework </strong>
       </a>
       together with Awilix and ExpressJS for its server, and
       <a
