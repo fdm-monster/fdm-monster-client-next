@@ -100,108 +100,87 @@
   </BaseDialog>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { usePrinterStore } from '@/store/printer.store'
-import { useDialogsStore } from '@/store/dialog.store'
+<script lang="ts" setup>
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { ServerPrivateService } from '@/backend/server-private.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useFeatureStore } from '@/store/features.store'
 
-interface Data {
-  selectedMode: number
-  exportFloors: boolean
-  exportFloorGrid: boolean
-  exportGroups: boolean
-  exportPrinters: boolean
-  notes?: string
-  importFile?: File
+const featureStore = useFeatureStore()
+const dialog = useDialog(DialogName.YamlImportExport)
+const snackbar = useSnackbar()
+
+const errorMessage = ref('')
+const errorDetailedMessage = ref('')
+const selectedMode = ref(0)
+const exportFloors = ref(true)
+const exportFloorGrid = ref(true)
+const exportGroups = ref(true)
+const exportPrinters = ref(true)
+const importFile = ref(undefined)
+const notes = ref('')
+
+const disableExportGroups = computed(() => {
+  return !featureStore.hasFeature('printerGroupsApi')
+})
+
+const isFileProvided = computed(() => {
+  return !!importFile.value
+})
+
+const isImportMode = computed(() => {
+  return selectedMode.value === 0
+})
+
+const onBeforeDialogOpened = async () => {
+  await featureStore.loadFeatures()
+  exportGroups.value = featureStore.hasFeature('printerGroupsApi')
 }
 
-export default defineComponent({
-  name: 'YamlImportExportDialog',
-  setup: () => {
-    const dialog = useDialog(DialogName.YamlImportExport)
-    return {
-      printersStore: usePrinterStore(),
-      dialogsStore: useDialogsStore(),
-      featureStore: useFeatureStore(),
-      dialog,
-      snackbar: useSnackbar()
-    }
-  },
-
-  data: (): Data => ({
-    selectedMode: 0,
-    exportFloors: true,
-    exportFloorGrid: true,
-    exportGroups: true,
-    exportPrinters: true,
-    importFile: undefined,
-    notes: ''
-  }),
-
-  computed: {
-    disableExportGroups() {
-      return !this.featureStore.hasFeature('printerGroupsApi')
-    },
-
-    isFileProvided() {
-      return !!this.importFile
-    },
-
-    isImportMode() {
-      return this.selectedMode === 0
-    }
-  },
-
-  async created() {
-    // Do not perform actions that might cause 401/403 handlers, or ensure they are safely handled
-  },
-
-  methods: {
-    async onBeforeDialogOpened() {
-      await this.featureStore.loadFeatures()
-      this.exportGroups = this.featureStore.hasFeature('printerGroupsApi')
-    },
-
-    async downloadExportYamlFile() {
-      if (this.exportFloorGrid) {
-        this.exportPrinters = true
-      }
-
-      await ServerPrivateService.downloadYamlExport({
-        exportPrinters: this.exportPrinters,
-        exportGroups: this.exportGroups,
-        exportFloorGrid: this.exportFloorGrid,
-        printerComparisonStrategiesByPriority: ['name', 'url'],
-        exportFloors: this.exportFloors,
-        floorComparisonStrategiesByPriority: 'floor',
-        notes: this.notes
-      })
-      this.snackbar.openInfoMessage({
-        title: 'Downloaded the YAML file'
-      })
-      this.notes = ''
-    },
-
-    async uploadAndImportYamlFile() {
-      if (!this.importFile) {
-        throw new Error('The import file was not specified')
-      }
-      await ServerPrivateService.uploadAndImportYaml(this.importFile)
-      this.importFile = undefined
-      this.snackbar.openInfoMessage({
-        title: 'Imported the YAML file'
-      })
-      this.closeDialog()
-    },
-
-    closeDialog() {
-      this.dialog.closeDialog()
-    }
+const downloadExportYamlFile = async () => {
+  if (exportFloorGrid.value) {
+    exportPrinters.value = true
   }
-})
+
+  await ServerPrivateService.downloadYamlExport({
+    exportPrinters: exportPrinters.value,
+    exportGroups: exportGroups.value,
+    exportFloorGrid: exportFloorGrid.value,
+    printerComparisonStrategiesByPriority: ['name', 'url'],
+    exportFloors: exportFloors.value,
+    floorComparisonStrategiesByPriority: 'floor',
+    notes: notes.value
+  })
+  snackbar.openInfoMessage({
+    title: 'Downloaded the YAML file'
+  })
+  notes.value = ''
+}
+
+const uploadAndImportYamlFile = async () => {
+  errorMessage.value = ''
+  errorDetailedMessage.value = ''
+  if (!importFile.value) {
+    errorMessage.value = 'The import file was not specified'
+    return
+  }
+  try {
+    await ServerPrivateService.uploadAndImportYaml(importFile.value)
+    importFile.value = undefined
+    snackbar.openInfoMessage({
+      title: 'Imported the YAML file'
+    })
+    closeDialog()
+  } catch (e) {
+    errorMessage.value = 'An error occurred uring import'
+    errorDetailedMessage.value = (e as Error).message.toString()
+    importFile.value = undefined
+  }
+}
+
+const closeDialog = () => {
+  importFile.value = undefined
+  dialog.closeDialog()
+}
 </script>
