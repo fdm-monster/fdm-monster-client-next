@@ -9,21 +9,23 @@
     <v-list lines="three">
       <v-list-item>
         <v-list-item-title> Current versions in use: </v-list-item-title>
-        <v-list-item-action-text>
-          <strong> Your server's version is: </strong> {{ serverVersion }}
-          <br />
-          <strong> Your client's version is: </strong> {{ version }}
-          <br />
+        <v-list-item-subtitle>
+          Your server's version is: {{ serverVersion }}
+        </v-list-item-subtitle>
+        <v-list-item-subtitle>
+          Your client's version is: {{ version }}
+        </v-list-item-subtitle>
+        <v-list-item-subtitle>
           <div v-if="monsterPiVersion">
             MonsterPi:
-            <strong> Your MonsterPi version is: </strong>
-            {{ monsterPiVersion }}<br />
+            <div>Your MonsterPi version is:</div>
+            {{ monsterPiVersion }}
           </div>
           <div v-else>
-            <strong> MonsterPi: </strong>
+            MonsterPi:
             <div>No MonsterPi distro was detected.</div>
           </div>
-        </v-list-item-action-text>
+        </v-list-item-subtitle>
       </v-list-item>
     </v-list>
     <v-divider />
@@ -76,16 +78,8 @@
           <v-radio
             v-for="release in filteredReleases"
             :key="release.tag_name"
-            :disabled="
-              isCurrentRelease(release) ||
-              !isUpgradeOrAllowedDowngrade(release, current) ||
-              isBelowMinimum(release)
-            "
-            :label="`${release.tag_name}${
-              isCurrentRelease(release) ? ', currently installed' : ''
-            }${!isUpgradeOrAllowedDowngrade(release, current) ? ', downgrade not allowed' : ''}${
-              isBelowMinimum(release) ? ', below minimum' : ''
-            }${isVersionUnstable(release) ? ', unstable version' : ''}`"
+            :disabled="isDisabledRelease(release)"
+            :label="calculateLabelDisabledReason(release)"
             :value="release.tag_name"
           />
         </v-radio-group>
@@ -197,6 +191,23 @@ function isCurrentUnstable() {
   return isVersionUnstable(currentRelease)
 }
 
+function calculateLabelDisabledReason(release: IRelease) {
+  const prefix = isVersionUnstable(release)
+    ? `${release.tag_name}, unstable`
+    : release.tag_name
+
+  if (isCurrentRelease(release)) {
+    return `${prefix}, currently installed`
+  }
+  if (isBelowMinimum(release)) {
+    return `${prefix}, below minimum`
+  }
+  if (!isUpgradeOrAllowedDowngrade(release, current.value)) {
+    return `${prefix}, downgrade not allowed`
+  }
+
+  return prefix
+}
 function isVersionUnstable(release?: IRelease) {
   if (release?.tag_name?.length) {
     return (
@@ -223,7 +234,7 @@ function isUpgradeOrAllowedDowngrade(release: IRelease, current?: IRelease) {
 
   return (
     compare(release.tag_name, current.tag_name) !== -1 &&
-    compare(minimum.value!.tag_name, current.tag_name) !== -1
+    compare(release.tag_name, minimum.value!.tag_name) !== -1
   )
 }
 
