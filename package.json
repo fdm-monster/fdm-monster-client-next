@@ -50,7 +50,7 @@
     "prettier": "^3.2.5",
     "sass": "1.77.0",
     "selective-object-reuse": "1.0.6",
-    "semver": "7.6.0",
+    "semver": "7.6.1",
     "socket.io-client": "4.7.5",
     "typescript": "5.4.5",
     "unplugin-auto-import": "0.17.5",
