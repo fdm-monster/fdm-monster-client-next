@@ -1096,8 +1096,8 @@ __metadata:
   linkType: hard
 
 "@tanstack/vue-query@npm:^5.28.13":
-  version: 5.40.1
-  resolution: "@tanstack/vue-query@npm:5.40.1"
+  version: 5.41.0
+  resolution: "@tanstack/vue-query@npm:5.41.0"
   dependencies:
     "@tanstack/match-sorter-utils": "npm:^8.15.1"
     "@tanstack/query-core": "npm:5.40.0"
@@ -1109,7 +1109,7 @@ __metadata:
   peerDependenciesMeta:
     "@vue/composition-api":
       optional: true
-  checksum: 10c0/c8312db861199991ae15e082f4677a69c26137a7216314b68748b0b0027600fdf5a0d5ab43dd5f892e21c82b0640691bbfdadf7deff6caeabec69f4f68b85668
+  checksum: 10c0/fef73a675e3aab764048016e2efc5368a2f01de419509029e9ce7e82043fdf38aed69e5a9e818ce5b7211cd8e6749c990cc2a11867a0a1336d0821c3ac0770d3
   languageName: node
   linkType: hard
 
