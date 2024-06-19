@@ -1026,10 +1026,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/babel-plugin-component-annotate@npm:2.18.0":
-  version: 2.18.0
-  resolution: "@sentry/babel-plugin-component-annotate@npm:2.18.0"
-  checksum: 10c0/0a9064b320d743fc900370711960d1abf2353bfc6c6a3a31ae366c2babfee4f2d9cdcc166d2cfca03786b30e9419fcac587b9a54acf22b71e613749388b9aa0d
+"@sentry/babel-plugin-component-annotate@npm:2.19.0":
+  version: 2.19.0
+  resolution: "@sentry/babel-plugin-component-annotate@npm:2.19.0"
+  checksum: 10c0/2f93d64095124b617dd1e5ffe8b91f17d4f8f5d890005f5a84e7de3ba891702671dc00d296dd7906d80bd9baa558ea08fe93db2c17a3ed28eba2294815194017
   languageName: node
   linkType: hard
 
@@ -1048,19 +1048,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/bundler-plugin-core@npm:2.18.0":
-  version: 2.18.0
-  resolution: "@sentry/bundler-plugin-core@npm:2.18.0"
+"@sentry/bundler-plugin-core@npm:2.19.0":
+  version: 2.19.0
+  resolution: "@sentry/bundler-plugin-core@npm:2.19.0"
   dependencies:
     "@babel/core": "npm:^7.18.5"
-    "@sentry/babel-plugin-component-annotate": "npm:2.18.0"
+    "@sentry/babel-plugin-component-annotate": "npm:2.19.0"
     "@sentry/cli": "npm:^2.22.3"
     dotenv: "npm:^16.3.1"
     find-up: "npm:^5.0.0"
     glob: "npm:^9.3.2"
     magic-string: "npm:0.30.8"
     unplugin: "npm:1.0.1"
-  checksum: 10c0/8a71af0573481bb5527264d3f15e4b541dbc778a7859e6755eca3b0c503663a173671cbb11109fe9658072eb0ebd3b43f6708514d5d3598a9f0f67d606befc39
+  checksum: 10c0/7125867cb84088776f318307e2d781fa270f140035b549edb402518fca8cf84a51259516e212df56a7ebb22dd63e0bd42b58b58b0d1a66101759d42a707c0e72
   languageName: node
   linkType: hard
 
@@ -1211,13 +1211,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/vite-plugin@npm:2.18.0":
-  version: 2.18.0
-  resolution: "@sentry/vite-plugin@npm:2.18.0"
+"@sentry/vite-plugin@npm:2.19.0":
+  version: 2.19.0
+  resolution: "@sentry/vite-plugin@npm:2.19.0"
   dependencies:
-    "@sentry/bundler-plugin-core": "npm:2.18.0"
+    "@sentry/bundler-plugin-core": "npm:2.19.0"
     unplugin: "npm:1.0.1"
-  checksum: 10c0/aa5ad014d093b3597dd503c4afc293e49a15b2692c5aaa8314b57afa854a91ee9a2488837750643ccab2be7141b1d0a1d3610bcde9b1417cd2871d206d69ac1c
+  checksum: 10c0/27947e5c1f8252ffc2dfb77d832510a22b5fbd35fdb453e3767e3ac95b099e5d4e21a1a2c1e6d5d7cb7cb553c5e0370e92453455ab9b6d9b7387590029fa42d1
   languageName: node
   linkType: hard
 
@@ -3366,7 +3366,7 @@ __metadata:
   dependencies:
     "@babel/types": "npm:7.24.7"
     "@sentry/tracing": "npm:7.114.0"
-    "@sentry/vite-plugin": "npm:2.18.0"
+    "@sentry/vite-plugin": "npm:2.19.0"
     "@sentry/vue": "npm:8.10.0"
     "@tanstack/vue-query": "npm:^5.28.13"
     "@types/node": "npm:20.14.5"
