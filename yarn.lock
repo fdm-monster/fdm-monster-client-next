@@ -22,10 +22,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@antfu/utils@npm:^0.7.7":
-  version: 0.7.7
-  resolution: "@antfu/utils@npm:0.7.7"
-  checksum: 10c0/7ca5db419f3cb6ceabf3ea254ce00ff0eab307585838c074eef40b0f948a8eade0cbad21622a62f3dea83e1cf88accf561be82bc2895e47c62cef01537b92be9
+"@antfu/utils@npm:^0.7.10":
+  version: 0.7.10
+  resolution: "@antfu/utils@npm:0.7.10"
+  checksum: 10c0/98991f66a4752ef097280b4235b27d961a13a2c67ef8e5b716a120eb9823958e20566516711204e2bfb08f0b935814b715f49ecd79c3b9b93ce32747ac297752
   languageName: node
   linkType: hard
 
@@ -2488,6 +2488,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"debug@npm:^4.3.5":
+  version: 4.3.5
+  resolution: "debug@npm:4.3.5"
+  dependencies:
+    ms: "npm:2.1.2"
+  peerDependenciesMeta:
+    supports-color:
+      optional: true
+  checksum: 10c0/082c375a2bdc4f4469c99f325ff458adad62a3fc2c482d59923c260cb08152f34e2659f72b3767db8bb2f21ca81a60a42d1019605a412132d7b9f59363a005cc
+  languageName: node
+  linkType: hard
+
 "deep-eql@npm:^4.1.3":
   version: 4.1.3
   resolution: "deep-eql@npm:4.1.3"
@@ -3410,7 +3422,7 @@ __metadata:
     typescript: "npm:5.5.2"
     unplugin-auto-import: "npm:0.17.6"
     unplugin-fonts: "npm:1.1.1"
-    unplugin-vue-components: "npm:0.27.1"
+    unplugin-vue-components: "npm:0.27.2"
     vite: "npm:5.3.1"
     vite-plugin-vuetify: "npm:2.0.3"
     vitest: "npm:1.6.0"
@@ -4557,6 +4569,15 @@ __metadata:
   dependencies:
     brace-expansion: "npm:^2.0.1"
   checksum: 10c0/2c16f21f50e64922864e560ff97c587d15fd491f65d92a677a344e970fe62aafdbeafe648965fa96d33c061b4d0eabfe0213466203dd793367e7f28658cf6414
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:^9.0.5":
+  version: 9.0.5
+  resolution: "minimatch@npm:9.0.5"
+  dependencies:
+    brace-expansion: "npm:^2.0.1"
+  checksum: 10c0/de96cf5e35bdf0eab3e2c853522f98ffbe9a36c37797778d2665231ec1f20a9447a7e567cb640901f89e4daaa95ae5d70c65a9e8aa2bb0019b6facbc3c0575ed
   languageName: node
   linkType: hard
 
@@ -6105,18 +6126,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-vue-components@npm:0.27.1":
-  version: 0.27.1
-  resolution: "unplugin-vue-components@npm:0.27.1"
+"unplugin-vue-components@npm:0.27.2":
+  version: 0.27.2
+  resolution: "unplugin-vue-components@npm:0.27.2"
   dependencies:
-    "@antfu/utils": "npm:^0.7.7"
+    "@antfu/utils": "npm:^0.7.10"
     "@rollup/pluginutils": "npm:^5.1.0"
     chokidar: "npm:^3.6.0"
-    debug: "npm:^4.3.4"
+    debug: "npm:^4.3.5"
     fast-glob: "npm:^3.3.2"
     local-pkg: "npm:^0.5.0"
     magic-string: "npm:^0.30.10"
-    minimatch: "npm:^9.0.4"
+    minimatch: "npm:^9.0.5"
     mlly: "npm:^1.7.1"
     unplugin: "npm:^1.10.1"
   peerDependencies:
@@ -6128,7 +6149,7 @@ __metadata:
       optional: true
     "@nuxt/kit":
       optional: true
-  checksum: 10c0/fa684ef0f8d99213ec3cc127fe8cd35c95b70389ece2a16546192b4ce4c8a3b995ab86265a667d24c9673ad0df275176c5e44b8704924b13d811157262818380
+  checksum: 10c0/418a38f542ec59bb90d05adeb05512e27f3f9e417aea8155963c83766a1d0210d94a4be477c3fb422f1e34986fe5e1f263a15595c02facf42bcb5fc8811c193b
   languageName: node
   linkType: hard
 
