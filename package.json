@@ -18,7 +18,7 @@
     "vuetify": "3.6.13"
   },
   "devDependencies": {
-    "@babel/types": "7.24.8",
+    "@babel/types": "7.24.9",
     "@sentry/tracing": "7.114.0",
     "@sentry/vite-plugin": "2.21.1",
     "@sentry/vue": "8.17.0",
