@@ -56,7 +56,7 @@
     "unplugin-auto-import": "0.18.0",
     "unplugin-fonts": "1.1.1",
     "unplugin-vue-components": "0.27.3",
-    "vite": "5.3.3",
+    "vite": "5.3.4",
     "vite-plugin-vuetify": "2.0.3",
     "vitest": "2.0.2",
     "vue-axios": "3.5.2",
