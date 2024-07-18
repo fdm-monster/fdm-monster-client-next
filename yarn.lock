@@ -3408,7 +3408,7 @@ __metadata:
     typescript: "npm:5.5.3"
     unplugin-auto-import: "npm:0.18.0"
     unplugin-fonts: "npm:1.1.1"
-    unplugin-vue-components: "npm:0.27.2"
+    unplugin-vue-components: "npm:0.27.3"
     vite: "npm:5.3.3"
     vite-plugin-vuetify: "npm:2.0.3"
     vitest: "npm:2.0.2"
@@ -6085,9 +6085,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-vue-components@npm:0.27.2":
-  version: 0.27.2
-  resolution: "unplugin-vue-components@npm:0.27.2"
+"unplugin-vue-components@npm:0.27.3":
+  version: 0.27.3
+  resolution: "unplugin-vue-components@npm:0.27.3"
   dependencies:
     "@antfu/utils": "npm:^0.7.10"
     "@rollup/pluginutils": "npm:^5.1.0"
@@ -6098,7 +6098,7 @@ __metadata:
     magic-string: "npm:^0.30.10"
     minimatch: "npm:^9.0.5"
     mlly: "npm:^1.7.1"
-    unplugin: "npm:^1.10.1"
+    unplugin: "npm:^1.11.0"
   peerDependencies:
     "@babel/parser": ^7.15.8
     "@nuxt/kit": ^3.2.2
@@ -6108,7 +6108,7 @@ __metadata:
       optional: true
     "@nuxt/kit":
       optional: true
-  checksum: 10c0/418a38f542ec59bb90d05adeb05512e27f3f9e417aea8155963c83766a1d0210d94a4be477c3fb422f1e34986fe5e1f263a15595c02facf42bcb5fc8811c193b
+  checksum: 10c0/0760337d6a83f600c8b0ca8189752878e12cc5e0c6e91bdb926326258a4a4f13923a430e6a47055752c71b7074554344234476e4eb3fa8ab2c4760996919618d
   languageName: node
   linkType: hard
 
