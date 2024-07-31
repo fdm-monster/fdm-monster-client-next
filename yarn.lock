@@ -1640,13 +1640,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/devtools-api@npm:^6.5.1":
-  version: 6.6.1
-  resolution: "@vue/devtools-api@npm:6.6.1"
-  checksum: 10c0/ab9a1e09baae514b0d3a8bf1d670ecb7724f7e55b82eea30aa2e7255e6200b45c1086c1376560f243cf86e98c0726e94d69cefe0ad23dfd50c7c49dfcb1fbf21
-  languageName: node
-  linkType: hard
-
 "@vue/devtools-api@npm:^6.6.3":
   version: 6.6.3
   resolution: "@vue/devtools-api@npm:6.6.3"
@@ -3441,7 +3434,7 @@ __metadata:
     vue: "npm:3.4.35"
     vue-axios: "npm:3.5.2"
     vue-chartjs: "npm:5.3.1"
-    vue-router: "npm:4.4.0"
+    vue-router: "npm:4.4.1"
     vue-tsc: "npm:2.0.29"
     vuedraggable: "npm:4.1.0"
     vuetify: "npm:3.6.13"
@@ -6496,14 +6489,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-router@npm:4.4.0":
-  version: 4.4.0
-  resolution: "vue-router@npm:4.4.0"
+"vue-router@npm:4.4.1":
+  version: 4.4.1
+  resolution: "vue-router@npm:4.4.1"
   dependencies:
-    "@vue/devtools-api": "npm:^6.5.1"
+    "@vue/devtools-api": "npm:^6.6.3"
   peerDependencies:
     vue: ^3.2.0
-  checksum: 10c0/aad52e6bf8f52b1fcc3465ad55ff7aaf302b22b7cec14108957eebeba608ad485626fea3eb6750ca516f3d3974c3830a3cd6d97ec8c431aaa45ed23ffede2803
+  checksum: 10c0/da45022ae4435b7e4b011cc4951e01f6f80ea6d3d0a69653712a932230c7f1e37db5ab010fb28c7caf6dfe881406da548d053abf5c66e6f2b0dda3a84a107af9
   languageName: node
   linkType: hard
 
