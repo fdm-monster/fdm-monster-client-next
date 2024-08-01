@@ -33,7 +33,7 @@
     "@vue/eslint-config-typescript": "13.0.0",
     "@vueuse/core": "10.11.0",
     "@vueuse/integrations": "10.11.0",
-    "axios": "1.7.2",
+    "axios": "1.7.3",
     "c8": "10.1.2",
     "chart.js": "4.4.3",
     "eslint": "9.8.0",
