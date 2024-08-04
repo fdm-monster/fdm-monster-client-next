@@ -57,7 +57,7 @@
     "unplugin-fonts": "1.1.1",
     "unplugin-vue-components": "0.27.3",
     "vite": "5.3.5",
-    "vite-plugin-vuetify": "2.0.3",
+    "vite-plugin-vuetify": "2.0.4",
     "vitest": "2.0.5",
     "vue-axios": "3.5.2",
     "vue-chartjs": "5.3.1",
