@@ -23,7 +23,7 @@
     "@sentry/vite-plugin": "2.22.2",
     "@sentry/vue": "8.26.0",
     "@tanstack/vue-query": "^5.28.13",
-    "@types/node": "20.16.0",
+    "@types/node": "20.16.1",
     "@types/semver": "7.5.8",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
