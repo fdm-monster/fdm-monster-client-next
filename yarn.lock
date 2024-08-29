@@ -1361,19 +1361,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.52.0":
-  version: 5.52.0
-  resolution: "@tanstack/query-core@npm:5.52.0"
-  checksum: 10c0/6f2309294d23721e4508241a4e109d6134bd125b732271217181ae99cc7994ec02ff964397e08bc5e9af5302e3838a3f3259d6e49fdf6fc8aaf324bc4fde4939
+"@tanstack/query-core@npm:5.52.2":
+  version: 5.52.2
+  resolution: "@tanstack/query-core@npm:5.52.2"
+  checksum: 10c0/34bc28f492272642159e6eb41cc45d05669a91a7a9124dcfa4a9b721696b921c0909234373035c9f51159069d71ee449459f0d528de500cfb07e6eb8fdd8857c
   languageName: node
   linkType: hard
 
 "@tanstack/vue-query@npm:^5.28.13":
-  version: 5.52.0
-  resolution: "@tanstack/vue-query@npm:5.52.0"
+  version: 5.52.2
+  resolution: "@tanstack/vue-query@npm:5.52.2"
   dependencies:
     "@tanstack/match-sorter-utils": "npm:^8.15.1"
-    "@tanstack/query-core": "npm:5.52.0"
+    "@tanstack/query-core": "npm:5.52.2"
     "@vue/devtools-api": "npm:^6.6.3"
     vue-demi: "npm:^0.14.10"
   peerDependencies:
@@ -1382,7 +1382,7 @@ __metadata:
   peerDependenciesMeta:
     "@vue/composition-api":
       optional: true
-  checksum: 10c0/70f48098d023da0f9ae74c1f5ec987726fc3718f7f65f81e8bc53c116372050194ac46cc4e1c2b464cb8e15d514b3641bf4a69cb5fecc25c6ddb6d90663fa873
+  checksum: 10c0/3d493fbf6769eac267cfd7c14f2d224afbc6a90feca94660b4a48cf802fcfe8c138910cd0c7cff70cfd2b1056f2114682764289cbcc54bbc71a5023e281ea7e1
   languageName: node
   linkType: hard
 
