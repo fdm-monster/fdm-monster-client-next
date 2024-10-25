@@ -283,13 +283,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:7.25.9":
-  version: 7.25.9
-  resolution: "@babel/types@npm:7.25.9"
+"@babel/types@npm:7.26.0":
+  version: 7.26.0
+  resolution: "@babel/types@npm:7.26.0"
   dependencies:
     "@babel/helper-string-parser": "npm:^7.25.9"
     "@babel/helper-validator-identifier": "npm:^7.25.9"
-  checksum: 10c0/33890d08bcb06b26a3a60e4c6c996cbdf2b8d8a3c212664de659c2775f80b002c5f2bceedaa309c384ff5e99bd579794fe6a7e41de07df70246f43c55016d349
+  checksum: 10c0/b694f41ad1597127e16024d766c33a641508aad037abd08d0d1f73af753e1119fa03b4a107d04b5f92cc19c095a594660547ae9bead1db2299212d644b0a5cb8
   languageName: node
   linkType: hard
 
@@ -3893,7 +3893,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "fdm-monster-client@workspace:."
   dependencies:
-    "@babel/types": "npm:7.25.9"
+    "@babel/types": "npm:7.26.0"
     "@sentry/tracing": "npm:7.114.0"
     "@sentry/vite-plugin": "npm:2.22.6"
     "@sentry/vue": "npm:8.35.0"
