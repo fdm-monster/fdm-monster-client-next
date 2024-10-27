@@ -47,7 +47,7 @@
         <tbody>
           <tr
             v-for="item in shownCompletions"
-            :key="item.id"
+            :key="item.printerId"
           >
             <td>
               {{ printer(item.printerId)?.name ?? '?' }}
@@ -105,6 +105,7 @@ import { PrintCompletionsService } from '@/backend/print-completions.service'
 import { PrinterCompletions } from '@/models/print-completions/print-completions.model'
 import { usePrinterStore } from '@/store/printer.store'
 import { useFloorStore } from '@/store/floor.store'
+import { IdType } from '@/utils/id.type'
 
 const loadedCompletions = ref<PrinterCompletions[]>([])
 const shownCompletions = ref<PrinterCompletions[]>([])
@@ -128,11 +129,11 @@ const loadCompletions = async () => {
   updatePrinters()
 }
 
-const printer = (printerId: string) => {
+const printer = (printerId: IdType) => {
   return printerStore.printer(printerId)
 }
 
-const floorOfPrinter = (printerId: string) => {
+const floorOfPrinter = (printerId: IdType) => {
   return floorStore.floorOfPrinter(printerId)
 }
 
@@ -143,8 +144,6 @@ const updatePrinters = () => {
   const preSearchPrints = pIds.length
     ? loadedCompletions.value.filter((c) => pIds.includes(c.printerId))
     : loadedCompletions.value
-
-  console.log('pre', preSearchPrints, printerNameSearch.value?.length)
 
   const preSortPrints = printerNameSearch.value?.length
     ? preSearchPrints.filter((p) => {
@@ -159,15 +158,11 @@ const updatePrinters = () => {
       })
     : preSearchPrints
 
-  console.log('presort', preSortPrints)
-
   shownCompletions.value = preSortPrints.sort((p1, p2) => {
     if (p1.failureCount === p2.failureCount) {
       return p1.printCount > p2.printCount ? -1 : 1
     }
     return p1.failureCount > p2.failureCount ? -1 : 1
   })
-
-  console.log('post', shownCompletions.value)
 }
 </script>
