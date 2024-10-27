@@ -16,11 +16,10 @@
                   <h3>
                     Experimental Features
                     <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
+                      <template v-slot:activator="{ props }">
                         <v-icon
                           class="help-icon"
-                          v-bind="attrs"
-                          v-on="on"
+                          v-bind="props"
                           >help_outline</v-icon
                         >
                       </template>
@@ -54,12 +53,8 @@
                   <h3>
                     Database Settings
                     <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-icon
-                          v-bind="attrs"
-                          v-on="on"
-                          >help_outline</v-icon
-                        >
+                      <template v-slot:activator="{ props }">
+                        <v-icon v-bind="props">help_outline</v-icon>
                       </template>
                       <span class="tooltip-content">
                         By enabling this setting you will set FDM Monster to
@@ -93,11 +88,10 @@
                   <h3>
                     Experimental Features
                     <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
+                      <template v-slot:activator="{ props }">
                         <v-icon
                           class="help-icon"
-                          v-bind="attrs"
-                          v-on="on"
+                          v-bind="props"
                           >help_outline</v-icon
                         >
                       </template>
@@ -131,11 +125,7 @@
             @click="saveSettings"
             >Save Settings</v-btn
           >
-          <v-btn
-            text
-            @click="resetSettings"
-            >Reset to Default</v-btn
-          >
+          <v-btn @click="resetSettings">Reset to Default</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
