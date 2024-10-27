@@ -68,6 +68,12 @@ const items = ref([
     icon: 'upgrade',
     path: '/settings/software-upgrade'
   },
-  { title: 'Diagnostics', icon: 'bug_report', path: '/settings/diagnostics' }
+  { title: 'Diagnostics', icon: 'bug_report', path: '/settings/diagnostics' },
+  {
+    title: 'Experimental',
+    icon: 'settings_applications',
+    path: '/settings/experimental',
+    divider: false
+  }
 ])
 </script>

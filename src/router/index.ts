@@ -21,6 +21,7 @@ import ServerProtectionSettings from '../components/Settings/ServerProtectionSet
 import SoftwareUpgradeSettings from '../components/Settings/SoftwareUpgradeSettings.vue'
 import DiagnosticsSettings from '../components/Settings/DiagnosticsSettings.vue'
 import PrintStatisticsView from '../components/PrintStatistics/PrintStatisticsView.vue'
+import ExperimentalSettings from '@/components/Settings/ExperimentalSettings.vue'
 
 const NeedsAuth = {
   requiresAuth: true
@@ -122,6 +123,11 @@ const router = createRouter({
           path: 'diagnostics',
           meta: NeedsAuth,
           component: DiagnosticsSettings
+        },
+        {
+          path: 'experimental',
+          meta: NeedsAuth,
+          component: ExperimentalSettings
         }
       ]
     },

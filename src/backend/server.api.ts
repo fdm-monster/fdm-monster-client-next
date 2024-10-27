@@ -51,6 +51,7 @@ export class ServerApi {
   static updateTimeoutSettingRoute = `${ServerApi.settingsRoute}/timeout`
   static serverSentryDiagnosticsSettingRoute = `${ServerApi.settingsRoute}/sentry-diagnostics`
   static updateExperimentalMoonrakerSupportRoute = `${ServerApi.settingsRoute}/experimental-moonraker-support`
+  static updateExperimentalClientSupportRoute = `${ServerApi.settingsRoute}/experimental-client-support`
 
   static serverPrivateRoute = `${ServerApi.base}/server`
   static serverRestartCommandRoute = `${ServerApi.serverPrivateRoute}/restart`
