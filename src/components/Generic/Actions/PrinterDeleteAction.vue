@@ -4,43 +4,26 @@
     color="primary"
     fab
     size="small"
-    @click.prevent.stop="deletePrinter()"
+    @click.prevent.stop="deletePrinter"
   >
     <v-icon>delete</v-icon>
   </v-btn>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { defineProps } from 'vue'
 import { PrinterDto } from '@/models/printers/printer.model'
-import { usePrinterStore } from '../../../store/printer.store'
+import { usePrinterStore } from '@/store/printer.store'
 
-export default defineComponent({
-  name: 'PrinterDeleteAction',
-  components: {},
-  props: {
-    printer: Object as PropType<PrinterDto>
-  },
-  setup: () => {
-    return {
-      printersStore: usePrinterStore()
-    }
-  },
+const props = defineProps<{
+  printer: PrinterDto
+}>()
 
-  computed: {
-    printerId() {
-      return this.printer!.id
-    }
-  },
+const printersStore = usePrinterStore()
 
-  async created() {},
-  async mounted() {},
+async function deletePrinter() {
+  if (!confirm('Are you sure to delete this printer?')) return
 
-  methods: {
-    async deletePrinter() {
-      if (!confirm('Are you sure to delete this printer?')) return
-      await this.printersStore.deletePrinter(this.printerId)
-    }
-  }
-})
+  await printersStore.deletePrinter(props.printer.id)
+}
 </script>

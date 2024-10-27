@@ -158,7 +158,7 @@
         <template #item.actions="{ item }">
           <PrinterUrlAction :printer="item" />
           <PrinterConnectionAction :printer="item" />
-          <PrinterEmergencyStopAction :printer="item" />
+          <PrinterQuickStopAction :printer="item" />
           <SyncPrinterNameAction :printer="item" />
           <PrinterDeleteAction :printer="item" />
           <PrinterSettingsAction
@@ -252,7 +252,7 @@ import PrinterDetails from '@/components/PrinterList/PrinterDetails.vue'
 import PrinterUrlAction from '@/components/Generic/Actions/PrinterUrlAction.vue'
 import PrinterSettingsAction from '@/components/Generic/Actions/PrinterSettingsAction.vue'
 import PrinterConnectionAction from '@/components/Generic/Actions/PrinterConnectionAction.vue'
-import PrinterEmergencyStopAction from '@/components/Generic/Actions/PrinterEmergencyStopAction.vue'
+import PrinterQuickStopAction from '@/components/Generic/Actions/PrinterQuickStopAction.vue'
 import SyncPrinterNameAction from '@/components/Generic/Actions/SyncPrinterNameAction.vue'
 
 import { usePrinterStore } from '@/store/printer.store'
@@ -388,7 +388,7 @@ const clickRow = (item: PrinterDto, event: any) => {
     const index = expanded.value.findIndex((i) => i === item.id)
     expanded.value.splice(index, 1)
   } else {
-    expanded.value.push(item.id)
+    expanded.value.push(item.id.toString())
   }
 }
 

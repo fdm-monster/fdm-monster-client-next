@@ -646,6 +646,8 @@ async function toggleMaintenance() {
 }
 
 async function refreshSocketState() {
+  if (!printerId.value) return
+
   await PrintersService.refreshSocket(printerId.value)
 }
 

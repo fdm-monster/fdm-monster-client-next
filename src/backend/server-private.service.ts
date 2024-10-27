@@ -2,8 +2,7 @@ import { BaseService } from '@/backend/base.service'
 import { ServerApi } from '@/backend/server.api'
 import { ExportYamlModel } from '@/models/server/export-yaml.model'
 import { downloadFileByBlob } from '@/utils/download-file.util'
-import axios from 'axios'
-import { getBaseUri, getHttpClient } from '@/shared/http-client'
+import { getHttpClient } from '@/shared/http-client'
 
 export class ServerPrivateService extends BaseService {
   public static async restartServer() {
@@ -20,8 +19,8 @@ export class ServerPrivateService extends BaseService {
       data: input,
       responseType: 'arraybuffer'
     })
-    await downloadFileByBlob(
-      (response as any).data as ArrayBuffer,
+    downloadFileByBlob(
+      response.data as ArrayBuffer,
       'export-fdm-monster-' + Date.now() + '.yaml'
     )
   }
@@ -40,17 +39,17 @@ export class ServerPrivateService extends BaseService {
     const client = await getHttpClient()
     const response = await client.request<any>({
       method: 'POST',
-      url: 'api/server/dump-fdm-monster-logs',
+      url: `api/server/dump-fdm-monster-logs`,
       responseType: 'arraybuffer'
     })
-    await downloadFileByBlob(
-      (response as any).data as ArrayBuffer,
+    downloadFileByBlob(
+      response.data as ArrayBuffer,
       'logs-fdm-monster-' + Date.now() + '.zip'
     )
   }
 
   public static async clearLogFilesOlderThanWeek() {
-    const path = 'api/server/clear-outdated-fdm-monster-logs'
+    const path = `api/server/clear-outdated-fdm-monster-logs`
     return await this.delete(path)
   }
 }

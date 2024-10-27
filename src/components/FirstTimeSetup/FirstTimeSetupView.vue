@@ -76,9 +76,7 @@
           <v-form v-model="formValid">
             <v-switch
               v-model="formStep1.loginRequired"
-              :hint="true"
               class="mt-5"
-              persistent-hint
             >
               <template #message>
                 <span class="d-flex flex-row align-center">
@@ -117,9 +115,7 @@
 
             <v-switch
               v-model="formStep1.registration"
-              :hint="true"
               class="mt-10 mb-10"
-              persistent-hint
             >
               <template #message>
                 <span class="d-flex flex-row align-center">
@@ -332,9 +328,7 @@ async function continueNext() {
   white-space: nowrap; /* Keeps the content on a single line */
   //margin: 0 auto; /* Gives that scrolling effect as the typing happens */
   letter-spacing: 0.15em; /* Adjust as needed */
-  animation:
-    typing 3.5s steps(40, end),
-    blink-caret 0.75s step-end infinite;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
 }
 
 /* The typing effect */
