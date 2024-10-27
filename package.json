@@ -1,11 +1,22 @@
 {
   "name": "@fdm-monster/client-next",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fdm-monster/fdm-monster-client-next.git"
+  },
+  "author": "David Zwart",
+  "license": "AGPL-3.0-or-later",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "0.0.1",
+  "description": "FDM Monster Client Next is the Vue3 frontend for FDM Monster.",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --fix --ignore-path .gitignore",
+    "lint": "eslint . --fix --ignore-path .gitignore",Hwoo
     "test:unit": "vitest --environment jsdom",
     "test:coverage": "vitest run --coverage --environment jsdom",
     "test:e2e": "start-server-and-test preview http://127.0.0.1:5050/ 'cypress open'"
