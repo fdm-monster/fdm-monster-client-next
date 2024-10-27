@@ -67,7 +67,7 @@ const bindDropConditionally = (
 
     if (
       ev.dataTransfer &&
-      [...ev!.dataTransfer.items].filter((i) => i.kind === 'file').length
+      Array.from(ev.dataTransfer.items).filter((i) => i.kind === 'file').length
     ) {
       return
     }
