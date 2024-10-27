@@ -6,9 +6,13 @@ import {
 import { usePrinterStore } from '@/store/printer.store'
 import { useUploadsStore } from '@/store/uploads.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
-import { App } from '@vue/composition-api'
+import { AppContext, Directive } from 'vue'
 
-const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
+const bindDropConditionally = (
+  el: HTMLElement,
+  printers: PrinterDto[],
+  context?: AppContext | null
+) => {
   const printersStore = usePrinterStore()
   const uploadsStore = useUploadsStore()
   const snackbar = useSnackbar()
@@ -83,29 +87,31 @@ const defaultBorder = '1px solid #2b2a27'
 const defaultTransition = 'background-color 0.5s ease'
 const hoverBorder = '1px solid red'
 
-export function registerFileDropDirective(app: App<Element>) {
-  app.directive('drop-upload', {
+export function getFileDropDirective(): Directive {
+  return {
     // When the bound element is inserted into the DOM...
-    inserted: (el, binding, vnode) => {
+    mounted: (el, binding, vnode) => {
       el.style.border = defaultBorder
       el.style.transition = defaultTransition
 
-      el.ondragenter = () => {
-        el.style.border = hoverBorder
-      }
-      el.ondragover = (ev) => {
-        el.style.border = hoverBorder
+      el.ondragenter = (ev: DragEvent) => {
         ev.preventDefault()
+        el.style.border = hoverBorder
       }
-      el.ondragleave = () => {
+      el.ondragover = (ev: DragEvent) => {
+        ev.preventDefault()
+        el.style.border = hoverBorder
+      }
+      el.ondragleave = (ev: DragEvent) => {
+        ev.preventDefault()
         el.style.border = defaultBorder
       }
 
       // The bound printer is not set
-      bindDropConditionally(el, binding.value?.printers, vnode.context)
+      bindDropConditionally(el, binding.value?.printers, vnode.appContext)
     },
-    update: (el, binding, vnode) => {
-      bindDropConditionally(el, binding.value?.printers, vnode.context)
+    beforeUpdate: (el, binding, vnode) => {
+      bindDropConditionally(el, binding.value, vnode.appContext)
     }
-  })
+  }
 }
