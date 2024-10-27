@@ -3,7 +3,7 @@
     <strong> Files: </strong>
     <v-list color="primary">
       <v-list-item
-        v-for="file in fileList.files"
+        v-for="file in fileList"
         :key="file.path"
       >
         {{ file.path }}
@@ -20,36 +20,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { PrinterFileDto } from '@/models/printers/printer-file.model'
+<script lang="ts" setup>
+import { FileDto } from '@/models/printers/printer-file.model'
 import { usePrinterStore } from '@/store/printer.store'
 
-export default defineComponent({
-  name: 'FileControlList',
-  components: {},
-  props: {
-    fileList: Object as PropType<PrinterFileDto[]>,
-    printerId: String
-  },
-  setup: () => {
-    return {
-      printersStore: usePrinterStore()
-    }
-  },
+interface Props {
+  fileList: FileDto[]
+  printerId: string
+}
 
-  computed: {},
+const props = defineProps<Props>()
 
-  watch: {},
+const printersStore = usePrinterStore()
 
-  async created() {},
-  async mounted() {},
-  methods: {
-    async deleteFile(file: PrinterFileDto) {
-      if (!this.fileList || !this.printerId) return
-
-      await this.printersStore.deletePrinterFile(this.printerId, file.path)
-    }
-  }
-})
+const deleteFile = async (file: FileDto) => {
+  if (!props.fileList || !props.printerId) return
+  await printersStore.deletePrinterFile(props.printerId, file.path)
+}
 </script>

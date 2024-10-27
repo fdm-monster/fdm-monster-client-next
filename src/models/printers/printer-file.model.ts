@@ -26,7 +26,7 @@ export interface OctoPrintStatisticsDto {
   }
 }
 
-export interface PrinterFileDto {
+export interface FileDto {
   date: number
   display: string
   gcodeAnalysis: GcodeAnalysisDto
@@ -43,6 +43,6 @@ export interface PrinterFileDto {
 }
 
 export interface ClearedFilesResult {
-  failedFiles: PrinterFileDto[]
-  succeededFiles: PrinterFileDto[]
+  failedFiles: FileDto[]
+  succeededFiles: FileDto[]
 }

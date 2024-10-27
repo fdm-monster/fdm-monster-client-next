@@ -444,7 +444,7 @@
 import { computed, ref, watch } from 'vue'
 import { generateInitials } from '@/shared/noun-adjectives.data'
 import { PrinterFileService, PrintersService } from '@/backend'
-import { PrinterFileDto } from '@/models/printers/printer-file.model'
+import { FileDto } from '@/models/printers/printer-file.model'
 import { formatBytes } from '@/utils/file-size.util'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from './Dialogs/dialog.constants'
@@ -461,7 +461,7 @@ const dialogsStore = useDialogsStore()
 const featureStore = useFeatureStore()
 const iconSize = ref(36)
 const fileSearch = ref<string | undefined>(undefined)
-const shownFileCache = ref<PrinterFileDto[] | undefined>(undefined)
+const shownFileCache = ref<FileDto[] | undefined>(undefined)
 const drawerOpened = ref(false)
 const loading = ref(true)
 const storedSideNavPrinter = computed(() => printersStore.sideNavPrinter)
@@ -556,12 +556,13 @@ const refreshFiles = async () => {
       false
     )
   } else {
-    shownFileCache.value =
-      await PrinterFileService.getFileCache(currentPrinterId)
+    shownFileCache.value = await PrinterFileService.getFileCache(
+      currentPrinterId
+    )
   }
   loading.value = false
 }
-const deleteFile = async (file: PrinterFileDto) => {
+const deleteFile = async (file: FileDto) => {
   if (!printerId.value) return
   await printersStore.deletePrinterFile(printerId.value, file.path)
 }
@@ -587,7 +588,7 @@ function truncateProgress(progress?: number) {
   return progress?.toFixed(1)
 }
 
-function isFileBeingPrinted(file: PrinterFileDto) {
+function isFileBeingPrinted(file: FileDto) {
   if (!printerId.value) {
     return false
   }
@@ -680,7 +681,7 @@ function clickSettings() {
   closeDrawer()
 }
 
-async function clickPrintFile(file: PrinterFileDto) {
+async function clickPrintFile(file: FileDto) {
   if (!printerId.value) return
   await printerStateStore.selectAndPrintFile({
     printerId: printerId.value,
@@ -688,7 +689,7 @@ async function clickPrintFile(file: PrinterFileDto) {
   })
 }
 
-function clickDownloadFile(file: PrinterFileDto) {
+function clickDownloadFile(file: FileDto) {
   PrinterFileService.downloadFile(file)
 }
 

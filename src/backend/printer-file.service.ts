@@ -3,7 +3,7 @@ import { ServerApi } from '@/backend/server.api'
 import { FileUploadCommands } from '@/models/printers/file-upload-commands.model'
 import {
   ClearedFilesResult,
-  PrinterFileDto
+  FileDto
 } from '@/models/printers/printer-file.model'
 import { PrinterDto } from '@/models/printers/printer.model'
 import { useSnackbar } from '@/shared/snackbar.composable'
@@ -13,7 +13,7 @@ export class PrinterFileService extends BaseService {
   static async getFiles(printerId: IdType, recursive = false) {
     const path = `${ServerApi.printerFilesRoute}/${printerId}/?recursive=${recursive}`
 
-    return (await this.get(path)) as PrinterFileDto[]
+    return (await this.get(path)) as FileDto[]
   }
 
   /**
@@ -23,7 +23,7 @@ export class PrinterFileService extends BaseService {
   static async getFileCache(printerId: IdType) {
     const path = `${ServerApi.printerFilesCacheRoute(printerId)}`
 
-    return (await this.get(path)) as PrinterFileDto[]
+    return (await this.get(path)) as FileDto[]
   }
 
   static async selectAndPrintFile(
@@ -85,7 +85,7 @@ export class PrinterFileService extends BaseService {
     return this.delete(urlPath)
   }
 
-  static downloadFile(file: PrinterFileDto) {
+  static downloadFile(file: FileDto) {
     window.location.href = file.refs.download
   }
 }
