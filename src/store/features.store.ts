@@ -42,7 +42,6 @@ export const useFeatureStore = defineStore('Feature', {
   },
   actions: {
     async loadFeatures() {
-      debugger
       try {
         const features = await AppService.getFeatures()
         this.setFeatures(features)

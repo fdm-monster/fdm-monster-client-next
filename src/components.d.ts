@@ -21,6 +21,7 @@ declare module 'vue' {
     CameraGridView: typeof import('./components/CameraGrid/CameraGridView.vue')['default']
     DiagnosticsSettings: typeof import('./components/Settings/DiagnosticsSettings.vue')['default']
     EmergencyCommands: typeof import('./components/Settings/EmergencyCommands.vue')['default']
+    ExperimentalSettings: typeof import('./components/Settings/ExperimentalSettings.vue')['default']
     FileControlList: typeof import('./components/PrinterList/FileControlList.vue')['default']
     FileExplorerSideNav: typeof import('./components/Generic/FileExplorerSideNav.vue')['default']
     FirstTimeSetupView: typeof import('./components/FirstTimeSetup/FirstTimeSetupView.vue')['default']
