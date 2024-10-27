@@ -163,19 +163,19 @@ const failedPrinters = ref<any[]>([])
 const responseTimesAvg = ref(NaN)
 const responseTimesMax = ref(NaN)
 const responseTimesMin = ref(NaN)
-const chartConfig = ref<ChartData>({
-  labels: [],
+const chartConfig = ref<ChartData<'bar', number[], string>>({
+  labels: [] as string[],
   datasets: [
     {
       label: 'OctoPrint Settings response times (ms)',
-      data: [],
+      data: [] as number[],
       borderColor: '#FF6384',
       backgroundColor: '#ffffff'
     }
   ]
 })
 
-const chartOptions: ChartOptions = {
+const chartOptions: ChartOptions<'bar'> = {
   color: 'white',
   plugins: {
     title: {
@@ -209,7 +209,9 @@ async function clickFetchNameState() {
     }))
 
   const times = printerSettingsBatch.map((n) => n.time)
-  const labels = printerSettingsBatch.map((n) => n.value?.appearance?.name)
+  const labels = printerSettingsBatch.map(
+    (n) => n.value?.appearance?.name ?? ''
+  )
   responseTimesAvg.value =
     times.reduce((a: number, b: number) => a + b, 0) / times.length
   responseTimesMin.value = Math.min(...times)
