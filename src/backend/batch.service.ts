@@ -5,19 +5,19 @@ import { ReprintFileDto } from '@/models/batch/reprint.dto'
 
 export class BatchService extends BaseService {
   static async batchSettingsGet<T = any>(printerIds: IdType[]) {
-    return await this.postApi<T>('api/batch/settings/get', { printerIds })
+    return await this.post<T>('api/batch/settings/get', { printerIds })
   }
 
   static async batchConnectUsb(printerIds: IdType[]) {
-    return await this.postApi('api/batch/connect/usb', { printerIds })
+    return await this.post('api/batch/connect/usb', { printerIds })
   }
 
   static async batchConnectSocket(printerIds: IdType[]) {
-    return await this.postApi('api/batch/connect/socket', { printerIds })
+    return await this.post('api/batch/connect/socket', { printerIds })
   }
 
   static async batchToggleEnabled(printerIds: IdType[], enabled: boolean) {
-    return await this.postApi('api/batch/toggle-enabled', {
+    return await this.post('api/batch/toggle-enabled', {
       printerIds,
       enabled
     })
@@ -25,13 +25,13 @@ export class BatchService extends BaseService {
 
   static async batchGetLastPrintedFiles(printerIds: IdType[]) {
     const path = ServerApi.batchGetLastPrintedFilesRoute
-    return await this.postApi<ReprintFileDto[]>(path, { printerIds })
+    return await this.post<ReprintFileDto[]>(path, { printerIds })
   }
 
   static async batchReprintFiles(
     prints: { printerId: IdType; path: string }[]
   ) {
     const path = ServerApi.batchReprintFilesRoute
-    return await this.postApi(path, { prints })
+    return await this.post(path, { prints })
   }
 }

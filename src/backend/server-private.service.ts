@@ -9,7 +9,7 @@ export class ServerPrivateService extends BaseService {
   public static async restartServer() {
     const path = ServerApi.serverRestartCommandRoute
 
-    return await this.postApi(path)
+    return await this.post(path)
   }
 
   public static async downloadYamlExport(input: ExportYamlModel) {
@@ -29,7 +29,7 @@ export class ServerPrivateService extends BaseService {
   public static async uploadAndImportYaml(file: File) {
     const formData = new FormData()
     formData.append('file', file)
-    return await this.postUploadApi(
+    return await this.postUpload(
       'api/server/import-printers-floors-yaml',
       formData,
       {}
@@ -51,6 +51,6 @@ export class ServerPrivateService extends BaseService {
 
   public static async clearLogFilesOlderThanWeek() {
     const path = 'api/server/clear-outdated-fdm-monster-logs'
-    return await this.deleteApi(path)
+    return await this.delete(path)
   }
 }

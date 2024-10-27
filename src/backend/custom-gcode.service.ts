@@ -6,6 +6,6 @@ export class CustomGcodeService extends BaseService {
   static async postEmergencyM112Command(printerId: IdType) {
     const path = ServerApi.sendEmergencyM112Route(printerId)
 
-    return await this.postApi(path)
+    return await this.post(path)
   }
 }
