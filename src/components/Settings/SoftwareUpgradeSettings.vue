@@ -137,33 +137,64 @@ import { computed, onMounted, ref } from 'vue'
 import { version as packageJsonVersion } from '../../../package.json'
 import { IRelease } from '@/models/server/client-releases.model'
 import { compare, minor } from 'semver'
+import { useFeatureStore } from '@/store/features.store'
 
+const errorMessage = ref('')
 const loading = ref(true)
+const rateLimitExceeded = ref(false)
 const allowDowngrade = ref(false)
 const serverVersion = ref('')
-const monsterPiVersion = ref<string | null>('')
+const monsterPiVersion = ref<string>('')
 const version = ref(packageJsonVersion)
 const current = ref<IRelease>()
 const minimum = ref<IRelease>()
 const selectedRelease = ref<string>()
 const showPrereleases = ref<boolean>(false)
 const loadedClientReleases = ref<IRelease[]>([])
+const featureStore = useFeatureStore()
 
 onMounted(async () => {
   await loadReleases()
 
   const versionSpec = await AppService.getVersion()
   serverVersion.value = versionSpec.version
-  monsterPiVersion.value = versionSpec.monsterPi
+  monsterPiVersion.value = versionSpec.monsterPi?.trim() || ''
 })
 
 async function loadReleases() {
   loading.value = true
-  const clientReleases = await AppService.getClientReleases()
-  current.value = clientReleases.current
-  minimum.value = clientReleases.minimum
-  loadedClientReleases.value = clientReleases.releases
-  loading.value = false
+  errorMessage.value = ''
+  rateLimitExceeded.value = false
+
+  if (featureStore.hasFeature('githubRateLimitApi')) {
+    try {
+      const rateLimit = await AppService.getGithubRateLimit()
+      if (rateLimit.rate.remaining === 0) {
+        const limitResetAt = new Date(rateLimit.rate.reset)
+        const time = limitResetAt.toLocaleTimeString()
+        const diff = rateLimit.rate.reset * 1000 - Date.now()
+        const diffMinutes = Math.ceil(diff / 60000)
+        errorMessage.value = `Server has reached a rate limit of the Github API. This limit will be reset at ${time} (in ${diffMinutes} minutes)`
+        loading.value = false
+        rateLimitExceeded.value = true
+        return
+      }
+    } catch (e) {
+      loading.value = false
+      return
+    }
+  }
+
+  try {
+    const clientReleases = await AppService.getClientReleases()
+    current.value = clientReleases.current
+    minimum.value = clientReleases.minimum
+    loadedClientReleases.value = clientReleases.releases
+  } catch (e: any) {
+    errorMessage.value = 'An error occurred loading the releases: ' + e.message
+  } finally {
+    loading.value = false
+  }
 }
 
 const filteredReleases = computed(() => {
@@ -191,6 +222,14 @@ function isCurrentUnstable() {
   return isVersionUnstable(currentRelease)
 }
 
+function isDisabledRelease(release: IRelease) {
+  return (
+    isCurrentRelease(release) ||
+    !isUpgradeOrAllowedDowngrade(release, current.value) ||
+    isBelowMinimum(release)
+  )
+}
+
 function calculateLabelDisabledReason(release: IRelease) {
   const prefix = isVersionUnstable(release)
     ? `${release.tag_name}, unstable`
@@ -208,6 +247,7 @@ function calculateLabelDisabledReason(release: IRelease) {
 
   return prefix
 }
+
 function isVersionUnstable(release?: IRelease) {
   if (release?.tag_name?.length) {
     return (

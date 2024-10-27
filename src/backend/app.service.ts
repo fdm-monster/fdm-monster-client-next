@@ -3,6 +3,7 @@ import { VersionModel } from '@/models/server/version.model'
 import { FeaturesModel } from '@/models/server/features.model'
 import { IClientReleases } from '@/models/server/client-releases.model'
 import { getHttpClient } from '@/shared/http-client'
+import { GithubRateLimit } from '@/models/server/github-rate-limit.model'
 
 export class AppService extends BaseService {
   static async updateClientDistGithub(
@@ -13,6 +14,10 @@ export class AppService extends BaseService {
       downloadRelease: version,
       allowDowngrade
     })
+  }
+
+  static async getGithubRateLimit() {
+    return (await this.get('api/server/github-rate-limit')) as GithubRateLimit
   }
 
   static async getClientReleases() {
