@@ -1,0 +1,26 @@
+name: Vue publish
+on:
+  pull_request:
+  push:
+    branches:
+      - 'main'
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'yarn'
+
+      - run: yarn set version berry
+      - run: yarn install --immutable
+      - run: yarn run build
+      - run: yarn run test:unit
+      - uses: JS-DevTools/npm-publish@v3
+        if: ${{ github.repository.name == 'fdm-monster-client' }}
+        with:
+          dry-run: true
+          token: ${{ secrets.NPM_TOKEN }}
+          package: package.json

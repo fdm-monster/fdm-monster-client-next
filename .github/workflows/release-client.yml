@@ -1,0 +1,94 @@
+name: Dist Release
+on:
+  push:
+    branches:
+      - 'develop'
+      - 'main'
+      - 'release/*'  # Add this line to include all release branches
+
+jobs:
+  checkversion:
+    runs-on: ubuntu-latest
+    outputs:
+      foundClientVersion: ${{ steps.init.outputs.foundClientVersion }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: get-client-version
+        # https://gist.github.com/DarrenN/8c6a5b969481725a4413?permalink_comment_id=3863317#gistcomment-3863317
+        run: |
+          echo "CLIENT_VERSION=$(npm pkg get version | sed 's/"//g')" >> $GITHUB_ENV
+      - uses: mukunku/tag-exists-action@v1.6.0
+        id: checkTag
+        with:
+          tag: ${{ env.CLIENT_VERSION }}
+      - run: echo ${{ steps.checkTag.outputs.exists }}
+      - name: Environment variables to output
+        id: init
+        run: |
+          echo "foundClientVersion=${{ steps.checkTag.outputs.exists }}" >> $GITHUB_OUTPUT
+
+  publish:
+    needs: checkversion
+    runs-on: ubuntu-latest
+    environment: npm-release
+    if: needs.checkversion.outputs.foundClientVersion == 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      # https://stackoverflow.com/questions/57968497/how-do-i-set-an-env-var-with-a-bash-expression-in-github-actions
+      - name: get-client-version
+        # https://gist.github.com/DarrenN/8c6a5b969481725a4413?permalink_comment_id=3863317#gistcomment-3863317
+        run: |
+          echo "CLIENT_VERSION=$(npm pkg get version | sed 's/"//g')" >> $GITHUB_ENV
+
+      # Build bundle
+      - run: yarn set version berry
+      - run: yarn install --immutable
+      - run: yarn run build
+
+      # Clear fields that make installing harder
+      - name: Replace JSON Value
+        run: |
+          jq '.dependencies = {}' package.json > tmp.json && mv tmp.json package.json
+          jq '.devDependencies = {}' package.json > tmp.json && mv tmp.json package.json
+      - name: Output package.json
+        run: |
+          cat package.json
+
+      # Publish to NPM
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: package.json
+          
+      # Create GitHub release
+      - name: Create release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: ${{ contains(env.CLIENT_VERSION, 'rc') || contains(env.CLIENT_VERSION, 'unstable') }}
+          release_name: "fdm-monster-client-next ${{ env.CLIENT_VERSION }}"
+          tag_name: ${{ env.CLIENT_VERSION }}
+          body: "Release notes not added" # ${{ steps.build_changelog.outputs.changelog }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: action-zip
+        uses: montudor/action-zip@v1.0.0
+        with:
+          args: zip -qq -r dist-client-${{ env.CLIENT_VERSION }}.zip dist ./package.json
+
+      - name: Upload client bundle zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist-client-${{ env.CLIENT_VERSION }}.zip
+          asset_name: dist-client-${{ env.CLIENT_VERSION }}.zip
+          asset_content_type: application/zip
+
