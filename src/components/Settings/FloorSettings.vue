@@ -55,8 +55,8 @@
 
       <v-col>
         <v-toolbar>
-          <v-hover v-slot="{ hover }">
-            <v-toolbar-title>
+          <v-hover v-slot="{ isHovering, props }">
+            <v-toolbar-title v-bind="props">
               <v-edit-dialog
                 v-if="selectedFloor"
                 @open="setEditedPrinterFloorName"
@@ -64,7 +64,7 @@
               >
                 <v-btn color="secondary">
                   <v-icon
-                    v-if="hover"
+                    v-if="isHovering"
                     size="small"
                   >
                     edit
@@ -87,8 +87,8 @@
             </v-toolbar-title>
           </v-hover>
 
-          <v-hover v-slot="{ hover }">
-            <v-toolbar-title>
+          <v-hover v-slot="{ isHovering, props }">
+            <v-toolbar-title v-bind="props">
               <v-edit-dialog
                 v-if="selectedFloor"
                 @open="setEditedPrinterFloorNumber"
@@ -96,7 +96,7 @@
               >
                 <v-btn color="secondary">
                   <v-icon
-                    v-if="hover"
+                    v-if="isHovering"
                     size="small"
                   >
                     edit

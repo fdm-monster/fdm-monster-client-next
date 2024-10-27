@@ -16,6 +16,7 @@ export class FeaturesModel {
   cameraStream?: IFeatureFlag
   printerGroupsApi?: IFeatureFlag
   printerControlApi?: IFeatureFlag
+  githubRateLimitApi?: IFeatureFlag
 }
 
 export type TFeatureFlags = keyof FeaturesModel
@@ -31,5 +32,6 @@ export const featureFlagsList: TFeatureFlags[] = [
   'batchTogglePrinterEnabled',
   'cameraStream',
   'printerGroupsApi',
-  'printerControlApi'
+  'printerControlApi',
+  'githubRateLimitApi'
 ]

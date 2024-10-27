@@ -40,7 +40,7 @@ export type ConnectionState =
   | 'Detecting serial connection'
   | 'Unknown State'
 
-export class CreateOrUpdatePrinterFileDto {
+export interface CreateOrUpdatePrinterFileDto {
   id?: IdType
   printerId?: IdType
 

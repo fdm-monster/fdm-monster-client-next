@@ -5,7 +5,7 @@ import {
 import { FloorService } from '@/backend/floor.service'
 import { useFloorStore } from '@/store/floor.store'
 import { PrinterDto } from '@/models/printers/printer.model'
-import { App } from '@vue/composition-api'
+import { AppContext, Directive } from 'vue'
 
 interface PrinterBindingValue {
   printerSet: PrinterDto | null
@@ -18,11 +18,13 @@ const hoverBorder = '1px solid gray'
 
 const bindDropConditionally = (
   el: HTMLElement,
-  bindingValue: PrinterBindingValue
+  bindingValue: PrinterBindingValue,
+  context?: AppContext | null
 ) => {
+  const printerSet = bindingValue?.printerSet
+
   const floorStore = useFloorStore()
 
-  const printerSet = bindingValue?.printerSet
   // If a printer is placed, we will not (yet) allow placing another printer
   if (printerSet) {
     el.ondrop = null
@@ -65,7 +67,7 @@ const bindDropConditionally = (
 
     if (
       ev.dataTransfer &&
-      [...ev!.dataTransfer.items].filter((i) => i.kind === 'file').length
+      Array.from(ev.dataTransfer.items).filter((i) => i.kind === 'file').length
     ) {
       return
     }
@@ -78,13 +80,13 @@ const bindDropConditionally = (
   }
 }
 
-export function registerPrinterPlaceDirective(app: App<Element>) {
-  app.directive('drop-printer-position', {
-    inserted: (el, binding, vnode) => {
-      bindDropConditionally(el, binding.value)
+export function getDropPrinterPositionDirective(): Directive {
+  return {
+    mounted: (el, binding, vnode) => {
+      bindDropConditionally(el, binding.value, vnode.appContext)
     },
-    update: (el, binding, vnode) => {
-      bindDropConditionally(el, binding.value)
+    beforeUpdate: (el, binding, vnode) => {
+      bindDropConditionally(el, binding.value, vnode.appContext)
     }
-  })
+  }
 }

@@ -1,11 +1,7 @@
-// Plugins
+import App from '@/App.vue'
+import router from './router'
 import { registerPlugins } from '@/plugins'
 import * as Sentry from '@sentry/vue'
-
-// Components
-import App from './App.vue'
-
-// Composables
 import { createApp } from 'vue'
 import { AxiosError } from 'axios'
 import { useSnackbar } from './shared/snackbar.composable'
@@ -14,20 +10,16 @@ import {
   captureException,
   replayIntegration
 } from '@sentry/vue'
-import { registerFileDropDirective } from './directives/file-upload.directive'
-import { registerPrinterPlaceDirective } from './directives/printer-place.directive'
-import router from './router'
+import { getFileDropDirective } from './directives/file-upload.directive'
+import { getDropPrinterPositionDirective } from './directives/printer-drop-position.directive'
 import { generateAppConstants } from '@/shared/app.constants'
-
-// console.log(
-//   `[DEV: ${import.meta.env.DEV}][PROD: ${import.meta.env.PROD}]`,
-//   import.meta.env.PACKAGE_VERSION
-// );
 
 const app = createApp(App)
 
-registerFileDropDirective(app)
-registerPrinterPlaceDirective(app)
+console.log(
+  `[DEV: ${import.meta.env.DEV}][PROD: ${import.meta.env.PROD}]`,
+  import.meta.env.PACKAGE_VERSION
+)
 
 Sentry.init({
   app,
@@ -74,6 +66,9 @@ app.config.errorHandler = (err: AxiosError | any) => {
 
   captureException(err)
 }
+
+app.directive('drop-upload', getFileDropDirective())
+app.directive('drop-printer-position', getDropPrinterPositionDirective())
 
 registerPlugins(app)
 app.provide('appConstants', generateAppConstants())

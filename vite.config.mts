@@ -9,7 +9,7 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'url'
 import packageJson from './package.json'
-// import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -42,6 +42,20 @@ export default defineConfig({
         configFile: 'src/styles/settings.scss'
       }
     }),
+    // Put the Sentry vite plugin after all other plugins
+    sentryVitePlugin({
+      telemetry: false,
+      org: 'fdm-monster',
+      project: 'fdm-monster-client',
+      // Specify the directory containing build artifacts
+      include: './dist',
+      // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
+      // and needs the `project:releases` and `org:read` scopes
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      // Optionally uncomment the line below to override automatic release name detection
+      release: packageJson.version,
+      dryRun: !process.env.SENTRY_AUTH_TOKEN?.length
+    }),
     Fonts({
       google: {
         families: [
@@ -52,19 +66,6 @@ export default defineConfig({
         ]
       }
     })
-    // SentryVitePlugin({
-    //   telemetry: false,
-    //   org: "fdm-monster",
-    //   project: "fdm-monster-client",
-    //   // Specify the directory containing build artifacts
-    //   include: "./dist",
-    //   // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
-    //   // and needs the `project:releases` and `org:read` scopes
-    //   authToken: process.env.SENTRY_AUTH_TOKEN,
-    //   // Optionally uncomment the line below to override automatic release name detection
-    //   release: packageJson.version,
-    //   dryRun: !process.env.SENTRY_AUTH_TOKEN?.length,
-    // }),
   ],
   define: {
     'process.env': {},
@@ -87,14 +88,15 @@ export default defineConfig({
       '.scss'
     ]
   },
-  // test: {
-  //   globals: true,
-  //   globalSetup: ["./vitest/setup.ts"],
-  //   environment: "jsdom",
-  //   deps: {
-  //     inline: ["vuetify"],
-  //   },
-  // },
+  test: {
+    globals: true,
+    // globalSetup: ["./vitest/setup.ts"],
+    setupFiles: ['./test/setup-axios-mock.ts'],
+    environment: 'jsdom',
+    deps: {
+      inline: ['vuetify']
+    }
+  },
   build: {
     sourcemap: true
   },

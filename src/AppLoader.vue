@@ -117,7 +117,10 @@ import { useProfileStore } from '@/store/profile.store'
 import { sleep } from '@/utils/time.utils'
 import { RouteNames } from '@/router/route-names'
 import { AppService } from '@/backend/app.service'
-import { AUTH_ERROR_REASON } from '@/shared/auth.constants'
+import {
+  AUTH_ERROR_REASON,
+  PermissionDeniedEvent
+} from '@/shared/auth.constants'
 import { SocketIoService } from '@/shared/socketio.service'
 
 const authStore = useAuthStore()
@@ -128,9 +131,9 @@ const overlay = ref(false)
 const router = useRouter()
 const overlayMessage = ref('')
 const loading = ref(true)
-const errorCaught = ref(null)
-const errorUrl = ref(null)
-const errorResponse = ref(null)
+const errorCaught = ref()
+const errorUrl = ref()
+const errorResponse = ref()
 const snackbar = useSnackbar()
 const socketIoClient: SocketIoService = new SocketIoService()
 
@@ -185,7 +188,9 @@ async function loadAppWithAuthenticationReady() {
 }
 
 // In use (shared/http-client.ts)
-const authPermissionDeniedKey = useEventBus('auth:permission-denied')
+const authPermissionDeniedKey = useEventBus<PermissionDeniedEvent>(
+  'auth:permission-denied'
+)
 authPermissionDeniedKey.on(async (event) => {
   console.log('[AppLoader] Permission denied, going to permission denied page')
   setOverlay(true, 'Permission denied')
@@ -193,7 +198,7 @@ authPermissionDeniedKey.on(async (event) => {
     name: RouteNames.PermissionDenied,
     query: {
       roles: event?.roles,
-      page: router.currentRoute.name,
+      page: String(router.currentRoute.value.name),
       permissions: event?.permissions,
       error: event?.error,
       url: event?.url
@@ -210,7 +215,7 @@ authFailKey.on(async (event: any) => {
   )
   setOverlay(true, 'Authentication failed, going back to login')
 
-  if (router.currentRoute.name !== RouteNames.Login) {
+  if (router.currentRoute.value.name !== RouteNames.Login) {
     await router.push({ name: RouteNames.Login })
   }
   setOverlay(false)
@@ -239,7 +244,7 @@ accountNotVerifiedEventKey.on(async () => {
     true,
     'Account not verified, please ask an administrator to verify your account.'
   )
-  if (router.currentRoute.name !== RouteNames.Login) {
+  if (router.currentRoute.value.name !== RouteNames.Login) {
     await router.push({ name: RouteNames.Login })
   }
   setOverlay(false)
@@ -255,7 +260,7 @@ passwordChangeRequiredEventKey.on(async () => {
   )
   snackbar.error('Password change required, please change your password.')
   setOverlay(true, 'Password change required, please change your password.')
-  if (router.currentRoute.name !== RouteNames.Login) {
+  if (router.currentRoute.value.name !== RouteNames.Login) {
     await router.push({ name: RouteNames.Login })
   }
   setOverlay(false)
@@ -306,7 +311,7 @@ onBeforeMount(async () => {
   if (!wizardState.wizardCompleted) {
     console.debug('[AppLoader] Wizard not completed, going to wizard')
     await authStore.logout(false)
-    if (router.currentRoute.name !== RouteNames.FirstTimeSetup) {
+    if (router.currentRoute.value.name !== RouteNames.FirstTimeSetup) {
       await router.replace({ name: RouteNames.FirstTimeSetup })
     }
     setOverlay(false)
@@ -344,7 +349,7 @@ onBeforeMount(async () => {
       setOverlay(true, 'Login expired, going back to login')
 
       await sleep(500)
-      if (router.currentRoute.name !== RouteNames.Login) {
+      if (router.currentRoute.value.name !== RouteNames.Login) {
         await router.push({ name: RouteNames.Login })
       }
       setOverlay(false)

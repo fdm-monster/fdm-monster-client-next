@@ -4,33 +4,21 @@
     color="primary"
     fab
     size="small"
-    @click.c.capture.native.stop="openPrinterURL(printer)"
+    @click.c.capture.native.stop="openPrinterURL()"
   >
     <v-icon>directions</v-icon>
   </v-btn>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
 import { PrinterDto } from '@/models/printers/printer.model'
 import { PrintersService } from '@/backend'
 
-export default defineComponent({
-  name: 'PrinterUrlAction',
-  props: {
-    printer: Object as PropType<PrinterDto>
-  },
+const props = defineProps<{
+  printer: PrinterDto
+}>()
 
-  computed: {
-    printerId() {
-      return this.printer!.id
-    }
-  },
-
-  methods: {
-    openPrinterURL(printer: PrinterDto) {
-      PrintersService.openPrinterURL(printer.printerURL)
-    }
-  }
-})
+async function openPrinterURL() {
+  PrintersService.openPrinterURL(props.printer.printerURL)
+}
 </script>

@@ -26,25 +26,24 @@
       </v-card-title>
 
       <v-data-table
-        v-model:expanded="expanded"
+        :expanded.sync="expanded"
         :headers="tableHeaders"
         :items="printers"
         :search="search"
-        :single-expand="true"
+        single-expand
         class="elevation-1"
         item-key="id"
         show-expand
         @click:row="clickRow"
       >
-        <template #no-results>
-          <div class="mt-4 mb-4">
-            <h3>No printer has been found. Create one here:</h3>
-            <PrinterCreateAction />
-          </div>
-        </template>
         <template #no-data>
           <div class="mt-4 mb-4">
-            <h3>No printer has been created yet. Create one here:</h3>
+            <h3 v-if="printers.length === 0">
+              No printer has been created yet. Create one here:
+            </h3>
+            <h3 v-else>
+              No printer has been found. Adjust your filters or search criteria.
+            </h3>
             <PrinterCreateAction />
           </div>
         </template>
@@ -132,7 +131,6 @@
                 class="ml-2"
                 size="small"
                 v-bind="props"
-                v-on="on"
               >
                 <v-icon size="small">add</v-icon>
               </v-chip>
@@ -160,7 +158,7 @@
         <template #item.actions="{ item }">
           <PrinterUrlAction :printer="item" />
           <PrinterConnectionAction :printer="item" />
-          <PrinterEmergencyStopAction :printer="item" />
+          <PrinterQuickStopAction :printer="item" />
           <SyncPrinterNameAction :printer="item" />
           <PrinterDeleteAction :printer="item" />
           <PrinterSettingsAction
@@ -175,8 +173,8 @@
           </span>
           <span v-else> No update received (silence) </span>
         </template>
-        <template #expanded-item="{ headers, item }">
-          <td :colspan="headers.length">
+        <template #expanded-row="{ item, columns }">
+          <td :colspan="columns.length">
             <PrinterDetails :printer="item" />
           </td>
         </template>
@@ -254,7 +252,7 @@ import PrinterDetails from '@/components/PrinterList/PrinterDetails.vue'
 import PrinterUrlAction from '@/components/Generic/Actions/PrinterUrlAction.vue'
 import PrinterSettingsAction from '@/components/Generic/Actions/PrinterSettingsAction.vue'
 import PrinterConnectionAction from '@/components/Generic/Actions/PrinterConnectionAction.vue'
-import PrinterEmergencyStopAction from '@/components/Generic/Actions/PrinterEmergencyStopAction.vue'
+import PrinterQuickStopAction from '@/components/Generic/Actions/PrinterQuickStopAction.vue'
 import SyncPrinterNameAction from '@/components/Generic/Actions/SyncPrinterNameAction.vue'
 
 import { usePrinterStore } from '@/store/printer.store'
@@ -274,6 +272,7 @@ import {
   PrinterGroupService
 } from '@/backend/printer-group.service'
 import { useDialog } from '@/shared/dialog.composable'
+import { VDataTable } from 'vuetify/components'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -288,22 +287,27 @@ const newGroupName = ref('')
 const updatedGroupName = ref('')
 const selectedGroup = ref<number>()
 
+type ReadonlyHeaders = VDataTable['$props']['headers']
+
 const search = ref('')
-const expanded = ref([])
+const expanded = ref<string[]>([])
 const hasPrinterGroupFeature = computed(() =>
   featureStore.hasFeature('printerGroupsApi')
 )
-const tableHeaders = computed(() => [
-  { text: 'Enabled', value: 'enabled' },
-  { text: 'Printer Name', align: 'start', sortable: true, value: 'name' },
-  { text: 'Floor', value: 'floor', sortable: false },
-  ...(featureStore.hasFeature('printerGroupsApi')
-    ? [{ text: 'Group(s)', value: 'group', sortable: true }]
-    : []),
-  { text: 'Actions', value: 'actions', sortable: false },
-  { text: 'Socket Update', value: 'socketupdate', sortable: false },
-  { text: '', value: 'data-table-expand' }
-])
+const tableHeaders = computed(
+  () =>
+    [
+      { title: 'Enabled', key: 'enabled' },
+      { title: 'Printer Name', align: 'start', sortable: true, key: 'name' },
+      { title: 'Floor', key: 'floor', sortable: false },
+      ...(featureStore.hasFeature('printerGroupsApi')
+        ? [{ title: 'Group(s)', key: 'group', sortable: true }]
+        : []),
+      { title: 'Actions', key: 'actions', sortable: false },
+      { title: 'Socket Update', key: 'socketupdate', sortable: false },
+      { title: '', key: 'data-table-expand' }
+    ] as ReadonlyHeaders
+)
 
 async function loadData() {
   loading.value = true
@@ -378,13 +382,14 @@ const openCreatePrinterDialog = () => {
 }
 
 const clickRow = (item: PrinterDto, event: any) => {
+  console.log(item, event)
+
   if (event.isExpanded) {
-    const index = expanded.value.findIndex((i) => i === item)
+    const index = expanded.value.findIndex((i) => i === item.id)
     expanded.value.splice(index, 1)
   } else {
-    expanded.value.push(item)
+    expanded.value.push(item.id.toString())
   }
-  console.log(event)
 }
 
 const openImportJsonPrintersDialog = () => {
@@ -412,7 +417,7 @@ const selectGroupForUpdatingName = () => {
   updatedGroupName.value = selectedGroupObject.value?.name
 }
 
-const updateGroupName = async (group?: GroupWithPrintersDto) => {
+const updateGroupName = async (group?: GroupWithPrintersDto<IdType>) => {
   if (!group?.id) {
     throw new Error('Group id was not defined')
   }

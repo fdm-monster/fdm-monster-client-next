@@ -10,7 +10,7 @@
     >
       <v-btn
         v-for="f in floors"
-        :key="f._id"
+        :key="f.id"
       >
         <v-icon>format_align_left</v-icon>
         {{ f.name }}

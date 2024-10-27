@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { PrinterDto } from '@/models/printers/printer.model'
 import {
   ClearedFilesResult,
-  PrinterFileDto
+  FileDto
 } from '@/models/printers/printer-file.model'
 import { PrinterFileService, PrintersService } from '@/backend'
 import { CreatePrinter } from '@/models/printers/crud/create-printer.model'
@@ -17,7 +17,7 @@ import {
 
 interface State {
   printers: PrinterDto[]
-  printerFileCache: Record<IdType, PrinterFileDto[]>
+  printerFileCache: Record<IdType, FileDto[]>
 
   sideNavPrinter?: PrinterDto
   updateDialogPrinter?: PrinterDto

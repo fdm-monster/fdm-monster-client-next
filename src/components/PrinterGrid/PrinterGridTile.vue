@@ -87,7 +87,7 @@
               @click="clickEmergencyStop()"
             >
               <v-icon>stop</v-icon>
-              &nbsp;Emergency stop
+              &nbsp;Quick stop
             </v-list-item>
           </v-list>
         </v-menu>
@@ -106,7 +106,7 @@
             <v-icon>usb</v-icon>
           </v-btn>
 
-          <!-- Emergency stop button -->
+          <!-- Quick stop button -->
           <v-tooltip
             v-if="
               hasPrinterControlFeature &&
@@ -129,7 +129,7 @@
             </template>
           </v-tooltip>
 
-          <!-- Emergency stop button -->
+          <!-- Quick stop button -->
           <v-tooltip
             v-if="printerStateStore.isPrinterOperational(printer?.id)"
             location="bottom"
@@ -145,9 +145,7 @@
               </v-btn>
             </template>
             <template #default>
-              <span>
-                Send an emergency stop, causing USB to be disconnected.
-              </span>
+              <span> Send a quick stop, causing USB to be disconnected. </span>
             </template>
           </v-tooltip>
 
@@ -375,10 +373,10 @@ const clickEmergencyStop = async () => {
   if (!printerId.value) return
   if (
     confirm(
-      'Are you sure to abort the print in Emergency Stop mode? Please reconnect after.'
+      'Are you sure to abort the print in Quick Stop mode? Please reconnect after.'
     )
   ) {
-    await CustomGcodeService.postEmergencyM112Command(printerId.value)
+    await CustomGcodeService.postQuickStopM112Command(printerId.value)
   }
 }
 
