@@ -1,4 +1,31 @@
-# Client 13/04/2024 1.5.8
+# Client 0.0.3
+
+## Features:
+
+- Added experimental settings page with client toggle
+
+## Fixes
+
+- Removed `debugger` statement from feature store
+
+# Client 0.0.2
+
+## Fix:
+
+- Add .npmignore: ignore a bunch of code in NPM release
+
+# Client 0.0.1
+
+## Features:
+
+- Added GHA workflows
+- Published NPM package
+
+## Fixes:
+
+- Made it compile
+
+# Client 0.0.0
 
 Changes:
 
