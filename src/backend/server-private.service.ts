@@ -18,10 +18,10 @@ export class ServerPrivateService extends BaseService {
       method: 'POST',
       url: 'api/server/export-printers-floors-yaml',
       data: input,
-      responseType: 'blob'
+      responseType: 'arraybuffer'
     })
     await downloadFileByBlob(
-      (response as any).data as any,
+      (response as any).data as ArrayBuffer,
       'export-fdm-monster-' + Date.now() + '.yaml'
     )
   }
@@ -41,10 +41,10 @@ export class ServerPrivateService extends BaseService {
     const response = await client.request<any>({
       method: 'POST',
       url: 'api/server/dump-fdm-monster-logs',
-      responseType: 'blob'
+      responseType: 'arraybuffer'
     })
     await downloadFileByBlob(
-      (response as any).data,
+      (response as any).data as ArrayBuffer,
       'logs-fdm-monster-' + Date.now() + '.zip'
     )
   }

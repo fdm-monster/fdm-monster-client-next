@@ -22,13 +22,13 @@ export async function getHttpClient(
 
   instance.interceptors.request.use((config) => {
     console.debug(
-      `${config.method?.toUpperCase().padEnd(6)} ${config.url?.padEnd(25)} WithAuth: ${withAuth
+      `${config.method?.toUpperCase().padEnd(6)} ${config.url?.padEnd(
+        25
+      )} WithAuth: ${withAuth
         ?.toString()
-        .padEnd(
-          7
-        )} AutoHandle401: ${autoHandle401?.toString().padEnd(7)} BaseURL: ${
-        config.baseURL
-      }`
+        .padEnd(7)} AutoHandle401: ${autoHandle401
+        ?.toString()
+        .padEnd(7)} BaseURL: ${config.baseURL}`
     )
     return config
   })
@@ -65,6 +65,11 @@ export async function getHttpClient(
           message: `No response was returned by axios - URL ${config?.url}`,
           stack: error.stack
         })
+      }
+
+      // Special code
+      if (response.status === HttpStatusCode.FailedDependency) {
+        return Promise.reject(error)
       }
 
       if (

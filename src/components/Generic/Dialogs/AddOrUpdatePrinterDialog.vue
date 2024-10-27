@@ -72,6 +72,25 @@
             <v-btn @click="showChecksPanel = false"> Hide checks </v-btn>
           </PrinterChecksPanel>
         </v-row>
+        <v-alert
+          color="primary"
+          class="my-3"
+          v-if="printerValidationError?.length"
+        >
+          {{ printerValidationError }}
+          <v-checkbox
+            color="warning"
+            v-model="forceSavePrinter"
+            label="Force save"
+          />
+        </v-alert>
+        <v-alert
+          class="my-3"
+          v-if="validatingPrinter"
+        >
+          Validating printer
+          <v-progress-circular indeterminate />
+        </v-alert>
       </v-card-text>
       <v-card-actions>
         <em class="text-red"> * indicates required field </em>
@@ -127,16 +146,24 @@ import {
 import { useDialog } from '@/shared/dialog.composable'
 import { AppConstants } from '@/shared/app.constants'
 import { useSnackbar } from '@/shared/snackbar.composable'
+import { AxiosError } from 'axios'
 
 const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 const printersStore = usePrinterStore()
 const testPrinterStore = useTestPrinterStore()
-
 const appConstants = inject('appConstants') as AppConstants
 const snackbar = useSnackbar()
+
+const printerValidationError = ref<null | string>(null)
+const validatingPrinter = ref(false)
+const forceSavePrinter = ref(false)
 const showChecksPanel = ref(false)
 const copyPasteConnectionString = ref('')
 const formData = ref(getDefaultCreatePrinter())
+
+const printerId = computed(() => {
+  return printersStore.updateDialogPrinter?.id
+})
 
 onMounted(async () => {
   if (printerId.value) {
@@ -145,8 +172,10 @@ onMounted(async () => {
   }
 })
 
-const printerId = computed(() => {
-  return printersStore.updateDialogPrinter?.id
+watch(printerId, (val) => {
+  if (!val) return
+  const printer = printersStore.printer(val) as CreatePrinter
+  formData.value = PrintersService.convertPrinterToCreateForm(printer)
 })
 
 const storedPrinter = computed(() => {
@@ -201,7 +230,7 @@ async function testPrinter() {
 }
 
 async function createPrinter(newPrinterData: CreatePrinter) {
-  await printersStore.createPrinter(newPrinterData)
+  await printersStore.createPrinter(newPrinterData, forceSavePrinter.value)
   snackbar.openInfoMessage({
     title: `Printer ${newPrinterData.name} created`
   })
@@ -210,10 +239,13 @@ async function createPrinter(newPrinterData: CreatePrinter) {
 async function updatePrinter(updatedPrinter: CreatePrinter) {
   const printerId = updatedPrinter.id
 
-  await printersStore.updatePrinter({
-    printerId: printerId as string,
-    updatedPrinter
-  })
+  await printersStore.updatePrinter(
+    {
+      printerId: printerId as string,
+      updatedPrinter
+    },
+    forceSavePrinter.value
+  )
 
   snackbar.openInfoMessage({
     title: `Printer ${updatedPrinter.name} updated`
@@ -223,32 +255,49 @@ async function updatePrinter(updatedPrinter: CreatePrinter) {
 async function submit() {
   // if (!(await isValid())) return
   if (!formData) return
+
+  printerValidationError.value = null
+  validatingPrinter.value = true
   const createdPrinter = formData.value as CreatePrinter
-  if (isUpdating) {
-    await updatePrinter(createdPrinter)
-  } else {
-    await createPrinter(createdPrinter)
+
+  try {
+    if (isUpdating.value) {
+      await updatePrinter(createdPrinter)
+    } else {
+      await createPrinter(createdPrinter)
+    }
+    closeDialog()
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      printerValidationError.value =
+        error.response?.data?.error || error.message
+      snackbar.error('Validation Failed', (error as Error).message)
+    } else {
+      printerValidationError.value = (error as Error).message
+      snackbar.error('Error', (error as Error).message)
+    }
+  } finally {
+    validatingPrinter.value = false
+    forceSavePrinter.value = false
   }
-  closeDialog()
 }
 
 async function duplicatePrinter() {
   formData.value.name = newRandomNamePair()
   printersStore.updateDialogPrinter = undefined
+  printerValidationError.value = null
+  forceSavePrinter.value = false
+  printerValidationError.value = null
 }
 
 function closeDialog() {
   dialog.closeDialog()
+  forceSavePrinter.value = false
+  printerValidationError.value = null
   showChecksPanel.value = false
   testPrinterStore.clearEvents()
   resetForm()
   printersStore.updateDialogPrinter = undefined
   copyPasteConnectionString.value = ''
 }
-
-watch(printerId, (val) => {
-  if (!val) return
-  const printer = printersStore.printer(val) as CreatePrinter
-  formData.value = PrintersService.convertPrinterToCreateForm(printer)
-})
 </script>
