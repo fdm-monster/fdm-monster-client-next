@@ -61,7 +61,7 @@
     "eslint-plugin-vuetify": "2.4.0",
     "jsdom": "25.0.1",
     "jwt-decode": "4.0.0",
-    "pinia": "2.2.4",
+    "pinia": "2.2.5",
     "prettier": "3.3.3",
     "sass": "1.80.4",
     "selective-object-reuse": "1.0.6",
