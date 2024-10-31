@@ -84,7 +84,7 @@
             </v-list-item>
             <v-list-item
               :close-on-click="true"
-              @click="clickEmergencyStop()"
+              @click="clickQuickStop()"
             >
               <v-icon>stop</v-icon>
               &nbsp;Quick stop
@@ -139,7 +139,7 @@
                 elevation="4"
                 size="36"
                 v-bind="props"
-                @click.prevent.stop="clickEmergencyStop()"
+                @click.prevent.stop="clickQuickStop()"
               >
                 <v-icon>dangerous</v-icon>
               </v-btn>
@@ -369,7 +369,7 @@ const clickOpenPrinterControlDialog = async () => {
   await controlDialog.openDialog({ printerId })
 }
 
-const clickEmergencyStop = async () => {
+const clickQuickStop = async () => {
   if (!printerId.value) return
   if (
     confirm(
