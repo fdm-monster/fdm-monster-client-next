@@ -63,7 +63,7 @@
     "jwt-decode": "4.0.0",
     "pinia": "2.2.6",
     "prettier": "3.3.3",
-    "sass": "1.80.5",
+    "sass": "1.80.6",
     "selective-object-reuse": "1.0.6",
     "semver": "7.6.3",
     "socket.io-client": "4.8.1",
