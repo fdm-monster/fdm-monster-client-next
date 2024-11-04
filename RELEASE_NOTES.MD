@@ -1,3 +1,9 @@
+# Client 0.0.4
+
+## Fixes:
+
+- File model and upload api brought up-to-date
+
 # Client 0.0.3
 
 ## Features:
