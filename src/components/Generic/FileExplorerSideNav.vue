@@ -407,7 +407,7 @@
             <template #activator="{ props }">
               <v-btn
                 v-bind="props"
-                @click="clickDownloadFile(file)"
+                @click="clickDownloadFile(file.path)"
               >
                 <v-icon> download </v-icon>
               </v-btn>
@@ -751,8 +751,9 @@ async function clickPrintFile(file: FileDto) {
   })
 }
 
-function clickDownloadFile(file: FileDto) {
-  PrinterFileService.downloadFile(printerId.value, file)
+function clickDownloadFile(path: string) {
+  if (!printerId.value) return
+  PrinterFileService.downloadFile(printerId.value, path)
 }
 
 function closeDrawer() {

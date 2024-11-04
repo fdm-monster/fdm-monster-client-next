@@ -13,10 +13,6 @@ import { usePrinterStore } from '@/store/printer.store'
 import { defineComponent, PropType } from 'vue'
 import { PrinterDto } from '@/models/printers/printer.model'
 
-interface Data {
-  property: number
-}
-
 export default defineComponent({
   name: 'RefreshFilesAction',
   components: {},
@@ -28,22 +24,11 @@ export default defineComponent({
       printersStore: usePrinterStore()
     }
   },
-
-  data: (): Data => ({
-    property: 0
-  }),
-
-  computed: {},
-
-  watch: {},
-
-  async created() {},
-  async mounted() {},
   methods: {
     async getFiles() {
       if (!this.printer) return
 
-      await this.printersStore.loadPrinterFiles(this.printer.id, false)
+      await this.printersStore.loadPrinterFiles(this.printer.id)
     }
   }
 })
