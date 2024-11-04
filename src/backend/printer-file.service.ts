@@ -1,6 +1,5 @@
 import { BaseService } from '@/backend/base.service'
 import { ServerApi } from '@/backend/server.api'
-import { FileUploadCommands } from '@/models/printers/file-upload-commands.model'
 import {
   ClearedFilesResult,
   FileDto
@@ -8,10 +7,11 @@ import {
 import { PrinterDto } from '@/models/printers/printer.model'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { IdType } from '@/utils/id.type'
+import { downloadFileByBlob } from '@/utils/download-file.util'
 
 export class PrinterFileService extends BaseService {
-  static async getFiles(printerId: IdType, recursive = false) {
-    const path = `${ServerApi.printerFilesRoute}/${printerId}/?recursive=${recursive}`
+  static async getFiles(printerId: IdType) {
+    const path = `${ServerApi.printerFilesRoute}/${printerId}`
 
     return (await this.get(path)) as FileDto[]
   }
@@ -35,23 +35,10 @@ export class PrinterFileService extends BaseService {
     return await this.post(path, { filePath, print })
   }
 
-  static async uploadFile(
-    printer: PrinterDto,
-    file: File,
-    commands: FileUploadCommands = {
-      select: true,
-      print: true
-    }
-  ) {
+  static async uploadFile(printer: PrinterDto, file: File) {
     const path = ServerApi.printerFilesUploadRoute(printer.id)
 
     const formData = new FormData()
-    if (commands.select) {
-      formData.append('select', 'true')
-    }
-    if (commands.print) {
-      formData.append('print', 'true')
-    }
     formData.append('files[0]', file)
 
     return this.postUpload(path, formData, {
@@ -80,12 +67,13 @@ export class PrinterFileService extends BaseService {
   }
 
   static async deleteFileOrFolder(printerId: IdType, path: string) {
-    const urlPath = `${ServerApi.printerFilesRoute}/${printerId}/?path=${path}`
-
+    const urlPath = `${ServerApi.printerFilesRoute}/${printerId}?path=${path}`
     return this.delete(urlPath)
   }
 
-  static downloadFile(file: FileDto) {
-    window.location.href = file.refs.download
+  static async downloadFile(printerId: IdType, path: string) {
+    const urlPath = `${ServerApi.printerFilesRoute}/${printerId}/download/${path}`
+    const arrayBuffer = await this.getDownload(urlPath)
+    downloadFileByBlob(arrayBuffer.data, path)
   }
 }

@@ -33,7 +33,7 @@
               </v-avatar>
             </v-btn>
           </template>
-          <span> Visit the OctoPrint associated to this printer </span>
+          <span> Visit the {{ serviceName }} associated to this printer </span>
         </v-tooltip>
       </template>
 
@@ -96,10 +96,10 @@
       color="primary"
     >
       <span v-if="!isEnabled">
-        Disabled OctoPrint, enable it first to get live updates
+        Disabled {{ serviceName }}, enable it first to get live updates
       </span>
       <span v-else>
-        This OctoPrint seems unreachable... Will keep trying for you
+        This {{ serviceName }} seems unreachable... Will keep trying for you
         <v-icon>hourglass_top</v-icon>
       </span>
     </v-alert>
@@ -109,13 +109,13 @@
       "
       color="secondary"
     >
-      This OctoPrint was disabled without reason.
+      This {{ serviceName }} was disabled without reason.
     </v-alert>
     <v-alert
       v-if="storedSideNavPrinter?.disabledReason"
       color="black"
     >
-      This OctoPrint was disabled for maintenance: <br />
+      This {{ serviceName }} was disabled for maintenance: <br />
       <small> &nbsp;&nbsp;{{ storedSideNavPrinter?.disabledReason }} </small>
     </v-alert>
 
@@ -140,13 +140,42 @@
                 class="ml-3 mr-6 ma-5"
                 :size="iconSize"
               >
-                <v-img src="/img/octoprint-tentacle.svg" />
+                <v-img
+                  v-if="isOctoPrint"
+                  src="/img/octoprint-tentacle.svg"
+                />
+                <span v-else>MO</span>
               </v-avatar>
             </template>
-            <span> Open OctoPrint </span>
+            <span> Open {{ serviceName }} </span>
           </v-list-item>
         </template>
-        <span> Visit the OctoPrint associated to this printer </span>
+        <span> Visit the {{ serviceName }} associated to this printer </span>
+      </v-tooltip>
+
+      <v-tooltip
+        location="left"
+        v-if="isMoonraker"
+      >
+        <template #activator="{ props }">
+          <v-list-item
+            class="extra-dense-list-item"
+            link
+            v-bind="props"
+            @click.prevent.stop="openPrinterMainsail()"
+          >
+            <template #prepend>
+              <v-avatar
+                class="ml-3 mr-6 ma-5"
+                :size="iconSize"
+              >
+                <span>MA</span>
+              </v-avatar>
+            </template>
+            <span> Open Mainsail </span>
+          </v-list-item>
+        </template>
+        <span> Visit the Mainsail for this printer </span>
       </v-tooltip>
 
       <v-tooltip location="left">
@@ -378,7 +407,7 @@
             <template #activator="{ props }">
               <v-btn
                 v-bind="props"
-                @click="clickDownloadFile(file)"
+                @click="clickDownloadFile(file.path)"
               >
                 <v-icon> download </v-icon>
               </v-btn>
@@ -409,11 +438,11 @@
               :class="{ 'current-file-print': isFileBeingPrinted(file) }"
               v-bind="props"
             >
-              {{ file.name }}
+              {{ file.path }}
             </span>
           </template>
           <span>
-            File: {{ file.name }} <br />
+            File: {{ file.path }} <br />
             Size: {{ formatBytes(file.size) }} <br />
             <strong>
               {{ isFileBeingPrinted(file) ? 'Printing' : 'Unused' }}
@@ -454,11 +483,17 @@ import { usePrinterStateStore } from '@/store/printer-state.store'
 import { interpretStates } from '@/shared/printer-state.constants'
 import { useSettingsStore } from '@/store/settings.store'
 import { useFeatureStore } from '@/store/features.store'
+import {
+  isMoonrakerType,
+  isOctoPrintType,
+  getServiceName
+} from '@/utils/printer-type.utils'
 
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const dialogsStore = useDialogsStore()
 const featureStore = useFeatureStore()
+
 const iconSize = ref(36)
 const fileSearch = ref<string | undefined>(undefined)
 const shownFileCache = ref<FileDto[] | undefined>(undefined)
@@ -469,6 +504,19 @@ const printerId = computed(() => storedSideNavPrinter.value?.id)
 const isOnline = computed(() =>
   printerId.value ? printerStateStore.isApiResponding(printerId.value) : false
 )
+
+const isOctoPrint = computed(() => {
+  return isOctoPrintType(storedSideNavPrinter.value?.printerType)
+})
+
+const isMoonraker = computed(() => {
+  return isMoonrakerType(storedSideNavPrinter.value?.printerType)
+})
+
+const serviceName = computed(() =>
+  getServiceName(storedSideNavPrinter.value?.printerType)
+)
+
 const isOperational = computed(() =>
   printerId.value
     ? printerStateStore.isPrinterOperational(printerId.value)
@@ -490,7 +538,7 @@ const filesListed = computed(() => {
   return (
     shownFileCache.value.filter((f) =>
       fileSearch.value?.length
-        ? `${f.name}${f.path}`.toLowerCase().includes(fileSearch.value)
+        ? `${f.path}`.toLowerCase().includes(fileSearch.value)
         : true
     ) || []
   )
@@ -550,23 +598,25 @@ const refreshFiles = async () => {
   loading.value = true
   const currentPrinterId = storedSideNavPrinter.value?.id
   if (!currentPrinterId) return
-  if (printerStateStore.isApiResponding(currentPrinterId)) {
-    shownFileCache.value = await printersStore.loadPrinterFiles(
-      currentPrinterId,
-      false
-    )
-  } else {
-    shownFileCache.value = await PrinterFileService.getFileCache(
-      currentPrinterId
-    )
+  try {
+    if (printerStateStore.isApiResponding(currentPrinterId)) {
+      shownFileCache.value = await printersStore.loadPrinterFiles(
+        currentPrinterId
+      )
+    } else {
+      shownFileCache.value = await PrinterFileService.getFileCache(
+        currentPrinterId
+      )
+    }
+  } finally {
+    loading.value = false
   }
-  loading.value = false
 }
 const deleteFile = async (file: FileDto) => {
   if (!printerId.value) return
   await printersStore.deletePrinterFile(printerId.value, file.path)
 }
-// ... (continue with other methods)
+
 watch(storedSideNavPrinter, async (viewedPrinter, oldVal) => {
   drawerOpened.value = !!viewedPrinter
   const currentPrinterId = viewedPrinter?.id
@@ -577,6 +627,7 @@ watch(storedSideNavPrinter, async (viewedPrinter, oldVal) => {
     await refreshFiles()
   }
 })
+
 watch(drawerOpened, (newVal) => {
   if (!newVal) {
     printersStore.setSideNavPrinter(undefined)
@@ -594,7 +645,7 @@ function isFileBeingPrinted(file: FileDto) {
   }
   const jobFilePath =
     printerStateStore.printingFilePathsByPrinterId[printerId.value]
-  return jobFilePath === file.name
+  return jobFilePath === file.path
 }
 
 function avatarInitials() {
@@ -607,6 +658,15 @@ function avatarInitials() {
 function openPrinterURL() {
   if (!storedSideNavPrinter.value) return
   PrintersService.openPrinterURL(storedSideNavPrinter.value.printerURL)
+  closeDrawer()
+}
+
+function openPrinterMainsail() {
+  if (!storedSideNavPrinter.value) return
+
+  const url = new URL(storedSideNavPrinter.value.printerURL)
+  url.port = '8080'
+  PrintersService.openPrinterURL(url.toString())
   closeDrawer()
 }
 
@@ -691,8 +751,9 @@ async function clickPrintFile(file: FileDto) {
   })
 }
 
-function clickDownloadFile(file: FileDto) {
-  PrinterFileService.downloadFile(file)
+function clickDownloadFile(path: string) {
+  if (!printerId.value) return
+  PrinterFileService.downloadFile(printerId.value, path)
 }
 
 function closeDrawer() {

@@ -43,8 +43,7 @@ const bindDropConditionally = (
         // Convert the file and bound printer to a file upload
         convertedUploads = convertPrinterMultiFileToQueue(
           firstPrinter,
-          clonedFiles,
-          printedFilename
+          clonedFiles
         )
       } else {
         if (clonedFiles.length > 1) {
@@ -56,14 +55,7 @@ const bindDropConditionally = (
           clonedFiles.length
         )
         const clonedFile = clonedFiles[0]
-        convertedUploads = convertMultiPrinterFileToQueue(
-          printers,
-          clonedFile,
-          {
-            select: true,
-            print: true
-          }
-        )
+        convertedUploads = convertMultiPrinterFileToQueue(printers, clonedFile)
       }
 
       uploadsStore.queueUploads(convertedUploads)
