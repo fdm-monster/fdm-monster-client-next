@@ -185,8 +185,8 @@ export const usePrinterStore = defineStore('Printers', {
         this.printerFileCache[printerId] = result.failedFiles
       }
     },
-    async loadPrinterFiles(printerId: IdType, recursive: boolean) {
-      const files = await PrinterFileService.getFiles(printerId, recursive)
+    async loadPrinterFiles(printerId: IdType) {
+      const files = await PrinterFileService.getFiles(printerId)
 
       files.sort((f1, f2) => {
         return f1.date < f2.date ? 1 : -1
