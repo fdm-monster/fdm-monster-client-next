@@ -5,6 +5,7 @@
 Fixes:
 
 - Account settings - cant change password
+- Account settings - apply user id number to string coercion
  
 # Client 0.0.6
 

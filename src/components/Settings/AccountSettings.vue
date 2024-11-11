@@ -127,7 +127,7 @@ onMounted(async () => {
 })
 
 async function changeUsername() {
-  if (!userId.value?.length) {
+  if (!userId.value?.toString()?.length) {
     snackbar.openErrorMessage({ title: 'User not loaded' })
     return
   }
@@ -139,7 +139,7 @@ async function changeUsername() {
 }
 
 async function changePassword() {
-  if (!userId.value?.length) {
+  if (!userId.value?.toString()?.length) {
     snackbar.openErrorMessage({ title: 'User not loaded' })
     return
   }
