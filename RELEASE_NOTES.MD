@@ -1,5 +1,14 @@
 # Develop 
 
+# Client 0.0.7
+
+Fixes:
+
+- Account settings - cant change password
+- Account settings - apply user id number to string coercion
+ 
+# Client 0.0.6
+
 ## Features:
 
 - User settings: add user roles dropdown to change verified users from GUEST role to OPERATOR or ADMIN.

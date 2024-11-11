@@ -119,16 +119,15 @@ const formData = ref<{
 
 onMounted(async () => {
   await settingsStore.loadSettings()
-  if (!settingsStore.settings?.server.loginRequired) {
-    loginEnabled.value = settingsStore.settings?.server.loginRequired
-  }
+  loginEnabled.value = settingsStore.settings?.server.loginRequired
+
   await profileStore.getProfile()
   formData.value.username = profileStore.username as string
   userId.value = profileStore.userId as string
 })
 
 async function changeUsername() {
-  if (!userId.value?.length) {
+  if (!userId.value?.toString()?.length) {
     snackbar.openErrorMessage({ title: 'User not loaded' })
     return
   }
@@ -140,7 +139,7 @@ async function changeUsername() {
 }
 
 async function changePassword() {
-  if (!userId.value?.length) {
+  if (!userId.value?.toString()?.length) {
     snackbar.openErrorMessage({ title: 'User not loaded' })
     return
   }
