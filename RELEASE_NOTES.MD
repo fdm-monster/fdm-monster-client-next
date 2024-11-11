@@ -1,6 +1,12 @@
+# Develop 
+
+## Features:
+
+- User settings: add user roles dropdown to change verified users from GUEST role to OPERATOR or ADMIN.
+
 # Client 0.0.5
 
-Fixes:
+## Fixes:
 
 - Printer dialog: api key of 43 length should be allowed since OctoPrint 1.10.3
  
