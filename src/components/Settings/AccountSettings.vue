@@ -119,9 +119,8 @@ const formData = ref<{
 
 onMounted(async () => {
   await settingsStore.loadSettings()
-  if (!settingsStore.settings?.server.loginRequired) {
-    loginEnabled.value = settingsStore.settings?.server.loginRequired
-  }
+  loginEnabled.value = settingsStore.settings?.server.loginRequired
+
   await profileStore.getProfile()
   formData.value.username = profileStore.username as string
   userId.value = profileStore.userId as string
