@@ -1,5 +1,6 @@
 {
   "name": "@fdm-monster/client-next",
+  "version": "0.0.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fdm-monster/fdm-monster-client-next.git"
@@ -9,7 +10,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.4",
   "description": "FDM Monster Client Next is the Vue3 frontend for FDM Monster.",
   "scripts": {
     "dev": "vite",
