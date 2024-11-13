@@ -1,5 +1,7 @@
 # Develop 
 
+# Client 0.0.8
+
 ## Fixes
 
 - PrinterStore: when deleting a printer, an error is often presented that the PrinterStore contains no printer with such id
