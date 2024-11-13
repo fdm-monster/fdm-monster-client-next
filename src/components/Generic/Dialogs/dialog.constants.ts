@@ -15,5 +15,7 @@ export enum DialogName {
   // The camera create dialog, which is used to create a new or update a camera.
   AddOrUpdateCameraDialog = 'AddOrUpdateCameraDialog',
   // Dialog for moving print head, homing, or retracting/extruding filament
-  PrinterControlDialog = 'PrinterControlDialog'
+  PrinterControlDialog = 'PrinterControlDialog',
+  // Dialog for creating a user which is pre-registered (no verification needed)
+  CreateUserDialog = 'CreateUserDialog'
 }

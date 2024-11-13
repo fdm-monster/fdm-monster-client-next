@@ -5,6 +5,17 @@
         <v-icon>settings</v-icon>
       </v-avatar>
       <v-toolbar-title> Users </v-toolbar-title>
+
+      <v-spacer />
+      <v-btn
+        :disabled="!profile?.isRootUser"
+        class="mt-2"
+        color="primary"
+        @click="openCreateUserDialog()"
+      >
+        <v-icon class="mr-2">verified_user</v-icon>
+        <span>Create verified user</span>
+      </v-btn>
     </v-toolbar>
     <GridLoader
       v-if="loading"
@@ -141,6 +152,8 @@ import { formatIntlDate } from '@/utils/date.utils'
 import GridLoader from '@/components/Generic/Loaders/GridLoader.vue'
 import { useQuery } from '@tanstack/vue-query'
 import { useSnackbar } from '@/shared/snackbar.composable'
+import { useDialog } from '@/shared/dialog.composable'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 
 const snackbar = useSnackbar()
 const loading = ref<boolean>(false)
@@ -285,5 +298,9 @@ async function updateUserRoles(user: User) {
     throw e
   }
   loading.value = false
+}
+
+async function openCreateUserDialog() {
+  await useDialog(DialogName.CreateUserDialog).openDialog()
 }
 </script>
