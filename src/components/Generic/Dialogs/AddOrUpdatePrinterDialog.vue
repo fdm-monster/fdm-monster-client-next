@@ -60,7 +60,6 @@
           <v-col :cols="showChecksPanel ? 8 : 12">
             <v-row v-if="formData">
               <v-col>
-                <!--                  :rules="printerNameRules"-->
                 <v-text-field
                   v-model="formData.name"
                   :counter="printerNameRules.max"
@@ -97,7 +96,6 @@
               persistent-hint
               required
             />
-            <!--            </validation-provider>-->
           </v-col>
 
           <PrinterChecksPanel
@@ -323,11 +321,19 @@ async function updatePrinter(updatedPrinter: CreatePrinter) {
 }
 
 async function submit() {
-  // if (!(await isValid())) return
   if (!formData) return
 
   printerValidationError.value = null
   validatingPrinter.value = true
+
+  if (
+    formData.value.printerURL?.length &&
+    !formData.value.printerURL?.startsWith('http://') &&
+    !formData.value.printerURL?.startsWith('https://')
+  ) {
+    formData.value.printerURL += 'https://'
+  }
+
   const createdPrinter = formData.value as CreatePrinter
 
   try {

@@ -3,6 +3,7 @@
 ## Fixes
 
 - PrinterStore: when deleting a printer, an error is often presented that the PrinterStore contains no printer with such id
+- AddOrUpdatePrinterDialog: auto-append https if this is missing in URL before submitting
 
 ## Features:
 
