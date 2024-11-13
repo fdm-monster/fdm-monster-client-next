@@ -17,7 +17,45 @@
           <span v-else> New Printer </span>
         </span>
       </v-card-title>
+
       <v-card-text>
+        <h4>Printer type</h4>
+        <v-item-group
+          v-model="formData.printerType"
+          mandatory
+        >
+          <v-container>
+            <v-row>
+              <v-col
+                v-for="item of serviceTypes"
+                :key="item.name"
+                cols="12"
+                md="6"
+              >
+                <v-item v-slot="{ isSelected, toggle }">
+                  <v-card
+                    :color="isSelected ? 'primary' : 'blue-grey darken-4'"
+                    class="d-flex align-center justify-center elevation-8"
+                    height="75px"
+                    width="225px"
+                    @click="toggle"
+                  >
+                    <v-img
+                      :src="item.logo"
+                      :height="item.height"
+                      max-width="125px"
+                      width="125px"
+                    />
+                    <v-scroll-y-transition>
+                      <h3 class="ml-3 align-center">{{ item.name }}</h3>
+                    </v-scroll-y-transition>
+                  </v-card>
+                </v-item>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-item-group>
+
         <v-row>
           <v-col :cols="showChecksPanel ? 8 : 12">
             <v-row v-if="formData">
@@ -43,8 +81,6 @@
               </v-col>
             </v-row>
 
-            <!--              persistent-hint-->
-            <!--              rules="required|url">-->
             <v-text-field
               v-model="formData.printerURL"
               class="ma-1"
@@ -52,7 +88,6 @@
               label="Printer URL*"
             />
 
-            <!--              :rules="apiKeyRules"-->
             <v-text-field
               v-model="formData.apiKey"
               :counter="apiKeyRules.length"
@@ -147,10 +182,14 @@ import { useDialog } from '@/shared/dialog.composable'
 import { AppConstants } from '@/shared/app.constants'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { AxiosError } from 'axios'
+import { useFeatureStore } from '@/store/features.store'
+import klipperLogoSvg from '@/assets/klipper-logo.svg'
+import octoPrintTentacleSvg from '@/assets/octoprint-tentacle.svg'
 
 const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 const printersStore = usePrinterStore()
 const testPrinterStore = useTestPrinterStore()
+const featureStore = useFeatureStore()
 const appConstants = inject('appConstants') as AppConstants
 const snackbar = useSnackbar()
 
@@ -160,6 +199,37 @@ const forceSavePrinter = ref(false)
 const showChecksPanel = ref(false)
 const copyPasteConnectionString = ref('')
 const formData = ref(getDefaultCreatePrinter())
+
+const serviceTypes = computed(() => {
+  if (featureStore.hasFeature('multiplePrinterServices')) {
+    const feature = featureStore.getFeature<{ types: string[] }>(
+      'multiplePrinterServices'
+    )
+    const hasKlipperSupport = feature?.subFeatures?.types?.includes('klipper')
+    if (hasKlipperSupport) {
+      return [
+        {
+          name: 'OctoPrint',
+          logo: octoPrintTentacleSvg,
+          height: '75px'
+        },
+        {
+          name: 'Klipper',
+          logo: klipperLogoSvg,
+          height: '75px'
+        }
+      ]
+    }
+  }
+
+  return [
+    {
+      name: 'OctoPrint',
+      logo: octoPrintTentacleSvg,
+      height: '75px'
+    }
+  ]
+})
 
 const printerId = computed(() => {
   return printersStore.updateDialogPrinter?.id
