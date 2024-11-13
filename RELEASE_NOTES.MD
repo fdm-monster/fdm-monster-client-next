@@ -1,5 +1,9 @@
 # Develop 
 
+## Fixes
+
+- PrinterStore: when deleting a printer, an error is often presented that the PrinterStore contains no printer with such id
+
 ## Features:
 
 - User settings: create user dialog for an admin to conveniently share a new verified account with roles.
