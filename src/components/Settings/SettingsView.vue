@@ -27,7 +27,7 @@
       </v-navigation-drawer>
     </div>
 
-    <router-view class="grow" />
+    <router-view />
   </v-row>
 </template>
 
