@@ -12,7 +12,7 @@
           autofocus
           name="login"
           placeholder="Username"
-          prepend-icon="mdi-account"
+          prepend-icon="person"
           type="text"
           variant="underlined"
           @keyup.enter="formIsDisabled || login()"
