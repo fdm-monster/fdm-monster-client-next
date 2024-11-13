@@ -9,6 +9,7 @@ export interface AppConstants {
   maxPrinterGroupLocationX: number
   maxPrinterGroupLocationY: number
   minPrinterFloorNameLength: number
+  minUsernameLength: number
 }
 
 export const generateAppConstants = (): Readonly<AppConstants> =>
@@ -19,5 +20,6 @@ export const generateAppConstants = (): Readonly<AppConstants> =>
     maxPrinterGroupNameLength: 30, // Doesn't exist on backend
     maxPrinterGroupLocationX: 4,
     maxPrinterGroupLocationY: 4,
-    minPrinterFloorNameLength: 3
+    minPrinterFloorNameLength: 3,
+    minUsernameLength: 3
   }) as Readonly<AppConstants>

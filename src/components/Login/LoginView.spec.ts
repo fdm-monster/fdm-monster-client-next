@@ -38,8 +38,6 @@ describe('LoginView.vue', () => {
   })
 
   it('displays the correct title', () => {
-    console.log(wrapper.html()) // Log the rendered output for debugging
-
     const title = wrapper.find('.text-uppercase.text-red') // Using the class selector
     expect(title.exists()).toBe(true) // Check if the title exists
     expect(title.text()).toContain('FDM')

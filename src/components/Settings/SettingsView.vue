@@ -21,12 +21,13 @@
             :prepend-icon="item.icon"
             :title="item.title"
             router-link
+            :style="item.divider ? 'border-bottom: 1px solid gray' : ''"
           />
         </v-list>
       </v-navigation-drawer>
     </div>
 
-    <router-view class="grow" />
+    <router-view />
   </v-row>
 </template>
 
@@ -35,40 +36,58 @@ const items = ref([
   {
     title: 'Grid',
     icon: 'grid_on',
-    path: '/settings/grid'
+    path: '/settings/grid',
+    divider: false
   },
   {
     title: 'Floors',
     icon: 'house_siding',
-    path: '/settings/floors'
+    path: '/settings/floors',
+    divider: true
   },
   {
-    title: 'User Management',
+    title: 'OctoPrint',
+    icon: 'image',
+    path: '/settings/octoprint',
+    divider: false
+  },
+
+  {
+    title: 'Emergency Commands',
+    icon: 'warning',
+    path: '/settings/emergency-commands',
+    divider: true
+  },
+  {
+    title: 'Users',
     icon: 'group',
-    path: '/settings/user-management'
+    path: '/settings/user-management',
+    divider: false
   },
   {
-    title: 'Account Settings',
+    title: 'Account',
     icon: 'account_circle',
-    path: '/settings/account'
+    path: '/settings/account',
+    divider: false
   },
   {
     title: 'Server Protection',
     icon: 'security',
-    path: '/settings/server-protection'
-  },
-  { title: 'OctoPrint Settings', icon: 'image', path: '/settings/octoprint' },
-  {
-    title: 'Emergency Commands',
-    icon: 'warning',
-    path: '/settings/emergency-commands'
+    path: '/settings/server-protection',
+    divider: true
   },
   {
     title: 'Software Upgrade',
     icon: 'upgrade',
-    path: '/settings/software-upgrade'
+    path: '/settings/software-upgrade',
+    divider: false
   },
-  { title: 'Diagnostics', icon: 'bug_report', path: '/settings/diagnostics' },
+  {
+    title: 'Diagnostics',
+    icon: 'bug_report',
+    path: '/settings/diagnostics',
+    divider: false
+  },
   {
     title: 'Experimental',
     icon: 'settings_applications',

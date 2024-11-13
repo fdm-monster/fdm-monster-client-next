@@ -164,7 +164,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                       <!---->
                       <i
                         aria-hidden="true"
-                        class="mdi-account mdi v-icon notranslate v-theme--light v-icon--size-default"
+                        class="person mdi v-icon notranslate v-theme--light v-icon--size-default"
                       />
                     </div>
                     <div

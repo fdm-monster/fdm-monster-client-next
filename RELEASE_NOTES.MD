@@ -1,8 +1,12 @@
 # Develop 
 
+## Features:
+
+- User settings: create user dialog for an admin to conveniently share a new verified account with roles.
+
 # Client 0.0.7
 
-Fixes:
+## Fixes:
 
 - Account settings - cant change password
 - Account settings - apply user id number to string coercion
