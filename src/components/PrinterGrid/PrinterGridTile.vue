@@ -15,7 +15,7 @@
             ? printerStateColor
             : 'rgba(1,1,1,0)'
       }"
-      class="tile fill-height"
+      class="tile"
       variant="outlined"
       tile
       @click="selectOrUnplacePrinter()"

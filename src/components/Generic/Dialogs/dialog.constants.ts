@@ -17,5 +17,7 @@ export enum DialogName {
   // Dialog for moving print head, homing, or retracting/extruding filament
   PrinterControlDialog = 'PrinterControlDialog',
   // Dialog for creating a user which is pre-registered (no verification needed)
-  CreateUserDialog = 'CreateUserDialog'
+  CreateUserDialog = 'CreateUserDialog',
+  // Dialog for managing grid columns, rows, tile size and more (reference to Grid Settings page)
+  GridSettingsDialog = 'GridSettingsDialog'
 }

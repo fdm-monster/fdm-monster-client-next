@@ -27,6 +27,7 @@
     <AddOrUpdateCameraStreamDialog />
     <AddOrUpdateFloorDialog />
     <CreateUserDialog />
+    <GridSettingsDialog />
     <PrinterMaintenanceDialog />
     <BatchJsonCreateDialog />
     <YamlImportExportDialog />

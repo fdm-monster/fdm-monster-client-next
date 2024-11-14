@@ -33,13 +33,6 @@
       <v-icon>warning</v-icon>
       {{ floorStore.floorlessPrinters.length }} unplaced printer(s)!
     </v-alert>
-    <div class="ma-4 pt-6">
-      <v-switch
-        v-model="gridStore.gridEditMode"
-        label="Printer Relocate Mode"
-      />
-    </div>
-
     <v-spacer />
     <span class="d-flex flex-wrap gap-2">
       <span class="pr-2">
@@ -63,6 +56,24 @@
         {{ printerStore.disabledCount }}
       </span>
     </span>
+
+    <v-btn
+      elevation="2"
+      color="primary"
+      small
+      class="ml-6"
+      icon
+      @click="useDialog(DialogName.GridSettingsDialog).openDialog()"
+    >
+      <v-icon>settings</v-icon>
+    </v-btn>
+
+    <div class="ma-4 pt-6">
+      <v-switch
+        v-model="gridStore.gridEditMode"
+        label="Printer Relocate Mode"
+      />
+    </div>
   </v-toolbar>
 </template>
 
@@ -72,11 +83,14 @@ import { usePrinterStore } from '@/store/printer.store'
 import { useGridStore } from '@/store/grid.store'
 import { useFloorStore } from '@/store/floor.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { useDialog } from '@/shared/dialog.composable'
 
 const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const floorStore = useFloorStore()
 const gridStore = useGridStore()
+
 const selectedFloorToggleIndex = ref<number>(0)
 
 const floors = computed(() => {

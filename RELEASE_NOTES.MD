@@ -1,8 +1,14 @@
 # Develop 
 
-Features
+## Features
 
 - Remove whitelist settings from UI
+- Introduce new grid layout
+- Introduce grid settings dialog on home page
+
+## Fixes
+
+- Snackbar buttons look a bit better
 
 # Client 0.0.8
 

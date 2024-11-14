@@ -13,10 +13,7 @@
   >
     <v-row>
       <v-col cols="2">
-        <v-btn size="large">
-          <v-icon>error</v-icon>
-          <v-icon />
-        </v-btn>
+        <v-btn icon="error" />
       </v-col>
       <v-col
         class="d-flex align-center flex-row"
@@ -34,11 +31,9 @@
 
       <v-col cols="1">
         <v-btn
-          size="large"
+          icon="close"
           @click="snackbarOpened = false"
-        >
-          <v-icon>close</v-icon>
-        </v-btn>
+        />
       </v-col>
     </v-row>
   </v-snackbar>

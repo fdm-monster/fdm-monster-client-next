@@ -12,9 +12,7 @@
   >
     <v-row>
       <v-col cols="2">
-        <v-btn size="large">
-          <v-icon>info</v-icon>
-        </v-btn>
+        <v-btn icon="info" />
       </v-col>
       <v-col
         cols="8"
@@ -29,13 +27,11 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="1">
+      <v-col cols="2">
         <v-btn
-          size="large"
+          icon="close"
           @click="snackbarOpened = false"
-        >
-          <v-icon>close</v-icon>
-        </v-btn>
+        />
       </v-col>
     </v-row>
   </v-snackbar>
