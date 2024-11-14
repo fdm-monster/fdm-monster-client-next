@@ -1,6 +1,6 @@
 <template>
-  <v-row no-gutters>
-    <div>
+  <div>
+    <v-row no-gutters>
       <v-navigation-drawer :permanent="true">
         <v-list-item>
           <v-list-item-title class="text-h6"> Settings </v-list-item-title>
@@ -25,10 +25,12 @@
           />
         </v-list>
       </v-navigation-drawer>
-    </div>
 
-    <router-view />
-  </v-row>
+      <v-col>
+        <router-view />
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script lang="ts" setup>
