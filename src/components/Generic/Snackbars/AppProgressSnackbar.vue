@@ -13,11 +13,9 @@
     <v-row>
       <v-col cols="2">
         <v-btn
-          icon
+          icon="file_upload"
           size="large"
-        >
-          <v-icon>file_upload</v-icon>
-        </v-btn>
+        />
       </v-col>
       <v-col
         class="d-flex align-center flex-row"
@@ -48,12 +46,10 @@
       </v-col>
       <v-col cols="1">
         <v-btn
-          icon
+          icon="close"
           size="large"
           @click="snackbarOpened = false"
-        >
-          <v-icon>close</v-icon>
-        </v-btn>
+        />
       </v-col>
     </v-row>
   </v-snackbar>

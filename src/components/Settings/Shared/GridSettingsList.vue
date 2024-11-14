@@ -63,14 +63,14 @@ const snackbar = useSnackbar()
 
 const largeTilesSettings = computed(() => settingsStore.largeTiles)
 
-async function updateGridColumns(newRows: number | null) {
-  if (!newRows) return
-  return updateGridSettings(newRows, settingsStore.gridRows)
-}
-
-async function updateGridRows(newColumns: number | null) {
+async function updateGridColumns(newColumns: number | null) {
   if (!newColumns) return
   return updateGridSettings(settingsStore.gridRows, newColumns)
+}
+
+async function updateGridRows(newRows: number | null) {
+  if (!newRows) return
+  return updateGridSettings(newRows, settingsStore.gridCols)
 }
 
 async function updateGridSettings(rows: number, columns: number) {
