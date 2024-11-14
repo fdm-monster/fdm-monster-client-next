@@ -13,20 +13,26 @@
         >
           <v-list-subheader> Grid Rows and Columns </v-list-subheader>
           <v-list-item v-if="settingsStore.settings?.frontend">
-            <v-select
-              type="number"
-              @change="updateGridSettings"
-              :value="settingsStore.gridRows"
-              :items="rowOptions"
-              label="Set the grid rows"
-            />
-            <v-select
-              type="number"
-              @change="updateGridSettings"
-              v-model="settingsStore.gridCols"
-              :items="colOptions"
-              label="Set the grid columns"
-            />
+            <v-row>
+              <v-col cols="3">
+                <v-select
+                  type="number"
+                  @update:modelValue="updateGridSettings"
+                  :value="settingsStore.settings.frontend.gridRows"
+                  :items="rowOptions"
+                  label="Set the grid rows"
+                />
+              </v-col>
+              <v-col cols="3">
+                <v-select
+                  type="number"
+                  @update:modelValue="updateGridSettings"
+                  v-model="settingsStore.settings.frontend.gridCols"
+                  :items="colOptions"
+                  label="Set the grid columns"
+                />
+              </v-col>
+            </v-row>
           </v-list-item>
         </v-list>
 
@@ -66,10 +72,9 @@ const snackbar = useSnackbar()
 const largeTilesSettings = computed(() => settingsStore.largeTiles)
 
 async function updateGridSettings() {
-  console.log(typeof settingsStore.gridCols)
   await settingsStore.updateFrontendSettings({
-    gridCols: parseInt(settingsStore.gridCols),
-    gridRows: parseInt(settingsStore.gridRows),
+    gridCols: settingsStore.gridCols,
+    gridRows: settingsStore.gridRows,
     largeTiles: largeTilesSettings.value
   })
   snackbar.info('Grid settings updated')
