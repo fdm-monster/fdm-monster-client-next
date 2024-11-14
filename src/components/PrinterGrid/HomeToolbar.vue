@@ -40,6 +40,30 @@
       />
     </div>
 
+    <!-- Optional grid controls -->
+    <div class="controls-container ma-4">
+      <div class="d-flex gap-4">
+        <v-text-field
+          :value="rows"
+          @change="updateGridRows"
+          type="number"
+          label="Rows"
+          :min="1"
+          density="compact"
+          hide-details
+        />
+        <v-text-field
+          :value="columns"
+          @change="updateGridColumns"
+          type="number"
+          label="Columns"
+          :min="1"
+          density="compact"
+          hide-details
+        />
+      </div>
+    </div>
+
     <v-spacer />
     <span class="d-flex flex-wrap gap-2">
       <span class="pr-2">
@@ -72,19 +96,48 @@ import { usePrinterStore } from '@/store/printer.store'
 import { useGridStore } from '@/store/grid.store'
 import { useFloorStore } from '@/store/floor.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
+import { useSettingsStore } from '@/store/settings.store'
 
 const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const floorStore = useFloorStore()
 const gridStore = useGridStore()
+const settingsStore = useSettingsStore()
+
+const loading = ref<boolean>(false)
 const selectedFloorToggleIndex = ref<number>(0)
 
 const floors = computed(() => {
   return floorStore.floors
 })
+const columns = computed(() => settingsStore.gridCols)
+const rows = computed(() => settingsStore.gridRows)
 
 function changeFloorIndex(index: any) {
   floorStore.changeSelectedFloorByIndex(index)
   selectedFloorToggleIndex.value = index
+}
+
+async function updateGridRows(newRows: number) {
+  return updateGridSettings(newRows, columns.value)
+}
+
+async function updateGridColumns(newColumns: number) {
+  return updateGridSettings(rows.value, newColumns)
+}
+
+async function updateGridSettings(rows: number, columns: number) {
+  try {
+    loading.value = true
+    await settingsStore.updateFrontendSettings({
+      gridRows: rows,
+      gridCols: columns,
+      largeTiles: settingsStore.largeTiles
+    })
+  } catch (e) {
+    console.log(e)
+  } finally {
+    loading.value = false
+  }
 }
 </script>
