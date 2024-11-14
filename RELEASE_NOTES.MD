@@ -1,5 +1,7 @@
 # Develop 
 
+# Client 0.0.9
+
 ## Features
 
 - Remove whitelist settings from UI
