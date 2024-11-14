@@ -83,7 +83,6 @@ import { usePrinterStore } from '@/store/printer.store'
 import { useGridStore } from '@/store/grid.store'
 import { useFloorStore } from '@/store/floor.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
-import { useSettingsStore } from '@/store/settings.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useDialog } from '@/shared/dialog.composable'
 
@@ -91,42 +90,15 @@ const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const floorStore = useFloorStore()
 const gridStore = useGridStore()
-const settingsStore = useSettingsStore()
 
-const loading = ref<boolean>(false)
 const selectedFloorToggleIndex = ref<number>(0)
 
 const floors = computed(() => {
   return floorStore.floors
 })
-const columns = computed(() => settingsStore.gridCols)
-const rows = computed(() => settingsStore.gridRows)
 
 function changeFloorIndex(index: any) {
   floorStore.changeSelectedFloorByIndex(index)
   selectedFloorToggleIndex.value = index
-}
-
-async function updateGridRows(newRows: number) {
-  return updateGridSettings(newRows, columns.value)
-}
-
-async function updateGridColumns(newColumns: number) {
-  return updateGridSettings(rows.value, newColumns)
-}
-
-async function updateGridSettings(rows: number, columns: number) {
-  try {
-    loading.value = true
-    await settingsStore.updateFrontendSettings({
-      gridRows: rows,
-      gridCols: columns,
-      largeTiles: settingsStore.largeTiles
-    })
-  } catch (e) {
-    console.log(e)
-  } finally {
-    loading.value = false
-  }
 }
 </script>
