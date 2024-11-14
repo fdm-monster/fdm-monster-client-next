@@ -2,9 +2,7 @@
   <BaseDialog
     :id="dialog.dialogId"
     max-width="1000px"
-    @beforeOpened="onBeforeDialogOpened"
     @escape="closeDialog()"
-    @opened="onDialogOpened"
   >
     <v-card class="pa-4">
       <v-card-title>
