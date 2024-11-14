@@ -1,0 +1,29 @@
+#vpss {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    position: fixed;
+    background-color: var(--vpss-bg-splash, /*BG_SPLASH*/);
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    bottom: 0;
+    z-index: 99999;
+    opacity: 1;
+}
+
+#vpss.vpss-hidden {
+    pointer-events: none;
+    animation: vpss-hide 200ms forwards;
+}
+
+@keyframes vpss-hide {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
