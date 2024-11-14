@@ -10,16 +10,18 @@ import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'url'
 import packageJson from './package.json'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
+import { splashScreen } from './plugins/plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    // {
-    //   name: "vitest-plugin-beforeall",
-    //   config: () => ({
-    //     test: { setupFiles: ["@vitest/web-worker", "./vitest/beforeall.ts"] },
-    //   }),
-    // },
+    splashScreen({
+      logoSrc: 'vite.svg',
+      splashBg: 'rgb(40, 40, 40)',
+      loaderType: 'dots',
+      loaderBg: 'rgb(155, 5, 5)',
+      minTime: 1000
+    }),
     AutoImport({
       imports: ['vue'],
       dts: 'src/auto-imports.d.ts',
