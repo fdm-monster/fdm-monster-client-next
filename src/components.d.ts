@@ -29,6 +29,8 @@ declare module 'vue' {
     FloorSettings: typeof import('./components/Settings/FloorSettings.vue')['default']
     GridLoader: typeof import('./components/Generic/Loaders/GridLoader.vue')['default']
     GridSettings: typeof import('./components/Settings/GridSettings.vue')['default']
+    GridSettingsDialog: typeof import('./components/Generic/Dialogs/GridSettingsDialog.vue')['default']
+    GridSettingsList: typeof import('./components/Settings/Shared/GridSettingsList.vue')['default']
     HelpOverlay: typeof import('./components/HelpOverlay/HelpOverlay.vue')['default']
     HomeToolbar: typeof import('./components/PrinterGrid/HomeToolbar.vue')['default']
     LoginForm: typeof import('./components/Login/LoginForm.vue')['default']
