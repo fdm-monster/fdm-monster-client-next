@@ -1,5 +1,9 @@
 # Develop 
 
+Features
+
+- Remove whitelist settings from UI
+
 # Client 0.0.8
 
 ## Fixes
