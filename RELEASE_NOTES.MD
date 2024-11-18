@@ -3,6 +3,7 @@
 ## Fixes
 
 - First-time setup: background was appearing above first-time-setup, not fixed and below
+- Printer tile: port over removal change of S/SA/P printer subtitle and replace with Awaiting
 
 # Client 0.0.9
 
