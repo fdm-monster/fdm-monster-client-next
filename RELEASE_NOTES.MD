@@ -1,5 +1,9 @@
 # Develop 
 
+## Fixes
+
+- First-time setup: background was appearing above first-time-setup, not fixed and below
+
 # Client 0.0.9
 
 ## Features

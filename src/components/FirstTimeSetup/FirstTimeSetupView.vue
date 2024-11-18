@@ -288,15 +288,6 @@ const stepper = ref(1)
 
 onMounted(async () => {
   await authStore.checkAuthenticationRequirements()
-
-  if (authStore.wizardState?.wizardCompleted) {
-    snackbar.info('Setup already completed.')
-    if (authStore.loginRequired) {
-      await router.push({ name: 'Login' })
-    } else {
-      await router.push({ name: 'Home' })
-    }
-  }
 })
 
 async function submitWizard() {
@@ -350,5 +341,14 @@ async function continueNext() {
   50% {
     border-color: orange;
   }
+}
+
+.grid-bg-img {
+  position: fixed;
+  height: 100vh;
+  top: 50vh;
+  width: 600%;
+  left: -250%;
+  filter: grayscale(100%);
 }
 </style>
