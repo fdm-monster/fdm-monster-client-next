@@ -351,4 +351,13 @@ async function continueNext() {
     border-color: orange;
   }
 }
+
+.grid-bg-img {
+  position: fixed;
+  height: 100vh;
+  top: 50vh;
+  width: 600%;
+  left: -250%;
+  filter: grayscale(100%);
+}
 </style>
