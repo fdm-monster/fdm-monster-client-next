@@ -73,8 +73,8 @@ export function interpretStates(
       text: authFail
         ? 'API key wrong'
         : noResponse
-          ? 'API unreachable'
-          : socketState?.api || '-'
+        ? 'API unreachable'
+        : socketState?.api || '-'
     }
   }
 
@@ -106,15 +106,14 @@ export function interpretStates(
     const p = printerState ? 1 : 0
     if (debugPrinterInterpretState)
       console.debug(
-        `Socket opened ${s}, socketAuthing ${sa} printerState ${p}, 
+        `Socket opened ${s}, socketAuthing ${sa} printerState ${p},
       currentState: ${currentState}, FLAGS ${flags}`
       )
     return {
       ...state,
       color: COLOR.danger,
       rgb: RGB.Red,
-      // TODO this should not result in S/SA/P label, but in a more descriptive label
-      text: !printerState ? 'No USB' : `S${s} SA${sa} | P${p}`
+      text: !printerState ? 'No USB' : `Awaiting`
     }
   }
 
