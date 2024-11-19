@@ -812,7 +812,7 @@ __metadata:
     semver: "npm:7.6.3"
     socket.io-client: "npm:4.8.1"
     typescript: "npm:5.6.3"
-    unplugin-auto-import: "npm:0.18.4"
+    unplugin-auto-import: "npm:0.18.5"
     unplugin-fonts: "npm:1.1.1"
     unplugin-vue-components: "npm:0.27.4"
     vite: "npm:5.4.11"
@@ -5550,6 +5550,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"magic-string@npm:^0.30.13":
+  version: 0.30.13
+  resolution: "magic-string@npm:0.30.13"
+  dependencies:
+    "@jridgewell/sourcemap-codec": "npm:^1.5.0"
+  checksum: 10c0/a275faeca1564c545019b4742c38a42ca80226c8c9e0805c32d1a1cc58b0e6ff7bbd914ed885fd10043858a7da0f732cb8f49c8975c3ecebde9cad4b57db5115
+  languageName: node
+  linkType: hard
+
 "make-dir@npm:^4.0.0":
   version: 4.0.0
   resolution: "make-dir@npm:4.0.0"
@@ -7439,18 +7448,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-auto-import@npm:0.18.4":
-  version: 0.18.4
-  resolution: "unplugin-auto-import@npm:0.18.4"
+"unplugin-auto-import@npm:0.18.5":
+  version: 0.18.5
+  resolution: "unplugin-auto-import@npm:0.18.5"
   dependencies:
     "@antfu/utils": "npm:^0.7.10"
     "@rollup/pluginutils": "npm:^5.1.3"
     fast-glob: "npm:^3.3.2"
     local-pkg: "npm:^0.5.0"
-    magic-string: "npm:^0.30.12"
+    magic-string: "npm:^0.30.13"
     minimatch: "npm:^9.0.5"
     unimport: "npm:^3.13.2"
-    unplugin: "npm:^1.15.0"
+    unplugin: "npm:^1.16.0"
   peerDependencies:
     "@nuxt/kit": ^3.2.2
     "@vueuse/core": "*"
@@ -7459,7 +7468,7 @@ __metadata:
       optional: true
     "@vueuse/core":
       optional: true
-  checksum: 10c0/a870b392891c9c5717fb195e075b63678e31fba218a334338fcc99c9da31d5049b16e444a86a677ba30d98e1e7e65356e9098a8da9629b1284ebc6f5004a9c7d
+  checksum: 10c0/18eaea8d4e0afebf356c98867cdbc16e81a396c0c1ade612545015d4f39b5d90a653cfd1b6c0b0b7b3b7214b5e72322f4b5f9f19dbaa8cb27fa5eeb0d22fd220
   languageName: node
   linkType: hard
 
@@ -7530,7 +7539,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin@npm:^1.15.0":
+"unplugin@npm:^1.15.0, unplugin@npm:^1.16.0":
   version: 1.16.0
   resolution: "unplugin@npm:1.16.0"
   dependencies:
