@@ -19,6 +19,7 @@
             <v-btn
               :size="iconSize"
               v-bind="props"
+              icon
               class="mr-4 mt-1"
               color="primary"
               @click="openPrinterURL()"
@@ -29,7 +30,7 @@
                 class="font-weight-bold"
                 color="primary"
               >
-                {{ avatarInitials }}
+                {{ avatarInitials() }}
               </v-avatar>
             </v-btn>
           </template>
