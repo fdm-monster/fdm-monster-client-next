@@ -10,15 +10,21 @@ export function newRandomNamePair() {
   const randomAdjective = Math.round(Math.random() * 1124)
   const randomNoun = Math.round(Math.random() * 3260)
 
-  return `${capitalize(adjectives[randomAdjective])} ${capitalize(nouns[randomNoun])}`
+  return `${capitalize(adjectives[randomAdjective])} ${capitalize(
+    nouns[randomNoun]
+  )}`
 }
 
 export function generateInitials(name: string) {
-  if (name === null) return '?'
+  if (!name?.trim().length) return '?'
+
   const initials = name
+    ?.trim()
     ?.replace(/[^a-zA-Z ]/g, '')
     ?.split(' ')
+    .map((v) => (!v.length ? '' : v))
     .slice(0, 3)
     .reduce((acc, subname) => acc + subname[0], '')
+
   return initials?.replace('undefined', '')
 }

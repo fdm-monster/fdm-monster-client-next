@@ -4,6 +4,8 @@
 
 - First-time setup: background was appearing above first-time-setup, not fixed and below
 - Printer tile: port over removal change of S/SA/P printer subtitle and replace with Awaiting
+- Dialog avatar: undefined would sometimes appear in avatar (once or twice)
+- File sidenav: avatar didnt render properly
 
 # Client 0.0.9
 
