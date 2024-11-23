@@ -251,7 +251,7 @@ const storedPrinter = computed(() => {
 })
 
 const isUpdating = computed(() => {
-  return !!storedPrinter
+  return !!storedPrinter.value
 })
 
 const submitButtonText = computed(() => {
