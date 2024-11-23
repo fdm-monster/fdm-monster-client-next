@@ -1,12 +1,19 @@
 # Develop 
 
+# Client 0.0.11
+
+## Fixes
+
+- Dialog avatar: undefined would sometimes appear in avatar (once or twice)
+- File sidenav: avatar didnt render properly
+- Printer dialog: Create printer would trigger update printer mode
+
+# Client 0.0.10
+
 ## Fixes
 
 - First-time setup: background was appearing above first-time-setup, not fixed and below
 - Printer tile: port over removal change of S/SA/P printer subtitle and replace with Awaiting
-- Dialog avatar: undefined would sometimes appear in avatar (once or twice)
-- File sidenav: avatar didnt render properly
-- Printer dialog: Create printer would trigger update printer mode
 
 # Client 0.0.9
 
