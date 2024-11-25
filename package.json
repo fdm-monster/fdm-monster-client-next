@@ -35,7 +35,7 @@
     "@tanstack/vue-query": "5.61.3",
     "@testing-library/vue": "8.1.0",
     "@types/jsdom": "21.1.7",
-    "@types/node": "22.9.3",
+    "@types/node": "22.9.4",
     "@types/semver": "7.5.8",
     "@typescript-eslint/eslint-plugin": "8.15.0",
     "@typescript-eslint/parser": "8.15.0",
