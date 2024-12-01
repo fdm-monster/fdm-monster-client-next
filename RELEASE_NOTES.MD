@@ -1,5 +1,9 @@
 # Develop 
 
+## Fixes
+
+- File delete/download: Deleting or downloading a file path is now encoded in url path
+ 
 # Client 0.0.11
 
 ## Fixes

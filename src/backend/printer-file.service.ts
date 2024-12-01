@@ -67,12 +67,16 @@ export class PrinterFileService extends BaseService {
   }
 
   static async deleteFileOrFolder(printerId: IdType, path: string) {
-    const urlPath = `${ServerApi.printerFilesRoute}/${printerId}?path=${path}`
+    const urlPath = `${
+      ServerApi.printerFilesRoute
+    }/${printerId}?path=${encodeURIComponent(path)}`
     return this.delete(urlPath)
   }
 
   static async downloadFile(printerId: IdType, path: string) {
-    const urlPath = `${ServerApi.printerFilesRoute}/${printerId}/download/${path}`
+    const urlPath = `${
+      ServerApi.printerFilesRoute
+    }/${printerId}/download/${encodeURIComponent(path)}`
     const arrayBuffer = await this.getDownload(urlPath)
     downloadFileByBlob(arrayBuffer.data, path)
   }
