@@ -71,7 +71,7 @@
     <div class="ma-4 pt-6">
       <v-switch
         v-model="gridStore.gridEditMode"
-        label="Printer Relocate Mode"
+        label="Grid Edit Mode"
       />
     </div>
   </v-toolbar>

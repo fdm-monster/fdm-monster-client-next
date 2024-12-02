@@ -36,7 +36,7 @@ declare module 'vue' {
     LoginForm: typeof import('./components/Login/LoginForm.vue')['default']
     LoginView: typeof import('./components/Login/LoginView.vue')['default']
     Logo: typeof import('./components/Login/Logo.vue')['default']
-    NavigationDrawer: typeof import('./components/Generic/NavigationDrawer.vue')['default']
+    NavigationBar: typeof import('./components/NavigationBar.vue')['default']
     NotFoundView: typeof import('./components/NotFound/NotFoundView.vue')['default']
     OctoPrintSettings: typeof import('./components/Settings/OctoPrintSettings.vue')['default']
     PermissionDenied: typeof import('./components/Login/PermissionDenied.vue')['default']
