@@ -113,7 +113,7 @@ export function interpretStates(
       ...state,
       color: COLOR.danger,
       rgb: RGB.Red,
-      text: !printerState ? 'No USB' : `Awaiting`
+      text: !printerState ? 'No USB' : 'Awaiting state'
     }
   }
 
