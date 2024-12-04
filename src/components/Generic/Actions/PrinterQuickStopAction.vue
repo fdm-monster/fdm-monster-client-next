@@ -1,19 +1,18 @@
 <template>
   <v-badge
     v-if="printer.enabled"
-    bordered
     class="ma-2"
-    overlap
   >
     <template #badge>
       <v-icon>bolt</v-icon>
     </template>
     <v-btn
-      fab
+      color="secondary"
       size="small"
+      rounded
       @click.stop="clickQuickStop"
     >
-      <v-icon>stop</v-icon>
+      <v-icon>dangerous</v-icon>
     </v-btn>
   </v-badge>
 </template>

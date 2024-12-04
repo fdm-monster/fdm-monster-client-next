@@ -1,9 +1,9 @@
 <template>
   <v-btn
-    class="ma-2"
-    color="primary"
-    fab
-    size="small"
+    class="ms-4"
+    color="secondary"
+    icon="delete"
+    rounded
     @click.c.capture.native.stop="openCreatePrinterDialog()"
   >
     <v-icon>add</v-icon>

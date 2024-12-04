@@ -703,7 +703,7 @@ async function toggleMaintenance() {
     return
   }
   printersStore.setMaintenanceDialogPrinter(storedSideNavPrinter.value)
-  dialogsStore.openDialogWithContext(DialogName.PrinterMaintenanceDialog)
+  await useDialog(DialogName.PrinterMaintenanceDialog).openDialog()
 
   closeDrawer()
 }

@@ -1,9 +1,9 @@
 <template>
   <v-btn
+    color="secondary"
     class="ma-2"
-    color="primary"
-    fab
     size="small"
+    rounded
     @click.c.capture.native.stop="openSettings()"
   >
     <v-icon>settings</v-icon>

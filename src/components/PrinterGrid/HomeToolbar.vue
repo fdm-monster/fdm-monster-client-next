@@ -27,8 +27,7 @@
     </v-btn>
     <v-alert
       v-if="floorStore.floorlessPrinters.length"
-      class="mt-4 ml-12"
-      color="primary"
+      class="ml-4"
     >
       <v-icon>warning</v-icon>
       {{ floorStore.floorlessPrinters.length }} unplaced printer(s)!
@@ -59,7 +58,6 @@
 
     <v-btn
       elevation="2"
-      color="primary"
       small
       class="ml-6"
       icon

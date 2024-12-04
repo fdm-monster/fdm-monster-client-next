@@ -2,9 +2,7 @@
   <v-badge
     v-if="printer.enabled"
     :color="isPrinterOperational() ? 'green' : 'red'"
-    bordered
-    class="ma-2"
-    overlap
+    class="pa-2"
   >
     <template #badge>
       <v-icon v-if="isPrinterOperational()">check</v-icon>
@@ -12,7 +10,8 @@
     </template>
     <v-btn
       :disabled="isPrinterPrinting()"
-      fab
+      color="secondary"
+      rounded
       size="small"
       @click.stop="togglePrinterConnection"
     >
