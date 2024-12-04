@@ -86,26 +86,22 @@
           <v-switch
             v-model="item.enabled"
             color="primary"
-            dark
             inset
             @click.native.capture.stop="toggleEnabled(item)"
           >
             {{ item.enabled }}
           </v-switch>
         </template>
-        <template #item.name="{ item }">
-          <v-chip
-            color="primary"
-            dark
-          >
+        <template v-slot:item.printerType="{ item }">
+          {{ getServiceName(item.printerType) }}
+        </template>
+        <template v-slot:item.name="{ item }">
+          <v-chip>
             {{ item.name || item.printerURL }}
           </v-chip>
         </template>
         <template #item.floor="{ item }">
-          <v-chip
-            v-if="item.id"
-            color="primary"
-          >
+          <v-chip v-if="item.id">
             {{ floorOfPrinter(item.id)?.name }}
           </v-chip>
         </template>
@@ -272,6 +268,7 @@ import {
 } from '@/backend/printer-group.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { VDataTable } from 'vuetify/components'
+import { getServiceName } from '@/utils/printer-type.utils'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -299,6 +296,7 @@ const tableHeaders = computed(
   () =>
     [
       { title: 'Enabled', key: 'enabled' },
+      { title: 'Type', key: 'printerType' },
       { title: 'Printer Name', align: 'start', sortable: true, key: 'name' },
       { title: 'Floor', key: 'floor', sortable: false },
       ...(featureStore.hasFeature('printerGroupsApi')
@@ -314,8 +312,7 @@ async function loadData() {
   loading.value = true
   await featureStore.loadFeatures()
   if (featureStore.hasFeature('printerGroupsApi')) {
-    const response = await PrinterGroupService.getGroupsWithPrinters()
-    groupsWithPrinters.value = response
+    groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
   }
   loading.value = false
   return groupsWithPrinters
