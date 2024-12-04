@@ -56,7 +56,7 @@
               class="ml-3"
               variant="outlined"
               type="button"
-              @click="openImportJsonPrintersDialog()"
+              @click="openImportOctoFarmPrintersDialog()"
             >
               <v-icon>publish</v-icon>
               Import OctoFarm Printers
@@ -256,7 +256,6 @@ import PrinterQuickStopAction from '@/components/Generic/Actions/PrinterQuickSto
 import SyncPrinterNameAction from '@/components/Generic/Actions/SyncPrinterNameAction.vue'
 
 import { usePrinterStore } from '@/store/printer.store'
-import { useDialogsStore } from '@/store/dialog.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import PrinterCreateAction from '@/components/Generic/Actions/PrinterCreateAction.vue'
 import PrinterDeleteAction from '@/components/Generic/Actions/PrinterDeleteAction.vue'
@@ -279,8 +278,10 @@ const printerStore = usePrinterStore()
 const loading = ref<boolean>(false)
 const printerStateStore = usePrinterStateStore()
 const floorStore = useFloorStore()
-const dialogsStore = useDialogsStore()
 const featureStore = useFeatureStore()
+
+const addOrUpdatePrinterDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
+
 const groupsWithPrinters = ref<GroupWithPrintersDto<IdType>[]>([])
 const filteredGroupsWithPrinters = ref<GroupWithPrintersDto<IdType>[]>([])
 const newGroupName = ref('')
@@ -374,11 +375,11 @@ const floorOfPrinter = (printerId: IdType) => {
 
 const openEditDialog = (printer: PrinterDto) => {
   printerStore.setUpdateDialogPrinter(printer)
-  dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog)
+  addOrUpdatePrinterDialog.openDialog(printer)
 }
 
 const openCreatePrinterDialog = () => {
-  dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog)
+  addOrUpdatePrinterDialog.openDialog()
 }
 
 const clickRow = (item: PrinterDto, event: any) => {
@@ -392,8 +393,8 @@ const clickRow = (item: PrinterDto, event: any) => {
   }
 }
 
-const openImportJsonPrintersDialog = () => {
-  dialogsStore.openDialogWithContext(DialogName.BatchJsonCreate)
+const openImportOctoFarmPrintersDialog = () => {
+  useDialog(DialogName.ImportOctoFarmDialog).openDialog()
 }
 
 const openYamlImportExportDialog = () => {

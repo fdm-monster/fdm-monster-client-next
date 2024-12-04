@@ -478,7 +478,6 @@ import { FileDto } from '@/models/printers/printer-file.model'
 import { formatBytes } from '@/utils/file-size.util'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from './Dialogs/dialog.constants'
-import { useDialogsStore } from '@/store/dialog.store'
 import { PrinterJobService } from '@/backend/printer-job.service'
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import { interpretStates } from '@/shared/printer-state.constants'
@@ -489,11 +488,13 @@ import {
   isOctoPrintType,
   getServiceName
 } from '@/utils/printer-type.utils'
+import { useDialog } from '@/shared/dialog.composable'
 
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
-const dialogsStore = useDialogsStore()
 const featureStore = useFeatureStore()
+
+const maintenanceDialog = useDialog(DialogName.PrinterMaintenanceDialog)
 
 const iconSize = ref(36)
 const fileSearch = ref<string | undefined>(undefined)
@@ -703,6 +704,7 @@ async function toggleMaintenance() {
   }
   printersStore.setMaintenanceDialogPrinter(storedSideNavPrinter.value)
   dialogsStore.openDialogWithContext(DialogName.PrinterMaintenanceDialog)
+
   closeDrawer()
 }
 
@@ -740,7 +742,7 @@ async function clickClearFiles() {
 function clickSettings() {
   if (!storedSideNavPrinter.value) return
   printersStore.setUpdateDialogPrinter(storedSideNavPrinter.value)
-  dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog)
+  maintenanceDialog.openDialog()
   closeDrawer()
 }
 

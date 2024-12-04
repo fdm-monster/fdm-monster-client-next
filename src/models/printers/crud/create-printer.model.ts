@@ -13,7 +13,7 @@ export const getDefaultCreatePrinter = (): PreCreatePrinter => ({
 export interface PreCreatePrinter {
   id?: IdType // Only in case of update
   enabled: boolean
-  printerType: number
+  printerType: PrinterType
   name: string
   printerURL: string | undefined
   apiKey: string

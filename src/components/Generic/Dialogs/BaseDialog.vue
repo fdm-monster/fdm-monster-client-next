@@ -34,6 +34,7 @@ const props = defineProps({
     default: '400px'
   }
 })
+
 const dialogsStore = useDialogsStore()
 const emit = defineEmits(['escape', 'opened', 'beforeOpened'])
 const dialog = useDialog(props.id)
