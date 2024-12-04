@@ -1,11 +1,16 @@
 # Develop 
 
+# Client 0.0.12
+
 ## Fixes
 
 - File delete/download: Deleting or downloading a file path is now encoded in url path
 - Layout: theming, color reduction and imports -- backported from vue2 client
 - Import dialog: broken import of OctoFarm import dialog
- 
+- PrinterList: updated action buttons to a more acceptable implementation
+- OctoFarmImportDialog: roughly imported and converted dialog to Vuetify3 stepper
+- Removed dialogsStore preferring useDialog composable
+
 # Client 0.0.11
 
 ## Fixes
