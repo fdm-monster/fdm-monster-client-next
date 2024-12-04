@@ -45,7 +45,7 @@
               </v-stepper-header>
 
               <v-stepper-window>
-                <v-stepper-window-item step="1">
+                <v-stepper-window-item value="1">
                   <v-file-input
                     class="mt-2"
                     style="max-width: 400px"
@@ -104,7 +104,7 @@
                   <v-img
                     v-if="showGif"
                     class="my-4"
-                    :src="gif"
+                    :src="octofarmImportGif"
                     style="border: 3px solid dimgray; max-width: 800px"
                     elevation="10"
                   />
@@ -119,7 +119,7 @@
                   </v-btn>
                 </v-stepper-window-item>
 
-                <v-stepper-window-item step="2">
+                <v-stepper-window-item value="2">
                   <div class="my-2">
                     <v-icon class="pr-2">info</v-icon>
                     Import state:
@@ -211,7 +211,7 @@
                   </v-btn>
                 </v-stepper-window-item>
 
-                <v-stepper-window-item step="3">
+                <v-stepper-window-item value="3">
                   <div
                     class="mb-5 mt-10"
                     v-if="importCompletedSuccesfully"
@@ -265,7 +265,7 @@
 import { PrintersService } from '@/backend'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useDialog } from '@/shared/dialog.composable'
-import * as gif from '@/assets/octofarm-printer-export.gif'
+import octofarmImportGif from '@/assets/octofarm-printer-export.gif'
 import { CreatePrinter } from '@/models/printers/crud/create-printer.model'
 
 const stepProgress = ref()
