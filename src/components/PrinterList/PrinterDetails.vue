@@ -48,7 +48,6 @@ interface Data {
 export default defineComponent({
   name: 'PrinterDetails',
   components: {
-    // FileControlList,
     RefreshFilesAction
   },
   props: {

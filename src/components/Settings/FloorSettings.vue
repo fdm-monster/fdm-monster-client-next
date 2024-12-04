@@ -1,17 +1,15 @@
 <template>
   <v-card>
-    <v-toolbar color="primary">
-      <v-avatar>
-        <v-icon>settings</v-icon>
-      </v-avatar>
-      <v-toolbar-title> Floor Management </v-toolbar-title>
-    </v-toolbar>
+    <SettingsToolbar
+      icon="house_siding"
+      title="Floors"
+    />
 
     <v-list
       subheader
       lines="three"
     >
-      <v-list-subheader> Floors </v-list-subheader>
+      <v-list-subheader>Floors</v-list-subheader>
 
       <v-list-item>
         <v-list-item-title> Create new floor </v-list-item-title>
@@ -157,11 +155,11 @@
 import { defineComponent } from 'vue'
 import { FloorDto } from '@/models/floors/floor.model'
 import { usePrinterStore } from '@/store/printer.store'
-import { useDialogsStore } from '@/store/dialog.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { PrinterDto } from '@/models/printers/printer.model'
 import { useFloorStore } from '@/store/floor.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
+import { useDialog } from '@/shared/dialog.composable'
 
 interface Data {
   editedFloorName: string
@@ -171,13 +169,12 @@ interface Data {
 
 export default defineComponent({
   name: 'FloorSettings',
-
   props: {},
   setup: () => {
     return {
       printersStore: usePrinterStore(),
       floorStore: useFloorStore(),
-      dialogsStore: useDialogsStore(),
+      addOrUpdateFloorDialog: useDialog(DialogName.AddOrUpdateFloorDialog),
       snackbar: useSnackbar()
     }
   },
@@ -186,31 +183,17 @@ export default defineComponent({
     editedFloorName: '',
     editedFloorNumber: 0
   }),
-
   computed: {
     floors() {
       return this.floorStore.floors
     },
-
     selectedFloor() {
       return this.floorStore.floors[this.selectedItem]
     },
-
     showAddedPrinters() {
       return this.selectedFloor.printers?.length + 1
-    },
-
-    unassignedPrinters() {
-      return this.floorStore.floorlessPrinters
     }
   },
-
-  watch: {},
-
-  created() {},
-
-  mounted() {},
-
   methods: {
     printerInFloor(floor: FloorDto, index: number): PrinterDto | undefined {
       if (!floor?.printers) return
@@ -219,19 +202,15 @@ export default defineComponent({
       if (!floorPrinter) return
       return this.printersStore.printer(floorPrinter.printerId)
     },
-
     async createFloor() {
-      this.dialogsStore.openDialogWithContext(DialogName.AddOrUpdateFloorDialog)
+      await this.addOrUpdateFloorDialog.openDialog()
     },
-
     setEditedPrinterFloorName() {
       this.editedFloorName = this.selectedFloor.name
     },
-
     setEditedPrinterFloorNumber() {
       this.editedFloorNumber = this.selectedFloor.floor
     },
-
     async updatePrinterFloorName() {
       if (!this.selectedFloor?.id) return
       const { id: floorId } = this.selectedFloor
@@ -241,7 +220,6 @@ export default defineComponent({
       })
       this.snackbar.info('Floor name updated')
     },
-
     async updatePrinterFloorNumber() {
       if (!this.selectedFloor?.id) return
       const { id: floorId } = this.selectedFloor
@@ -253,14 +231,12 @@ export default defineComponent({
       // Adapt to potential sort change
       this.selectedItem = -1
     },
-
     async clickDeleteFloor() {
       if (!this.selectedFloor?.id) return
 
       await this.floorStore.deleteFloor(this.selectedFloor.id)
       this.snackbar.info('Floor deleted')
     },
-
     async deletePrinterFromFloor(floor: FloorDto, index: number) {
       const printer = this.printerInFloor(floor, index)
       if (!floor?.id || !printer?.id) return

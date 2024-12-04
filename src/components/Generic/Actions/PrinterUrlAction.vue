@@ -1,8 +1,7 @@
 <template>
   <v-btn
-    class="ma-2"
-    color="primary"
-    fab
+    color="secondary"
+    rounded
     size="small"
     @click.c.capture.native.stop="openPrinterURL()"
   >

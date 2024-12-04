@@ -3,10 +3,9 @@
     <template #activator="{ props }">
       <v-btn
         v-bind="props"
-        class="ma-2"
-        color="primary"
-        fab
+        color="secondary"
         size="small"
+        rounded
         @click.c.capture.native.stop="syncPrinterName()"
       >
         <v-icon>badge</v-icon>

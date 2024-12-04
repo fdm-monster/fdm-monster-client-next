@@ -38,6 +38,7 @@ declare module 'vue' {
     Logo: typeof import('./components/Login/Logo.vue')['default']
     NavigationBar: typeof import('./components/NavigationBar.vue')['default']
     NotFoundView: typeof import('./components/NotFound/NotFoundView.vue')['default']
+    OctoFarmImportDialog: typeof import('./components/Generic/Dialogs/OctoFarmImportDialog.vue')['default']
     OctoPrintSettings: typeof import('./components/Settings/OctoPrintSettings.vue')['default']
     PermissionDenied: typeof import('./components/Login/PermissionDenied.vue')['default']
     PrinterChecksPanel: typeof import('./components/Generic/Dialogs/PrinterChecksPanel.vue')['default']

@@ -1,6 +1,5 @@
 <template>
   <v-toolbar flat>
-    <v-toolbar-title> Floors </v-toolbar-title>
     <v-btn-toggle
       :model-value="selectedFloorToggleIndex"
       class="ml-7"
@@ -11,8 +10,9 @@
       <v-btn
         v-for="f in floors"
         :key="f.id"
+        size="small"
       >
-        <v-icon>format_align_left</v-icon>
+        <v-icon>layers</v-icon>
         {{ f.name }}
       </v-btn>
     </v-btn-toggle>
@@ -27,8 +27,7 @@
     </v-btn>
     <v-alert
       v-if="floorStore.floorlessPrinters.length"
-      class="mt-4 ml-12"
-      color="primary"
+      class="ml-4"
     >
       <v-icon>warning</v-icon>
       {{ floorStore.floorlessPrinters.length }} unplaced printer(s)!
@@ -59,7 +58,6 @@
 
     <v-btn
       elevation="2"
-      color="primary"
       small
       class="ml-6"
       icon

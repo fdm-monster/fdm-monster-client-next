@@ -1,9 +1,9 @@
 <template>
   <v-btn
-    class="ma-2"
-    color="primary"
-    fab
-    size="small"
+    class="ms-4"
+    color="secondary"
+    icon="delete"
+    rounded
     @click.c.capture.native.stop="openCreatePrinterDialog()"
   >
     <v-icon>add</v-icon>
@@ -11,12 +11,19 @@
 </template>
 
 <script lang="ts" setup>
-import { useDialogsStore } from '@/store/dialog.store'
 import { DialogName } from '../Dialogs/dialog.constants'
+import { useDialog } from '@/shared/dialog.composable'
+import { IdType } from '@/utils/id.type'
 
-const dialogsStore = useDialogsStore()
+const props = defineProps<{
+  floorId?: IdType
+  floorX?: number
+  floorY?: number
+}>()
+
+const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 
 function openCreatePrinterDialog() {
-  dialogsStore.openDialogWithContext(DialogName.AddOrUpdatePrinterDialog)
+  dialog.openDialog(props)
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
   <v-btn
-    class="ma-2"
-    color="primary"
-    fab
+    class="ms-4"
+    color="secondary"
     size="small"
+    rounded
     @click.prevent.stop="deletePrinter"
   >
     <v-icon>delete</v-icon>

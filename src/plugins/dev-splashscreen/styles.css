@@ -6,9 +6,9 @@
     gap: 16px;
     position: fixed;
     background-color: var(--vpss-bg-splash, /*BG_SPLASH*/);
-    top: 0px;
-    right: 0px;
-    left: 0px;
+    top: 0;
+    right: 0;
+    left: 0;
     bottom: 0;
     z-index: 99999;
     opacity: 1;

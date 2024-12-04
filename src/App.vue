@@ -4,7 +4,7 @@
     <AppErrorSnackbar />
     <AppProgressSnackbar />
 
-    <NavigationDrawer
+    <NavigationBar
       v-if="
         (authStore.hasAuthToken && !authStore.isLoginExpired) ||
         !authStore.loginRequired
@@ -29,7 +29,7 @@
     <CreateUserDialog />
     <GridSettingsDialog />
     <PrinterMaintenanceDialog />
-    <BatchJsonCreateDialog />
+    <OctoFarmImportDialog />
     <YamlImportExportDialog />
     <FileExplorerSideNav />
     <BatchReprintDialog />
