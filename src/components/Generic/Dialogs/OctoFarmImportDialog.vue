@@ -13,9 +13,9 @@
       <v-card-text>
         <v-row>
           <v-col cols="12">
+            <!-- TODO vertical stepper is still in labs -->
             <v-stepper
               v-model="stepProgress"
-              vertical
               non-linear
             >
               <v-stepper-header>
@@ -158,9 +158,9 @@
                         :key="committedPrinter.name"
                         :title="committedPrinter.name"
                       >
-                        <template v-slot:default="{ active }">
+                        <template v-slot:default="{ isActive }">
                           <v-list-item-action>
-                            <v-checkbox :input-value="active"></v-checkbox>
+                            <v-checkbox :input-value="isActive"></v-checkbox>
                           </v-list-item-action>
 
                           <v-list-item-content>
@@ -252,10 +252,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          text
-          @click="closeDialog()"
-        >
+        <v-btn @click="closeDialog()">
           <v-icon class="mr-2">close</v-icon>
           Close
         </v-btn>
@@ -268,6 +265,8 @@
 import { PrintersService } from '@/backend'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useDialog } from '@/shared/dialog.composable'
+import * as gif from '@/assets/octofarm-printer-export.gif'
+import { CreatePrinter } from '@/models/printers/crud/create-printer.model'
 
 const stepProgress = ref()
 const validationStatus = ref(false)
