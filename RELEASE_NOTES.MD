@@ -1,5 +1,9 @@
 # Develop 
 
+## Fixes
+
+- Tile: add tooltips, fix: add pausing as paused state
+
 # Client 0.0.12
 
 ## Fixes
