@@ -3,6 +3,8 @@
 ## Fixes
 
 - File delete/download: Deleting or downloading a file path is now encoded in url path
+- Layout: theming, color reduction and imports -- backported from vue2 client
+- Import dialog: broken import of OctoFarm import dialog
  
 # Client 0.0.11
 
