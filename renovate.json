@@ -25,6 +25,12 @@
       ],
       "groupName": "@vueuse",
       "automerge": true
+    },
+    {
+      "matchFileNames": ["package.json"],
+      "matchPackageNames": ["vite"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
