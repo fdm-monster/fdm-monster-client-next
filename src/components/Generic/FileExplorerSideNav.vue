@@ -484,17 +484,15 @@ import { interpretStates } from '@/shared/printer-state.constants'
 import { useSettingsStore } from '@/store/settings.store'
 import { useFeatureStore } from '@/store/features.store'
 import {
+  getServiceName,
   isMoonrakerType,
-  isOctoPrintType,
-  getServiceName
+  isOctoPrintType
 } from '@/utils/printer-type.utils'
 import { useDialog } from '@/shared/dialog.composable'
 
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const featureStore = useFeatureStore()
-
-const maintenanceDialog = useDialog(DialogName.PrinterMaintenanceDialog)
 
 const iconSize = ref(36)
 const fileSearch = ref<string | undefined>(undefined)
@@ -742,7 +740,7 @@ async function clickClearFiles() {
 function clickSettings() {
   if (!storedSideNavPrinter.value) return
   printersStore.setUpdateDialogPrinter(storedSideNavPrinter.value)
-  maintenanceDialog.openDialog()
+  useDialog(DialogName.AddOrUpdatePrinterDialog).openDialog()
   closeDrawer()
 }
 
