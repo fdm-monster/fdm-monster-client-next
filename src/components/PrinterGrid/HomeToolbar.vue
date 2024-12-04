@@ -1,6 +1,5 @@
 <template>
   <v-toolbar flat>
-    <v-toolbar-title> Floors </v-toolbar-title>
     <v-btn-toggle
       :model-value="selectedFloorToggleIndex"
       class="ml-7"
@@ -11,8 +10,9 @@
       <v-btn
         v-for="f in floors"
         :key="f.id"
+        size="small"
       >
-        <v-icon>format_align_left</v-icon>
+        <v-icon>layers</v-icon>
         {{ f.name }}
       </v-btn>
     </v-btn-toggle>

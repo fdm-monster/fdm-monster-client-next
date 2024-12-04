@@ -27,7 +27,7 @@ export function splashScreen(options: PluginOptions) {
     logoSrc,
     minDurationMs,
     loaderType = "line",
-    loaderBg = "#0072f5",
+    loaderBg = "#1eb6c3",
     splashBg = "#ffffff",
   } = options;
 

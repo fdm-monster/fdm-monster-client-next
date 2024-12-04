@@ -2,7 +2,6 @@
   <BaseDialog
     :id="dialog.dialogId"
     max-width="700px"
-    @escape="closeDialog()"
     @beforeOpened="onBeforeDialogOpened()"
     @escape="closeDialog()"
     @opened="onDialogOpened()"

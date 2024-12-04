@@ -2,8 +2,6 @@
   <v-navigation-drawer
     permanent
     rail
-    theme="dark"
-    class="nav-side-background"
   >
     <v-app-bar-nav-icon class="ml-1 mt-2">
       <v-img
@@ -46,24 +44,3 @@ const items = [
   ['contact_support', 'About', '/about']
 ]
 </script>
-
-<style>
-/*https://mdbootstrap.com/docs/vue/css/background-image/*/
-.nav-side-background {
-  background: -moz-linear-gradient(
-    45deg,
-    rgba(18, 18, 18, 1),
-    rgba(155, 5, 5, 1) 100%
-  );
-  background: -webkit-linear-gradient(
-    45deg,
-    rgba(18, 18, 18, 1),
-    rgba(155, 5, 5, 1) 100%
-  );
-  background: linear-gradient(
-    45deg,
-    rgba(18, 18, 18, 1),
-    rgba(155, 5, 5, 1) 100%
-  );
-}
-</style>
