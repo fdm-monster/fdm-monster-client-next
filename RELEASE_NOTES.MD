@@ -3,6 +3,7 @@
 ## Fixes
 
 - Tile: add tooltips, fix: add pausing as paused state
+- Print grid: floor toggle would de-synchronize with store
 
 # Client 0.0.12
 

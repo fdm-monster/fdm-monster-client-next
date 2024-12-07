@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { usePrinterStore } from '@/store/printer.store'
 import { useGridStore } from '@/store/grid.store'
 import { useFloorStore } from '@/store/floor.store'
@@ -89,7 +89,7 @@ const printerStateStore = usePrinterStateStore()
 const floorStore = useFloorStore()
 const gridStore = useGridStore()
 
-const selectedFloorToggleIndex = ref<number>(0)
+const selectedFloorToggleIndex = computed(() => floorStore.selectedFloorIndex)
 
 const floors = computed(() => {
   return floorStore.floors
@@ -97,6 +97,5 @@ const floors = computed(() => {
 
 function changeFloorIndex(index: any) {
   floorStore.changeSelectedFloorByIndex(index)
-  selectedFloorToggleIndex.value = index
 }
 </script>
