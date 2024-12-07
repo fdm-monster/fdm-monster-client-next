@@ -5,6 +5,7 @@ export interface FrontendSettings {
   largeTiles: boolean
   gridCols: number
   gridRows: number
+  tilePreferCancelOverQuickStop: boolean
 }
 
 export interface ConnectionInfo {
