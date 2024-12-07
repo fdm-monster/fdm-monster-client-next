@@ -55,7 +55,7 @@
           v-if="!thumbnail?.length"
           style="opacity: 0.3; filter: grayscale(100%)"
           width="80px"
-          :src="require('@/assets/logo.png')"
+          :src="logoPng"
           alt="No thumbnail was found in GCode"
         />
         <v-img
@@ -328,6 +328,7 @@ import { useDialog } from '@/shared/dialog.composable'
 import { useFeatureStore } from '@/store/features.store'
 import { useThumbnailQuery } from '@/queries/thumbnail.query'
 import { PrinterJobService } from '@/backend/printer-job.service'
+import logoPng from '@/assets/logo.png'
 
 const defaultColor = 'rgba(100,100,100,0.1)'
 
