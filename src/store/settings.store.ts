@@ -41,6 +41,14 @@ export const useSettingsStore = defineStore({
       this.settings = response
       return response
     },
+    async saveFrontendSettings() {
+      if (!this.settings) return
+
+      const response = await SettingsService.updateFrontendSettings(
+        this.settings.frontend
+      )
+      this.settings = response
+    },
     async updateTimeoutSettings(update: TimeoutSettings): Promise<SettingsDto> {
       const response = await SettingsService.updateTimeoutSettings(update)
       this.settings = response
@@ -50,6 +58,15 @@ export const useSettingsStore = defineStore({
   getters: {
     serverSettings(): ServerSettingsDto | undefined {
       return this.settings?.server
+    },
+    frontendSettings(): FrontendSettings | undefined {
+      return this.settings?.frontend
+    },
+    preferCancelOverQuickStop(): boolean {
+      return this.settings?.frontend?.tilePreferCancelOverQuickStop || false
+    },
+    thumbnailsEnabled(): boolean {
+      return this.settings?.server.experimentalThumbnailSupport || false
     },
     largeTiles(): boolean {
       return this.settings?.frontend?.largeTiles || false

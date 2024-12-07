@@ -2,253 +2,309 @@
   <div v-drop-printer-position="{ x, y, printerSet: printer }">
     <v-card
       v-drop-upload="{ printers: [printer] }"
+      elevation="5"
+      class="tile colored-tile rounded-lg"
       :class="{
         'tile-large': largeTilesEnabled,
         'tile-selected': selected,
         'tile-unselected': unselected,
-        'tile-setup': printer
+        'tile-no-printer': !printer
       }"
-      :disabled="!printer"
-      :style="{
-        'background-color':
-          !gridStore.gridEditMode || !printer
-            ? printerStateColor
-            : 'rgba(1,1,1,0)'
-      }"
-      class="tile"
-      variant="outlined"
-      tile
-      @click="selectOrUnplacePrinter()"
+      @click="selectOrClearPrinterPosition()"
     >
-      <v-icon
-        v-if="printerState?.text.includes('API')"
-        color="primary"
-        size="70"
-        style="opacity: 0.2; position: absolute; top: 5%; right: 10%"
+      <div
+        class="printer-title"
+        v-show="printer"
       >
-        wifi_off
-      </v-icon>
-      <v-icon
-        v-if="printerState?.text.includes('USB')"
-        color="primary"
-        size="70"
-        style="opacity: 0.2; position: absolute; top: 5%; right: 10%"
+        {{ printer?.name ?? '&nbsp;' }}
+      </div>
+
+      <div
+        v-if="!printer || gridStore.gridEditMode"
+        style="position: absolute; height: calc(120px - 20px)"
+        class="plus-hover-icon"
       >
-        usb_off
-      </v-icon>
-      <v-container
-        v-if="printer?.id"
-        class="tile-inner fill-height"
+        <div
+          class="d-flex flex flex-column justify-center"
+          style="height: 100%"
+        >
+          <PrinterCreateAction
+            v-if="!printer"
+            :floor-id="floorStore.selectedFloor?.id"
+            :floor-x="x"
+            :floor-y="y"
+          />
+          <v-btn
+            v-if="printer"
+            color="error"
+            small
+            rounded
+            @click.c.capture.native.stop="selectOrClearPrinterPosition()"
+          >
+            <v-icon>clear</v-icon>
+            Clear position
+          </v-btn>
+        </div>
+      </div>
+
+      <div
+        class="printer-file-or-stream-viewer"
+        v-if="!!printer && isOnline"
       >
-        <small class="small-resized-font">
-          {{ printer?.name }}
-        </small>
-        <v-menu offset-y>
-          <template #activator="{ props }">
+        <v-img
+          v-if="!thumbnail?.length"
+          style="opacity: 0.3; filter: grayscale(100%)"
+          width="80px"
+          :src="require('@/assets/logo.png')"
+          alt="No thumbnail was found in GCode"
+        />
+        <v-img
+          v-else
+          width="80"
+          :src="'data:image/png;base64,' + (thumbnail ?? '')"
+        />
+      </div>
+      <div
+        class="printer-file-or-stream-viewer"
+        v-else-if="!!printer"
+      >
+        <v-icon
+          size="80"
+          v-if="printerState?.text.includes('API')"
+          color="secondary"
+        >
+          wifi_off
+        </v-icon>
+        <v-icon
+          size="80"
+          v-if="!printer.enabled"
+          color="secondary"
+        >
+          disabled_by_default
+        </v-icon>
+        <v-icon
+          size="80"
+          v-if="printerState?.text.includes('unset')"
+          color="secondary"
+        >
+          question_mark
+        </v-icon>
+      </div>
+
+      <div
+        class="printer-menu"
+        v-if="printer && !gridStore.gridEditMode"
+      >
+        <v-tooltip top>
+          <template v-slot:activator="{ props }">
             <v-btn
-              class="float-right d-inline d-xl-none"
               v-bind="props"
+              small
+              color="darkgray"
+              style="border-radius: 7px"
+              elevation="0"
+              @click.prevent.stop="clickInfo()"
             >
-              <v-icon>more_vert</v-icon>
+              <v-icon dark>menu</v-icon>
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item
-              :close-on-click="true"
-              @click="clickInfo()"
-            >
-              <v-icon>info</v-icon>
-              &nbsp;Details
-            </v-list-item>
-            <v-list-item
+          <template v-slot:default>Open printer details</template>
+        </v-tooltip>
+      </div>
+
+      <div
+        class="printer-controls"
+        v-if="printer && !gridStore.gridEditMode"
+        style="overflow: clip"
+      >
+        <small class="file-name">
+          {{ currentPrintingFilePath ?? '&nbsp;' }}</small
+        >
+      </div>
+
+      <!-- Hover controls -->
+      <div
+        class="centered-controls"
+        v-if="printer && !gridStore.gridEditMode"
+      >
+        <v-tooltip top>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              v-bind="props"
               v-if="hasPrinterControlFeature"
-              :close-on-click="true"
-              @click="clickOpenPrinterControlDialog()"
+              :disabled="!isOnline || !isOperational"
+              small
+              color="darkgray"
+              style="border-radius: 7px"
+              elevation="0"
+              @click.prevent.stop="clickOpenPrinterControlDialog()"
             >
               <v-icon>open_with</v-icon>
-              &nbsp;Control
-            </v-list-item>
-            <v-list-item
-              :close-on-click="true"
-              @click="clickOpenPrinterURL()"
+            </v-btn>
+          </template>
+          <template v-slot:default>Move and home printer</template>
+        </v-tooltip>
+
+        <!-- Connect USB -->
+        <v-tooltip top>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              v-if="!isOperational && isOnline"
+              v-bind="props"
+              small
+              color="darkgray"
+              style="border-radius: 7px"
+              elevation="0"
+              @click.prevent.stop="clickConnectUsb()"
             >
-              <v-icon>directions</v-icon>
-              &nbsp;Visit OctoPrint
-            </v-list-item>
-            <v-list-item
-              :close-on-click="true"
-              @click="clickOpenSettings()"
+              <v-icon>usb</v-icon>
+            </v-btn>
+          </template>
+          <template v-slot:default>Connect USB (only for OctoPrint)</template>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              v-bind="props"
+              small
+              color="darkgray"
+              style="border-radius: 7px"
+              elevation="0"
+              @click.prevent.stop="clickRefreshSocket()"
+            >
+              <v-icon>refresh</v-icon>
+            </v-btn>
+          </template>
+          <template v-slot:default
+            >Reload printer websocket and refresh all states</template
+          >
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              v-bind="props"
+              :disabled="!isOnline || (!isPaused && !isPrinting)"
+              small
+              color="darkgray"
+              style="border-radius: 7px"
+              elevation="0"
+              @click.prevent.stop="
+                isPaused ? clickResumePrint() : clickPausePrint()
+              "
+            >
+              <v-icon v-if="!isPaused">pause</v-icon>
+              <v-icon v-if="isPaused">play_arrow</v-icon>
+            </v-btn>
+          </template>
+          <template v-slot:default>
+            {{ isPaused ? 'Resume print' : 'Pause print' }}
+          </template>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              v-bind="props"
+              small
+              :disabled="
+                !isOnline ||
+                (preferCancelOverQuickStop && !isPrinting && !isPaused)
+              "
+              color="darkgray"
+              style="border-radius: 7px"
+              elevation="0"
+              @click.prevent.stop="
+                preferCancelOverQuickStop ? clickStop() : clickQuickStop()
+              "
+            >
+              <v-icon
+                >{{ preferCancelOverQuickStop ? 'stop' : 'dangerous' }}
+              </v-icon>
+            </v-btn>
+          </template>
+          <template v-slot:default>{{
+            preferCancelOverQuickStop
+              ? 'Cancel current print gracefully'
+              : 'Perform quick stop of printer'
+          }}</template>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              v-bind="props"
+              small
+              color="darkgray"
+              style="border-radius: 7px"
+              elevation="0"
+              @click.prevent.stop="clickOpenSettings()"
             >
               <v-icon>settings</v-icon>
-              &nbsp;Edit Printer
-            </v-list-item>
-            <v-list-item
-              :close-on-click="true"
-              @click="clickQuickStop()"
-            >
-              <v-icon>stop</v-icon>
-              &nbsp;Quick stop
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <div
-          v-if="!gridStore.gridEditMode"
-          class="float-right d-none d-xl-inline"
-        >
-          <!-- Connect USB -->
-          <v-btn
-            v-if="
-              !printerStateStore.isPrinterOperational(printer?.id) &&
-              printerStateStore.isApiResponding(printer?.id)
-            "
-            @click.prevent.stop="clickConnectUsb()"
-          >
-            <v-icon>usb</v-icon>
-          </v-btn>
-
-          <!-- Quick stop button -->
-          <v-tooltip
-            v-if="
-              hasPrinterControlFeature &&
-              printerStateStore.isPrinterOperational(printer?.id)
-            "
-            location="bottom"
-          >
-            <template #activator="{ props }">
-              <v-btn
-                elevation="4"
-                size="36"
-                v-bind="props"
-                @click.prevent.stop="clickOpenPrinterControlDialog()"
-              >
-                <v-icon>open_with</v-icon>
-              </v-btn>
-            </template>
-            <template #default>
-              <span> Control your printer head or extruder. </span>
-            </template>
-          </v-tooltip>
-
-          <!-- Quick stop button -->
-          <v-tooltip
-            v-if="printerStateStore.isPrinterOperational(printer?.id)"
-            location="bottom"
-          >
-            <template #activator="{ props }">
-              <v-btn
-                elevation="4"
-                size="36"
-                v-bind="props"
-                @click.prevent.stop="clickQuickStop()"
-              >
-                <v-icon>dangerous</v-icon>
-              </v-btn>
-            </template>
-            <template #default>
-              <span> Send a quick stop, causing USB to be disconnected. </span>
-            </template>
-          </v-tooltip>
-
-          <!-- Refresh connectivity button -->
-          <v-tooltip
-            v-if="
-              printer.enabled &&
-              printerStateStore.isPrinterNotOnline(printer.id)
-            "
-            location="bottom"
-          >
-            <template #activator="{ props }">
-              <v-btn
-                elevation="4"
-                size="36"
-                v-bind="props"
-                @click.prevent.stop="clickRefreshSocket()"
-              >
-                <v-icon>autorenew</v-icon>
-              </v-btn>
-            </template>
-            <template #default>
-              <span> Retry connecting to OctoPrint API </span>
-            </template>
-          </v-tooltip>
-          <v-btn
-            elevation="5"
-            @click.prevent.stop="clickInfo()"
-          >
-            <v-icon>menu_open</v-icon>
-          </v-btn>
-        </div>
-        <div
-          v-else
-          class="float-end"
-        >
-          <strong
-            class="pl-5 pr-5"
-            color="primary"
-          >
-            <v-icon>disabled_visible</v-icon>
-            Click to clear
-          </strong>
-        </div>
-        <br />
-
-        <v-tooltip
-          :disabled="!printer?.disabledReason"
-          close-delay="100"
-          color="danger"
-          open-delay="0"
-          location="top"
-        >
-          <template #activator="{ props }">
-            <small
-              class="xsmall-resized-font text--secondary d-lg-inline d-none"
-              v-bind="props"
-            >
-              <span v-if="printer?.disabledReason">
-                <small> MAINTENANCE </small>
-                <v-icon
-                  class="d-none d-xl-inline"
-                  color="primary"
-                  size="small"
-                >
-                  info
-                </v-icon>
-              </span>
-              <span v-else>
-                <small>
-                  {{ printerState?.text?.toUpperCase() }}
-                </small>
-              </span>
-            </small>
+            </v-btn>
           </template>
-          Maintenance reason: <br />
-          {{ printer.disabledReason }}
+          <template v-slot:default>Open printer settings</template>
         </v-tooltip>
-        <small v-if="largeTilesEnabled && currentPrintingFilePath">
-          <strong> File: </strong> {{ currentPrintingFilePath }}
-        </small>
-      </v-container>
-      <v-container v-else-if="gridStore.gridEditMode">
-        <v-icon size="48">add</v-icon>
-        Place printer
-      </v-container>
+      </div>
+
+      <!-- Progress Bar -->
       <v-progress-linear
-        v-if="currentJob?.progress"
-        :model-value="currentJob.progress.completion"
-        absolute
-        bottom
-        color="green"
-        height="13"
+        v-if="printer && !gridStore.gridEditMode"
+        :value="currentJob?.progress?.completion"
+        background-color="dark-gray"
+        height="14"
+        class="progress-bar"
       >
-        <span class="xsmall-resized-font">
-          {{
-            largeTilesEnabled
-              ? currentJob?.progress?.completion
-                ? currentJob?.progress?.completion?.toFixed(1) + '%'
-                : '-'
-              : currentPrintingFilePath
-          }}
-        </span>
+        <template v-slot:default="{ value }">
+          <strong>
+            {{
+              largeTilesEnabled
+                ? value
+                  ? value?.toFixed(1) + '%'
+                  : '&nbsp;'
+                : currentPrintingFilePath
+            }}
+          </strong>
+
+          <v-tooltip
+            close-delay="100"
+            color="danger"
+            open-delay="0"
+            top
+          >
+            <template v-slot:activator="{ props }">
+              <span
+                class="xsmall-resized-font text--secondary ml-sm-2"
+                v-bind="props"
+              >
+                <span v-if="printer?.disabledReason">
+                  <small> MAINTENANCE</small>
+                  <v-icon
+                    class="d-none d-xl-inline"
+                    color="primary"
+                    small
+                    >info</v-icon
+                  >
+                </span>
+                <span v-else>
+                  <small
+                    :style="{
+                      'background-color': printerStateColor + '99',
+                      'border-left': '5px solid ' + printerStateColor + 'ff',
+                      padding: '5px'
+                    }"
+                  >
+                    {{ printerState?.text?.toUpperCase() }}
+                  </small>
+                </span>
+              </span>
+            </template>
+
+            Maintenance description: <br />
+            {{ printer?.disabledReason }}
+          </v-tooltip>
+        </template>
       </v-progress-linear>
     </v-card>
   </div>
@@ -270,6 +326,8 @@ import { PrinterDto } from '@/models/printers/printer.model'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { useFeatureStore } from '@/store/features.store'
+import { useThumbnailQuery } from '@/queries/thumbnail.query'
+import { PrinterJobService } from '@/backend/printer-job.service'
 
 const defaultColor = 'rgba(100,100,100,0.1)'
 
@@ -294,6 +352,33 @@ const snackbar = useSnackbar()
 
 const printerId = computed(() => props.printer?.id)
 
+const { data: thumbnail } = useThumbnailQuery(
+  printerId,
+  settingsStore.thumbnailsEnabled
+)
+
+const isOnline = computed(() =>
+  printerId.value ? printerStateStore.isApiResponding(printerId.value) : false
+)
+
+const isOperational = computed(() =>
+  printerId.value
+    ? printerStateStore.isPrinterOperational(printerId.value)
+    : false
+)
+
+const isPrinting = computed(() => {
+  return printerId.value
+    ? printerStateStore.isPrinterPrinting(printerId.value)
+    : false
+})
+
+const isPaused = computed(() => {
+  if (!printerId.value) return false
+
+  return printerStateStore.isPrinterPaused(printerId.value)
+})
+
 const selected = computed(() => {
   if (!printerId.value) return false
   return printerStore.isSelectedPrinter(printerId.value)
@@ -301,6 +386,10 @@ const selected = computed(() => {
 
 const unselected = computed(() => {
   return printerStore.selectedPrinters?.length && !selected.value
+})
+
+const preferCancelOverQuickStop = computed(() => {
+  return settingsStore.preferCancelOverQuickStop
 })
 
 const hasPrinterControlFeature = computed(() => {
@@ -339,6 +428,26 @@ const currentPrintingFilePath = computed(() => {
   return printerStateStore.printingFilePathsByPrinterId[printerId.value]
 })
 
+const clickStop = async () => {
+  if (!printerId.value) return
+
+  if (confirm('Are you sure to cancel the current print job?')) {
+    await PrinterJobService.stopPrintJob(printerId.value)
+  }
+}
+
+const clickPausePrint = async () => {
+  if (!printerId.value) return
+
+  await PrinterJobService.pausePrintJob(printerId.value)
+}
+
+const clickResumePrint = async () => {
+  if (!printerId.value) return
+
+  await PrinterJobService.resumePrintJob(printerId.value)
+}
+
 const clickInfo = () => {
   printerStore.setSideNavPrinter(props.printer)
 }
@@ -349,11 +458,6 @@ const clickRefreshSocket = async () => {
   snackbar.openInfoMessage({
     title: 'Refreshing OctoPrint connection state'
   })
-}
-
-const clickOpenPrinterURL = () => {
-  if (!props.printer) return
-  PrintersService.openPrinterURL(props.printer.printerURL)
 }
 
 const clickOpenSettings = () => {
@@ -371,6 +475,7 @@ const clickOpenPrinterControlDialog = async () => {
 
 const clickQuickStop = async () => {
   if (!printerId.value) return
+
   if (
     confirm(
       'Are you sure to abort the print in Quick Stop mode? Please reconnect after.'
@@ -385,8 +490,12 @@ const clickConnectUsb = async () => {
   await PrintersService.sendPrinterConnectCommand(printerId.value)
 }
 
-const selectOrUnplacePrinter = async () => {
-  if (!props.printer || !printerId.value) return
+const selectOrClearPrinterPosition = async () => {
+  if (!props.printer || !printerId.value) {
+    gridStore.gridEditMode = true
+    return
+  }
+
   if (gridStore.gridEditMode) {
     const floorId = floorStore.selectedFloor?.id
     if (!floorId) throw new Error('Cant clear printer, floor not selected')
@@ -399,40 +508,112 @@ const selectOrUnplacePrinter = async () => {
 
 <style>
 .tile {
-  min-height: 75px;
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+/Edge */
-  user-select: none; /* Standard */
+  min-height: 120px;
+  z-index: 1;
 }
 
-.tile-large {
-  min-height: 200px;
-}
-
-.tile-inner {
-  opacity: 0.85;
+.colored-tile {
+  padding: 8px;
+  color: #ffffff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background-color 0.2s;
 }
 
 .tile-selected {
-  outline: 2px solid rgb(2, 248, 23) !important;
+  outline: 2px solid var(--v-primary-base);
   opacity: 1;
 }
 
-.tile-unselected {
-  opacity: 0.65;
+.tile-no-printer {
+  background-color: #171717;
+  height: 120px;
+  border: 2px #3a3a3a dashed !important;
+  outline: none;
 }
 
-.tile-setup:hover {
-  outline: 2px solid #02b102 !important;
-  border-right-width: 8px;
+.tile-no-printer:hover {
+  background-color: #2a2a2a;
 }
 
-.small-resized-font {
-  font-size: clamp(10px, 1vw, 18px);
+.plus-hover-icon {
+  display: none;
 }
 
-.xsmall-resized-font {
-  font-size: clamp(8px, 1vw, 10px);
+.tile-no-printer:hover .plus-hover-icon {
+  display: block;
+}
+
+.tile:hover .plus-hover-icon {
+  display: block;
+}
+
+.printer-title {
+  font-size: 16px !important;
+  font-weight: bold;
+  text-align: center;
+  color: #ffffff;
+}
+
+.printer-file-or-stream-viewer {
+  position: absolute;
+  left: 16px;
+  height: calc(100% - 36px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.printer-menu {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.printer-controls {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.file-name {
+  font-size: 14px;
+  color: #bfbfbf;
+  max-width: 70%;
+  display: block;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.centered-controls {
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  transition: opacity 0.2s;
+}
+
+.colored-tile:hover .centered-controls {
+  opacity: 1;
+}
+
+.control-icons v-btn {
+  color: #ffffff;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #2c2c2c;
+  border-radius: 7px !important;
 }
 </style>

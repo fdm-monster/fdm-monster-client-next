@@ -48,6 +48,27 @@
           </v-row>
         </v-list-item>
       </v-list>
+
+      <v-divider />
+      <v-list
+        subheader
+        three-line
+      >
+        <v-list-subheader>Large or Compact Tiles</v-list-subheader>
+        <v-list-item>
+          <v-row v-if="settingsStore.settings?.frontend">
+            <v-col cols="5">
+              <v-checkbox
+                @change="updateGridSettings"
+                v-model="
+                  settingsStore.settings.frontend.tilePreferCancelOverQuickStop
+                "
+                label="Print tile - show cancel instead of quick stop"
+              />
+            </v-col>
+          </v-row>
+        </v-list-item>
+      </v-list>
     </v-card-text>
   </div>
 </template>
@@ -62,22 +83,30 @@ const settingsStore = useSettingsStore()
 const snackbar = useSnackbar()
 
 const largeTilesSettings = computed(() => settingsStore.largeTiles)
+const tilePreferCancelOverQuickStop = computed(
+  () => settingsStore.preferCancelOverQuickStop
+)
 
 async function updateGridColumns(newColumns: number | null) {
   if (!newColumns) return
-  return updateGridSettings(settingsStore.gridRows, newColumns)
+  return updateGridSettingsInner(newColumns, settingsStore.gridRows)
 }
 
 async function updateGridRows(newRows: number | null) {
   if (!newRows) return
-  return updateGridSettings(newRows, settingsStore.gridCols)
+  return updateGridSettingsInner(settingsStore.gridCols, newRows)
 }
 
-async function updateGridSettings(rows: number, columns: number) {
+async function updateGridSettings() {
+  return updateGridSettingsInner(settingsStore.gridCols, settingsStore.gridRows)
+}
+
+async function updateGridSettingsInner(rows: number, columns: number) {
   await settingsStore.updateFrontendSettings({
-    gridRows: rows,
     gridCols: columns,
-    largeTiles: largeTilesSettings.value
+    gridRows: rows,
+    largeTiles: largeTilesSettings.value,
+    tilePreferCancelOverQuickStop: tilePreferCancelOverQuickStop.value
   })
   snackbar.info('Grid settings updated')
 }
