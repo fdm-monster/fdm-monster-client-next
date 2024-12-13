@@ -1,4 +1,8 @@
-# Develop 
+# Develop
+
+## Fixes
+ 
+- YAML dialog wouldn't reset error after re-opening
 
 # Client 0.0.13
 
