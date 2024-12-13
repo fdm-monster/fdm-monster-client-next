@@ -1,13 +1,19 @@
 <template>
-  <v-btn
-    color="secondary"
-    class="ma-2"
-    size="small"
-    rounded
-    @click.c.capture.native.stop="openSettings()"
-  >
-    <v-icon>settings</v-icon>
-  </v-btn>
+  <v-tooltip location="top">
+    <template v-slot:activator="{ props }">
+      <v-btn
+        v-bind="props"
+        color="secondary"
+        class="ma-2"
+        size="small"
+        rounded
+        @click.c.capture.native.stop="openSettings()"
+      >
+        <v-icon>settings</v-icon>
+      </v-btn>
+    </template>
+    <template v-slot:default>Update printer settings</template>
+  </v-tooltip>
 </template>
 
 <script lang="ts">
