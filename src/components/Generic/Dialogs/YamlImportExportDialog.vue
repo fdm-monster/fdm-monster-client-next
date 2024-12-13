@@ -3,6 +3,7 @@
     :id="dialog.dialogId"
     max-width="700px"
     @before-opened="onBeforeDialogOpened"
+    @opened="onDialogOpened"
     @escape="closeDialog()"
   >
     <v-card class="pa-4">
@@ -138,6 +139,13 @@ const onBeforeDialogOpened = async () => {
   exportGroups.value = featureStore.hasFeature('printerGroupsApi')
 }
 
+const onDialogOpened = async () => {
+  importFile.value = undefined
+  errorMessage.value = ''
+  errorDetailedMessage.value = ''
+  notes.value = ''
+}
+
 const downloadExportYamlFile = async () => {
   if (exportFloorGrid.value) {
     exportPrinters.value = true
@@ -181,6 +189,9 @@ const uploadAndImportYamlFile = async () => {
 
 const closeDialog = () => {
   importFile.value = undefined
+  errorMessage.value = ''
+  errorDetailedMessage.value = ''
+  notes.value = ''
   dialog.closeDialog()
 }
 </script>
