@@ -651,7 +651,7 @@ __metadata:
     semver: "npm:7.6.3"
     socket.io-client: "npm:4.8.1"
     typescript: "npm:5.6.3"
-    unplugin-auto-import: "npm:0.18.6"
+    unplugin-auto-import: "npm:0.19.0"
     unplugin-fonts: "npm:1.3.1"
     unplugin-vue-components: "npm:0.27.5"
     vite: "npm:5.4.11"
@@ -5045,6 +5045,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"magic-string@npm:^0.30.15":
+  version: 0.30.15
+  resolution: "magic-string@npm:0.30.15"
+  dependencies:
+    "@jridgewell/sourcemap-codec": "npm:^1.5.0"
+  checksum: 10c0/7d10403cb0b403c0453d7af57d8d01a58c334b260e64653c5f5c2311800f4c6b1b7f4502153f9051dd8a87116acd50e5e3fce4bf79ec9d7127f087aa1c08b96b
+  languageName: node
+  linkType: hard
+
 "make-dir@npm:^4.0.0":
   version: 4.0.0
   resolution: "make-dir@npm:4.0.0"
@@ -6765,9 +6774,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unimport@npm:^3.13.4":
-  version: 3.13.4
-  resolution: "unimport@npm:3.13.4"
+"unimport@npm:^3.14.5":
+  version: 3.14.5
+  resolution: "unimport@npm:3.14.5"
   dependencies:
     "@rollup/pluginutils": "npm:^5.1.3"
     acorn: "npm:^8.14.0"
@@ -6778,11 +6787,12 @@ __metadata:
     magic-string: "npm:^0.30.14"
     mlly: "npm:^1.7.3"
     pathe: "npm:^1.1.2"
+    picomatch: "npm:^4.0.2"
     pkg-types: "npm:^1.2.1"
     scule: "npm:^1.3.0"
     strip-literal: "npm:^2.1.1"
     unplugin: "npm:^1.16.0"
-  checksum: 10c0/233a8d293b4280e40ca522ab5f84ccebdad91441f78bd2e0d7690164938b27bd5a9f3aa52a001a643eff00aa9a656bbaa3a05cccaa3b6fff9990aad5d3c4eb0f
+  checksum: 10c0/4b392cc4d38694d903da281ce372d073e7bdabd5c2fcf20e364bde8c1c8999ecf8a352496ab60abe4a17eb1fb5cace5880bcf34004b19bfbdc88b531df1472ef
   languageName: node
   linkType: hard
 
@@ -6804,18 +6814,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-auto-import@npm:0.18.6":
-  version: 0.18.6
-  resolution: "unplugin-auto-import@npm:0.18.6"
+"unplugin-auto-import@npm:0.19.0":
+  version: 0.19.0
+  resolution: "unplugin-auto-import@npm:0.19.0"
   dependencies:
     "@antfu/utils": "npm:^0.7.10"
     "@rollup/pluginutils": "npm:^5.1.3"
-    fast-glob: "npm:^3.3.2"
     local-pkg: "npm:^0.5.1"
-    magic-string: "npm:^0.30.14"
-    minimatch: "npm:^9.0.5"
-    unimport: "npm:^3.13.4"
-    unplugin: "npm:^1.16.0"
+    magic-string: "npm:^0.30.15"
+    picomatch: "npm:^4.0.2"
+    unimport: "npm:^3.14.5"
+    unplugin: "npm:^2.1.0"
   peerDependencies:
     "@nuxt/kit": ^3.2.2
     "@vueuse/core": "*"
@@ -6824,7 +6833,7 @@ __metadata:
       optional: true
     "@vueuse/core":
       optional: true
-  checksum: 10c0/0d4adf397e9745e5a43bb3675e9b6499b90b71ff3b4a8ec1319914ad18cd58e8a7865d0b64be955a0bb3540329c6837b9d43fa32f4a2e2a0e4d65db5f58a6391
+  checksum: 10c0/17c9ea7810ac2bc49f7a18c096dc5fc8823d85ad880fc98421ae8a57a669a910af51fcca198c724e925796c0b3c2309ee6db8ca344f1bbec22c088dd632aeec9
   languageName: node
   linkType: hard
 
@@ -6900,6 +6909,16 @@ __metadata:
     acorn: "npm:^8.14.0"
     webpack-virtual-modules: "npm:^0.6.2"
   checksum: 10c0/547f6bd5ec1dd7411533e68e73c60d5e9527e68d52aa326442650d084866ed3307ac68719068abae23ceab09db197cad43b382a7e69c2d8ca338b27802392fed
+  languageName: node
+  linkType: hard
+
+"unplugin@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "unplugin@npm:2.1.0"
+  dependencies:
+    acorn: "npm:^8.14.0"
+    webpack-virtual-modules: "npm:^0.6.2"
+  checksum: 10c0/f41d4ee1ccc3d8478afdfb4d5f52ddd34bcd3157ebe5ac804b9c5d0afe1e3d6fad5ef44f7bbf030e8a1c671e145fcc8547be46e21d080bd9729f6e97d86f9fd3
   languageName: node
   linkType: hard
 
