@@ -1,23 +1,29 @@
 <template>
-  <v-badge
-    v-if="printer.enabled"
-    :color="isPrinterOperational() ? 'green' : 'red'"
-    class="pa-2"
-  >
-    <template #badge>
-      <v-icon v-if="isPrinterOperational()">check</v-icon>
-      <v-icon v-else>close</v-icon>
+  <v-tooltip location="top">
+    <template v-slot:activator="{ props }">
+      <v-badge
+        v-if="printer.enabled"
+        :color="isPrinterOperational() ? 'green' : 'red'"
+        class="pa-2"
+      >
+        <template #badge>
+          <v-icon v-if="isPrinterOperational()">check</v-icon>
+          <v-icon v-else>close</v-icon>
+        </template>
+        <v-btn
+          :disabled="isPrinterPrinting()"
+          v-bind="props"
+          color="secondary"
+          rounded
+          size="small"
+          @click.stop="togglePrinterConnection"
+        >
+          <v-icon>usb</v-icon>
+        </v-btn>
+      </v-badge>
     </template>
-    <v-btn
-      :disabled="isPrinterPrinting()"
-      color="secondary"
-      rounded
-      size="small"
-      @click.stop="togglePrinterConnection"
-    >
-      <v-icon>usb</v-icon>
-    </v-btn>
-  </v-badge>
+    <template v-slot:default>Connect USB (OctoPrint only)</template>
+  </v-tooltip>
 </template>
 
 <script lang="ts" setup>

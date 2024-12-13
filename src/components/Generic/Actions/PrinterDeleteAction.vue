@@ -1,13 +1,19 @@
 <template>
-  <v-btn
-    class="ms-4"
-    color="secondary"
-    size="small"
-    rounded
-    @click.prevent.stop="deletePrinter"
-  >
-    <v-icon>delete</v-icon>
-  </v-btn>
+  <v-tooltip location="top">
+    <template v-slot:activator="{ props }">
+      <v-btn
+        v-bind="props"
+        class="ms-4"
+        color="secondary"
+        size="small"
+        rounded
+        @click.prevent.stop="deletePrinter"
+      >
+        <v-icon>delete</v-icon>
+      </v-btn>
+    </template>
+    <template v-slot:default>Delete printer</template>
+  </v-tooltip>
 </template>
 
 <script lang="ts" setup>

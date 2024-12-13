@@ -1,8 +1,15 @@
 # Develop
 
+# Client 0.0.14
+
+## Features
+
+- Printer list: add tooltips to printer list actions
+
 ## Fixes
- 
+
 - YAML dialog wouldn't reset error after re-opening
+- Printer list - quick stop action: quick stop showed delete in alert, typo fixed
 
 # Client 0.0.13
 
