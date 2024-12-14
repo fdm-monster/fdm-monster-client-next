@@ -19,9 +19,13 @@
         {{ printer?.name ?? '&nbsp;' }}
       </div>
 
+      <!-- Create printer - hover button-->
       <div
         v-if="!printer || gridStore.gridEditMode"
-        style="position: absolute; height: calc(120px - 20px)"
+        style="position: absolute"
+        :style="{
+          height: largeTilesEnabled ? 'calc(120px - 20px)' : 'calc(84px - 20px)'
+        }"
         class="plus-hover-icon"
       >
         <div
@@ -54,13 +58,13 @@
         <v-img
           v-if="!thumbnail?.length"
           style="opacity: 0.3; filter: grayscale(100%)"
-          width="80px"
+          :width="tileIconThumbnailSize"
           :src="logoPng"
           alt="No thumbnail was found in GCode"
         />
         <v-img
           v-else
-          width="80"
+          :width="tileIconThumbnailSize"
           :src="'data:image/png;base64,' + (thumbnail ?? '')"
         />
       </div>
@@ -69,21 +73,21 @@
         v-else-if="!!printer"
       >
         <v-icon
-          size="80"
+          :size="tileIconThumbnailSize"
           v-if="printerState?.text.includes('API')"
           color="secondary"
         >
           wifi_off
         </v-icon>
         <v-icon
-          size="80"
+          :size="tileIconThumbnailSize"
           v-if="!printer.enabled"
           color="secondary"
         >
           disabled_by_default
         </v-icon>
         <v-icon
-          size="80"
+          :size="tileIconThumbnailSize"
           v-if="printerState?.text.includes('unset')"
           color="secondary"
         >
@@ -116,6 +120,10 @@
         class="printer-controls"
         v-if="printer && !gridStore.gridEditMode"
         style="overflow: clip"
+        :style="{
+          position: largeTilesEnabled ? 'inherit' : 'absolute',
+          top: largeTilesEnabled ? 'inherit' : '30px'
+        }"
       >
         <small class="file-name">
           {{ currentPrintingFilePath ?? '&nbsp;' }}</small
@@ -133,7 +141,7 @@
               v-bind="props"
               v-if="hasPrinterControlFeature"
               :disabled="!isOnline || !isOperational"
-              small
+              :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               style="border-radius: 7px"
               elevation="0"
@@ -151,7 +159,7 @@
             <v-btn
               v-if="!isOperational && isOnline"
               v-bind="props"
-              small
+              :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               style="border-radius: 7px"
               elevation="0"
@@ -167,7 +175,7 @@
           <template v-slot:activator="{ props }">
             <v-btn
               v-bind="props"
-              small
+              :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               style="border-radius: 7px"
               elevation="0"
@@ -186,7 +194,7 @@
             <v-btn
               v-bind="props"
               :disabled="!isOnline || (!isPaused && !isPrinting)"
-              small
+              :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               style="border-radius: 7px"
               elevation="0"
@@ -207,7 +215,7 @@
           <template v-slot:activator="{ props }">
             <v-btn
               v-bind="props"
-              small
+              :size="largeTilesEnabled ? 'small' : 'x-small'"
               :disabled="
                 !isOnline ||
                 (preferCancelOverQuickStop && !isPrinting && !isPaused)
@@ -235,7 +243,7 @@
           <template v-slot:activator="{ props }">
             <v-btn
               v-bind="props"
-              small
+              :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               style="border-radius: 7px"
               elevation="0"
@@ -258,13 +266,7 @@
       >
         <template v-slot:default="{ value }">
           <strong>
-            {{
-              largeTilesEnabled
-                ? value
-                  ? value?.toFixed(1) + '%'
-                  : '&nbsp;'
-                : currentPrintingFilePath
-            }}
+            {{ value?.toFixed(1) + '%' }}
           </strong>
 
           <v-tooltip
@@ -272,6 +274,7 @@
             color="danger"
             open-delay="0"
             top
+            :disabled="printer?.enabled"
           >
             <template v-slot:activator="{ props }">
               <span
@@ -301,8 +304,11 @@
               </span>
             </template>
 
-            Maintenance description: <br />
-            {{ printer?.disabledReason }}
+            <template #default>
+              <span>
+                {{ printer?.disabledReason ?? 'Printer disabled' }}
+              </span>
+            </template>
           </v-tooltip>
         </template>
       </v-progress-linear>
@@ -353,6 +359,11 @@ const snackbar = useSnackbar()
 
 const printerId = computed(() => props.printer?.id)
 
+const largeTilesEnabled = computed(() => settingsStore.largeTiles)
+const tileIconThumbnailSize = computed(() =>
+  largeTilesEnabled.value ? '80px' : '40px'
+)
+
 const { data: thumbnail } = useThumbnailQuery(
   printerId,
   settingsStore.thumbnailsEnabled
@@ -395,10 +406,6 @@ const preferCancelOverQuickStop = computed(() => {
 
 const hasPrinterControlFeature = computed(() => {
   return featureStore.hasFeature('printerControlApi')
-})
-
-const largeTilesEnabled = computed(() => {
-  return settingsStore.largeTiles
 })
 
 const printerState = computed(() => {
@@ -509,8 +516,12 @@ const selectOrClearPrinterPosition = async () => {
 
 <style>
 .tile {
+  min-height: 84px;
+  max-height: 92px;
+}
+
+.tile-large {
   min-height: 120px;
-  z-index: 1;
 }
 
 .colored-tile {
@@ -528,11 +539,15 @@ const selectOrClearPrinterPosition = async () => {
   opacity: 1;
 }
 
-.tile-no-printer {
+.tile.tile-no-printer {
   background-color: #171717;
-  height: 120px;
+  height: 84px;
   border: 2px #3a3a3a dashed !important;
   outline: none;
+}
+
+.tile.tile-large {
+  min-height: 120px;
 }
 
 .tile-no-printer:hover {

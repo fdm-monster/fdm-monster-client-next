@@ -1,12 +1,13 @@
 <template>
   <v-btn
-    class="ms-4"
-    color="secondary"
-    icon="delete"
+    class="ma-2"
+    color="primary"
+    size="small"
     rounded
     @click.c.capture.native.stop="openCreatePrinterDialog()"
   >
     <v-icon>add</v-icon>
+    New printer
   </v-btn>
 </template>
 

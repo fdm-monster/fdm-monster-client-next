@@ -1,5 +1,11 @@
 # Develop
 
+## Features
+
+- Printer tile: re-implement compact tile, the opposite of large tile mode
+- Printer tile: new printer button backported
+- Printer grid, grid edit mode: adjust rows/cols buttons backported
+
 # Client 0.0.14
 
 ## Features
