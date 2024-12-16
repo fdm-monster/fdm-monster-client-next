@@ -62,3 +62,12 @@ onMounted(() => {
   uploadProgressTest(false)
 })
 </script>
+
+<style>
+.v-tooltip > .v-overlay__content {
+  transition-duration: 75ms !important;
+  background-color: #232323;
+  color: white;
+  border: 1px solid white;
+}
+</style>
