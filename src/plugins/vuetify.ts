@@ -14,13 +14,6 @@ import { createVuetify } from 'vuetify'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
-  defaults: {
-    VTooltip: {
-      style: [{ textTransform: 'none' }]
-      // style: 'border: 1px solid white;'
-      // transition-duration: 75ms; background-color: #232323;
-    }
-  },
   theme: {
     defaultTheme: 'dark',
     themes: {
