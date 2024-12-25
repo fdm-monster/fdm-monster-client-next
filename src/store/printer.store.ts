@@ -170,7 +170,7 @@ export const usePrinterStore = defineStore('Printers', {
         )
       }
     },
-    async clearPrinterFiles(printerId: IdType) {
+    async deletePrinterFiles(printerId: IdType) {
       if (!printerId) {
         throw new Error('No printerId was provided')
       }
