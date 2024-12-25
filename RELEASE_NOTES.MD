@@ -3,6 +3,8 @@
 ## Fixes
 
 - Vuetify Tooltip: improve styling of tooltip for better legibility
+- Settings: use constants settings map
+- Printer tile: clicking on an empty tile should not enable grid mode
 
 # Client 0.0.15
 
