@@ -1,5 +1,7 @@
 # Develop
 
+# Client 0.0.16
+
 ## Fixes
 
 - Vuetify Tooltip: improve styling of tooltip for better legibility
