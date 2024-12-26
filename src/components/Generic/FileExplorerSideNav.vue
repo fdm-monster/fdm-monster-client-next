@@ -323,7 +323,7 @@
             class="extra-dense-list-item"
             link
             v-bind="props"
-            @click.prevent.stop="clickClearFiles()"
+            @click.prevent.stop="clickDeleteAllFiles()"
           >
             <v-avatar :size="iconSize">
               <v-icon> delete </v-icon>
@@ -729,10 +729,14 @@ async function clickResumePrint() {
   await PrinterJobService.resumePrintJob(printerId.value)
 }
 
-async function clickClearFiles() {
+async function clickDeleteAllFiles() {
   if (!printerId.value) return
+  if (!confirm('Are you sure to delete all files for this printer?')) {
+    return
+  }
+
   loading.value = true
-  await printersStore.clearPrinterFiles(printerId.value)
+  await printersStore.deletePrinterFiles(printerId.value)
   loading.value = false
   shownFileCache.value = printersStore.printerFiles(printerId.value)
 }
