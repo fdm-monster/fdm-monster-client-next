@@ -172,7 +172,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                     >
                       
                       <div
-                        class="v-field v-field--no-label v-field--variant-underlined v-theme--light v-locale--is-ltr"
+                        class="v-field v-field--variant-underlined v-theme--light v-locale--is-ltr"
                       >
                         <div
                           class="v-field__overlay"
@@ -230,7 +230,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           >
                             <!---->
                             
-                            <!---->
+                            Username
                             
                           </label>
                           
@@ -242,7 +242,6 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                             class="v-field__input"
                             id="input-0"
                             name="login"
-                            placeholder="Username"
                             size="1"
                             type="text"
                             value=""
@@ -257,7 +256,16 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           class="v-field__outline"
                         >
                           <!---->
-                          <!---->
+                          <label
+                            aria-hidden="true"
+                            class="v-label v-field-label v-field-label--floating"
+                            for="input-0"
+                          >
+                            <!---->
+                            
+                            Username
+                            
+                          </label>
                         </div>
                       </div>
                       
@@ -299,7 +307,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                     >
                       
                       <div
-                        class="v-field v-field--variant-underlined v-theme--light v-locale--is-ltr"
+                        class="v-field v-field--appended v-field--variant-underlined v-theme--light v-locale--is-ltr"
                       >
                         <div
                           class="v-field__overlay"
@@ -353,7 +361,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <!---->
                           <label
                             class="v-label v-field-label"
-                            for="password"
+                            for="input-2"
                           >
                             <!---->
                             
@@ -364,9 +372,9 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           
                           <!---->
                           <input
-                            aria-describedby="password-messages"
+                            aria-describedby="input-2-messages"
                             class="v-field__input"
-                            id="password"
+                            id="input-2"
                             name="password"
                             password=""
                             size="1"
@@ -378,7 +386,18 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           
                         </div>
                         <!---->
-                        <!---->
+                        <div
+                          class="v-field__append-inner"
+                        >
+                          <!---->
+                          <i
+                            aria-hidden="false"
+                            aria-label="Password appended action"
+                            class="visibility mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable"
+                            role="button"
+                            tabindex="0"
+                          />
+                        </div>
                         <div
                           class="v-field__outline"
                         >
@@ -386,7 +405,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <label
                             aria-hidden="true"
                             class="v-label v-field-label v-field-label--floating"
-                            for="password"
+                            for="input-2"
                           >
                             <!---->
                             
@@ -397,18 +416,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                       </div>
                       
                     </div>
-                    <div
-                      class="v-input__append"
-                    >
-                      <i
-                        aria-hidden="false"
-                        aria-label="Password appended action"
-                        class="visibility mdi v-icon notranslate v-theme--light v-icon--size-default v-icon--clickable"
-                        role="button"
-                        tabindex="0"
-                      />
-                      <!---->
-                    </div>
+                    <!---->
                     <div
                       class="v-input__details"
                     >
@@ -417,7 +425,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                         aria-live="polite"
                         class="v-messages"
                         css="true"
-                        id="password-messages"
+                        id="input-2-messages"
                         name="slide-y-transition"
                         persisted="false"
                         role="alert"
@@ -496,535 +504,6 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                       aria-hidden="true"
                       class="right mdi v-icon notranslate v-theme--light v-icon--size-default pl-5"
                     />
-                    
-                    
-                  </span>
-                  <!---->
-                  <!---->
-                </button>
-                
-              </div>
-              
-              <!---->
-              
-              <!---->
-              <span
-                class="v-card__underlay"
-              />
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`MyComponent.vue > renders with the correct structure 1`] = `
-<div
-  class="v-row v-row--no-gutters position-relative"
->
-  <div
-    class="v-col-lg-12 v-col-12"
-  >
-    <div
-      class="v-container v-locale--is-ltr"
-    >
-      <div
-        class="d-flex align-center"
-        style="min-height: calc(100vh - 148px);"
-      >
-        <div
-          class="v-row justify-center align-content-center"
-        >
-          <div
-            class="pt-6 pl-6 d-flex flex-column align-center"
-          >
-            <div
-              class="v-responsive v-img v-img--booting shrink mr-1 pt-3 ml-1"
-              contain=""
-              style="width: 150px; opacity: 0.85;"
-            >
-              <div
-                class="v-responsive__sizer"
-              />
-              
-              
-              <transition-stub
-                appear="true"
-                css="true"
-                name="fade-transition"
-                persisted="false"
-              >
-                <img
-                  class="v-img__img v-img__img--contain"
-                  src="/src/assets/logo.png"
-                  style="display: none;"
-                />
-              </transition-stub>
-              <transition-stub
-                appear="false"
-                css="true"
-                name="fade-transition"
-                persisted="false"
-              >
-                <!---->
-              </transition-stub>
-              <!---->
-              <!---->
-              <!---->
-              
-              
-              <!---->
-            </div>
-            <div
-              class="v-toolbar-title text-uppercase text-red"
-            >
-              <div
-                class="v-toolbar-title__placeholder"
-              >
-                <!---->
-                
-                <strong>
-                   FDM  
-                </strong>
-                <strong>
-                   Monster 
-                </strong>
-                
-              </div>
-            </div>
-            <div
-              class="v-toolbar-title mt-lg-6 mt-sm-5 mb-md-5"
-            >
-              <div
-                class="v-toolbar-title__placeholder"
-              >
-                <!---->
-                
-                 Login to your account 
-                
-              </div>
-            </div>
-            <div
-              class="v-card-subtitle text-grey mb-md-5"
-            >
-               Welcome back! Please enter your details 
-            </div>
-          </div>
-          <div
-            class="v-col-md-12 v-col-12"
-          >
-            <div
-              class="v-card v-theme--dark v-card--density-default elevation-10 v-card--variant-elevated pa-4 login-card"
-              style="border-radius: 10px;"
-            >
-              <!---->
-              <div
-                class="v-card__loader"
-              >
-                <div
-                  aria-hidden="true"
-                  aria-valuemax="100"
-                  aria-valuemin="0"
-                  class="v-progress-linear v-theme--dark v-locale--is-ltr"
-                  role="progressbar"
-                  style="top: 0px; height: 0px; --v-progress-linear-height: 2px;"
-                >
-                  <!---->
-                  <div
-                    class="v-progress-linear__background"
-                  />
-                  <div
-                    class="v-progress-linear__buffer"
-                    style="width: 0%;"
-                  />
-                  <transition-stub
-                    appear="false"
-                    css="true"
-                    name="fade-transition"
-                    persisted="false"
-                  >
-                    <div
-                      class="v-progress-linear__indeterminate"
-                    >
-                      
-                      <div
-                        class="v-progress-linear__indeterminate long"
-                      />
-                      <div
-                        class="v-progress-linear__indeterminate short"
-                      />
-                      
-                    </div>
-                  </transition-stub>
-                  <!---->
-                </div>
-              </div>
-              <!---->
-              <!---->
-              
-              <div
-                class="v-card-text"
-              >
-                <form
-                  class="v-form"
-                  novalidate=""
-                >
-                  
-                  <label>
-                     Username 
-                  </label>
-                  <div
-                    class="v-input v-input--horizontal v-input--density-default v-theme--dark v-locale--is-ltr v-text-field v-input--plain-underlined"
-                  >
-                    <div
-                      class="v-input__prepend"
-                    >
-                      <!---->
-                      <i
-                        aria-hidden="true"
-                        class="material-icons v-icon notranslate v-theme--dark v-icon--size-default"
-                      >
-                        mdi-account
-                      </i>
-                    </div>
-                    <div
-                      class="v-input__control"
-                    >
-                      
-                      <div
-                        class="v-field v-field--no-label v-field--variant-underlined v-theme--dark v-locale--is-ltr"
-                      >
-                        <div
-                          class="v-field__overlay"
-                        />
-                        <div
-                          class="v-field__loader"
-                        >
-                          <div
-                            aria-hidden="true"
-                            aria-valuemax="100"
-                            aria-valuemin="0"
-                            class="v-progress-linear v-theme--dark v-locale--is-ltr"
-                            role="progressbar"
-                            style="top: 0px; height: 0px; --v-progress-linear-height: 2px;"
-                          >
-                            <!---->
-                            <div
-                              class="v-progress-linear__background"
-                            />
-                            <div
-                              class="v-progress-linear__buffer"
-                              style="width: 0%;"
-                            />
-                            <transition-stub
-                              appear="false"
-                              css="true"
-                              name="fade-transition"
-                              persisted="false"
-                            >
-                              <div
-                                class="v-progress-linear__indeterminate"
-                              >
-                                
-                                <div
-                                  class="v-progress-linear__indeterminate long"
-                                />
-                                <div
-                                  class="v-progress-linear__indeterminate short"
-                                />
-                                
-                              </div>
-                            </transition-stub>
-                            <!---->
-                          </div>
-                        </div>
-                        <!---->
-                        <div
-                          class="v-field__field"
-                          data-no-activator=""
-                        >
-                          <!---->
-                          <label
-                            class="v-label v-field-label"
-                            for="input-0"
-                          >
-                            <!---->
-                            
-                            <!---->
-                            
-                          </label>
-                          
-                          
-                          <!---->
-                          <input
-                            aria-describedby="input-0-messages"
-                            autofocus=""
-                            class="v-field__input"
-                            id="input-0"
-                            name="login"
-                            placeholder="Username"
-                            size="1"
-                            type="text"
-                            value=""
-                          />
-                          <!---->
-                          
-                          
-                        </div>
-                        <!---->
-                        <!---->
-                        <div
-                          class="v-field__outline"
-                        >
-                          <!---->
-                          <!---->
-                        </div>
-                      </div>
-                      
-                    </div>
-                    <!---->
-                    <div
-                      class="v-input__details"
-                    >
-                      <transition-group-stub
-                        appear="false"
-                        aria-live="polite"
-                        class="v-messages"
-                        css="true"
-                        id="input-0-messages"
-                        name="slide-y-transition"
-                        persisted="false"
-                        role="alert"
-                        tag="div"
-                      >
-                        <!---->
-                      </transition-group-stub>
-                      <!---->
-                    </div>
-                  </div>
-                  <div
-                    class="v-input v-input--horizontal v-input--density-default v-theme--dark v-locale--is-ltr v-text-field v-input--plain-underlined"
-                  >
-                    <div
-                      class="v-input__prepend"
-                    >
-                      <!---->
-                      <i
-                        aria-hidden="true"
-                        class="material-icons v-icon notranslate v-theme--dark v-icon--size-default"
-                      >
-                        lock
-                      </i>
-                    </div>
-                    <div
-                      class="v-input__control"
-                    >
-                      
-                      <div
-                        class="v-field v-field--variant-underlined v-theme--dark v-locale--is-ltr"
-                      >
-                        <div
-                          class="v-field__overlay"
-                        />
-                        <div
-                          class="v-field__loader"
-                        >
-                          <div
-                            aria-hidden="true"
-                            aria-valuemax="100"
-                            aria-valuemin="0"
-                            class="v-progress-linear v-theme--dark v-locale--is-ltr"
-                            role="progressbar"
-                            style="top: 0px; height: 0px; --v-progress-linear-height: 2px;"
-                          >
-                            <!---->
-                            <div
-                              class="v-progress-linear__background"
-                            />
-                            <div
-                              class="v-progress-linear__buffer"
-                              style="width: 0%;"
-                            />
-                            <transition-stub
-                              appear="false"
-                              css="true"
-                              name="fade-transition"
-                              persisted="false"
-                            >
-                              <div
-                                class="v-progress-linear__indeterminate"
-                              >
-                                
-                                <div
-                                  class="v-progress-linear__indeterminate long"
-                                />
-                                <div
-                                  class="v-progress-linear__indeterminate short"
-                                />
-                                
-                              </div>
-                            </transition-stub>
-                            <!---->
-                          </div>
-                        </div>
-                        <!---->
-                        <div
-                          class="v-field__field"
-                          data-no-activator=""
-                        >
-                          <!---->
-                          <label
-                            class="v-label v-field-label"
-                            for="password"
-                          >
-                            <!---->
-                            
-                            Password
-                            
-                          </label>
-                          
-                          
-                          <!---->
-                          <input
-                            aria-describedby="password-messages"
-                            class="v-field__input"
-                            id="password"
-                            name="password"
-                            password=""
-                            size="1"
-                            type="password"
-                            value=""
-                          />
-                          <!---->
-                          
-                          
-                        </div>
-                        <!---->
-                        <!---->
-                        <div
-                          class="v-field__outline"
-                        >
-                          <!---->
-                          <label
-                            aria-hidden="true"
-                            class="v-label v-field-label v-field-label--floating"
-                            for="password"
-                          >
-                            <!---->
-                            
-                            Password
-                            
-                          </label>
-                        </div>
-                      </div>
-                      
-                    </div>
-                    <div
-                      class="v-input__append"
-                    >
-                      <i
-                        aria-hidden="false"
-                        aria-label="Password appended action"
-                        class="material-icons v-icon notranslate v-theme--dark v-icon--size-default v-icon--clickable"
-                        role="button"
-                        tabindex="0"
-                      >
-                        visibility
-                      </i>
-                      <!---->
-                    </div>
-                    <div
-                      class="v-input__details"
-                    >
-                      <transition-group-stub
-                        appear="false"
-                        aria-live="polite"
-                        class="v-messages"
-                        css="true"
-                        id="password-messages"
-                        name="slide-y-transition"
-                        persisted="false"
-                        role="alert"
-                        tag="div"
-                      >
-                        <!---->
-                      </transition-group-stub>
-                      <!---->
-                    </div>
-                  </div>
-                  <!--v-if-->
-                  <!--v-if-->
-                  
-                </form>
-              </div>
-              <div
-                class="v-card-actions"
-              >
-                
-                <button
-                  class="v-btn v-btn--slim v-theme--dark bg-primary v-btn--density-default v-btn--variant-flat pa-4"
-                  style="width: 100%;"
-                  type="button"
-                >
-                  
-                  <span
-                    class="v-btn__overlay"
-                  />
-                  <span
-                    class="v-btn__underlay"
-                  />
-                  
-                  <!---->
-                  <span
-                    class="v-btn__content"
-                    data-no-activator=""
-                  >
-                    
-                    
-                     Login 
-                    
-                    
-                  </span>
-                  <!---->
-                  <!---->
-                </button>
-                
-              </div>
-              <div
-                class="v-card-actions"
-              >
-                
-                <button
-                  class="v-btn v-btn--disabled v-btn--slim v-theme--dark v-btn--density-default v-btn--variant-flat pa-4"
-                  disabled=""
-                  style="width: 100%;"
-                  type="button"
-                >
-                  
-                  <span
-                    class="v-btn__overlay"
-                  />
-                  <span
-                    class="v-btn__underlay"
-                  />
-                  
-                  <!---->
-                  <span
-                    class="v-btn__content"
-                    data-no-activator=""
-                  >
-                    
-                    
-                     Register new account (not enabled) 
-                    <i
-                      aria-hidden="true"
-                      class="material-icons v-icon notranslate v-theme--dark v-icon--size-default pl-5"
-                    >
-                      right
-                    </i>
                     
                     
                   </span>
