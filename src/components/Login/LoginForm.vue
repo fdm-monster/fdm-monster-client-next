@@ -9,25 +9,24 @@
         <label> Username </label>
         <v-text-field
           v-model="username"
-          autofocus
-          name="login"
-          placeholder="Username"
           prepend-icon="person"
+          autofocus
+          label="Username"
+          name="login"
           type="text"
           variant="underlined"
           @keyup.enter="formIsDisabled || login()"
         />
         <v-text-field
-          id="password"
           v-model="password"
-          :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+          :append-inner-icon="showPassword ? 'visibility_off' : 'visibility'"
+          @click:append-inner="showPassword = !showPassword"
           :type="showPassword ? 'text' : 'password'"
           label="Password"
           name="password"
           password
           prepend-icon="lock"
           variant="underlined"
-          @click:append="showPassword = !showPassword"
           @keyup.enter="formIsDisabled || login()"
         />
         <v-alert

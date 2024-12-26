@@ -62,6 +62,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ServerProtectionSettings: typeof import('./components/Settings/ServerProtectionSettings.vue')['default']
+    SettingSection: typeof import('./components/Settings/Shared/SettingSection.vue')['default']
     SettingsToolbar: typeof import('./components/Settings/Shared/SettingsToolbar.vue')['default']
     SettingsView: typeof import('./components/Settings/SettingsView.vue')['default']
     SoftwareUpgradeSettings: typeof import('./components/Settings/SoftwareUpgradeSettings.vue')['default']
