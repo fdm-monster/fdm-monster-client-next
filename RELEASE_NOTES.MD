@@ -1,5 +1,9 @@
 # Develop
 
+Chores
+
+- Adjust server version api response (no more isPm2 or isNodemon flags)
+
 # Client 0.0.16
 
 ## Fixes
