@@ -3,10 +3,12 @@
 ## Chores
 
 - Adjust server version api response (no more isPm2 or isNodemon flags)
+- Backport: update emergency commands to latest version of Vue2 
 
 ## Fixes
 
 - Delete files on printer details (sidenav) should be protected by a confirmation dialog.
+- Emergency commands: server restart does not work - broken button removed
  
 # Client 0.0.16
 

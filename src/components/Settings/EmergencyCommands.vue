@@ -15,31 +15,32 @@
       </v-list-subheader>
 
       <v-list-item>
-        <v-list-item-title> Server commands </v-list-item-title>
-        <v-list-item-subtitle>
-          Restart the server
-          <br />
-          <v-btn
-            color="primary"
-            disabled
-            @click="restartServer()"
-          >
-            Restart server (does not work yet)
-          </v-btn>
-        </v-list-item-subtitle>
-      </v-list-item>
-
-      <v-list-item>
         <v-list-item-title> Batch disabling </v-list-item-title>
         <v-list-item-subtitle>
           Disable all printers in batch (will not affect print)
           <br />
           <v-btn
+            :disabled="isLoading || noPrintersOrAllDisabled"
             color="primary"
             @click="batchToggleEnabled(false)"
+            class="ml-4"
           >
             Batch disable
           </v-btn>
+          <v-progress-circular
+            v-if="isLoading"
+            indeterminate
+            size="30"
+            width="4"
+            class="ml-2"
+          />
+          <v-icon
+            v-if="noPrintersOrAllDisabled"
+            color="warning"
+            class="ml-2"
+          >
+            warning
+          </v-icon>
         </v-list-item-subtitle>
       </v-list-item>
 
@@ -50,11 +51,27 @@
           printers in maintenance mode)
           <br />
           <v-btn
+            :disabled="isLoading || noPrintersOrAllEnabled"
             color="primary"
             @click="batchToggleEnabled(true)"
+            class="ml-4"
           >
             Batch enable
           </v-btn>
+          <v-progress-circular
+            v-if="isLoading"
+            indeterminate
+            size="30"
+            width="4"
+            class="ml-2"
+          />
+          <v-icon
+            v-if="noPrintersOrAllEnabled"
+            color="warning"
+            class="ml-2"
+            v-tooltip.bottom="'No printers available'"
+            >warning</v-icon
+          >
         </v-list-item-subtitle>
       </v-list-item>
 
@@ -64,34 +81,64 @@
           Connect all USB devices
           <br />
           <v-btn
-            :disabled="!hasConnectUsbFeature"
+            :disabled="
+              !hasConnectUsbFeature || isLoading || noPrintersOrAllDisabled
+            "
             color="primary"
-            @click="connectUSBs()"
+            @click="connectUSBs"
+            class="ml-4"
           >
             <v-icon class="mr-2">usb</v-icon>
             Connect USBs
           </v-btn>
-          <v-alert v-if="!hasConnectUsbFeature">
-            <v-icon class="mr-2">warning</v-icon>
-            This feature is not available, please update the FDM Monster server
+          <v-alert
+            v-if="!hasConnectUsbFeature"
+            class="ml-4 mt-2"
+            type="warning"
+            color="orange"
+          >
+            <v-icon class="mr-2">warning</v-icon> This feature requires an FDM
+            Monster server update.
           </v-alert>
+          <v-progress-circular
+            v-if="isLoading"
+            indeterminate
+            size="30"
+            width="4"
+            class="ml-2"
+          />
         </v-list-item-subtitle>
         <v-list-item-subtitle class="mt-2">
           Connect all Sockets
           <br />
           <v-btn
-            :disabled="!hasConnectSocketFeature"
+            :disabled="
+              !hasConnectSocketFeature || isLoading || noPrintersOrAllDisabled
+            "
             color="primary"
-            @click="connectSockets()"
+            @click="connectSockets"
+            class="ml-4"
           >
             <v-icon class="mr-2">hub</v-icon>
             Connect Sockets
           </v-btn>
         </v-list-item-subtitle>
-        <v-alert v-if="!hasConnectSocketFeature">
-          <v-icon class="mr-2">warning</v-icon>
-          This feature is not available, please update the FDM Monster server
+        <v-alert
+          v-if="!hasConnectSocketFeature"
+          class="ml-4 mt-2"
+          type="warning"
+          color="orange"
+        >
+          <v-icon class="mr-2">warning</v-icon> This feature requires an FDM
+          Monster server update.
         </v-alert>
+        <v-progress-circular
+          v-if="isLoading"
+          indeterminate
+          size="30"
+          width="4"
+          class="ml-2"
+        />
       </v-list-item>
     </v-list>
 
@@ -101,21 +148,31 @@
         <v-btn
           color="primary"
           @click="clickFetchNameState()"
+          :loading="isLoading"
         >
-          Measure response times
+          Measure network response times
         </v-btn>
       </div>
       <div class="ml-7 mt-3">
         <span v-if="namesFetched"> Response times: </span>
         <Bar
           v-if="namesFetched"
+          style="background-color: #272727"
           :data="chartConfig"
           :options="chartOptions"
-          height="40"
+          height="100"
         />
-        <span v-else>
-          A graph will be shown, presenting the times in milliseconds (ms)
-        </span>
+        <span v-else
+          >A graph will be shown, presenting the times in milliseconds
+          (ms)</span
+        >
+        <v-progress-circular
+          v-if="isLoading"
+          indeterminate
+          size="30"
+          width="4"
+          class="ml-2"
+        />
       </div>
     </div>
   </v-card>
@@ -123,7 +180,6 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { ServerPrivateService } from '@/backend/server-private.service'
 import { BatchService } from '@/backend/batch.service'
 import { usePrinterStore } from '@/store/printer.store'
 import { useFeatureStore } from '@/store/features.store'
@@ -141,7 +197,6 @@ import {
 import { Bar } from 'vue-chartjs'
 import { IdType } from '@/utils/id.type'
 import { OctoPrintSettingsDto } from '@/backend/dto/octoprint-settings.dto'
-import { sleep } from '@/utils/time.utils'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -156,6 +211,7 @@ export type BatchOctoPrintSettingsDto = {
 const printerStore = usePrinterStore()
 const featureStore = useFeatureStore()
 
+const isLoading = ref(false)
 const namesFetched = ref(false)
 const fetchedNames = ref<string[]>([])
 
@@ -187,6 +243,20 @@ const chartOptions: ChartOptions<'bar'> = {
   responsive: true
 }
 
+const noPrintersOrAllDisabled = computed(() => {
+  return (
+    printerStore.printers.length === 0 ||
+    printerStore.printers.every((printer) => !printer.enabled)
+  )
+})
+
+const noPrintersOrAllEnabled = computed(() => {
+  return (
+    printerStore.printers.length === 0 ||
+    printerStore.printers.every((printer) => !!printer.enabled)
+  )
+})
+
 const hasConnectUsbFeature = computed(() => {
   return featureStore.hasFeature('batchConnectUsbCalls')
 })
@@ -195,47 +265,46 @@ const hasConnectSocketFeature = computed(() => {
 })
 
 async function clickFetchNameState() {
-  const printerIds = printerStore.printers.map((p) => p.id)
-  const printerSettingsBatch = (await BatchService.batchSettingsGet(
-    printerIds
-  )) as BatchOctoPrintSettingsDto[]
-  const names = printerSettingsBatch.map(
-    (s) => s.value?.appearance?.name || 'ERROR'
-  )
-  failedPrinters.value = printerSettingsBatch
-    .filter((nb) => !nb.success)
-    .map((e) => ({
-      message: e.error
-    }))
+  try {
+    isLoading.value = true
+    const printerIds = printerStore.printers.map((p) => p.id)
+    const printerSettingsBatch = (await BatchService.batchSettingsGet(
+      printerIds
+    )) as BatchOctoPrintSettingsDto[]
+    const names = printerSettingsBatch.map(
+      (s) => s.value?.appearance?.name || 'ERROR'
+    )
+    failedPrinters.value = printerSettingsBatch
+      .filter((nb) => !nb.success)
+      .map((e) => ({
+        message: e.error
+      }))
 
-  const times = printerSettingsBatch.map((n) => n.time)
-  const labels = printerSettingsBatch.map(
-    (n) => n.value?.appearance?.name ?? ''
-  )
-  responseTimesAvg.value =
-    times.reduce((a: number, b: number) => a + b, 0) / times.length
-  responseTimesMin.value = Math.min(...times)
-  responseTimesMax.value = Math.max(...times)
-  chartConfig.value = {
-    labels,
-    datasets: [
-      {
-        label: 'OctoPrint Settings response times (ms)',
-        data: times,
-        borderColor: '#FF6384',
-        backgroundColor: '#ffffff'
-      }
-    ]
+    const times = printerSettingsBatch.map((n) => n.time)
+    const labels = printerSettingsBatch.map(
+      (n) => n.value?.appearance?.name ?? ''
+    )
+    responseTimesAvg.value =
+      times.reduce((a: number, b: number) => a + b, 0) / times.length
+    responseTimesMin.value = Math.min(...times)
+    responseTimesMax.value = Math.max(...times)
+    chartConfig.value = {
+      labels,
+      datasets: [
+        {
+          label: 'OctoPrint Settings response times (ms)',
+          data: times,
+          borderColor: '#FF6384',
+          backgroundColor: '#ffffff'
+        }
+      ]
+    }
+
+    namesFetched.value = true
+    fetchedNames.value = names
+  } finally {
+    isLoading.value = false
   }
-
-  await sleep(500)
-
-  namesFetched.value = true
-  fetchedNames.value = names
-}
-
-async function restartServer() {
-  await ServerPrivateService.restartServer()
 }
 
 async function batchToggleEnabled(enabled: boolean) {
@@ -243,23 +312,34 @@ async function batchToggleEnabled(enabled: boolean) {
     return
   }
 
-  const printerIds = printerStore.printers.map((p) => p.id)
-  await BatchService.batchToggleEnabled(printerIds, enabled)
+  isLoading.value = true
+  try {
+    await BatchService.batchToggleEnabled(
+      printerStore.printers.map((p) => p.id),
+      enabled
+    )
+  } finally {
+    isLoading.value = false
+  }
 }
 
 async function connectUSBs() {
   if (!confirm('Are you sure you want to connect all USBs?')) {
     return
   }
-  const printerIds = printerStore.printers.map((p) => p.id)
-  await BatchService.batchConnectUsb(printerIds)
+  try {
+    await BatchService.batchConnectUsb(printerStore.printers.map((p) => p.id))
+  } finally {
+    isLoading.value = false
+  }
 }
 
 async function connectSockets() {
   if (!confirm('Are you sure you want to connect all sockets?')) {
     return
   }
-  const printerIds = printerStore.printers.map((p) => p.id)
-  await BatchService.batchConnectSocket(printerIds)
+  isLoading.value = true
+  await BatchService.batchConnectSocket(printerStore.printers.map((p) => p.id))
+  isLoading.value = false
 }
 </script>

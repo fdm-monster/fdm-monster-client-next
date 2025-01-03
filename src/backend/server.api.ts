@@ -53,7 +53,6 @@ export class ServerApi {
   static updateExperimentalClientSupportRoute = `${ServerApi.settingsRoute}/experimental-client-support`
 
   static serverPrivateRoute = `${ServerApi.base}/server`
-  static serverRestartCommandRoute = `${ServerApi.serverPrivateRoute}/restart`
 
   static pluginRoute = `${ServerApi.base}/plugin`
   static pluginFirmwareUpdateRoute = `${ServerApi.pluginRoute}/firmware-update`
