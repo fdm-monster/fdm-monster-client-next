@@ -1,5 +1,4 @@
 import { BaseService } from '@/backend/base.service'
-import { ServerApi } from '@/backend/server.api'
 import { ExportYamlModel } from '@/models/server/export-yaml.model'
 import { downloadFileByBlob } from '@/utils/download-file.util'
 import { getHttpClient } from '@/shared/http-client'
