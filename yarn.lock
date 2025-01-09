@@ -710,7 +710,7 @@ __metadata:
     semver: "npm:7.6.3"
     socket.io-client: "npm:4.8.1"
     typescript: "npm:5.7.3"
-    unplugin-auto-import: "npm:0.19.0"
+    unplugin-auto-import: "npm:19.0.0"
     unplugin-fonts: "npm:1.3.1"
     unplugin-vue-components: "npm:0.28.0"
     vite: "npm:5.4.11"
@@ -5157,6 +5157,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"magic-string@npm:^0.30.17":
+  version: 0.30.17
+  resolution: "magic-string@npm:0.30.17"
+  dependencies:
+    "@jridgewell/sourcemap-codec": "npm:^1.5.0"
+  checksum: 10c0/16826e415d04b88378f200fe022b53e638e3838b9e496edda6c0e086d7753a44a6ed187adc72d19f3623810589bf139af1a315541cd6a26ae0771a0193eaf7b8
+  languageName: node
+  linkType: hard
+
 "make-dir@npm:^4.0.0":
   version: 4.0.0
   resolution: "make-dir@npm:4.0.0"
@@ -6933,17 +6942,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-auto-import@npm:0.19.0":
-  version: 0.19.0
-  resolution: "unplugin-auto-import@npm:0.19.0"
+"unplugin-auto-import@npm:19.0.0":
+  version: 19.0.0
+  resolution: "unplugin-auto-import@npm:19.0.0"
   dependencies:
     "@antfu/utils": "npm:^0.7.10"
-    "@rollup/pluginutils": "npm:^5.1.3"
+    "@rollup/pluginutils": "npm:^5.1.4"
     local-pkg: "npm:^0.5.1"
-    magic-string: "npm:^0.30.15"
+    magic-string: "npm:^0.30.17"
     picomatch: "npm:^4.0.2"
     unimport: "npm:^3.14.5"
-    unplugin: "npm:^2.1.0"
+    unplugin: "npm:^2.1.2"
   peerDependencies:
     "@nuxt/kit": ^3.2.2
     "@vueuse/core": "*"
@@ -6952,7 +6961,7 @@ __metadata:
       optional: true
     "@vueuse/core":
       optional: true
-  checksum: 10c0/17c9ea7810ac2bc49f7a18c096dc5fc8823d85ad880fc98421ae8a57a669a910af51fcca198c724e925796c0b3c2309ee6db8ca344f1bbec22c088dd632aeec9
+  checksum: 10c0/ed17868494b94828c31971fc0ef4b277efdbc9bbe0e1139f5d52d1ba13c77084f62452aff65e08e093a985c2bf745235196975873a0adf20dd199b039823d191
   languageName: node
   linkType: hard
 
@@ -7038,6 +7047,16 @@ __metadata:
     acorn: "npm:^8.14.0"
     webpack-virtual-modules: "npm:^0.6.2"
   checksum: 10c0/f41d4ee1ccc3d8478afdfb4d5f52ddd34bcd3157ebe5ac804b9c5d0afe1e3d6fad5ef44f7bbf030e8a1c671e145fcc8547be46e21d080bd9729f6e97d86f9fd3
+  languageName: node
+  linkType: hard
+
+"unplugin@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "unplugin@npm:2.1.2"
+  dependencies:
+    acorn: "npm:^8.14.0"
+    webpack-virtual-modules: "npm:^0.6.2"
+  checksum: 10c0/ae24ee275de96a700df416c3241f910ac964011c2e23dc726feb768fe10fc40bef3dbe2d0d8d267ed988c6c3393c3a9782d5b7b30df4a27e8dab244d86b4d4be
   languageName: node
   linkType: hard
 
