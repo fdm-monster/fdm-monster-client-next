@@ -42,7 +42,7 @@
     "@vitejs/plugin-vue": "5.2.1",
     "@vitest/ui": "2.1.8",
     "@vitest/web-worker": "2.1.8",
-    "@vue/eslint-config-typescript": "14.2.0",
+    "@vue/eslint-config-typescript": "14.3.0",
     "@vue/test-utils": "2.4.6",
     "@vueuse/core": "12.4.0",
     "@vueuse/integrations": "12.4.0",
