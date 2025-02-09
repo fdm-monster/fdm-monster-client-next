@@ -272,17 +272,17 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                     </div>
                     <!---->
                     <div
+                      aria-live="polite"
                       class="v-input__details"
+                      id="input-0-messages"
+                      role="alert"
                     >
                       <transition-group-stub
                         appear="false"
-                        aria-live="polite"
                         class="v-messages"
                         css="true"
-                        id="input-0-messages"
                         name="slide-y-transition"
                         persisted="false"
-                        role="alert"
                         tag="div"
                       >
                         <!---->
@@ -418,17 +418,17 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                     </div>
                     <!---->
                     <div
+                      aria-live="polite"
                       class="v-input__details"
+                      id="input-2-messages"
+                      role="alert"
                     >
                       <transition-group-stub
                         appear="false"
-                        aria-live="polite"
                         class="v-messages"
                         css="true"
-                        id="input-2-messages"
                         name="slide-y-transition"
                         persisted="false"
-                        role="alert"
                         tag="div"
                       >
                         <!---->
