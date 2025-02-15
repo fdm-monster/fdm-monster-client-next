@@ -76,7 +76,7 @@
     "vitest": "3.0.5",
     "vue-chartjs": "5.3.2",
     "vue-router": "4.5.0",
-    "vue-tsc": "2.2.0",
+    "vue-tsc": "2.2.2",
     "vuedraggable": "4.1.0"
   },
   "packageManager": "yarn@4.6.0"
