@@ -22,13 +22,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@antfu/utils@npm:^0.7.10":
-  version: 0.7.10
-  resolution: "@antfu/utils@npm:0.7.10"
-  checksum: 10c0/98991f66a4752ef097280b4235b27d961a13a2c67ef8e5b716a120eb9823958e20566516711204e2bfb08f0b935814b715f49ecd79c3b9b93ce32747ac297752
-  languageName: node
-  linkType: hard
-
 "@asamuzakjp/css-color@npm:^2.8.2":
   version: 2.8.2
   resolution: "@asamuzakjp/css-color@npm:2.8.2"
@@ -899,7 +892,7 @@ __metadata:
     typescript: "npm:5.7.3"
     unplugin-auto-import: "npm:19.1.0"
     unplugin-fonts: "npm:1.3.1"
-    unplugin-vue-components: "npm:28.0.0"
+    unplugin-vue-components: "npm:28.1.0"
     vite: "npm:5.4.14"
     vite-plugin-vuetify: "npm:2.1.0"
     vitest: "npm:3.0.5"
@@ -1235,22 +1228,6 @@ __metadata:
   version: 1.0.0-next.25
   resolution: "@polka/url@npm:1.0.0-next.25"
   checksum: 10c0/ef61f0a0fe94bb6e1143fc5b9d5a12e6ca9dbd2c57843ebf81db432c21b9f1005c09e8a1ef8b6d5ddfa42146ca65b640feb2d353bd0d3546da46ba59e48a5349
-  languageName: node
-  linkType: hard
-
-"@rollup/pluginutils@npm:^5.1.4":
-  version: 5.1.4
-  resolution: "@rollup/pluginutils@npm:5.1.4"
-  dependencies:
-    "@types/estree": "npm:^1.0.0"
-    estree-walker: "npm:^2.0.2"
-    picomatch: "npm:^4.0.2"
-  peerDependencies:
-    rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
-  peerDependenciesMeta:
-    rollup:
-      optional: true
-  checksum: 10c0/6d58fbc6f1024eb4b087bc9bf59a1d655a8056a60c0b4021d3beaeec3f0743503f52467fd89d2cf0e7eccf2831feb40a05ad541a17637ea21ba10b21c2004deb
   languageName: node
   linkType: hard
 
@@ -5421,16 +5398,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"local-pkg@npm:^0.5.1":
-  version: 0.5.1
-  resolution: "local-pkg@npm:0.5.1"
-  dependencies:
-    mlly: "npm:^1.7.3"
-    pkg-types: "npm:^1.2.1"
-  checksum: 10c0/ade8346f1dc04875921461adee3c40774b00d4b74095261222ebd4d5fd0a444676e36e325f76760f21af6a60bc82480e154909b54d2d9f7173671e36dacf1808
-  languageName: node
-  linkType: hard
-
 "local-pkg@npm:^1.0.0":
   version: 1.0.0
   resolution: "local-pkg@npm:1.0.0"
@@ -7501,20 +7468,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-vue-components@npm:28.0.0":
-  version: 28.0.0
-  resolution: "unplugin-vue-components@npm:28.0.0"
+"unplugin-vue-components@npm:28.1.0":
+  version: 28.1.0
+  resolution: "unplugin-vue-components@npm:28.1.0"
   dependencies:
-    "@antfu/utils": "npm:^0.7.10"
-    "@rollup/pluginutils": "npm:^5.1.4"
     chokidar: "npm:^3.6.0"
     debug: "npm:^4.4.0"
-    fast-glob: "npm:^3.3.3"
-    local-pkg: "npm:^0.5.1"
+    local-pkg: "npm:^1.0.0"
     magic-string: "npm:^0.30.17"
-    minimatch: "npm:^9.0.5"
-    mlly: "npm:^1.7.3"
-    unplugin: "npm:^2.1.2"
+    mlly: "npm:^1.7.4"
+    tinyglobby: "npm:^0.2.10"
+    unplugin: "npm:^2.2.0"
+    unplugin-utils: "npm:^0.2.4"
   peerDependencies:
     "@babel/parser": ^7.15.8
     "@nuxt/kit": ^3.2.2
@@ -7524,7 +7489,7 @@ __metadata:
       optional: true
     "@nuxt/kit":
       optional: true
-  checksum: 10c0/f3904eec9d497253abeb18c81eb0c230797c386802621043883fffa30c9d4dbaf82dbe70ce570cf6ce750dbc1dacdb440c9f22f3eb86bff373c25b29064bfeca
+  checksum: 10c0/7a928a6cf675c5654800df3763e27e2f7060fe4ab220bfb823e796d14e4a3f0c6f7b54811f29767a0ff9b34f5b12eb2a5846290dcb9a3d64097e162ef186e2d1
   languageName: node
   linkType: hard
 
