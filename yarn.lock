@@ -892,7 +892,7 @@ __metadata:
     typescript: "npm:5.7.3"
     unplugin-auto-import: "npm:19.1.0"
     unplugin-fonts: "npm:1.3.1"
-    unplugin-vue-components: "npm:28.2.0"
+    unplugin-vue-components: "npm:28.4.0"
     vite: "npm:5.4.14"
     vite-plugin-vuetify: "npm:2.1.0"
     vitest: "npm:3.0.6"
@@ -7490,9 +7490,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-vue-components@npm:28.2.0":
-  version: 28.2.0
-  resolution: "unplugin-vue-components@npm:28.2.0"
+"unplugin-vue-components@npm:28.4.0":
+  version: 28.4.0
+  resolution: "unplugin-vue-components@npm:28.4.0"
   dependencies:
     chokidar: "npm:^3.6.0"
     debug: "npm:^4.4.0"
@@ -7511,7 +7511,7 @@ __metadata:
       optional: true
     "@nuxt/kit":
       optional: true
-  checksum: 10c0/6ee042b58da7f2da939ebc5eb46eb2c5440c7c3de37eaf8ce0cac9fad6f5b274e23cf0093166e3e97d72a3642fac6a70823d4dc321654d1bab483ac2a8399ebf
+  checksum: 10c0/72b5bb0036a50c3481f4d27e40b02ba87373181022d5329210967b2f4d8494081f1eef8bc612df09d6e14c52edea71e074484a95ffbeaeefc4ee50619f07d141
   languageName: node
   linkType: hard
 
