@@ -1,5 +1,11 @@
 # Develop
 
+## Client 0.0.18
+
+Fixes
+
+- Upload progress bar won't get stuck anymore, requires FDMM server 1.8.3 or higher!
+
 # Client 0.0.17
 
 ## Chores
