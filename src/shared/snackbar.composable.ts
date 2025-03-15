@@ -33,7 +33,7 @@ export interface ProgressMessage {
 }
 
 export function useSnackbar() {
-  const { emit: emitProgessMessage, on: onProgressMessage } =
+  const { emit: emitProgressMessage, on: onProgressMessage } =
     useEventBus<ProgressMessage>(progressMessageKey)
   const { emit: emitInfoMessage, on: onInfoMessage } =
     useEventBus<InfoMessage>(infoMessageKey)
@@ -47,7 +47,7 @@ export function useSnackbar() {
       value: number,
       completed: boolean
     ) =>
-      emitProgessMessage({
+      emitProgressMessage({
         key,
         title,
         value,
