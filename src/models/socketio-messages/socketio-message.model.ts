@@ -50,4 +50,5 @@ export interface SocketIoUpdateMessage {
   printerEvents: Record<IdType, PrinterStateDto>
   trackedUploads: UploadStates
   floors: FloorDto[]
+  [k: string]: any
 }
