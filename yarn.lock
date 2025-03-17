@@ -856,7 +856,7 @@ __metadata:
     "@types/semver": "npm:7.5.8"
     "@typescript-eslint/eslint-plugin": "npm:8.26.1"
     "@typescript-eslint/parser": "npm:8.26.1"
-    "@vitejs/plugin-vue": "npm:5.2.1"
+    "@vitejs/plugin-vue": "npm:5.2.2"
     "@vitest/ui": "npm:3.0.8"
     "@vitest/web-worker": "npm:3.0.8"
     "@vue/eslint-config-typescript": "npm:14.5.0"
@@ -2124,13 +2124,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-vue@npm:5.2.1":
-  version: 5.2.1
-  resolution: "@vitejs/plugin-vue@npm:5.2.1"
+"@vitejs/plugin-vue@npm:5.2.2":
+  version: 5.2.2
+  resolution: "@vitejs/plugin-vue@npm:5.2.2"
   peerDependencies:
     vite: ^5.0.0 || ^6.0.0
     vue: ^3.2.25
-  checksum: 10c0/927c06ccf591812c8195967ad550059a77a922cc9f9672f4e83451538a421427bd4daf8cce20366baa3a70882b2ff6c4e5fea2c1fdc3fd24a8caa061c893c2d8
+  checksum: 10c0/6622a712a5f8259f2164676fa50584db73fcf6a81e22d26a53b1c3b789bf7f5f9ecc7e6d2e218852583e6693f6ac2e1206fce7e15c06c1345fa9258d06316f76
   languageName: node
   linkType: hard
 
