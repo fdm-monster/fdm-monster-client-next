@@ -18,8 +18,7 @@ export interface SettingsState {
   frontendDebugSettings: FrontendDebugSettings
 }
 
-export const useSettingsStore = defineStore({
-  id: 'Settings',
+export const useSettingsStore = defineStore('Settings', {
   state: (): SettingsState => ({
     settings: undefined,
     frontendDebugSettings: {
