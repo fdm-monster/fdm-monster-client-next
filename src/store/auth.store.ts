@@ -8,7 +8,7 @@ import {
   AUTH_ERROR_REASON,
   convertAuthErrorReason
 } from '@/shared/auth.constants'
-import { useEventBus } from '@vueuse/core/index'
+import { useEventBus } from '@vueuse/core'
 
 export interface IClaims extends JwtPayload {
   name: string
