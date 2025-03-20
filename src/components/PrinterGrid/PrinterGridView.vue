@@ -80,7 +80,7 @@
             class="ml-2"
             color="primary"
             size="x-small"
-            @click="$refs.fileUpload?.click()"
+            @click="fileUpload?.click()"
           >
             Select gcode file
           </v-btn>
