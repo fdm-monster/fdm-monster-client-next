@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useJwt } from '@vueuse/integrations/useJwt'
+import { useJwt } from '@vueuse/integrations'
 import type { JwtPayload } from 'jwt-decode'
 import { AuthService, type Tokens } from '@/backend/auth.service'
 import { AxiosError, HttpStatusCode } from 'axios'
