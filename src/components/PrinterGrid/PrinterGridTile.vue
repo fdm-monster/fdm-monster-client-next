@@ -464,7 +464,7 @@ const clickRefreshSocket = async () => {
   if (!printerId.value) return
   await PrintersService.refreshSocket(printerId.value)
   snackbar.openInfoMessage({
-    title: 'Refreshing OctoPrint connection state'
+    title: 'Refreshing connection state'
   })
 }
 

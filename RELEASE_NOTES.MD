@@ -1,5 +1,9 @@
 # Develop
 
+Chore
+
+- Remove OctoPrint reference in "Refreshing OctoPrint connection state"
+ 
 ## Client 0.0.18
 
 Fixes
