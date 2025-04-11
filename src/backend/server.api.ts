@@ -1,118 +1,119 @@
-import { IdType } from '@/utils/id.type'
+import { IdType } from "@/utils/id.type";
 
 export class ServerApi {
-  static base = '/api'
+  static base = "/api";
 
-  static firstTimeSetupRoute = `${ServerApi.base}/first-time-setup`
-  static completeFirstTimeSetupRoute = `${ServerApi.firstTimeSetupRoute}/complete`
+  static firstTimeSetupRoute = `${ServerApi.base}/first-time-setup`;
+  static completeFirstTimeSetupRoute = `${ServerApi.firstTimeSetupRoute}/complete`;
 
-  static printerRoute = `${ServerApi.base}/printer`
-  static printerBatchRoute = `${ServerApi.printerRoute}/batch`
-  static printerTestConnectionRoute = `${ServerApi.printerRoute}/test-connection`
+  static printerRoute = `${ServerApi.base}/printer`;
+  static printerBatchRoute = `${ServerApi.printerRoute}/batch`;
+  static printerTestConnectionRoute = `${ServerApi.printerRoute}/test-connection`;
 
-  static printerSettingsRoute = `${ServerApi.base}/printer-settings`
+  static printerSettingsRoute = `${ServerApi.base}/printer-settings`;
 
-  static floorRoute = `${ServerApi.base}/floor`
+  static floorRoute = `${ServerApi.base}/floor`;
 
-  static batchRoute = `${ServerApi.base}/batch`
-  static batchGetLastPrintedFilesRoute = `${ServerApi.batchRoute}/reprint/list`
-  static batchReprintFilesRoute = `${ServerApi.batchRoute}/reprint/execute`
+  static batchRoute = `${ServerApi.base}/batch`;
+  static batchGetLastPrintedFilesRoute = `${ServerApi.batchRoute}/reprint/list`;
+  static batchReprintFilesRoute = `${ServerApi.batchRoute}/reprint/execute`;
 
-  static printCompletionRoute = `${ServerApi.base}/print-completion`
+  static printCompletionRoute = `${ServerApi.base}/print-completion`;
 
-  static printerFilesRoute = `${ServerApi.base}/printer-files`
-  static printerFilesPurgeRoute = `${ServerApi.printerFilesRoute}/purge`
+  static printerFilesRoute = `${ServerApi.base}/printer-files`;
+  static printerFilesPurgeRoute = `${ServerApi.printerFilesRoute}/purge`;
 
-  static printerGroupRoute = `${ServerApi.base}/printer-group`
-  static createGroupRoute = `${ServerApi.base}/printer-group`
+  static printerGroupRoute = `${ServerApi.base}/printer-group`;
+  static createGroupRoute = `${ServerApi.base}/printer-group`;
+  static customGCodeRoute = `${ServerApi.base}/custom-gcode`;
+  static userRoute = `${ServerApi.base}/user`;
+  static rolesRoute = `${ServerApi.base}/user/roles`;
+  static userProfileRoute = `${ServerApi.userRoute}/profile`;
+  static settingsRoute = `${ServerApi.base}/settings`;
+  static settingsSensitiveRoute = `${ServerApi.settingsRoute}/sensitive`;
+  static updateLoginRequiredRoute = `${ServerApi.settingsRoute}/login-required`;
+  static updateRegistrationEnabledRoute = `${ServerApi.settingsRoute}/registration-enabled`;
+  static updateCredentialSettings = `${ServerApi.settingsRoute}/credential`;
+  static fileCleanSettingsRoute = `${ServerApi.settingsRoute}/file-clean`;
+  static updateFrontendSettingsRoute = `${ServerApi.settingsRoute}/frontend`;
+  static updateTimeoutSettingRoute = `${ServerApi.settingsRoute}/timeout`;
+  static serverSentryDiagnosticsSettingRoute = `${ServerApi.settingsRoute}/sentry-diagnostics`;
+  static updateExperimentalMoonrakerSupportRoute = `${ServerApi.settingsRoute}/experimental-moonraker-support`;
+  static updateExperimentalClientSupportRoute = `${ServerApi.settingsRoute}/experimental-client-support`;
+
   static deleteGroupRoute = (id: IdType) =>
-    `${ServerApi.base}/printer-group/${id}`
+    `${ServerApi.base}/printer-group/${id}`;
+
   static updateGroupNameRoute = (id: IdType) =>
-    `${ServerApi.base}/printer-group/${id}/name`
+    `${ServerApi.base}/printer-group/${id}/name`;
+
   static addPrinterToGroupRoute = (id: IdType) =>
-    `${ServerApi.base}/printer-group/${id}/printer`
-  static deletePrinterFromGroupRoute = ServerApi.addPrinterToGroupRoute
+    `${ServerApi.base}/printer-group/${id}/printer`;
 
-  static customGCodeRoute = `${ServerApi.base}/custom-gcode`
+  static deletePrinterFromGroupRoute = ServerApi.addPrinterToGroupRoute;
 
-  static userRoute = `${ServerApi.base}/user`
-  static rolesRoute = `${ServerApi.base}/user/roles`
-  static userProfileRoute = `${ServerApi.userRoute}/profile`
-
-  static settingsRoute = `${ServerApi.base}/settings`
-  static settingsSensitiveRoute = `${ServerApi.settingsRoute}/sensitive`
-  static updateLoginRequiredRoute = `${ServerApi.settingsRoute}/login-required`
-  static updateRegistrationEnabledRoute = `${ServerApi.settingsRoute}/registration-enabled`
-  static updateCredentialSettings = `${ServerApi.settingsRoute}/credential`
-  static fileCleanSettingsRoute = `${ServerApi.settingsRoute}/file-clean`
-  static updateFrontendSettingsRoute = `${ServerApi.settingsRoute}/frontend`
-  static updateTimeoutSettingRoute = `${ServerApi.settingsRoute}/timeout`
-  static serverSentryDiagnosticsSettingRoute = `${ServerApi.settingsRoute}/sentry-diagnostics`
-  static updateExperimentalMoonrakerSupportRoute = `${ServerApi.settingsRoute}/experimental-moonraker-support`
-  static updateExperimentalClientSupportRoute = `${ServerApi.settingsRoute}/experimental-client-support`
-
-  static getPrinterRoute = (id: IdType) => `${ServerApi.printerRoute}/${id}`
+  static getPrinterRoute = (id: IdType) => `${ServerApi.printerRoute}/${id}`;
   static postPrinterDisabledReasonRoute = (id: IdType) =>
-    `${ServerApi.printerRoute}/${id}/disabled-reason`
+    `${ServerApi.printerRoute}/${id}/disabled-reason`;
   static getPrinterLoginDetailsRoute = (id: IdType) =>
-    `${ServerApi.getPrinterRoute(id)}/login-details`
+    `${ServerApi.getPrinterRoute(id)}/login-details`;
   static restartOctoPrintRoute = (id: IdType) =>
-    `${ServerApi.getPrinterRoute(id)}/restart-octoprint`
+    `${ServerApi.getPrinterRoute(id)}/restart-octoprint`;
 
   static refreshSocketRoute = (id: IdType) =>
-    `${ServerApi.getPrinterRoute(id)}/refresh-socket`
+    `${ServerApi.getPrinterRoute(id)}/refresh-socket`;
   static getPrinterSettingsRoute = (id: IdType) =>
-    `${ServerApi.printerSettingsRoute}/${id}`
+    `${ServerApi.printerSettingsRoute}/${id}`;
   static setPrinterSettingsGCodeAnalysisRoute = (id: IdType) =>
-    `${ServerApi.getPrinterSettingsRoute(id)}/gcode-analysis`
+    `${ServerApi.getPrinterSettingsRoute(id)}/gcode-analysis`;
   static syncPrinterNameSettingRoute = (id: IdType) =>
-    `${ServerApi.getPrinterSettingsRoute(id)}/sync-printername`
-  static getFloorRoute = (id: IdType) => `${ServerApi.floorRoute}/${id}`
+    `${ServerApi.getPrinterSettingsRoute(id)}/sync-printername`;
+  static getFloorRoute = (id: IdType) => `${ServerApi.floorRoute}/${id}`;
   static addOrRemovePrinterFromFloorRoute = (id: IdType) =>
-    `${ServerApi.getFloorRoute(id)}/printer`
+    `${ServerApi.getFloorRoute(id)}/printer`;
   static sendQuickStopM112Route = (id: IdType) =>
-    `${ServerApi.customGCodeRoute}/send-emergency-m112/${id}`
+    `${ServerApi.customGCodeRoute}/send-emergency-m112/${id}`;
   static updatePrinterFloorNameRoute = (id: IdType) =>
-    `${ServerApi.getFloorRoute(id)}/name`
+    `${ServerApi.getFloorRoute(id)}/name`;
   static updatePrinterFloorNumberRoute = (id: IdType) =>
-    `${ServerApi.getFloorRoute(id)}/floor-number`
+    `${ServerApi.getFloorRoute(id)}/floor-number`;
   static printerFilesClearRoute = (id: IdType) =>
-    `${ServerApi.printerFilesRoute}/${id}/clear`
+    `${ServerApi.printerFilesRoute}/${id}/clear`;
   static printerFilesSelectAndPrintRoute = (id: IdType) =>
-    `${ServerApi.printerFilesRoute}/${id}/select`
+    `${ServerApi.printerFilesRoute}/${id}/select`;
   static printerFilesUploadRoute = (id: IdType) =>
-    `${ServerApi.printerFilesRoute}/${id}/upload`
+    `${ServerApi.printerFilesRoute}/${id}/upload`;
   static printerFilesCacheRoute = (id: IdType) =>
-    `${ServerApi.printerFilesRoute}/${id}/cache`
+    `${ServerApi.printerFilesRoute}/${id}/cache`;
   static printerEnabledRoute = (id: IdType) =>
-    `${ServerApi.getPrinterRoute(id)}/enabled`
+    `${ServerApi.getPrinterRoute(id)}/enabled`;
   static printerSerialConnectRoute = (id: IdType) =>
-    `${ServerApi.getPrinterRoute(id)}/serial-connect`
+    `${ServerApi.getPrinterRoute(id)}/serial-connect`;
   static printerJogCommandRoute = (id: IdType) =>
-    `${ServerApi.getPrinterRoute(id)}/jog`
+    `${ServerApi.getPrinterRoute(id)}/jog`;
   static printerHomeCommandRoute = (id: IdType) =>
-    `${ServerApi.getPrinterRoute(id)}/home`
+    `${ServerApi.getPrinterRoute(id)}/home`;
   static printerSerialDisconnectRoute = (id: IdType) =>
-    `${ServerApi.getPrinterRoute(id)}/serial-disconnect`
+    `${ServerApi.getPrinterRoute(id)}/serial-disconnect`;
 
   static printerJobRoute = (id: IdType) =>
-    `${ServerApi.getPrinterRoute(id)}/job`
+    `${ServerApi.getPrinterRoute(id)}/job`;
   static printerStopJobRoute = (id: IdType) =>
-    `${ServerApi.printerJobRoute(id)}/stop`
+    `${ServerApi.printerJobRoute(id)}/stop`;
   static printerPauseJobRoute = (id: IdType) =>
-    `${ServerApi.printerJobRoute(id)}/pause`
+    `${ServerApi.printerJobRoute(id)}/pause`;
   static printerResumeJobRoute = (id: IdType) =>
-    `${ServerApi.printerJobRoute(id)}/resume`
+    `${ServerApi.printerJobRoute(id)}/resume`;
 
   static userChangeUsernameRoute = (id: IdType) =>
-    `${ServerApi.userRoute}/${id}/change-username`
+    `${ServerApi.userRoute}/${id}/change-username`;
   static userChangePasswordRoute = (id: IdType) =>
-    `${ServerApi.userRoute}/${id}/change-password`
-  static userDeleteRoute = (id: IdType) => `${ServerApi.userRoute}/${id}`
+    `${ServerApi.userRoute}/${id}/change-password`;
+  static userDeleteRoute = (id: IdType) => `${ServerApi.userRoute}/${id}`;
   static userSetVerifiedRoute = (id: IdType) =>
-    `${ServerApi.userRoute}/${id}/set-verified`
+    `${ServerApi.userRoute}/${id}/set-verified`;
   static userSetRootUserRoute = (id: IdType) =>
-    `${ServerApi.userRoute}/${id}/set-root-user`
+    `${ServerApi.userRoute}/${id}/set-root-user`;
   static userSetUserRolesRoute = (id: IdType) =>
-    `${ServerApi.userRoute}/${id}/set-user-roles`
+    `${ServerApi.userRoute}/${id}/set-user-roles`;
 }
