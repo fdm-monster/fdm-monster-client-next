@@ -226,7 +226,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <!---->
                           <label
                             class="v-label v-field-label"
-                            for="input-0"
+                            for="input-v-0"
                           >
                             <!---->
                             
@@ -237,10 +237,10 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           
                           <!---->
                           <input
-                            aria-describedby="input-0-messages"
+                            aria-describedby="input-v-0-messages"
                             autofocus=""
                             class="v-field__input"
-                            id="input-0"
+                            id="input-v-0"
                             name="login"
                             size="1"
                             type="text"
@@ -259,7 +259,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <label
                             aria-hidden="true"
                             class="v-label v-field-label v-field-label--floating"
-                            for="input-0"
+                            for="input-v-0"
                           >
                             <!---->
                             
@@ -274,7 +274,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                     <div
                       aria-live="polite"
                       class="v-input__details"
-                      id="input-0-messages"
+                      id="input-v-0-messages"
                       role="alert"
                     >
                       <transition-group-stub
@@ -361,7 +361,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <!---->
                           <label
                             class="v-label v-field-label"
-                            for="input-2"
+                            for="input-v-2"
                           >
                             <!---->
                             
@@ -372,9 +372,9 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           
                           <!---->
                           <input
-                            aria-describedby="input-2-messages"
+                            aria-describedby="input-v-2-messages"
                             class="v-field__input"
-                            id="input-2"
+                            id="input-v-2"
                             name="password"
                             password=""
                             size="1"
@@ -405,7 +405,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <label
                             aria-hidden="true"
                             class="v-label v-field-label v-field-label--floating"
-                            for="input-2"
+                            for="input-v-2"
                           >
                             <!---->
                             
@@ -420,7 +420,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                     <div
                       aria-live="polite"
                       class="v-input__details"
-                      id="input-2-messages"
+                      id="input-v-2-messages"
                       role="alert"
                     >
                       <transition-group-stub
