@@ -3,21 +3,12 @@ import { BaseService } from '@/backend/base.service'
 import { LoginDetails, PrinterDto } from '@/models/printers/printer.model'
 import {
   CreatePrinter,
-  getDefaultCreatePrinter,
-  PreCreatePrinter
+  getDefaultCreatePrinter
 } from '@/models/printers/crud/create-printer.model'
 import { newRandomNamePair } from '@/shared/noun-adjectives.data'
 import { IdType } from '@/utils/id.type'
 
 export class PrintersService extends BaseService {
-  static applyLoginDetailsPatchForm(
-    patch: { printerURL: string; apiKey: string; name: string },
-    formData: PreCreatePrinter
-  ) {
-    formData.name = patch.name || newRandomNamePair()
-    formData.apiKey = patch.apiKey
-  }
-
   static convertPrinterToCreateForm(printer: CreatePrinter) {
     // Inverse transformation
     const newFormData = getDefaultCreatePrinter()
