@@ -89,14 +89,6 @@
             <v-icon class="mr-2">usb</v-icon>
             Connect USBs
           </v-btn>
-          <v-alert
-            class="ml-4 mt-2"
-            color="orange"
-            type="warning"
-          >
-            <v-icon class="mr-2">warning</v-icon>
-            This feature requires an FDM Monster server update.
-          </v-alert>
           <v-progress-circular
             v-if="isLoading"
             class="ml-2"
@@ -118,14 +110,6 @@
             Connect Sockets
           </v-btn>
         </v-list-item-subtitle>
-        <v-alert
-          class="ml-4 mt-2"
-          color="orange"
-          type="warning"
-        >
-          <v-icon class="mr-2">warning</v-icon>
-          This feature requires an FDM Monster server update.
-        </v-alert>
         <v-progress-circular
           v-if="isLoading"
           class="ml-2"
