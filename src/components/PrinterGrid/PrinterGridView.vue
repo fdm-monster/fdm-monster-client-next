@@ -48,7 +48,6 @@
           </v-chip-group>
           <br />
           <v-btn
-            v-if="isBatchReprintFeatureAvailable"
             :disabled="!hasPrintersSelected"
             color="primary"
             size="x-small"
@@ -119,7 +118,6 @@ import { convertMultiPrinterFileToQueue } from '@/utils/uploads-state.utils'
 import HomeToolbar from '@/components/PrinterGrid/HomeToolbar.vue'
 import { usePrinterStore } from '@/store/printer.store'
 import { useUploadsStore } from '@/store/uploads.store'
-import { useFeatureStore } from '@/store/features.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import { useGridStore } from '@/store/grid.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
@@ -130,13 +128,10 @@ const gridStore = useGridStore()
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const uploadsStore = useUploadsStore()
-const featureStore = useFeatureStore()
 const snackbar = useSnackbar()
 
 const selectedFile = ref<File | undefined>(undefined)
-const isBatchReprintFeatureAvailable = computed(() =>
-  featureStore.hasFeature('batchReprintCalls')
-)
+
 const hasPrintersSelected = computed(
   () => printersStore.selectedPrinters.length > 0
 )
@@ -159,7 +154,6 @@ const batchReprintFiles = async () => {
     printersStore.selectedPrinters?.map((p) => p.id)
   )
   console.log('[PrinterGridView] Dialog completed', output)
-  // await printersStore.batchReprintFiles();
 }
 
 const uploadFile = () => {

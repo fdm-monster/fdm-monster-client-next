@@ -1,8 +1,8 @@
 <template>
   <v-navigation-drawer
     v-model="drawerOpened"
-    loading="true"
     absolute
+    loading="true"
     location="right"
     scrim="white"
     temporary
@@ -18,10 +18,10 @@
           <template #activator="{ props }">
             <v-btn
               :size="iconSize"
-              v-bind="props"
-              icon
               class="mr-4 mt-1"
               color="primary"
+              icon
+              v-bind="props"
               @click="openPrinterURL()"
               @click.middle="openPrinterURL()"
             >
@@ -78,9 +78,9 @@
         <v-tooltip location="bottom">
           <template #activator="{ props }">
             <v-btn
-              variant="outlined"
               size="small"
               v-bind="props"
+              variant="outlined"
             >
               {{ currentPrintingFilePath }}
             </v-btn>
@@ -126,7 +126,7 @@
       v-drop-upload="{ printers: [storedSideNavPrinter] }"
       density="compact"
     >
-      <v-list-subheader inset> Manage FDM Monster instance </v-list-subheader>
+      <v-list-subheader inset> Manage FDM Monster instance</v-list-subheader>
 
       <v-tooltip location="left">
         <template #activator="{ props }">
@@ -138,8 +138,8 @@
           >
             <template #prepend>
               <v-avatar
-                class="ml-3 mr-6 ma-5"
                 :size="iconSize"
+                class="ml-3 mr-6 ma-5"
               >
                 <v-img
                   v-if="isOctoPrint"
@@ -155,8 +155,8 @@
       </v-tooltip>
 
       <v-tooltip
-        location="left"
         v-if="isMoonraker"
+        location="left"
       >
         <template #activator="{ props }">
           <v-list-item
@@ -167,8 +167,8 @@
           >
             <template #prepend>
               <v-avatar
-                class="ml-3 mr-6 ma-5"
                 :size="iconSize"
+                class="ml-3 mr-6 ma-5"
               >
                 <span>MA</span>
               </v-avatar>
@@ -192,7 +192,7 @@
                 :size="iconSize"
                 color="grey-lighten-1"
               >
-                <v-icon :color="isEnabled ? 'primary' : 'green'"> dns </v-icon>
+                <v-icon :color="isEnabled ? 'primary' : 'green'"> dns</v-icon>
               </v-avatar>
             </template>
             <span v-if="isEnabled"> Disable Printer Location </span>
@@ -253,7 +253,7 @@
       </v-tooltip>
 
       <v-divider />
-      <v-list-subheader inset> Commands </v-list-subheader>
+      <v-list-subheader inset> Commands</v-list-subheader>
       <v-tooltip location="left">
         <template #activator="{ props }">
           <v-list-item
@@ -264,7 +264,7 @@
             @click.prevent.stop="togglePrinterConnection()"
           >
             <v-avatar :size="iconSize">
-              <v-icon> usb </v-icon>
+              <v-icon> usb</v-icon>
             </v-avatar>
             <span v-if="isStoppable"> Disconnect USB & Stop Print </span>
             <span v-else-if="isOperational"> Disconnect USB </span>
@@ -274,10 +274,7 @@
         <span> Disconnect USB, disrupting any print </span>
       </v-tooltip>
 
-      <v-tooltip
-        v-if="featureStore.hasFeature('pauseResumePrinterCommand')"
-        location="left"
-      >
+      <v-tooltip location="left">
         <template #activator="{ props }">
           <v-list-item
             :disabled="!isOnline || !isPrinting"
@@ -289,8 +286,8 @@
             "
           >
             <v-avatar :size="iconSize">
-              <v-icon v-if="!isPaused"> pause </v-icon>
-              <v-icon v-if="isPaused"> play_circle_outline </v-icon>
+              <v-icon v-if="!isPaused"> pause</v-icon>
+              <v-icon v-if="isPaused"> play_circle_outline</v-icon>
             </v-avatar>
             {{ isPaused ? 'Resume print' : 'Pause print' }}
           </v-list-item>
@@ -308,7 +305,7 @@
             @click.prevent.stop="clickStopPrint()"
           >
             <v-avatar :size="iconSize">
-              <v-icon> stop </v-icon>
+              <v-icon> stop</v-icon>
             </v-avatar>
             Cancel print
           </v-list-item>
@@ -326,7 +323,7 @@
             @click.prevent.stop="clickDeleteAllFiles()"
           >
             <v-avatar :size="iconSize">
-              <v-icon> delete </v-icon>
+              <v-icon> delete</v-icon>
             </v-avatar>
             Delete files
           </v-list-item>
@@ -343,7 +340,7 @@
             @click.prevent.stop="refreshFiles()"
           >
             <v-avatar :size="iconSize">
-              <v-icon> refresh </v-icon>
+              <v-icon> refresh</v-icon>
             </v-avatar>
             Refresh files
           </v-list-item>
@@ -360,7 +357,7 @@
             @click.prevent.stop="clickSettings()"
           >
             <v-avatar :size="iconSize">
-              <v-icon> settings </v-icon>
+              <v-icon> settings</v-icon>
             </v-avatar>
             Settings
           </v-list-item>
@@ -375,7 +372,7 @@
       v-drop-upload="{ printers: [storedSideNavPrinter] }"
       density="compact"
     >
-      <v-list-subheader inset> Files - drag 'n drop! </v-list-subheader>
+      <v-list-subheader inset> Files - drag 'n drop!</v-list-subheader>
       <v-text-field
         v-model="fileSearch"
         class="ml-5 mr-5"
@@ -386,9 +383,9 @@
       <!-- Empty file list -->
       <v-list-item v-if="!filesListed.length">
         <v-avatar :size="iconSize">
-          <v-icon> clear </v-icon>
+          <v-icon> clear</v-icon>
         </v-avatar>
-        <v-list-item-title> No files to show </v-list-item-title>
+        <v-list-item-title> No files to show</v-list-item-title>
       </v-list-item>
 
       <!-- Loading file list-->
@@ -410,7 +407,7 @@
                 v-bind="props"
                 @click="clickDownloadFile(file.path)"
               >
-                <v-icon> download </v-icon>
+                <v-icon> download</v-icon>
               </v-btn>
             </template>
             <span> Download GCode </span>
@@ -426,7 +423,7 @@
                 v-bind="props"
                 @click="clickPrintFile(file)"
               >
-                <v-icon> play_arrow </v-icon>
+                <v-icon> play_arrow</v-icon>
               </v-btn>
             </template>
             <span> Select & Print </span>
@@ -459,7 +456,7 @@
                 v-bind="props"
                 @click="deleteFile(file)"
               >
-                <v-icon color="grey-lighten-1"> delete </v-icon>
+                <v-icon color="grey-lighten-1"> delete</v-icon>
               </v-btn>
             </template>
             <span> Delete file </span>
@@ -482,7 +479,6 @@ import { PrinterJobService } from '@/backend/printer-job.service'
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import { interpretStates } from '@/shared/printer-state.constants'
 import { useSettingsStore } from '@/store/settings.store'
-import { useFeatureStore } from '@/store/features.store'
 import {
   getServiceName,
   isMoonrakerType,
@@ -492,7 +488,6 @@ import { useDialog } from '@/shared/dialog.composable'
 
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
-const featureStore = useFeatureStore()
 
 const iconSize = ref(36)
 const fileSearch = ref<string | undefined>(undefined)

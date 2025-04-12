@@ -4,40 +4,40 @@
       <v-avatar>
         <v-icon>settings</v-icon>
       </v-avatar>
-      <v-toolbar-title> Emergency Commands </v-toolbar-title>
+      <v-toolbar-title> Emergency Commands</v-toolbar-title>
     </v-toolbar>
     <v-list
-      subheader
       lines="three"
+      subheader
     >
       <v-list-subheader>
         Emergency Commands to rectify problematic situations
       </v-list-subheader>
 
       <v-list-item>
-        <v-list-item-title> Batch disabling </v-list-item-title>
+        <v-list-item-title> Batch disabling</v-list-item-title>
         <v-list-item-subtitle>
           Disable all printers in batch (will not affect print)
           <br />
           <v-btn
             :disabled="isLoading || noPrintersOrAllDisabled"
+            class="ml-4"
             color="primary"
             @click="batchToggleEnabled(false)"
-            class="ml-4"
           >
             Batch disable
           </v-btn>
           <v-progress-circular
             v-if="isLoading"
+            class="ml-2"
             indeterminate
             size="30"
             width="4"
-            class="ml-2"
           />
           <v-icon
             v-if="noPrintersOrAllDisabled"
-            color="warning"
             class="ml-2"
+            color="warning"
           >
             warning
           </v-icon>
@@ -45,110 +45,88 @@
       </v-list-item>
 
       <v-list-item>
-        <v-list-item-title> Batch enabling </v-list-item-title>
+        <v-list-item-title> Batch enabling</v-list-item-title>
         <v-list-item-subtitle>
           Enabling all printers in batch (will not affect print and it will skip
           printers in maintenance mode)
           <br />
           <v-btn
             :disabled="isLoading || noPrintersOrAllEnabled"
+            class="ml-4"
             color="primary"
             @click="batchToggleEnabled(true)"
-            class="ml-4"
           >
             Batch enable
           </v-btn>
           <v-progress-circular
             v-if="isLoading"
+            class="ml-2"
             indeterminate
             size="30"
             width="4"
-            class="ml-2"
           />
           <v-icon
             v-if="noPrintersOrAllEnabled"
-            color="warning"
-            class="ml-2"
             v-tooltip.bottom="'No printers available'"
-            >warning</v-icon
-          >
+            class="ml-2"
+            color="warning"
+            >warning
+          </v-icon>
         </v-list-item-subtitle>
       </v-list-item>
 
       <v-list-item>
-        <v-list-item-title> Batch USB connect </v-list-item-title>
+        <v-list-item-title> Batch USB connect</v-list-item-title>
         <v-list-item-subtitle>
           Connect all USB devices
           <br />
           <v-btn
-            :disabled="
-              !hasConnectUsbFeature || isLoading || noPrintersOrAllDisabled
-            "
+            :disabled="isLoading || noPrintersOrAllDisabled"
+            class="ml-4"
             color="primary"
             @click="connectUSBs"
-            class="ml-4"
           >
             <v-icon class="mr-2">usb</v-icon>
             Connect USBs
           </v-btn>
-          <v-alert
-            v-if="!hasConnectUsbFeature"
-            class="ml-4 mt-2"
-            type="warning"
-            color="orange"
-          >
-            <v-icon class="mr-2">warning</v-icon> This feature requires an FDM
-            Monster server update.
-          </v-alert>
           <v-progress-circular
             v-if="isLoading"
+            class="ml-2"
             indeterminate
             size="30"
             width="4"
-            class="ml-2"
           />
         </v-list-item-subtitle>
         <v-list-item-subtitle class="mt-2">
           Connect all Sockets
           <br />
           <v-btn
-            :disabled="
-              !hasConnectSocketFeature || isLoading || noPrintersOrAllDisabled
-            "
+            :disabled="isLoading || noPrintersOrAllDisabled"
+            class="ml-4"
             color="primary"
             @click="connectSockets"
-            class="ml-4"
           >
             <v-icon class="mr-2">hub</v-icon>
             Connect Sockets
           </v-btn>
         </v-list-item-subtitle>
-        <v-alert
-          v-if="!hasConnectSocketFeature"
-          class="ml-4 mt-2"
-          type="warning"
-          color="orange"
-        >
-          <v-icon class="mr-2">warning</v-icon> This feature requires an FDM
-          Monster server update.
-        </v-alert>
         <v-progress-circular
           v-if="isLoading"
+          class="ml-2"
           indeterminate
           size="30"
           width="4"
-          class="ml-2"
         />
       </v-list-item>
     </v-list>
 
     <div class="ma-3">
-      <v-alert> Test all OctoPrint response times </v-alert>
+      <v-alert> Test all OctoPrint response times</v-alert>
       <div class="ml-6">
         <v-btn
+          :loading="isLoading"
           color="primary"
           @click="clickFetchNameState()"
-          :loading="isLoading"
         >
           Measure network response times
         </v-btn>
@@ -157,10 +135,10 @@
         <span v-if="namesFetched"> Response times: </span>
         <Bar
           v-if="namesFetched"
-          style="background-color: #272727"
           :data="chartConfig"
           :options="chartOptions"
           height="100"
+          style="background-color: #272727"
         />
         <span v-else
           >A graph will be shown, presenting the times in milliseconds
@@ -168,10 +146,10 @@
         >
         <v-progress-circular
           v-if="isLoading"
+          class="ml-2"
           indeterminate
           size="30"
           width="4"
-          class="ml-2"
         />
       </div>
     </div>
@@ -182,7 +160,6 @@
 import { computed, ref } from 'vue'
 import { BatchService } from '@/backend/batch.service'
 import { usePrinterStore } from '@/store/printer.store'
-import { useFeatureStore } from '@/store/features.store'
 import {
   BarElement,
   CategoryScale,
@@ -209,7 +186,6 @@ export type BatchOctoPrintSettingsDto = {
 }
 
 const printerStore = usePrinterStore()
-const featureStore = useFeatureStore()
 
 const isLoading = ref(false)
 const namesFetched = ref(false)
@@ -255,13 +231,6 @@ const noPrintersOrAllEnabled = computed(() => {
     printerStore.printers.length === 0 ||
     printerStore.printers.every((printer) => !!printer.enabled)
   )
-})
-
-const hasConnectUsbFeature = computed(() => {
-  return featureStore.hasFeature('batchConnectUsbCalls')
-})
-const hasConnectSocketFeature = computed(() => {
-  return featureStore.hasFeature('batchConnectSocketCalls')
 })
 
 async function clickFetchNameState() {
