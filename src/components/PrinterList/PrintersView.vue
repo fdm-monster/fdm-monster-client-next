@@ -7,13 +7,13 @@
         <v-select
           v-if="hasPrinterGroupFeature && groupsWithPrinters.length"
           v-model="filteredGroupsWithPrinters"
-          multiple
           :items="groupsWithPrinters"
-          item-title="name"
           :return-object="true"
+          item-title="name"
+          label="Filter by groups"
+          multiple
           placeholder="Select group to filter by"
           prepend-icon="filter_list"
-          label="Filter by groups"
         />
         <v-text-field
           v-model="search"
@@ -30,10 +30,10 @@
         :headers="tableHeaders"
         :items="printers"
         :search="search"
-        single-expand
         class="elevation-1"
         item-key="id"
         show-expand
+        single-expand
         @click:row="clickRow"
       >
         <template #no-data>
@@ -54,8 +54,8 @@
             </v-toolbar-title>
             <v-btn
               class="ml-3"
-              variant="outlined"
               type="button"
+              variant="outlined"
               @click="openImportOctoFarmPrintersDialog()"
             >
               <v-icon>publish</v-icon>
@@ -63,8 +63,8 @@
             </v-btn>
             <v-btn
               class="ml-3"
-              variant="outlined"
               type="button"
+              variant="outlined"
               @click="openCreatePrinterDialog()"
             >
               <v-icon>add</v-icon>
@@ -112,9 +112,9 @@
           <v-chip
             v-for="group of groupsOfPrinter(item.id)"
             :key="group.id"
+            class="ml-2"
             closable
             size="small"
-            class="ml-2"
             @click:close="deletePrinterFromGroup(group.id, item.id)"
           >
             {{ group.name }}
@@ -136,7 +136,7 @@
               density="compact"
               style="border: 1px solid dimgray"
             >
-              <v-list-subheader> ADD TO GROUP </v-list-subheader>
+              <v-list-subheader> ADD TO GROUP</v-list-subheader>
               <v-list-item-group>
                 <v-list-item
                   v-for="(group, index) in nonGroupsOfPrinter(item.id)"
@@ -189,16 +189,16 @@
         <v-container>
           <v-chip-group
             v-model="selectedGroup"
-            selected-class="primary--text"
             column
+            selected-class="primary--text"
             @update:model-value="selectGroupForUpdatingName()"
           >
             <v-chip
               v-for="group of groupsWithPrinters"
               :key="group.id"
-              size="small"
-              closable
               class="mr-3"
+              closable
+              size="small"
               @click:close="deleteGroup(group.id)"
             >
               {{ group.name }}
@@ -234,7 +234,7 @@
           >
             Name
           </v-text-field>
-          <v-btn @click="createGroup()"> Create new group </v-btn>
+          <v-btn @click="createGroup()"> Create new group</v-btn>
         </v-container>
       </v-card-text>
     </v-card>

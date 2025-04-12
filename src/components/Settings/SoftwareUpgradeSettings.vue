@@ -4,11 +4,11 @@
       <v-avatar>
         <v-icon>upgrade</v-icon>
       </v-avatar>
-      <v-toolbar-title> Software Upgrade </v-toolbar-title>
+      <v-toolbar-title> Software Upgrade</v-toolbar-title>
     </v-toolbar>
     <v-list lines="three">
       <v-list-item>
-        <v-list-item-title> Current versions in use: </v-list-item-title>
+        <v-list-item-title> Current versions in use:</v-list-item-title>
         <v-list-item-subtitle>
           Your server's version is: {{ serverVersion }}
         </v-list-item-subtitle>
@@ -30,11 +30,11 @@
     </v-list>
     <v-divider />
     <v-list
-      subheader
       lines="three"
+      subheader
     >
       <v-list-item>
-        <v-list-item-title> Server upgrade </v-list-item-title>
+        <v-list-item-title> Server upgrade</v-list-item-title>
         <v-list-item-subtitle>
           Please visit
           <a href="https://docs.fdm-monster.net/docs/installing/">
@@ -47,7 +47,7 @@
     <v-divider />
     <v-list lines="three">
       <v-list-item>
-        <v-list-item-title> Client upgrade </v-list-item-title>
+        <v-list-item-title> Client upgrade</v-list-item-title>
         <v-list-item-subtitle>
           Please visit
           <a
@@ -63,7 +63,7 @@
         </v-list-item-subtitle>
       </v-list-item>
       <v-list-item>
-        <v-list-item-title> Select a release to upgrade to: </v-list-item-title>
+        <v-list-item-title> Select a release to upgrade to:</v-list-item-title>
         <v-list-item-subtitle class="mt-2">
           Minimum required version: {{ minimum?.tag_name }}
         </v-list-item-subtitle>
@@ -85,7 +85,7 @@
         </v-radio-group>
         <div>
           <v-alert
-            v-if="showPrereleases"
+            v-if="showPreReleases"
             color="primary"
             max-width="500px"
           >
@@ -99,7 +99,7 @@
             label="Allow downgrade"
           />
           <v-checkbox
-            v-model="showPrereleases"
+            v-model="showPreReleases"
             :disabled="getIsCurrentUnstable"
             :label="
               getIsCurrentUnstable
@@ -137,7 +137,6 @@ import { computed, onMounted, ref } from 'vue'
 import { version as packageJsonVersion } from '../../../package.json'
 import { IRelease } from '@/models/server/client-releases.model'
 import { compare, minor } from 'semver'
-import { useFeatureStore } from '@/store/features.store'
 
 const errorMessage = ref('')
 const loading = ref(true)
@@ -149,9 +148,8 @@ const version = ref(packageJsonVersion)
 const current = ref<IRelease>()
 const minimum = ref<IRelease>()
 const selectedRelease = ref<string>()
-const showPrereleases = ref<boolean>(false)
+const showPreReleases = ref<boolean>(false)
 const loadedClientReleases = ref<IRelease[]>([])
-const featureStore = useFeatureStore()
 
 onMounted(async () => {
   await loadReleases()
@@ -166,23 +164,21 @@ async function loadReleases() {
   errorMessage.value = ''
   rateLimitExceeded.value = false
 
-  if (featureStore.hasFeature('githubRateLimitApi')) {
-    try {
-      const rateLimit = await AppService.getGithubRateLimit()
-      if (rateLimit.rate.remaining === 0) {
-        const limitResetAt = new Date(rateLimit.rate.reset)
-        const time = limitResetAt.toLocaleTimeString()
-        const diff = rateLimit.rate.reset * 1000 - Date.now()
-        const diffMinutes = Math.ceil(diff / 60000)
-        errorMessage.value = `Server has reached a rate limit of the Github API. This limit will be reset at ${time} (in ${diffMinutes} minutes)`
-        loading.value = false
-        rateLimitExceeded.value = true
-        return
-      }
-    } catch (e) {
+  try {
+    const rateLimit = await AppService.getGithubRateLimit()
+    if (rateLimit.rate.remaining === 0) {
+      const limitResetAt = new Date(rateLimit.rate.reset)
+      const time = limitResetAt.toLocaleTimeString()
+      const diff = rateLimit.rate.reset * 1000 - Date.now()
+      const diffMinutes = Math.ceil(diff / 60000)
+      errorMessage.value = `Server has reached a rate limit of the Github API. This limit will be reset at ${time} (in ${diffMinutes} minutes)`
       loading.value = false
+      rateLimitExceeded.value = true
       return
     }
+  } catch (e) {
+    loading.value = false
+    return
   }
 
   try {
@@ -206,7 +202,7 @@ const filteredReleases = computed(() => {
 
     return (
       isMinimumVersionOrHigher &&
-      (isCurrentUnstable() || showPrereleases.value || !isReleaseCandidate) &&
+      (isCurrentUnstable() || showPreReleases.value || !isReleaseCandidate) &&
       !isDraft
     )
   })
