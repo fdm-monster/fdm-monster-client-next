@@ -917,7 +917,7 @@ __metadata:
     vue-router: "npm:4.5.1"
     vue-tsc: "npm:2.2.10"
     vuedraggable: "npm:4.1.0"
-    vuetify: "npm:3.8.3"
+    vuetify: "npm:3.8.4"
   languageName: unknown
   linkType: soft
 
@@ -8631,9 +8631,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vuetify@npm:3.8.3":
-  version: 3.8.3
-  resolution: "vuetify@npm:3.8.3"
+"vuetify@npm:3.8.4":
+  version: 3.8.4
+  resolution: "vuetify@npm:3.8.4"
   peerDependencies:
     typescript: ">=4.7"
     vite-plugin-vuetify: ">=2.1.0"
@@ -8646,7 +8646,7 @@ __metadata:
       optional: true
     webpack-plugin-vuetify:
       optional: true
-  checksum: 10c0/e08dc6b0e60fe621f07dae7e017c2ffa26572b9a1dfdabc066ced3ad7d6baac06a56e5f8aec4e997197ee6c94800ac8b1a6286db8d7c6cffca9b7dfb2cb87357
+  checksum: 10c0/366e4aead1115f7534263166d767d8f55214c7dbca178a25eb2418f39d0ea64540d9db5fa814486e7eeabb11ea703230d2dcbb08cd93ab7a48e9c1a9409fb040
   languageName: node
   linkType: hard
 
