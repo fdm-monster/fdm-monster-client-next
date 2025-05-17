@@ -40,6 +40,15 @@
                       <span>Enable Experimental Moonraker Support</span>
                     </template>
                   </v-checkbox>
+                  <v-checkbox
+                    v-model="experimentalPrusaLinkSupport"
+                    label="Enable Experimental PrusaLink Support"
+                    hide-details
+                  >
+                    <template v-slot:label>
+                      <span>Enable Experimental PrusaLink Support</span>
+                    </template>
+                  </v-checkbox>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -137,6 +146,7 @@ import { onMounted, ref } from 'vue'
 import { SettingsService } from '@/backend'
 
 const experimentalMoonrakerSupport = ref(false)
+const experimentalPrusaLinkSupport = ref(false)
 const experimentalTypeORMSupport = ref(false)
 const experimentalClientSupport = ref(false)
 
@@ -144,6 +154,7 @@ async function loadSettings() {
   const settings = await SettingsService.getSettings()
   experimentalMoonrakerSupport.value =
     settings.server.experimentalMoonrakerSupport
+  experimentalPrusaLinkSupport.value = settings.server.experimentalPrusaLinkSupport
   experimentalTypeORMSupport.value = settings.server.experimentalTypeormSupport
   experimentalClientSupport.value = settings.server.experimentalClientSupport
 }
@@ -156,6 +167,9 @@ const saveSettings = async () => {
   await SettingsService.updateExperimentalMoonrakerSupport(
     experimentalMoonrakerSupport.value
   )
+  await SettingsService.updateExperimentalPrusaLinkSupport(
+    experimentalPrusaLinkSupport.value
+  )
   await SettingsService.updateExperimentalClientSupport(
     experimentalClientSupport.value
   )
@@ -164,6 +178,7 @@ const saveSettings = async () => {
 
 const resetSettings = async () => {
   await SettingsService.updateExperimentalMoonrakerSupport(false)
+  await SettingsService.updateExperimentalPrusaLinkSupport(false)
   await SettingsService.updateExperimentalClientSupport(false)
   await loadSettings()
 }

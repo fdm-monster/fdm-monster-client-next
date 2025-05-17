@@ -1,8 +1,21 @@
 # Develop
 
+## Client 0.0.20
+
+Feature 
+
+- Introduce UI tweaks for FDM Monster 1.9 PrusaLink support
+
+Fixes
+
+- PrusaLink support should not be dependent on whether Klipper support is enabled. Fixed with new API subfeature, which was missing.
+
+## Client 0.0.19
+
 Chore
 
 - Remove OctoPrint reference in "Refreshing OctoPrint connection state"
+- Remove all unused feature flags - the features are not optional
  
 ## Client 0.0.18
 

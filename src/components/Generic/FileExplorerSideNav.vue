@@ -141,11 +141,10 @@
                 :size="iconSize"
                 class="ml-3 mr-6 ma-5"
               >
-                <v-img
-                  v-if="isOctoPrint"
-                  src="/img/octoprint-tentacle.svg"
-                />
-                <span v-else>MO</span>
+                <v-img v-if="isOctoPrint" :src="octoPrintIcon"></v-img>
+                <span v-else-if="isMoonraker">MR</span>
+                <span v-else-if="isPrusaLink">PL</span>
+                <span v-else>?</span>
               </v-avatar>
             </template>
             <span> Open {{ serviceName }} </span>
@@ -479,11 +478,12 @@ import { PrinterJobService } from '@/backend/printer-job.service'
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import { interpretStates } from '@/shared/printer-state.constants'
 import { useSettingsStore } from '@/store/settings.store'
+import octoPrintIcon from "@/assets/octoprint-tentacle.svg";
 import {
   getServiceName,
   isMoonrakerType,
-  isOctoPrintType
-} from '@/utils/printer-type.utils'
+  isOctoPrintType, isPrusaLinkType,
+} from "@/utils/printer-type.utils";
 import { useDialog } from '@/shared/dialog.composable'
 
 const printersStore = usePrinterStore()
@@ -506,6 +506,10 @@ const isOctoPrint = computed(() => {
 
 const isMoonraker = computed(() => {
   return isMoonrakerType(storedSideNavPrinter.value?.printerType)
+})
+
+const isPrusaLink = computed(() => {
+  return isPrusaLinkType(storedSideNavPrinter.value?.printerType);
 })
 
 const serviceName = computed(() =>
