@@ -76,6 +76,11 @@ export class SettingsService extends BaseService {
     return (await this.put(path, { enabled })) as SettingsDto // Assuming it returns SettingsDto
   }
 
+  static async updateExperimentalPrusaLinkSupport(enabled: boolean) {
+    const path = ServerApi.updateExperimentalPrusaLinkSupportRoute;
+    return (await this.put(path, { enabled })) as SettingsDto; // Assuming it returns SettingsDto
+  }
+
   static async updateExperimentalClientSupport(enabled: boolean) {
     const path = ServerApi.updateExperimentalClientSupportRoute
     return (await this.put(path, { enabled })) as SettingsDto // Assuming it returns SettingsDto

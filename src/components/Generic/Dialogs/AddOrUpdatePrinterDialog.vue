@@ -29,21 +29,21 @@
               <v-col
                 v-for="item of serviceTypes"
                 :key="item.name"
-                cols="12"
-                md="6"
+                cols="4"
+                md="4"
               >
                 <v-item v-slot="{ isSelected, toggle }">
                   <v-card
                     :color="isSelected ? 'primary' : 'blue-grey darken-4'"
                     class="d-flex align-center justify-center elevation-8"
-                    height="75px"
+                    height="60px"
                     width="225px"
                     @click="toggle"
                   >
                     <v-img
-                      :src="item.logo"
                       :height="item.height"
-                      max-width="125px"
+                      :src="item.logo"
+                      max-width="100px"
                       width="125px"
                     />
                     <v-scroll-y-transition>
@@ -88,11 +88,36 @@
             />
 
             <v-text-field
+              v-if="formData.printerType === OctoPrintType"
               v-model="formData.apiKey"
               :counter="apiKeyRules.length"
               class="ma-1"
               hint="User or Application Key with 32 or 43 characters (Global API key will fail)"
-              label="API Key*"
+              :label="
+                formData.printerType === OctoPrintType || formData.printerType === MoonrakerType
+                  ? 'API Key (unsupported)'
+                  : 'API Key (required)*'
+              "
+              persistent-hint
+              required
+            />
+
+            <v-text-field
+              v-if="formData.printerType === PrusaLinkType"
+              v-model="formData.username"
+              class="ma-1"
+              hint="Username (often 'maker')"
+              label="Username"
+              persistent-hint
+              required
+            />
+
+            <v-text-field
+              v-if="formData.printerType === PrusaLinkType"
+              v-model="formData.password"
+              class="ma-1"
+              hint="Password (visit your printer settings)"
+              label="Password"
               persistent-hint
               required
             />
@@ -102,24 +127,24 @@
             v-if="showChecksPanel"
             :cols="4"
           >
-            <v-btn @click="showChecksPanel = false"> Hide checks </v-btn>
+            <v-btn @click="showChecksPanel = false"> Hide checks</v-btn>
           </PrinterChecksPanel>
         </v-row>
         <v-alert
-          color="primary"
-          class="my-3"
           v-if="printerValidationError?.length"
+          class="my-3"
+          color="primary"
         >
           {{ printerValidationError }}
           <v-checkbox
-            color="warning"
             v-model="forceSavePrinter"
+            color="warning"
             label="Force save"
           />
         </v-alert>
         <v-alert
-          class="my-3"
           v-if="validatingPrinter"
+          class="my-3"
         >
           Validating printer
           <v-progress-circular indeterminate />
@@ -163,217 +188,240 @@
 </template>
 
 <script lang="ts" setup>
-import { inject } from 'vue'
+import { inject } from "vue";
+import { generateInitials, newRandomNamePair } from "@/shared/noun-adjectives.data";
+import { usePrinterStore } from "@/store/printer.store";
+import { PrintersService } from "@/backend";
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
+import { useTestPrinterStore } from "@/store/test-printer.store";
+import { CreatePrinter, getDefaultCreatePrinter } from "@/models/printers/crud/create-printer.model";
+import { useDialog } from "@/shared/dialog.composable";
+import { AppConstants } from "@/shared/app.constants";
+import { useSnackbar } from "@/shared/snackbar.composable";
+import { AxiosError } from "axios";
+import { useFeatureStore } from "@/store/features.store";
+import klipperLogoSvg from "@/assets/klipper-logo.svg";
+import octoPrintTentacleSvg from "@/assets/octoprint-tentacle.svg";
+import prusaLinkLogoSvg from "@/assets/prusa-link-logo.svg";
 import {
-  generateInitials,
-  newRandomNamePair
-} from '@/shared/noun-adjectives.data'
-import { usePrinterStore } from '@/store/printer.store'
-import { PrintersService } from '@/backend'
-import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { useTestPrinterStore } from '@/store/test-printer.store'
-import {
-  CreatePrinter,
-  getDefaultCreatePrinter
-} from '@/models/printers/crud/create-printer.model'
-import { useDialog } from '@/shared/dialog.composable'
-import { AppConstants } from '@/shared/app.constants'
-import { useSnackbar } from '@/shared/snackbar.composable'
-import { AxiosError } from 'axios'
-import { useFeatureStore } from '@/store/features.store'
-import klipperLogoSvg from '@/assets/klipper-logo.svg'
-import octoPrintTentacleSvg from '@/assets/octoprint-tentacle.svg'
+  getServiceName,
+  isMoonrakerType, isPrusaLinkType,
+  MoonrakerType,
+  OctoPrintType,
+  PrusaLinkType,
+} from "@/utils/printer-type.utils";
 
-const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
-const printersStore = usePrinterStore()
-const testPrinterStore = useTestPrinterStore()
-const featureStore = useFeatureStore()
-const appConstants = inject('appConstants') as AppConstants
-const snackbar = useSnackbar()
+const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog);
+const printersStore = usePrinterStore();
+const testPrinterStore = useTestPrinterStore();
+const featureStore = useFeatureStore();
+const appConstants = inject("appConstants") as AppConstants;
+const snackbar = useSnackbar();
 
-const printerValidationError = ref<null | string>(null)
-const validatingPrinter = ref(false)
-const forceSavePrinter = ref(false)
-const showChecksPanel = ref(false)
-const copyPasteConnectionString = ref('')
-const formData = ref(getDefaultCreatePrinter())
+const printerValidationError = ref<null | string>(null);
+const validatingPrinter = ref(false);
+const forceSavePrinter = ref(false);
+const showChecksPanel = ref(false);
+const copyPasteConnectionString = ref("");
+const formData = ref(getDefaultCreatePrinter());
 
 const serviceTypes = computed(() => {
-  if (featureStore.hasFeature('multiplePrinterServices')) {
+  if (featureStore.hasFeature("multiplePrinterServices")) {
     const feature = featureStore.getFeature<{ types: string[] }>(
-      'multiplePrinterServices'
-    )
-    const hasKlipperSupport = feature?.subFeatures?.types?.includes('klipper')
-    if (hasKlipperSupport) {
-      return [
-        {
-          name: 'OctoPrint',
-          logo: octoPrintTentacleSvg,
-          height: '75px'
-        },
-        {
-          name: 'Klipper',
-          logo: klipperLogoSvg,
-          height: '75px'
-        }
-      ]
-    }
+      "multiplePrinterServices",
+    );
+    const hasKlipperSupport = feature?.subFeatures?.types?.includes("klipper");
+    const hasPrusaLinkSupport = feature?.subFeatures?.types?.includes("prusaLink");
+
+    return [
+      {
+        name: getServiceName(OctoPrintType),
+        logo: octoPrintTentacleSvg,
+        height: "60px",
+      },
+      ...(hasKlipperSupport ? [{
+        name: getServiceName(MoonrakerType),
+        logo: klipperLogoSvg,
+        height: "60px",
+      }] : []),
+      ...(hasPrusaLinkSupport ? [{
+        name: getServiceName(PrusaLinkType),
+        logo: prusaLinkLogoSvg,
+        height: "20px",
+      }] : []),
+    ];
   }
 
   return [
     {
-      name: 'OctoPrint',
+      name: "OctoPrint",
       logo: octoPrintTentacleSvg,
-      height: '75px'
-    }
-  ]
-})
+      height: "75px",
+    },
+  ];
+});
 
 const printerId = computed(() => {
-  return printersStore.updateDialogPrinter?.id
-})
+  return printersStore.updateDialogPrinter?.id;
+});
 
 onMounted(async () => {
   if (printerId.value) {
-    const crudeData = printersStore.printer(printerId.value) as CreatePrinter
-    formData.value = PrintersService.convertPrinterToCreateForm(crudeData)
+    const crudeData = printersStore.printer(printerId.value) as CreatePrinter;
+    formData.value = PrintersService.convertPrinterToCreateForm(crudeData);
   }
-})
+});
 
 watch(printerId, (val) => {
-  if (!val) return
-  const printer = printersStore.printer(val) as CreatePrinter
-  formData.value = PrintersService.convertPrinterToCreateForm(printer)
-})
+  if (!val) return;
+  const printer = printersStore.printer(val) as CreatePrinter;
+  formData.value = PrintersService.convertPrinterToCreateForm(printer);
+});
 
 const storedPrinter = computed(() => {
-  return printersStore.updateDialogPrinter
-})
+  return printersStore.updateDialogPrinter;
+});
 
 const isUpdating = computed(() => {
-  return !!storedPrinter.value
-})
+  return !!storedPrinter.value;
+});
 
 const submitButtonText = computed(() => {
-  return isUpdating ? 'Save' : 'Create'
-})
+  return isUpdating ? "Save" : "Create";
+});
 
 const avatarInitials = computed(() => {
   if (formData) {
-    return generateInitials(formData.value?.name)
+    return generateInitials(formData.value?.name);
   }
-  return '?'
-})
+  return "?";
+});
 
 const printerNameRules = computed(() => {
-  return { required: true, max: appConstants.maxPrinterNameLength }
-})
+  return { required: true, max: appConstants.maxPrinterNameLength };
+});
 
 const apiKeyRules = computed(() => {
   return {
     required: true,
     length: appConstants.apiKeyLength,
-    alpha_num: true
-  }
-})
+    alpha_num: true,
+  };
+});
 
 function resetForm() {
-  formData.value = getDefaultCreatePrinter()
+  formData.value = getDefaultCreatePrinter();
 }
 
 function openTestPanel() {
-  showChecksPanel.value = true
+  showChecksPanel.value = true;
 }
 
 async function testPrinter() {
-  if (!formData) return
+  if (!isValid()) return;
 
-  testPrinterStore.clearEvents()
-  openTestPanel()
+  testPrinterStore.clearEvents();
+  openTestPanel();
 
   const { correlationToken } = await testPrinterStore.createTestPrinter(
-    formData.value as CreatePrinter
-  )
-  testPrinterStore.currentCorrelationToken = correlationToken
+    formData.value as CreatePrinter,
+  );
+  testPrinterStore.currentCorrelationToken = correlationToken;
 }
 
+const isValid = () => {
+  const form = formData.value;
+  if (!form) return false;
+  if (isMoonrakerType(form.printerType)) {
+    return form.printerURL?.length && form.name?.length;
+  }
+  if (isPrusaLinkType(form.printerType)) {
+    return form.printerURL?.length && form.name?.length && form.username?.length && form.password?.length;
+  }
+  return form.printerURL?.length && form.name?.length && form.apiKey?.length;
+};
+
 async function createPrinter(newPrinterData: CreatePrinter) {
-  await printersStore.createPrinter(newPrinterData, forceSavePrinter.value)
+  await printersStore.createPrinter(newPrinterData, forceSavePrinter.value);
   snackbar.openInfoMessage({
-    title: `Printer ${newPrinterData.name} created`
-  })
+    title: `Printer ${newPrinterData.name} created`,
+  });
 }
 
 async function updatePrinter(updatedPrinter: CreatePrinter) {
-  const printerId = updatedPrinter.id
+  const printerId = updatedPrinter.id;
 
   await printersStore.updatePrinter(
     {
       printerId: printerId as string,
-      updatedPrinter
+      updatedPrinter,
     },
-    forceSavePrinter.value
-  )
+    forceSavePrinter.value,
+  );
 
   snackbar.openInfoMessage({
-    title: `Printer ${updatedPrinter.name} updated`
-  })
+    title: `Printer ${updatedPrinter.name} updated`,
+  });
 }
 
 async function submit() {
-  if (!formData) return
+  if (!isValid()) return;
 
-  printerValidationError.value = null
-  validatingPrinter.value = true
+  printerValidationError.value = null;
+  validatingPrinter.value = true;
 
   if (
     formData.value.printerURL?.length &&
-    !formData.value.printerURL?.startsWith('http://') &&
-    !formData.value.printerURL?.startsWith('https://')
+    !formData.value.printerURL?.startsWith("http://") &&
+    !formData.value.printerURL?.startsWith("https://")
   ) {
-    formData.value.printerURL += 'https://'
+    formData.value.printerURL += "https://";
   }
 
-  const createdPrinter = formData.value as CreatePrinter
+  const createdPrinter = formData.value as CreatePrinter;
+
+  if (isMoonrakerType(createdPrinter.printerType) || isPrusaLinkType(createdPrinter.printerType)) {
+    createdPrinter.apiKey = "";
+  }
 
   try {
     if (isUpdating.value) {
-      await updatePrinter(createdPrinter)
+      await updatePrinter(createdPrinter);
     } else {
-      await createPrinter(createdPrinter)
+      await createPrinter(createdPrinter);
     }
-    closeDialog()
+    closeDialog();
   } catch (error) {
     if (error instanceof AxiosError) {
       printerValidationError.value =
-        error.response?.data?.error || error.message
-      snackbar.error('Validation Failed', (error as Error).message)
+        error.response?.data?.error || error.message;
+      snackbar.error("Validation Failed", (error as Error).message);
     } else {
-      printerValidationError.value = (error as Error).message
-      snackbar.error('Error', (error as Error).message)
+      printerValidationError.value = (error as Error).message;
+      snackbar.error("Error", (error as Error).message);
     }
   } finally {
-    validatingPrinter.value = false
-    forceSavePrinter.value = false
+    validatingPrinter.value = false;
+    forceSavePrinter.value = false;
   }
 }
 
 async function duplicatePrinter() {
-  formData.value.name = newRandomNamePair()
-  printersStore.updateDialogPrinter = undefined
-  printerValidationError.value = null
-  forceSavePrinter.value = false
-  printerValidationError.value = null
+  formData.value.name = newRandomNamePair();
+  printersStore.updateDialogPrinter = undefined;
+  printerValidationError.value = null;
+  forceSavePrinter.value = false;
+  printerValidationError.value = null;
 }
 
 function closeDialog() {
-  dialog.closeDialog()
-  forceSavePrinter.value = false
-  printerValidationError.value = null
-  showChecksPanel.value = false
-  testPrinterStore.clearEvents()
-  resetForm()
-  printersStore.updateDialogPrinter = undefined
-  copyPasteConnectionString.value = ''
+  dialog.closeDialog();
+  forceSavePrinter.value = false;
+  printerValidationError.value = null;
+  showChecksPanel.value = false;
+  testPrinterStore.clearEvents();
+  resetForm();
+  printersStore.updateDialogPrinter = undefined;
+  copyPasteConnectionString.value = "";
 }
 </script>

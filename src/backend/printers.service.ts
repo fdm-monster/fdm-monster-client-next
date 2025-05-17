@@ -17,6 +17,8 @@ export class PrintersService extends BaseService {
     newFormData.printerURL = printer.printerURL
     newFormData.name = printer.name || newRandomNamePair()
     newFormData.apiKey = printer.apiKey
+    newFormData.username = printer.username
+    newFormData.password = printer.password
     newFormData.enabled = printer.enabled
     return newFormData
   }
@@ -30,13 +32,13 @@ export class PrintersService extends BaseService {
   static async getPrinters() {
     const path = ServerApi.printerRoute
 
-    return (await this.get<PrinterDto[]>(path)) as PrinterDto[]
+    return await this.get<PrinterDto[]>(path)
   }
 
   static async getPrinterLoginDetails(printerId: IdType) {
     const path = ServerApi.getPrinterLoginDetailsRoute(printerId)
 
-    return (await this.get<LoginDetails>(path)) as LoginDetails
+    return await this.get<LoginDetails>(path)
   }
 
   static async restartOctoPrint(printerId: IdType) {
