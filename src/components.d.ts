@@ -38,7 +38,7 @@ declare module 'vue' {
     NavigationBar: typeof import('./components/NavigationBar.vue')['default']
     NotFoundView: typeof import('./components/NotFound/NotFoundView.vue')['default']
     OctoFarmImportDialog: typeof import('./components/Generic/Dialogs/OctoFarmImportDialog.vue')['default']
-    OctoPrintSettings: typeof import('./components/Settings/OctoPrintSettings.vue')['default']
+    PrinterSettings: typeof import('./components/Settings/PrinterSettings.vue')['default']
     PermissionDenied: typeof import('./components/Login/PermissionDenied.vue')['default']
     PrinterChecksPanel: typeof import('./components/Generic/Dialogs/PrinterChecksPanel.vue')['default']
     PrinterConnectionAction: typeof import('./components/Generic/Actions/PrinterConnectionAction.vue')['default']
