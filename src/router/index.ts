@@ -3,7 +3,7 @@ import PrinterGridView from '@/components/PrinterGrid/PrinterGridView.vue'
 import PrintersView from '@/components/PrinterList/PrintersView.vue'
 import Settings from '@/components/Settings/SettingsView.vue'
 import UserManagementSettings from '@/components/Settings/UserManagementSettings.vue'
-import OctoPrintSettings from '@/components/Settings/OctoPrintSettings.vue'
+import PrinterSettings from '@/components/Settings/PrinterSettings.vue'
 import FloorSettings from '@/components/Settings/FloorSettings.vue'
 import AboutView from '@/components/AboutHelp/AboutView.vue'
 import EmergencyCommands from '@/components/Settings/EmergencyCommands.vue'
@@ -105,9 +105,9 @@ const router = createRouter({
           component: UserManagementSettings
         },
         {
-          path: 'octoprint',
+          path: 'printer',
           meta: NeedsAuth,
-          component: OctoPrintSettings
+          component: PrinterSettings
         },
         {
           path: 'emergency-commands',
@@ -131,11 +131,6 @@ const router = createRouter({
         }
       ]
     },
-    // {
-    //   path: "/repair-log",
-    //   name: "Repair Log",
-    //   component: RepairLogView,
-    // },
     {
       path: '/statistics',
       name: RouteNames.PrintStatistics,

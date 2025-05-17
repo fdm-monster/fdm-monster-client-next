@@ -1,5 +1,15 @@
 # Develop
 
+## Client 0.0.21
+
+Feature
+
+- Ability to set upload timeout separately
+
+Chore
+
+- Rename OctoPrint settings page to Printer
+
 ## Client 0.0.20
 
 Feature 
