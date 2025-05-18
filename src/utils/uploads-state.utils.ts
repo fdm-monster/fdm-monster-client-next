@@ -7,7 +7,7 @@ import { QueuedUpload } from '@/models/uploads/queued-upload.model'
 export function convertPrinterMultiFileToQueue(
   printer: PrinterDto,
   files: File[],
-  startPrint: boolean
+  startPrint: boolean = true
 ): QueuedUpload[] {
   if (!printer) return []
 
@@ -23,7 +23,7 @@ export function convertPrinterMultiFileToQueue(
 export function convertMultiPrinterFileToQueue(
   printers: PrinterDto[],
   file: File,
-  startPrint: boolean
+  startPrint: boolean = true
 ) {
   if (!printers?.length || !file) return []
 
