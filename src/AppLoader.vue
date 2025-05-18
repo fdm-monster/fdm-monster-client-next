@@ -12,6 +12,50 @@
     />
     <br />
 
+    <div v-if="serverDisconnected">
+      <h1>FDM Monster Server Disconnected</h1>
+      <p>Did not receive an answer from the server. Please ensure the server is started and reload the page.</p>
+
+      <v-sheet class="pa-4 rounded" color="grey darken-3" width="100%">
+        <v-row>
+          <v-col>
+            <img
+              class="justify-center align-center align-content-center rounded-pill mt-8 ma-4"
+              src="/img/OIG.JYDC2RaWdz7g9.jpg"
+              style="opacity: 0.9"
+              width="200"
+            />
+          </v-col>
+          <v-col class="justify-center align-center align-content-center">
+            <v-btn color="primary mb-2" @click="reloadPage()">
+              <v-icon class="mr-2">refresh</v-icon>
+              reload the page
+            </v-btn>
+            <br />
+            <v-btn
+              color="darken-2 mb-2"
+              href="https://docs.fdm-monster.net"
+              style="color: white"
+              target="_blank"
+            >
+              <v-icon class="mr-2">menu_book</v-icon>
+              view documentation
+            </v-btn>
+            <br />
+            <v-btn
+              color="purple darken-4"
+              href="https://discord.gg/mwA8uP8CMc"
+              style="color: white"
+              target="_blank"
+            >
+              <v-icon class="mr-2">chat</v-icon>
+              join our Discord
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-sheet>
+    </div>
+
     <div
       v-if="errorCaught"
       style="margin: 50px"
@@ -123,19 +167,20 @@ import {
 } from '@/shared/auth.constants'
 import { SocketIoService } from '@/shared/socketio.service'
 
-const authStore = useAuthStore()
-const settingsStore = useSettingsStore()
-const featureStore = useFeatureStore()
-const profileStore = useProfileStore()
-const overlay = ref(false)
-const router = useRouter()
-const overlayMessage = ref('')
-const loading = ref(true)
-const errorCaught = ref()
-const errorUrl = ref()
-const errorResponse = ref()
-const snackbar = useSnackbar()
-const socketIoClient: SocketIoService = new SocketIoService()
+const authStore = useAuthStore();
+const settingsStore = useSettingsStore();
+const featureStore = useFeatureStore();
+const profileStore = useProfileStore();
+const overlay = ref(false);
+const router = useRouter();
+const overlayMessage = ref("");
+const loading = ref(true);
+const errorCaught = ref();
+const serverDisconnected = ref();
+const errorUrl = ref();
+const errorResponse = ref();
+const snackbar = useSnackbar();
+const socketIoClient: SocketIoService = new SocketIoService();
 
 function reloadPage() {
   window.location.reload()
@@ -184,6 +229,7 @@ async function loadAppWithAuthenticationReady() {
     socketIoClient.reconnect()
   }
 
+  loading.value = false;
   setOverlay(false)
 }
 
@@ -266,15 +312,32 @@ passwordChangeRequiredEventKey.on(async () => {
   setOverlay(false)
 })
 
+const serverDisconnectedKey = useEventBus(
+  "server:disconnected",
+);
+serverDisconnectedKey.on(async (event) => {
+  setOverlay(true);
+  serverDisconnected.value = true;
+  loading.value = true;
+});
+
+const serverConnectedKey = useEventBus(
+  "server:connected",
+);
+serverConnectedKey.on(async (event) => {
+  setOverlay(false);
+  serverDisconnected.value = false;
+  loading.value = false;
+});
+
 onUnmounted(() => {
-  if (socketIoClient) {
+  if (socketIoClient.socketState().setup) {
     socketIoClient.disconnect()
   }
 })
 
 onBeforeMount(async () => {
   loading.value = true
-  // Pick random string out of array of strings
   const loadingMessages = [
     'Loading FDM Monster',
     'Loading it all',
@@ -293,16 +356,12 @@ onBeforeMount(async () => {
   setOverlay(true, message)
 
   try {
-    await AppService.test()
-    // Nice test for error handling
-    // throw new Error("test");
+    await AppService.test();
   } catch (e) {
-    loading.value = false
-    errorCaught.value = e
-    errorUrl.value = 'api/test'
-    // Disable capture to sentry when it overloads
-    captureException(e)
-    return
+    loading.value = false;
+    serverDisconnected.value = true;
+    captureException(e);
+    return;
   }
 
   // If the route is wrong about login requirements, an error will be shown

@@ -67,6 +67,7 @@ const router = createRouter({
     {
       path: '/cameras',
       name: RouteNames.CameraGridView,
+      meta: NeedsAuth,
       component: CameraGridView
     },
     {

@@ -100,8 +100,8 @@
               <v-text-field
                 v-model="refreshTokenAttempts"
                 :disabled="!refreshTokenAttemptsEnabled"
-                :rules="[(val) => !!val && val >= 50]"
-                label="Refresh Token Attempts (disabled: -1)"
+                :rules="[(val) => !!val && val >= 1]"
+                label="Refresh Token Attempts (disabled: -1, range: 1 to 50)"
                 type="number"
               />
             </v-col>
@@ -235,15 +235,15 @@ async function resetLoginExpirySettingsToDefault() {
   snackbar.info('Login expiry settings reset to default')
 }
 
-async function saveLoginExpirySettings(showSnackbar = true) {
+async function saveLoginExpirySettings() {
   if (jwtExpiresIn.value < 2 || jwtExpiresIn.value > 120) {
     throw new Error('JWT Expiry must be between 2 and 120 minutes')
   }
   if (
     refreshTokenAttemptsEnabled.value &&
-    (refreshTokenAttempts.value < 50 || refreshTokenAttempts.value > 1000)
+    (refreshTokenAttempts.value < 1 || refreshTokenAttempts.value > 50)
   ) {
-    throw new Error('Refresh Token Attempts must be between 50 and 1000')
+    throw new Error('Refresh Token Attempts must be between 1 and 50')
   }
   if (refreshTokenExpiry.value < 1 || refreshTokenExpiry.value > 30) {
     throw new Error('Refresh Token Expiry must be between 1 and 30 days')
