@@ -1,5 +1,23 @@
 # Develop
 
+## Client 0.0.22
+
+Feature
+
+- Detect server disconnects, presenting this in overlay message with page reload
+- Ability to add startPrint to specify print or not after upload
+
+Fixes
+
+- Camera page wasn't flagged as requiring authentication
+- SocketIO service now detects and handles expired JWT token
+- SocketIO service now detects server disconnects and reconnects
+- ServerProtectionSettings wouldn't validate refresh attempts correctly
+
+Chore
+
+- Cleaned up and rewrote SocketIO client
+
 ## Client 0.0.21
 
 Feature
