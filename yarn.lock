@@ -917,7 +917,7 @@ __metadata:
     semver: "npm:7.7.2"
     socket.io-client: "npm:4.8.1"
     typescript: "npm:5.8.3"
-    unplugin-auto-import: "npm:19.2.0"
+    unplugin-auto-import: "npm:19.3.0"
     unplugin-fonts: "npm:1.3.1"
     unplugin-vue-components: "npm:28.5.0"
     vite: "npm:5.4.14"
@@ -7577,15 +7577,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-auto-import@npm:19.2.0":
-  version: 19.2.0
-  resolution: "unplugin-auto-import@npm:19.2.0"
+"unplugin-auto-import@npm:19.3.0":
+  version: 19.3.0
+  resolution: "unplugin-auto-import@npm:19.3.0"
   dependencies:
     local-pkg: "npm:^1.1.1"
     magic-string: "npm:^0.30.17"
     picomatch: "npm:^4.0.2"
     unimport: "npm:^4.2.0"
-    unplugin: "npm:^2.3.2"
+    unplugin: "npm:^2.3.4"
     unplugin-utils: "npm:^0.2.4"
   peerDependencies:
     "@nuxt/kit": ^3.2.2
@@ -7595,7 +7595,7 @@ __metadata:
       optional: true
     "@vueuse/core":
       optional: true
-  checksum: 10c0/72a4c1f44b58b6cf1ad402d4757fee6fa89fbd0156b8dfb74507898ac526e905fc7698676cb5adfbb84f5c82065bfd417dd8de49456fd5829fc957b1aaa2ef37
+  checksum: 10c0/8f8c902d8ec66fc3ddc9836ca2704ea3b1caa33e49a44101f6c81a017c456ba430ac5d12a87713e42f4d2b15ac1732c757721966eac8208a129d9e852928e937
   languageName: node
   linkType: hard
 
@@ -7690,6 +7690,17 @@ __metadata:
     picomatch: "npm:^4.0.2"
     webpack-virtual-modules: "npm:^0.6.2"
   checksum: 10c0/157a50072601b9bfbf3ab27a76a04685fb0af0c1a579d958787ffcb28a4d64e09acf42f0176e8767ccd940f27ee52d97a7f6aa6ce2e1e0dbe666ec26519750ef
+  languageName: node
+  linkType: hard
+
+"unplugin@npm:^2.3.4":
+  version: 2.3.4
+  resolution: "unplugin@npm:2.3.4"
+  dependencies:
+    acorn: "npm:^8.14.1"
+    picomatch: "npm:^4.0.2"
+    webpack-virtual-modules: "npm:^0.6.2"
+  checksum: 10c0/2d5fc0dccfce0e8061157ba24c9776af32c37caa4e145ddd191124e45388601c7790e0f6f95e03125b30bdd4a0e8d3e07edda5df080eaac9e7d56040c57b88f8
   languageName: node
   linkType: hard
 
