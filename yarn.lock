@@ -891,7 +891,7 @@ __metadata:
     "@tanstack/vue-query": "npm:5.80.6"
     "@testing-library/vue": "npm:8.1.0"
     "@types/jsdom": "npm:21.1.7"
-    "@types/node": "npm:22.15.30"
+    "@types/node": "npm:22.15.31"
     "@types/semver": "npm:7.7.0"
     "@typescript-eslint/eslint-plugin": "npm:8.34.0"
     "@typescript-eslint/parser": "npm:8.34.0"
@@ -1939,12 +1939,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:22.15.30":
-  version: 22.15.30
-  resolution: "@types/node@npm:22.15.30"
+"@types/node@npm:22.15.31":
+  version: 22.15.31
+  resolution: "@types/node@npm:22.15.31"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10c0/ca330ac0e7fd502686d6df115fcc606aba46fd334220f749bbba2f639accdadcb23f7900603ceccdc8240be736739cad5c0b87c0fa92c9255a4dff245f07d664
+  checksum: 10c0/ef7d5dc890da41cfd554d35ab8998bc18be9e3a0caa642e720599ac4410a94a4879766e52b3c9cafa06c66b7b8aebdc51f322cf67df23a6489927890196a316d
   languageName: node
   linkType: hard
 
