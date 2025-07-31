@@ -931,7 +931,7 @@ __metadata:
     unplugin-fonts: "npm:1.4.0"
     unplugin-vue-components: "npm:28.8.0"
     vite: "npm:5.4.19"
-    vite-plugin-vuetify: "npm:2.1.1"
+    vite-plugin-vuetify: "npm:2.1.2"
     vitest: "npm:3.2.4"
     vue: "npm:3.5.18"
     vue-chartjs: "npm:5.3.2"
@@ -2646,15 +2646,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vuetify/loader-shared@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@vuetify/loader-shared@npm:2.1.0"
+"@vuetify/loader-shared@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@vuetify/loader-shared@npm:2.1.1"
   dependencies:
     upath: "npm:^2.0.1"
   peerDependencies:
     vue: ^3.0.0
     vuetify: ^3.0.0
-  checksum: 10c0/85c882ccbfd151cafd9fc0790c65c2e9924e2a4552e867ca4aa1deb47c501222fc1fb6e83df9c31080e7d1285d8f9a51a44a996901d104e2b49ad0dee301be76
+  checksum: 10c0/e442bc41cc0a43e424f8929a8d1e7513fcce21b08d939fd718e9d3d7663107cb9e44ac47d3830110b23857556e8496ca9ffd3aca4f462314f65e71ebda6df78e
   languageName: node
   linkType: hard
 
@@ -8657,18 +8657,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-vuetify@npm:2.1.1":
-  version: 2.1.1
-  resolution: "vite-plugin-vuetify@npm:2.1.1"
+"vite-plugin-vuetify@npm:2.1.2":
+  version: 2.1.2
+  resolution: "vite-plugin-vuetify@npm:2.1.2"
   dependencies:
-    "@vuetify/loader-shared": "npm:^2.1.0"
+    "@vuetify/loader-shared": "npm:^2.1.1"
     debug: "npm:^4.3.3"
     upath: "npm:^2.0.1"
   peerDependencies:
     vite: ">=5"
     vue: ^3.0.0
     vuetify: ^3.0.0
-  checksum: 10c0/629893488ae23ffd9e9a32fccf2d6ff4d5a00826329ec90e9765a17d182a9200ffe11430bd418227119e8ef3ed21eaec1bab0635a77fdcb4b64aac10f38adcb0
+  checksum: 10c0/bfcf04de3814cf580109b1b31bec6751f5c86a74d06294e287f18f6eedaae62ef742f32afb60983d3b6c44bb2ac74b0476ea7d1c8bde6e67e69cae58192998fd
   languageName: node
   linkType: hard
 
