@@ -905,7 +905,7 @@ __metadata:
     eslint-plugin-prettier: "npm:5.5.4"
     eslint-plugin-promise: "npm:7.2.1"
     eslint-plugin-vue: "npm:10.4.0"
-    eslint-plugin-vuetify: "npm:2.5.2"
+    eslint-plugin-vuetify: "npm:2.5.3"
     jsdom: "npm:26.1.0"
     jwt-decode: "npm:4.0.0"
     material-design-icons-iconfont: "npm:6.7.0"
@@ -4488,16 +4488,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vuetify@npm:2.5.2":
-  version: 2.5.2
-  resolution: "eslint-plugin-vuetify@npm:2.5.2"
+"eslint-plugin-vuetify@npm:2.5.3":
+  version: 2.5.3
+  resolution: "eslint-plugin-vuetify@npm:2.5.3"
   dependencies:
     eslint-plugin-vue: "npm:>=9.6.0"
     requireindex: "npm:^1.2.0"
   peerDependencies:
     eslint: ^8.0.0 || ^9.0.0
     vuetify: ^3.0.0
-  checksum: 10c0/69c4e7898112239ea6a5c099a2d29dbdb8baf06c3a9d73db7009a6e37664d9710a9bb2fc378b20fd72c7c8da527644b78cea1fefb166074a864d1fac7140ef45
+  checksum: 10c0/ffd74c2e6fb532a3cb60591abefecf9a366ccfb5c6360e79421bd190186be0207dd0cbab5bdf523b621aebcc3a6d9e0779b7c75517f6482d3e4c64e3d500a8be
   languageName: node
   linkType: hard
 
