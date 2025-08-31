@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/types": "7.28.2",
     "@sentry/tracing": "7.120.4",
-    "@sentry/vite-plugin": "4.1.1",
+    "@sentry/vite-plugin": "4.2.0",
     "@sentry/vue": "10.7.0",
     "@tanstack/vue-query": "5.85.6",
     "@testing-library/vue": "8.1.0",
