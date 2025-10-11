@@ -17,6 +17,7 @@ Fixes
 Chore
 
 - Cleaned up and rewrote SocketIO client
+- Package updates
 
 ## Client 0.0.21
 
