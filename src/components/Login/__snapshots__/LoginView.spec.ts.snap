@@ -226,7 +226,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <!---->
                           <label
                             class="v-label v-field-label"
-                            for="input-v-0"
+                            for="input-v-1"
                           >
                             <!---->
                             
@@ -237,10 +237,10 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           
                           <!---->
                           <input
-                            aria-describedby="input-v-0-messages"
+                            aria-describedby="input-v-1-messages"
                             autofocus=""
                             class="v-field__input"
-                            id="input-v-0"
+                            id="input-v-1"
                             name="login"
                             size="1"
                             type="text"
@@ -259,7 +259,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <label
                             aria-hidden="true"
                             class="v-label v-field-label v-field-label--floating"
-                            for="input-v-0"
+                            for="input-v-1"
                           >
                             <!---->
                             
@@ -274,7 +274,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                     <div
                       aria-live="polite"
                       class="v-input__details"
-                      id="input-v-0-messages"
+                      id="input-v-1-messages"
                       role="alert"
                     >
                       <transition-group-stub
@@ -361,7 +361,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <!---->
                           <label
                             class="v-label v-field-label"
-                            for="input-v-2"
+                            for="input-v-4"
                           >
                             <!---->
                             
@@ -372,9 +372,9 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           
                           <!---->
                           <input
-                            aria-describedby="input-v-2-messages"
+                            aria-describedby="input-v-4-messages"
                             class="v-field__input"
-                            id="input-v-2"
+                            id="input-v-4"
                             name="password"
                             password=""
                             size="1"
@@ -405,7 +405,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <label
                             aria-hidden="true"
                             class="v-label v-field-label v-field-label--floating"
-                            for="input-v-2"
+                            for="input-v-4"
                           >
                             <!---->
                             
@@ -420,7 +420,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                     <div
                       aria-live="polite"
                       class="v-input__details"
-                      id="input-v-2-messages"
+                      id="input-v-4-messages"
                       role="alert"
                     >
                       <transition-group-stub
@@ -444,7 +444,6 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
               <div
                 class="v-card-actions"
               >
-                
                 <button
                   class="v-btn v-btn--slim v-theme--light bg-primary v-btn--density-default v-btn--variant-flat pa-4"
                   style="width: 100%;"
@@ -472,12 +471,10 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                   <!---->
                   <!---->
                 </button>
-                
               </div>
               <div
                 class="v-card-actions"
               >
-                
                 <button
                   class="v-btn v-btn--disabled v-btn--slim v-theme--light v-btn--density-default v-btn--variant-flat pa-4"
                   disabled=""
@@ -510,7 +507,6 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                   <!---->
                   <!---->
                 </button>
-                
               </div>
               
               <!---->
