@@ -945,7 +945,7 @@ __metadata:
     eslint-plugin-n: "npm:17.23.1"
     eslint-plugin-prettier: "npm:5.5.4"
     eslint-plugin-promise: "npm:7.2.1"
-    eslint-plugin-vue: "npm:10.5.0"
+    eslint-plugin-vue: "npm:10.5.1"
     eslint-plugin-vuetify: "npm:2.5.3"
     jsdom: "npm:27.0.0"
     jwt-decode: "npm:4.0.0"
@@ -4522,9 +4522,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:10.5.0":
-  version: 10.5.0
-  resolution: "eslint-plugin-vue@npm:10.5.0"
+"eslint-plugin-vue@npm:10.5.1":
+  version: 10.5.1
+  resolution: "eslint-plugin-vue@npm:10.5.1"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.4.0"
     natural-compare: "npm:^1.4.0"
@@ -4542,7 +4542,7 @@ __metadata:
       optional: true
     "@typescript-eslint/parser":
       optional: true
-  checksum: 10c0/28d8a9abfef9dcdb5d8df10ce16f8b2d94ff82514b22c2c9623f426ddf4b10b1c3dcf841992a74a460e6bc1637f57db3adf3b3cbb2e5348cc42572e559dde87b
+  checksum: 10c0/002ebf22465ca2f6b0d0725012ae6db65a256d8f22cdddc10c79e5efb030e4bc38b461466289f05eb176796ca9466d29af4d4c7450e3d741c49f04e238433cb8
   languageName: node
   linkType: hard
 
