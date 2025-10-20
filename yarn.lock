@@ -961,7 +961,7 @@ __metadata:
     typescript: "npm:5.9.3"
     unplugin-auto-import: "npm:20.2.0"
     unplugin-fonts: "npm:1.4.0"
-    unplugin-vue-components: "npm:29.1.0"
+    unplugin-vue-components: "npm:29.2.0"
     vite: "npm:5.4.20"
     vite-plugin-vuetify: "npm:2.1.2"
     vitest: "npm:3.2.4"
@@ -8630,9 +8630,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-vue-components@npm:29.1.0":
-  version: 29.1.0
-  resolution: "unplugin-vue-components@npm:29.1.0"
+"unplugin-utils@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "unplugin-utils@npm:0.3.1"
+  dependencies:
+    pathe: "npm:^2.0.3"
+    picomatch: "npm:^4.0.3"
+  checksum: 10c0/e563b15f2ae604d4f84ac664a7b1738585d2e82a068e59612589e61e555b3d93aa7379a4b6938df3788fe5658cae53d752dd72f6072bd4a642b6e0385c0e4eab
+  languageName: node
+  linkType: hard
+
+"unplugin-vue-components@npm:29.2.0":
+  version: 29.2.0
+  resolution: "unplugin-vue-components@npm:29.2.0"
   dependencies:
     chokidar: "npm:^3.6.0"
     debug: "npm:^4.4.3"
@@ -8641,7 +8651,7 @@ __metadata:
     mlly: "npm:^1.8.0"
     tinyglobby: "npm:^0.2.15"
     unplugin: "npm:^2.3.10"
-    unplugin-utils: "npm:^0.3.0"
+    unplugin-utils: "npm:^0.3.1"
   peerDependencies:
     "@babel/parser": ^7.15.8
     "@nuxt/kit": ^3.2.2 || ^4.0.0
@@ -8651,7 +8661,7 @@ __metadata:
       optional: true
     "@nuxt/kit":
       optional: true
-  checksum: 10c0/fbc1ae4f45d98bc2b135237f40a0014d5a08179e561a464604f5dc04e595b7b00037ec18c6809aaae94fe6b30067bcda405d6a2802a955bbd2340c82713ee1d8
+  checksum: 10c0/1eb06ba085efb385e2cbeb7990c743f28f6b8ec4f563fbe46f465033750ef332f526794df123ce2d113c03a06225f7fdf5db84fb9fc81c67f765275e6329e8c4
   languageName: node
   linkType: hard
 
