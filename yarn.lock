@@ -935,7 +935,7 @@ __metadata:
   dependencies:
     "@babel/types": "npm:7.28.5"
     "@sentry/tracing": "npm:7.120.4"
-    "@sentry/vite-plugin": "npm:4.5.0"
+    "@sentry/vite-plugin": "npm:4.6.0"
     "@sentry/vue": "npm:10.22.0"
     "@tanstack/vue-query": "npm:5.90.5"
     "@testing-library/vue": "npm:8.1.0"
@@ -1663,10 +1663,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/babel-plugin-component-annotate@npm:4.5.0":
-  version: 4.5.0
-  resolution: "@sentry/babel-plugin-component-annotate@npm:4.5.0"
-  checksum: 10c0/15ece621c55c8acec64cd97d10c5d3b935ea837574b477433b211e53061ce19076f3fa9693b56bc9a69105f5b076e0826849f0c2d4cb8521cdb9f7c3d61e4b3d
+"@sentry/babel-plugin-component-annotate@npm:4.6.0":
+  version: 4.6.0
+  resolution: "@sentry/babel-plugin-component-annotate@npm:4.6.0"
+  checksum: 10c0/64a5d08ca571653399b35060db5007c86811dd06c79d6f09a8503d13e55f0cc4de54c02787ac4363b7cef0f4f873a3807d7846b0a13791f50068a34dadbe40f9
   languageName: node
   linkType: hard
 
@@ -1683,90 +1683,90 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/bundler-plugin-core@npm:4.5.0":
-  version: 4.5.0
-  resolution: "@sentry/bundler-plugin-core@npm:4.5.0"
+"@sentry/bundler-plugin-core@npm:4.6.0":
+  version: 4.6.0
+  resolution: "@sentry/bundler-plugin-core@npm:4.6.0"
   dependencies:
     "@babel/core": "npm:^7.18.5"
-    "@sentry/babel-plugin-component-annotate": "npm:4.5.0"
-    "@sentry/cli": "npm:^2.51.0"
+    "@sentry/babel-plugin-component-annotate": "npm:4.6.0"
+    "@sentry/cli": "npm:^2.57.0"
     dotenv: "npm:^16.3.1"
     find-up: "npm:^5.0.0"
     glob: "npm:^9.3.2"
     magic-string: "npm:0.30.8"
     unplugin: "npm:1.0.1"
-  checksum: 10c0/209717ff3635bc97df063a919d4ffc037dafe37b08b465634773acfabf28b52aa7a1ae2a499375c94e7dce3a24bb9e7a8ab5390395ffd9c5ac6270c4f5d68a23
+  checksum: 10c0/0d07c249e55987891eb681e40f59e632b44a7bf5cd7bb4bd0f53ea26b3ba25caef468392d64392607ba09bd5fe7fefddd7f2b5c347613f877ba85de6e0d605bc
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:2.51.1":
-  version: 2.51.1
-  resolution: "@sentry/cli-darwin@npm:2.51.1"
+"@sentry/cli-darwin@npm:2.57.0":
+  version: 2.57.0
+  resolution: "@sentry/cli-darwin@npm:2.57.0"
   conditions: os=darwin
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm64@npm:2.51.1":
-  version: 2.51.1
-  resolution: "@sentry/cli-linux-arm64@npm:2.51.1"
+"@sentry/cli-linux-arm64@npm:2.57.0":
+  version: 2.57.0
+  resolution: "@sentry/cli-linux-arm64@npm:2.57.0"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:2.51.1":
-  version: 2.51.1
-  resolution: "@sentry/cli-linux-arm@npm:2.51.1"
+"@sentry/cli-linux-arm@npm:2.57.0":
+  version: 2.57.0
+  resolution: "@sentry/cli-linux-arm@npm:2.57.0"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-i686@npm:2.51.1":
-  version: 2.51.1
-  resolution: "@sentry/cli-linux-i686@npm:2.51.1"
+"@sentry/cli-linux-i686@npm:2.57.0":
+  version: 2.57.0
+  resolution: "@sentry/cli-linux-i686@npm:2.57.0"
   conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:2.51.1":
-  version: 2.51.1
-  resolution: "@sentry/cli-linux-x64@npm:2.51.1"
+"@sentry/cli-linux-x64@npm:2.57.0":
+  version: 2.57.0
+  resolution: "@sentry/cli-linux-x64@npm:2.57.0"
   conditions: (os=linux | os=freebsd | os=android) & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-arm64@npm:2.51.1":
-  version: 2.51.1
-  resolution: "@sentry/cli-win32-arm64@npm:2.51.1"
+"@sentry/cli-win32-arm64@npm:2.57.0":
+  version: 2.57.0
+  resolution: "@sentry/cli-win32-arm64@npm:2.57.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:2.51.1":
-  version: 2.51.1
-  resolution: "@sentry/cli-win32-i686@npm:2.51.1"
+"@sentry/cli-win32-i686@npm:2.57.0":
+  version: 2.57.0
+  resolution: "@sentry/cli-win32-i686@npm:2.57.0"
   conditions: os=win32 & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:2.51.1":
-  version: 2.51.1
-  resolution: "@sentry/cli-win32-x64@npm:2.51.1"
+"@sentry/cli-win32-x64@npm:2.57.0":
+  version: 2.57.0
+  resolution: "@sentry/cli-win32-x64@npm:2.57.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli@npm:^2.51.0":
-  version: 2.51.1
-  resolution: "@sentry/cli@npm:2.51.1"
+"@sentry/cli@npm:^2.57.0":
+  version: 2.57.0
+  resolution: "@sentry/cli@npm:2.57.0"
   dependencies:
-    "@sentry/cli-darwin": "npm:2.51.1"
-    "@sentry/cli-linux-arm": "npm:2.51.1"
-    "@sentry/cli-linux-arm64": "npm:2.51.1"
-    "@sentry/cli-linux-i686": "npm:2.51.1"
-    "@sentry/cli-linux-x64": "npm:2.51.1"
-    "@sentry/cli-win32-arm64": "npm:2.51.1"
-    "@sentry/cli-win32-i686": "npm:2.51.1"
-    "@sentry/cli-win32-x64": "npm:2.51.1"
+    "@sentry/cli-darwin": "npm:2.57.0"
+    "@sentry/cli-linux-arm": "npm:2.57.0"
+    "@sentry/cli-linux-arm64": "npm:2.57.0"
+    "@sentry/cli-linux-i686": "npm:2.57.0"
+    "@sentry/cli-linux-x64": "npm:2.57.0"
+    "@sentry/cli-win32-arm64": "npm:2.57.0"
+    "@sentry/cli-win32-i686": "npm:2.57.0"
+    "@sentry/cli-win32-x64": "npm:2.57.0"
     https-proxy-agent: "npm:^5.0.0"
     node-fetch: "npm:^2.6.7"
     progress: "npm:^2.0.3"
@@ -1791,7 +1791,7 @@ __metadata:
       optional: true
   bin:
     sentry-cli: bin/sentry-cli
-  checksum: 10c0/9c6bbc5c8fd2207c215ffa6719f7fdca8138b93ba9ff3b0e691ca3a9ed2afae4e44abe9dd499b855663c0860b1800bc01ee1ee7c263b091eb9023a69a1b92e67
+  checksum: 10c0/a633c52ac7c6265a60ee903b685320d04f49db464ad60b1600b6f6d7f8e4dd8d171151fc5905938d8aca89811fe1f0ee8c18cf435365cd801bb5dd1fbcb9fb28
   languageName: node
   linkType: hard
 
@@ -1837,13 +1837,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/vite-plugin@npm:4.5.0":
-  version: 4.5.0
-  resolution: "@sentry/vite-plugin@npm:4.5.0"
+"@sentry/vite-plugin@npm:4.6.0":
+  version: 4.6.0
+  resolution: "@sentry/vite-plugin@npm:4.6.0"
   dependencies:
-    "@sentry/bundler-plugin-core": "npm:4.5.0"
+    "@sentry/bundler-plugin-core": "npm:4.6.0"
     unplugin: "npm:1.0.1"
-  checksum: 10c0/245f4cc96bb54724ad9424919753dbdfef5eec36558fec8f08f98d0d06672b023805dbdf66a54e743b2abc5d3804350f1bcb1d2887e560c4c12983e600c671f9
+  checksum: 10c0/9041828eb5f830272ff150946d69596ab427348a64018308b01b1090b52c32854caf58a989cbbb943fe80026eddf6b3a78014be77213c9959ec0a831486658dc
   languageName: node
   linkType: hard
 
