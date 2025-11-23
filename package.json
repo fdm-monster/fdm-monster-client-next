@@ -79,5 +79,5 @@
     "vue-tsc": "3.1.5",
     "vuedraggable": "4.1.0"
   },
-  "packageManager": "yarn@4.11.0"
+  "packageManager": "yarn@4.12.0"
 }
