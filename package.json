@@ -39,7 +39,7 @@
     "@types/semver": "7.7.1",
     "@typescript-eslint/eslint-plugin": "8.49.0",
     "@typescript-eslint/parser": "8.49.0",
-    "@vitejs/plugin-vue": "6.0.2",
+    "@vitejs/plugin-vue": "6.0.3",
     "@vitest/ui": "3.2.4",
     "@vitest/web-worker": "3.2.4",
     "@vue/eslint-config-typescript": "14.6.0",
