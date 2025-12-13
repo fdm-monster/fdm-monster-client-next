@@ -96,8 +96,10 @@ export default defineConfig({
     // globalSetup: ["./vitest/setup.ts"],
     setupFiles: ['./test/setup-axios-mock.ts'],
     environment: 'jsdom',
-    deps: {
-      inline: ['vuetify']
+    server: {
+      deps: {
+        inline: ['vuetify'],
+      },
     }
   },
   build: {
