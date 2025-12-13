@@ -20,7 +20,7 @@ export default defineConfig({
       splashBg: 'rgb(40, 40, 40)',
       loaderType: 'dots',
       loaderBg: 'rgb(155, 5, 5)',
-      minTime: 1000
+      minDurationMs: 1000
     }),
     AutoImport({
       imports: ['vue'],
@@ -35,7 +35,7 @@ export default defineConfig({
       dts: 'src/components.d.ts'
     }),
     Vue({
-      template: { transformAssetUrls }
+      template: {transformAssetUrls}
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
@@ -93,7 +93,6 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    // globalSetup: ["./vitest/setup.ts"],
     setupFiles: ['./test/setup-axios-mock.ts'],
     environment: 'jsdom',
     server: {
