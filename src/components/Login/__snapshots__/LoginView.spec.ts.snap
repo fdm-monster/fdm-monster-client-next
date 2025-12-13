@@ -161,7 +161,6 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                     <div
                       class="v-input__prepend"
                     >
-                      <!---->
                       <i
                         aria-hidden="true"
                         class="person mdi v-icon notranslate v-theme--light v-icon--size-default"
@@ -225,8 +224,10 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                         >
                           <!---->
                           <label
+                            aria-hidden="false"
                             class="v-label v-field-label"
                             for="input-v-1"
+                            id="input-v-1-label"
                           >
                             <!---->
                             
@@ -238,6 +239,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <!---->
                           <input
                             aria-describedby="input-v-1-messages"
+                            aria-labelledby="input-v-1-label"
                             autofocus=""
                             class="v-field__input"
                             id="input-v-1"
@@ -296,7 +298,6 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                     <div
                       class="v-input__prepend"
                     >
-                      <!---->
                       <i
                         aria-hidden="true"
                         class="lock mdi v-icon notranslate v-theme--light v-icon--size-default"
@@ -360,8 +361,10 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                         >
                           <!---->
                           <label
+                            aria-hidden="false"
                             class="v-label v-field-label"
                             for="input-v-4"
+                            id="input-v-4-label"
                           >
                             <!---->
                             
@@ -373,6 +376,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                           <!---->
                           <input
                             aria-describedby="input-v-4-messages"
+                            aria-labelledby="input-v-4-label"
                             class="v-field__input"
                             id="input-v-4"
                             name="password"
@@ -389,7 +393,6 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
                         <div
                           class="v-field__append-inner"
                         >
-                          <!---->
                           <i
                             aria-hidden="false"
                             aria-label="Password appended action"
