@@ -32,7 +32,7 @@
     "@babel/types": "7.28.5",
     "@sentry/tracing": "7.120.4",
     "@sentry/vite-plugin": "4.6.1",
-    "@sentry/vue": "10.32.0",
+    "@sentry/vue": "10.32.1",
     "@tanstack/vue-query": "5.92.1",
     "@testing-library/vue": "8.1.0",
     "@types/jsdom": "27.0.0",
