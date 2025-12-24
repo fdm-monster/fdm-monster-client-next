@@ -5,7 +5,7 @@
         Printers
         <v-spacer />
         <v-select
-          v-if="hasPrinterGroupFeature && groupsWithPrinters.length"
+          v-if="groupsWithPrinters.length"
           v-model="filteredGroupsWithPrinters"
           :items="groupsWithPrinters"
           :return-object="true"
@@ -106,7 +106,6 @@
           </v-chip>
         </template>
         <template
-          v-if="hasPrinterGroupFeature"
           #item.group="{ item }"
         >
           <v-chip
@@ -178,7 +177,6 @@
     </v-card>
 
     <v-card
-      v-if="hasPrinterGroupFeature"
       class="mt-4"
     >
       <v-card-title> Printer Groups </v-card-title>
