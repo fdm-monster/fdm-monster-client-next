@@ -67,7 +67,7 @@
     "sass": "1.97.1",
     "selective-object-reuse": "1.0.6",
     "semver": "7.7.3",
-    "socket.io-client": "4.8.2",
+    "socket.io-client": "4.8.3",
     "typescript": "5.9.3",
     "unplugin-auto-import": "20.3.0",
     "unplugin-fonts": "1.4.0",
