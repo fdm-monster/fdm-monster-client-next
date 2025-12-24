@@ -51,7 +51,7 @@ export function splashScreen(options: PluginOptions) {
       } else if (loaderType === "dots") {
         loaderStyles = readPluginFile("loaders/dots.css", pluginAssetsPath, config.root);
       }
-      
+
       const logoHtml = fs.readFileSync(
         resolve(config.publicDir, logoSrc),
         "utf8"

@@ -1,5 +1,12 @@
 # Develop
 
+## Client 0.0.25
+
+Fixes
+
+- Splash logo is now FDMM logo instead of Vite logo
+
+
 ## Client 0.0.24
 
 Feat
