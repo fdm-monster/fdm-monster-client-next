@@ -2,9 +2,7 @@ name: Dist Release
 on:
   push:
     branches:
-      - 'develop'
       - 'main'
-      - 'release/*'  # Add this line to include all release branches
 
 jobs:
   checkversion:
@@ -32,11 +30,15 @@ jobs:
     runs-on: ubuntu-latest
     environment: npm-release
     if: needs.checkversion.outputs.foundClientVersion == 'false'
+    permissions:
+      id-token: write  # Required for OIDC (NPM)
+      contents: write
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 24.x
+          registry-url: 'https://registry.npmjs.org'
 
       # https://stackoverflow.com/questions/57968497/how-do-i-set-an-env-var-with-a-bash-expression-in-github-actions
       - name: get-client-version
@@ -61,9 +63,8 @@ jobs:
       # Publish to NPM
       - uses: JS-DevTools/npm-publish@v4
         with:
-          token: ${{ secrets.NPM_TOKEN }}
           package: package.json
-          
+
       # Create GitHub release
       - name: Create release
         uses: actions/create-release@v1
