@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import path from "node:path";
+import { resolve } from "node:path";
 import type { PluginOption, ResolvedConfig } from "vite";
 
 /**
@@ -14,6 +14,8 @@ type PluginOptions = {
   loaderBg?: string;
   loaderType?: LoaderType;
   minDurationMs?: number;
+  // Add this to allow specifying where the plugin assets are located
+  pluginAssetsPath?: string;
 };
 
 export function splashScreen(options: PluginOptions) {
@@ -29,6 +31,7 @@ export function splashScreen(options: PluginOptions) {
     loaderType = "line",
     loaderBg = "#1eb6c3",
     splashBg = "#ffffff",
+    pluginAssetsPath = "src/plugins/dev-splashscreen",
   } = options;
 
   let config: ResolvedConfig;
@@ -39,18 +42,19 @@ export function splashScreen(options: PluginOptions) {
       config = resolvedConfig;
     },
     transformIndexHtml(html: string) {
-      const baseStyles = readPluginFile("styles.css");
+      const baseStyles = readPluginFile("styles.css", pluginAssetsPath, config.root);
 
       let loaderStyles = "";
 
       if (loaderType === "line") {
-        loaderStyles = readPluginFile("loaders/line.css");
+        loaderStyles = readPluginFile("loaders/line.css", pluginAssetsPath, config.root);
       } else if (loaderType === "dots") {
-        loaderStyles = readPluginFile("loaders/dots.css");
+        loaderStyles = readPluginFile("loaders/dots.css", pluginAssetsPath, config.root);
       }
 
+      console.log("Plugin img " + resolve(config.publicDir, logoSrc));
       const logoHtml = fs.readFileSync(
-        path.resolve(config.publicDir, logoSrc),
+        resolve(config.publicDir, logoSrc),
         "utf8"
       );
 
@@ -58,21 +62,23 @@ export function splashScreen(options: PluginOptions) {
         logoHtml,
         loaderType,
         minDurationMs,
+        pluginAssetsPath,
+        projectRoot: config.root,
       });
 
       const styles = `
         <style id="vpss-style">
-          ${baseStyles.replace("/*BG_SPLASH*/", splashBg)}
-          ${loaderStyles.replace("/*BG_LOADER*/", loaderBg)}
+          ${ baseStyles.replace("/*BG_SPLASH*/", splashBg) }
+          ${ loaderStyles.replace("/*BG_LOADER*/", loaderBg) }
         </style>
       `;
 
       return (
         html
           // Add styles to end of head
-          .replace("</head>", `${styles}</head>`)
+          .replace("</head>", `${ styles }</head>`)
           // Add splash screen to end of body
-          .replace("</body>", `${splash}</body>`)
+          .replace("</body>", `${ splash }</body>`)
       );
     },
   } satisfies PluginOption;
@@ -82,42 +88,39 @@ function splashTemplate({
                           logoHtml,
                           loaderType,
                           minDurationMs,
+                          pluginAssetsPath,
+                          projectRoot,
                         }: {
   logoHtml: string;
   loaderType: LoaderType;
   minDurationMs?: number;
+  pluginAssetsPath: string;
+  projectRoot: string;
 }) {
-  /**
-   * TODO: add more loader options.
-   * Inspiration: https://cssloaders.github.io/
-   */
   let loaderHtml = "";
 
   if (loaderType === "line") {
-    loaderHtml = readPluginFile("loaders/line.html");
+    loaderHtml = readPluginFile("loaders/line.html", pluginAssetsPath, projectRoot);
   } else if (loaderType === "dots") {
-    loaderHtml = readPluginFile("loaders/dots.html");
+    loaderHtml = readPluginFile("loaders/dots.html", pluginAssetsPath, projectRoot);
   }
 
   return /*html*/ `
     <div id="vpss">
-      <div class="vpss-logo">${logoHtml}</div>
-      ${loaderHtml}
+      <div class="vpss-logo">${ logoHtml }</div>
+      ${ loaderHtml }
     </div>
     <script>
       (function () {
         window.__VPSS__ = {
           renderedAt: new Date().getTime(),
-          minDurationMs: ${minDurationMs || 0},
+          minDurationMs: ${ minDurationMs || 0 },
         };
       })();
     </script>
   `;
 }
 
-// TODO: is there an easier way to resolve static files relative to the plugin?
-const pluginPath = "src/plugins/dev-splashscreen";
-
-function readPluginFile(filePath: string) {
-  return fs.readFileSync(path.resolve(pluginPath, filePath), "utf8");
+function readPluginFile(filePath: string, pluginAssetsPath: string, projectRoot: string) {
+  return fs.readFileSync(resolve(projectRoot, pluginAssetsPath, filePath), "utf8");
 }

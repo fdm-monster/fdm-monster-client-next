@@ -16,7 +16,7 @@ import { splashScreen } from './plugins/plugin'
 export default defineConfig({
   plugins: [
     splashScreen({
-      logoSrc: 'vite.svg',
+      logoSrc: 'img/logo.svg',
       splashBg: 'rgb(40, 40, 40)',
       loaderType: 'dots',
       loaderBg: 'rgb(155, 5, 5)',
