@@ -7,7 +7,7 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // Utilities
 import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from 'url'
+import { fileURLToPath, URL } from 'node:url'
 import packageJson from './package.json'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { splashScreen } from './plugins/plugin'
