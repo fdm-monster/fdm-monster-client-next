@@ -1,11 +1,21 @@
 # Develop
 
+## Client 0.0.24
+
+Feat
+
+- Upgrade vite to 7.x
+
+Fixes
+
+- Vite/vitest config types fixed
+
 ## Client 0.0.23
 
 Fixes
 
 - Printer tile: 'No USB' label replaced with 'Unknown state'
-- 
+
 ## Client 0.0.22
 
 Feature
