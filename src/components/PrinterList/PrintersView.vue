@@ -5,7 +5,7 @@
         Printers
         <v-spacer />
         <v-select
-          v-if="hasPrinterGroupFeature && groupsWithPrinters.length"
+          v-if="groupsWithPrinters.length"
           v-model="filteredGroupsWithPrinters"
           :items="groupsWithPrinters"
           :return-object="true"
@@ -106,7 +106,6 @@
           </v-chip>
         </template>
         <template
-          v-if="hasPrinterGroupFeature"
           #item.group="{ item }"
         >
           <v-chip
@@ -178,7 +177,6 @@
     </v-card>
 
     <v-card
-      v-if="hasPrinterGroupFeature"
       class="mt-4"
     >
       <v-card-title> Printer Groups </v-card-title>
@@ -289,9 +287,7 @@ type ReadonlyHeaders = VDataTable['$props']['headers']
 
 const search = ref('')
 const expanded = ref<string[]>([])
-const hasPrinterGroupFeature = computed(() =>
-  featureStore.hasFeature('printerGroupsApi')
-)
+
 const tableHeaders = computed(
   () =>
     [
@@ -299,9 +295,7 @@ const tableHeaders = computed(
       { title: 'Type', key: 'printerType' },
       { title: 'Printer Name', align: 'start', sortable: true, key: 'name' },
       { title: 'Floor', key: 'floor', sortable: false },
-      ...(featureStore.hasFeature('printerGroupsApi')
-        ? [{ title: 'Group(s)', key: 'group', sortable: true }]
-        : []),
+      { title: 'Group(s)', key: 'group', sortable: true },
       { title: 'Actions', key: 'actions', sortable: false },
       { title: 'Socket Update', key: 'socketupdate', sortable: false },
       { title: '', key: 'data-table-expand' }
@@ -311,9 +305,7 @@ const tableHeaders = computed(
 async function loadData() {
   loading.value = true
   await featureStore.loadFeatures()
-  if (featureStore.hasFeature('printerGroupsApi')) {
-    groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
-  }
+  groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
   loading.value = false
   return groupsWithPrinters
 }
@@ -325,7 +317,6 @@ const printerGroupsQuery = useQuery({
 
 const printers = computed(() => {
   if (
-    !featureStore.hasFeature('printerGroupsApi') ||
     !filteredGroupsWithPrinters.value?.length
   ) {
     return printerStore.printers

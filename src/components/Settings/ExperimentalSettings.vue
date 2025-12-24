@@ -60,41 +60,6 @@
               <v-card>
                 <v-card-title>
                   <h3>
-                    Database Settings
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ props }">
-                        <v-icon v-bind="props">help_outline</v-icon>
-                      </template>
-                      <span class="tooltip-content">
-                        By enabling this setting you will set FDM Monster to
-                        SQLite as a database source (standalone mode). Please
-                        set 'ENABLE_EXPERIMENTAL_TYPEORM' to 'true' to enable
-                        this feature.
-                      </span>
-                    </v-tooltip>
-                  </h3>
-                </v-card-title>
-                <v-card-text>
-                  <v-checkbox
-                    v-model="experimentalTypeORMSupport"
-                    label="Enable TypeORM Support"
-                    hide-details
-                    disabled
-                  >
-                    <template v-slot:label>
-                      <span>Enable TypeORM Support</span>
-                    </template>
-                  </v-checkbox>
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-card>
-                <v-card-title>
-                  <h3>
                     Experimental Features
                     <v-tooltip bottom>
                       <template v-slot:activator="{ props }">
@@ -147,7 +112,6 @@ import { SettingsService } from '@/backend'
 
 const experimentalMoonrakerSupport = ref(false)
 const experimentalPrusaLinkSupport = ref(false)
-const experimentalTypeORMSupport = ref(false)
 const experimentalClientSupport = ref(false)
 
 async function loadSettings() {
@@ -155,7 +119,6 @@ async function loadSettings() {
   experimentalMoonrakerSupport.value =
     settings.server.experimentalMoonrakerSupport
   experimentalPrusaLinkSupport.value = settings.server.experimentalPrusaLinkSupport
-  experimentalTypeORMSupport.value = settings.server.experimentalTypeormSupport
   experimentalClientSupport.value = settings.server.experimentalClientSupport
 }
 
@@ -187,6 +150,6 @@ const onExperimentalClientSupportChange = async () => {
   await SettingsService.updateExperimentalClientSupport(
     experimentalClientSupport.value
   )
-  window.location.reload()
+  globalThis.location.reload()
 }
 </script>
