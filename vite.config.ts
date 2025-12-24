@@ -7,7 +7,7 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // Utilities
 import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from 'url'
+import { fileURLToPath, URL } from 'node:url'
 import packageJson from './package.json'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { splashScreen } from './plugins/plugin'
@@ -49,14 +49,13 @@ export default defineConfig({
       telemetry: false,
       org: 'fdm-monster',
       project: 'fdm-monster-client',
-      // Specify the directory containing build artifacts
-      include: './dist',
       // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
       // and needs the `project:releases` and `org:read` scopes
       authToken: process.env.SENTRY_AUTH_TOKEN,
       // Optionally uncomment the line below to override automatic release name detection
-      release: packageJson.version,
-      dryRun: !process.env.SENTRY_AUTH_TOKEN?.length
+      release: {
+        name: packageJson.version
+      }
     }),
     Fonts({
       google: {
@@ -90,16 +89,6 @@ export default defineConfig({
       '.css',
       '.scss'
     ]
-  },
-  test: {
-    globals: true,
-    setupFiles: ['./test/setup-axios-mock.ts'],
-    environment: 'jsdom',
-    server: {
-      deps: {
-        inline: ['vuetify'],
-      },
-    }
   },
   build: {
     sourcemap: true
