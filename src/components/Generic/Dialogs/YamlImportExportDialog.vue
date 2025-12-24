@@ -49,7 +49,6 @@
             />
             <v-checkbox
               v-model="exportGroups"
-              :disabled="disableExportGroups"
               class="pa-0 ma-0 mt-2 ml-2"
               label="Include groups"
             />
@@ -122,10 +121,6 @@ const exportPrinters = ref(true)
 const importFile = ref(undefined)
 const notes = ref('')
 
-const disableExportGroups = computed(() => {
-  return !featureStore.hasFeature('printerGroupsApi')
-})
-
 const isFileProvided = computed(() => {
   return !!importFile.value
 })
@@ -136,7 +131,6 @@ const isImportMode = computed(() => {
 
 const onBeforeDialogOpened = async () => {
   await featureStore.loadFeatures()
-  exportGroups.value = featureStore.hasFeature('printerGroupsApi')
 }
 
 const onDialogOpened = async () => {

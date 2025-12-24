@@ -950,6 +950,7 @@ __metadata:
     "@sentry/vue": "npm:10.32.1"
     "@tanstack/vue-query": "npm:5.92.1"
     "@testing-library/vue": "npm:8.1.0"
+    "@types/js-yaml": "npm:4.0.9"
     "@types/jsdom": "npm:27.0.0"
     "@types/node": "npm:24.10.4"
     "@types/semver": "npm:7.7.1"
@@ -1887,6 +1888,13 @@ __metadata:
   version: 2.0.6
   resolution: "@types/istanbul-lib-coverage@npm:2.0.6"
   checksum: 10c0/3948088654f3eeb45363f1db158354fb013b362dba2a5c2c18c559484d5eb9f6fd85b23d66c0a7c2fcfab7308d0a585b14dadaca6cc8bf89ebfdc7f8f5102fb7
+  languageName: node
+  linkType: hard
+
+"@types/js-yaml@npm:4.0.9":
+  version: 4.0.9
+  resolution: "@types/js-yaml@npm:4.0.9"
+  checksum: 10c0/24de857aa8d61526bbfbbaa383aa538283ad17363fcd5bb5148e2c7f604547db36646440e739d78241ed008702a8920665d1add5618687b6743858fae00da211
   languageName: node
   linkType: hard
 

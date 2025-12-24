@@ -1,5 +1,12 @@
 # Develop
 
+## Client 0.0.26
+
+Fixes
+
+- Remove unused printer group feature flag
+- Remove unused typeorm feature flag
+
 ## Client 0.0.25
 
 Fixes
