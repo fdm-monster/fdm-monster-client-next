@@ -194,7 +194,7 @@ import { usePrinterStore } from "@/store/printer.store";
 import { PrintersService } from "@/backend";
 import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
 import { useTestPrinterStore } from "@/store/test-printer.store";
-import { CreatePrinter, getDefaultCreatePrinter } from "@/models/printers/crud/create-printer.model";
+import { CreatePrinter, getDefaultCreatePrinter } from "@/models/printers/create-printer.model";
 import { useDialog } from "@/shared/dialog.composable";
 import { AppConstants } from "@/shared/app.constants";
 import { useSnackbar } from "@/shared/snackbar.composable";
@@ -353,7 +353,7 @@ async function updatePrinter(updatedPrinter: CreatePrinter) {
 
   await printersStore.updatePrinter(
     {
-      printerId: printerId as string,
+      printerId: printerId!,
       updatedPrinter,
     },
     forceSavePrinter.value,
