@@ -144,9 +144,7 @@ export class SocketIoService {
     }
 
     if (message.printerEvents) {
-      this.printerStateStore.setPrinterEvents(
-        message.printerEvents as Record<number, PrinterStateDto>,
-      );
+      this.printerStateStore.setPrinterEvents(message.printerEvents);
     }
   }
 
