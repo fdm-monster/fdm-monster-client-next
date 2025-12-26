@@ -1,5 +1,16 @@
 # Develop
 
+## Client 0.0.27
+
+Feature
+
+- SocketIO debug page in settings
+
+Fixes
+
+- The frontend now only support number id types (dropping mongodb support)
+- User Roles changes have been switched to role name strings
+
 ## Client 0.0.26
 
 Fixes
