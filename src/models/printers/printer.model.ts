@@ -1,12 +1,10 @@
-import { IdType } from '@/utils/id.type'
-
 export interface LoginDetails {
   apiKey: string
   printerURL: string
 }
 
 export interface PrinterDto {
-  id: IdType
+  id: number
   printerType: number
   correlationToken?: string
   enabled: boolean

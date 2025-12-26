@@ -14,10 +14,9 @@
 <script lang="ts" setup>
 import { DialogName } from '../Dialogs/dialog.constants'
 import { useDialog } from '@/shared/dialog.composable'
-import { IdType } from '@/utils/id.type'
 
 const props = defineProps<{
-  floorId?: IdType
+  floorId?: number
   floorX?: number
   floorY?: number
 }>()

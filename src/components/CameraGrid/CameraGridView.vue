@@ -72,7 +72,6 @@ import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { CameraWithPrinter } from '@/models/camera-streams/camera-stream'
 import { usePrinterStore } from '@/store/printer.store'
-import { IdType } from '@/utils/id.type'
 
 const printerStore = usePrinterStore()
 const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
@@ -90,7 +89,7 @@ const query = useQuery({
   queryFn: camerasWithPrinter
 })
 const deleteMutation = useMutation({
-  mutationFn: (cameraId: IdType) =>
+  mutationFn: (cameraId: number) =>
     CameraStreamService.deleteCameraStream(cameraId),
   onSuccess: () => query.refetch()
 })
@@ -99,12 +98,12 @@ function addCamera() {
   dialog.openDialog({ addOrUpdate: 'add' })
 }
 
-function updateCamera(cameraId?: IdType) {
+function updateCamera(cameraId?: number) {
   if (!cameraId) return
   dialog.openDialog({ addOrUpdate: 'update', cameraId })
 }
 
-function deleteCamera(cameraId?: IdType) {
+function deleteCamera(cameraId?: number) {
   if (!cameraId) return
   deleteMutation.mutateAsync(cameraId)
 }

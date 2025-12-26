@@ -1,30 +1,29 @@
-import { newRandomNamePair } from '@/shared/noun-adjectives.data'
-import { IdType } from '@/utils/id.type'
+import { newRandomNamePair } from "@/shared/noun-adjectives.data";
 
 export interface FloorDto {
-  id: IdType
-  name: string
-  floor: number
-  printers: PositionDto[]
+  id: number;
+  name: string;
+  floor: number;
+  printers: PositionDto[];
 }
 
 export interface PreCreateFloor {
-  id?: IdType
-  name: string
-  floor: string
-  printers: PositionDto[]
+  id?: number;
+  name: string;
+  floor: string;
+  printers: PositionDto[];
 }
 
-export interface PositionDto<KeyType = IdType> {
-  x: number
-  y: number
-  printerId: KeyType
-  floorId: KeyType
+export interface PositionDto {
+  x: number;
+  y: number;
+  printerId: number;
+  floorId: number;
 }
 
 export const getDefaultCreateFloor = (): PreCreateFloor => ({
   id: undefined,
   name: newRandomNamePair(),
-  floor: '1',
-  printers: []
-})
+  floor: "1",
+  printers: [],
+});

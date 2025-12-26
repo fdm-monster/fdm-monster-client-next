@@ -109,13 +109,12 @@ import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useDialog } from '@/shared/dialog.composable'
 import { AppConstants } from '@/shared/app.constants'
 import { useSnackbar } from '@/shared/snackbar.composable'
-import { IdType } from '@/utils/id.type'
 import { Role } from '@/models/user.model'
 
 interface CreateUserForm {
   username: string
   password: string
-  roleIds: IdType[]
+  roleIds: number[]
 }
 
 const dialog = useDialog(DialogName.CreateUserDialog)
