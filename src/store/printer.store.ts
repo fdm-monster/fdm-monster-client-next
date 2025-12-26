@@ -5,7 +5,7 @@ import {
   FileDto
 } from '@/models/printers/printer-file.model'
 import { PrinterFileService, PrintersService } from '@/backend'
-import { CreatePrinter } from '@/models/printers/crud/create-printer.model'
+import { CreatePrinter } from '@/models/printers/create-printer.model'
 import { PrinterJobService } from '@/backend/printer-job.service'
 import { usePrinterStateStore } from './printer-state.store'
 import {

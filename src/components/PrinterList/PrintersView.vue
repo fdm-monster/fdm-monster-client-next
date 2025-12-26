@@ -26,7 +26,7 @@
       </v-card-title>
 
       <v-data-table
-        :expanded.sync="expanded"
+        v-model:expanded="expanded"
         :headers="tableHeaders"
         :items="printers"
         :search="search"
@@ -276,8 +276,8 @@ const featureStore = useFeatureStore()
 
 const addOrUpdatePrinterDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 
-const groupsWithPrinters = ref<GroupWithPrintersDto<number>[]>([])
-const filteredGroupsWithPrinters = ref<GroupWithPrintersDto<number>[]>([])
+const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
+const filteredGroupsWithPrinters = ref<GroupWithPrintersDto[]>([])
 const newGroupName = ref('')
 const updatedGroupName = ref('')
 const selectedGroup = ref<number>()
@@ -373,7 +373,7 @@ const clickRow = (item: PrinterDto, event: any) => {
   console.log(item, event)
 
   if (event.isExpanded) {
-    const index = expanded.value.findIndex((i) => i === item.id)
+    const index = expanded.value.findIndex((i) => i === item.id.toString())
     expanded.value.splice(index, 1)
   } else {
     expanded.value.push(item.id.toString())
@@ -405,7 +405,7 @@ const selectGroupForUpdatingName = () => {
   updatedGroupName.value = selectedGroupObject.value?.name
 }
 
-const updateGroupName = async (group?: GroupWithPrintersDto<number>) => {
+const updateGroupName = async (group?: GroupWithPrintersDto) => {
   if (!group?.id) {
     throw new Error('Group id was not defined')
   }
