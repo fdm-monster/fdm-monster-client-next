@@ -1,4 +1,4 @@
-import { PrinterStateDto, SocketIoUpdateMessage } from "@/models/socketio-messages/socketio-message.model";
+import { SocketIoUpdateMessage } from "@/models/socketio-messages/socketio-message.model";
 import { usePrinterStore } from "@/store/printer.store";
 import { useFloorStore } from "@/store/floor.store";
 import { usePrinterStateStore } from "@/store/printer-state.store";
