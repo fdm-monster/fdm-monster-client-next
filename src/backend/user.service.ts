@@ -60,8 +60,8 @@ export class UserService extends BaseService {
     return await this.post(path, { isRootUser })
   }
 
-  static async setUserRoles(id: number, roleIds: number[]) {
+  static async setUserRoles(id: number, roles: string[]) {
     const path = ServerApi.userSetUserRolesRoute(id)
-    return await this.post(path, { roleIds })
+    return await this.post(path, { roles })
   }
 }

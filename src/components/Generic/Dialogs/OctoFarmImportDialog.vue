@@ -266,7 +266,7 @@ import { PrintersService } from '@/backend'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useDialog } from '@/shared/dialog.composable'
 import octofarmImportGif from '@/assets/octofarm-printer-export.gif'
-import { CreatePrinter } from '@/models/printers/crud/create-printer.model'
+import { CreatePrinter } from '@/models/printers/create-printer.model'
 
 const stepProgress = ref()
 const validationStatus = ref(false)
