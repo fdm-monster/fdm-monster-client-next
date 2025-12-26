@@ -34,6 +34,7 @@
     <FileExplorerSideNav />
     <BatchReprintDialog />
     <PrinterControlDialog />
+    <JsonViewerDialog />
   </v-app>
 </template>
 

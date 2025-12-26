@@ -8,16 +8,15 @@ import { usePrinterStore } from './printer.store'
 import { PrinterFileService } from '@/backend'
 import { useSettingsStore } from './settings.store'
 import { CurrentOrHistoryPayload } from '@/models/printers/printer-current-job.model'
-import { IdType } from '@/utils/id.type'
 import {
   isPrinterIdling,
   isPrinterPrinting
 } from '@/shared/printer-state.constants'
 
 interface State {
-  printerIds: IdType[]
-  printerEventsById: Record<IdType, PrinterStateDto>
-  socketStatesById: Record<IdType, SocketState>
+  printerIds: number[]
+  printerEventsById: Record<number, PrinterStateDto>
+  socketStatesById: Record<number, SocketState>
 }
 
 export const usePrinterStateStore = defineStore('PrinterState', {
@@ -29,7 +28,7 @@ export const usePrinterStateStore = defineStore('PrinterState', {
   getters: {
     operationalPrintersById() {
       const printerStore = usePrinterStore()
-      const printersById: Record<IdType, PrinterDto> = {}
+      const printersById: Record<number, PrinterDto> = {}
       this.printerIds.forEach((id) => {
         const printerEvents = this.printerEventsById[id]
         if (printerEvents?.current?.payload?.state?.flags?.operational) {
@@ -45,13 +44,13 @@ export const usePrinterStateStore = defineStore('PrinterState', {
       })
       return printersById
     },
-    isPrinterOperational(): (printerId: IdType) => boolean {
-      return (printerId: IdType) => {
+    isPrinterOperational(): (printerId: number) => boolean {
+      return (printerId: number) => {
         return !!this.operationalPrintersById[printerId]
       }
     },
     printingPrintersById() {
-      const printersById: Record<IdType, PrinterStateDto> = {}
+      const printersById: Record<number, PrinterStateDto> = {}
       this.printerIds.forEach((id) => {
         const printerEvents = this.printerEventsById[id]
         if (printerEvents?.current?.payload?.state?.flags?.printing) {
@@ -60,19 +59,19 @@ export const usePrinterStateStore = defineStore('PrinterState', {
       })
       return printersById
     },
-    isPrinterPrinting(): (printerId: IdType) => boolean {
-      return (printerId: IdType) => !!this.printingPrintersById[printerId]
+    isPrinterPrinting(): (printerId: number) => boolean {
+      return (printerId: number) => !!this.printingPrintersById[printerId]
     },
-    isPrinterStoppable(): (printerId: IdType) => boolean {
-      return (printerId: IdType) => {
+    isPrinterStoppable(): (printerId: number) => boolean {
+      return (printerId: number) => {
         const printerEvents = this.printerEventsById[printerId]
         if (!printerEvents) return false
         const flags = printerEvents?.current?.payload?.state?.flags
         return flags?.printing || flags?.paused || flags?.pausing
       }
     },
-    isPrinterPaused(): (printerId: IdType) => boolean {
-      return (printerId: IdType) => {
+    isPrinterPaused(): (printerId: number) => boolean {
+      return (printerId: number) => {
         const printerEvents = this.printerEventsById[printerId]
         if (!printerEvents) return false
         const flags = printerEvents?.current?.payload?.state?.flags
@@ -80,7 +79,7 @@ export const usePrinterStateStore = defineStore('PrinterState', {
       }
     },
     printerCurrentEventReceivedAtById() {
-      const printerCurrentEventReceivedAtById: Record<IdType, number> = {}
+      const printerCurrentEventReceivedAtById: Record<number, number> = {}
       this.printerIds.forEach((id) => {
         const printerEvents = this.printerEventsById[id]
         if (printerEvents?.current?.receivedAt) {
@@ -92,7 +91,7 @@ export const usePrinterStateStore = defineStore('PrinterState', {
     },
     onlinePrinters() {
       const printerStore = usePrinterStore()
-      const onlinePrinters: Record<IdType, PrinterDto> = {}
+      const onlinePrinters: Record<number, PrinterDto> = {}
       this.printerIds.forEach((id) => {
         const socketState = this.socketStatesById[id]
         if (socketState?.api === 'responding') {
@@ -131,12 +130,12 @@ export const usePrinterStateStore = defineStore('PrinterState', {
       ).length
     },
     isApiResponding() {
-      return (printerId: IdType) => {
+      return (printerId: number) => {
         return Object.keys(this.onlinePrinters).includes(printerId.toString())
       }
     },
     isPrinterNotOnline() {
-      return (printerId: IdType) => {
+      return (printerId: number) => {
         return !this.isApiResponding(printerId)
       }
     },
@@ -144,7 +143,7 @@ export const usePrinterStateStore = defineStore('PrinterState', {
       const printerStore = usePrinterStore()
       const jobsRendered =
         useSettingsStore().frontendDebugSettings.showJobsRendered
-      const printersWithJobById: Record<IdType, CurrentOrHistoryPayload> = {}
+      const printersWithJobById: Record<number, CurrentOrHistoryPayload> = {}
       this.printerIds.forEach((id) => {
         const printerEvents = this.printerEventsById[id]
         const flags = printerEvents?.current?.payload?.state?.flags
@@ -195,7 +194,7 @@ export const usePrinterStateStore = defineStore('PrinterState', {
       return printersWithJobById
     },
     printingFilePathsByPrinterId() {
-      const printingFilesByPrinterId: Record<IdType, string> = {}
+      const printingFilesByPrinterId: Record<number, string> = {}
       this.printerIds.forEach((id) => {
         const printerEvents = this.printerEventsById[id]
         const flags = printerEvents?.current?.payload?.state?.flags
@@ -208,23 +207,23 @@ export const usePrinterStateStore = defineStore('PrinterState', {
     }
   },
   actions: {
-    setSocketStates(socketStates: Record<IdType, SocketState>) {
+    setSocketStates(socketStates: Record<number, SocketState>) {
       this.socketStatesById = socketStates
-      this.printerIds = Object.keys(socketStates)
+      this.printerIds = Object.keys(socketStates).map(Number)
     },
-    setPrinterEvents(printerEvents: Record<IdType, PrinterStateDto>) {
+    setPrinterEvents(printerEvents: Record<number, PrinterStateDto>) {
       this.printerEventsById = printerEvents
       // TODO check id's different from printer events and socket states
     },
-    deletePrinterEvents(printerId: IdType) {
+    deletePrinterEvents(printerId: number) {
       delete this.printerEventsById[printerId]
-      this.printerIds = Object.keys(this.printerEventsById)
+      this.printerIds = Object.keys(this.printerEventsById).map(Number)
     },
     async selectAndPrintFile({
       printerId,
       fullPath
     }: {
-      printerId: IdType
+      printerId: number
       fullPath: string
     }) {
       if (!printerId) return

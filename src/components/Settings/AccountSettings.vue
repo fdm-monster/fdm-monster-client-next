@@ -2,38 +2,32 @@
   <v-card>
     <v-toolbar color="primary">
       <v-avatar>
-        <v-icon>account_circle</v-icon>
+        <v-icon icon="account_circle" />
       </v-avatar>
-      <v-toolbar-title> Account Settings </v-toolbar-title>
+      <v-toolbar-title>Account Settings</v-toolbar-title>
     </v-toolbar>
-    <v-list
-      subheader
-      lines="three"
-    >
-      <v-list-item>
-        <v-list-item-content v-if="!loginEnabled">
-          <v-alert color="primary">
-            Login is currently disabled. To adjust your username and password,
-            please enable that setting at the Server Protection settings page.
-            Then log in and visit this page.
-          </v-alert>
-        </v-list-item-content>
+
+    <v-list>
+      <v-list-item v-if="!loginEnabled">
+        <v-alert color="primary" variant="tonal">
+          Login is currently disabled. To adjust your username and password,
+          please enable that setting at the Server Protection settings page.
+          Then log in and visit this page.
+        </v-alert>
       </v-list-item>
     </v-list>
-    <v-list
-      subheader
-      lines="three"
-    >
+
+    <v-list>
       <v-list-item>
-        <v-list-item-title> Username </v-list-item-title>
-        <v-list-item-action-text>
-          <v-text-field
-            v-model="formData.username"
-            :disabled="!loginEnabled"
-            label="Fill in your username"
-          />
-        </v-list-item-action-text>
+        <v-list-item-title>Username</v-list-item-title>
+        <v-text-field
+          v-model="formData.username"
+          :disabled="!loginEnabled"
+          label="Fill in your username"
+          class="mt-2"
+        />
       </v-list-item>
+
       <div class="ml-4 mb-4">
         <v-btn
           :disabled="!loginEnabled"
@@ -43,43 +37,43 @@
           Change username
         </v-btn>
       </div>
-      <v-divider />
-      <br />
+
+      <v-divider class="my-4" />
 
       <v-list-item>
-        <v-list-item-title> Old Password </v-list-item-title>
-        <v-list-item-action-text>
-          <v-text-field
-            v-model="formData.oldPassword"
-            :disabled="!loginEnabled"
-            placeholder="Old password"
-            type="password"
-          />
-        </v-list-item-action-text>
+        <v-list-item-title>Old Password</v-list-item-title>
+        <v-text-field
+          v-model="formData.oldPassword"
+          :disabled="!loginEnabled"
+          placeholder="Old password"
+          type="password"
+          class="mt-2"
+        />
       </v-list-item>
+
       <v-list-item>
-        <v-list-item-title> New Password </v-list-item-title>
-        <v-list-item-action-text>
-          <v-text-field
-            v-model="formData.newPassword"
-            :disabled="!loginEnabled"
-            placeholder="New password"
-            type="password"
-          />
-        </v-list-item-action-text>
+        <v-list-item-title>New Password</v-list-item-title>
+        <v-text-field
+          v-model="formData.newPassword"
+          :disabled="!loginEnabled"
+          placeholder="New password"
+          type="password"
+          class="mt-2"
+        />
       </v-list-item>
+
       <v-list-item>
-        <v-list-item-title> Repeat New Password </v-list-item-title>
-        <v-list-item-action-text>
-          <v-text-field
-            v-model="formData.repeatPassword"
-            :disabled="!loginEnabled"
-            placeholder="Repeat new password"
-            type="password"
-          />
-        </v-list-item-action-text>
+        <v-list-item-title>Repeat New Password</v-list-item-title>
+        <v-text-field
+          v-model="formData.repeatPassword"
+          :disabled="!loginEnabled"
+          placeholder="Repeat new password"
+          type="password"
+          class="mt-2"
+        />
       </v-list-item>
     </v-list>
+
     <div class="ml-4 mb-4">
       <v-btn
         :disabled="!loginEnabled"
@@ -89,6 +83,7 @@
         Change password
       </v-btn>
     </div>
+
     <v-divider />
   </v-card>
 </template>
@@ -109,7 +104,7 @@ const authStore = useAuthStore()
 const router = useRouter()
 const snackbar = useSnackbar()
 const loginEnabled = ref<boolean>()
-const userId = ref<string>('')
+const userId = ref<number | null>(null)
 const formData = ref<{
   username: string
   oldPassword: string
@@ -123,7 +118,7 @@ onMounted(async () => {
 
   await profileStore.getProfile()
   formData.value.username = profileStore.username as string
-  userId.value = profileStore.userId as string
+  userId.value = profileStore.userId
 })
 
 async function changeUsername() {

@@ -105,7 +105,6 @@ import { PrintCompletionsService } from '@/backend/print-completions.service'
 import { PrinterCompletions } from '@/models/print-completions/print-completions.model'
 import { usePrinterStore } from '@/store/printer.store'
 import { useFloorStore } from '@/store/floor.store'
-import { IdType } from '@/utils/id.type'
 
 const loadedCompletions = ref<PrinterCompletions[]>([])
 const shownCompletions = ref<PrinterCompletions[]>([])
@@ -129,11 +128,11 @@ const loadCompletions = async () => {
   updatePrinters()
 }
 
-const printer = (printerId: IdType) => {
+const printer = (printerId: number) => {
   return printerStore.printer(printerId)
 }
 
-const floorOfPrinter = (printerId: IdType) => {
+const floorOfPrinter = (printerId: number) => {
   return floorStore.floorOfPrinter(printerId)
 }
 

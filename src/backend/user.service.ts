@@ -1,12 +1,11 @@
 import { ServerApi } from '@/backend/server.api'
 import { BaseService } from '@/backend/base.service'
 import { Role, User } from '@/models/user.model'
-import { IdType } from '@/utils/id.type'
 
 export interface ICreateUser {
   username: string
   password: string
-  roleIds: IdType[]
+  roles: string[]
 }
 
 export class UserService extends BaseService {
@@ -33,7 +32,7 @@ export class UserService extends BaseService {
   }
 
   static async changePassword(
-    id: string,
+    id: number,
     oldPassword: string,
     newPassword: string
   ) {
@@ -41,28 +40,28 @@ export class UserService extends BaseService {
     return await this.post(path, { oldPassword, newPassword })
   }
 
-  static async changeUsername(id: string, username: string) {
+  static async changeUsername(id: number, username: string) {
     const path = ServerApi.userChangeUsernameRoute(id)
     return await this.post(path, { username })
   }
 
-  static async deleteUser(id: string) {
+  static async deleteUser(id: number) {
     const path = ServerApi.userDeleteRoute(id)
     return await this.delete(path)
   }
 
-  static async setUserVerified(id: string, isVerified: boolean) {
+  static async setUserVerified(id: number, isVerified: boolean) {
     const path = ServerApi.userSetVerifiedRoute(id)
     return await this.post(path, { isVerified })
   }
 
-  static async setRootUser(id: string, isRootUser: boolean) {
+  static async setRootUser(id: number, isRootUser: boolean) {
     const path = ServerApi.userSetRootUserRoute(id)
     return await this.post(path, { isRootUser })
   }
 
-  static async setUserRoles(id: string, roleIds: IdType[]) {
+  static async setUserRoles(id: number, roles: string[]) {
     const path = ServerApi.userSetUserRolesRoute(id)
-    return await this.post(path, { roleIds })
+    return await this.post(path, { roles })
   }
 }

@@ -172,14 +172,13 @@ import {
   Tooltip
 } from 'chart.js'
 import { Bar } from 'vue-chartjs'
-import { IdType } from '@/utils/id.type'
 import { OctoPrintSettingsDto } from '@/backend/dto/octoprint-settings.dto'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export type BatchOctoPrintSettingsDto = {
   success: boolean
-  printerId: IdType
+  printerId: number
   time: number
   value?: OctoPrintSettingsDto
   error?: string

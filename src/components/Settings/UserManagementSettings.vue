@@ -82,7 +82,7 @@
                     </v-chip>
                   </li>
                   <li
-                    v-for="role of convertRoles(user.roles)"
+                    v-for="role of user.roles"
                     :key="role"
                   >
                     <v-chip
@@ -187,10 +187,6 @@ const userQuery = useQuery({
   queryFn: loadData
 })
 
-function convertRoles(roleIds: (string | number)[]): (string | undefined)[] {
-  return roleIds.map((roleId) => roles.value.find((r) => r.id == roleId)?.name)
-}
-
 function isCurrentAccount(user: User): boolean {
   return user.id == profile.value?.id
 }
@@ -286,8 +282,6 @@ async function setRootUser(user: User, isRootUser: boolean = true) {
 async function updateUserRoles(user: User) {
   try {
     loading.value = true
-    console.log(user.roles)
-    console.log(user.roles.map((v) => typeof v))
     await UserService.setUserRoles(user.id, user.roles)
     await userQuery.refetch()
     snackbar.info(`Roles updated for ${user.username}`)
