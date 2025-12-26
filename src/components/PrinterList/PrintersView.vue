@@ -373,7 +373,7 @@ const clickRow = (item: PrinterDto, event: any) => {
   console.log(item, event)
 
   if (event.isExpanded) {
-    const index = expanded.value.findIndex((i) => i === item.id.toString())
+    const index = expanded.value.indexOf(item.id.toString())
     expanded.value.splice(index, 1)
   } else {
     expanded.value.push(item.id.toString())

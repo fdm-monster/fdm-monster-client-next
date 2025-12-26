@@ -10,6 +10,7 @@ import { useTrackedUploadsStore } from "@/store/tracked-uploads.store";
 import { io, Socket } from "socket.io-client";
 import { reactive } from "vue";
 import { useEventBus } from "@vueuse/core";
+import { useDebugSocketStore } from "@/store/debug-socket.store";
 
 enum IO_MESSAGES {
   LegacyUpdate = "legacy-update",
@@ -30,6 +31,7 @@ export class SocketIoService {
   private readonly printerStateStore = usePrinterStateStore();
   private readonly testPrinterStore = useTestPrinterStore();
   private readonly trackedUploadsStore = useTrackedUploadsStore();
+  private readonly debugSocketStore = useDebugSocketStore();
   private readonly snackbar = useSnackbar();
   private readonly authStore = useAuthStore();
 
@@ -192,6 +194,11 @@ export class SocketIoService {
     if (!appSocketIO) {
       throw new Error("Cant bind socket app events, socket not created");
     }
+
+    // Register catch-all handler for debugging
+    appSocketIO.onAny((event, ...args) => {
+      this.debugSocketStore.logMessage("in", event, args.length === 1 ? args[0] : args);
+    });
 
     // Register legacy update handler
     appSocketIO.on(IO_MESSAGES.LegacyUpdate, (data) => this.onMessage(data));

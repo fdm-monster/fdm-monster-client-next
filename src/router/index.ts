@@ -22,6 +22,7 @@ import SoftwareUpgradeSettings from '../components/Settings/SoftwareUpgradeSetti
 import DiagnosticsSettings from '../components/Settings/DiagnosticsSettings.vue'
 import PrintStatisticsView from '../components/PrintStatistics/PrintStatisticsView.vue'
 import ExperimentalSettings from '@/components/Settings/ExperimentalSettings.vue'
+import DebugSocketSettings from "@/components/Settings/DebugSocketSettings.vue";
 
 const NeedsAuth = {
   requiresAuth: true
@@ -129,6 +130,11 @@ const router = createRouter({
           path: 'experimental',
           meta: NeedsAuth,
           component: ExperimentalSettings
+        },
+        {
+          path: "debug-socket",
+          meta: NeedsAuth,
+          component: DebugSocketSettings,
         }
       ]
     },
