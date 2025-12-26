@@ -41,7 +41,7 @@ export interface PrinterCompletions {
 
   printJobs: PrintJobEvents[]
 
-  correlationIds: number[]
+  correlationIds: string[]
 }
 
 export type PrintCompletionsModel = PrinterCompletions[]
