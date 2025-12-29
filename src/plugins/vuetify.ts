@@ -2,6 +2,7 @@
  * plugins/vuetify.ts
  *
  * Framework documentation: https://vuetifyjs.com`
+ * Note to self: src/styles/vuetify-variables.d.css contains a subset of CSS variables.
  */
 
 // Styles
@@ -13,7 +14,7 @@ import { aliases, md } from 'vuetify/iconsets/md'
 import { createVuetify } from 'vuetify'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
-export default createVuetify({
+export const vuetify = createVuetify({
   theme: {
     defaultTheme: 'dark',
     themes: {
@@ -32,7 +33,7 @@ export default createVuetify({
       light: {
         dark: false,
         colors: {
-          primary: '#9B0505',
+          primary: '#1eb6c3',
           secondary: '#424242',
           accent: '#82B1FF',
           error: '#FF5252',

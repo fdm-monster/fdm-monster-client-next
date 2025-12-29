@@ -4,6 +4,7 @@ Chores
 
 - Replace sass with sass-embedded for increased compilation performance
 - Remove dev splash screen
+- Cleanup main.ts imports, add helpful CSS hints with vuetify-variables.d.css typing for Vuetify theme CSS variables
 
 ## Client 0.0.27
 
