@@ -1,8 +1,10 @@
 <template>
   <v-overlay
     v-model="overlay"
+    :scrim="scrimColor"
     opacity="0.98"
-    style="z-index: 7"
+    persistent
+    no-click-animation
   >
     <GridLoader
       v-if="loading"
@@ -151,6 +153,7 @@ import { useEventBus } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { AxiosError } from 'axios'
 import { captureException } from '@sentry/vue'
+import { useTheme } from 'vuetify'
 import GridLoader from './components/Generic/Loaders/GridLoader.vue'
 import { useAuthStore } from './store/auth.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
@@ -182,8 +185,11 @@ const errorResponse = ref();
 const snackbar = useSnackbar();
 const socketIoClient: SocketIoService = new SocketIoService();
 
+const theme = useTheme()
+const scrimColor = computed(() => theme.current.value.colors.background)
+
 function reloadPage() {
-  window.location.reload()
+  globalThis.location.reload()
 }
 
 function copyError() {
@@ -195,13 +201,13 @@ function copyError() {
 }
 
 function setOverlay(overlayEnabled: boolean, message: string = '') {
-  if (!overlayEnabled) {
-    overlayMessage.value = ''
-  } else {
+  if (overlayEnabled) {
     overlayMessage.value = message
     errorCaught.value = null
     errorUrl.value = null
     errorResponse.value = null
+  } else {
+    overlayMessage.value = ''
   }
   overlay.value = overlayEnabled
 }
@@ -223,10 +229,10 @@ async function loadAppWithAuthenticationReady() {
     captureException(e)
   }
 
-  if (!socketIoClient.socketState().setup) {
-    await socketIoClient.setupSocketConnection()
-  } else {
+  if (socketIoClient.socketState().setup) {
     socketIoClient.reconnect()
+  } else {
+    await socketIoClient.setupSocketConnection()
   }
 
   loading.value = false;
