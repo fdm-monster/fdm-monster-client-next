@@ -44,7 +44,6 @@ import { useUploadsStore } from './store/uploads.store'
 import { uploadProgressTest } from './utils/test.util'
 import { useAuthStore } from './store/auth.store'
 import AppLoader from './AppLoader.vue'
-import { hideSplashScreen } from '@/plugins/dev-splashscreen/runtime'
 
 const uploadsStore = useUploadsStore()
 const authStore = useAuthStore()
@@ -56,19 +55,24 @@ watch(queuedUploads, async () => {
 })
 
 onMounted(() => {
-  hideSplashScreen()
   console.debug(
-    `App.vue mounted. Logged in: ${authStore.hasAuthToken}, Expired: ${authStore.isLoginExpired}`
+    `App.vue mounted. Logged in: ${ authStore.hasAuthToken }, Expired: ${ authStore.isLoginExpired }`
   )
   uploadProgressTest(false)
 })
 </script>
 
 <style>
+/* Used to improve Vuetify tooltips: increased contrast and legibility */
 .v-tooltip > .v-overlay__content {
   transition-duration: 75ms !important;
   background-color: #232323;
   color: white;
   border: 1px solid white;
+}
+
+/* Fix the main app height calculation as 100dvh or 100vh seem to wrong (on Edge for Desktop) */
+.v-application__wrap {
+  min-height: 100% !important;
 }
 </style>

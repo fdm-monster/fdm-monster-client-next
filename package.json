@@ -1,6 +1,6 @@
 {
   "name": "@fdm-monster/client-next",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fdm-monster/fdm-monster-client-next.git"
@@ -65,7 +65,7 @@
     "jwt-decode": "4.0.0",
     "pinia": "3.0.4",
     "prettier": "3.7.4",
-    "sass": "1.97.1",
+    "sass-embedded": "1.97.1",
     "selective-object-reuse": "1.0.6",
     "semver": "7.7.3",
     "socket.io-client": "4.8.3",

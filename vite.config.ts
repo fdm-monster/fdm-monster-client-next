@@ -10,18 +10,12 @@ import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 import packageJson from './package.json'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
-import { splashScreen } from './plugins/plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Avoid console jumping around:
+  clearScreen: false,
   plugins: [
-    splashScreen({
-      logoSrc: 'img/logo.svg',
-      splashBg: 'rgb(40, 40, 40)',
-      loaderType: 'dots',
-      loaderBg: 'rgb(155, 5, 5)',
-      minDurationMs: 1000
-    }),
     AutoImport({
       imports: ['vue'],
       dts: 'src/auto-imports.d.ts',

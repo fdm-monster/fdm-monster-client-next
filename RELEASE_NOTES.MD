@@ -1,5 +1,23 @@
 # Develop
 
+## Client 0.0.28
+
+Fixes
+
+- The overlay scrim added connected to Vuetify theme
+- The overlay does not allow clicking away, it is persistent and click animation is removed
+- The HTML vertical scrollbar now auto instead of scroll (Vuetify _reset.scss problem)
+- The HTML background now matches theme color
+- Navigation logo alignment improved by centering and size constraints
+- Page content height now calculated with 100% to avoid pixel discrepancies on Edge for Desktop
+
+Chores
+
+- Replace sass with sass-embedded for increased compilation performance
+- Remove dev splash screen
+- Cleanup main.ts imports, add helpful CSS hints with vuetify-variables.d.css typing for Vuetify theme CSS variables
+- Vite console doesnt clear screen anymore
+
 ## Client 0.0.27
 
 Feature
