@@ -91,7 +91,6 @@ export const useDialogsStore = defineStore('Dialog', {
         throw new Error('Cannot unregister undefined dialog reference')
       }
 
-      console.debug(`[Pinia Dialog ${id}] Registered`)
       const existingDialog = this.dialogsById[id]
       if (existingDialog) {
         console.debug(

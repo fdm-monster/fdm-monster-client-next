@@ -1,4 +1,4 @@
-import { useSnackbar } from '../shared/snackbar.composable'
+import { useSnackbar } from '@/shared/snackbar.composable'
 
 export function uploadProgressTest(enabled: boolean) {
   if (!enabled) return

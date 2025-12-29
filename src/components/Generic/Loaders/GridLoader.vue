@@ -27,7 +27,7 @@ export default {
   methods: {
     random,
     getWrapperStyle() {
-      const width = `${parseFloat(this.size) * 3 + parseFloat(this.margin) * 6}${this.sizeUnit}`
+      const width = `${Number.parseFloat(this.size) * 3 + Number.parseFloat(this.margin) * 6}${this.sizeUnit}`
       return {
         width: width,
         fontSize: 0

@@ -2,6 +2,11 @@
 
 ## Client 0.0.28
 
+Features
+
+- Redesigned loader, error and disconnect page
+- Implement reconnect loop triggered by app initiation and socketIO disconnect
+
 Fixes
 
 - The overlay scrim added connected to Vuetify theme
@@ -17,6 +22,7 @@ Chores
 - Remove dev splash screen
 - Cleanup main.ts imports, add helpful CSS hints with vuetify-variables.d.css typing for Vuetify theme CSS variables
 - Vite console doesnt clear screen anymore
+- Add md icon set for more icons
 
 ## Client 0.0.27
 
