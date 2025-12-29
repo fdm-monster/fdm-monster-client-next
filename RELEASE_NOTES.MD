@@ -1,5 +1,10 @@
 # Develop
 
+Chores
+
+- Replace sass with sass-embedded for increased compilation performance
+- Remove dev splash screen
+
 ## Client 0.0.27
 
 Feature

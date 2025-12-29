@@ -44,7 +44,6 @@ import { useUploadsStore } from './store/uploads.store'
 import { uploadProgressTest } from './utils/test.util'
 import { useAuthStore } from './store/auth.store'
 import AppLoader from './AppLoader.vue'
-import { hideSplashScreen } from '@/plugins/dev-splashscreen/runtime'
 
 const uploadsStore = useUploadsStore()
 const authStore = useAuthStore()
@@ -56,7 +55,6 @@ watch(queuedUploads, async () => {
 })
 
 onMounted(() => {
-  hideSplashScreen()
   console.debug(
     `App.vue mounted. Logged in: ${authStore.hasAuthToken}, Expired: ${authStore.isLoginExpired}`
   )
