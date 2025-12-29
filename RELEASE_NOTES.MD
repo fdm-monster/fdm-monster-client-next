@@ -1,5 +1,7 @@
 # Develop
 
+## Client 0.0.28
+
 Fixes
 
 - The overlay scrim added connected to Vuetify theme
