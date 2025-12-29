@@ -15,6 +15,8 @@ Fixes
 - The HTML background now matches theme color
 - Navigation logo alignment improved by centering and size constraints
 - Page content height now calculated with 100% to avoid pixel discrepancies on Edge for Desktop
+- Border of tile color was wrong
+- Printer drop default border was wrong
 
 Chores
 

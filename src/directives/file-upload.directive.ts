@@ -28,7 +28,7 @@ const bindDropConditionally = (
       const filesArray = e.dataTransfer?.files
       if (!filesArray?.length) return
 
-      const clonedFiles = [...Array.from(filesArray)]
+      const clonedFiles = Array.from(filesArray)
       let convertedUploads = []
       if (isSinglePrinter) {
         const printedFilename =
@@ -48,7 +48,7 @@ const bindDropConditionally = (
         )
       } else {
         if (clonedFiles.length > 1) {
-          throw 'Cannot upload multiple files to multiple printers'
+          throw new Error('Cannot upload multiple files to multiple printers')
         }
         console.debug(
           'Multi printer upload mode',
@@ -63,16 +63,17 @@ const bindDropConditionally = (
 
       printersStore.clearSelectedPrinters()
     }
-  } else {
-    el.ondrop = async (e) => {
-      e.preventDefault()
-      el.style.border = defaultBorder
-      snackbar.openInfoMessage({
-        title: 'No action performed',
-        subtitle: 'Please select one or more printers',
-        warning: true
-      })
-    }
+    return;
+  }
+
+  el.ondrop = async (e) => {
+    e.preventDefault()
+    el.style.border = defaultBorder
+    snackbar.openInfoMessage({
+      title: 'No action performed',
+      subtitle: 'Please select one or more printers',
+      warning: true
+    })
   }
 }
 
