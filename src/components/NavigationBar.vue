@@ -3,15 +3,14 @@
     permanent
     rail
   >
-    <v-app-bar-nav-icon class="ml-1 mt-2">
+    <div class="d-flex justify-center align-center logo-container">
       <v-img
         alt="FDM Monster Logo"
         :src="imgLogo"
-        class="shrink mr-1 pt-3 ml-1"
+        class="logo-image"
         transition="scale-transition"
-        width="40"
       />
-    </v-app-bar-nav-icon>
+    </div>
 
     <v-divider />
 
@@ -39,8 +38,20 @@ const items = [
   ['home', 'Devices', '/'],
   ['print', 'Printers', '/printers'],
   ['camera_alt', 'CameraGridView', '/cameras'],
-  ['settings', 'Settings', '/settings'],
   ['timeline', 'PrintStatistics', '/statistics'],
+  ['settings', 'Settings', '/settings'],
   ['contact_support', 'About', '/about']
 ]
 </script>
+
+<style scoped>
+.logo-container {
+  height: 64px;
+}
+
+.logo-image {
+  width: 40px;
+  max-width: 40px;
+  max-height: 40px;
+}
+</style>

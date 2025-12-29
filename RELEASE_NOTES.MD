@@ -4,8 +4,9 @@ Fixes
 
 - The overlay scrim added connected to Vuetify theme
 - The overlay does not allow clicking away, it is persistent and click animation is removed
-- The html vertical scrollbar now auto instead of scroll (Vuetify _reset.scss problem)
-- The html background now matches theme color
+- The HTML vertical scrollbar now auto instead of scroll (Vuetify _reset.scss problem)
+- The HTML background now matches theme color
+- Navigation logo alignment improved by centering and size constraints
 
 Chores
 
