@@ -529,7 +529,7 @@ const selectOrClearPrinterPosition = async () => {
 }
 
 .tile-selected {
-  outline: 2px solid var(--v-primary-base);
+  outline: 2px solid rgb(var(--v-theme-primary));
   opacity: 1;
 }
 

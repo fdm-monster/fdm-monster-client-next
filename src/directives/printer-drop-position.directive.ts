@@ -13,8 +13,8 @@ interface PrinterBindingValue {
   y: number
 }
 
-const defaultBorder = '1px solid #2b2a27'
-const hoverBorder = '1px solid gray'
+const defaultBorder = 'none' // Remove default border
+const hoverBorder = '2px dashed rgba(255, 255, 255, 0.4)'
 
 const bindDropConditionally = (
   el: HTMLElement,
