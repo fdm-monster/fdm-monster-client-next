@@ -1,17 +1,15 @@
-// Plugins
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import Fonts from 'unplugin-fonts/vite'
 import Vue from '@vitejs/plugin-vue'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-
-// Utilities
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 import packageJson from './package.json'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 // https://vitejs.dev/config/
+// As advised by vite 7 docs, we now use sass-embedded for increased vuetify/sass performance
 export default defineConfig({
   // Avoid console jumping around:
   clearScreen: false,

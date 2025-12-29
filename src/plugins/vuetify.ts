@@ -5,12 +5,11 @@
  * Note to self: src/styles/vuetify-variables.d.css contains a subset of CSS variables.
  */
 
-// Styles
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import { aliases, md } from 'vuetify/iconsets/md'
-
-// Composables
+import { mdi } from "vuetify/iconsets/mdi";
 import { createVuetify } from 'vuetify'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
@@ -48,7 +47,8 @@ export const vuetify = createVuetify({
     defaultSet: 'md',
     aliases,
     sets: {
-      md
+      md,
+      mdi,
     }
   }
 })
