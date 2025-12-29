@@ -6,14 +6,16 @@
 
     <NavigationBar
       v-if="
-        (authStore.hasAuthToken && !authStore.isLoginExpired) ||
-        !authStore.loginRequired
+        !appLoaderStore.loading &&
+        ((authStore.hasAuthToken && !authStore.isLoginExpired) ||
+        !authStore.loginRequired)
       "
     />
     <TopBar
       v-if="
-        (authStore.hasAuthToken && !authStore.isLoginExpired) ||
-        !authStore.loginRequired
+        !appLoaderStore.loading &&
+        ((authStore.hasAuthToken && !authStore.isLoginExpired) ||
+        !authStore.loginRequired)
       "
     />
 
@@ -43,10 +45,12 @@ import { onMounted, watch } from 'vue'
 import { useUploadsStore } from './store/uploads.store'
 import { uploadProgressTest } from './utils/test.util'
 import { useAuthStore } from './store/auth.store'
+import { useOverlayStore } from './store/overlay.store'
 import AppLoader from './AppLoader.vue'
 
 const uploadsStore = useUploadsStore()
 const authStore = useAuthStore()
+const appLoaderStore = useOverlayStore()
 
 const queuedUploads = uploadsStore.queuedUploads
 

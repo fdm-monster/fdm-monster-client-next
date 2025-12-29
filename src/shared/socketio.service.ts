@@ -11,6 +11,7 @@ import { io, Socket } from "socket.io-client";
 import { reactive } from "vue";
 import { useEventBus } from "@vueuse/core";
 import { useDebugSocketStore } from "@/store/debug-socket.store";
+import { useOverlayStore } from "@/store/overlay.store";
 
 enum IO_MESSAGES {
   LegacyUpdate = "legacy-update",
@@ -32,6 +33,7 @@ export class SocketIoService {
   private readonly testPrinterStore = useTestPrinterStore();
   private readonly trackedUploadsStore = useTrackedUploadsStore();
   private readonly debugSocketStore = useDebugSocketStore();
+  private readonly appLoaderStore = useOverlayStore();
   private readonly snackbar = useSnackbar();
   private readonly authStore = useAuthStore();
 
@@ -160,7 +162,8 @@ export class SocketIoService {
       socketState.connected = true;
       socketState.active = appSocketIO?.active ?? false;
       console.debug("Socket connected:", socketState.id, "Active:", socketState.active);
-      useEventBus("server:connected").emit({});
+      this.appLoaderStore.setServerDisconnected(false);
+      this.appLoaderStore.resetRetry();
     });
 
     appSocketIO.on("disconnect", () => {
@@ -168,7 +171,11 @@ export class SocketIoService {
       socketState.connected = false;
       socketState.active = false;
       console.debug("Socket disconnected");
-      useEventBus("server:disconnected").emit({});
+      this.appLoaderStore.setServerDisconnected(true);
+
+      // Trigger backend retry loop
+      const retryEventBus = useEventBus('backend:start-retry');
+      retryEventBus.emit();
     });
 
     appSocketIO.on("connect_error", async (error) => {
@@ -185,7 +192,7 @@ export class SocketIoService {
           await this.authStore.logout();
         }
       } else {
-        useEventBus("server:disconnected").emit({});
+        this.appLoaderStore.setServerDisconnected(true);
       }
     });
   }

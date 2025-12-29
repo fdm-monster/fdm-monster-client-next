@@ -1,161 +1,35 @@
 <template>
+  <!-- Shows Vue router content -->
+  <slot v-if="!appLoaderStore.overlay"/>
+
   <v-overlay
-    v-model="overlay"
+    v-model="appLoaderStore.overlay"
     :scrim="scrimColor"
     opacity="0.98"
     persistent
     no-click-animation
+    class="align-center justify-center"
   >
-    <GridLoader
-      v-if="loading"
-      :size="20"
-      class="ma-auto"
-      color="#a70015"
-    />
-    <br />
+    <!-- Loading State -->
+    <AppLoadingMessage/>
 
-    <div v-if="serverDisconnected">
-      <h1>FDM Monster Server Disconnected</h1>
-      <p>Did not receive an answer from the server. Please ensure the server is started and reload the page.</p>
+    <!-- Server Disconnected State -->
+    <ServerDisconnectedMessage/>
 
-      <v-sheet class="pa-4 rounded" color="grey darken-3" width="100%">
-        <v-row>
-          <v-col>
-            <img
-              class="justify-center align-center align-content-center rounded-pill mt-8 ma-4"
-              src="/img/OIG.JYDC2RaWdz7g9.jpg"
-              style="opacity: 0.9"
-              width="200"
-            />
-          </v-col>
-          <v-col class="justify-center align-center align-content-center">
-            <v-btn color="primary mb-2" @click="reloadPage()">
-              <v-icon class="mr-2">refresh</v-icon>
-              reload the page
-            </v-btn>
-            <br />
-            <v-btn
-              color="darken-2 mb-2"
-              href="https://docs.fdm-monster.net"
-              style="color: white"
-              target="_blank"
-            >
-              <v-icon class="mr-2">menu_book</v-icon>
-              view documentation
-            </v-btn>
-            <br />
-            <v-btn
-              color="purple darken-4"
-              href="https://discord.gg/mwA8uP8CMc"
-              style="color: white"
-              target="_blank"
-            >
-              <v-icon class="mr-2">chat</v-icon>
-              join our Discord
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-sheet>
-    </div>
-
-    <div
-      v-if="errorCaught"
-      style="margin: 50px"
-    >
-      <h1>FDM Monster Server Error</h1>
-      <p>
-        Did not expect this answer from the server. Please check your
-        configuration and logs.
-      </p>
-      <v-sheet
-        class="pa-4 rounded"
-        color="grey-darken-2"
-        width="80%"
-      >
-        Details:
-        <div class="mt-2 mb-2">
-          {{ JSON.stringify(errorCaught, null, 4) }}
-        </div>
-        <div
-          v-if="errorUrl"
-          class="mt-2 mb-2"
-        >
-          Original URL: {{ errorUrl }}
-        </div>
-        <div
-          v-if="errorResponse"
-          class="mt-2 mb-2"
-        >
-          Response body: {{ errorResponse }}
-        </div>
-        <br />
-        <v-btn
-          class="mb-2"
-          color="secondary"
-          @click="copyError()"
-        >
-          <v-icon class="mr-2">content_copy</v-icon>
-          Copy error details
-        </v-btn>
-        <br />
-        <v-btn
-          color="primary mb-2"
-          @click="reloadPage()"
-        >
-          <v-icon class="mr-2">refresh</v-icon>
-          reload the page
-        </v-btn>
-        <br />
-        <v-btn
-          color="darken-2 mb-2"
-          href="https://docs.fdm-monster.net"
-          style="color: white"
-          target="_blank"
-        >
-          <v-icon class="mr-2">menu_book</v-icon>
-          view documentation
-        </v-btn>
-        <br />
-        <v-btn
-          color="purple-darken-4"
-          href="https://discord.gg/mwA8uP8CMc"
-          style="color: white"
-          target="_blank"
-        >
-          <v-icon class="mr-2">chat</v-icon>
-          join our Discord
-        </v-btn>
-      </v-sheet>
-
-      <img
-        class="justify-center align-center align-content-center rounded-pill mt-8 ma-4"
-        src="/img/OIG.JYDC2RaWdz7g9.jpg"
-        style="opacity: 0.9"
-        width="400"
-      />
-    </div>
-
-    <!-- Fade-in -->
-    <!-- Slow scroll fade-out vtexts -->
-    <div
-      v-if="loading"
-      style="animation: fadeIn 0.75s"
-    >
-      {{ overlayMessage }}
-    </div>
+    <!-- Error State (token refresh failed) -->
+    <ErrorStateMessage/>
   </v-overlay>
-  <slot v-if="!overlay" />
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onUnmounted, ref } from 'vue'
+import { computed, onBeforeMount, onUnmounted } from 'vue'
 import { useEventBus } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { AxiosError } from 'axios'
 import { captureException } from '@sentry/vue'
 import { useTheme } from 'vuetify'
-import GridLoader from './components/Generic/Loaders/GridLoader.vue'
 import { useAuthStore } from './store/auth.store'
+import { useOverlayStore } from './store/overlay.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useSettingsStore } from '@/store/settings.store'
 import { setSentryEnabled } from '@/utils/sentry.util'
@@ -169,47 +43,74 @@ import {
   PermissionDeniedEvent
 } from '@/shared/auth.constants'
 import { SocketIoService } from '@/shared/socketio.service'
+import AppLoadingMessage from "@/components/Generic/Loaders/AppLoadingMessage.vue";
+import ServerDisconnectedMessage from "@/components/Generic/Loaders/ServerDisconnectedMessage.vue";
+import ErrorStateMessage from "@/components/Generic/Loaders/ErrorStateMessage.vue";
 
 const authStore = useAuthStore();
+const appLoaderStore = useOverlayStore();
 const settingsStore = useSettingsStore();
 const featureStore = useFeatureStore();
 const profileStore = useProfileStore();
-const overlay = ref(false);
 const router = useRouter();
-const overlayMessage = ref("");
-const loading = ref(true);
-const errorCaught = ref();
-const serverDisconnected = ref();
-const errorUrl = ref();
-const errorResponse = ref();
 const snackbar = useSnackbar();
 const socketIoClient: SocketIoService = new SocketIoService();
 
 const theme = useTheme()
 const scrimColor = computed(() => theme.current.value.colors.background)
-
-function reloadPage() {
-  globalThis.location.reload()
-}
-
-function copyError() {
-  navigator.clipboard.writeText(JSON.stringify(errorCaught.value))
-  snackbar.openInfoMessage({
-    title: 'Copied',
-    subtitle: 'Error copied to clipboard'
-  })
-}
+const RETRY_DELAY_MS = 5000 // 5 seconds between retries
+let retryIntervalId: NodeJS.Timeout | null = null
 
 function setOverlay(overlayEnabled: boolean, message: string = '') {
   if (overlayEnabled) {
-    overlayMessage.value = message
-    errorCaught.value = null
-    errorUrl.value = null
-    errorResponse.value = null
+    appLoaderStore.setOverlay(true, message)
+    appLoaderStore.clearError()
   } else {
-    overlayMessage.value = ''
+    appLoaderStore.hideOverlay()
   }
-  overlay.value = overlayEnabled
+}
+
+async function testConnection() {
+  appLoaderStore.setTestingConnection(true)
+  try {
+    await AppService.test()
+    console.log('[AppLoader] Backend connection successful, reloading page')
+    stopRetryLoop()
+    appLoaderStore.resetRetry()
+    globalThis.location.reload()
+  } catch (e) {
+    console.log(`[AppLoader] Retry attempt failed`, e)
+    appLoaderStore.setTestingConnection(false)
+    appLoaderStore.incrementRetry(RETRY_DELAY_MS)
+  }
+}
+
+function retryBackendConnection() {
+  console.log('[AppLoader] Starting retry loop')
+
+  // Clear any existing interval
+  stopRetryLoop()
+
+  // Check every 100ms if it's time to retry
+  retryIntervalId = globalThis.setInterval(async () => {
+    const nextRetryTime = appLoaderStore.nextRetryTime || 0
+    if (Date.now() >= nextRetryTime && nextRetryTime > 0) {
+      console.log(`[AppLoader] Retry attempt at ${ Date.now() }`)
+      // Set nextRetryTime to 0 to prevent multiple simultaneous tests
+      appLoaderStore.nextRetryTime = 0
+      await testConnection()
+    }
+  }, 100)
+}
+
+function stopRetryLoop() {
+  if (!retryIntervalId !== null) {
+    return
+  }
+  
+  console.log('[AppLoader] Stopping retry loop')
+  clearInterval(retryIntervalId)
+  retryIntervalId = null
 }
 
 async function loadAppWithAuthenticationReady() {
@@ -235,7 +136,6 @@ async function loadAppWithAuthenticationReady() {
     await socketIoClient.setupSocketConnection()
   }
 
-  loading.value = false;
   setOverlay(false)
 }
 
@@ -263,7 +163,7 @@ authPermissionDeniedKey.on(async (event) => {
 const authFailKey = useEventBus('auth:failure')
 authFailKey.on(async (event: any) => {
   console.debug(
-    `[AppLoader] Event received: 'auth:failure', going back to login, context: ${event}`
+    `[AppLoader] Event received: 'auth:failure', going back to login, context: ${ event }`
   )
   setOverlay(true, 'Authentication failed, going back to login')
 
@@ -283,11 +183,11 @@ loginEventKey.on(async () => {
 
 // Emitted by auth.store.ts handleAndEmitAuthenticationError
 const accountNotVerifiedEventKey = useEventBus(
-  `auth:${AUTH_ERROR_REASON.AccountNotVerified}`
+  `auth:${ AUTH_ERROR_REASON.AccountNotVerified }`
 )
 accountNotVerifiedEventKey.on(async () => {
   console.debug(
-    `[AppLoader] Event received: 'auth:${AUTH_ERROR_REASON.AccountNotVerified}', going to login`
+    `[AppLoader] Event received: 'auth:${ AUTH_ERROR_REASON.AccountNotVerified }', going to login`
   )
   snackbar.error(
     'Account not verified, please ask an administrator to verify your account.'
@@ -304,11 +204,11 @@ accountNotVerifiedEventKey.on(async () => {
 
 // Emitted by auth.store.ts handleAndEmitAuthenticationError
 const passwordChangeRequiredEventKey = useEventBus(
-  `auth:${AUTH_ERROR_REASON.PasswordChangeRequired}`
+  `auth:${ AUTH_ERROR_REASON.PasswordChangeRequired }`
 )
 passwordChangeRequiredEventKey.on(async () => {
   console.debug(
-    `[AppLoader] Event received: 'auth:${AUTH_ERROR_REASON.PasswordChangeRequired}', going to login`
+    `[AppLoader] Event received: 'auth:${ AUTH_ERROR_REASON.PasswordChangeRequired }', going to login`
   )
   snackbar.error('Password change required, please change your password.')
   setOverlay(true, 'Password change required, please change your password.')
@@ -318,32 +218,26 @@ passwordChangeRequiredEventKey.on(async () => {
   setOverlay(false)
 })
 
-const serverDisconnectedKey = useEventBus(
-  "server:disconnected",
-);
-serverDisconnectedKey.on(async (event) => {
-  setOverlay(true);
-  serverDisconnected.value = true;
-  loading.value = true;
-});
-
-const serverConnectedKey = useEventBus(
-  "server:connected",
-);
-serverConnectedKey.on(async (event) => {
-  setOverlay(false);
-  serverDisconnected.value = false;
-  loading.value = false;
-});
+// Emitted by socketio.service.ts when socket disconnects
+const backendRetryEventKey = useEventBus('backend:start-retry')
+backendRetryEventKey.on(() => {
+  console.debug('[AppLoader] Event received: backend:start-retry, starting retry loop')
+  appLoaderStore.startRetry(RETRY_DELAY_MS)
+  retryBackendConnection()
+})
 
 onUnmounted(() => {
-  if (socketIoClient.socketState().setup) {
-    socketIoClient.disconnect()
+  stopRetryLoop()
+
+  if (!socketIoClient.socketState().setup) {
+    return
   }
+
+  socketIoClient.disconnect()
 })
 
 onBeforeMount(async () => {
-  loading.value = true
+  appLoaderStore.setLoading(true)
   const loadingMessages = [
     'Loading FDM Monster',
     'Loading it all',
@@ -354,7 +248,10 @@ onBeforeMount(async () => {
     'Cleaning cobwebs',
     'Loading filament.dll',
     'Loading 3D_printer.exe',
-    'Loading spools'
+    'Loading spools',
+    'Forking PrusaSlicer',
+    'Filling progress bar',
+    'Eating printed spaghetti'
   ]
 
   const message =
@@ -364,9 +261,10 @@ onBeforeMount(async () => {
   try {
     await AppService.test();
   } catch (e) {
-    loading.value = false;
-    serverDisconnected.value = true;
+    appLoaderStore.setServerDisconnected(true);
     captureException(e);
+    appLoaderStore.startRetry(5000);
+    await retryBackendConnection();
     return;
   }
 
@@ -418,31 +316,21 @@ onBeforeMount(async () => {
         await router.push({ name: RouteNames.Login })
       }
       setOverlay(false)
-      // Dont load app as it will be redirected to login
+      // Don't load app as it will be redirected to login
       return
     }
   } catch (e) {
     console.log('[AppLoader] Error when refreshing login', e)
-    loading.value = false
-    errorCaught.value = (e as AxiosError).message
-    errorUrl.value = (e as AxiosError).config?.url
-    errorResponse.value = (e as AxiosError).response?.data
+    appLoaderStore.setLoading(false)
+    appLoaderStore.setError(
+      (e as AxiosError).message,
+      (e as AxiosError).config?.url,
+      (e as AxiosError).response?.data
+    )
     captureException(e)
     return
   }
 
-  console.debug('[AppLoader] Loading app')
   await loadAppWithAuthenticationReady()
 })
 </script>
-
-<style>
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-</style>
