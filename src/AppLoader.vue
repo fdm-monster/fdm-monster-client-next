@@ -104,12 +104,12 @@ function retryBackendConnection() {
 }
 
 function stopRetryLoop() {
-  if (!retryIntervalId !== null) {
+  if (!retryIntervalId) {
     return
   }
-  
+
   console.log('[AppLoader] Stopping retry loop')
-  clearInterval(retryIntervalId)
+  clearInterval(retryIntervalId!)
   retryIntervalId = null
 }
 
@@ -264,7 +264,7 @@ onBeforeMount(async () => {
     appLoaderStore.setServerDisconnected(true);
     captureException(e);
     appLoaderStore.startRetry(5000);
-    await retryBackendConnection();
+    retryBackendConnection();
     return;
   }
 
