@@ -3,11 +3,11 @@
     <v-card>
       <v-card-title class="d-flex align-center">
         <span>Printers</span>
-        <v-spacer />
+        <v-spacer/>
         <div class="d-flex align-center ga-2">
           <PrinterTagFilter
             v-model="selectedTagIds"
-            :tags="groups"
+            :tags="tags"
             label="Filter by tags"
             style="width: 220px"
           />
@@ -34,10 +34,8 @@
         :items="printers"
         :search="search"
         class="elevation-1"
-        item-key="id"
+        item-value="id"
         show-expand
-        single-expand
-        @click:row="clickRow"
       >
         <template #no-data>
           <div class="mt-4 mb-4">
@@ -47,7 +45,7 @@
             <h3 v-else>
               No printer has been found. Adjust your filters or search criteria.
             </h3>
-            <PrinterCreateAction />
+            <PrinterCreateAction/>
           </div>
         </template>
         <template #top>
@@ -55,7 +53,7 @@
             <v-toolbar-title>
               Showing {{ printers.length || 0 }} printers
             </v-toolbar-title>
-            <v-spacer />
+            <v-spacer/>
             <v-btn
               variant="elevated"
               color="purple"
@@ -141,22 +139,22 @@
         <template #item.group="{ item }">
           <div class="d-flex align-center flex-wrap ga-1">
             <v-chip
-              v-for="group of groupsOfPrinter(item.id)"
-              :key="group.id"
+              v-for="tag of tagsOfPrinter(item.id)"
+              :key="tag.id"
               size="small"
               variant="tonal"
               closable
-              @click:close="deletePrinterFromGroup(group.id, item.id)"
+              @click:close="deletePrinterFromTag(tag.id, item.id)"
             >
               <v-icon start size="x-small">label</v-icon>
-              {{ group.name }}
+              {{ tag.name }}
             </v-chip>
 
             <v-menu>
               <template #activator="{ props }">
                 <v-btn
                   v-bind="props"
-                  :disabled="!nonGroupsOfPrinter(item.id).length"
+                  :disabled="!nonTagsOfPrinter(item.id).length"
                   size="x-small"
                   icon
                   variant="text"
@@ -168,16 +166,16 @@
               <v-list density="compact" min-width="150">
                 <v-list-subheader>Add Tag</v-list-subheader>
                 <v-list-item
-                  v-for="(group, index) in nonGroupsOfPrinter(item.id)"
+                  v-for="(tag, index) in nonTagsOfPrinter(item.id)"
                   :key="index"
-                  @click="addPrinterToGroup(group.id, item.id)"
+                  @click="addPrinterToTag(tag.id, item.id)"
                 >
                   <template v-slot:prepend>
                     <v-icon size="small">label</v-icon>
                   </template>
-                  <v-list-item-title>{{ group.name }}</v-list-item-title>
+                  <v-list-item-title>{{ tag.name }}</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="!nonGroupsOfPrinter(item.id).length" disabled>
+                <v-list-item v-if="!nonTagsOfPrinter(item.id).length" disabled>
                   <v-list-item-title class="text-caption">All tags assigned</v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -185,17 +183,20 @@
           </div>
         </template>
         <template #item.actions="{ item }">
-          <div class="d-flex ga-1 align-center">
-            <PrinterUrlAction :printer="item" />
-            <PrinterConnectionAction :printer="item" />
-            <PrinterQuickStopAction :printer="item" />
-            <FileExplorerAction :printer="item" />
-            <SyncPrinterNameAction :printer="item" />
-            <PrinterDeleteAction :printer="item" />
-            <PrinterSettingsAction
-              :printer="item"
-              @update:show="openEditDialog(item)"
-            />
+          <div class="d-flex align-center">
+            <!-- Core actions -->
+            <div class="d-flex ga-1">
+              <FileExplorerAction :printer="item"/>
+              <PrinterSettingsAction
+                :printer="item"
+                @update:show="openEditDialog(item)"
+              />
+              <PrinterDeleteAction :printer="item"/>
+              <PrinterUrlAction :printer="item"/>
+              <PrinterQuickStopAction :printer="item"/>
+              <PrinterConnectionAction :printer="item"/>
+              <SyncPrinterNameAction :printer="item"/>
+            </div>
           </div>
         </template>
         <template #item.socketupdate="{ item }">
@@ -207,7 +208,7 @@
         </template>
         <template #expanded-row="{ item, columns }">
           <td :colspan="columns.length">
-            <PrinterDetails :printer="item" />
+            <PrinterDetails :printer="item"/>
           </td>
         </template>
       </v-data-table>
@@ -225,16 +226,16 @@
             <div class="text-subtitle-2 mb-2">Available Tags:</div>
             <div class="d-flex flex-wrap ga-2">
               <v-chip
-                v-for="group of groupsWithPrinters"
-                :key="group.id"
+                v-for="tag of tagsWithPrinters"
+                :key="tag.id"
                 closable
                 size="small"
-                @click:close="deleteGroup(group.id)"
+                @click:close="deleteTag(tag.id)"
               >
-                {{ group.name }}
+                {{ tag.name }}
               </v-chip>
               <v-chip
-                v-if="!groupsWithPrinters.length"
+                v-if="!tagsWithPrinters.length"
                 disabled
                 size="small"
               >
@@ -243,32 +244,32 @@
             </div>
           </div>
 
-          <v-divider class="my-4" />
+          <v-divider class="my-4"/>
 
           <div>
             <div class="text-subtitle-2 mb-2">Create New Tag:</div>
             <v-text-field
-              v-model="newGroupName"
+              v-model="newTagName"
               label="Tag Name"
               placeholder="Enter tag name"
               density="compact"
               variant="outlined"
               hide-details
-              @keyup.enter="createGroup()"
+              @keyup.enter="createTag()"
             />
             <v-btn
               class="mt-2"
               color="primary"
               size="small"
               prepend-icon="add"
-              @click="createGroup()"
+              @click="createTag()"
             >
               Create Tag
             </v-btn>
           </div>
         </v-card-text>
         <v-card-actions>
-          <v-spacer />
+          <v-spacer/>
           <v-btn @click="showTagDialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
@@ -316,10 +317,10 @@ const featureStore = useFeatureStore()
 
 const addOrUpdatePrinterDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 
-const groupsWithPrinters = ref<TagWithPrintersDto[]>([])
-const groups = ref<{ id: number; name: string }[]>([])
+const tagsWithPrinters = ref<TagWithPrintersDto[]>([])
+const tags = ref<{ id: number; name: string }[]>([])
 const selectedTagIds = ref<number[]>([])
-const newGroupName = ref('')
+const newTagName = ref('')
 const showTagDialog = ref(false)
 const selectedPrinterTypes = ref<number[]>([])
 const cameras = ref<any[]>([])
@@ -347,18 +348,18 @@ const tableHeaders = computed(
 async function loadData() {
   loading.value = true
   await featureStore.loadFeatures()
-  groupsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
-  groups.value = groupsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
+  tagsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
+  tags.value = tagsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
 
   // Load cameras
   const { CameraStreamService } = await import('@/backend/camera-stream.service')
   cameras.value = await CameraStreamService.listCameraStreams()
 
   loading.value = false
-  return groupsWithPrinters
+  return tagsWithPrinters
 }
 
-const printerGroupsQuery = useQuery({
+const printerTagsQuery = useQuery({
   queryKey: ['printerGroups'],
   queryFn: loadData
 })
@@ -368,7 +369,7 @@ const printers = computed(() => {
 
   // Filter by tags
   if (selectedTagIds.value?.length > 0) {
-    const printerIdsInSelectedTags = groupsWithPrinters.value
+    const printerIdsInSelectedTags = tagsWithPrinters.value
       .filter(g => selectedTagIds.value.includes(g.id))
       .flatMap(g => g.printers.map(p => p.printerId))
     filtered = filtered.filter((p) =>
@@ -396,15 +397,15 @@ const diffSeconds = (timestamp: number) => {
   return (now - timestamp) / 1000
 }
 
-const groupsOfPrinter = (printerId: number) => {
-  return groupsWithPrinters.value.filter((g) =>
+const tagsOfPrinter = (printerId: number) => {
+  return tagsWithPrinters.value.filter((g) =>
     g.printers.find((p) => p.printerId === printerId)
   )
 }
 
-const nonGroupsOfPrinter = (printerId: number) => {
-  return groupsWithPrinters.value.filter(
-    (g) => !g.printers.find((p) => p.printerId === printerId)
+const nonTagsOfPrinter = (printerId: number) => {
+  return tagsWithPrinters.value.filter(
+    (g) => !g.printers.some((p) => p.printerId === printerId)
   )
 }
 
@@ -425,21 +426,6 @@ const openCreatePrinterDialog = () => {
   addOrUpdatePrinterDialog.openDialog()
 }
 
-const clickRow = (event: any, item: any) => {
-  if (!item?.item?.id) return
-
-  const itemId = item.item.id.toString()
-  const index = expanded.value.indexOf(itemId)
-
-  if (index > -1) {
-    // Already expanded, collapse it
-    expanded.value.splice(index, 1)
-  } else {
-    // Not expanded, expand it
-    expanded.value = [itemId] // Single expand mode
-  }
-}
-
 const openImportOctoFarmPrintersDialog = () => {
   useDialog(DialogName.ImportOctoFarmDialog).openDialog()
 }
@@ -448,49 +434,49 @@ const openYamlImportExportDialog = () => {
   useDialog(DialogName.YamlImportExport).openDialog()
 }
 
-const createGroup = async () => {
-  if (!newGroupName.value?.trim()?.length) {
-    throw new Error('Please set a non-empty group name')
+const createTag = async () => {
+  if (!newTagName.value?.trim()?.length) {
+    throw new Error('Please set a non-empty tag name')
   }
 
-  await PrinterTagService.createTag(newGroupName.value.trim())
-  await printerGroupsQuery.refetch()
-  newGroupName.value = ''
+  await PrinterTagService.createTag(newTagName.value.trim())
+  await printerTagsQuery.refetch()
+  newTagName.value = ''
   showTagDialog.value = false
   snackbar.info('Created tag')
 }
 
-const deleteGroup = async (groupId: number) => {
-  const existingGroup = groupsWithPrinters.value.find((g) => g.id === groupId)
-  if (!existingGroup) {
-    throw new Error('Group was not found, please reload the page')
+const deleteTag = async (groupId: number) => {
+  const existingTag = tagsWithPrinters.value.find((g) => g.id === groupId)
+  if (!existingTag) {
+    throw new Error('Tag was not found, please reload the page')
   }
 
-  const printerCount = existingGroup.printers.length
+  const printerCount = existingTag.printers.length
   if (
     printerCount > 0 &&
     !confirm(
-      `This group contains ${printerCount} printers, are you sure to delete it?`
+      `This tag contains ${ printerCount } printers, are you sure to delete it?`
     )
   ) {
     return
   }
 
   await PrinterTagService.deleteTag(groupId)
-  await printerGroupsQuery.refetch()
-  snackbar.info('Deleted group')
+  await printerTagsQuery.refetch()
+  snackbar.info('Deleted tag')
 }
 
-const addPrinterToGroup = async (groupId: number, printerId: number) => {
+const addPrinterToTag = async (groupId: number, printerId: number) => {
   await PrinterTagService.addPrinterToTag(groupId, printerId)
-  await printerGroupsQuery.refetch()
-  snackbar.info('Added printer to group')
+  await printerTagsQuery.refetch()
+  snackbar.info('Added printer to tag')
 }
 
-const deletePrinterFromGroup = async (groupId: number, printerId: number) => {
+const deletePrinterFromTag = async (groupId: number, printerId: number) => {
   await PrinterTagService.deletePrinterTag(groupId, printerId)
-  await printerGroupsQuery.refetch()
-  snackbar.info('Removed printer from group')
+  await printerTagsQuery.refetch()
+  snackbar.info('Removed printer from tag')
 }
 
 const toggleEnabled = async (printer: PrinterDto) => {

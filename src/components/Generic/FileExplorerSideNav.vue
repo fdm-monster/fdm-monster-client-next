@@ -36,6 +36,7 @@
           </div>
 
           <v-btn
+            v-if="storedSideNavPrinter && hasWebInterface(storedSideNavPrinter.printerType)"
             icon="open_in_new"
             variant="text"
             size="small"
@@ -410,6 +411,7 @@ import { usePrinterStateStore } from '@/store/printer-state.store'
 import {
   getServiceName,
 } from "@/shared/printer-types.constants";
+import { hasWebInterface } from '@/shared/printer-capabilities.constants'
 import { useDialog } from '@/shared/dialog.composable'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
 

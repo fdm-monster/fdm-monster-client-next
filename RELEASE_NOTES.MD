@@ -20,6 +20,7 @@ Features
 - Redesign Job Menu including Tag and Type filter
 - Design new Printer Status Menu
 - Redesign the floor settings page
+- Implement capabilities feature to allow better UI customization for different printer types
 
 Fixes
 

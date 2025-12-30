@@ -4,7 +4,7 @@
       <v-btn
         v-bind="props"
         color="secondary"
-        class="ma-2"
+        class="ms-4"
         size="small"
         rounded
         @click.c.capture.native.stop="openSettings()"

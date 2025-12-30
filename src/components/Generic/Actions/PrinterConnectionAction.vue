@@ -1,10 +1,10 @@
 <template>
-  <v-tooltip location="top">
+  <v-tooltip v-if="hasSerialConnection(printer.printerType)" location="top">
     <template v-slot:activator="{ props }">
       <v-badge
         v-if="printer.enabled"
         :color="isPrinterOperational() ? 'green' : 'red'"
-        class="pa-2"
+        class="ms-4"
       >
         <template #badge>
           <v-icon v-if="isPrinterOperational()">check</v-icon>
@@ -30,6 +30,7 @@
 import { PrinterDto } from '@/models/printers/printer.model'
 import { PrintersService } from '@/backend'
 import { usePrinterStateStore } from '@/store/printer-state.store'
+import { hasSerialConnection } from '@/shared/printer-capabilities.constants'
 
 const props = defineProps<{
   printer: PrinterDto

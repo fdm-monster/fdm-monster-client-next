@@ -13,7 +13,7 @@
       }"
       class="tile colored-tile rounded-lg"
       elevation="5"
-      @click="selectOrClearPrinterPosition()"
+      @click="selectPrinterPosition()"
       @dragstart="onDragStart"
     >
       <div
@@ -90,7 +90,7 @@
       </div>
 
       <div
-        v-if="printer && !gridStore.gridEditMode"
+        v-if="printer"
         class="printer-menu"
       >
         <v-tooltip location="top">
@@ -111,7 +111,7 @@
       </div>
 
       <div
-        v-if="printer && !gridStore.gridEditMode"
+        v-if="printer"
         :style="{
           position: largeTilesEnabled ? 'inherit' : 'absolute',
           top: largeTilesEnabled ? 'inherit' : '30px'
@@ -126,7 +126,7 @@
 
       <!-- Hover controls -->
       <div
-        v-if="printer && !gridStore.gridEditMode"
+        v-if="printer"
         class="centered-controls"
       >
         <v-tooltip top>
@@ -146,16 +146,15 @@
           <template v-slot:default>Move and home printer</template>
         </v-tooltip>
 
-        <!-- Connect USB -->
-        <v-tooltip top>
-          <template v-slot:activator="{ props }">
+        <v-tooltip v-if="hasSerialConnection(props.printer?.printerType)" top>
+          <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               v-if="!isOperational && isOnline"
               :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               elevation="0"
               style="border-radius: 7px"
-              v-bind="props"
+              v-bind="tooltipProps"
               @click.prevent.stop="clickConnectUsb()"
             >
               <v-icon>usb</v-icon>
@@ -164,14 +163,14 @@
           <template v-slot:default>Connect USB (only for OctoPrint)</template>
         </v-tooltip>
 
-        <v-tooltip top>
-          <template v-slot:activator="{ props }">
+        <v-tooltip v-if="hasPrinterControl(props.printer?.printerType)" top>
+          <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               elevation="0"
               style="border-radius: 7px"
-              v-bind="props"
+              v-bind="tooltipProps"
               @click.prevent.stop="clickRefreshSocket()"
             >
               <v-icon>refresh</v-icon>
@@ -182,15 +181,15 @@
           </template>
         </v-tooltip>
 
-        <v-tooltip top>
-          <template v-slot:activator="{ props }">
+        <v-tooltip v-if="hasPrinterControl(props.printer?.printerType)" top>
+          <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               :disabled="!isOnline || (!isPaused && !isPrinting)"
               :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               elevation="0"
               style="border-radius: 7px"
-              v-bind="props"
+              v-bind="tooltipProps"
               @click.prevent.stop="
                 isPaused ? clickResumePrint() : clickPausePrint()
               "
@@ -204,8 +203,11 @@
           </template>
         </v-tooltip>
 
-        <v-tooltip top>
-          <template v-slot:activator="{ props }">
+        <v-tooltip
+          v-if="hasPrinterControl(props.printer?.printerType) && (hasEmergencyStop(props.printer?.printerType) || preferCancelOverQuickStop)"
+          top
+        >
+          <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               :disabled="
                 !isOnline ||
@@ -215,7 +217,7 @@
               color="darkgray"
               elevation="0"
               style="border-radius: 7px"
-              v-bind="props"
+              v-bind="tooltipProps"
               @click.prevent.stop="
                 preferCancelOverQuickStop ? clickStop() : clickQuickStop()
               "
@@ -253,7 +255,7 @@
 
       <!-- Progress Bar -->
       <v-progress-linear
-        v-if="printer && !gridStore.gridEditMode"
+        v-if="printer"
         :model-value="currentProgress"
         background-color="dark-gray"
         class="progress-bar"
@@ -329,6 +331,7 @@ import { useDialog } from '@/shared/dialog.composable'
 import { useThumbnailQuery } from '@/queries/thumbnail.query'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
 import { dragAppId, INTENT, PrinterPlace, DRAG_EVENTS } from '@/shared/drag.constants'
+import { hasEmergencyStop, hasPrinterControl, hasSerialConnection } from '@/shared/printer-capabilities.constants'
 import logoPng from '@/assets/logo.png'
 
 const defaultColor = 'rgba(100,100,100,0.1)'
@@ -514,17 +517,11 @@ const clickConnectUsb = async () => {
   await PrintersService.sendPrinterConnectCommand(printerId.value)
 }
 
-const selectOrClearPrinterPosition = async () => {
+const selectPrinterPosition = async () => {
   if (!props.printer || !printerId.value) {
     return
   }
 
-  if (gridStore.gridEditMode) {
-    const floorId = floorStore.selectedFloor?.id
-    if (!floorId) throw new Error('Cant clear printer, floor not selected')
-    await FloorService.deletePrinterFromFloor(floorId, printerId.value)
-    return
-  }
   printerStore.toggleSelectedPrinter(props.printer)
 }
 </script>

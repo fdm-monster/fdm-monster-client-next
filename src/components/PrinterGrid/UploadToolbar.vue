@@ -88,7 +88,6 @@ const openPrinter = (printer: PrinterDto) => {
 
 <template>
   <v-banner
-    v-if="!gridStore.gridEditMode"
     v-drop-upload="{ printers: selectedPrinters }"
   >
     <v-row style="margin-bottom: -5px">
