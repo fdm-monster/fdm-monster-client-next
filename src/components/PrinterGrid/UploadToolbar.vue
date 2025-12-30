@@ -197,7 +197,3 @@ const openPrinter = (printer: PrinterDto) => {
     </v-row>
   </v-banner>
 </template>
-
-<style scoped>
-
-</style>
