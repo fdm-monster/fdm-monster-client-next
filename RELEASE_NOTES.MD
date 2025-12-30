@@ -19,6 +19,7 @@ Fixes
 - Printer drop default border was wrong
 - Disable printer tile ripple when printer not online
 - Close side explorer or dialogs when server has suddenly disconnected
+- OctoFarm import dialog upgraded to Vuetify3 and import flow has been fixed
 
 Chores
 
