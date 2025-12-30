@@ -2,40 +2,44 @@
   <v-snackbar
     v-model="snackbarOpened"
     :timeout="snackbarTimeout"
-    absolute
-    location="bottom"
-    class="ml-16 mb-16 ma-3 elevation-24"
-    color="error-darken-1"
-    rounded="pill"
+    location="bottom right"
+    class="error-snackbar"
+    color="error"
+    variant="elevated"
+    rounded="lg"
     multi-line
-    style="z-index: 1000"
-    width="450"
+    width="400"
+    max-width="90vw"
   >
-    <v-row>
-      <v-col cols="2">
-        <v-btn icon="error" />
-      </v-col>
-      <v-col
-        class="d-flex align-center flex-row"
-        cols="8"
+    <div class="d-flex align-center ga-3">
+      <v-icon
+        color="white"
+        size="24"
       >
-        <div>
-          <span class="font-weight-bold text-button">
-            {{ snackbarTitle }}
-          </span>
-          <div v-if="snackbarSubtitle?.length">
-            {{ snackbarSubtitle }}
-          </div>
-        </div>
-      </v-col>
+        error
+      </v-icon>
 
-      <v-col cols="1">
-        <v-btn
-          icon="close"
-          @click="snackbarOpened = false"
-        />
-      </v-col>
-    </v-row>
+      <div class="flex-grow-1 min-width-0">
+        <div class="text-body-1 font-weight-medium text-white">
+          {{ snackbarTitle }}
+        </div>
+        <div
+          v-if="snackbarSubtitle?.length"
+          class="text-body-2 text-white opacity-90 mt-1"
+        >
+          {{ snackbarSubtitle }}
+        </div>
+      </div>
+
+      <v-btn
+        icon="close"
+        variant="text"
+        color="white"
+        size="small"
+        class="ml-2"
+        @click="snackbarOpened = false"
+      />
+    </div>
   </v-snackbar>
 </template>
 <script lang="ts" setup>
@@ -57,3 +61,25 @@ onMounted(() => {
   })
 })
 </script>
+
+<style scoped>
+.error-snackbar {
+  margin: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.min-width-0 {
+  min-width: 0;
+}
+
+/* Ensure text doesn't overflow */
+.error-snackbar :deep(.v-snackbar__content) {
+  padding: 16px 20px;
+}
+
+/* Animation for better UX */
+.error-snackbar :deep(.v-snackbar__wrapper) {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+}
+</style>
+

@@ -1,10 +1,22 @@
 <template>
-  <v-toolbar flat>
+  <v-toolbar
+    flat
+    color="surface"
+    class="text-on-surface"
+  >
+    <v-btn
+      v-if="!printerStore.printers?.length"
+      class="mt-0 ml-6"
+      color="primary"
+      to="/printers"
+    >
+      You have no printers. Click here to start!
+    </v-btn>
+
+    <!-- Floor selection toggle group -->
     <v-btn-toggle
       :model-value="selectedFloorToggleIndex"
-      class="ml-7"
       mandatory
-      rounded
       @update:model-value="changeFloorIndex"
     >
       <v-btn
@@ -17,14 +29,6 @@
       </v-btn>
     </v-btn-toggle>
 
-    <v-btn
-      v-if="!printerStore.printers?.length"
-      class="mt-0 ml-6"
-      color="primary"
-      to="/printers"
-    >
-      You have no printers. Click here to start!
-    </v-btn>
     <v-alert
       v-if="floorStore.floorlessPrinters.length"
       class="ml-4"
@@ -32,6 +36,7 @@
       <v-icon>warning</v-icon>
       {{ floorStore.floorlessPrinters.length }} unplaced printer(s)!
     </v-alert>
+
     <v-spacer />
     <span class="d-flex flex-wrap gap-2">
       <span class="pr-2">
@@ -58,13 +63,12 @@
 
     <v-btn
       elevation="2"
-      small
+      color="secondary"
+      size="small"
       class="ml-6"
-      icon
+      icon="settings"
       @click="useDialog(DialogName.GridSettingsDialog).openDialog()"
-    >
-      <v-icon>settings</v-icon>
-    </v-btn>
+    />
 
     <div class="ma-4 pt-6">
       <v-switch

@@ -100,20 +100,20 @@
         v-if="printer && !gridStore.gridEditMode"
         class="printer-menu"
       >
-        <v-tooltip top>
+        <v-tooltip location="top">
           <template v-slot:activator="{ props }">
             <v-btn
-              color="darkgray"
-              elevation="0"
-              small
-              style="border-radius: 7px"
+              color="primary"
+              elevation="2"
+              size="x-small"
+              rounded="xl"
               v-bind="props"
               @click.prevent.stop="clickInfo()"
             >
-              <v-icon dark>menu</v-icon>
+              <v-icon size="16">folder</v-icon>
             </v-btn>
           </template>
-          <template v-slot:default>Open printer details</template>
+          <template v-slot:default>Files</template>
         </v-tooltip>
       </div>
 
@@ -185,7 +185,7 @@
             </v-btn>
           </template>
           <template v-slot:default
-            >Reload printer websocket and refresh all states
+            >Reload printer connection and refresh all states
           </template>
         </v-tooltip>
 
@@ -261,7 +261,7 @@
       <!-- Progress Bar -->
       <v-progress-linear
         v-if="printer && !gridStore.gridEditMode"
-        :value="currentJob?.progress?.completion"
+        :model-value="currentProgress"
         background-color="dark-gray"
         class="progress-bar"
         height="14"
@@ -334,7 +334,6 @@ import { PrinterDto } from '@/models/printers/printer.model'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { useThumbnailQuery } from '@/queries/thumbnail.query'
-import { PrinterJobService } from '@/backend/printer-job.service'
 import logoPng from '@/assets/logo.png'
 
 const defaultColor = 'rgba(100,100,100,0.1)'
@@ -427,6 +426,13 @@ const currentJob = computed(() => {
   return printerStateStore.printerJobsById[printerId.value]
 })
 
+const currentProgress = computed(() => {
+  if (!printerId.value) return undefined
+
+  const job = currentJob.value
+  return job?.progress?.completion
+})
+
 const currentPrintingFilePath = computed(() => {
   if (!printerId.value) return
   return printerStateStore.printingFilePathsByPrinterId[printerId.value]
@@ -435,21 +441,19 @@ const currentPrintingFilePath = computed(() => {
 const clickStop = async () => {
   if (!printerId.value) return
 
-  if (confirm('Are you sure to cancel the current print job?')) {
-    await PrinterJobService.stopPrintJob(printerId.value)
-  }
+  await printerStore.sendStopJobCommand(printerId.value)
 }
 
 const clickPausePrint = async () => {
   if (!printerId.value) return
 
-  await PrinterJobService.pausePrintJob(printerId.value)
+  await PrintersService.pausePrintJob(printerId.value)
 }
 
 const clickResumePrint = async () => {
   if (!printerId.value) return
 
-  await PrinterJobService.resumePrintJob(printerId.value)
+  await PrintersService.resumePrintJob(printerId.value)
 }
 
 const clickInfo = () => {
@@ -580,10 +584,11 @@ const selectOrClearPrinterPosition = async () => {
 
 .printer-menu {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 6px;
+  right: 6px;
   display: flex;
   align-items: center;
+  z-index: 1;
 }
 
 .printer-controls {

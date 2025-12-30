@@ -6,7 +6,6 @@ import {
 } from '@/models/printers/printer-file.model'
 import { PrinterFileService, PrintersService } from '@/backend'
 import { CreatePrinter } from '@/models/printers/create-printer.model'
-import { PrinterJobService } from '@/backend/printer-job.service'
 import { usePrinterStateStore } from './printer-state.store'
 import {
   isPrinterDisabled,
@@ -231,7 +230,7 @@ export const usePrinterStore = defineStore('Printers', {
 
       const answer = confirm(question)
       if (answer) {
-        await PrinterJobService.stopPrintJob(printer.id)
+        await PrintersService.stopPrintJob(printer.id)
       }
     }
   }

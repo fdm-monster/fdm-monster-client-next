@@ -106,7 +106,7 @@ export function getFileDropDirective(): Directive {
       bindDropConditionally(el, binding.value?.printers, vnode.appContext)
     },
     beforeUpdate: (el, binding, vnode) => {
-      bindDropConditionally(el, binding.value, vnode.appContext)
+      bindDropConditionally(el, binding.value?.printers, vnode.appContext)
     }
   }
 }

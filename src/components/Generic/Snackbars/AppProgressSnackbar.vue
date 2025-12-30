@@ -2,56 +2,66 @@
   <v-snackbar
     v-model="snackbarOpened"
     :timeout="progressTimeout"
-    absolute
     location="bottom right"
-    class="ma-3 elevation-24"
-    min-width="450px"
+    class="progress-snackbar"
+    color="primary"
+    variant="elevated"
+    rounded="lg"
     multi-line
-    rounded="pill"
-    style="z-index: 1000"
+    width="450"
+    max-width="90vw"
   >
-    <v-row>
-      <v-col cols="2">
-        <v-btn
-          icon="file_upload"
-          size="large"
-        />
-      </v-col>
-      <v-col
-        class="d-flex align-center flex-row"
-        cols="8"
+    <div class="d-flex align-start ga-3">
+      <v-icon
+        color="white"
+        size="24"
       >
-        <div style="width: 100%">
-          <span class="font-weight-bold text-button">
-            {{ snackbarTitle }}
-          </span>
-          <div
-            v-for="(progress, index) in progressTracked"
-            :key="index"
-            class="mb-2"
-          >
-            <v-icon v-if="progress.completed">check</v-icon>
-            <v-icon v-else-if="progress.timeoutAt">pause</v-icon>
-            <v-icon v-else>hourglass_bottom</v-icon>
-            {{ progress.title }}
-            {{ (progress.completed ? 100 : progress.value).toFixed(1) }}%
-            <br />
-            <v-progress-linear
-              :key="progress.key"
-              :model-value="progress.completed ? 100 : progress.value"
-              :color="progress.timeoutAt ? 'red' : 'success'"
-            />
-          </div>
+        upload
+      </v-icon>
+
+      <div class="flex-grow-1 min-width-0">
+        <div class="text-body-1 font-weight-medium text-white mb-3">
+          {{ snackbarTitle }}
         </div>
-      </v-col>
-      <v-col cols="1">
-        <v-btn
-          icon="close"
-          size="large"
-          @click="snackbarOpened = false"
-        />
-      </v-col>
-    </v-row>
+
+        <div
+          v-for="(progress, index) in progressTracked"
+          :key="index"
+          class="mb-3"
+        >
+          <div class="d-flex align-center ga-2 mb-1">
+            <v-icon
+              color="white"
+              size="16"
+            >
+              {{ progress.completed ? 'check' : progress.timeoutAt ? 'pause' : 'schedule' }}
+            </v-icon>
+            <span class="text-body-2 text-white">{{ progress.title }}</span>
+            <v-spacer />
+            <span class="text-body-2 text-white font-weight-bold">
+              {{ (progress.completed ? 100 : progress.value).toFixed(1) }}%
+            </span>
+          </div>
+          <v-progress-linear
+            :key="progress.key"
+            :model-value="progress.completed ? 100 : progress.value"
+            :color="progress.timeoutAt ? 'error' : 'success'"
+            height="4"
+            rounded
+            bg-color="rgba(255,255,255,0.3)"
+          />
+        </div>
+      </div>
+
+      <v-btn
+        icon="close"
+        variant="text"
+        color="white"
+        size="small"
+        class="ml-2"
+        @click="snackbarOpened = false"
+      />
+    </div>
   </v-snackbar>
 </template>
 <script lang="ts" setup>
@@ -152,3 +162,25 @@ onMounted(() => {
   })
 })
 </script>
+
+<style scoped>
+.progress-snackbar {
+  margin: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.min-width-0 {
+  min-width: 0;
+}
+
+/* Ensure text doesn't overflow */
+.progress-snackbar :deep(.v-snackbar__content) {
+  padding: 16px 20px;
+}
+
+/* Animation for better UX */
+.progress-snackbar :deep(.v-snackbar__wrapper) {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+}
+</style>
+
