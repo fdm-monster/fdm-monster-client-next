@@ -76,6 +76,14 @@ export const useDialogsStore = defineStore('Dialog', {
       }
       console.debug(`[Pinia Dialog ${id}] Closed`)
     },
+    closeAllDialogs() {
+      for (const dialogId of this.ids) {
+        const dialog = this.dialogsById[dialogId]
+        if (dialog?.opened) {
+          this.closeDialog(dialogId);
+        }
+      }
+    },
     unregisterDialogReference(id: DialogName) {
       delete this.dialogsById[id]
       this.ids = this.ids.filter((i) => i !== id)

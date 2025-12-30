@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia'
+import { useDialogsStore } from "@/store/dialog.store";
+import { usePrinterStore } from "@/store/printer.store";
 
 export interface OverlayState {
   loading: boolean
@@ -42,6 +44,8 @@ export const useOverlayStore = defineStore('Overlay', {
     setServerDisconnected(disconnected: boolean) {
       this.serverDisconnected = disconnected
       if (disconnected) {
+        useDialogsStore().closeAllDialogs()
+        usePrinterStore().closeFileExplorer()
         this.overlay = true
         this.loading = false
       } else {

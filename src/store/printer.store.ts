@@ -85,6 +85,9 @@ export const usePrinterStore = defineStore('Printers', {
     clearSelectedPrinters() {
       this.selectedPrinters = []
     },
+    closeFileExplorer() {
+      this.sideNavPrinter = undefined
+    },
     setSideNavPrinter(printer?: PrinterDto) {
       this.sideNavPrinter = printer
     },
@@ -222,9 +225,9 @@ export const usePrinterStore = defineStore('Printers', {
       const printer = this.printer(printerId)
       if (!printer) return
 
-      const question = !printerStateStore.isPrinterPrinting(printerId)
-        ? 'The printer is still printing - are you sure to stop it?'
-        : 'The printer seems idle - do you want to command it to stop anyway?'
+      const question = printerStateStore.isPrinterPrinting(printerId)
+        ? 'The printer seems idle - do you want to command it to stop anyway?'
+        : 'The printer is still printing - are you sure to stop it?'
 
       const answer = confirm(question)
       if (answer) {
