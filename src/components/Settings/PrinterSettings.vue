@@ -97,27 +97,6 @@
           width="4"
         />
       </SettingSection>
-
-      <v-divider />
-
-      <SettingSection
-        title="Disable Inefficient GCode Analysis"
-        tooltip="Prevent CPU-intensive GCode analysis on all printers at once."
-      >
-        <v-btn
-          color="primary"
-          @click="bulkDisableGCodeAnalysis()"
-        >
-          Bulk Disable GCode Analysis
-        </v-btn>
-        <v-progress-circular
-          v-if="loading.bulkDisableGCodeAnalysis"
-          class="ml-2"
-          indeterminate
-          size="30"
-          width="4"
-        />
-      </SettingSection>
     </v-card-text>
   </v-card>
 </template>
@@ -125,8 +104,6 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { PrinterFileService, SettingsService } from "@/backend";
-import { PrinterSettingsService } from "@/backend/printer-settings.service";
-import { usePrinterStateStore } from "@/store/printer-state.store";
 import { useSnackbar } from "@/shared/snackbar.composable";
 import { useSettingsStore } from "@/store/settings.store";
 import SettingsToolbar from "@/components/Settings/Shared/SettingsToolbar.vue";
@@ -136,7 +113,6 @@ import { settingsPage } from "@/components/Settings/Shared/setting.constants";
 const page = settingsPage["printer"];
 
 const settingsStore = useSettingsStore();
-const printerStateStore = usePrinterStateStore();
 const snackbar = useSnackbar();
 
 const fileHandlingSettings = ref({
@@ -149,7 +125,6 @@ const loading = ref({
   fileCleanSettings: false,
   timeoutSettings: false,
   purgeFiles: false,
-  bulkDisableGCodeAnalysis: false,
 });
 
 onMounted(async () => {
@@ -204,21 +179,6 @@ async function purgeFiles() {
     });
   } finally {
     loading.value.purgeFiles = false;
-  }
-}
-
-async function bulkDisableGCodeAnalysis() {
-  loading.value.bulkDisableGCodeAnalysis = true;
-  try {
-    const printers = printerStateStore.onlinePrinters;
-    for (const printer of Object.values(printers)) {
-      await PrinterSettingsService.setGCodeAnalysis(printer.id, false);
-    }
-    snackbar.openInfoMessage({
-      title: `Finished disabling GCode analysis for ${Object.keys(printers).length} online printers.`,
-    });
-  } finally {
-    loading.value.bulkDisableGCodeAnalysis = false;
   }
 }
 </script>

@@ -1,5 +1,4 @@
 export const settingPage = {
-  grid: "grid",
   floors: "floors",
   printer: "printer",
   emergencyCommands: "emergencyCommands",
@@ -13,12 +12,6 @@ export const settingPage = {
 } as const;
 
 export const settingsPage = {
-  [settingPage.grid]: {
-    title: "Grid",
-    icon: "grid_on",
-    path: "/settings/grid",
-    divider: false,
-  },
   [settingPage.floors]: {
     title: "Floors",
     icon: "house_siding",
@@ -37,6 +30,12 @@ export const settingsPage = {
     path: "/settings/emergency-commands",
     divider: true,
   },
+  [settingPage.serverProtection]: {
+    title: "Server Protection",
+    icon: "security",
+    path: "/settings/server-protection",
+    divider: false,
+  },
   [settingPage.users]: {
     title: "Users",
     icon: "group",
@@ -47,12 +46,6 @@ export const settingsPage = {
     title: "Account",
     icon: "account_circle",
     path: "/settings/account",
-    divider: false,
-  },
-  [settingPage.serverProtection]: {
-    title: "Server Protection",
-    icon: "security",
-    path: "/settings/server-protection",
     divider: true,
   },
   [settingPage.softwareUpgrade]: {

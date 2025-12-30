@@ -33,22 +33,17 @@
               label="Select YAML file"
               prepend-icon="attach_file"
               variant="outlined"
-              hint="Upload a YAML file to import printers, floors, and groups"
+              hint="Upload a YAML file to import printers, floors, and tags (groups)"
               persistent-hint
+              @update:model-value="onFileSelected"
             />
 
-            <v-btn
-              v-if="isFileProvided && !importSummary"
-              :disabled="!isFileProvided"
-              :loading="validatingImport"
-              block
+            <v-progress-linear
+              v-if="validatingImport"
+              indeterminate
               color="secondary"
               class="mt-4"
-              @click="validateImportFile()"
-            >
-              <v-icon start>checklist</v-icon>
-              Validate & Preview
-            </v-btn>
+            />
 
             <v-alert v-if="errorMessage" type="error" class="mt-4" closable>
               <div class="font-weight-bold">{{ errorMessage }}</div>
@@ -103,17 +98,30 @@
                   </v-list-item>
                   <v-list-item v-if="importSummary.hasSettings">
                     <template v-slot:prepend>
-                      <v-icon color="warning">settings</v-icon>
+                      <v-icon color="error">block</v-icon>
                     </template>
-                    <v-list-item-title>Settings Included</v-list-item-title>
+                    <v-list-item-title class="text-decoration-line-through text-medium-emphasis">
+                      Settings (will be excluded)
+                    </v-list-item-title>
                   </v-list-item>
                   <v-list-item v-if="importSummary.usersCount > 0">
                     <template v-slot:prepend>
-                      <v-icon color="warning">person</v-icon>
+                      <v-icon color="error">block</v-icon>
                     </template>
-                    <v-list-item-title>{{ importSummary.usersCount }} Users</v-list-item-title>
+                    <v-list-item-title class="text-decoration-line-through text-medium-emphasis">
+                      {{ importSummary.usersCount }} Users (will be excluded)
+                    </v-list-item-title>
                   </v-list-item>
                 </v-list>
+                <v-alert
+                  v-if="importSummary.hasSettings || importSummary.usersCount > 0"
+                  type="info"
+                  variant="tonal"
+                  density="compact"
+                  class="mt-3"
+                >
+                  Settings and users will be excluded to prevent conflicts with your existing setup.
+                </v-alert>
               </v-card-text>
             </v-card>
 
@@ -246,7 +254,7 @@ const exportGroups = ref(true)
 const exportPrinters = ref(true)
 const exportSettings = ref(true)
 const exportUsers = ref(true)
-const importFile = ref<File[] | undefined>(undefined)
+const importFile = ref<File | undefined>(undefined)
 const notes = ref('')
 const validatingImport = ref(false)
 const importSummary = ref<any>(null)
@@ -258,6 +266,20 @@ const isFileProvided = computed(() => {
 const isImportMode = computed(() => {
   return selectedMode.value === 0
 })
+
+const onFileSelected = async (file: File | File[]) => {
+  if (file) {
+    errorMessage.value = ''
+    errorDetailedMessage.value = ''
+    importSummary.value = null
+
+    await validateImportFile()
+  } else {
+    importSummary.value = null
+    errorMessage.value = 'No file selected'
+    errorDetailedMessage.value = 'Please select a yaml file to import'
+  }
+}
 
 const onBeforeDialogOpened = async () => {
   await featureStore.loadFeatures()
@@ -273,22 +295,21 @@ const onDialogOpened = async () => {
 }
 
 const validateImportFile = async () => {
-  if (!importFile.value || !importFile.value.length) {
-    errorMessage.value = 'No file selected'
+  if (!importFile.value) {
     return
   }
 
   validatingImport.value = true
-  errorMessage.value = ''
-  errorDetailedMessage.value = ''
-  importSummary.value = null
 
   try {
-    const text = await importFile.value[0].text()
+    const text = await importFile.value.text()
     const parsed = load(text) as any
 
     if (!parsed || typeof parsed !== 'object') {
-      throw new Error('Invalid YAML file format')
+      errorMessage.value = 'Failed to parse yaml file structure'
+      errorDetailedMessage.value = 'yaml load failed'
+      importSummary.value = null
+      return
     }
 
     importSummary.value = {
@@ -301,8 +322,6 @@ const validateImportFile = async () => {
       hasSettings: !!parsed.settings,
       usersCount: parsed.users?.length || 0
     }
-
-    snackbar.openInfoMessage({ title: 'Import file validated successfully' })
   } catch (error: any) {
     errorMessage.value = 'Failed to validate import file'
     errorDetailedMessage.value = error.message
@@ -337,15 +356,40 @@ const downloadExportYamlFile = async () => {
 const uploadAndImportYamlFile = async () => {
   errorMessage.value = ''
   errorDetailedMessage.value = ''
-  if (!importFile.value || !importFile.value.length) {
+  if (!importFile.value) {
     errorMessage.value = 'The import file was not specified'
     return
   }
   try {
-    await ServerPrivateService.uploadAndImportYaml(importFile.value[0])
+    // Filter out settings and users for already set-up servers
+    const text = await importFile.value.text()
+    const parsed = load(text) as any
+
+    // Remove settings and users to prevent conflicts
+    if (parsed.settings) {
+      delete parsed.settings
+    }
+    if (parsed.users) {
+      delete parsed.users
+    }
+    if (parsed.roles) {
+      delete parsed.roles
+    }
+    if (parsed.user_roles) {
+      delete parsed.user_roles
+    }
+
+    // Create a new YAML file from the filtered data
+    const { dump } = await import('js-yaml')
+    const filteredYaml = dump(parsed)
+    const filteredFile = new File([filteredYaml], importFile.value.name, {
+      type: 'application/x-yaml'
+    })
+
+    await ServerPrivateService.uploadAndImportYaml(filteredFile)
     importFile.value = undefined
     snackbar.openInfoMessage({
-      title: 'Imported the YAML file'
+      title: 'Imported the YAML file (settings and users excluded)'
     })
     closeDialog()
   } catch (e) {

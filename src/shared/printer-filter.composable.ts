@@ -1,22 +1,22 @@
 import { ref } from 'vue'
-import { PrinterGroupService, GroupDto, GroupWithPrintersDto } from '@/backend/printer-group.service'
+import { PrinterTagService, TagDto, TagWithPrintersDto } from '@/backend/printer-tag.service'
 import type { PrinterDto } from '@/models/printers/printer.model'
 
 export function usePrinterFilters() {
   const selectedTags = ref<number[]>([])
   const selectedPrinterTypes = ref<number[]>([])
-  const groups = ref<GroupDto[]>([])
-  const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
+  const tags = ref<TagDto[]>([])
+  const tagsWithPrinters = ref<TagWithPrintersDto[]>([])
 
-  const loadGroups = async () => {
-    groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
-    groups.value = groupsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
+  const loadTags = async () => {
+    tagsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
+    tags.value = tagsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
   }
 
   const matchesTagFilter = (printerId: number): boolean => {
     if (selectedTags.value.length === 0) return true
 
-    return groupsWithPrinters.value.some(group =>
+    return tagsWithPrinters.value.some(group =>
       selectedTags.value.includes(group.id) &&
       group.printers.some(p => p.printerId === printerId)
     )
@@ -41,9 +41,9 @@ export function usePrinterFilters() {
   return {
     selectedTags,
     selectedPrinterTypes,
-    groups,
-    groupsWithPrinters,
-    loadGroups,
+    tags,
+    tagsWithPrinters,
+    loadTags,
     matchesTagFilter,
     matchesPrinterTypeFilter,
     filterPrinters,

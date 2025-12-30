@@ -3,7 +3,7 @@
     <template #activator="{ props: tooltipProps }">
       <v-btn
         v-bind="tooltipProps"
-        variant="outlined"
+        :variant="variant"
         class="ml-2"
         :color="color"
         @click="$emit('click')"
@@ -31,6 +31,7 @@ defineEmits(['click'])
 export interface Props {
   tooltip: string
   color?: string | 'success' | 'warning' | 'danger' | 'primary' | 'secondary'
+  variant?: "elevated" | "flat" | "outlined" | "plain" | "text" | "tonal"
   icon?: string
   iconClass?: string
   text?: string
@@ -42,6 +43,7 @@ const props = withDefaults(defineProps<Props>(), {
   icon: '',
   iconClass: '',
   text: '',
-  location: 'bottom'
+  location: 'bottom',
+  variant: 'elevated'
 })
 </script>

@@ -61,7 +61,7 @@
             color="primary"
             variant="elevated"
             class="mr-3"
-            @click="goToSettings"
+            @click="goToPrinterGrid"
           >
             <v-icon class="mr-2">add</v-icon>
             Add Your First Printer
@@ -98,17 +98,33 @@
               color="success"
               variant="elevated"
               @click="goToCameras"
-              :disabled="totalPrinters === 0"
             >
               <v-icon class="mr-2">camera_alt</v-icon>
               View Cameras
             </v-btn>
             <v-btn
-              variant="outlined"
+              color="warning"
+              variant="elevated"
               @click="gotoJobs"
             >
               <v-icon class="mr-2">analytics</v-icon>
               View Jobs
+            </v-btn>
+            <v-btn
+              variant="elevated"
+              color="primary"
+              @click="openYamlDialog"
+            >
+              <v-icon class="mr-2">code</v-icon>
+              Import/Export backup
+            </v-btn>
+            <v-btn
+              variant="elevated"
+              color="purple"
+              @click="openOctoFarmImportDialog"
+            >
+              <v-icon class="mr-2">publish</v-icon>
+              Import OctoFarm printers
             </v-btn>
           </v-btn-group>
         </v-card>
@@ -127,7 +143,7 @@
             <div class="d-flex align-center ga-2">
               <PrinterTagFilter
                 v-model="selectedTags"
-                :groups="groups"
+                :tags="tags"
                 label="Tags"
                 style="width: 200px"
               />
@@ -204,7 +220,7 @@
             <v-btn
               color="primary"
               variant="elevated"
-              @click="goToSettings"
+              @click="goToPrinterGrid"
             >
               <v-icon class="mr-2">add</v-icon>
               Add Printer
@@ -292,6 +308,8 @@ import {
 import { usePrinterFilters } from '@/shared/printer-filter.composable'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
+import { useDialog } from '@/shared/dialog.composable'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 
 const router = useRouter()
 const printerStore = usePrinterStore()
@@ -300,13 +318,13 @@ const printerStateStore = usePrinterStateStore()
 const {
   selectedTags,
   selectedPrinterTypes,
-  groups,
-  loadGroups,
+  tags,
+  loadTags,
   filterPrinters
 } = usePrinterFilters()
 
 onMounted(async () => {
-  await loadGroups()
+  await loadTags()
 })
 
 // Computed properties for dashboard metrics
@@ -348,16 +366,20 @@ const goToCameras = () => {
   router.push('/cameras')
 }
 
-const goToSettings = () => {
-  router.push('/settings')
-}
-
 const gotoJobs = () => {
   router.push('/jobs')
 }
 
 const viewDocumentation = () => {
-  window.open('https://docs.fdm-monster.net', '_blank')
+  globalThis.open('https://docs.fdm-monster.net', '_blank')
+}
+
+const openYamlDialog = () => {
+  useDialog(DialogName.YamlImportExport).openDialog()
+}
+
+const openOctoFarmImportDialog = () => {
+  useDialog(DialogName.ImportOctoFarmDialog).openDialog()
 }
 
 // Printer interaction methods

@@ -98,11 +98,11 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="groups.length" class="mt-3">
+        <v-row v-if="tags.length" class="mt-3">
           <v-col cols="12">
             <PrinterTagFilter
               v-model="selectedTags"
-              :groups="groups"
+              :tags="tags"
               label="Filter by Tags"
             />
           </v-col>
@@ -308,9 +308,9 @@ const totalJobs = ref(0)
 const {
   selectedTags,
   selectedPrinterTypes,
-  groups,
-  groupsWithPrinters,
-  loadGroups
+  tags,
+  tagsWithPrinters,
+  loadTags
 } = usePrinterFilters()
 
 const searchParams = ref<PrintJobSearchPagedParams>({
@@ -338,7 +338,7 @@ const filteredPrintJobs = computed(() => {
   if (selectedTags.value.length > 0) {
     filtered = filtered.filter(job => {
       if (!job.printerId) return false
-      return groupsWithPrinters.value.some(group =>
+      return tagsWithPrinters.value.some(group =>
         selectedTags.value.includes(group.id) &&
         group.printers.some(p => p.printerId === job.printerId)
       )
@@ -376,7 +376,7 @@ const debouncedSearch = useDebounceFn(() => {
 
 onMounted(async () => {
   await loadPrintJobs()
-  await loadGroups()
+  await loadTags()
 })
 
 const loadPrintJobs = async () => {

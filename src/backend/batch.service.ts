@@ -3,10 +3,6 @@ import { ServerApi } from '@/backend/server.api'
 import { ReprintFileDto } from '@/models/batch/reprint.dto'
 
 export class BatchService extends BaseService {
-  static async batchSettingsGet<T = any>(printerIds: number[]) {
-    return await this.post<T>('/api/batch/settings/get', { printerIds })
-  }
-
   static async batchConnectUsb(printerIds: number[]) {
     return await this.post('/api/batch/connect/usb', { printerIds })
   }

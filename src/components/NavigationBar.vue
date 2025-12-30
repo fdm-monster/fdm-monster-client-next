@@ -18,15 +18,22 @@
       density="compact"
       nav
     >
-      <v-list-item
+      <v-tooltip
         v-for="([icon, title, path], i) in items"
         :key="i"
-        :to="path"
-        :prepend-icon="icon"
-        :title="title"
-        density="comfortable"
-        router-link
-      />
+        location="end"
+      >
+        <template #activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            :to="path"
+            :prepend-icon="icon"
+            density="comfortable"
+            router-link
+          />
+        </template>
+        <span>{{ title }}</span>
+      </v-tooltip>
     </v-list>
   </v-navigation-drawer>
 </template>

@@ -14,8 +14,7 @@
           >
             {{ avatarInitials }}
           </v-avatar>
-          <span v-if="isUpdating"> Updating Printer </span>
-          <span v-else> New Printer </span>
+          {{ dialogTitle }}
         </span>
       </v-card-title>
 
@@ -224,6 +223,7 @@ const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog);
 const printersStore = usePrinterStore();
 const testPrinterStore = useTestPrinterStore();
 const featureStore = useFeatureStore();
+const floorStore = useFloorStore();
 const appConstants = inject("appConstants") as AppConstants;
 const snackbar = useSnackbar();
 
@@ -314,6 +314,22 @@ const storedPrinter = computed(() => {
 
 const isUpdating = computed(() => {
   return !!storedPrinter.value;
+});
+
+const dialogTitle = computed(() => {
+  if (isUpdating.value) {
+    return 'Updating Printer'
+  }
+
+  const ctx = dialog.context()
+  if (ctx?.floorId) {
+    const floor = floorStore.floors.find(f => f.id === ctx.floorId)
+    if (floor) {
+      return `Add Printer to ${floor.name}`
+    }
+  }
+
+  return 'New Printer'
 });
 
 const submitButtonText = computed(() => {

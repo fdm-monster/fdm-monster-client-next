@@ -66,7 +66,7 @@
                   />
                   <PrinterTagFilter
                     v-model="selectedTags"
-                    :groups="groups"
+                    :tags="tags"
                     label="Filter by Tags"
                     class="mb-3"
                   />
@@ -357,9 +357,9 @@ const fileExplorer = useFileExplorer()
 const {
   selectedTags,
   selectedPrinterTypes,
-  groups,
-  groupsWithPrinters,
-  loadGroups
+  tags,
+  tagsWithPrinters,
+  loadTags
 } = usePrinterFilters()
 
 // Reactive state
@@ -370,7 +370,7 @@ const cameraErrors = reactive<Record<number, boolean>>({})
 const cameraLoading = reactive<Record<number, boolean>>({})
 
 onMounted(async () => {
-  await loadGroups()
+  await loadTags()
 })
 
 // Fetch cameras with printer data
@@ -436,7 +436,7 @@ const filteredCameras = computed(() => {
     // Tag filter
     let matchesTags = selectedTags.value.length === 0
     if (selectedTags.value.length > 0 && camera.printer?.id) {
-      matchesTags = groupsWithPrinters.value.some(group =>
+      matchesTags = tagsWithPrinters.value.some(group =>
         selectedTags.value.includes(group.id) &&
         group.printers.some(p => p.printerId === camera.printer?.id)
       )

@@ -2,16 +2,19 @@
   <div v-drop-printer-position="{ x, y, printerSet: printer }">
     <v-card
       v-drop-upload="{ printers: [printer] }"
+      :draggable="!!printer"
       :ripple="isOnline"
       :class="{
         'tile-large': largeTilesEnabled,
         'tile-selected': selected,
         'tile-unselected': unselected,
-        'tile-no-printer': !printer
+        'tile-no-printer': !printer,
+        'tile-draggable': !!printer
       }"
       class="tile colored-tile rounded-lg"
       elevation="5"
-      @click="selectOrClearPrinterPosition()"
+      @click="selectPrinterPosition()"
+      @dragstart="onDragStart"
     >
       <div
         v-show="printer"
@@ -20,35 +23,25 @@
         {{ printer?.name ?? '&nbsp;' }}
       </div>
 
-      <!-- Create printer - hover button-->
+      <!-- Create printer or no printers message -->
       <div
-        v-if="!printer || gridStore.gridEditMode"
+        v-if="!printer"
         :style="{
           height: largeTilesEnabled ? 'calc(120px - 20px)' : 'calc(84px - 20px)'
         }"
-        class="plus-hover-icon"
+        :class="isFirstTile&& noPrintersExist ? 'plus-always-visible': 'plus-hover-icon'"
         style="position: absolute"
       >
         <div
-          class="d-flex flex flex-column justify-center"
+          class="d-flex flex flex-column justify-center align-center"
           style="height: 100%"
         >
           <PrinterCreateAction
-            v-if="!printer"
             :floor-id="floorStore.selectedFloor?.id"
             :floor-x="x"
             :floor-y="y"
+            :is-first-time="isFirstTile && noPrintersExist"
           />
-          <v-btn
-            v-if="printer"
-            color="error"
-            rounded
-            small
-            @click.c.capture.native.stop="selectOrClearPrinterPosition()"
-          >
-            <v-icon>clear</v-icon>
-            Clear position
-          </v-btn>
         </div>
       </div>
 
@@ -97,7 +90,7 @@
       </div>
 
       <div
-        v-if="printer && !gridStore.gridEditMode"
+        v-if="printer"
         class="printer-menu"
       >
         <v-tooltip location="top">
@@ -118,7 +111,7 @@
       </div>
 
       <div
-        v-if="printer && !gridStore.gridEditMode"
+        v-if="printer"
         :style="{
           position: largeTilesEnabled ? 'inherit' : 'absolute',
           top: largeTilesEnabled ? 'inherit' : '30px'
@@ -133,7 +126,7 @@
 
       <!-- Hover controls -->
       <div
-        v-if="printer && !gridStore.gridEditMode"
+        v-if="printer"
         class="centered-controls"
       >
         <v-tooltip top>
@@ -153,16 +146,15 @@
           <template v-slot:default>Move and home printer</template>
         </v-tooltip>
 
-        <!-- Connect USB -->
-        <v-tooltip top>
-          <template v-slot:activator="{ props }">
+        <v-tooltip v-if="hasSerialConnection(printer.printerType)" top>
+          <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               v-if="!isOperational && isOnline"
               :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               elevation="0"
               style="border-radius: 7px"
-              v-bind="props"
+              v-bind="tooltipProps"
               @click.prevent.stop="clickConnectUsb()"
             >
               <v-icon>usb</v-icon>
@@ -171,33 +163,33 @@
           <template v-slot:default>Connect USB (only for OctoPrint)</template>
         </v-tooltip>
 
-        <v-tooltip top>
-          <template v-slot:activator="{ props }">
+        <v-tooltip v-if="hasPrinterControl(printer.printerType)" top>
+          <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               elevation="0"
               style="border-radius: 7px"
-              v-bind="props"
+              v-bind="tooltipProps"
               @click.prevent.stop="clickRefreshSocket()"
             >
               <v-icon>refresh</v-icon>
             </v-btn>
           </template>
           <template v-slot:default
-            >Reload printer connection and refresh all states
+          >Reload printer connection and refresh all states
           </template>
         </v-tooltip>
 
-        <v-tooltip top>
-          <template v-slot:activator="{ props }">
+        <v-tooltip v-if="hasPrinterControl(printer.printerType)" top>
+          <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               :disabled="!isOnline || (!isPaused && !isPrinting)"
               :size="largeTilesEnabled ? 'small' : 'x-small'"
               color="darkgray"
               elevation="0"
               style="border-radius: 7px"
-              v-bind="props"
+              v-bind="tooltipProps"
               @click.prevent.stop="
                 isPaused ? clickResumePrint() : clickPausePrint()
               "
@@ -211,8 +203,11 @@
           </template>
         </v-tooltip>
 
-        <v-tooltip top>
-          <template v-slot:activator="{ props }">
+        <v-tooltip
+          v-if="hasPrinterControl(printer.printerType) && (hasEmergencyStop(printer.printerType) || preferCancelOverQuickStop)"
+          top
+        >
+          <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               :disabled="
                 !isOnline ||
@@ -222,18 +217,18 @@
               color="darkgray"
               elevation="0"
               style="border-radius: 7px"
-              v-bind="props"
+              v-bind="tooltipProps"
               @click.prevent.stop="
                 preferCancelOverQuickStop ? clickStop() : clickQuickStop()
               "
             >
               <v-icon
-                >{{ preferCancelOverQuickStop ? 'stop' : 'dangerous' }}
+              >{{ preferCancelOverQuickStop ? 'stop' : 'dangerous' }}
               </v-icon>
             </v-btn>
           </template>
           <template v-slot:default
-            >{{
+          >{{
               preferCancelOverQuickStop
                 ? 'Cancel current print gracefully'
                 : 'Perform quick stop of printer'
@@ -260,7 +255,7 @@
 
       <!-- Progress Bar -->
       <v-progress-linear
-        v-if="printer && !gridStore.gridEditMode"
+        v-if="printer"
         :model-value="currentProgress"
         background-color="dark-gray"
         class="progress-bar"
@@ -289,7 +284,7 @@
                     class="d-none d-xl-inline"
                     color="primary"
                     small
-                    >info</v-icon
+                  >info</v-icon
                   >
                 </span>
                 <span v-else>
@@ -324,8 +319,6 @@ import { CustomGcodeService } from '@/backend/custom-gcode.service'
 import { PrintersService } from '@/backend'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { useGridStore } from '@/store/grid.store'
-import { FloorService } from '@/backend/floor.service'
 import { useSettingsStore } from '@/store/settings.store'
 import { useFloorStore } from '@/store/floor.store'
 import { interpretStates } from '@/shared/printer-state.constants'
@@ -335,6 +328,8 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { useThumbnailQuery } from '@/queries/thumbnail.query'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
+import { dragAppId, INTENT, PrinterPlace, DRAG_EVENTS } from '@/shared/drag.constants'
+import { hasEmergencyStop, hasPrinterControl, hasSerialConnection } from '@/shared/printer-capabilities.constants'
 import logoPng from '@/assets/logo.png'
 
 const defaultColor = 'rgba(100,100,100,0.1)'
@@ -352,13 +347,15 @@ const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const floorStore = useFloorStore()
 const settingsStore = useSettingsStore()
-const gridStore = useGridStore()
 const controlDialog = useDialog(DialogName.PrinterControlDialog)
 const addOrUpdateDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 const fileExplorer = useFileExplorer()
 const snackbar = useSnackbar()
 
 const printerId = computed(() => props.printer?.id)
+
+const isFirstTile = computed(() => props.x === 0 && props.y === 0)
+const noPrintersExist = computed(() => printerStore.printers.length === 0)
 
 const largeTilesEnabled = computed(() => settingsStore.largeTiles)
 const tileIconThumbnailSize = computed(() =>
@@ -471,6 +468,22 @@ const clickRefreshSocket = async () => {
   })
 }
 
+const onDragStart = (ev: DragEvent) => {
+  if (!ev.dataTransfer || !props.printer?.id) return
+
+  // Notify that we're dragging a placed printer (for showing remove zone)
+  globalThis.dispatchEvent(new CustomEvent(DRAG_EVENTS.TILE_DRAG_START))
+
+  ev.dataTransfer.setData(
+    'text',
+    JSON.stringify({
+      appId: dragAppId,
+      intent: INTENT.PRINTER_PLACE,
+      printerId: props.printer.id
+    } as PrinterPlace)
+  )
+}
+
 const clickOpenSettings = () => {
   printerStore.setUpdateDialogPrinter(props.printer)
   addOrUpdateDialog.openDialog()
@@ -501,17 +514,11 @@ const clickConnectUsb = async () => {
   await PrintersService.sendPrinterConnectCommand(printerId.value)
 }
 
-const selectOrClearPrinterPosition = async () => {
+const selectPrinterPosition = async () => {
   if (!props.printer || !printerId.value) {
     return
   }
 
-  if (gridStore.gridEditMode) {
-    const floorId = floorStore.selectedFloor?.id
-    if (!floorId) throw new Error('Cant clear printer, floor not selected')
-    await FloorService.deletePrinterFromFloor(floorId, printerId.value)
-    return
-  }
   printerStore.toggleSelectedPrinter(props.printer)
 }
 </script>
@@ -552,6 +559,14 @@ const selectOrClearPrinterPosition = async () => {
   min-height: 120px;
 }
 
+.tile-draggable {
+  cursor: move;
+}
+
+.tile-draggable:active {
+  opacity: 0.7;
+}
+
 .tile-no-printer:hover {
   background-color: #2a2a2a;
   cursor: not-allowed;
@@ -559,6 +574,10 @@ const selectOrClearPrinterPosition = async () => {
 
 .plus-hover-icon {
   display: none;
+}
+
+.plus-always-visible {
+  display: block !important;
 }
 
 .tile-no-printer:hover .plus-hover-icon {

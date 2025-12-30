@@ -29,7 +29,6 @@
     <AddOrUpdateCameraStreamDialog />
     <AddOrUpdateFloorDialog />
     <CreateUserDialog />
-    <GridSettingsDialog />
     <PrinterMaintenanceDialog />
     <OctoFarmImportDialog />
     <YamlImportExportDialog />

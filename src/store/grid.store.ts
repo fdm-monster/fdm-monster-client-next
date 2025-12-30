@@ -1,13 +1,11 @@
 import { defineStore } from 'pinia'
 
 interface State {
-  gridEditMode: boolean
   selectedTagFilter: number[]
   selectedPrinterTypeFilter: number[]
 }
 export const useGridStore = defineStore('GridStore', {
   state: (): State => ({
-    gridEditMode: false,
     selectedTagFilter: [],
     selectedPrinterTypeFilter: []
   }),
