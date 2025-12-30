@@ -3,68 +3,64 @@
     <v-menu
       v-model="menu"
       :close-on-content-click="false"
-      :nudge-width="400"
-      location="bottom right"
-      offset-x
-      offset-y
-      transition="slide-x-transition"
+      location="bottom"
+      width="800"
     >
       <template #activator="{ props }">
         <v-btn
-          :color="activePrintCount ? 'green' : 'secondary'"
-          dark
+          :color="activePrintCount ? 'success' : ''"
+          variant="tonal"
           v-bind="props"
         >
-          <span>
-            Print jobs {{ activePrintCount ? `(${activePrintCount})` : '' }}
-          </span>
-          <v-icon end> work </v-icon>
+          <v-icon class="mr-2">work</v-icon>
+          Active Jobs ({{ activePrintCount }})
+          <v-badge
+            v-if="activePrintCount > 0"
+            :content="activePrintCount"
+            color="success"
+            inline
+            class="ml-2"
+          />
         </v-btn>
       </template>
 
-      <v-card
-        class="d-flex flex-column"
-        min-width="300"
-      >
-        <v-list style="overflow-y: hidden; flex-shrink: 0">
-          <v-list-item>
-            <template #prepend>
-              <v-avatar
-                class="font-weight-bold"
-                color="primary"
-                size="44"
-              >
-                {{ activePrintCount }}
-              </v-avatar>
-            </template>
+      <v-card>
+        <v-card-title class="d-flex align-center">
+          <v-icon class="mr-2">work</v-icon>
+          Active Print Jobs
+          <v-spacer />
+          <v-chip size="small" color="success">{{ activePrintCount }}</v-chip>
+        </v-card-title>
 
-            <v-list-item-title>
-              Print Jobs
-              <span class="float-end">
-                <v-btn
-                  variant="tonal"
-                  @click="menu = false"
-                >
-                  <v-icon>close</v-icon>Close
-                </v-btn>
-              </span>
-            </v-list-item-title>
+        <v-card-text class="pa-3">
+          <!-- Search -->
+          <v-text-field
+            v-model="searchString"
+            clearable
+            label="Search"
+            placeholder="Search by filename or printer name..."
+            prepend-inner-icon="search"
+            variant="outlined"
+            density="compact"
+            hide-details
+            class="mb-3"
+          />
 
-            <v-list-item-action class="mt-2">
-              <v-text-field
-                v-model="searchString"
-                autofocus
-                class="p-2"
-                clearable
-                label="Search jobs or printers"
-                persistent-placeholder
-                placeholder="Type part of a filename or printer name to search"
-                prepend-icon="search"
-                style="min-width: 900px"
-              />
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
+          <!-- Filters -->
+          <div class="d-flex ga-2 mb-3">
+            <PrinterTagFilter
+              v-model="selectedTags"
+              :tags="tags"
+              label="Filter by tags"
+              style="flex: 1"
+            />
+            <PrinterTypeFilter
+              v-model="selectedPrinterTypes"
+              label="Filter by type"
+              style="flex: 1"
+            />
+          </div>
+        </v-card-text>
 
         <v-divider />
 
@@ -104,7 +100,9 @@
         <v-card-actions>
           <v-spacer />
 
-          <v-btn @click="menu = false"> Close </v-btn>
+          <v-btn variant="tonal" @click="menu = false">
+            <v-icon class="mr-2">close</v-icon> Close
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>
@@ -112,24 +110,41 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, computed, watch, onMounted } from 'vue'
 import { usePrinterStateStore } from '@/store/printer-state.store'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
+import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
+import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 
 const printerStateStore = usePrinterStateStore()
 const searchString = ref('')
 const menu = ref(false)
 
+const {
+  selectedTags,
+  selectedPrinterTypes,
+  tags,
+  loadTags,
+  matchesTagFilter,
+  matchesPrinterTypeFilter
+} = usePrinterFilters()
+
+onMounted(async () => {
+  await loadTags()
+})
+
 const activePrintJobs = computed(() => {
   return printerStateStore.printersWithJob.filter((p) => {
+    // Search filter
     const fileName = p.job?.job?.file.name
     const fileNameSearch = fileName?.toLowerCase() || ''
     const printerUrlSearch = p.printer.printerURL?.toLowerCase() || ''
     const searchSearch = p.printer.name?.toLowerCase() || ''
-
     const combineSearch = `${fileNameSearch} ${printerUrlSearch} ${searchSearch}`
-    return (
-      !searchString.value ||
-      combineSearch.includes(searchString.value.toLowerCase())
-    )
+    const matchesSearch = !searchString.value || combineSearch.includes(searchString.value.toLowerCase())
+    const matchesTags = matchesTagFilter(p.printer.id)
+    const matchesType = matchesPrinterTypeFilter(p.printer)
+    return matchesSearch && matchesTags && matchesType
   })
 })
 

@@ -15,7 +15,7 @@ export class ServerApi {
   static readonly printJobsSearchPagedRoute = `${ServerApi.printJobsRoute}/search-paged`
   static readonly printerFilesRoute = `${ServerApi.base}/printer-files`
   static readonly printerFilesPurgeRoute = `${ServerApi.printerFilesRoute}/purge`
-  static readonly printerGroupRoute = `${ServerApi.base}/printer-group`
+  static readonly printerTagsRoute = `${ServerApi.base}/printer-group`
   static readonly createGroupRoute = `${ServerApi.base}/printer-group`
   static readonly customGCodeRoute = `${ServerApi.base}/custom-gcode`
   static readonly userRoute = `${ServerApi.base}/user`
@@ -35,15 +35,15 @@ export class ServerApi {
   static readonly updateExperimentalPrusaLinkSupportRoute = `${ServerApi.settingsRoute}/experimental-prusa-link-support`
   static readonly updateExperimentalBambuSupportRoute = `${ServerApi.settingsRoute}/experimental-bambu-support`
 
-  static readonly deleteGroupRoute = (id: number) => `${ServerApi.base}/printer-group/${id}`
+  static readonly deleteTagRoute = (id: number) => `${ServerApi.base}/printer-group/${id}`
 
-  static readonly updateGroupNameRoute = (id: number) =>
+  static readonly updateTagNameRoute = (id: number) =>
     `${ServerApi.base}/printer-group/${id}/name`
 
   static readonly addPrinterToGroupRoute = (id: number) =>
     `${ServerApi.base}/printer-group/${id}/printer`
 
-  static readonly deletePrinterFromGroupRoute = ServerApi.addPrinterToGroupRoute
+  static readonly deletePrinterFromTagRoute = ServerApi.addPrinterToGroupRoute
 
   static readonly getPrinterRoute = (id: number) => `${ServerApi.printerRoute}/${id}`
   static readonly postPrinterDisabledReasonRoute = (id: number) =>
@@ -57,8 +57,6 @@ export class ServerApi {
     `${ServerApi.getPrinterRoute(id)}/refresh-socket`
   static readonly getPrinterSettingsRoute = (id: number) =>
     `${ServerApi.printerSettingsRoute}/${id}`
-  static readonly setPrinterSettingsGCodeAnalysisRoute = (id: number) =>
-    `${ServerApi.getPrinterSettingsRoute(id)}/gcode-analysis`
   static readonly syncPrinterNameSettingRoute = (id: number) =>
     `${ServerApi.getPrinterSettingsRoute(id)}/sync-printername`
   static readonly getFloorRoute = (id: number) => `${ServerApi.floorRoute}/${id}`

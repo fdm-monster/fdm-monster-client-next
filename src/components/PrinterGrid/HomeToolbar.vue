@@ -25,7 +25,7 @@
     <!-- Tag filter -->
     <PrinterTagFilter
       v-model="selectedTags"
-      :groups="groups"
+      :tags="tags"
       label="Filter by tags"
       class="ml-4"
       style="max-width: 300px"
@@ -86,28 +86,6 @@
     </v-menu>
 
     <v-spacer />
-    <span class="d-flex flex-wrap gap-2">
-      <span class="pr-2">
-        <v-icon>print</v-icon>
-        {{ printerStateStore.printingCount }}
-      </span>
-      <span class="pr-2">
-        <v-icon>ac_unit</v-icon>
-        {{ printerStateStore.operationalNotPrintingCount }}
-      </span>
-      <span class="pr-2">
-        <v-icon>handyman</v-icon>
-        {{ printerStore.maintenanceCount }}
-      </span>
-      <span class="pr-2">
-        <v-icon>usb_off</v-icon>
-        {{ printerStore.disconnectedCount }}
-      </span>
-      <span class="pr-2">
-        <v-icon>print_disabled</v-icon>
-        {{ printerStore.disabledCount }}
-      </span>
-    </span>
 
     <!-- Grid size controls - always visible -->
     <GridSizeControl class="ml-4" />
@@ -140,8 +118,8 @@ const gridStore = useGridStore()
 const {
   selectedTags,
   selectedPrinterTypes,
-  groups,
-  loadGroups
+  tags,
+  loadTags
 } = usePrinterFilters()
 
 const selectedFloorToggleIndex = computed(() => floorStore.selectedFloorIndex)
@@ -151,7 +129,7 @@ const floors = computed(() => {
 })
 
 onMounted(async () => {
-  await loadGroups()
+  await loadTags()
 })
 
 function changeFloorIndex(index: any) {

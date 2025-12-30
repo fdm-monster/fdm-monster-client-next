@@ -30,6 +30,12 @@ export const settingsPage = {
     path: "/settings/emergency-commands",
     divider: true,
   },
+  [settingPage.serverProtection]: {
+    title: "Server Protection",
+    icon: "security",
+    path: "/settings/server-protection",
+    divider: false,
+  },
   [settingPage.users]: {
     title: "Users",
     icon: "group",
@@ -40,12 +46,6 @@ export const settingsPage = {
     title: "Account",
     icon: "account_circle",
     path: "/settings/account",
-    divider: false,
-  },
-  [settingPage.serverProtection]: {
-    title: "Server Protection",
-    icon: "security",
-    path: "/settings/server-protection",
     divider: true,
   },
   [settingPage.softwareUpgrade]: {

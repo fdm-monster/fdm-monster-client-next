@@ -5,19 +5,10 @@
         <span>Printers</span>
         <v-spacer />
         <div class="d-flex align-center ga-2">
-          <v-select
-            v-if="groupsWithPrinters.length"
-            v-model="filteredGroupsWithPrinters"
-            :items="groupsWithPrinters"
-            :return-object="true"
-            item-title="name"
+          <PrinterTagFilter
+            v-model="selectedTagIds"
+            :tags="groups"
             label="Filter by tags"
-            multiple
-            placeholder="Select tags"
-            prepend-inner-icon="label"
-            density="compact"
-            variant="outlined"
-            hide-details
             style="width: 220px"
           />
           <PrinterTypeFilter
@@ -66,7 +57,8 @@
             </v-toolbar-title>
             <v-spacer />
             <v-btn
-              variant="tonal"
+              variant="elevated"
+              color="purple"
               prepend-icon="publish"
               @click="openImportOctoFarmPrintersDialog()"
             >
@@ -74,7 +66,7 @@
             </v-btn>
             <v-btn
               class="ml-2"
-              variant="tonal"
+              variant="elevated"
               color="success"
               prepend-icon="add"
               @click="openCreatePrinterDialog()"
@@ -83,20 +75,20 @@
             </v-btn>
             <v-btn
               class="ml-2"
-              variant="tonal"
+              variant="elevated"
               prepend-icon="label"
               @click="showTagDialog = true"
             >
               Manage Tags
             </v-btn>
             <v-btn
-              class="ml-2"
-              variant="tonal"
+              class="ml-2 mr-2"
+              variant="elevated"
               color="primary"
               prepend-icon="code"
               @click="openYamlImportExportDialog()"
             >
-              Import/Export YAML
+              Import/Export Backup
             </v-btn>
           </v-toolbar>
         </template>
@@ -126,7 +118,7 @@
         <template #item.cameras="{ item }">
           <div class="d-flex align-center flex-wrap ga-1">
             <v-chip
-              v-for="(camera, index) in camerasOfPrinter(item.id).slice(0, 2)"
+              v-for="(camera, _) in camerasOfPrinter(item.id).slice(0, 2)"
               :key="camera.id"
               size="x-small"
               variant="tonal"
@@ -288,6 +280,7 @@
 import { computed, ref } from 'vue'
 import { PrintersService } from '@/backend/printers.service'
 import PrinterDetails from '@/components/PrinterList/PrinterDetails.vue'
+import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 import PrinterUrlAction from '@/components/Generic/Actions/PrinterUrlAction.vue'
 import PrinterSettingsAction from '@/components/Generic/Actions/PrinterSettingsAction.vue'
@@ -307,9 +300,9 @@ import { useFeatureStore } from '@/store/features.store'
 import { useQuery } from '@tanstack/vue-query'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import {
-  GroupWithPrintersDto,
-  PrinterGroupService
-} from '@/backend/printer-group.service'
+  TagWithPrintersDto,
+  PrinterTagService
+} from '@/backend/printer-tag.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { VDataTable } from 'vuetify/components'
 import { getServiceName } from '@/shared/printer-types.constants'
@@ -323,8 +316,9 @@ const featureStore = useFeatureStore()
 
 const addOrUpdatePrinterDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 
-const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
-const filteredGroupsWithPrinters = ref<GroupWithPrintersDto[]>([])
+const groupsWithPrinters = ref<TagWithPrintersDto[]>([])
+const groups = ref<{ id: number; name: string }[]>([])
+const selectedTagIds = ref<number[]>([])
 const newGroupName = ref('')
 const showTagDialog = ref(false)
 const selectedPrinterTypes = ref<number[]>([])
@@ -353,7 +347,8 @@ const tableHeaders = computed(
 async function loadData() {
   loading.value = true
   await featureStore.loadFeatures()
-  groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
+  groupsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
+  groups.value = groupsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
 
   // Load cameras
   const { CameraStreamService } = await import('@/backend/camera-stream.service')
@@ -372,13 +367,12 @@ const printers = computed(() => {
   let filtered = printerStore.printers
 
   // Filter by tags
-  if (filteredGroupsWithPrinters.value?.length > 0) {
-    const printerIdsInFilteredGroups =
-      filteredGroupsWithPrinters.value.flatMap((g) =>
-        g.printers.map((p) => p.printerId)
-      ) || []
+  if (selectedTagIds.value?.length > 0) {
+    const printerIdsInSelectedTags = groupsWithPrinters.value
+      .filter(g => selectedTagIds.value.includes(g.id))
+      .flatMap(g => g.printers.map(p => p.printerId))
     filtered = filtered.filter((p) =>
-      printerIdsInFilteredGroups.includes(p.id)
+      printerIdsInSelectedTags.includes(p.id)
     )
   }
 
@@ -459,7 +453,7 @@ const createGroup = async () => {
     throw new Error('Please set a non-empty group name')
   }
 
-  await PrinterGroupService.createGroup(newGroupName.value.trim())
+  await PrinterTagService.createTag(newGroupName.value.trim())
   await printerGroupsQuery.refetch()
   newGroupName.value = ''
   showTagDialog.value = false
@@ -482,19 +476,19 @@ const deleteGroup = async (groupId: number) => {
     return
   }
 
-  await PrinterGroupService.deleteGroup(groupId)
+  await PrinterTagService.deleteTag(groupId)
   await printerGroupsQuery.refetch()
   snackbar.info('Deleted group')
 }
 
 const addPrinterToGroup = async (groupId: number, printerId: number) => {
-  await PrinterGroupService.addPrinterToGroup(groupId, printerId)
+  await PrinterTagService.addPrinterToTag(groupId, printerId)
   await printerGroupsQuery.refetch()
   snackbar.info('Added printer to group')
 }
 
 const deletePrinterFromGroup = async (groupId: number, printerId: number) => {
-  await PrinterGroupService.deletePrinterFromGroup(groupId, printerId)
+  await PrinterTagService.deletePrinterTag(groupId, printerId)
   await printerGroupsQuery.refetch()
   snackbar.info('Removed printer from group')
 }

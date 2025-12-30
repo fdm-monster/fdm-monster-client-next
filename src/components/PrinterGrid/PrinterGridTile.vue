@@ -29,22 +29,18 @@
         :style="{
           height: largeTilesEnabled ? 'calc(120px - 20px)' : 'calc(84px - 20px)'
         }"
-        class="plus-hover-icon"
+        :class="isFirstTile&& noPrintersExist ? 'plus-always-visible': 'plus-hover-icon'"
         style="position: absolute"
       >
         <div
           class="d-flex flex flex-column justify-center align-center"
           style="height: 100%"
         >
-          <div v-if="isFirstTile && noPrintersExist" class="text-center pa-4">
-            <v-icon size="large" color="primary" class="mb-2">add_circle</v-icon>
-            <div class="text-subtitle-2 mb-2">No printers yet</div>
-            <div class="text-caption text-medium-emphasis mb-3">Click below to add your first printer</div>
-          </div>
           <PrinterCreateAction
             :floor-id="floorStore.selectedFloor?.id"
             :floor-x="x"
             :floor-y="y"
+            :is-first-time="isFirstTile && noPrintersExist"
           />
         </div>
       </div>
@@ -182,7 +178,7 @@
             </v-btn>
           </template>
           <template v-slot:default
-            >Reload printer connection and refresh all states
+          >Reload printer connection and refresh all states
           </template>
         </v-tooltip>
 
@@ -225,12 +221,12 @@
               "
             >
               <v-icon
-                >{{ preferCancelOverQuickStop ? 'stop' : 'dangerous' }}
+              >{{ preferCancelOverQuickStop ? 'stop' : 'dangerous' }}
               </v-icon>
             </v-btn>
           </template>
           <template v-slot:default
-            >{{
+          >{{
               preferCancelOverQuickStop
                 ? 'Cancel current print gracefully'
                 : 'Perform quick stop of printer'
@@ -286,7 +282,7 @@
                     class="d-none d-xl-inline"
                     color="primary"
                     small
-                    >info</v-icon
+                  >info</v-icon
                   >
                 </span>
                 <span v-else>
@@ -332,7 +328,7 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { useThumbnailQuery } from '@/queries/thumbnail.query'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
-import { dragAppId, INTENT, PrinterPlace } from '@/shared/drag.constants'
+import { dragAppId, INTENT, PrinterPlace, DRAG_EVENTS } from '@/shared/drag.constants'
 import logoPng from '@/assets/logo.png'
 
 const defaultColor = 'rgba(100,100,100,0.1)'
@@ -357,6 +353,9 @@ const fileExplorer = useFileExplorer()
 const snackbar = useSnackbar()
 
 const printerId = computed(() => props.printer?.id)
+
+const isFirstTile = computed(() => props.x === 0 && props.y === 0)
+const noPrintersExist = computed(() => printerStore.printers.length === 0)
 
 const largeTilesEnabled = computed(() => settingsStore.largeTiles)
 const tileIconThumbnailSize = computed(() =>
@@ -473,7 +472,7 @@ const onDragStart = (ev: DragEvent) => {
   if (!ev.dataTransfer || !props.printer?.id) return
 
   // Notify that we're dragging a placed printer (for showing remove zone)
-  window.dispatchEvent(new CustomEvent('tile-drag-start'))
+  globalThis.dispatchEvent(new CustomEvent(DRAG_EVENTS.TILE_DRAG_START))
 
   ev.dataTransfer.setData(
     'text',
@@ -581,6 +580,10 @@ const selectOrClearPrinterPosition = async () => {
 
 .plus-hover-icon {
   display: none;
+}
+
+.plus-always-visible {
+  display: block !important;
 }
 
 .tile-no-printer:hover .plus-hover-icon {

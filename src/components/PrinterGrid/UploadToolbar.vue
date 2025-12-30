@@ -135,35 +135,27 @@ const openPrinter = (printer: PrinterDto) => {
         <v-btn
           :disabled="!hasPrintersSelected"
           color="primary"
-          size="x-small"
+          variant="elevated"
+          size="small"
           @click="batchReprintFiles()"
         >
-          <v-icon
-            class="pr-2"
-            size="small"
-          >
-            refresh
-          </v-icon>
+          <v-icon class="pr-2" size="small">refresh</v-icon>
           Batch reprint
         </v-btn>
         <v-btn
-          :color="hasPrintersSelected ? 'primary' : 'secondary'"
+          :disabled="selectedPrinters.length === 0"
           class="ml-2"
-          size="x-small"
+          variant="elevated"
+          size="small"
           @click="clearSelectedPrinters()"
         >
-          <v-icon
-            class="pr-2"
-            size="small"
-          >
-            delete
-          </v-icon>
+          <v-icon class="pr-2" size="small">delete</v-icon>
           Clear all ({{ selectedPrinters.length }})
         </v-btn>
         <v-btn
           class="ml-2"
-          color="secondary"
-          size="x-small"
+          variant="elevated"
+          size="small"
           @click="fileUpload?.click()"
         >
           Select gcode file
@@ -171,8 +163,9 @@ const openPrinter = (printer: PrinterDto) => {
         <v-btn
           :disabled="!selectedFile"
           class="ml-2"
-          color="green"
-          size="x-small"
+          color="success"
+          variant="elevated"
+          size="small"
           @click="uploadFile(false)"
         >
           Upload only
@@ -180,8 +173,9 @@ const openPrinter = (printer: PrinterDto) => {
         <v-btn
           :disabled="!selectedFile"
           class="ml-2 mr-5"
-          color="green"
-          size="x-small"
+          color="success"
+          variant="elevated"
+          size="small"
           @click="uploadFile(true)"
         >
           Upload and print

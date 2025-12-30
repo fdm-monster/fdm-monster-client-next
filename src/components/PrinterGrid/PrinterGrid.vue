@@ -50,41 +50,39 @@ import PrinterGridTile from '@/components/PrinterGrid/PrinterGridTile.vue'
 import { usePrinterStore } from '@/store/printer.store'
 import { PrinterDto } from '@/models/printers/printer.model'
 import { useGridStore } from '@/store/grid.store'
-import { dragAppId, INTENT, PrinterPlace } from '@/shared/drag.constants'
+import { dragAppId, INTENT, PrinterPlace, DRAG_EVENTS } from '@/shared/drag.constants'
 import { useSettingsStore } from '@/store/settings.store'
 import { useFloorStore } from '@/store/floor.store'
 import { FloorService } from '@/backend/floor.service'
-import { PrinterGroupService, GroupWithPrintersDto } from '@/backend/printer-group.service'
+import { PrinterTagService, TagWithPrintersDto } from '@/backend/printer-tag.service'
 
 const printerStore = usePrinterStore()
 const floorStore = useFloorStore()
 const settingsStore = useSettingsStore()
 const gridStore = useGridStore()
-const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
+const tagsWithPrinters = ref<TagWithPrintersDto[]>([])
 const isDragging = ref(false)
 const isDraggingPlacedPrinter = ref(false)
 const isOverRemoveZone = ref(false)
 
 // Track when dragging placed vs unplaced printers
-window.addEventListener('dragstart', (e: any) => {
+globalThis.addEventListener('dragstart', (e: any) => {
   isDragging.value = true
-  // Check if drag is from a tile (has data-placed attribute or similar)
-  // We'll set isDraggingPlacedPrinter in the tile's dragstart
 })
-window.addEventListener('dragend', () => {
+globalThis.addEventListener('dragend', () => {
   isDragging.value = false
   isDraggingPlacedPrinter.value = false
 })
 
 // Custom event from tiles to indicate dragging a placed printer
-window.addEventListener('tile-drag-start', () => {
+globalThis.addEventListener(DRAG_EVENTS.TILE_DRAG_START, () => {
   isDraggingPlacedPrinter.value = true
 })
 
 onMounted(async () => {
   await printerStore.loadPrinters()
   await floorStore.loadFloors()
-  groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
+  tagsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
 })
 
 const props = defineProps({
@@ -112,7 +110,7 @@ const printerMatrix = computed(() => {
       // Check tag filter
       let matchesTagFilter = !hasTagFilter
       if (hasTagFilter) {
-        matchesTagFilter = groupsWithPrinters.value.some(group =>
+        matchesTagFilter = tagsWithPrinters.value.some(group =>
           gridStore.selectedTagFilter.includes(group.id) &&
           group.printers.some(p => p.printerId === printer.id)
         )

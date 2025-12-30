@@ -11,10 +11,12 @@
       <v-tooltip location="top">
         <template #activator="{ props: tooltipProps }">
           <v-btn
-            icon="help"
+            variant="tonal"
+            class="ml-2 mr-2"
             v-bind="{ ...dialogActivatorProps, ...tooltipProps }"
           >
-            <v-icon>help</v-icon>
+            <v-icon icon="mdi:mdi-help" class="mr-2"></v-icon>
+            help
           </v-btn>
         </template>
         <span> Load the online documentation webpage </span>

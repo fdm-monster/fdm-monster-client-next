@@ -14,6 +14,8 @@
     </h2>
     <v-spacer />
 
+    <PrinterStatusMenu />
+
     <PrintJobsMenu />
 
     <v-menu
@@ -44,26 +46,28 @@
           :prepend-icon="item.icon"
           link
         />
+        <v-divider v-if="isDevEnv" />
+        <v-list-item v-if="isDevEnv && expiry" disabled>
+          <template #prepend>
+            <v-icon>schedule</v-icon>
+          </template>
+          <v-list-item-title class="text-caption">
+            Auth Expiry: {{ expiry }}
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item v-if="isDevEnv" disabled>
+          <template #prepend>
+            <v-icon>wifi</v-icon>
+          </template>
+          <v-list-item-title class="text-caption font-monospace">
+            SocketIO: S{{ socketState.setup ? 1 : 0 }} C{{ socketState.connected ? 1 : 0 }} A{{ socketState.active ? 1 : 0 }}
+          </v-list-item-title>
+          <v-list-item-subtitle class="text-caption">
+            {{ socketState.id }}
+          </v-list-item-subtitle>
+        </v-list-item>
       </v-list>
     </v-menu>
-
-    <span
-      v-if="isDevEnv && expiry"
-      class="ml-2"
-    >
-      AuthExp {{ expiry }}
-    </span>
-
-    <span
-      v-if="isDevEnv"
-      class="ml-2"
-    >
-      <small>
-        S{{ socketState.setup ? 1 : 0 }} C{{ socketState.connected ? 1 : 0 }}
-        A{{ socketState.active ? 1 : 0}}
-        {{ socketState.id }}
-      </small>
-    </span>
 
     <TooltipButton
       v-if="authStore.loginRequired === true"
@@ -82,6 +86,7 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useIntervalFn } from '@vueuse/core'
+import PrinterStatusMenu from '@/components/Generic/PrinterStatusMenu.vue'
 import PrintJobsMenu from '@/components/Generic/PrintJobsMenu.vue'
 import { useAuthStore } from '@/store/auth.store'
 import { useProfileStore } from '@/store/profile.store'

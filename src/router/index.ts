@@ -91,7 +91,7 @@ const router = createRouter({
         {
           path: '',
           meta: NeedsAuth,
-          redirect: '/settings/grid'
+          redirect: '/settings/floors'
         },
         {
           path: 'account',

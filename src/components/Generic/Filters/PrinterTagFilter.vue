@@ -1,9 +1,9 @@
 <template>
   <v-select
-    v-if="groups.length || !hideWhenEmpty"
+    v-if="tags.length || !hideWhenEmpty"
     v-bind="$attrs"
     :model-value="modelValue"
-    :items="groups"
+    :items="tags"
     item-title="name"
     item-value="id"
     :label="label"
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import type { GroupDto } from '@/backend/printer-group.service'
+import type { TagDto } from '@/backend/printer-tag.service'
 
 defineOptions({
   inheritAttrs: false
@@ -29,7 +29,7 @@ defineOptions({
 
 withDefaults(defineProps<{
   modelValue: number[]
-  groups: GroupDto[]
+  tags: TagDto[]
   label?: string
   prependInnerIcon?: string
   prependIcon?: string

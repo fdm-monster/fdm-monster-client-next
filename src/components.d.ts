@@ -61,6 +61,7 @@ declare module 'vue' {
     PrinterQuickStopAction: typeof import('./components/Generic/Actions/PrinterQuickStopAction.vue')['default']
     PrinterSettings: typeof import('./components/Settings/PrinterSettings.vue')['default']
     PrinterSettingsAction: typeof import('./components/Generic/Actions/PrinterSettingsAction.vue')['default']
+    PrinterStatusMenu: typeof import('./components/Generic/PrinterStatusMenu.vue')['default']
     PrintersView: typeof import('./components/PrinterList/PrintersView.vue')['default']
     PrinterTagFilter: typeof import('./components/Generic/Filters/PrinterTagFilter.vue')['default']
     PrinterTypeFilter: typeof import('./components/Generic/Filters/PrinterTypeFilter.vue')['default']

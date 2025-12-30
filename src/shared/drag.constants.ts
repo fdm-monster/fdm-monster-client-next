@@ -1,5 +1,9 @@
 export const dragAppId = 'FDM-Monster-Client-Vue2'
 
+export const DRAG_EVENTS = {
+  TILE_DRAG_START: 'tile-drag-start'
+} as const
+
 export enum INTENT {
   PRINTER_PLACE = 'PRINTER_PLACE'
 }

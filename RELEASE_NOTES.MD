@@ -17,6 +17,9 @@ Features
 - Export and import yaml upgraded
 - Printer placement UX redesigned, removed GridDialog/GridSettings
 - Add camera references to printer list
+- Redesign Job Menu including Tag and Type filter
+- Design new Printer Status Menu
+- Redesign the floor settings page
 
 Fixes
 
@@ -35,6 +38,9 @@ Fixes
 - Printer page action buttons now aligned (even if badge is present)
 - Improved app error handling user friendliness
 - Improve creating first printer
+- Regression settings page should route to floor settings
+- Regression YAML import would not trigger validation
+- YAML import will not allow importing users, user roles, settings as that will lead to failure
 
 Chores
 
@@ -44,6 +50,11 @@ Chores
 - Vite console doesnt clear screen anymore
 - Add md icon set for more icons
 - Split upload toolbar from PrinterGridView
+- Remove bulk gcode feature - does not fit the overall design anymore 
+- Clean up TopBar
+- Rename backend group service to tag service
+- Indicate on printer create that we're creating a printer on a floor
+- Add tooltips to NavBar
 
 ## Client 0.0.27
 
