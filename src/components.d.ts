@@ -29,6 +29,7 @@ declare module 'vue' {
     EmergencyCommands: typeof import('./components/Settings/EmergencyCommands.vue')['default']
     ErrorStateMessage: typeof import('./components/Generic/Loaders/ErrorStateMessage.vue')['default']
     ExperimentalSettings: typeof import('./components/Settings/ExperimentalSettings.vue')['default']
+    FileExplorerAction: typeof import('./components/Generic/Actions/FileExplorerAction.vue')['default']
     FileExplorerSideNav: typeof import('./components/Generic/FileExplorerSideNav.vue')['default']
     FirstTimeSetupView: typeof import('./components/FirstTimeSetup/FirstTimeSetupView.vue')['default']
     FloorSettings: typeof import('./components/Settings/FloorSettings.vue')['default']

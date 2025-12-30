@@ -334,6 +334,7 @@ import { PrinterDto } from '@/models/printers/printer.model'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { useThumbnailQuery } from '@/queries/thumbnail.query'
+import { useFileExplorer } from '@/shared/file-explorer.composable'
 import logoPng from '@/assets/logo.png'
 
 const defaultColor = 'rgba(100,100,100,0.1)'
@@ -354,6 +355,7 @@ const settingsStore = useSettingsStore()
 const gridStore = useGridStore()
 const controlDialog = useDialog(DialogName.PrinterControlDialog)
 const addOrUpdateDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
+const fileExplorer = useFileExplorer()
 const snackbar = useSnackbar()
 
 const printerId = computed(() => props.printer?.id)
@@ -457,7 +459,8 @@ const clickResumePrint = async () => {
 }
 
 const clickInfo = () => {
-  printerStore.setSideNavPrinter(props.printer)
+  if (!props.printer) return
+  fileExplorer.openFileExplorer(props.printer)
 }
 
 const clickRefreshSocket = async () => {

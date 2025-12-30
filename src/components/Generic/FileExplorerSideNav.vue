@@ -1,468 +1,400 @@
 <template>
   <v-navigation-drawer
     v-model="drawerOpened"
-    absolute
-    loading="true"
     location="right"
-    scrim="white"
     temporary
-    width="700"
-    @close="closeDrawer()"
+    width="420"
+    class="printer-side-nav"
+    @update:model-value="closeDrawer"
   >
-    <v-list-item
+    <!-- Printer Header Card -->
+    <v-card
       v-if="storedSideNavPrinter"
-      lines="two"
+      class="ma-3 mb-4"
+      elevation="2"
+      rounded="lg"
     >
-      <template #prepend>
-        <v-tooltip location="left">
-          <template #activator="{ props }">
-            <v-btn
-              :size="iconSize"
-              class="mr-4 mt-1"
-              color="primary"
-              icon
-              v-bind="props"
-              @click="openPrinterURL()"
-              @click.middle="openPrinterURL()"
-            >
-              <v-avatar
-                :size="iconSize"
-                class="font-weight-bold"
-                color="primary"
-              >
-                {{ avatarInitials() }}
-              </v-avatar>
-            </v-btn>
-          </template>
-          <span> Visit the {{ serviceName }} associated to this printer </span>
-        </v-tooltip>
-      </template>
-
-      <v-list-item-title class="font-weight-bold">
-        {{ storedSideNavPrinter.name }}
-      </v-list-item-title>
-
-      <!-- Spacer -->
-      <v-list-item-subtitle />
-
-      <v-list-item-media>
-        <strong
-          v-if="!isEnabled || !isOnline"
-          class="d-flex justify-center static-disabled"
-        >
-          {{ isEnabled ? 'Enabled' : 'Disabled' }} -
-          {{ !isOnline ? 'Offline' : printerState?.text?.toUpperCase() }}
-        </strong>
-        <strong
-          v-if="isEnabled && printerState?.text && isOperational && isOnline"
-          class="pulsating-red d-flex justify-center"
-        >
-          Enabled - {{ printerState?.text }}
-        </strong>
-      </v-list-item-media>
-
-      <v-list-item-subtitle v-if="currentJob">
-        <span
-          v-if="currentJob?.progress"
-          class="d-flex justify-center"
-        >
-          Progress:
-          {{ truncateProgress(currentJob?.progress.completion) }}%
-        </span>
-        <v-progress-linear
-          v-if="currentJob?.progress"
-          :model-value="truncateProgress(currentJob.progress?.completion)"
-          class="mt-1 mb-1"
-          height="8px"
-        />
-        <v-tooltip location="bottom">
-          <template #activator="{ props }">
-            <v-btn
-              size="small"
-              v-bind="props"
-              variant="outlined"
-            >
-              {{ currentPrintingFilePath }}
-            </v-btn>
-          </template>
-          <span>
-            {{ currentPrintingFilePath }}
-          </span>
-        </v-tooltip>
-      </v-list-item-subtitle>
-    </v-list-item>
-
-    <v-alert
-      v-if="!isEnabled || !isOnline"
-      color="primary"
-    >
-      <span v-if="!isEnabled">
-        Disabled {{ serviceName }}, enable it first to get live updates
-      </span>
-      <span v-else>
-        This {{ serviceName }} seems unreachable... Will keep trying for you
-        <v-icon>hourglass_top</v-icon>
-      </span>
-    </v-alert>
-    <v-alert
-      v-if="
-        !storedSideNavPrinter?.enabled && !storedSideNavPrinter?.disabledReason
-      "
-      color="secondary"
-    >
-      This {{ serviceName }} was disabled without reason.
-    </v-alert>
-    <v-alert
-      v-if="storedSideNavPrinter?.disabledReason"
-      color="black"
-    >
-      This {{ serviceName }} was disabled for maintenance: <br />
-      <small> &nbsp;&nbsp;{{ storedSideNavPrinter?.disabledReason }} </small>
-    </v-alert>
-
-    <v-divider />
-
-    <v-list
-      v-drop-upload="{ printers: [storedSideNavPrinter] }"
-      density="compact"
-    >
-      <v-list-subheader inset> Manage FDM Monster instance</v-list-subheader>
-
-      <v-tooltip location="left">
-        <template #activator="{ props }">
-          <v-list-item
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="openPrinterURL()"
+      <v-card-text class="pb-2">
+        <div class="d-flex align-center mb-3">
+          <v-avatar
+            :size="48"
+            color="primary"
+            class="mr-3"
           >
-            <template #prepend>
-              <v-avatar
-                :size="iconSize"
-                class="ml-3 mr-6 ma-5"
-              >
-                <v-img v-if="isOctoPrint" :src="octoPrintIcon"></v-img>
-                <span v-else-if="isMoonraker">MR</span>
-                <span v-else-if="isPrusaLink">PL</span>
-                <span v-else>?</span>
-              </v-avatar>
-            </template>
-            <span> Open {{ serviceName }} </span>
-          </v-list-item>
-        </template>
-        <span> Visit the {{ serviceName }} associated to this printer </span>
-      </v-tooltip>
-
-      <v-tooltip
-        v-if="isMoonraker"
-        location="left"
-      >
-        <template #activator="{ props }">
-          <v-list-item
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="openPrinterMainsail()"
-          >
-            <template #prepend>
-              <v-avatar
-                :size="iconSize"
-                class="ml-3 mr-6 ma-5"
-              >
-                <span>MA</span>
-              </v-avatar>
-            </template>
-            <span> Open Mainsail </span>
-          </v-list-item>
-        </template>
-        <span> Visit the Mainsail for this printer </span>
-      </v-tooltip>
-
-      <v-tooltip location="left">
-        <template #activator="{ props }">
-          <v-list-item
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="toggleEnabled()"
-          >
-            <template #prepend>
-              <v-avatar
-                :size="iconSize"
-                color="grey-lighten-1"
-              >
-                <v-icon :color="isEnabled ? 'primary' : 'green'"> dns</v-icon>
-              </v-avatar>
-            </template>
-            <span v-if="isEnabled"> Disable Printer Location </span>
-            <span v-else-if="!isEnabled"> Enable Printer Location </span>
-          </v-list-item>
-        </template>
-        <span> Deactivate connection, without impacting print </span>
-      </v-tooltip>
-
-      <v-tooltip location="left">
-        <template #activator="{ props }">
-          <v-list-item
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="toggleMaintenance()"
-          >
-            <v-avatar
-              :size="iconSize"
-              color="grey-lighten-1"
-            >
-              <v-icon :color="!isUnderMaintenance ? 'primary' : 'green'">
-                construction
-              </v-icon>
-            </v-avatar>
-            <span v-if="!isUnderMaintenance"> Enable Maintenance </span>
-            <span v-else-if="isUnderMaintenance"> Complete Maintenance </span>
-          </v-list-item>
-        </template>
-        <span> Deactivate, set under repair, without impacting print </span>
-      </v-tooltip>
-
-      <v-tooltip location="left">
-        <template #activator="{ props }">
-          <v-list-item
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="refreshSocketState()"
-          >
-            <v-avatar :size="iconSize">
-              <v-icon
-                :color="!isUnderMaintenance ? 'primary' : 'green'"
-                class="grey-lighten-1"
-              >
-                autorenew
-              </v-icon>
-            </v-avatar>
-            <span>
-              Refresh State <small> - this does not affect the print! </small>
+            <span class="text-h6 font-weight-bold">
+              {{ avatarInitials() }}
             </span>
-          </v-list-item>
+          </v-avatar>
+
+          <div class="flex-grow-1">
+            <div class="text-h6 font-weight-bold">
+              {{ storedSideNavPrinter.name }}
+            </div>
+            <div class="text-caption text-medium-emphasis">
+              {{ serviceName }}
+            </div>
+          </div>
+
+          <v-btn
+            icon="open_in_new"
+            variant="text"
+            size="small"
+            @click="openPrinterURL()"
+          />
+        </div>
+
+        <!-- Status Chip -->
+        <v-chip
+          :color="getStatusColor()"
+          :prepend-icon="getStatusIcon()"
+          size="small"
+          class="mb-2"
+        >
+          {{ getStatusText() }}
+        </v-chip>
+
+        <!-- Print Progress -->
+        <div
+          v-if="currentJob?.progress && isPrinting"
+          class="mt-3"
+        >
+          <div class="d-flex justify-space-between align-center mb-1">
+            <span class="text-body-2">{{ currentPrintingFilePath }}</span>
+            <span class="text-body-2 font-weight-bold">
+              {{ truncateProgress(currentJob.progress.completion) }}%
+            </span>
+          </div>
+          <v-progress-linear
+            :model-value="currentJob.progress.completion"
+            color="primary"
+            height="6"
+            rounded
+          />
+        </div>
+      </v-card-text>
+    </v-card>
+
+    <!-- Status Alerts -->
+    <div class="ma-3">
+      <v-alert
+        v-if="!isEnabled"
+        type="warning"
+        variant="tonal"
+        class="mb-3"
+        density="compact"
+      >
+        <template #prepend>
+          <v-icon>power_off</v-icon>
         </template>
-        <span>
-          Let FDM Monster know you are experiencing inconsistencies, reset all
-          volatile states
-        </span>
-      </v-tooltip>
+        Printer is disabled. Enable to receive live updates.
+      </v-alert>
+
+      <v-alert
+        v-else-if="!isOnline"
+        type="info"
+        variant="tonal"
+        class="mb-3"
+        density="compact"
+      >
+        <template #prepend>
+          <v-icon>wifi_off</v-icon>
+        </template>
+        Printer appears offline. Attempting to reconnect...
+      </v-alert>
+
+      <v-alert
+        v-if="storedSideNavPrinter?.disabledReason"
+        type="error"
+        variant="tonal"
+        class="mb-3"
+        density="compact"
+      >
+        <template #prepend>
+          <v-icon>construction</v-icon>
+        </template>
+        <div>
+          <div class="font-weight-bold">Under Maintenance</div>
+          <div class="text-caption">{{ storedSideNavPrinter.disabledReason }}</div>
+        </div>
+      </v-alert>
+
+      <v-alert
+        v-if="fileLoadError"
+        type="warning"
+        variant="tonal"
+        class="mb-3"
+        density="compact"
+      >
+        <template #prepend>
+          <v-icon>warning</v-icon>
+        </template>
+        <div>
+          <div>Unable to load files from {{ serviceName }}</div>
+          <v-btn
+            size="small"
+            variant="outlined"
+            class="mt-2"
+            @click="refreshFiles()"
+          >
+            Try Again
+          </v-btn>
+        </div>
+      </v-alert>
+    </div>
+
+    <!-- Quick Actions -->
+    <v-card
+      class="ma-3 mb-4"
+      elevation="1"
+      rounded="lg"
+    >
+      <v-card-title class="text-subtitle-1 py-3">
+        Quick Actions
+      </v-card-title>
+
+      <v-card-text class="pt-0">
+        <div class="d-flex flex-wrap ga-2">
+          <v-btn
+            :disabled="!isEnabled || !isOnline"
+            :color="isOperational ? 'warning' : 'success'"
+            size="small"
+            variant="outlined"
+            @click="togglePrinterConnection()"
+          >
+            <v-icon start>{{ isOperational ? 'usb_off' : 'usb' }}</v-icon>
+            {{ isOperational ? 'Disconnect' : 'Connect' }}
+          </v-btn>
+
+          <v-btn
+            :color="isEnabled ? 'warning' : 'success'"
+            size="small"
+            variant="outlined"
+            @click="toggleEnabled()"
+          >
+            <v-icon start>{{ isEnabled ? 'pause' : 'play_arrow' }}</v-icon>
+            {{ isEnabled ? 'Disable' : 'Enable' }}
+          </v-btn>
+
+          <v-btn
+            size="small"
+            variant="outlined"
+            @click="refreshSocketState()"
+          >
+            <v-icon start>refresh</v-icon>
+            Refresh
+          </v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
+
+    <!-- Print Controls -->
+    <v-card
+      v-if="isPrinting || isStoppable || isPaused"
+      class="ma-3 mb-4"
+      elevation="1"
+      rounded="lg"
+    >
+      <v-card-title class="text-subtitle-1 py-3">
+        Print Controls
+      </v-card-title>
+
+      <v-card-text class="pt-0">
+        <div class="d-flex flex-wrap ga-2">
+          <v-btn
+            v-if="isPrinting || isPaused"
+            :disabled="!isOnline"
+            :color="isPaused ? 'success' : 'warning'"
+            size="small"
+            variant="outlined"
+            @click="isPaused ? clickResumePrint() : clickPausePrint()"
+          >
+            <v-icon start>{{ isPaused ? 'play_arrow' : 'pause' }}</v-icon>
+            {{ isPaused ? 'Resume' : 'Pause' }}
+          </v-btn>
+
+          <v-btn
+            v-if="isStoppable"
+            color="error"
+            size="small"
+            variant="outlined"
+            @click="clickStopPrint()"
+          >
+            <v-icon start>stop</v-icon>
+            Cancel Print
+          </v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
+
+    <!-- Files Section -->
+    <v-card
+      class="ma-3 mb-4 flex-grow-1"
+      elevation="1"
+      rounded="lg"
+    >
+      <v-card-title class="d-flex align-center py-3">
+        <span class="text-subtitle-1">Files</span>
+        <v-spacer />
+        <v-btn
+          icon="refresh"
+          size="small"
+          variant="text"
+          @click="refreshFiles()"
+        />
+      </v-card-title>
 
       <v-divider />
-      <v-list-subheader inset> Commands</v-list-subheader>
-      <v-tooltip location="left">
-        <template #activator="{ props }">
-          <v-list-item
-            :disabled="!storedSideNavPrinter?.enabled || !isOnline"
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="togglePrinterConnection()"
+
+      <v-card-text class="pt-3">
+        <!-- Search Field -->
+        <v-text-field
+          v-model="fileSearch"
+          placeholder="Search files..."
+          prepend-inner-icon="search"
+          variant="outlined"
+          density="compact"
+          clearable
+          hide-details
+          class="mb-3"
+        />
+
+        <!-- File List -->
+        <div class="file-list">
+          <!-- Loading State -->
+          <div
+            v-if="loading"
+            class="d-flex justify-center py-4"
           >
-            <v-avatar :size="iconSize">
-              <v-icon> usb</v-icon>
-            </v-avatar>
-            <span v-if="isStoppable"> Disconnect USB & Stop Print </span>
-            <span v-else-if="isOperational"> Disconnect USB </span>
-            <span v-else> Connect USB </span>
-          </v-list-item>
-        </template>
-        <span> Disconnect USB, disrupting any print </span>
-      </v-tooltip>
+            <v-progress-circular
+              indeterminate
+              size="32"
+            />
+          </div>
 
-      <v-tooltip location="left">
-        <template #activator="{ props }">
-          <v-list-item
-            :disabled="!isOnline || !isPrinting"
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="
-              isPaused ? clickResumePrint() : clickPausePrint()
-            "
+          <!-- Empty State -->
+          <div
+            v-else-if="!filesListed.length && !fileLoadError"
+            class="text-center py-6"
           >
-            <v-avatar :size="iconSize">
-              <v-icon v-if="!isPaused"> pause</v-icon>
-              <v-icon v-if="isPaused"> play_circle_outline</v-icon>
-            </v-avatar>
-            {{ isPaused ? 'Resume print' : 'Pause print' }}
-          </v-list-item>
-        </template>
-        <span> Send Pause or Resume command </span>
-      </v-tooltip>
-
-      <v-tooltip location="left">
-        <template #activator="{ props }">
-          <v-list-item
-            :disabled="!isStoppable"
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="clickStopPrint()"
-          >
-            <v-avatar :size="iconSize">
-              <v-icon> stop</v-icon>
-            </v-avatar>
-            Cancel print
-          </v-list-item>
-        </template>
-        <span> Cancel print gracefully </span>
-      </v-tooltip>
-
-      <v-tooltip location="left">
-        <template #activator="{ props }">
-          <v-list-item
-            :disabled="!canBeCleared"
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="clickDeleteAllFiles()"
-          >
-            <v-avatar :size="iconSize">
-              <v-icon> delete</v-icon>
-            </v-avatar>
-            Delete files
-          </v-list-item>
-        </template>
-        <span> Clear all files present on OctoPrint (local) </span>
-      </v-tooltip>
-
-      <v-tooltip location="left">
-        <template #activator="{ props }">
-          <v-list-item
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="refreshFiles()"
-          >
-            <v-avatar :size="iconSize">
-              <v-icon> refresh</v-icon>
-            </v-avatar>
-            Refresh files
-          </v-list-item>
-        </template>
-        <span> Rebuild the file list on OctoPrint (local) </span>
-      </v-tooltip>
-
-      <v-tooltip location="left">
-        <template #activator="{ props }">
-          <v-list-item
-            class="extra-dense-list-item"
-            link
-            v-bind="props"
-            @click.prevent.stop="clickSettings()"
-          >
-            <v-avatar :size="iconSize">
-              <v-icon> settings</v-icon>
-            </v-avatar>
-            Settings
-          </v-list-item>
-        </template>
-        <span> Edit the printer settings </span>
-      </v-tooltip>
-    </v-list>
-
-    <v-divider />
-
-    <v-list
-      v-drop-upload="{ printers: [storedSideNavPrinter] }"
-      density="compact"
-    >
-      <v-list-subheader inset> Files - drag 'n drop!</v-list-subheader>
-      <v-text-field
-        v-model="fileSearch"
-        class="ml-5 mr-5"
-        clearable
-        label="Search files..."
-        prepend-icon="search"
-      />
-      <!-- Empty file list -->
-      <v-list-item v-if="!filesListed.length">
-        <v-avatar :size="iconSize">
-          <v-icon> clear</v-icon>
-        </v-avatar>
-        <v-list-item-title> No files to show</v-list-item-title>
-      </v-list-item>
-
-      <!-- Loading file list-->
-      <v-progress-linear
-        v-if="loading"
-        indeterminate
-      />
-      <v-list-item
-        v-for="(file, index) in filesListed"
-        :key="index"
-        density="compact"
-        link
-        style="padding-top: 0"
-      >
-        <v-avatar :size="iconSize">
-          <v-tooltip location="left">
-            <template #activator="{ props }">
-              <v-btn
-                v-bind="props"
-                @click="clickDownloadFile(file.path)"
-              >
-                <v-icon> download</v-icon>
-              </v-btn>
-            </template>
-            <span> Download GCode </span>
-          </v-tooltip>
-        </v-avatar>
-
-        <v-list-item-action>
-          <v-tooltip location="left">
-            <template #activator="{ props }">
-              <v-btn
-                :disabled="isFileBeingPrinted(file)"
-                icon
-                v-bind="props"
-                @click="clickPrintFile(file)"
-              >
-                <v-icon> play_arrow</v-icon>
-              </v-btn>
-            </template>
-            <span> Select & Print </span>
-          </v-tooltip>
-        </v-list-item-action>
-
-        <v-tooltip location="left">
-          <template #activator="{ props }">
-            <span
-              :class="{ 'current-file-print': isFileBeingPrinted(file) }"
-              v-bind="props"
+            <v-icon
+              size="48"
+              color="medium-emphasis"
+              class="mb-2"
             >
-              {{ file.path }}
-            </span>
-          </template>
-          <span>
-            File: {{ file.path }} <br />
-            Size: {{ formatBytes(file.size) }} <br />
-            <strong>
-              {{ isFileBeingPrinted(file) ? 'Printing' : 'Unused' }}
-            </strong>
-          </span>
-        </v-tooltip>
+              folder_open
+            </v-icon>
+            <div class="text-body-2 text-medium-emphasis">
+              No files found
+            </div>
+          </div>
 
-        <v-list-item-action>
-          <v-tooltip location="left">
-            <template #activator="{ props }">
-              <v-btn
-                :disabled="isFileBeingPrinted(file)"
-                v-bind="props"
-                @click="deleteFile(file)"
-              >
-                <v-icon color="grey-lighten-1"> delete</v-icon>
-              </v-btn>
-            </template>
-            <span> Delete file </span>
-          </v-tooltip>
-        </v-list-item-action>
-      </v-list-item>
-    </v-list>
+          <!-- File Items -->
+          <div
+            v-for="(file, index) in filesListed"
+            :key="index"
+            class="file-item"
+          >
+            <v-card
+              :class="{ 'file-printing': isFileBeingPrinted(file) }"
+              variant="outlined"
+              class="mb-2"
+              rounded="lg"
+            >
+              <v-card-text class="py-2 px-3">
+                <div class="d-flex align-center">
+                  <v-icon
+                    :color="isFileBeingPrinted(file) ? 'primary' : 'medium-emphasis'"
+                    class="mr-3"
+                  >
+                    {{ isFileBeingPrinted(file) ? 'play_circle' : 'insert_drive_file' }}
+                  </v-icon>
+
+                  <div class="flex-grow-1 min-width-0">
+                    <div
+                      :class="{ 'text-primary font-weight-bold': isFileBeingPrinted(file) }"
+                      class="text-body-2 text-truncate"
+                      :title="file.path"
+                    >
+                      {{ file.path }}
+                    </div>
+                    <div class="text-caption text-medium-emphasis">
+                      {{ formatBytes(file.size) }}
+                    </div>
+                  </div>
+
+                  <div class="d-flex ga-1">
+                    <v-btn
+                      icon="download"
+                      size="x-small"
+                      variant="text"
+                      @click="clickDownloadFile(file.path)"
+                    />
+                    <v-btn
+                      :disabled="isFileBeingPrinted(file)"
+                      icon="play_arrow"
+                      size="x-small"
+                      variant="text"
+                      color="success"
+                      @click="clickPrintFile(file)"
+                    />
+                    <v-btn
+                      :disabled="isFileBeingPrinted(file)"
+                      icon="delete"
+                      size="x-small"
+                      variant="text"
+                      color="error"
+                      @click="deleteFile(file)"
+                    />
+                  </div>
+                </div>
+              </v-card-text>
+            </v-card>
+          </div>
+        </div>
+      </v-card-text>
+    </v-card>
+
+    <!-- Bottom Actions -->
+    <v-card
+      class="ma-3"
+      elevation="1"
+      rounded="lg"
+    >
+      <v-card-text class="py-3">
+        <div class="d-flex flex-wrap ga-2">
+          <v-btn
+            :disabled="!canBeCleared"
+            color="error"
+            size="small"
+            variant="outlined"
+            @click="clickDeleteAllFiles()"
+          >
+            <v-icon start>delete_sweep</v-icon>
+            Clear All
+          </v-btn>
+
+          <v-btn
+            size="small"
+            variant="outlined"
+            @click="clickSettings()"
+          >
+            <v-icon start>settings</v-icon>
+            Settings
+          </v-btn>
+
+          <v-btn
+            v-if="isUnderMaintenance"
+            size="small"
+            variant="outlined"
+            color="warning"
+            @click="toggleMaintenance()"
+          >
+            <v-icon start>build</v-icon>
+            Maintenance
+          </v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
   </v-navigation-drawer>
 </template>
 
@@ -475,41 +407,30 @@ import { formatBytes } from '@/utils/file-size.util'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from './Dialogs/dialog.constants'
 import { usePrinterStateStore } from '@/store/printer-state.store'
-import { interpretStates } from '@/shared/printer-state.constants'
-import { useSettingsStore } from '@/store/settings.store'
-import octoPrintIcon from "@/assets/octoprint-tentacle.svg";
 import {
   getServiceName,
-  isMoonrakerType,
-  isOctoPrintType, isPrusaLinkType,
 } from "@/utils/printer-type.utils";
 import { useDialog } from '@/shared/dialog.composable'
+import { useFileExplorer } from '@/shared/file-explorer.composable'
 
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
+const fileExplorer = useFileExplorer()
 
-const iconSize = ref(36)
 const fileSearch = ref<string | undefined>(undefined)
 const shownFileCache = ref<FileDto[] | undefined>(undefined)
-const drawerOpened = ref(false)
-const loading = ref(true)
-const storedSideNavPrinter = computed(() => printersStore.sideNavPrinter)
-const printerId = computed(() => storedSideNavPrinter.value?.id)
+const drawerOpened = fileExplorer.isOpen
+const loading = fileExplorer.loading
+const fileLoadError = fileExplorer.error
+const printerId = fileExplorer.currentPrinterId
+
+const storedSideNavPrinter = computed(() => {
+  if (!printerId.value) return undefined
+  return printersStore.printer(printerId.value)
+})
 const isOnline = computed(() =>
   printerId.value ? printerStateStore.isApiResponding(printerId.value) : false
 )
-
-const isOctoPrint = computed(() => {
-  return isOctoPrintType(storedSideNavPrinter.value?.printerType)
-})
-
-const isMoonraker = computed(() => {
-  return isMoonrakerType(storedSideNavPrinter.value?.printerType)
-})
-
-const isPrusaLink = computed(() => {
-  return isPrusaLinkType(storedSideNavPrinter.value?.printerType);
-})
 
 const serviceName = computed(() =>
   getServiceName(storedSideNavPrinter.value?.printerType)
@@ -570,31 +491,10 @@ const currentPrintingFilePath = computed(() => {
   }
   return printerStateStore.printingFilePathsByPrinterId[printerId.value]
 })
-const printerState = computed(() => {
-  if (!printerId.value || !storedSideNavPrinter.value) return null
-  const printerEvents = printerStateStore.printerEventsById[printerId.value]
-  const socketState = printerStateStore.socketStatesById[printerId.value]
-  const states = interpretStates(
-    storedSideNavPrinter.value,
-    socketState,
-    printerEvents
-  )
-  const debugInterpretedState =
-    useSettingsStore().frontendDebugSettings?.showInterpretedPrinterState
-  if (debugInterpretedState) {
-    console.debug(
-      '[FileExplorerSideNav] rendered for printerId',
-      printerId.value,
-      states?.text,
-      states?.color,
-      states?.rgb
-    )
-  }
-  return states
-})
 const refreshFiles = async () => {
-  loading.value = true
-  const currentPrinterId = storedSideNavPrinter.value?.id
+  fileExplorer.setLoading(true)
+  fileExplorer.setError(false)
+  const currentPrinterId = printerId.value
   if (!currentPrinterId) return
   try {
     if (printerStateStore.isApiResponding(currentPrinterId)) {
@@ -606,8 +506,13 @@ const refreshFiles = async () => {
         currentPrinterId
       )
     }
+  } catch (error) {
+    console.warn('Failed to load printer files:', error)
+    fileExplorer.setError(true)
+    // Fallback to empty array to show "No files to show" message
+    shownFileCache.value = []
   } finally {
-    loading.value = false
+    fileExplorer.setLoading(false)
   }
 }
 const deleteFile = async (file: FileDto) => {
@@ -615,20 +520,11 @@ const deleteFile = async (file: FileDto) => {
   await printersStore.deletePrinterFile(printerId.value, file.path)
 }
 
-watch(storedSideNavPrinter, async (viewedPrinter, oldVal) => {
-  drawerOpened.value = !!viewedPrinter
-  const currentPrinterId = viewedPrinter?.id
-  if (!viewedPrinter || !currentPrinterId) {
-    return
-  }
-  if (!shownFileCache.value || viewedPrinter.id !== oldVal?.id || !oldVal) {
+watch(printerId, async (newPrinterId, oldPrinterId) => {
+  if (newPrinterId && newPrinterId !== oldPrinterId) {
     await refreshFiles()
-  }
-})
-
-watch(drawerOpened, (newVal) => {
-  if (!newVal) {
-    printersStore.setSideNavPrinter(undefined)
+  } else if (!newPrinterId) {
+    shownFileCache.value = undefined
   }
 })
 
@@ -656,15 +552,6 @@ function avatarInitials() {
 function openPrinterURL() {
   if (!storedSideNavPrinter.value) return
   PrintersService.openPrinterURL(storedSideNavPrinter.value.printerURL)
-  closeDrawer()
-}
-
-function openPrinterMainsail() {
-  if (!storedSideNavPrinter.value) return
-
-  const url = new URL(storedSideNavPrinter.value.printerURL)
-  url.port = '8080'
-  PrintersService.openPrinterURL(url.toString())
   closeDrawer()
 }
 
@@ -733,9 +620,9 @@ async function clickDeleteAllFiles() {
     return
   }
 
-  loading.value = true
+  fileExplorer.setLoading(true)
   await printersStore.deletePrinterFiles(printerId.value)
-  loading.value = false
+  fileExplorer.setLoading(false)
   shownFileCache.value = printersStore.printerFiles(printerId.value)
 }
 
@@ -760,39 +647,77 @@ function clickDownloadFile(path: string) {
 }
 
 function closeDrawer() {
-  printersStore.setSideNavPrinter(undefined)
+  fileExplorer.closeFileExplorer()
+}
+
+function getStatusColor() {
+  if (!isEnabled.value) return 'error'
+  if (!isOnline.value) return 'warning'
+  if (isPrinting.value) return 'success'
+  if (isOperational.value) return 'primary'
+  return 'medium-emphasis'
+}
+
+function getStatusIcon() {
+  if (!isEnabled.value) return 'power_off'
+  if (!isOnline.value) return 'wifi_off'
+  if (isPrinting.value) return 'print'
+  if (isOperational.value) return 'check_circle'
+  return 'radio_button_unchecked'
+}
+
+function getStatusText() {
+  if (!isEnabled.value) return 'Disabled'
+  if (!isOnline.value) return 'Offline'
+  if (isPrinting.value && isPaused.value) return 'Paused'
+  if (isPrinting.value) return 'Printing'
+  if (isOperational.value) return 'Ready'
+  return 'Idle'
 }
 </script>
-<style>
-.extra-dense-list-item {
-  margin-top: -7px;
+<style scoped>
+.printer-side-nav {
+  background: rgb(var(--v-theme-surface));
 }
 
-.current-file-print {
-  color: red;
+.file-printing {
+  border-color: rgb(var(--v-theme-primary)) !important;
+  background: rgba(var(--v-theme-primary), 0.05);
 }
 
-.pulsating-red {
-  background: darkred;
-  margin: 10px;
-  border-radius: 15px;
-  box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-  transform: scale(1);
-  animation: pulse 2s infinite;
+.file-list {
+  max-height: 400px;
+  overflow-y: auto;
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
-  }
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-  }
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-  }
+.file-item {
+  transition: all 0.2s ease;
+}
+
+.file-item:hover {
+  transform: translateY(-1px);
+}
+
+.min-width-0 {
+  min-width: 0;
+}
+
+/* Scrollbar styling */
+.file-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.file-list::-webkit-scrollbar-track {
+  background: rgba(var(--v-theme-on-surface), 0.05);
+  border-radius: 2px;
+}
+
+.file-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--v-theme-on-surface), 0.2);
+  border-radius: 2px;
+}
+
+.file-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--v-theme-on-surface), 0.3);
 }
 </style>
