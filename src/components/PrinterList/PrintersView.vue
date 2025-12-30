@@ -1,28 +1,50 @@
 <template>
   <div>
     <v-card>
-      <v-card-title>
-        Printers
+      <v-card-title class="d-flex align-center">
+        <span>Printers</span>
         <v-spacer />
-        <v-select
-          v-if="groupsWithPrinters.length"
-          v-model="filteredGroupsWithPrinters"
-          :items="groupsWithPrinters"
-          :return-object="true"
-          item-title="name"
-          label="Filter by groups"
-          multiple
-          placeholder="Select group to filter by"
-          prepend-icon="filter_list"
-        />
-        <v-text-field
-          v-model="search"
-          class="p-2"
-          clearable
-          label="Printer search"
-          prepend-icon="search"
-          single-line
-        />
+        <div class="d-flex align-center ga-2">
+          <v-select
+            v-if="groupsWithPrinters.length"
+            v-model="filteredGroupsWithPrinters"
+            :items="groupsWithPrinters"
+            :return-object="true"
+            item-title="name"
+            label="Filter by tags"
+            multiple
+            placeholder="Select tags"
+            prepend-inner-icon="label"
+            density="compact"
+            variant="outlined"
+            hide-details
+            style="width: 220px"
+          />
+          <v-select
+            v-model="selectedPrinterTypes"
+            :items="printerTypes"
+            item-title="name"
+            item-value="value"
+            label="Filter by type"
+            multiple
+            placeholder="Select types"
+            prepend-inner-icon="category"
+            density="compact"
+            variant="outlined"
+            hide-details
+            style="width: 220px"
+          />
+          <v-text-field
+            v-model="search"
+            clearable
+            label="Search"
+            prepend-inner-icon="search"
+            density="compact"
+            variant="outlined"
+            hide-details
+            style="width: 220px"
+          />
+        </div>
       </v-card-title>
 
       <v-data-table
@@ -52,34 +74,40 @@
             <v-toolbar-title>
               Showing {{ printers.length || 0 }} printers
             </v-toolbar-title>
+            <v-spacer />
             <v-btn
-              class="ml-3"
-              type="button"
-              variant="outlined"
+              variant="tonal"
+              prepend-icon="publish"
               @click="openImportOctoFarmPrintersDialog()"
             >
-              <v-icon>publish</v-icon>
-              Import OctoFarm Printers
+              Import OctoFarm
             </v-btn>
             <v-btn
-              class="ml-3"
-              type="button"
-              variant="outlined"
+              class="ml-2"
+              variant="tonal"
+              color="success"
+              prepend-icon="add"
               @click="openCreatePrinterDialog()"
             >
-              <v-icon>add</v-icon>
               Create Printer
             </v-btn>
             <v-btn
-              class="ml-3"
+              class="ml-2"
+              variant="tonal"
+              prepend-icon="label"
+              @click="showTagDialog = true"
+            >
+              Manage Tags
+            </v-btn>
+            <v-btn
+              class="ml-2"
+              variant="tonal"
               color="primary"
-              type="button"
+              prepend-icon="code"
               @click="openYamlImportExportDialog()"
             >
-              <v-icon>publish</v-icon>
               Import/Export YAML
             </v-btn>
-            <v-spacer />
           </v-toolbar>
         </template>
         <template #item.enabled="{ item }">
@@ -105,50 +133,51 @@
             {{ floorOfPrinter(item.id)?.name }}
           </v-chip>
         </template>
-        <template
-          #item.group="{ item }"
-        >
-          <v-chip
-            v-for="group of groupsOfPrinter(item.id)"
-            :key="group.id"
-            class="ml-2"
-            closable
-            size="small"
-            @click:close="deletePrinterFromGroup(group.id, item.id)"
-          >
-            {{ group.name }}
-          </v-chip>
-
-          <v-menu offset-y>
-            <template #activator="{ props }">
-              <v-chip
-                :disabled="!groupsWithPrinters.length"
-                class="ml-2"
-                size="small"
-                v-bind="props"
-              >
-                <v-icon size="small">add</v-icon>
-              </v-chip>
-            </template>
-
-            <v-list
-              density="compact"
-              style="border: 1px solid dimgray"
+        <template #item.group="{ item }">
+          <div class="d-flex align-center flex-wrap ga-1">
+            <v-chip
+              v-for="group of groupsOfPrinter(item.id)"
+              :key="group.id"
+              size="small"
+              variant="tonal"
+              closable
+              @click:close="deletePrinterFromGroup(group.id, item.id)"
             >
-              <v-list-subheader> ADD TO GROUP</v-list-subheader>
-              <v-list-item-group>
+              <v-icon start size="x-small">label</v-icon>
+              {{ group.name }}
+            </v-chip>
+
+            <v-menu>
+              <template #activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  :disabled="!nonGroupsOfPrinter(item.id).length"
+                  size="x-small"
+                  icon
+                  variant="text"
+                >
+                  <v-icon>add</v-icon>
+                </v-btn>
+              </template>
+
+              <v-list density="compact" min-width="150">
+                <v-list-subheader>Add Tag</v-list-subheader>
                 <v-list-item
                   v-for="(group, index) in nonGroupsOfPrinter(item.id)"
                   :key="index"
                   @click="addPrinterToGroup(group.id, item.id)"
                 >
-                  <v-list-item-title>
-                    {{ group.name }}
-                  </v-list-item-title>
+                  <template v-slot:prepend>
+                    <v-icon size="small">label</v-icon>
+                  </template>
+                  <v-list-item-title>{{ group.name }}</v-list-item-title>
                 </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </v-menu>
+                <v-list-item v-if="!nonGroupsOfPrinter(item.id).length" disabled>
+                  <v-list-item-title class="text-caption">All tags assigned</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </div>
         </template>
         <template #item.actions="{ item }">
           <div class="d-flex ga-1 align-center">
@@ -179,66 +208,66 @@
       </v-data-table>
     </v-card>
 
-    <v-card
-      class="mt-4"
-    >
-      <v-card-title> Printer Groups </v-card-title>
+    <!-- Tag Management Dialog -->
+    <v-dialog v-model="showTagDialog" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex align-center">
+          <v-icon class="mr-2">label</v-icon>
+          Manage Tags
+        </v-card-title>
+        <v-card-text>
+          <div class="mb-4">
+            <div class="text-subtitle-2 mb-2">Available Tags:</div>
+            <div class="d-flex flex-wrap ga-2">
+              <v-chip
+                v-for="group of groupsWithPrinters"
+                :key="group.id"
+                closable
+                size="small"
+                @click:close="deleteGroup(group.id)"
+              >
+                {{ group.name }}
+              </v-chip>
+              <v-chip
+                v-if="!groupsWithPrinters.length"
+                disabled
+                size="small"
+              >
+                No tags yet
+              </v-chip>
+            </div>
+          </div>
 
-      <v-card-text>
-        <h3>Existing groups:</h3>
+          <v-divider class="my-4" />
 
-        <v-container>
-          <v-chip-group
-            v-model="selectedGroup"
-            column
-            selected-class="primary--text"
-            @update:model-value="selectGroupForUpdatingName()"
-          >
-            <v-chip
-              v-for="group of groupsWithPrinters"
-              :key="group.id"
-              class="mr-3"
-              closable
+          <div>
+            <div class="text-subtitle-2 mb-2">Create New Tag:</div>
+            <v-text-field
+              v-model="newGroupName"
+              label="Tag Name"
+              placeholder="Enter tag name"
+              density="compact"
+              variant="outlined"
+              hide-details
+              @keyup.enter="createGroup()"
+            />
+            <v-btn
+              class="mt-2"
+              color="primary"
               size="small"
-              @click:close="deleteGroup(group.id)"
+              prepend-icon="add"
+              @click="createGroup()"
             >
-              {{ group.name }}
-            </v-chip>
-          </v-chip-group>
-        </v-container>
-
-        <h3 class="mt-3">Update group name</h3>
-        <v-container>
-          <v-alert v-if="!selectedGroupObject">
-            Select a group to update its name.
-          </v-alert>
-          <v-text-field
-            v-model="updatedGroupName"
-            :disabled="!selectedGroupObject"
-            label="Group Name"
-            placeholder="Type group name here"
-          >
-            Name
-          </v-text-field>
-          <v-btn @click="updateGroupName(selectedGroupObject)">
-            Update name
-          </v-btn>
-        </v-container>
-
-        <h3 class="mt-3">Add group</h3>
-
-        <v-container>
-          <v-text-field
-            v-model="newGroupName"
-            label="Group Name"
-            placeholder="Type group name here"
-          >
-            Name
-          </v-text-field>
-          <v-btn @click="createGroup()"> Create new group</v-btn>
-        </v-container>
-      </v-card-text>
-    </v-card>
+              Create Tag
+            </v-btn>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn @click="showTagDialog = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -283,8 +312,15 @@ const addOrUpdatePrinterDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
 const filteredGroupsWithPrinters = ref<GroupWithPrintersDto[]>([])
 const newGroupName = ref('')
-const updatedGroupName = ref('')
-const selectedGroup = ref<number>()
+const showTagDialog = ref(false)
+const selectedPrinterTypes = ref<number[]>([])
+
+const printerTypes = [
+  { name: 'OctoPrint', value: 0 },
+  { name: 'Moonraker', value: 1 },
+  { name: 'PrusaLink', value: 2 },
+  { name: 'Bambu', value: 3 }
+]
 
 type ReadonlyHeaders = VDataTable['$props']['headers']
 
@@ -298,7 +334,7 @@ const tableHeaders = computed(
       { title: 'Type', key: 'printerType' },
       { title: 'Printer Name', align: 'start', sortable: true, key: 'name' },
       { title: 'Floor', key: 'floor', sortable: false },
-      { title: 'Group(s)', key: 'group', sortable: true },
+      { title: 'Tags', key: 'group', sortable: true },
       { title: 'Actions', key: 'actions', sortable: false },
       { title: 'Socket Update', key: 'socketupdate', sortable: false },
       { title: '', key: 'data-table-expand' }
@@ -319,28 +355,32 @@ const printerGroupsQuery = useQuery({
 })
 
 const printers = computed(() => {
-  if (
-    !filteredGroupsWithPrinters.value?.length
-  ) {
-    return printerStore.printers
+  let filtered = printerStore.printers
+
+  // Filter by tags
+  if (filteredGroupsWithPrinters.value?.length > 0) {
+    const printerIdsInFilteredGroups =
+      filteredGroupsWithPrinters.value.flatMap((g) =>
+        g.printers.map((p) => p.printerId)
+      ) || []
+    filtered = filtered.filter((p) =>
+      printerIdsInFilteredGroups.includes(p.id)
+    )
   }
-  const printerIdsInFilteredGroups =
-    filteredGroupsWithPrinters.value.flatMap((g) =>
-      g.printers.map((p) => p.printerId)
-    ) || []
-  return printerStore.printers.filter((p) =>
-    printerIdsInFilteredGroups.includes(p.id)
-  )
+
+  // Filter by printer type
+  if (selectedPrinterTypes.value?.length > 0) {
+    filtered = filtered.filter((p) =>
+      selectedPrinterTypes.value.includes(p.printerType)
+    )
+  }
+
+  return filtered
 })
 
 const currentEventReceivedAt = computed(
   () => printerStateStore.printerCurrentEventReceivedAtById
 )
-const selectedGroupObject = computed(() => {
-  if (!selectedGroup.value && selectedGroup.value !== 0) return
-
-  return groupsWithPrinters.value[selectedGroup.value]
-})
 
 const diffSeconds = (timestamp: number) => {
   if (!timestamp) return
@@ -376,6 +416,8 @@ const openCreatePrinterDialog = () => {
 const clickRow = (item: PrinterDto, event: any) => {
   console.log(item, event)
 
+  if (!item?.id) return
+
   if (event.isExpanded) {
     const index = expanded.value.indexOf(item.id.toString())
     expanded.value.splice(index, 1)
@@ -400,32 +442,8 @@ const createGroup = async () => {
   await PrinterGroupService.createGroup(newGroupName.value.trim())
   await printerGroupsQuery.refetch()
   newGroupName.value = ''
-  snackbar.info('Created group')
-}
-
-const selectGroupForUpdatingName = () => {
-  if (!selectedGroupObject.value) return
-
-  updatedGroupName.value = selectedGroupObject.value?.name
-}
-
-const updateGroupName = async (group?: GroupWithPrintersDto) => {
-  if (!group?.id) {
-    throw new Error('Group id was not defined')
-  }
-  const existingGroup = groupsWithPrinters.value.find((g) => g.id === group.id)
-  if (!existingGroup) {
-    throw new Error('Group was not found, please reload the page')
-  }
-  if (!updatedGroupName.value?.trim()?.length) {
-    throw new Error('Please set a non-empty group name')
-  }
-
-  await PrinterGroupService.updateGroupName(
-    group.id,
-    updatedGroupName.value.trim()
-  )
-  await printerGroupsQuery.refetch()
+  showTagDialog.value = false
+  snackbar.info('Created tag')
 }
 
 const deleteGroup = async (groupId: number) => {

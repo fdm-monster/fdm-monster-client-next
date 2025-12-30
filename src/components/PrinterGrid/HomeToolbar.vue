@@ -29,6 +29,53 @@
       </v-btn>
     </v-btn-toggle>
 
+    <!-- Tag filter -->
+    <v-select
+      v-if="groups.length"
+      v-model="selectedTags"
+      :items="groups"
+      item-title="name"
+      item-value="id"
+      label="Filter by tags"
+      multiple
+      chips
+      closable-chips
+      density="compact"
+      variant="outlined"
+      hide-details
+      clearable
+      class="ml-4"
+      style="max-width: 300px"
+      @update:model-value="onTagFilterChange"
+    >
+      <template v-slot:prepend>
+        <v-icon>label</v-icon>
+      </template>
+    </v-select>
+
+    <!-- Printer type filter -->
+    <v-select
+      v-model="selectedPrinterTypes"
+      :items="printerTypes"
+      item-title="name"
+      item-value="value"
+      label="Filter by type"
+      multiple
+      chips
+      closable-chips
+      density="compact"
+      variant="outlined"
+      hide-details
+      clearable
+      class="ml-2"
+      style="max-width: 300px"
+      @update:model-value="onPrinterTypeFilterChange"
+    >
+      <template v-slot:prepend>
+        <v-icon>category</v-icon>
+      </template>
+    </v-select>
+
     <v-alert
       v-if="floorStore.floorlessPrinters.length"
       class="ml-4"
@@ -80,18 +127,30 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { usePrinterStore } from '@/store/printer.store'
 import { useGridStore } from '@/store/grid.store'
 import { useFloorStore } from '@/store/floor.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useDialog } from '@/shared/dialog.composable'
+import { PrinterGroupService, GroupDto } from '@/backend/printer-group.service'
 
 const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const floorStore = useFloorStore()
 const gridStore = useGridStore()
+
+const groups = ref<GroupDto[]>([])
+const selectedTags = ref<number[]>([])
+const selectedPrinterTypes = ref<number[]>([])
+
+const printerTypes = [
+  { name: 'OctoPrint', value: 0 },
+  { name: 'Moonraker', value: 1 },
+  { name: 'PrusaLink', value: 2 },
+  { name: 'Bambu', value: 3 }
+]
 
 const selectedFloorToggleIndex = computed(() => floorStore.selectedFloorIndex)
 
@@ -99,7 +158,20 @@ const floors = computed(() => {
   return floorStore.floors
 })
 
+onMounted(async () => {
+  const groupsWithPrinters = await PrinterGroupService.getGroupsWithPrinters()
+  groups.value = groupsWithPrinters.map(g => ({ id: g.id, name: g.name }))
+})
+
 function changeFloorIndex(index: any) {
   floorStore.changeSelectedFloorByIndex(index)
+}
+
+function onTagFilterChange(tagIds: number[]) {
+  gridStore.setTagFilter(tagIds)
+}
+
+function onPrinterTypeFilterChange(typeIds: number[]) {
+  gridStore.setPrinterTypeFilter(typeIds)
 }
 </script>
