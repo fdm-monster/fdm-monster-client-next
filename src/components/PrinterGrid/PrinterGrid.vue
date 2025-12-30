@@ -112,7 +112,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import PrinterGridTile from '@/components/PrinterGrid/PrinterGridTile.vue'
 import { usePrinterStore } from '@/store/printer.store'
 import { PrinterDto } from '@/models/printers/printer.model'
@@ -120,15 +120,18 @@ import { useGridStore } from '@/store/grid.store'
 import { dragAppId, INTENT, PrinterPlace } from '@/shared/drag.constants'
 import { useSettingsStore } from '@/store/settings.store'
 import { useFloorStore } from '@/store/floor.store'
+import { PrinterGroupService, GroupWithPrintersDto } from '@/backend/printer-group.service'
 
 const printerStore = usePrinterStore()
 const floorStore = useFloorStore()
 const settingsStore = useSettingsStore()
 const gridStore = useGridStore()
+const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
 
 onMounted(async () => {
   await printerStore.loadPrinters()
   await floorStore.loadFloors()
+  groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
 })
 
 const props = defineProps({
@@ -138,7 +141,41 @@ const props = defineProps({
   }
 })
 
-const printerMatrix = computed(() => floorStore.gridSortedPrinters)
+const printerMatrix = computed(() => {
+  const matrix = floorStore.gridSortedPrinters
+  const hasTagFilter = gridStore.selectedTagFilter?.length > 0
+  const hasPrinterTypeFilter = gridStore.selectedPrinterTypeFilter?.length > 0
+
+  // If no filters, return all printers
+  if (!hasTagFilter && !hasPrinterTypeFilter) {
+    return matrix
+  }
+
+  // Filter printers based on selected tags and printer types
+  return matrix.map(row =>
+    row.map(printer => {
+      if (!printer) return undefined
+
+      // Check tag filter
+      let matchesTagFilter = !hasTagFilter
+      if (hasTagFilter) {
+        matchesTagFilter = groupsWithPrinters.value.some(group =>
+          gridStore.selectedTagFilter.includes(group.id) &&
+          group.printers.some(p => p.printerId === printer.id)
+        )
+      }
+
+      // Check printer type filter
+      let matchesPrinterType = !hasPrinterTypeFilter
+      if (hasPrinterTypeFilter) {
+        matchesPrinterType = gridStore.selectedPrinterTypeFilter.includes(printer.printerType)
+      }
+
+      // Printer must match both filters (if active)
+      return matchesTagFilter && matchesPrinterType ? printer : undefined
+    })
+  )
+})
 const columns = computed(() => settingsStore.gridCols)
 const rows = computed(() => settingsStore.gridRows)
 const largeTileMode = computed(() => settingsStore.largeTiles)

@@ -12,6 +12,7 @@ Features
 - Design new dashboard page
 - Redesign camera page
 - Redesign all settings pages
+- Implement (group) tag filtering on both printer page and printer list page
 
 Fixes
 
