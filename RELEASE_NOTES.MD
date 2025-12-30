@@ -9,6 +9,7 @@ Features
 - Redesign app snackbars
 - Redesign file sidenav with composable
 - Design new job page
+- Design new dashboard page
 
 Fixes
 

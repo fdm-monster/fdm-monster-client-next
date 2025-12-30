@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import DashboardView from '@/components/Dashboard/DashboardView.vue'
 import PrinterGridView from '@/components/PrinterGrid/PrinterGridView.vue'
 import PrintersView from '@/components/PrinterList/PrintersView.vue'
 import Settings from '@/components/Settings/SettingsView.vue'
@@ -38,6 +39,18 @@ const router = createRouter({
     {
       path: '/',
       name: RouteNames.Home,
+      meta: NeedsAuth,
+      redirect: '/dashboard'
+    },
+    {
+      path: '/dashboard',
+      name: RouteNames.Dashboard,
+      meta: NeedsAuth,
+      component: DashboardView
+    },
+    {
+      path: '/printers-grid',
+      name: 'PrinterGrid',
       meta: NeedsAuth,
       component: PrinterGridView
     },

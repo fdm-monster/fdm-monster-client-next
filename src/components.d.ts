@@ -24,6 +24,7 @@ declare module 'vue' {
     BatchReprintDialog: typeof import('./components/Generic/Dialogs/BatchReprintDialog.vue')['default']
     CameraGridView: typeof import('./components/CameraGrid/CameraGridView.vue')['default']
     CreateUserDialog: typeof import('./components/Generic/Dialogs/CreateUserDialog.vue')['default']
+    DashboardView: typeof import('./components/Dashboard/DashboardView.vue')['default']
     DebugSocketSettings: typeof import('./components/Settings/DebugSocketSettings.vue')['default']
     DiagnosticsSettings: typeof import('./components/Settings/DiagnosticsSettings.vue')['default']
     EmergencyCommands: typeof import('./components/Settings/EmergencyCommands.vue')['default']

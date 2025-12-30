@@ -35,7 +35,8 @@
 import imgLogo from '@/assets/logo.png'
 
 const items = [
-  ['home', 'Devices', '/'],
+  ['dashboard', 'Dashboard', '/dashboard'],
+  ['view_module', 'Printer Grid', '/printers-grid'],
   ['print', 'Printers', '/printers'],
   ['camera_alt', 'Cameras', '/cameras'],
   ['timeline', 'Print Jobs', '/jobs'],
