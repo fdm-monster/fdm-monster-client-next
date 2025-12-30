@@ -1,5 +1,6 @@
 export const RouteNames = {
   Home: 'Home',
+  Dashboard: 'Dashboard',
   Login: 'Login',
   Registration: 'Registration',
   PrintersView: 'PrintersView',
