@@ -10,7 +10,9 @@ export class ServerApi {
   static readonly batchRoute = `${ServerApi.base}/batch`
   static readonly batchGetLastPrintedFilesRoute = `${ServerApi.batchRoute}/reprint/list`
   static readonly batchReprintFilesRoute = `${ServerApi.batchRoute}/reprint/execute`
-  static readonly printCompletionRoute = `${ServerApi.base}/print-completion`
+  static readonly printJobsRoute = `${ServerApi.base}/print-jobs`
+  static readonly printJobsSearchRoute = `${ServerApi.printJobsRoute}/search`
+  static readonly printJobsSearchPagedRoute = `${ServerApi.printJobsRoute}/search-paged`
   static readonly printerFilesRoute = `${ServerApi.base}/printer-files`
   static readonly printerFilesPurgeRoute = `${ServerApi.printerFilesRoute}/purge`
   static readonly printerGroupRoute = `${ServerApi.base}/printer-group`

@@ -5,7 +5,7 @@ export const RouteNames = {
   PrintersView: 'PrintersView',
   Settings: 'Settings',
   CameraGridView: 'CameraGridView',
-  PrintStatistics: 'Print Statistics',
+  PrintJobs: 'Print Jobs',
   About: 'About',
   PermissionDenied: 'PermissionDenied',
   NotFound: 'NotFound',
