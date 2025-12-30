@@ -63,16 +63,16 @@ export async function getHttpClient(
     async (error: AxiosError) => {
       const { response, config } = error
       if (!response) {
-        console.error('No response was returned by axios', error)
-        return Promise.reject({
-          message: `No response was returned by axios - URL ${config?.url}`,
-          stack: error.stack
-        })
+        const e = new Error(
+          `No response was returned by axios - URL ${config?.url}`
+        )
+        e.stack = error.stack
+        throw e;
       }
 
       // Special code
       if (response.status === HttpStatusCode.FailedDependency) {
-        return Promise.reject(error)
+        throw error;
       }
 
       if (
@@ -105,7 +105,7 @@ export async function getHttpClient(
           error: data?.error,
           url: config?.url
         })
-        return Promise.reject(error)
+        throw error;
       }
 
       const authStore = useAuthStore()
@@ -142,9 +142,7 @@ export async function getHttpClient(
 
         console.debug('Redoing request without interceptors', config?.url)
         const newConfig: AxiosRequestConfig = config
-        if (!newConfig.headers) {
-          newConfig.headers = {}
-        }
+        newConfig.headers ??= {};
         newConfig.headers.Authorization = `Bearer ${authStore.token}`
         return axios(newConfig)
       }
