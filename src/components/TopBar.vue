@@ -27,11 +27,10 @@
         <!--Theme?-->
         <v-btn
           class="ml-2"
-          color="secondary"
-          theme="dark"
+          variant="tonal"
           v-bind="props"
         >
-          <v-icon class="mr-2">person</v-icon>
+          <v-icon class="mr-2">mdi:mdi-account</v-icon>
           {{ username }}
         </v-btn>
       </template>
@@ -42,7 +41,7 @@
           :key="index"
           :to="item.path"
           :title="item.title"
-          :prepend-avatar="item.icon"
+          :prepend-icon="item.icon"
           link
         />
       </v-list>
@@ -70,18 +69,10 @@
       v-if="authStore.loginRequired === true"
       tooltip="Go back to login"
       text="Logout"
-      color="secondary"
       icon="logout"
+      variant="tonal"
       @click="logout()"
     />
-
-    <v-btn
-      v-if="authStore.loginRequired === true"
-      class="ml-2"
-    >
-      <v-icon class="mr-2">logout</v-icon>
-      Logout
-    </v-btn>
 
     <HelpOverlay />
   </v-app-bar>
@@ -102,7 +93,7 @@ const profileStore = useProfileStore()
 const authStore = useAuthStore()
 const router = useRouter()
 const items = [
-  { title: 'Open Profile', icon: 'person', path: '/settings/account' }
+  { title: 'Open Profile', icon: 'mdi:mdi-account', path: '/settings/account' }
 ]
 
 const now = ref(Date.now())
