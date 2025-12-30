@@ -1,6 +1,7 @@
 <template>
   <v-select
     v-if="groups.length || !hideWhenEmpty"
+    v-bind="$attrs"
     :model-value="modelValue"
     :items="groups"
     item-title="name"
@@ -15,14 +16,16 @@
     :closable-chips="closableChips"
     :clearable="clearable"
     :hide-details="hideDetails"
-    :class="className"
-    :style="style"
     @update:model-value="$emit('update:modelValue', $event)"
   />
 </template>
 
 <script setup lang="ts">
 import type { GroupDto } from '@/backend/printer-group.service'
+
+defineOptions({
+  inheritAttrs: false
+})
 
 withDefaults(defineProps<{
   modelValue: number[]
@@ -37,8 +40,6 @@ withDefaults(defineProps<{
   closableChips?: boolean
   clearable?: boolean
   hideDetails?: boolean
-  className?: string
-  style?: string
   hideWhenEmpty?: boolean
 }>(), {
   label: 'Filter by tags',

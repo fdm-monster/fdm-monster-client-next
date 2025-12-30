@@ -42,5 +42,3 @@ export const PRINTER_TYPES = [
   { name: getServiceName(PrusaLinkType), value: PrusaLinkType },
   { name: getServiceName(BambuType), value: BambuType }
 ] as const
-
-export type PrinterTypeValue = typeof PRINTER_TYPES[number]['value']

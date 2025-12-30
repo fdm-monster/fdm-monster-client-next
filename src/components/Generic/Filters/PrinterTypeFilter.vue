@@ -1,5 +1,6 @@
 <template>
   <v-select
+    v-bind="$attrs"
     :model-value="modelValue"
     :items="printerTypes"
     item-title="name"
@@ -14,8 +15,6 @@
     :closable-chips="closableChips"
     :clearable="clearable"
     :hide-details="hideDetails"
-    :class="className"
-    :style="style"
     @update:model-value="$emit('update:modelValue', $event)"
   />
 </template>
@@ -23,20 +22,22 @@
 <script setup lang="ts">
 import { PRINTER_TYPES } from '@/shared/printer-types.constants'
 
+defineOptions({
+  inheritAttrs: false
+})
+
 withDefaults(defineProps<{
   modelValue: number[]
   label?: string
   prependInnerIcon?: string
   prependIcon?: string
-  variant?: string
-  density?: string
+  variant?: "filled" | "outlined" | "plain" | "solo" | "solo-filled" | "solo-inverted" | "underlined"
+  density?: null | 'default' | 'comfortable' | 'compact'
   multiple?: boolean
   chips?: boolean
   closableChips?: boolean
   clearable?: boolean
   hideDetails?: boolean
-  className?: string
-  style?: string
 }>(), {
   label: 'Filter by type',
   prependInnerIcon: 'category',

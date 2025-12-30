@@ -289,7 +289,7 @@ import {
 } from '@/backend/printer-group.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { VDataTable } from 'vuetify/components'
-import { getServiceName, PRINTER_TYPES } from '@/shared/printer-types.constants'
+import { getServiceName } from '@/shared/printer-types.constants'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
