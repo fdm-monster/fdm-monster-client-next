@@ -1,6 +1,6 @@
 import { ServerApi } from "@/backend/server.api";
 import { BaseService } from "@/backend/base.service";
-import { LoginDetails, PrinterDto } from "@/models/printers/printer.model";
+import { PrinterDto } from "@/models/printers/printer.model";
 import { CreatePrinter, getDefaultCreatePrinter } from "@/models/printers/create-printer.model";
 import { newRandomNamePair } from "@/shared/noun-adjectives.data";
 
@@ -32,15 +32,19 @@ export class PrintersService extends BaseService {
     return await this.get<PrinterDto[]>(path);
   }
 
-  static async getPrinterLoginDetails(printerId: number) {
-    const path = ServerApi.getPrinterLoginDetailsRoute(printerId);
-
-    return await this.get<LoginDetails>(path);
+  static async stopPrintJob(printerId: number) {
+    const path = ServerApi.printerStopJobRoute(printerId)
+    return await this.post(path)
   }
 
-  static async restartOctoPrint(printerId: number) {
-    const path = `${ ServerApi.restartOctoPrintRoute(printerId) }`;
-    return (await this.post(path)) as any;
+  static async pausePrintJob(printerId: number) {
+    const path = ServerApi.printerPauseJobRoute(printerId)
+    return await this.post(path)
+  }
+
+  static async resumePrintJob(printerId: number) {
+    const path = ServerApi.printerResumeJobRoute(printerId)
+    return await this.post(path)
   }
 
   static async refreshSocket(printerId: number) {

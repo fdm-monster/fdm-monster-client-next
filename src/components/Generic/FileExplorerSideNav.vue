@@ -474,7 +474,6 @@ import { FileDto } from '@/models/printers/printer-file.model'
 import { formatBytes } from '@/utils/file-size.util'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from './Dialogs/dialog.constants'
-import { PrinterJobService } from '@/backend/printer-job.service'
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import { interpretStates } from '@/shared/printer-state.constants'
 import { useSettingsStore } from '@/store/settings.store'
@@ -714,18 +713,18 @@ async function refreshSocketState() {
 async function clickStopPrint() {
   if (!printerId.value) return
   if (confirm('Are you sure to cancel the current print job?')) {
-    await PrinterJobService.stopPrintJob(printerId.value)
+    await PrintersService.stopPrintJob(printerId.value)
   }
 }
 
 async function clickPausePrint() {
   if (!printerId.value) return
-  await PrinterJobService.pausePrintJob(printerId.value)
+  await PrintersService.pausePrintJob(printerId.value)
 }
 
 async function clickResumePrint() {
   if (!printerId.value) return
-  await PrinterJobService.resumePrintJob(printerId.value)
+  await PrintersService.resumePrintJob(printerId.value)
 }
 
 async function clickDeleteAllFiles() {

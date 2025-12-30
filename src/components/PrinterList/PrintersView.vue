@@ -151,15 +151,18 @@
           </v-menu>
         </template>
         <template #item.actions="{ item }">
-          <PrinterUrlAction :printer="item" />
-          <PrinterConnectionAction :printer="item" />
-          <PrinterQuickStopAction :printer="item" />
-          <SyncPrinterNameAction :printer="item" />
-          <PrinterDeleteAction :printer="item" />
-          <PrinterSettingsAction
-            :printer="item"
-            @update:show="openEditDialog(item)"
-          />
+          <div class="d-flex ga-1 align-center">
+            <PrinterUrlAction :printer="item" />
+            <PrinterConnectionAction :printer="item" />
+            <PrinterQuickStopAction :printer="item" />
+            <FileExplorerAction :printer="item" />
+            <SyncPrinterNameAction :printer="item" />
+            <PrinterDeleteAction :printer="item" />
+            <PrinterSettingsAction
+              :printer="item"
+              @update:show="openEditDialog(item)"
+            />
+          </div>
         </template>
         <template #item.socketupdate="{ item }">
           <span v-if="currentEventReceivedAt[item.id]">

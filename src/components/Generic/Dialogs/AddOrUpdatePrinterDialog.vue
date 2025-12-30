@@ -266,7 +266,7 @@ const serviceTypes = computed(() => {
         name: getServiceName(BambuType),
         type: BambuType,
         logo: bambuLogoSvg,
-        height: "20px",
+        height: "60px",
       }] : []),
     ];
   }

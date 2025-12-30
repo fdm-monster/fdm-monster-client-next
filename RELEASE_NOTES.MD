@@ -6,6 +6,7 @@ Features
 
 - Redesigned loader, error and disconnect page
 - Implement reconnect loop triggered by app initiation and socketIO disconnect
+- Redesign app snackbars
 
 Fixes
 
@@ -20,6 +21,8 @@ Fixes
 - Disable printer tile ripple when printer not online
 - Close side explorer or dialogs when server has suddenly disconnected
 - OctoFarm import dialog upgraded to Vuetify3 and import flow has been fixed
+- Overall code cleanup, printer tile progress bar fix
+- Printer page action buttons now aligned (even if badge is present)
 
 Chores
 
@@ -28,6 +31,7 @@ Chores
 - Cleanup main.ts imports, add helpful CSS hints with vuetify-variables.d.css typing for Vuetify theme CSS variables
 - Vite console doesnt clear screen anymore
 - Add md icon set for more icons
+- Split upload toolbar from PrinterGridView
 
 ## Client 0.0.27
 
