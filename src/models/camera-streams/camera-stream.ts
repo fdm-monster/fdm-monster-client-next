@@ -3,6 +3,7 @@ import { PrinterDto } from '@/models/printers/printer.model'
 export interface CreateCameraStreamDto {
   streamURL: string
   name?: string
+  printerId?: number
 }
 
 export interface CameraStream {

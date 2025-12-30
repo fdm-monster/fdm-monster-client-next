@@ -10,6 +10,7 @@ Features
 - Redesign file sidenav with composable
 - Design new job page
 - Design new dashboard page
+- Redesign camera page
 
 Fixes
 
