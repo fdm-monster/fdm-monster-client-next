@@ -1,8 +1,3 @@
-export interface LoginDetails {
-  apiKey: string
-  printerURL: string
-}
-
 export interface PrinterDto {
   id: number
   printerType: number

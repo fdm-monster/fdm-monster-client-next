@@ -4,6 +4,7 @@ export interface ServerSettingsDto {
   registration: boolean
   experimentalMoonrakerSupport: boolean
   experimentalPrusaLinkSupport: boolean
+  experimentalBambuSupport: boolean
   experimentalClientSupport: boolean
   experimentalThumbnailSupport: boolean
 }

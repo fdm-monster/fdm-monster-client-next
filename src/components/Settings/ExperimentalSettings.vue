@@ -49,6 +49,15 @@
                       <span>Enable Experimental PrusaLink Support</span>
                     </template>
                   </v-checkbox>
+                  <v-checkbox
+                    v-model="experimentalBambuSupport"
+                    label="Enable Experimental Bambu Support"
+                    hide-details
+                  >
+                    <template v-slot:label>
+                      <span>Enable Experimental Bambu Support</span>
+                    </template>
+                  </v-checkbox>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -112,13 +121,14 @@ import { SettingsService } from '@/backend'
 
 const experimentalMoonrakerSupport = ref(false)
 const experimentalPrusaLinkSupport = ref(false)
+const experimentalBambuSupport = ref(false)
 const experimentalClientSupport = ref(false)
 
 async function loadSettings() {
   const settings = await SettingsService.getSettings()
-  experimentalMoonrakerSupport.value =
-    settings.server.experimentalMoonrakerSupport
+  experimentalMoonrakerSupport.value = settings.server.experimentalMoonrakerSupport
   experimentalPrusaLinkSupport.value = settings.server.experimentalPrusaLinkSupport
+  experimentalBambuSupport.value = settings.server.experimentalBambuSupport
   experimentalClientSupport.value = settings.server.experimentalClientSupport
 }
 
@@ -133,6 +143,9 @@ const saveSettings = async () => {
   await SettingsService.updateExperimentalPrusaLinkSupport(
     experimentalPrusaLinkSupport.value
   )
+  await SettingsService.updateExperimentalBambuSupport(
+    experimentalBambuSupport.value
+  )
   await SettingsService.updateExperimentalClientSupport(
     experimentalClientSupport.value
   )
@@ -142,6 +155,7 @@ const saveSettings = async () => {
 const resetSettings = async () => {
   await SettingsService.updateExperimentalMoonrakerSupport(false)
   await SettingsService.updateExperimentalPrusaLinkSupport(false)
+  await SettingsService.updateExperimentalBambuSupport(false)
   await SettingsService.updateExperimentalClientSupport(false)
   await loadSettings()
 }
