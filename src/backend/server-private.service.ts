@@ -8,7 +8,7 @@ export class ServerPrivateService extends BaseService {
     const client = await getHttpClient()
     const response = await client.request<any>({
       method: 'POST',
-      url: 'api/server/export-printers-floors-yaml',
+      url: 'api/server/yaml-export',
       data: input,
       responseType: 'arraybuffer'
     })
@@ -22,7 +22,7 @@ export class ServerPrivateService extends BaseService {
     const formData = new FormData()
     formData.append('file', file)
     return await this.postUpload(
-      'api/server/import-printers-floors-yaml',
+      'api/server/yaml-import',
       formData,
       {}
     )
