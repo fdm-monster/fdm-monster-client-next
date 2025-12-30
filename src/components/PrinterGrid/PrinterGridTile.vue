@@ -146,7 +146,7 @@
           <template v-slot:default>Move and home printer</template>
         </v-tooltip>
 
-        <v-tooltip v-if="hasSerialConnection(props.printer?.printerType)" top>
+        <v-tooltip v-if="hasSerialConnection(printer.printerType)" top>
           <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               v-if="!isOperational && isOnline"
@@ -163,7 +163,7 @@
           <template v-slot:default>Connect USB (only for OctoPrint)</template>
         </v-tooltip>
 
-        <v-tooltip v-if="hasPrinterControl(props.printer?.printerType)" top>
+        <v-tooltip v-if="hasPrinterControl(printer.printerType)" top>
           <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               :size="largeTilesEnabled ? 'small' : 'x-small'"
@@ -181,7 +181,7 @@
           </template>
         </v-tooltip>
 
-        <v-tooltip v-if="hasPrinterControl(props.printer?.printerType)" top>
+        <v-tooltip v-if="hasPrinterControl(printer.printerType)" top>
           <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               :disabled="!isOnline || (!isPaused && !isPrinting)"
@@ -204,7 +204,7 @@
         </v-tooltip>
 
         <v-tooltip
-          v-if="hasPrinterControl(props.printer?.printerType) && (hasEmergencyStop(props.printer?.printerType) || preferCancelOverQuickStop)"
+          v-if="hasPrinterControl(printer.printerType) && (hasEmergencyStop(printer.printerType) || preferCancelOverQuickStop)"
           top
         >
           <template v-slot:activator="{ props: tooltipProps }">
@@ -320,7 +320,6 @@ import { PrintersService } from '@/backend'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useGridStore } from '@/store/grid.store'
-import { FloorService } from '@/backend/floor.service'
 import { useSettingsStore } from '@/store/settings.store'
 import { useFloorStore } from '@/store/floor.store'
 import { interpretStates } from '@/shared/printer-state.constants'
@@ -349,7 +348,6 @@ const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const floorStore = useFloorStore()
 const settingsStore = useSettingsStore()
-const gridStore = useGridStore()
 const controlDialog = useDialog(DialogName.PrinterControlDialog)
 const addOrUpdateDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 const fileExplorer = useFileExplorer()
