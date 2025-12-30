@@ -13,89 +13,66 @@
       <v-card-text>
         <v-row>
           <v-col cols="12">
-            <!-- TODO vertical stepper is still in labs -->
-            <v-stepper
+            <v-stepper-vertical
               v-model="stepProgress"
               non-linear
             >
-              <v-stepper-header>
-                <v-stepper-item
-                  :complete="stepProgress > 1"
-                  value="1"
-                  editable
+              <template v-slot:default="{ step }">
+                <v-stepper-vertical-item
+                  title="Export PrintersDB from OctoFarm"
+                  :value="1"
+                  :complete="step > 1"
                 >
-                  Export PrintersDB from OctoFarm
-                </v-stepper-item>
-
-                <v-stepper-item
-                  :complete="stepProgress > 2"
-                  value="2"
-                  editable
-                >
-                  Show printers & decide
-                </v-stepper-item>
-
-                <v-stepper-item
-                  :complete="stepProgress > 3"
-                  value="3"
-                  editable
-                >
-                  Import printers into FDM Monster
-                </v-stepper-item>
-              </v-stepper-header>
-
-              <v-stepper-window>
-                <v-stepper-window-item value="1">
                   <v-file-input
                     class="mt-2"
                     style="max-width: 400px"
                     v-model="importFile"
-                    filled
+                    variant="filled"
                     accept=".json"
                     clearable
                     label="Upload PrintersDB.json file"
-                    @change="updatePrinterCount()"
+                    @update:model-value="updatePrinterCount()"
                   />
 
                   <ol>
                     <li>
                       <h4>
-                        <v-icon>navigation</v-icon>
+                        <v-icon>mdi:mdi-navigation</v-icon>
                         Go to your OctoFarm System page
                       </h4>
                     </li>
                     <li>
                       <h4>
-                        <v-icon>mouse</v-icon>
+                        <v-icon>mdi:mdi-mdi-mouse</v-icon>
                         Click 'Database'
                       </h4>
                     </li>
                     <li>
                       <h4>
-                        <v-icon>mouse</v-icon>
+                        <v-icon>mdi:mdi-mdi-mouse</v-icon>
                         Click the button 'Export Printers'
                       </h4>
                     </li>
                     <li>
                       <h4>
-                        <v-icon>upload</v-icon>
+                        <v-icon>mdi:mdi-mdi-upload</v-icon>
                         Upload 'PrintersDB.json' above
                       </h4>
                     </li>
                   </ol>
 
                   <div class="my-3">
-                    <v-icon class="pr-2">info</v-icon>
+                    <v-icon class="pr-2">mdi:mdi-information</v-icon>
                     OctoFarm printers should be exported as a JSON file. Please
                     upload the correct "PrintersDB.json" database file using the
                     steps provided.
                     <v-btn
-                      small
+                      size="small"
                       class="ml-2"
                       color="success"
                       @click="showGif = !showGif"
                     >
-                      <v-icon class="pr-2">gif</v-icon>
+                      <v-icon class="pr-2">mdi:mdi-file-gif-box</v-icon>
                       <span v-if="!showGif">Show GIF</span>
                       <span v-else>Hide GIF</span>
                     </v-btn>
@@ -109,7 +86,7 @@
                     elevation="10"
                   />
 
-                  <br />
+                  <br/>
                   <v-btn
                     color="primary"
                     @click="clickValidateAndNext()"
@@ -117,11 +94,15 @@
                   >
                     Validate
                   </v-btn>
-                </v-stepper-window-item>
+                </v-stepper-vertical-item>
 
-                <v-stepper-window-item value="2">
+                <v-stepper-vertical-item
+                  title="Show printers & verify"
+                  :value="2"
+                  :complete="step > 2"
+                >
                   <div class="my-2">
-                    <v-icon class="pr-2">info</v-icon>
+                    <v-icon class="pr-2">mdi:mdi-information</v-icon>
                     Import state:
                     {{ validationStatus ? 'success' : 'failed' }} -
                     {{ numPrinters }} printer(s) found
@@ -133,70 +114,61 @@
                     type="error"
                   >
                     {{ errorMessage }}
-                    <br />
+                    <br/>
                     Details: {{ errorDetailedMessage?.slice(0, 75) }}
                     <span v-if="errorDetailedMessage?.length > 75">...</span>
                   </v-alert>
 
-                  <v-divider class="mt-2" />
+                  <v-divider class="mt-2"/>
 
                   <v-list
-                    two-line
-                    flat
-                    subheader
-                    dense
+                    :lines="'two'"
+                    density="compact"
                     class="mt-2"
                   >
-                    <v-subheader>Found printers</v-subheader>
-                    <v-list-item-group
-                      v-model="selectedPrinters"
-                      multiple
+                    <v-list-subheader>Found printers</v-list-subheader>
+                    <v-list-item
+                      v-for="(committedPrinter, index) of committedPrinters"
+                      :key="committedPrinter.name"
+                      :title="committedPrinter.name"
+                      @click="togglePrinter(index)"
                     >
-                      <v-list-item
-                        dense
-                        v-for="committedPrinter of committedPrinters"
-                        :key="committedPrinter.name"
-                        :title="committedPrinter.name"
-                      >
-                        <template v-slot:default="{ isActive }">
-                          <v-list-item-action>
-                            <v-checkbox :input-value="isActive"></v-checkbox>
-                          </v-list-item-action>
+                      <template v-slot:prepend>
+                        <v-checkbox-btn
+                          :model-value="selectedPrinters.includes(index)"
+                        ></v-checkbox-btn>
+                      </template>
 
-                          <v-list-item-content>
-                            <v-list-item-title>
-                              {{ committedPrinter.name }}
-                            </v-list-item-title>
-                            <v-list-item-subtitle>
-                              <span class="mr-4"
-                                >URL: {{ committedPrinter.printerURL }}</span
-                              >
-                              <span class="mr-4"
-                                >Enabled: {{ committedPrinter.enabled }}</span
-                              >
-                              <span class="mr-4"
-                                >API Key: {{ committedPrinter.apiKey }}</span
-                              >
-                            </v-list-item-subtitle>
-                          </v-list-item-content>
-                        </template>
-                      </v-list-item>
-                    </v-list-item-group>
+                      <v-list-item-title>
+                        {{ committedPrinter.name }}
+                      </v-list-item-title>
+                      <v-list-item-subtitle>
+                        <span class="mr-4"
+                        >URL: {{ committedPrinter.printerURL }}</span
+                        >
+                        <span class="mr-4"
+                        >Enabled: {{ committedPrinter.enabled }}</span
+                        >
+                        <span class="mr-4"
+                        >API Key: {{ committedPrinter.apiKey }}</span
+                        >
+                      </v-list-item-subtitle>
+                    </v-list-item>
 
-                    <v-subheader>
+                    <v-list-subheader>
                       <v-btn
                         @click="toggleSelected"
                         class="my-2"
-                        small
+                        size="small"
                       >
-                        <v-icon class="mr-2">check</v-icon>
+                        <v-icon class="mr-2">mdi:mdi-check</v-icon>
                         Toggle selection
                       </v-btn>
-                    </v-subheader>
+                    </v-list-subheader>
                   </v-list>
 
                   <div class="my-3">
-                    <v-icon class="pr-2">info</v-icon>
+                    <v-icon class="pr-2">mdi:mdi-information</v-icon>
                     At this moment, the following properties will be imported:
                     enabled, name, printerURL and apiKey
                   </div>
@@ -209,9 +181,13 @@
                   >
                     Submit {{ selectedPrinters?.length }} printers
                   </v-btn>
-                </v-stepper-window-item>
+                </v-stepper-vertical-item>
 
-                <v-stepper-window-item value="3">
+                <v-stepper-vertical-item
+                  title="Import printers into FDM Monster"
+                  :complete="step > 3"
+                  :value="3"
+                >
                   <div
                     class="mb-5 mt-10"
                     v-if="importCompletedSuccesfully"
@@ -219,41 +195,43 @@
                     <v-icon
                       size="100"
                       class="mr-5"
-                      color="green circle"
-                      >check_circle</v-icon
+                      color="green"
                     >
+                      mdi:mdi-check-circle
+                    </v-icon>
                     Import Completed
                   </div>
                   <div v-else>
                     <v-icon
                       size="100"
                       class="mr-5"
-                      color="red circle"
-                      >error</v-icon
+                      color="red"
                     >
+                      mdi:mdi-alert-circle
+                    </v-icon>
 
                     Something went wrong: {{ errorMessage }}
-                    <br />
+                    <br/>
                     <span class="ml-5 mt-2">
                       Details: {{ errorDetailedMessage?.slice(0, 75) }}
                     </span>
                     <span
                       class="ml-5 mt-2"
                       v-if="errorDetailedMessage?.length > 75"
-                      >...</span
+                    >...</span
                     >
                   </div>
-                </v-stepper-window-item>
-              </v-stepper-window>
-            </v-stepper>
+                </v-stepper-vertical-item>
+              </template>
+            </v-stepper-vertical>
           </v-col>
         </v-row>
-        <v-btn class="mt-2"> Validate printers </v-btn>
+        <v-btn class="mt-2"> Validate printers</v-btn>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="closeDialog()">
-          <v-icon class="mr-2">close</v-icon>
+          <v-icon class="mr-2">mdi:mdi-close</v-icon>
           Close
         </v-btn>
       </v-card-actions>
@@ -262,35 +240,38 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { PrintersService } from '@/backend'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useDialog } from '@/shared/dialog.composable'
 import octofarmImportGif from '@/assets/octofarm-printer-export.gif'
 import { CreatePrinter } from '@/models/printers/create-printer.model'
 
-const stepProgress = ref()
+const stepProgress = ref(1)
 const validationStatus = ref(false)
 const showGif = ref(false)
 const errorMessage = ref('')
 const errorDetailedMessage = ref('')
-const importFile = ref<File>()
+const importFile = ref<File[]>([])
 const numPrinters = ref(0)
 const committedPrinters = ref<CreatePrinter[]>([])
 const selectedPrinters = ref<number[]>([])
 const importCompletedSuccesfully = ref<boolean>(false)
 const dialog = useDialog(DialogName.ImportOctoFarmDialog)
 
-function onBeforeDialogOpened() {}
+function onBeforeDialogOpened() {
+}
 
-async function onDialogOpened() {}
+async function onDialogOpened() {
+}
 
 const parsedPrinters = async () => {
-  if (!importFile.value) {
+  if (!importFile.value || !importFile.value.length) {
     validationStatus.value = false
-    return
+    return []
   }
 
-  const data = JSON.parse(await importFile.value.text())
+  const data = JSON.parse(await importFile.value[0].text())
   if (!data || !Array.isArray(data)) return []
   if (!data?.length) return []
 
@@ -371,6 +352,15 @@ const clickValidateAndNext = async () => {
   stepProgress.value = 2
 }
 
+const togglePrinter = (index: number) => {
+  const idx = selectedPrinters.value.indexOf(index)
+  if (idx > -1) {
+    selectedPrinters.value.splice(idx, 1)
+  } else {
+    selectedPrinters.value.push(index)
+  }
+}
+
 const toggleSelected = () => {
   const isOneSelected = selectedPrinters.value.length
   if (isOneSelected) {
@@ -400,14 +390,14 @@ const submit = async () => {
     importCompletedSuccesfully.value = true
   } catch (e) {
     importCompletedSuccesfully.value = false
-    importFile.value = undefined
+    importFile.value = []
     errorMessage.value = 'An error occurred'
     errorDetailedMessage.value = (e as Error).message.toString()
   }
 }
 
 const closeDialog = () => {
-  importFile.value = undefined
+  importFile.value = []
   dialog.closeDialog()
   stepProgress.value = 1
 }

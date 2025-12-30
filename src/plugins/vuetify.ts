@@ -11,6 +11,7 @@ import 'vuetify/styles'
 import { aliases, md } from 'vuetify/iconsets/md'
 import { mdi } from "vuetify/iconsets/mdi";
 import { createVuetify } from 'vuetify'
+import { VStepperVertical, VStepperVerticalItem } from "vuetify/labs/components";
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export const vuetify = createVuetify({
@@ -50,5 +51,9 @@ export const vuetify = createVuetify({
       md,
       mdi,
     }
+  },
+  components: {
+    VStepperVertical,
+    VStepperVerticalItem
   }
 })
