@@ -366,10 +366,6 @@ const goToCameras = () => {
   router.push('/cameras')
 }
 
-const goToSettings = () => {
-  router.push('/settings')
-}
-
 const gotoJobs = () => {
   router.push('/jobs')
 }

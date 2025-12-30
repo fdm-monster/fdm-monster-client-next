@@ -97,10 +97,8 @@
 
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue'
-import { usePrinterStore } from '@/store/printer.store'
 import { useGridStore } from '@/store/grid.store'
 import { useFloorStore } from '@/store/floor.store'
-import { usePrinterStateStore } from '@/store/printer-state.store'
 import { usePrinterFilters } from '@/shared/printer-filter.composable'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
@@ -110,8 +108,6 @@ import { dragAppId, INTENT, PrinterPlace } from '@/shared/drag.constants'
 import { getServiceName } from '@/shared/printer-types.constants'
 import type { PrinterDto } from '@/models/printers/printer.model'
 
-const printerStore = usePrinterStore()
-const printerStateStore = usePrinterStateStore()
 const floorStore = useFloorStore()
 const gridStore = useGridStore()
 

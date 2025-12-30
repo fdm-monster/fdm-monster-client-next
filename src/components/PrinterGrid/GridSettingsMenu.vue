@@ -43,19 +43,19 @@ const settingsStore = useSettingsStore()
 const largeTilesModel = ref(settingsStore.largeTiles)
 const preferCancelModel = ref(settingsStore.preferCancelOverQuickStop)
 
-async function updateLargeTiles(value: boolean) {
+async function updateLargeTiles(value: boolean | null) {
   if (!settingsStore.frontendSettings) return
   await settingsStore.updateFrontendSettings({
     ...settingsStore.frontendSettings,
-    largeTiles: value
+    largeTiles: value ?? false
   })
 }
 
-async function updatePreferCancel(value: boolean) {
+async function updatePreferCancel(value: boolean | null) {
   if (!settingsStore.frontendSettings) return
   await settingsStore.updateFrontendSettings({
     ...settingsStore.frontendSettings,
-    tilePreferCancelOverQuickStop: value
+    tilePreferCancelOverQuickStop: value ?? false
   })
 }
 </script>

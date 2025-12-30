@@ -48,9 +48,8 @@
 import { computed, onMounted, ref } from 'vue'
 import PrinterGridTile from '@/components/PrinterGrid/PrinterGridTile.vue'
 import { usePrinterStore } from '@/store/printer.store'
-import { PrinterDto } from '@/models/printers/printer.model'
 import { useGridStore } from '@/store/grid.store'
-import { dragAppId, INTENT, PrinterPlace, DRAG_EVENTS } from '@/shared/drag.constants'
+import { dragAppId, INTENT, DRAG_EVENTS } from '@/shared/drag.constants'
 import { useSettingsStore } from '@/store/settings.store'
 import { useFloorStore } from '@/store/floor.store'
 import { FloorService } from '@/backend/floor.service'
@@ -140,20 +139,6 @@ const gridStyle = computed(() => ({
 
 const getX = (index: number) => index % columns.value
 const getY = (index: number) => Math.floor(index / columns.value)
-
-function onDragStart(printer: PrinterDto, ev: DragEvent) {
-  if (!ev.dataTransfer) return
-  if (!printer.id) return
-
-  ev.dataTransfer.setData(
-    'text',
-    JSON.stringify({
-      appId: dragAppId,
-      intent: INTENT.PRINTER_PLACE,
-      printerId: printer.id
-    } as PrinterPlace)
-  )
-}
 
 function getPrinter(col: number, row: number) {
   const x = col
