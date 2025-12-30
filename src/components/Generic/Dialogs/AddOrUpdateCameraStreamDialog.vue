@@ -100,6 +100,7 @@
             <v-card-text class="pa-0">
               <div class="camera-preview-container">
                 <img
+                  alt="Camera stream"
                   v-show="!imageError && !imageLoading"
                   :key="imageRetryKey"
                   :src="cameraStream.streamURL"
