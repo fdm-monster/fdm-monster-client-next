@@ -185,8 +185,8 @@ async function resetLoginExpirySettingsToDefault() {
 }
 
 async function saveLoginExpirySettings() {
-  jwtExpiresIn.value = parseInt((jwtExpiresIn.value ?? '')?.toString())
-  refreshTokenAttempts.value = parseInt((refreshTokenAttempts.value ?? '').toString())
+  jwtExpiresIn.value = Number.parseInt((jwtExpiresIn.value ?? '')?.toString())
+  refreshTokenAttempts.value = Number.parseInt((refreshTokenAttempts.value ?? '').toString())
 
   if (!jwtExpiresIn.value || jwtExpiresIn.value < 120 || jwtExpiresIn.value > 120 * 60) {
     throw new Error('JWT Expiry must be between 2 and 120 minutes')

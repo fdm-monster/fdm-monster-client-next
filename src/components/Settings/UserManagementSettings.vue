@@ -24,11 +24,11 @@
         <v-table theme="dark" hover>
           <thead>
             <tr>
-              <th class="text-left">Username</th>
-              <th class="text-left">Status</th>
-              <th class="text-left">Roles</th>
-              <th class="text-left">Created</th>
-              <th class="text-right">Actions</th>
+              <th scope="col" class="text-left">Username</th>
+              <th scope="col" class="text-left">Status</th>
+              <th scope="col" class="text-left">Roles</th>
+              <th scope="col" class="text-left">Created</th>
+              <th scope="col" class="text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
