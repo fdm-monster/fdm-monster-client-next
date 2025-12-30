@@ -105,10 +105,10 @@
             </v-btn>
             <v-btn
               variant="outlined"
-              @click="goToStatistics"
+              @click="gotoJobs"
             >
               <v-icon class="mr-2">analytics</v-icon>
-              View Statistics
+              View Jobs
             </v-btn>
           </v-btn-group>
         </v-card>
@@ -119,15 +119,30 @@
     <v-row>
       <v-col cols="12" md="8">
         <v-card class="pa-4 fill-height" elevation="2">
-          <h3 class="text-h6 mb-4 d-flex align-center">
-            <v-icon class="mr-2">timeline</v-icon>
-            Farm Status Overview
-          </h3>
+          <div class="d-flex align-center justify-space-between mb-4">
+            <h3 class="text-h6 d-flex align-center">
+              <v-icon class="mr-2">timeline</v-icon>
+              Farm Status Overview
+            </h3>
+            <div class="d-flex align-center ga-2">
+              <PrinterTagFilter
+                v-model="selectedTags"
+                :groups="groups"
+                label="Tags"
+                style="width: 200px"
+              />
+              <PrinterTypeFilter
+                v-model="selectedPrinterTypes"
+                label="Type"
+                style="width: 200px"
+              />
+            </div>
+          </div>
 
           <!-- Printer Status Grid -->
           <div v-if="totalPrinters > 0" class="printer-status-grid">
             <div
-              v-for="printer in printers.slice(0, 8)"
+              v-for="printer in filteredPrinters.slice(0, 8)"
               :key="printer.id"
               class="printer-status-item"
               @click="openPrinter()"
@@ -253,10 +268,10 @@
             variant="outlined"
             block
             class="mt-4"
-            @click="goToStatistics"
+            @click="gotoJobs"
           >
             <v-icon class="mr-2">analytics</v-icon>
-            View Detailed Analytics
+            View Job Analytics
           </v-btn>
         </v-card>
       </v-col>
@@ -265,7 +280,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePrinterStore } from '@/store/printer.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
@@ -274,13 +289,29 @@ import {
   isPrinterDisconnected,
   isPrinterInMaintenance
 } from '@/shared/printer-state.constants'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
+import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
+import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 
 const router = useRouter()
 const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 
+const {
+  selectedTags,
+  selectedPrinterTypes,
+  groups,
+  loadGroups,
+  filterPrinters
+} = usePrinterFilters()
+
+onMounted(async () => {
+  await loadGroups()
+})
+
 // Computed properties for dashboard metrics
 const printers = computed(() => printerStore.printers)
+const filteredPrinters = computed(() => filterPrinters(printers.value))
 const totalPrinters = computed(() => printers.value.length)
 const printingCount = computed(() => printerStateStore.printingCount)
 const operationalCount = computed(() => printerStateStore.operationalNotPrintingCount)
@@ -321,8 +352,8 @@ const goToSettings = () => {
   router.push('/settings')
 }
 
-const goToStatistics = () => {
-  router.push('/statistics')
+const gotoJobs = () => {
+  router.push('/jobs')
 }
 
 const viewDocumentation = () => {

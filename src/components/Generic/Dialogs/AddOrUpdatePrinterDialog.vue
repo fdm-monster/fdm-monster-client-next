@@ -215,7 +215,7 @@ import {
   OctoPrintType,
   PrusaLinkType,
   BambuType,
-} from "@/utils/printer-type.utils";
+} from "@/shared/printer-types.constants";
 import PrinterChecksPanel from "@/components/Generic/Dialogs/PrinterChecksPanel.vue";
 import { useFloorStore } from "@/store/floor.store";
 import { captureException } from "@sentry/vue";

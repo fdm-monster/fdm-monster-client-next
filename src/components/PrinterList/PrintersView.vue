@@ -20,18 +20,8 @@
             hide-details
             style="width: 220px"
           />
-          <v-select
+          <PrinterTypeFilter
             v-model="selectedPrinterTypes"
-            :items="printerTypes"
-            item-title="name"
-            item-value="value"
-            label="Filter by type"
-            multiple
-            placeholder="Select types"
-            prepend-inner-icon="category"
-            density="compact"
-            variant="outlined"
-            hide-details
             style="width: 220px"
           />
           <v-text-field
@@ -275,6 +265,7 @@
 import { computed, ref } from 'vue'
 import { PrintersService } from '@/backend/printers.service'
 import PrinterDetails from '@/components/PrinterList/PrinterDetails.vue'
+import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 import PrinterUrlAction from '@/components/Generic/Actions/PrinterUrlAction.vue'
 import PrinterSettingsAction from '@/components/Generic/Actions/PrinterSettingsAction.vue'
 import PrinterConnectionAction from '@/components/Generic/Actions/PrinterConnectionAction.vue'
@@ -298,7 +289,7 @@ import {
 } from '@/backend/printer-group.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { VDataTable } from 'vuetify/components'
-import { getServiceName } from '@/utils/printer-type.utils'
+import { getServiceName } from '@/shared/printer-types.constants'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -314,13 +305,6 @@ const filteredGroupsWithPrinters = ref<GroupWithPrintersDto[]>([])
 const newGroupName = ref('')
 const showTagDialog = ref(false)
 const selectedPrinterTypes = ref<number[]>([])
-
-const printerTypes = [
-  { name: 'OctoPrint', value: 0 },
-  { name: 'Moonraker', value: 1 },
-  { name: 'PrusaLink', value: 2 },
-  { name: 'Bambu', value: 3 }
-]
 
 type ReadonlyHeaders = VDataTable['$props']['headers']
 

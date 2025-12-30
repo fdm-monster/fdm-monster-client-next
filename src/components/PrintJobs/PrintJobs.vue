@@ -68,7 +68,7 @@
         </v-row>
 
         <v-row class="mt-3">
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="4">
             <v-text-field
               v-model="searchParams.startDate"
               label="Start Date"
@@ -79,7 +79,7 @@
               @input="debouncedSearch"
             />
           </v-col>
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="4">
             <v-text-field
               v-model="searchParams.endDate"
               label="End Date"
@@ -88,6 +88,22 @@
               prepend-inner-icon="event"
               hide-details
               @input="debouncedSearch"
+            />
+          </v-col>
+          <v-col cols="12" md="4">
+            <PrinterTypeFilter
+              v-model="selectedPrinterTypes"
+              label="Filter by Type"
+            />
+          </v-col>
+        </v-row>
+
+        <v-row v-if="groups.length" class="mt-3">
+          <v-col cols="12">
+            <PrinterTagFilter
+              v-model="selectedTags"
+              :groups="groups"
+              label="Filter by Tags"
             />
           </v-col>
         </v-row>
@@ -111,7 +127,7 @@
           v-model:items-per-page="itemsPerPage"
           v-model:page="currentPage"
           :headers="headers"
-          :items="printJobs"
+          :items="filteredPrintJobs"
           :items-length="totalJobs"
           :loading="loading"
           :search="searchText"
@@ -278,12 +294,24 @@ import { onMounted, ref, computed } from 'vue'
 import { PrintJobsService, type PrintJobDto, type PrintJobSearchPagedParams } from '@/backend/print-jobs.service'
 import { useFloorStore } from '@/store/floor.store'
 import { useDebounceFn } from '@vueuse/core'
+import { usePrinterStore } from '@/store/printer.store'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
+import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
+import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 
 const printJobs = ref<PrintJobDto[]>([])
 const loading = ref(false)
 const currentPage = ref(1)
 const itemsPerPage = ref(25)
 const totalJobs = ref(0)
+
+const {
+  selectedTags,
+  selectedPrinterTypes,
+  groups,
+  groupsWithPrinters,
+  loadGroups
+} = usePrinterFilters()
 
 const searchParams = ref<PrintJobSearchPagedParams>({
   searchPrinter: '',
@@ -295,11 +323,38 @@ const searchParams = ref<PrintJobSearchPagedParams>({
 })
 
 const floorStore = useFloorStore()
+const printerStore = usePrinterStore()
 
 const searchText = computed(() => {
   return [searchParams.value.searchPrinter, searchParams.value.searchFile]
     .filter(Boolean)
     .join(' ')
+})
+
+const filteredPrintJobs = computed(() => {
+  let filtered = printJobs.value
+
+  // Filter by tags
+  if (selectedTags.value.length > 0) {
+    filtered = filtered.filter(job => {
+      if (!job.printerId) return false
+      return groupsWithPrinters.value.some(group =>
+        selectedTags.value.includes(group.id) &&
+        group.printers.some(p => p.printerId === job.printerId)
+      )
+    })
+  }
+
+  // Filter by printer type
+  if (selectedPrinterTypes.value.length > 0) {
+    filtered = filtered.filter(job => {
+      if (!job.printerId) return false
+      const printer = printerStore.printers.find(p => p.id === job.printerId)
+      return printer && selectedPrinterTypes.value.includes(printer.printerType)
+    })
+  }
+
+  return filtered
 })
 
 const headers = [
@@ -321,6 +376,7 @@ const debouncedSearch = useDebounceFn(() => {
 
 onMounted(async () => {
   await loadPrintJobs()
+  await loadGroups()
 })
 
 const loadPrintJobs = async () => {

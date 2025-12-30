@@ -51,7 +51,7 @@
                   />
                 </v-btn>
               </template>
-              <v-card min-width="300">
+              <v-card min-width="350">
                 <v-card-text>
                   <v-select
                     v-model="filterPrinter"
@@ -62,12 +62,23 @@
                     density="compact"
                     clearable
                     hide-details
+                    class="mb-3"
+                  />
+                  <PrinterTagFilter
+                    v-model="selectedTags"
+                    :groups="groups"
+                    label="Filter by Tags"
+                    class="mb-3"
+                  />
+                  <PrinterTypeFilter
+                    v-model="selectedPrinterTypes"
+                    label="Filter by Type"
+                    class="mb-3"
                   />
                   <v-checkbox
                     v-model="showOnlyUnavailable"
                     label="Show only unavailable cameras"
                     density="compact"
-                    class="mt-2"
                     hide-details
                   />
                 </v-card-text>
@@ -325,7 +336,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch, onMounted } from 'vue'
 import { CameraStreamService } from '@/backend/camera-stream.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
@@ -334,11 +345,22 @@ import { CameraWithPrinter } from '@/models/camera-streams/camera-stream'
 import { usePrinterStore } from '@/store/printer.store'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
 import type { PrinterDto } from '@/models/printers/printer.model'
-import { getServiceName } from '@/utils/printer-type.utils'
+import { getServiceName } from '@/shared/printer-types.constants'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
+import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
+import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 
 const printerStore = usePrinterStore()
 const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
 const fileExplorer = useFileExplorer()
+
+const {
+  selectedTags,
+  selectedPrinterTypes,
+  groups,
+  groupsWithPrinters,
+  loadGroups
+} = usePrinterFilters()
 
 // Reactive state
 const searchQuery = ref('')
@@ -346,6 +368,10 @@ const filterPrinter = ref<number | undefined>(undefined)
 const showOnlyUnavailable = ref(false)
 const cameraErrors = reactive<Record<number, boolean>>({})
 const cameraLoading = reactive<Record<number, boolean>>({})
+
+onMounted(async () => {
+  await loadGroups()
+})
 
 // Fetch cameras with printer data
 const camerasWithPrinter = async (): Promise<CameraWithPrinter[]> => {
@@ -407,12 +433,27 @@ const filteredCameras = computed(() => {
       (filterPrinter.value === null && !camera.cameraStream.printerId) ||
       camera.cameraStream.printerId === filterPrinter.value
 
+    // Tag filter
+    let matchesTags = selectedTags.value.length === 0
+    if (selectedTags.value.length > 0 && camera.printer?.id) {
+      matchesTags = groupsWithPrinters.value.some(group =>
+        selectedTags.value.includes(group.id) &&
+        group.printers.some(p => p.printerId === camera.printer?.id)
+      )
+    }
+
+    // Printer type filter
+    let matchesPrinterType = selectedPrinterTypes.value.length === 0
+    if (selectedPrinterTypes.value.length > 0 && camera.printer) {
+      matchesPrinterType = selectedPrinterTypes.value.includes(camera.printer.printerType)
+    }
+
     // Unavailable filter
     const matchesAvailability =
       !showOnlyUnavailable.value ||
       cameraErrors[camera.cameraStream.id!]
 
-    return matchesSearch && matchesPrinter && matchesAvailability
+    return matchesSearch && matchesPrinter && matchesTags && matchesPrinterType && matchesAvailability
   })
 })
 
@@ -423,7 +464,12 @@ const unavailableCount = computed(() => {
 
 // Check if filters are active
 const hasActiveFilters = computed(() => {
-  return filterPrinter.value !== undefined || showOnlyUnavailable.value
+  return (
+    filterPrinter.value !== undefined ||
+    showOnlyUnavailable.value ||
+    selectedTags.value.length > 0 ||
+    selectedPrinterTypes.value.length > 0
+  )
 })
 
 // Count active filters
@@ -431,6 +477,8 @@ const activeFilterCount = computed(() => {
   let count = 0
   if (filterPrinter.value !== undefined) count++
   if (showOnlyUnavailable.value) count++
+  if (selectedTags.value.length > 0) count++
+  if (selectedPrinterTypes.value.length > 0) count++
   return count
 })
 
@@ -468,6 +516,8 @@ watch(
 function clearFilters() {
   filterPrinter.value = undefined
   showOnlyUnavailable.value = false
+  selectedTags.value = []
+  selectedPrinterTypes.value = []
 }
 
 // Dialog actions
