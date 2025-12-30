@@ -27,6 +27,7 @@ Fixes
 - OctoFarm import dialog upgraded to Vuetify3 and import flow has been fixed
 - Overall code cleanup, printer tile progress bar fix
 - Printer page action buttons now aligned (even if badge is present)
+- Improved app error handling user friendliness
 
 Chores
 
