@@ -17,7 +17,6 @@ interface State {
   printers: PrinterDto[]
   printerFileCache: Record<number, FileDto[]>
 
-  sideNavPrinter?: PrinterDto
   updateDialogPrinter?: PrinterDto
   selectedPrinters: PrinterDto[]
   maintenanceDialogPrinter?: PrinterDto
@@ -28,7 +27,6 @@ export const usePrinterStore = defineStore('Printers', {
     printers: [],
     printerFileCache: {},
 
-    sideNavPrinter: undefined,
     updateDialogPrinter: undefined,
     selectedPrinters: [],
     maintenanceDialogPrinter: undefined
@@ -84,12 +82,6 @@ export const usePrinterStore = defineStore('Printers', {
     clearSelectedPrinters() {
       this.selectedPrinters = []
     },
-    closeFileExplorer() {
-      this.sideNavPrinter = undefined
-    },
-    setSideNavPrinter(printer?: PrinterDto) {
-      this.sideNavPrinter = printer
-    },
     setUpdateDialogPrinter(printer?: PrinterDto) {
       this.updateDialogPrinter = printer
     },
@@ -128,10 +120,6 @@ export const usePrinterStore = defineStore('Printers', {
       if (!printers?.length) {
         this.printers = []
         return
-      }
-      const viewedPrinterId = this.sideNavPrinter?.id
-      if (viewedPrinterId) {
-        this.sideNavPrinter = printers.find((p) => p.id === viewedPrinterId)
       }
       this.printers = printers.sort((a: PrinterDto, b: PrinterDto) =>
         a.name?.toLowerCase()?.localeCompare(b?.name?.toLowerCase()) ? 1 : -1
