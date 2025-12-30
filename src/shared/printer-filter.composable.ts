@@ -1,4 +1,4 @@
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { PrinterGroupService, GroupDto, GroupWithPrintersDto } from '@/backend/printer-group.service'
 import type { PrinterDto } from '@/models/printers/printer.model'
 

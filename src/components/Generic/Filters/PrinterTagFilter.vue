@@ -33,8 +33,8 @@ withDefaults(defineProps<{
   label?: string
   prependInnerIcon?: string
   prependIcon?: string
-  variant?: string
-  density?: string
+  variant?: "filled" | "outlined" | "plain" | "solo" | "solo-filled" | "solo-inverted" | "underlined"
+  density?: null | 'default' | 'comfortable' | 'compact'
   multiple?: boolean
   chips?: boolean
   closableChips?: boolean
