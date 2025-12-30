@@ -20,7 +20,7 @@ import GridSettings from '../components/Settings/GridSettings.vue'
 import ServerProtectionSettings from '../components/Settings/ServerProtectionSettings.vue'
 import SoftwareUpgradeSettings from '../components/Settings/SoftwareUpgradeSettings.vue'
 import DiagnosticsSettings from '../components/Settings/DiagnosticsSettings.vue'
-import PrintStatisticsView from '../components/PrintStatistics/PrintStatisticsView.vue'
+import PrintJobsView from '../components/PrintJobs/PrintJobsView.vue'
 import ExperimentalSettings from '@/components/Settings/ExperimentalSettings.vue'
 import DebugSocketSettings from "@/components/Settings/DebugSocketSettings.vue";
 
@@ -139,10 +139,10 @@ const router = createRouter({
       ]
     },
     {
-      path: '/statistics',
-      name: RouteNames.PrintStatistics,
+      path: '/jobs',
+      name: RouteNames.PrintJobs,
       meta: NeedsAuth,
-      component: PrintStatisticsView
+      component: PrintJobsView
     },
     {
       path: '/about',

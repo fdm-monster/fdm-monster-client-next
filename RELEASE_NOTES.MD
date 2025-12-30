@@ -8,6 +8,7 @@ Features
 - Implement reconnect loop triggered by app initiation and socketIO disconnect
 - Redesign app snackbars
 - Redesign file sidenav with composable
+- Design new job page
 
 Fixes
 
