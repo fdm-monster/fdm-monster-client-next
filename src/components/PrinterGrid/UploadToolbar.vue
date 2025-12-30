@@ -10,6 +10,7 @@ import { usePrinterStore } from "@/store/printer.store";
 import { usePrinterStateStore } from "@/store/printer-state.store";
 import { useUploadsStore } from "@/store/uploads.store";
 import { useSnackbar } from "@/shared/snackbar.composable";
+import { formatBytes } from "@/utils/file-size.util";
 
 const gridStore = useGridStore()
 const printersStore = usePrinterStore()
