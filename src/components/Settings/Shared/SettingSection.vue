@@ -25,20 +25,22 @@
       </v-tooltip>
     </v-list-subheader>
     <v-list-item>
-      <v-list-item-media>
-        <v-row>
-          <v-col cols="3">
-            <slot></slot>
-          </v-col>
-        </v-row>
-      </v-list-item-media>
+      <v-row v-if="usecols">
+        <v-col cols="4">
+          <slot></slot>
+        </v-col>
+      </v-row>
+      <slot v-else></slot>
     </v-list-item>
   </v-list>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   title: string
   tooltip?: string
-}>()
+  usecols?: boolean
+}>(), {
+  usecols: true
+})
 </script>

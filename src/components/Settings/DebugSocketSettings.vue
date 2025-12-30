@@ -5,12 +5,12 @@
       <!-- Controls -->
       <div class="d-flex align-center flex-wrap gap-2 mb-2">
         <v-btn
-          :color="debugStore.enabled ? 'error' : 'success'"
+          :color="debugStore.enabled ? 'error' : 'primary'"
           small
           @click="toggleCapture"
         >
           <v-icon small class="mr-1">{{
-            debugStore.enabled ? "stop" : "play_arrow"
+            debugStore.enabled ? "mdi:mdi-stop" : "mdi:mdi-play"
           }}</v-icon>
           {{ debugStore.enabled ? "Stop" : "Start" }}
         </v-btn>
@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, nextTick } from "vue";
+import { ref, watch, nextTick, onMounted } from "vue";
 import { useDebugSocketStore, SocketMessage } from "@/store/debug-socket.store";
 import { useDialog } from "@/shared/dialog.composable";
 import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
@@ -111,9 +111,20 @@ const filterText = ref("");
 const autoScroll = ref(true);
 const messagesContainer = ref<HTMLElement | null>(null);
 
+// Auto-start listening when page loads
+onMounted(() => {
+  if (!debugStore.enabled) {
+    debugStore.enable();
+  }
+});
+
 function toggleCapture() {
   if (debugStore.enabled) {
     debugStore.disable();
+    // Reset pause state when stopping
+    if (debugStore.paused) {
+      debugStore.togglePause();
+    }
   } else {
     debugStore.enable();
   }

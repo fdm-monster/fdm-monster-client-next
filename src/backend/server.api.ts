@@ -32,7 +32,6 @@ export class ServerApi {
   static readonly serverSentryDiagnosticsSettingRoute = `${ServerApi.settingsRoute}/sentry-diagnostics`
   static readonly updateExperimentalMoonrakerSupportRoute = `${ServerApi.settingsRoute}/experimental-moonraker-support`
   static readonly updateExperimentalThumbnailSupportRoute = `${ServerApi.settingsRoute}/experimental-thumbnail-support`
-  static readonly updateExperimentalClientSupportRoute = `${ServerApi.settingsRoute}/experimental-client-support`
   static readonly updateExperimentalPrusaLinkSupportRoute = `${ServerApi.settingsRoute}/experimental-prusa-link-support`
   static readonly updateExperimentalBambuSupportRoute = `${ServerApi.settingsRoute}/experimental-bambu-support`
 

@@ -1,54 +1,42 @@
 <template>
   <v-card>
-    <v-toolbar color="primary">
-      <v-avatar>
-        <v-icon>upgrade</v-icon>
-      </v-avatar>
-      <v-toolbar-title> Software Upgrade</v-toolbar-title>
-    </v-toolbar>
-    <v-list lines="three">
-      <v-list-item>
-        <v-list-item-title> Current versions in use:</v-list-item-title>
-        <v-list-item-subtitle>
-          Your server's version is: {{ serverVersion }}
-        </v-list-item-subtitle>
-        <v-list-item-subtitle>
-          Your client's version is: {{ version }}
-        </v-list-item-subtitle>
-        <v-list-item-subtitle>
-          <div v-if="monsterPiVersion">
-            MonsterPi:
-            <div>Your MonsterPi version is:</div>
-            {{ monsterPiVersion }}
-          </div>
-          <div v-else>
-            MonsterPi:
-            <div>No MonsterPi distro was detected.</div>
-          </div>
-        </v-list-item-subtitle>
-      </v-list-item>
-    </v-list>
-    <v-divider />
-    <v-list
-      lines="three"
-      subheader
-    >
-      <v-list-item>
-        <v-list-item-title> Server upgrade</v-list-item-title>
-        <v-list-item-subtitle>
+    <SettingsToolbar :icon="page.icon" :title="page.title" />
+    <v-card-text>
+      <SettingSection title="Current versions in use" :usecols="false">
+        <div>Your server's version is: {{ serverVersion }}</div>
+        <div>Your client's version is: {{ version }}</div>
+        <div v-if="monsterPiVersion">
+          Your MonsterPi version is: {{ monsterPiVersion }}
+        </div>
+        <div v-else>
+          MonsterPi: No MonsterPi distro was detected.
+        </div>
+      </SettingSection>
+
+      <v-divider />
+
+      <SettingSection
+        title="Server upgrade"
+        tooltip="Please visit the installation documentation for instructions"
+        :usecols="false"
+      >
+        <div>
           Please visit
           <a href="https://docs.fdm-monster.net/docs/installing/">
             the installation documentation
           </a>
           for instructions on how to upgrade the server.
-        </v-list-item-subtitle>
-      </v-list-item>
-    </v-list>
-    <v-divider />
-    <v-list lines="three">
-      <v-list-item>
-        <v-list-item-title> Client upgrade</v-list-item-title>
-        <v-list-item-subtitle>
+        </div>
+      </SettingSection>
+
+      <v-divider />
+
+      <SettingSection
+        title="Client upgrade"
+        tooltip="Upgrade the client webapp for quickly retrieving small fixes and features"
+        :usecols="false"
+      >
+        <div class="mb-3">
           Please visit
           <a
             href="https://docs.fdm-monster.net/docs/configuration/updating_client_bundle"
@@ -56,24 +44,18 @@
             the installation documentation
           </a>
           for instructions on how to upgrade the client bundle.
-        </v-list-item-subtitle>
-        <v-list-item-subtitle>
-          Upgrade the client webapp for quickly retrieving small fixes and
-          features
-        </v-list-item-subtitle>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-title> Select a release to upgrade to:</v-list-item-title>
-        <v-list-item-subtitle class="mt-2">
-          Minimum required version: {{ minimum?.tag_name }}
-        </v-list-item-subtitle>
+        </div>
 
-        <span v-if="loading">
-          <v-alert> Loading releases... </v-alert>
-        </span>
+        <div class="font-weight-bold mb-2">Select a release to upgrade to:</div>
+        <div class="mb-2">
+          Minimum required version: {{ minimum?.tag_name }}
+        </div>
+
+        <v-alert v-if="loading">Loading releases...</v-alert>
         <v-alert v-if="!loading && !filteredReleases?.length">
           No releases to show.
         </v-alert>
+
         <v-radio-group v-model="selectedRelease">
           <v-radio
             v-for="release in filteredReleases"
@@ -83,52 +65,53 @@
             :value="release.tag_name"
           />
         </v-radio-group>
-        <div>
-          <v-alert
-            v-if="showPreReleases"
-            color="primary"
-            max-width="500px"
-          >
-            You are viewing prereleases, please install such versions at your
-            own risk!
-          </v-alert>
-        </div>
-        <div>
-          <v-checkbox
-            v-model="allowDowngrade"
-            label="Allow downgrade"
-          />
-          <v-checkbox
-            v-model="showPreReleases"
-            :disabled="getIsCurrentUnstable"
-            :label="
-              getIsCurrentUnstable
-                ? 'Show prerelease versions (Currently already on prerelease version)'
-                : 'Show prerelease versions'
-            "
-          />
-        </div>
-        <v-btn
-          class="mt-2 mr-4"
-          color="secondary"
-          @click="loadReleases()"
-        >
-          Reload release version list
-        </v-btn>
-        <v-btn
-          :disabled="
-            !selectedRelease?.length || selectedRelease === current?.tag_name
-          "
-          class="mt-2"
+
+        <v-alert
+          v-if="showPreReleases"
           color="primary"
-          variant="flat"
-          @click="clickUpdateClient(selectedRelease)"
+          max-width="500px"
+          class="mb-3"
         >
-          <v-icon>upgrade</v-icon>
-          Upgrade/downgrade client
-        </v-btn>
-      </v-list-item>
-    </v-list>
+          You are viewing prereleases, please install such versions at your
+          own risk!
+        </v-alert>
+
+        <v-checkbox
+          v-model="allowDowngrade"
+          label="Allow downgrade"
+        />
+        <v-checkbox
+          v-model="showPreReleases"
+          :disabled="getIsCurrentUnstable"
+          :label="
+            getIsCurrentUnstable
+              ? 'Show prerelease versions (Currently already on prerelease version)'
+              : 'Show prerelease versions'
+          "
+        />
+
+        <div class="mt-3">
+          <v-btn
+            class="mr-4"
+            color="secondary"
+            @click="loadReleases()"
+          >
+            Reload release version list
+          </v-btn>
+          <v-btn
+            :disabled="
+              !selectedRelease?.length || selectedRelease === current?.tag_name
+            "
+            color="primary"
+            variant="flat"
+            @click="clickUpdateClient(selectedRelease)"
+          >
+            <v-icon>upgrade</v-icon>
+            Upgrade/downgrade client
+          </v-btn>
+        </div>
+      </SettingSection>
+    </v-card-text>
   </v-card>
 </template>
 <script lang="ts" setup>
@@ -137,7 +120,11 @@ import { computed, onMounted, ref } from 'vue'
 import { version as packageJsonVersion } from '../../../package.json'
 import { IRelease } from '@/models/server/client-releases.model'
 import { compare, minor } from 'semver'
+import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
+import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
+import { settingsPage } from '@/components/Settings/Shared/setting.constants'
 
+const page = settingsPage['softwareUpgrade']
 const errorMessage = ref('')
 const loading = ref(true)
 const rateLimitExceeded = ref(false)
