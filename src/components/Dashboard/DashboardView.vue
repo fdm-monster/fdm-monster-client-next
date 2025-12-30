@@ -119,15 +119,52 @@
     <v-row>
       <v-col cols="12" md="8">
         <v-card class="pa-4 fill-height" elevation="2">
-          <h3 class="text-h6 mb-4 d-flex align-center">
-            <v-icon class="mr-2">timeline</v-icon>
-            Farm Status Overview
-          </h3>
+          <div class="d-flex align-center justify-space-between mb-4">
+            <h3 class="text-h6 d-flex align-center">
+              <v-icon class="mr-2">timeline</v-icon>
+              Farm Status Overview
+            </h3>
+            <div class="d-flex align-center ga-2">
+              <v-select
+                v-if="groups.length"
+                v-model="selectedTags"
+                :items="groups"
+                item-title="name"
+                item-value="id"
+                label="Tags"
+                prepend-inner-icon="label"
+                variant="outlined"
+                density="compact"
+                multiple
+                chips
+                closable-chips
+                clearable
+                hide-details
+                style="width: 200px"
+              />
+              <v-select
+                v-model="selectedPrinterTypes"
+                :items="printerTypes"
+                item-title="name"
+                item-value="value"
+                label="Type"
+                prepend-inner-icon="category"
+                variant="outlined"
+                density="compact"
+                multiple
+                chips
+                closable-chips
+                clearable
+                hide-details
+                style="width: 200px"
+              />
+            </div>
+          </div>
 
           <!-- Printer Status Grid -->
           <div v-if="totalPrinters > 0" class="printer-status-grid">
             <div
-              v-for="printer in printers.slice(0, 8)"
+              v-for="printer in filteredPrinters.slice(0, 8)"
               :key="printer.id"
               class="printer-status-item"
               @click="openPrinter()"
@@ -265,7 +302,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePrinterStore } from '@/store/printer.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
@@ -274,13 +311,54 @@ import {
   isPrinterDisconnected,
   isPrinterInMaintenance
 } from '@/shared/printer-state.constants'
+import { PrinterGroupService, GroupDto, GroupWithPrintersDto } from '@/backend/printer-group.service'
 
 const router = useRouter()
 const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 
+const selectedTags = ref<number[]>([])
+const selectedPrinterTypes = ref<number[]>([])
+const groups = ref<GroupDto[]>([])
+const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
+
+const printerTypes = [
+  { name: 'OctoPrint', value: 0 },
+  { name: 'Moonraker', value: 1 },
+  { name: 'PrusaLink', value: 2 },
+  { name: 'Bambu', value: 3 }
+]
+
+onMounted(async () => {
+  groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
+  groups.value = groupsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
+})
+
 // Computed properties for dashboard metrics
 const printers = computed(() => printerStore.printers)
+
+const filteredPrinters = computed(() => {
+  let filtered = printers.value
+
+  // Filter by tags
+  if (selectedTags.value.length > 0) {
+    filtered = filtered.filter(printer => {
+      return groupsWithPrinters.value.some(group =>
+        selectedTags.value.includes(group.id) &&
+        group.printers.some(p => p.printerId === printer.id)
+      )
+    })
+  }
+
+  // Filter by printer type
+  if (selectedPrinterTypes.value.length > 0) {
+    filtered = filtered.filter(printer =>
+      selectedPrinterTypes.value.includes(printer.printerType)
+    )
+  }
+
+  return filtered
+})
 const totalPrinters = computed(() => printers.value.length)
 const printingCount = computed(() => printerStateStore.printingCount)
 const operationalCount = computed(() => printerStateStore.operationalNotPrintingCount)

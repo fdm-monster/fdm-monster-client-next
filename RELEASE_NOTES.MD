@@ -13,6 +13,7 @@ Features
 - Redesign camera page
 - Redesign all settings pages
 - Implement (group) tag filtering on both printer page and printer list page
+- Implement (group) tag filtering on camera, jobs and dashboard pages
 
 Fixes
 

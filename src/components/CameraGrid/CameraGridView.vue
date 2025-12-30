@@ -51,7 +51,7 @@
                   />
                 </v-btn>
               </template>
-              <v-card min-width="300">
+              <v-card min-width="350">
                 <v-card-text>
                   <v-select
                     v-model="filterPrinter"
@@ -62,12 +62,45 @@
                     density="compact"
                     clearable
                     hide-details
+                    class="mb-3"
+                  />
+                  <v-select
+                    v-if="groups.length"
+                    v-model="selectedTags"
+                    :items="groups"
+                    item-title="name"
+                    item-value="id"
+                    label="Filter by Tags"
+                    prepend-inner-icon="label"
+                    variant="outlined"
+                    density="compact"
+                    multiple
+                    chips
+                    closable-chips
+                    clearable
+                    hide-details
+                    class="mb-3"
+                  />
+                  <v-select
+                    v-model="selectedPrinterTypes"
+                    :items="printerTypes"
+                    item-title="name"
+                    item-value="value"
+                    label="Filter by Type"
+                    prepend-inner-icon="category"
+                    variant="outlined"
+                    density="compact"
+                    multiple
+                    chips
+                    closable-chips
+                    clearable
+                    hide-details
+                    class="mb-3"
                   />
                   <v-checkbox
                     v-model="showOnlyUnavailable"
                     label="Show only unavailable cameras"
                     density="compact"
-                    class="mt-2"
                     hide-details
                   />
                 </v-card-text>
@@ -325,7 +358,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch, onMounted } from 'vue'
 import { CameraStreamService } from '@/backend/camera-stream.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
@@ -335,6 +368,7 @@ import { usePrinterStore } from '@/store/printer.store'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
 import type { PrinterDto } from '@/models/printers/printer.model'
 import { getServiceName } from '@/utils/printer-type.utils'
+import { PrinterGroupService, GroupDto, GroupWithPrintersDto } from '@/backend/printer-group.service'
 
 const printerStore = usePrinterStore()
 const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
@@ -344,8 +378,24 @@ const fileExplorer = useFileExplorer()
 const searchQuery = ref('')
 const filterPrinter = ref<number | undefined>(undefined)
 const showOnlyUnavailable = ref(false)
+const selectedTags = ref<number[]>([])
+const selectedPrinterTypes = ref<number[]>([])
+const groups = ref<GroupDto[]>([])
+const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
 const cameraErrors = reactive<Record<number, boolean>>({})
 const cameraLoading = reactive<Record<number, boolean>>({})
+
+const printerTypes = [
+  { name: 'OctoPrint', value: 0 },
+  { name: 'Moonraker', value: 1 },
+  { name: 'PrusaLink', value: 2 },
+  { name: 'Bambu', value: 3 }
+]
+
+onMounted(async () => {
+  groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
+  groups.value = groupsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
+})
 
 // Fetch cameras with printer data
 const camerasWithPrinter = async (): Promise<CameraWithPrinter[]> => {
@@ -407,12 +457,27 @@ const filteredCameras = computed(() => {
       (filterPrinter.value === null && !camera.cameraStream.printerId) ||
       camera.cameraStream.printerId === filterPrinter.value
 
+    // Tag filter
+    let matchesTags = selectedTags.value.length === 0
+    if (selectedTags.value.length > 0 && camera.printer?.id) {
+      matchesTags = groupsWithPrinters.value.some(group =>
+        selectedTags.value.includes(group.id) &&
+        group.printers.some(p => p.printerId === camera.printer?.id)
+      )
+    }
+
+    // Printer type filter
+    let matchesPrinterType = selectedPrinterTypes.value.length === 0
+    if (selectedPrinterTypes.value.length > 0 && camera.printer) {
+      matchesPrinterType = selectedPrinterTypes.value.includes(camera.printer.printerType)
+    }
+
     // Unavailable filter
     const matchesAvailability =
       !showOnlyUnavailable.value ||
       cameraErrors[camera.cameraStream.id!]
 
-    return matchesSearch && matchesPrinter && matchesAvailability
+    return matchesSearch && matchesPrinter && matchesTags && matchesPrinterType && matchesAvailability
   })
 })
 
@@ -423,7 +488,12 @@ const unavailableCount = computed(() => {
 
 // Check if filters are active
 const hasActiveFilters = computed(() => {
-  return filterPrinter.value !== undefined || showOnlyUnavailable.value
+  return (
+    filterPrinter.value !== undefined ||
+    showOnlyUnavailable.value ||
+    selectedTags.value.length > 0 ||
+    selectedPrinterTypes.value.length > 0
+  )
 })
 
 // Count active filters
@@ -431,6 +501,8 @@ const activeFilterCount = computed(() => {
   let count = 0
   if (filterPrinter.value !== undefined) count++
   if (showOnlyUnavailable.value) count++
+  if (selectedTags.value.length > 0) count++
+  if (selectedPrinterTypes.value.length > 0) count++
   return count
 })
 
@@ -468,6 +540,8 @@ watch(
 function clearFilters() {
   filterPrinter.value = undefined
   showOnlyUnavailable.value = false
+  selectedTags.value = []
+  selectedPrinterTypes.value = []
 }
 
 // Dialog actions
