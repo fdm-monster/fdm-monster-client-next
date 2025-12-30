@@ -130,7 +130,7 @@
               v-for="printer in printers.slice(0, 8)"
               :key="printer.id"
               class="printer-status-item"
-              @click="openPrinter(printer)"
+              @click="openPrinter()"
             >
               <v-card
                 class="pa-3 text-center cursor-pointer hover-effect"
@@ -330,7 +330,7 @@ const viewDocumentation = () => {
 }
 
 // Printer interaction methods
-const openPrinter = (printer: any) => {
+const openPrinter = () => {
   router.push('/printers-grid')
 }
 
