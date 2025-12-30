@@ -109,7 +109,7 @@
               </td>
               <td>
                 <div class="d-flex justify-end ga-1">
-                  <v-tooltip text="Toggle verification">
+                  <v-tooltip :text="user.isVerified ? 'Set user to unverified' : 'Set user to verified'">
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
