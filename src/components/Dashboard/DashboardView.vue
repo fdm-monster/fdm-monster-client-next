@@ -105,10 +105,10 @@
             </v-btn>
             <v-btn
               variant="outlined"
-              @click="goToStatistics"
+              @click="gotoJobs"
             >
               <v-icon class="mr-2">analytics</v-icon>
-              View Statistics
+              View Jobs
             </v-btn>
           </v-btn-group>
         </v-card>
@@ -125,37 +125,15 @@
               Farm Status Overview
             </h3>
             <div class="d-flex align-center ga-2">
-              <v-select
-                v-if="groups.length"
+              <PrinterTagFilter
                 v-model="selectedTags"
-                :items="groups"
-                item-title="name"
-                item-value="id"
+                :groups="groups"
                 label="Tags"
-                prepend-inner-icon="label"
-                variant="outlined"
-                density="compact"
-                multiple
-                chips
-                closable-chips
-                clearable
-                hide-details
                 style="width: 200px"
               />
-              <v-select
+              <PrinterTypeFilter
                 v-model="selectedPrinterTypes"
-                :items="printerTypes"
-                item-title="name"
-                item-value="value"
                 label="Type"
-                prepend-inner-icon="category"
-                variant="outlined"
-                density="compact"
-                multiple
-                chips
-                closable-chips
-                clearable
-                hide-details
                 style="width: 200px"
               />
             </div>
@@ -290,10 +268,10 @@
             variant="outlined"
             block
             class="mt-4"
-            @click="goToStatistics"
+            @click="gotoJobs"
           >
             <v-icon class="mr-2">analytics</v-icon>
-            View Detailed Analytics
+            View Job Analytics
           </v-btn>
         </v-card>
       </v-col>
@@ -302,7 +280,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePrinterStore } from '@/store/printer.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
@@ -311,54 +289,29 @@ import {
   isPrinterDisconnected,
   isPrinterInMaintenance
 } from '@/shared/printer-state.constants'
-import { PrinterGroupService, GroupDto, GroupWithPrintersDto } from '@/backend/printer-group.service'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
+import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
+import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 
 const router = useRouter()
 const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 
-const selectedTags = ref<number[]>([])
-const selectedPrinterTypes = ref<number[]>([])
-const groups = ref<GroupDto[]>([])
-const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
-
-const printerTypes = [
-  { name: 'OctoPrint', value: 0 },
-  { name: 'Moonraker', value: 1 },
-  { name: 'PrusaLink', value: 2 },
-  { name: 'Bambu', value: 3 }
-]
+const {
+  selectedTags,
+  selectedPrinterTypes,
+  groups,
+  loadGroups,
+  filterPrinters
+} = usePrinterFilters()
 
 onMounted(async () => {
-  groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
-  groups.value = groupsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
+  await loadGroups()
 })
 
 // Computed properties for dashboard metrics
 const printers = computed(() => printerStore.printers)
-
-const filteredPrinters = computed(() => {
-  let filtered = printers.value
-
-  // Filter by tags
-  if (selectedTags.value.length > 0) {
-    filtered = filtered.filter(printer => {
-      return groupsWithPrinters.value.some(group =>
-        selectedTags.value.includes(group.id) &&
-        group.printers.some(p => p.printerId === printer.id)
-      )
-    })
-  }
-
-  // Filter by printer type
-  if (selectedPrinterTypes.value.length > 0) {
-    filtered = filtered.filter(printer =>
-      selectedPrinterTypes.value.includes(printer.printerType)
-    )
-  }
-
-  return filtered
-})
+const filteredPrinters = computed(() => filterPrinters(printers.value))
 const totalPrinters = computed(() => printers.value.length)
 const printingCount = computed(() => printerStateStore.printingCount)
 const operationalCount = computed(() => printerStateStore.operationalNotPrintingCount)
@@ -399,8 +352,8 @@ const goToSettings = () => {
   router.push('/settings')
 }
 
-const goToStatistics = () => {
-  router.push('/statistics')
+const gotoJobs = () => {
+  router.push('/jobs')
 }
 
 const viewDocumentation = () => {

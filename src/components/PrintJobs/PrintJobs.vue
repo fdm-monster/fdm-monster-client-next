@@ -91,40 +91,19 @@
             />
           </v-col>
           <v-col cols="12" md="4">
-            <v-select
+            <PrinterTypeFilter
               v-model="selectedPrinterTypes"
-              :items="printerTypes"
-              item-title="name"
-              item-value="value"
               label="Filter by Type"
-              prepend-inner-icon="category"
-              variant="outlined"
-              density="compact"
-              multiple
-              chips
-              closable-chips
-              clearable
-              hide-details
             />
           </v-col>
         </v-row>
 
         <v-row v-if="groups.length" class="mt-3">
           <v-col cols="12">
-            <v-select
+            <PrinterTagFilter
               v-model="selectedTags"
-              :items="groups"
-              item-title="name"
-              item-value="id"
+              :groups="groups"
               label="Filter by Tags"
-              prepend-inner-icon="label"
-              variant="outlined"
-              density="compact"
-              multiple
-              chips
-              closable-chips
-              clearable
-              hide-details
             />
           </v-col>
         </v-row>
@@ -315,25 +294,24 @@ import { onMounted, ref, computed } from 'vue'
 import { PrintJobsService, type PrintJobDto, type PrintJobSearchPagedParams } from '@/backend/print-jobs.service'
 import { useFloorStore } from '@/store/floor.store'
 import { useDebounceFn } from '@vueuse/core'
-import { PrinterGroupService, GroupDto, GroupWithPrintersDto } from '@/backend/printer-group.service'
 import { usePrinterStore } from '@/store/printer.store'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
+import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
+import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 
 const printJobs = ref<PrintJobDto[]>([])
 const loading = ref(false)
 const currentPage = ref(1)
 const itemsPerPage = ref(25)
 const totalJobs = ref(0)
-const selectedTags = ref<number[]>([])
-const selectedPrinterTypes = ref<number[]>([])
-const groups = ref<GroupDto[]>([])
-const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
 
-const printerTypes = [
-  { name: 'OctoPrint', value: 0 },
-  { name: 'Moonraker', value: 1 },
-  { name: 'PrusaLink', value: 2 },
-  { name: 'Bambu', value: 3 }
-]
+const {
+  selectedTags,
+  selectedPrinterTypes,
+  groups,
+  groupsWithPrinters,
+  loadGroups
+} = usePrinterFilters()
 
 const searchParams = ref<PrintJobSearchPagedParams>({
   searchPrinter: '',
@@ -398,8 +376,7 @@ const debouncedSearch = useDebounceFn(() => {
 
 onMounted(async () => {
   await loadPrintJobs()
-  groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
-  groups.value = groupsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
+  await loadGroups()
 })
 
 const loadPrintJobs = async () => {

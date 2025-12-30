@@ -409,7 +409,7 @@ import { DialogName } from './Dialogs/dialog.constants'
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import {
   getServiceName,
-} from "@/utils/printer-type.utils";
+} from "@/shared/printer-types.constants";
 import { useDialog } from '@/shared/dialog.composable'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
 

@@ -64,37 +64,15 @@
                     hide-details
                     class="mb-3"
                   />
-                  <v-select
-                    v-if="groups.length"
+                  <PrinterTagFilter
                     v-model="selectedTags"
-                    :items="groups"
-                    item-title="name"
-                    item-value="id"
+                    :groups="groups"
                     label="Filter by Tags"
-                    prepend-inner-icon="label"
-                    variant="outlined"
-                    density="compact"
-                    multiple
-                    chips
-                    closable-chips
-                    clearable
-                    hide-details
                     class="mb-3"
                   />
-                  <v-select
+                  <PrinterTypeFilter
                     v-model="selectedPrinterTypes"
-                    :items="printerTypes"
-                    item-title="name"
-                    item-value="value"
                     label="Filter by Type"
-                    prepend-inner-icon="category"
-                    variant="outlined"
-                    density="compact"
-                    multiple
-                    chips
-                    closable-chips
-                    clearable
-                    hide-details
                     class="mb-3"
                   />
                   <v-checkbox
@@ -367,34 +345,32 @@ import { CameraWithPrinter } from '@/models/camera-streams/camera-stream'
 import { usePrinterStore } from '@/store/printer.store'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
 import type { PrinterDto } from '@/models/printers/printer.model'
-import { getServiceName } from '@/utils/printer-type.utils'
-import { PrinterGroupService, GroupDto, GroupWithPrintersDto } from '@/backend/printer-group.service'
+import { getServiceName } from '@/shared/printer-types.constants'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
+import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
+import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 
 const printerStore = usePrinterStore()
 const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
 const fileExplorer = useFileExplorer()
 
+const {
+  selectedTags,
+  selectedPrinterTypes,
+  groups,
+  groupsWithPrinters,
+  loadGroups
+} = usePrinterFilters()
+
 // Reactive state
 const searchQuery = ref('')
 const filterPrinter = ref<number | undefined>(undefined)
 const showOnlyUnavailable = ref(false)
-const selectedTags = ref<number[]>([])
-const selectedPrinterTypes = ref<number[]>([])
-const groups = ref<GroupDto[]>([])
-const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
 const cameraErrors = reactive<Record<number, boolean>>({})
 const cameraLoading = reactive<Record<number, boolean>>({})
 
-const printerTypes = [
-  { name: 'OctoPrint', value: 0 },
-  { name: 'Moonraker', value: 1 },
-  { name: 'PrusaLink', value: 2 },
-  { name: 'Bambu', value: 3 }
-]
-
 onMounted(async () => {
-  groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
-  groups.value = groupsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
+  await loadGroups()
 })
 
 // Fetch cameras with printer data
