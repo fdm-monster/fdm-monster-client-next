@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HomeToolbar />
+    <HomeToolbar/>
 
     <v-banner
       v-if="!gridStore.gridEditMode"

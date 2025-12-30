@@ -2,6 +2,7 @@
   <div v-drop-printer-position="{ x, y, printerSet: printer }">
     <v-card
       v-drop-upload="{ printers: [printer] }"
+      :ripple="isOnline"
       :class="{
         'tile-large': largeTilesEnabled,
         'tile-selected': selected,
