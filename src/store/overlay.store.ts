@@ -74,12 +74,6 @@ export const useOverlayStore = defineStore('Overlay', {
       this.nextRetryTime = null
       this.isTestingConnection = false
     },
-    setRetrying(isRetrying: boolean) {
-      this.isRetrying = isRetrying
-      if (!isRetrying) {
-        this.nextRetryTime = null
-      }
-    },
     setTestingConnection(isTesting: boolean) {
       this.isTestingConnection = isTesting
     },
