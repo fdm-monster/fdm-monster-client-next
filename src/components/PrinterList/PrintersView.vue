@@ -123,6 +123,29 @@
             {{ floorOfPrinter(item.id)?.name }}
           </v-chip>
         </template>
+        <template #item.cameras="{ item }">
+          <div class="d-flex align-center flex-wrap ga-1">
+            <v-chip
+              v-for="(camera, index) in camerasOfPrinter(item.id).slice(0, 2)"
+              :key="camera.id"
+              size="x-small"
+              variant="tonal"
+            >
+              <v-icon start size="x-small">videocam</v-icon>
+              {{ camera.name }}
+            </v-chip>
+            <v-chip
+              v-if="camerasOfPrinter(item.id).length > 2"
+              size="x-small"
+              variant="text"
+            >
+              +{{ camerasOfPrinter(item.id).length - 2 }} more
+            </v-chip>
+            <span v-if="!camerasOfPrinter(item.id).length" class="text-caption text-medium-emphasis">
+              No cameras
+            </span>
+          </div>
+        </template>
         <template #item.group="{ item }">
           <div class="d-flex align-center flex-wrap ga-1">
             <v-chip
@@ -305,6 +328,7 @@ const filteredGroupsWithPrinters = ref<GroupWithPrintersDto[]>([])
 const newGroupName = ref('')
 const showTagDialog = ref(false)
 const selectedPrinterTypes = ref<number[]>([])
+const cameras = ref<any[]>([])
 
 type ReadonlyHeaders = VDataTable['$props']['headers']
 
@@ -319,6 +343,7 @@ const tableHeaders = computed(
       { title: 'Printer Name', align: 'start', sortable: true, key: 'name' },
       { title: 'Floor', key: 'floor', sortable: false },
       { title: 'Tags', key: 'group', sortable: true },
+      { title: 'Cameras', key: 'cameras', sortable: false },
       { title: 'Actions', key: 'actions', sortable: false },
       { title: 'Socket Update', key: 'socketupdate', sortable: false },
       { title: '', key: 'data-table-expand' }
@@ -329,6 +354,11 @@ async function loadData() {
   loading.value = true
   await featureStore.loadFeatures()
   groupsWithPrinters.value = await PrinterGroupService.getGroupsWithPrinters()
+
+  // Load cameras
+  const { CameraStreamService } = await import('@/backend/camera-stream.service')
+  cameras.value = await CameraStreamService.listCameraStreams()
+
   loading.value = false
   return groupsWithPrinters
 }
@@ -388,6 +418,10 @@ const floorOfPrinter = (printerId: number) => {
   return floorStore.floorOfPrinter(printerId)
 }
 
+const camerasOfPrinter = (printerId: number) => {
+  return cameras.value.filter(camera => camera.printerId === printerId)
+}
+
 const openEditDialog = (printer: PrinterDto) => {
   printerStore.setUpdateDialogPrinter(printer)
   addOrUpdatePrinterDialog.openDialog(printer)
@@ -397,16 +431,18 @@ const openCreatePrinterDialog = () => {
   addOrUpdatePrinterDialog.openDialog()
 }
 
-const clickRow = (item: PrinterDto, event: any) => {
-  console.log(item, event)
+const clickRow = (event: any, item: any) => {
+  if (!item?.item?.id) return
 
-  if (!item?.id) return
+  const itemId = item.item.id.toString()
+  const index = expanded.value.indexOf(itemId)
 
-  if (event.isExpanded) {
-    const index = expanded.value.indexOf(item.id.toString())
+  if (index > -1) {
+    // Already expanded, collapse it
     expanded.value.splice(index, 1)
   } else {
-    expanded.value.push(item.id.toString())
+    // Not expanded, expand it
+    expanded.value = [itemId] // Single expand mode
   }
 }
 

@@ -2,16 +2,19 @@
   <div v-drop-printer-position="{ x, y, printerSet: printer }">
     <v-card
       v-drop-upload="{ printers: [printer] }"
+      :draggable="!!printer"
       :ripple="isOnline"
       :class="{
         'tile-large': largeTilesEnabled,
         'tile-selected': selected,
         'tile-unselected': unselected,
-        'tile-no-printer': !printer
+        'tile-no-printer': !printer,
+        'tile-draggable': !!printer
       }"
       class="tile colored-tile rounded-lg"
       elevation="5"
       @click="selectOrClearPrinterPosition()"
+      @dragstart="onDragStart"
     >
       <div
         v-show="printer"
@@ -20,9 +23,9 @@
         {{ printer?.name ?? '&nbsp;' }}
       </div>
 
-      <!-- Create printer - hover button-->
+      <!-- Create printer or no printers message -->
       <div
-        v-if="!printer || gridStore.gridEditMode"
+        v-if="!printer"
         :style="{
           height: largeTilesEnabled ? 'calc(120px - 20px)' : 'calc(84px - 20px)'
         }"
@@ -30,25 +33,19 @@
         style="position: absolute"
       >
         <div
-          class="d-flex flex flex-column justify-center"
+          class="d-flex flex flex-column justify-center align-center"
           style="height: 100%"
         >
+          <div v-if="isFirstTile && noPrintersExist" class="text-center pa-4">
+            <v-icon size="large" color="primary" class="mb-2">add_circle</v-icon>
+            <div class="text-subtitle-2 mb-2">No printers yet</div>
+            <div class="text-caption text-medium-emphasis mb-3">Click below to add your first printer</div>
+          </div>
           <PrinterCreateAction
-            v-if="!printer"
             :floor-id="floorStore.selectedFloor?.id"
             :floor-x="x"
             :floor-y="y"
           />
-          <v-btn
-            v-if="printer"
-            color="error"
-            rounded
-            small
-            @click.c.capture.native.stop="selectOrClearPrinterPosition()"
-          >
-            <v-icon>clear</v-icon>
-            Clear position
-          </v-btn>
         </div>
       </div>
 
@@ -335,6 +332,7 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { useThumbnailQuery } from '@/queries/thumbnail.query'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
+import { dragAppId, INTENT, PrinterPlace } from '@/shared/drag.constants'
 import logoPng from '@/assets/logo.png'
 
 const defaultColor = 'rgba(100,100,100,0.1)'
@@ -471,6 +469,22 @@ const clickRefreshSocket = async () => {
   })
 }
 
+const onDragStart = (ev: DragEvent) => {
+  if (!ev.dataTransfer || !props.printer?.id) return
+
+  // Notify that we're dragging a placed printer (for showing remove zone)
+  window.dispatchEvent(new CustomEvent('tile-drag-start'))
+
+  ev.dataTransfer.setData(
+    'text',
+    JSON.stringify({
+      appId: dragAppId,
+      intent: INTENT.PRINTER_PLACE,
+      printerId: props.printer.id
+    } as PrinterPlace)
+  )
+}
+
 const clickOpenSettings = () => {
   printerStore.setUpdateDialogPrinter(props.printer)
   addOrUpdateDialog.openDialog()
@@ -550,6 +564,14 @@ const selectOrClearPrinterPosition = async () => {
 
 .tile.tile-large {
   min-height: 120px;
+}
+
+.tile-draggable {
+  cursor: move;
+}
+
+.tile-draggable:active {
+  opacity: 0.7;
 }
 
 .tile-no-printer:hover {

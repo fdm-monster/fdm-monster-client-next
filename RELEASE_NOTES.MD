@@ -15,6 +15,8 @@ Features
 - Implement (group) tag filtering on both printer page and printer list page
 - Implement (group) tag filtering on camera, jobs and dashboard pages
 - Export and import yaml upgraded
+- Printer placement UX redesigned, removed GridDialog/GridSettings
+- Add camera references to printer list
 
 Fixes
 
@@ -32,6 +34,7 @@ Fixes
 - Overall code cleanup, printer tile progress bar fix
 - Printer page action buttons now aligned (even if badge is present)
 - Improved app error handling user friendliness
+- Improve creating first printer
 
 Chores
 

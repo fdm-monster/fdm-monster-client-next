@@ -1,37 +1,5 @@
 <template>
   <div>
-    <v-banner v-if="gridStore.gridEditMode">
-      <v-row style="margin-bottom: -5px">
-        <v-col>
-          <span>
-            Drag {{ floorStore.floorlessPrinters.length }} unplaced printer(s)
-            from here to place it on the grid.
-          </span>
-          <v-chip-group>
-            <v-chip
-              v-for="printer of floorStore.floorlessPrinters"
-              :key="printer.id"
-              draggable
-              size="small"
-              style="cursor: move"
-              @dragstart="onDragStart(printer, $event)"
-            >
-              {{ printer.name }}
-            </v-chip>
-          </v-chip-group>
-        </v-col>
-        <v-col>
-          <div>
-            Clear printers by clicking on
-            <strong>
-              <v-icon>disabled_visible</v-icon>
-              Click to clear
-            </strong>
-          </div>
-        </v-col>
-      </v-row>
-    </v-banner>
-
     <div class="printer-grid-container">
       <div
         class="printer-grid"
@@ -51,55 +19,20 @@
             :y="getY(index - 1)"
           />
         </div>
-        <!-- Columns increment/decrement -->
-        <div
-          v-if="gridStore.gridEditMode"
-          class="d-flex flex-row justify-start"
-          style="gap: 10px; width: 100%"
-        >
-          Columns
-          <v-btn
-            x-small
-            rounded
-            :disabled="settingsStore.gridCols <= 1"
-            @click="decrementGridCols()"
-          >
-            <v-icon>remove</v-icon>
-          </v-btn>
-          <v-btn
-            x-small
-            rounded
-            :disabled="settingsStore.gridCols >= 12"
-            @click="incrementGridCols()"
-          >
-            <v-icon>add</v-icon>
-          </v-btn>
-        </div>
       </div>
-      <!-- Rows increment/decrement -->
-      <div
-        v-if="gridStore.gridEditMode"
-        class="d-flex flex-column justify-start"
-        style="gap: 10px; margin-top: 10px"
-      >
-        Rows
-        <v-btn
-          x-small
-          rounded
-          :disabled="settingsStore.gridRows <= 1"
-          @click="decrementGridRows()"
-        >
-          <v-icon>remove</v-icon>
-        </v-btn>
-        <v-btn
-          x-small
-          rounded
-          :disabled="settingsStore.gridRows >= 16"
-          @click="incrementGridRows()"
-        >
-          <v-icon>add</v-icon>
-        </v-btn>
-      </div>
+    </div>
+
+    <!-- Drop zone for removing printers from grid - only show when dragging placed printers -->
+    <div
+      v-show="isDraggingPlacedPrinter"
+      class="remove-drop-zone"
+      @dragover.prevent
+      @dragenter.prevent="onDragEnterRemove"
+      @dragleave.prevent="onDragLeaveRemove"
+      @drop.prevent="onDropRemove"
+    >
+      <v-icon size="large" class="mr-2">delete_forever</v-icon>
+      <span class="text-h6">Drop here to remove from grid</span>
     </div>
 
     <img
@@ -120,6 +53,7 @@ import { useGridStore } from '@/store/grid.store'
 import { dragAppId, INTENT, PrinterPlace } from '@/shared/drag.constants'
 import { useSettingsStore } from '@/store/settings.store'
 import { useFloorStore } from '@/store/floor.store'
+import { FloorService } from '@/backend/floor.service'
 import { PrinterGroupService, GroupWithPrintersDto } from '@/backend/printer-group.service'
 
 const printerStore = usePrinterStore()
@@ -127,6 +61,25 @@ const floorStore = useFloorStore()
 const settingsStore = useSettingsStore()
 const gridStore = useGridStore()
 const groupsWithPrinters = ref<GroupWithPrintersDto[]>([])
+const isDragging = ref(false)
+const isDraggingPlacedPrinter = ref(false)
+const isOverRemoveZone = ref(false)
+
+// Track when dragging placed vs unplaced printers
+window.addEventListener('dragstart', (e: any) => {
+  isDragging.value = true
+  // Check if drag is from a tile (has data-placed attribute or similar)
+  // We'll set isDraggingPlacedPrinter in the tile's dragstart
+})
+window.addEventListener('dragend', () => {
+  isDragging.value = false
+  isDraggingPlacedPrinter.value = false
+})
+
+// Custom event from tiles to indicate dragging a placed printer
+window.addEventListener('tile-drag-start', () => {
+  isDraggingPlacedPrinter.value = true
+})
 
 onMounted(async () => {
   await printerStore.loadPrinters()
@@ -211,38 +164,57 @@ function getPrinter(col: number, row: number) {
   return printerMatrix.value[x][y]
 }
 
-async function incrementGridRows() {
-  if (!gridStore.gridEditMode || !settingsStore.frontendSettings) return
-  if (settingsStore.frontendSettings.gridRows >= 16) return
-
-  settingsStore.frontendSettings.gridRows++
-  await settingsStore.saveFrontendSettings()
+function onDragEnterRemove() {
+  isOverRemoveZone.value = true
 }
 
-async function incrementGridCols() {
-  if (!gridStore.gridEditMode || !settingsStore.frontendSettings) return
-  if (settingsStore.frontendSettings.gridCols >= 12) return
-
-  settingsStore.frontendSettings.gridCols++
-  await settingsStore.saveFrontendSettings()
+function onDragLeaveRemove() {
+  isOverRemoveZone.value = false
 }
 
-async function decrementGridRows() {
-  if (!gridStore.gridEditMode || !settingsStore.frontendSettings) return
-  if (settingsStore.frontendSettings.gridRows == 1) return
-  settingsStore.frontendSettings.gridRows--
-  await settingsStore.saveFrontendSettings()
+async function onDropRemove(ev: DragEvent) {
+  isOverRemoveZone.value = false
+
+  if (!ev.dataTransfer) return
+
+  try {
+    const data = JSON.parse(ev.dataTransfer.getData('text'))
+    if (data.appId !== dragAppId || data.intent !== INTENT.PRINTER_PLACE) return
+
+    const printerId = data.printerId
+    if (!printerId || !floorStore.selectedFloor) return
+
+    // Remove printer from floor
+    await FloorService.deletePrinterFromFloor(floorStore.selectedFloor.id, printerId)
+    await floorStore.loadFloors()
+  } catch (e) {
+    console.error('Failed to remove printer from grid:', e)
+  }
 }
 
-async function decrementGridCols() {
-  if (!gridStore.gridEditMode || !settingsStore.frontendSettings) return
-  if (settingsStore.frontendSettings.gridCols == 1) return
-  settingsStore.frontendSettings.gridCols--
-  await settingsStore.saveFrontendSettings()
-}
 </script>
 
 <style scoped>
+.remove-drop-zone {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background-color: rgba(211, 47, 47, 0.3);
+  border-top: 3px dashed rgba(211, 47, 47, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: background-color 0.2s;
+  backdrop-filter: blur(4px);
+}
+
+.remove-drop-zone:hover {
+  background-color: rgba(211, 47, 47, 0.5);
+}
+
 .printer-grid-container {
   width: 100%;
 }

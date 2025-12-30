@@ -1,5 +1,4 @@
 export const settingPage = {
-  grid: "grid",
   floors: "floors",
   printer: "printer",
   emergencyCommands: "emergencyCommands",
@@ -13,12 +12,6 @@ export const settingPage = {
 } as const;
 
 export const settingsPage = {
-  [settingPage.grid]: {
-    title: "Grid",
-    icon: "grid_on",
-    path: "/settings/grid",
-    divider: false,
-  },
   [settingPage.floors]: {
     title: "Floors",
     icon: "house_siding",

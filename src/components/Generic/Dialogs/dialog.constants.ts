@@ -18,8 +18,6 @@ export enum DialogName {
   PrinterControlDialog = 'PrinterControlDialog',
   // Dialog for creating a user which is pre-registered (no verification needed)
   CreateUserDialog = 'CreateUserDialog',
-  // Dialog for managing grid columns, rows, tile size and more (reference to Grid Settings page)
-  GridSettingsDialog = 'GridSettingsDialog',
   // Dialog for viewing JSON data in a pretty-printed format
   JsonViewerDialog = "JsonViewerDialog",
 }

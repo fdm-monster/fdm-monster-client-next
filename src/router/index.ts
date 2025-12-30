@@ -17,7 +17,6 @@ import RegistrationView from '../components/Login/RegistrationView.vue'
 import CameraGridView from '../components/CameraGrid/CameraGridView.vue'
 import FirstTimeSetupView from '../components/FirstTimeSetup/FirstTimeSetupView.vue'
 import AccountSettings from '../components/Settings/AccountSettings.vue'
-import GridSettings from '../components/Settings/GridSettings.vue'
 import ServerProtectionSettings from '../components/Settings/ServerProtectionSettings.vue'
 import SoftwareUpgradeSettings from '../components/Settings/SoftwareUpgradeSettings.vue'
 import DiagnosticsSettings from '../components/Settings/DiagnosticsSettings.vue'
@@ -105,11 +104,6 @@ const router = createRouter({
           component: ServerProtectionSettings
         },
         {
-          path: 'grid',
-          meta: NeedsAuth,
-          component: GridSettings
-        },
-        {
           path: 'floors',
           meta: NeedsAuth,
           component: FloorSettings
@@ -182,16 +176,16 @@ router.beforeEach(async (to, from, next) => {
 
   // Note that we do not let loginRequired === null coerce to false as that means its not loaded
   if (!to?.meta?.requiresAuth || authStore.loginRequired === false) {
-    console.debug(`No auth required on route ${to.fullPath}`)
+    console.debug(`No auth required on route ${ to.fullPath }`)
     return next()
   }
-  // TODO why is this here again? This causes the app not to initialize properly (SocketIO/settings in AppLoader)
-  // else if (authStore.loginRequired === null) {
-  //   return next();
+    // TODO why is this here again? This causes the app not to initialize properly (SocketIO/settings in AppLoader)
+    // else if (authStore.loginRequired === null) {
+    //   return next();
   // }
   else {
     console.debug(
-      `Auth required on route ${to.fullPath} (loginRequired=${authStore.loginRequired}, registration=${authStore.registration}, wizardState=${authStore.wizardState}, requiresAuth=${to?.meta?.requiresAuth})`
+      `Auth required on route ${ to.fullPath } (loginRequired=${ authStore.loginRequired }, registration=${ authStore.registration }, wizardState=${ authStore.wizardState }, requiresAuth=${ to?.meta?.requiresAuth })`
     )
   }
 
