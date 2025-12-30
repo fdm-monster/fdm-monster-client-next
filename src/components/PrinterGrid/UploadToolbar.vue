@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useGridStore } from "@/store/grid.store";
 import { computed } from "vue";
 import { useDialog } from "@/shared/dialog.composable";
 import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
@@ -12,7 +11,6 @@ import { useUploadsStore } from "@/store/uploads.store";
 import { useSnackbar } from "@/shared/snackbar.composable";
 import { formatBytes } from "@/utils/file-size.util";
 
-const gridStore = useGridStore()
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const uploadsStore = useUploadsStore()
