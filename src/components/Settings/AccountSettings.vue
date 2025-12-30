@@ -1,90 +1,65 @@
 <template>
   <v-card>
-    <v-toolbar color="primary">
-      <v-avatar>
-        <v-icon icon="account_circle" />
-      </v-avatar>
-      <v-toolbar-title>Account Settings</v-toolbar-title>
-    </v-toolbar>
+    <SettingsToolbar :icon="page.icon" :title="page.title" />
+    <v-card-text>
+      <v-alert v-if="!loginEnabled" color="primary" variant="tonal" class="mb-4">
+        Login is currently disabled. To adjust your username and password,
+        please enable that setting at the Server Protection settings page.
+        Then log in and visit this page.
+      </v-alert>
 
-    <v-list>
-      <v-list-item v-if="!loginEnabled">
-        <v-alert color="primary" variant="tonal">
-          Login is currently disabled. To adjust your username and password,
-          please enable that setting at the Server Protection settings page.
-          Then log in and visit this page.
-        </v-alert>
-      </v-list-item>
-    </v-list>
-
-    <v-list>
-      <v-list-item>
-        <v-list-item-title>Username</v-list-item-title>
+      <SettingSection title="Change Username" :usecols="false">
         <v-text-field
           v-model="formData.username"
           :disabled="!loginEnabled"
           label="Fill in your username"
-          class="mt-2"
         />
-      </v-list-item>
-
-      <div class="ml-4 mb-4">
         <v-btn
           :disabled="!loginEnabled"
           color="primary"
+          class="mt-2"
           @click="changeUsername()"
         >
           Change username
         </v-btn>
-      </div>
+      </SettingSection>
 
-      <v-divider class="my-4" />
+      <v-divider />
 
-      <v-list-item>
-        <v-list-item-title>Old Password</v-list-item-title>
+      <SettingSection title="Change Password" :usecols="false">
         <v-text-field
           v-model="formData.oldPassword"
           :disabled="!loginEnabled"
           placeholder="Old password"
           type="password"
-          class="mt-2"
+          label="Old Password"
+          class="mb-3"
         />
-      </v-list-item>
-
-      <v-list-item>
-        <v-list-item-title>New Password</v-list-item-title>
         <v-text-field
           v-model="formData.newPassword"
           :disabled="!loginEnabled"
           placeholder="New password"
           type="password"
-          class="mt-2"
+          label="New Password"
+          class="mb-3"
         />
-      </v-list-item>
-
-      <v-list-item>
-        <v-list-item-title>Repeat New Password</v-list-item-title>
         <v-text-field
           v-model="formData.repeatPassword"
           :disabled="!loginEnabled"
           placeholder="Repeat new password"
           type="password"
-          class="mt-2"
+          label="Repeat New Password"
+          class="mb-3"
         />
-      </v-list-item>
-    </v-list>
-
-    <div class="ml-4 mb-4">
-      <v-btn
-        :disabled="!loginEnabled"
-        color="primary"
-        @click="changePassword()"
-      >
-        Change password
-      </v-btn>
-    </div>
-
-    <v-divider />
+        <v-btn
+          :disabled="!loginEnabled"
+          color="primary"
+          @click="changePassword()"
+        >
+          Change password
+        </v-btn>
+      </SettingSection>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -97,7 +72,11 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { useAuthStore } from '@/store/auth.store'
 import { routeToLogin } from '@/router/utils'
 import { useSettingsStore } from '@/store/settings.store'
+import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
+import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
+import { settingsPage } from '@/components/Settings/Shared/setting.constants'
 
+const page = settingsPage['account']
 const settingsStore = useSettingsStore()
 const profileStore = useProfileStore()
 const authStore = useAuthStore()

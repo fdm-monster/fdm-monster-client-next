@@ -1,146 +1,168 @@
 <template>
   <v-card>
-    <v-toolbar color="primary">
-      <v-avatar>
-        <v-icon>settings</v-icon>
-      </v-avatar>
-      <v-toolbar-title> Users </v-toolbar-title>
+    <SettingsToolbar :icon="page.icon" :title="page.title" />
+    <v-card-text>
+      <GridLoader
+        v-if="loading"
+        :size="20"
+        color="#a70015"
+        style="margin: 250px; position: absolute"
+      />
 
-      <v-spacer />
-      <v-btn
-        :disabled="!profile?.isRootUser"
-        class="mt-2"
-        color="primary"
-        @click="openCreateUserDialog()"
-      >
-        <v-icon class="mr-2">verified_user</v-icon>
-        <span>Create verified user</span>
-      </v-btn>
-    </v-toolbar>
-    <GridLoader
-      v-if="loading"
-      :size="20"
-      color="#a70015"
-      style="margin: 250px; position: absolute"
-    />
-    <v-list lines="three">
-      <v-list-subheader> Showing all users </v-list-subheader>
+      <SettingSection title="User Management" :usecols="false">
+        <div class="mb-4">
+          <v-btn
+            :disabled="!profile?.isRootUser"
+            color="primary"
+            prepend-icon="add"
+            @click="openCreateUserDialog()"
+          >
+            Create Verified User
+          </v-btn>
+        </div>
 
-      <v-list-item
-        v-for="(user, index) in users"
-        :key="index"
-        class="pl-6"
-        style="
-          max-width: 800px;
-          border-top: 1px solid grey;
-          border-bottom: 1px solid grey;
-        "
-      >
-        <v-list-item-content
-          :class="
-            isCurrentAccount(user) ? 'pl-6 grey darken-3' : 'pl-6 grey darken-4'
-          "
-        >
-          <v-list-item-title>
-            User '{{ user.username }}'
-            <strong
-              v-if="isCurrentAccount(user)"
-              class="text--primary float-end mr-5 mt-2"
+        <v-table theme="dark" hover>
+          <thead>
+            <tr>
+              <th class="text-left">Username</th>
+              <th class="text-left">Status</th>
+              <th class="text-left">Roles</th>
+              <th class="text-left">Created</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(user, index) in users"
+              :key="index"
+              :class="{ 'bg-grey-darken-3': isCurrentAccount(user) }"
             >
-              Your account
-            </strong>
-          </v-list-item-title>
-          <v-list-item-subtitle />
-          <span class="text-grey-darken-4">
-            <ul>
-              <li>
-                <span
-                  v-if="user.isVerified"
-                  class="text-success"
-                >
-                  Account verified
-                </span>
-                <span
-                  v-else
-                  class="text-error"
-                >
-                  Account not verified
-                </span>
-              </li>
-              <li>Created at {{ formatIntlDate(user.createdAt) }}</li>
-              <li v-if="user.isDemoUser">Demo user account</li>
-
-              <li>
-                Role(s)
-                <ul>
-                  <li v-if="user.isRootUser">
-                    <v-chip
-                      class="mb-2 mt-2"
-                      size="small"
-                    >
-                      OWNER
-                    </v-chip>
-                  </li>
-                  <li
+              <td>
+                <div class="d-flex align-center">
+                  <span class="font-weight-medium">{{ user.username }}</span>
+                  <v-chip
+                    v-if="isCurrentAccount(user)"
+                    color="primary"
+                    size="x-small"
+                    class="ml-2"
+                  >
+                    You
+                  </v-chip>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-center ga-1">
+                  <v-chip
+                    :color="user.isVerified ? 'success' : 'warning'"
+                    size="x-small"
+                  >
+                    {{ user.isVerified ? 'Verified' : 'Unverified' }}
+                  </v-chip>
+                  <v-chip
+                    v-if="user.isDemoUser"
+                    size="x-small"
+                    color="info"
+                  >
+                    Demo
+                  </v-chip>
+                </div>
+              </td>
+              <td>
+                <div v-if="profile?.isRootUser" style="min-width: 200px">
+                  <v-select
+                    :items="roles.map((r) => ({ title: r.name, value: r.name }))"
+                    v-model="user.roles"
+                    multiple
+                    chips
+                    density="compact"
+                    variant="outlined"
+                    hide-details
+                    @update:model-value="updateUserRoles(user)"
+                  >
+                    <template v-slot:prepend-item v-if="user.isRootUser">
+                      <v-list-item>
+                        <v-chip size="small" color="error">OWNER</v-chip>
+                      </v-list-item>
+                      <v-divider />
+                    </template>
+                  </v-select>
+                </div>
+                <div v-else class="d-flex align-center ga-1 flex-wrap">
+                  <v-chip
+                    v-if="user.isRootUser"
+                    size="x-small"
+                    color="error"
+                  >
+                    OWNER
+                  </v-chip>
+                  <v-chip
                     v-for="role of user.roles"
                     :key="role"
+                    size="x-small"
                   >
-                    <v-chip
-                      class="mb-2 mt-2"
-                      size="small"
-                    >
-                      {{ role }}
-                    </v-chip>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </span>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn
-            :disabled="isCurrentAccount(user) || user.isRootUser"
-            :color="user.isVerified ? 'error darken-4' : 'success'"
-            @click="verifyUser(user, !user.isVerified)"
-          >
-            <v-icon class="mr-2">shield</v-icon>
-            <span v-if="!user.isVerified"> Verify account </span>
-            <span v-if="user.isVerified"> Un-verify account </span>
-          </v-btn>
-          <v-btn
-            :color="user.isRootUser ? 'error darken-4' : 'success'"
-            :disabled="isCurrentAccount(user) || !profile?.isRootUser"
-            class="mt-2"
-            @click="setRootUser(user, !user.isRootUser)"
-          >
-            <v-icon class="mr-2">key</v-icon>
-            <span v-if="user.isRootUser"> Remove owner </span>
-            <span v-if="!user.isRootUser"> Set owner </span>
-          </v-btn>
+                    {{ role }}
+                  </v-chip>
+                </div>
+              </td>
+              <td class="text-caption">
+                {{ formatIntlDate(user.createdAt) }}
+              </td>
+              <td>
+                <div class="d-flex justify-end ga-1">
+                  <v-tooltip text="Toggle verification">
+                    <template v-slot:activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        :disabled="isCurrentAccount(user) || user.isRootUser"
+                        :color="user.isVerified ? 'warning' : 'success'"
+                        size="small"
+                        icon
+                        variant="text"
+                        @click="verifyUser(user, !user.isVerified)"
+                      >
+                        <v-icon>{{ user.isVerified ? 'shield_off' : 'shield' }}</v-icon>
+                      </v-btn>
+                    </template>
+                  </v-tooltip>
 
-          <v-select
-            v-if="profile?.isRootUser"
-            :items="roles.map((r) => ({ text: r.name, value: r.id }))"
-            v-model="user.roles"
-            multiple
-            label="Select roles"
-            @change="updateUserRoles(user)"
-            class="pt-6"
-            style="width: 15rem"
-          />
+                  <v-tooltip text="Toggle owner status">
+                    <template v-slot:activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        :disabled="isCurrentAccount(user) || !profile?.isRootUser"
+                        :color="user.isRootUser ? 'warning' : 'primary'"
+                        size="small"
+                        icon
+                        variant="text"
+                        @click="setRootUser(user, !user.isRootUser)"
+                      >
+                        <v-icon>{{ user.isRootUser ? 'key_off' : 'key' }}</v-icon>
+                      </v-btn>
+                    </template>
+                  </v-tooltip>
 
-          <v-btn
-            :disabled="isCurrentAccount(user) || user.isRootUser"
-            class="mt-2"
-            color="error-darken-2"
-            @click="deleteUser(user)"
-          >
-            <v-icon class="mr-2">delete</v-icon>
-            Delete
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-list>
+                  <v-tooltip text="Delete user">
+                    <template v-slot:activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        :disabled="isCurrentAccount(user) || user.isRootUser"
+                        color="error"
+                        size="small"
+                        icon
+                        variant="text"
+                        @click="deleteUser(user)"
+                      >
+                        <v-icon>delete</v-icon>
+                      </v-btn>
+                    </template>
+                  </v-tooltip>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+      </SettingSection>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -154,7 +176,11 @@ import { useQuery } from '@tanstack/vue-query'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
+import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
+import { settingsPage } from '@/components/Settings/Shared/setting.constants'
 
+const page = settingsPage['users']
 const snackbar = useSnackbar()
 const loading = ref<boolean>(false)
 const profile = ref<User>()

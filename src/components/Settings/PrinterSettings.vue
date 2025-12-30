@@ -1,115 +1,124 @@
 <template>
   <v-card>
-    <v-toolbar color="primary">
-      <v-avatar>
-        <v-icon>settings</v-icon>
-      </v-avatar>
-      <v-toolbar-title> Printer Settings </v-toolbar-title>
-    </v-toolbar>
-    <v-list lines="three">
-      <v-list-item>
-        <v-list-item-title> Pre-upload file cleanup </v-list-item-title>
-        <v-list-item-subtitle>
-          Automatically cleanup old files to ensure the SD card has enough
-          space.
-          <br />
-          <v-checkbox
-            v-model="fileHandlingSettings.autoRemoveOldFilesBeforeUpload"
-            label="Remove old file before upload"
-          />
-          <v-text-field
-            v-model="fileHandlingSettings.autoRemoveOldFilesCriteriumDays"
-            :disabled="!fileHandlingSettings.autoRemoveOldFilesBeforeUpload"
-            label="Amount of days to keep files"
-            min="0"
-            variant="outlined"
-            type="number"
-          />
-          <v-checkbox
-            v-model="fileHandlingSettings.autoRemoveOldFilesAtBoot"
-            label="Remove old files when (re)booting the server"
-          />
-          <v-btn
-            color="primary"
-            @click="setFileCleanSettings()"
-          >
-            save file clean settings
-          </v-btn>
-        </v-list-item-subtitle>
-      </v-list-item>
+    <SettingsToolbar :icon="page.icon" :title="page.title" />
+    <v-card-text>
+      <SettingSection
+        title="Pre-upload File Cleanup"
+        tooltip="Automatically cleanup old files to ensure the SD card has enough space."
+      >
+        <v-checkbox
+          v-model="fileHandlingSettings.autoRemoveOldFilesBeforeUpload"
+          label="Remove old file before upload"
+          @change="setFileCleanSettings"
+        />
+        <v-text-field
+          v-model="fileHandlingSettings.autoRemoveOldFilesCriteriumDays"
+          :disabled="!fileHandlingSettings.autoRemoveOldFilesBeforeUpload"
+          label="Amount of days to keep files"
+          min="0"
+          type="number"
+          @change="setFileCleanSettings"
+        />
+        <v-checkbox
+          v-model="fileHandlingSettings.autoRemoveOldFilesAtBoot"
+          label="Remove old files when (re)booting the server"
+          @change="setFileCleanSettings"
+        />
+        <v-progress-circular
+          v-if="loading.fileCleanSettings"
+          class="ml-2"
+          indeterminate
+          size="30"
+          width="4"
+        />
+      </SettingSection>
 
-      <v-list-item>
-        <v-list-item-title> Connection Timeout </v-list-item-title>
-        <v-list-item-subtitle v-if="settingsStore.settings?.timeout">
-          Set the server default REST API timeout in milliseconds.
-          <v-text-field
-            v-model="settingsStore.settings.timeout.apiTimeout"
-            label="Connection Timeout"
-            min="0"
-            variant="outlined"
-            type="number"
-          />
-          <v-btn
-            color="primary"
-            @click="updateTimeoutSettings()"
-          >
-            save connection timeout
-          </v-btn>
-        </v-list-item-subtitle>
-      </v-list-item>
+      <v-divider />
 
-      <v-list-item>
-        <v-list-item-title> Upload Timeout </v-list-item-title>
-        <v-list-item-subtitle v-if="settingsStore.settings?.timeout">
-          Set the server REST API file upload timeout in milliseconds.
-          <v-text-field
-            v-model="settingsStore.settings.timeout.apiUploadTimeout"
-            label="Upload Timeout"
-            min="0"
-            variant="outlined"
-            type="number"
-          />
-          <v-btn
-            color="primary"
-            @click="updateTimeoutSettings()"
-          >
-            save upload timeout
-          </v-btn>
-        </v-list-item-subtitle>
-      </v-list-item>
+      <SettingSection
+        v-if="settingsStore.settings?.timeout"
+        title="API Timeout"
+        tooltip="Set the server default REST API timeout in milliseconds."
+      >
+        <v-text-field
+          v-model="settingsStore.settings.timeout.apiTimeout"
+          label="Connection Timeout"
+          min="0"
+          type="number"
+          @change="updateTimeoutSettings"
+        />
+        <v-progress-circular
+          v-if="loading.timeoutSettings"
+          class="ml-2"
+          indeterminate
+          size="30"
+          width="4"
+        />
+      </SettingSection>
 
-      <v-list-item>
-        <v-list-item-title> Clean file references </v-list-item-title>
-        <v-list-item-subtitle>
-          Clear out the file references for all printers - this does not remove
-          them from OctoPrint!
-          <br />
-          <v-btn
-            color="primary"
-            @click="purgeFiles()"
-          >
-            Purge file references
-          </v-btn>
-        </v-list-item-subtitle>
-      </v-list-item>
+      <SettingSection
+        v-if="settingsStore.settings?.timeout"
+        title="Upload Timeout"
+        tooltip="Set the server REST API file upload timeout in milliseconds."
+      >
+        <v-text-field
+          v-model="settingsStore.settings.timeout.apiUploadTimeout"
+          label="Upload Timeout"
+          min="0"
+          type="number"
+          @change="updateTimeoutSettings"
+        />
+        <v-progress-circular
+          v-if="loading.timeoutSettings"
+          class="ml-2"
+          indeterminate
+          size="30"
+          width="4"
+        />
+      </SettingSection>
 
-      <v-list-item>
-        <v-list-item-title>
-          Disable inefficient GCode analysis
-        </v-list-item-title>
-        <v-list-item-subtitle>
-          Disable GCode analysis on all printers at once, preventing CPU
-          intensive and inaccurate time/size estimates.
-          <br />
-          <v-btn
-            color="primary"
-            @click="bulkDisableGCodeAnalysis()"
-          >
-            Bulk disable GCode Analysis
-          </v-btn>
-        </v-list-item-subtitle>
-      </v-list-item>
-    </v-list>
+      <v-divider />
+
+      <SettingSection
+        title="Clean File References"
+        tooltip="Clear out file references without removing them from OctoPrint."
+      >
+        <v-btn
+          color="primary"
+          @click="purgeFiles()"
+        >
+          Purge File References
+        </v-btn>
+        <v-progress-circular
+          v-if="loading.purgeFiles"
+          class="ml-2"
+          indeterminate
+          size="30"
+          width="4"
+        />
+      </SettingSection>
+
+      <v-divider />
+
+      <SettingSection
+        title="Disable Inefficient GCode Analysis"
+        tooltip="Prevent CPU-intensive GCode analysis on all printers at once."
+      >
+        <v-btn
+          color="primary"
+          @click="bulkDisableGCodeAnalysis()"
+        >
+          Bulk Disable GCode Analysis
+        </v-btn>
+        <v-progress-circular
+          v-if="loading.bulkDisableGCodeAnalysis"
+          class="ml-2"
+          indeterminate
+          size="30"
+          width="4"
+        />
+      </SettingSection>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -120,6 +129,11 @@ import { PrinterSettingsService } from "@/backend/printer-settings.service";
 import { usePrinterStateStore } from "@/store/printer-state.store";
 import { useSnackbar } from "@/shared/snackbar.composable";
 import { useSettingsStore } from "@/store/settings.store";
+import SettingsToolbar from "@/components/Settings/Shared/SettingsToolbar.vue";
+import SettingSection from "@/components/Settings/Shared/SettingSection.vue";
+import { settingsPage } from "@/components/Settings/Shared/setting.constants";
+
+const page = settingsPage["printer"];
 
 const settingsStore = useSettingsStore();
 const printerStateStore = usePrinterStateStore();

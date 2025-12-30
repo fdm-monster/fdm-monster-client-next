@@ -1,77 +1,53 @@
 <template>
   <v-card>
-    <v-toolbar color="primary">
-      <v-avatar>
-        <v-icon>bug_report</v-icon>
-      </v-avatar>
-      <v-toolbar-title> Diagnostics</v-toolbar-title>
-    </v-toolbar>
-    <v-list
-      lines="three"
-      subheader
-    >
-      <v-list-subheader>
-        Diagnostics to provide bug reports to the developers of this software
-      </v-list-subheader>
+    <SettingsToolbar :icon="page.icon" :title="page.title" />
+    <v-card-text>
+      <SettingSection title="Remote Sentry diagnostic reports">
+        <v-checkbox
+          v-model="sentryDiagnosticsEnabled"
+          label="Enable remote Sentry diagnostic reports"
+          @change="saveSentryDiagnosticsSettings"
+        />
+        <v-btn
+          color="secondary"
+          @click="sendTestSentryException()"
+        >
+          <v-icon class="pr-2">bug_report</v-icon>
+          Test Error
+        </v-btn>
+      </SettingSection>
 
-      <v-list-item>
-        <v-list-item-title>
-          Remote Sentry diagnostic reports:
-        </v-list-item-title>
-        <v-list-item-subtitle>
-          <v-checkbox
-            v-model="sentryDiagnosticsEnabled"
-            label="Enable remote Sentry diagnostic reports"
-          />
-        </v-list-item-subtitle>
-        <v-list-item-subtitle>
-          <v-btn
-            color="primary"
-            @click="saveSentryDiagnosticsSettings()"
-          >
-            <v-icon class="pr-2">save</v-icon>
-            Save
-          </v-btn>
-          <v-btn
-            color="secondary"
-            @click="sendTestSentryException()"
-          >
-            <v-icon class="pr-2">bug_report</v-icon>
-            Test Error
-          </v-btn>
-        </v-list-item-subtitle>
-      </v-list-item>
       <v-divider />
-      <v-list-item>
-        <v-list-item-title> Logs Dump</v-list-item-title>
-        <v-list-item-subtitle>
-          Download a .zip file containing all logs from the server
-        </v-list-item-subtitle>
-        <v-list-item-subtitle>
-          <br />
-          <v-btn
-            color="primary"
-            @click="downloadLogDump()"
-          >
-            <v-icon>download</v-icon>
-            Download Log Files (.zip)
-          </v-btn>
-        </v-list-item-subtitle>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-title> Clear log files</v-list-item-title>
-        <v-list-item-subtitle>
-          <br />
-          <v-btn
-            color="default"
-            @click="clearOldLogFiles()"
-          >
-            <v-icon>download</v-icon>
-            Clear log files older than a week
-          </v-btn>
-        </v-list-item-subtitle>
-      </v-list-item>
-    </v-list>
+
+      <SettingSection
+        :usecols="false"
+        title="Download a .zip file containing all logs from the server"
+      >
+        <v-row>
+          <v-col cols="3">
+            <v-btn
+              color="primary"
+              @click="downloadLogDump()"
+            >
+              <v-icon>download</v-icon>
+              Download Log Files (.zip)
+            </v-btn>
+          </v-col>
+        </v-row>
+      </SettingSection>
+
+      <v-divider />
+
+      <SettingSection title="Clear log files">
+        <v-btn
+          color="default"
+          @click="clearOldLogFiles()"
+        >
+          <v-icon>download</v-icon>
+          Clear log files older than a week
+        </v-btn>
+      </SettingSection>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -83,7 +59,11 @@ import { setSentryEnabled } from '@/utils/sentry.util'
 import { ServerPrivateService } from '@/backend/server-private.service'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { captureException } from '@sentry/vue'
+import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
+import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
+import { settingsPage } from '@/components/Settings/Shared/setting.constants'
 
+const page = settingsPage['diagnostics']
 const snackBar = useSnackbar()
 const settingsStore = useSettingsStore()
 const sentryDiagnosticsEnabled = ref(false)

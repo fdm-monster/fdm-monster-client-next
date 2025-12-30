@@ -11,6 +11,7 @@ Features
 - Design new job page
 - Design new dashboard page
 - Redesign camera page
+- Redesign all settings pages
 
 Fixes
 

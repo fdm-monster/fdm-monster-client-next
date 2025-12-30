@@ -1,169 +1,227 @@
 <template>
-  <v-row>
-    <v-col cols="12">
-      <v-card>
-        <v-card-title>
-          <h2>Settings</h2>
-        </v-card-title>
-        <v-card-text>
-          <v-row>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-card>
-                <v-card-title>
-                  <h3>
-                    Experimental Features
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ props }">
-                        <v-icon
-                          class="help-icon"
-                          v-bind="props"
-                          >help_outline</v-icon
-                        >
-                      </template>
-                      <span class="tooltip-content">
-                        Moonraker support is currently in beta, use at your own
-                        risk.
-                      </span>
-                    </v-tooltip>
-                  </h3>
-                </v-card-title>
-                <v-card-text>
-                  <v-checkbox
-                    v-model="experimentalMoonrakerSupport"
-                    label="Enable Experimental Moonraker Support"
-                    hide-details
-                  >
-                    <template v-slot:label>
-                      <span>Enable Experimental Moonraker Support</span>
-                    </template>
-                  </v-checkbox>
-                  <v-checkbox
-                    v-model="experimentalPrusaLinkSupport"
-                    label="Enable Experimental PrusaLink Support"
-                    hide-details
-                  >
-                    <template v-slot:label>
-                      <span>Enable Experimental PrusaLink Support</span>
-                    </template>
-                  </v-checkbox>
-                  <v-checkbox
-                    v-model="experimentalBambuSupport"
-                    label="Enable Experimental Bambu Support"
-                    hide-details
-                  >
-                    <template v-slot:label>
-                      <span>Enable Experimental Bambu Support</span>
-                    </template>
-                  </v-checkbox>
-                </v-card-text>
-              </v-card>
-            </v-col>
+  <v-card>
+    <SettingsToolbar :icon="page.icon" :title="page.title" />
+    <v-card-text>
+      <SettingSection
+        title="Experimental Server Features"
+        tooltip="Moonraker support is currently in beta, use at your own risk."
+        :usecols="false"
+      >
+        <div class="d-flex align-center mb-2">
+          <v-checkbox
+            v-model="experimentalMoonrakerSupport"
+            :disabled="isMoonrakerSupportLoading"
+            @change="updateMoonrakerSupport"
+            hide-details
+            label="Enable Experimental Moonraker Support"
+          />
+          <v-progress-circular
+            v-if="isMoonrakerSupportLoading"
+            indeterminate
+            size="30"
+            width="4"
+            class="ml-2"
+          />
+          <v-icon v-if="showMoonrakerSuccess" color="success" class="ml-2">
+            check_circle
+          </v-icon>
+        </div>
 
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-card>
-                <v-card-title>
-                  <h3>
-                    Experimental Features
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ props }">
-                        <v-icon
-                          class="help-icon"
-                          v-bind="props"
-                          >help_outline</v-icon
-                        >
-                      </template>
-                      <span class="tooltip-content">
-                        Enables the next version of the FDM Monster UI
-                        (experimental).
-                      </span>
-                    </v-tooltip>
-                  </h3>
-                </v-card-title>
-                <v-card-text>
-                  <v-checkbox
-                    v-model="experimentalClientSupport"
-                    label="Enable Next Client Version (Experimental)"
-                    hide-details
-                    @change="onExperimentalClientSupportChange"
-                  >
-                    <template v-slot:label>
-                      <span>Enable Next Client Version (Experimental)</span>
-                    </template>
-                  </v-checkbox>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            @click="saveSettings"
-            >Save Settings</v-btn
-          >
-          <v-btn @click="resetSettings">Reset to Default</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+        <v-alert v-if="experimentalMoonrakerSupport" color="warning" variant="tonal" class="mb-2">
+          Disabling Moonraker support will disable all printers of type Moonraker. You need to
+          re-enable them after re-enabling this feature.
+        </v-alert>
+
+        <div class="d-flex align-center mb-2">
+          <v-checkbox
+            v-model="experimentalPrusaLinkSupport"
+            :disabled="isPrusaLinkSupportLoading"
+            @change="updatePrusaLinkSupport"
+            hide-details
+            label="Enable Experimental PrusaLink Support"
+          />
+          <v-progress-circular
+            v-if="isPrusaLinkSupportLoading"
+            indeterminate
+            size="30"
+            width="4"
+            class="ml-2"
+          />
+          <v-icon v-if="showPrusaLinkSuccess" color="success" class="ml-2">
+            check_circle
+          </v-icon>
+        </div>
+
+        <div class="d-flex align-center">
+          <v-checkbox
+            v-model="experimentalBambuSupport"
+            :disabled="isBambuSupportLoading"
+            @change="updateBambuSupport"
+            hide-details
+            label="Enable Experimental Bambu Support"
+          />
+          <v-progress-circular
+            v-if="isBambuSupportLoading"
+            indeterminate
+            size="30"
+            width="4"
+            class="ml-2"
+          />
+          <v-icon v-if="showBambuSuccess" color="success" class="ml-2">
+            check_circle
+          </v-icon>
+        </div>
+      </SettingSection>
+
+      <v-divider />
+
+      <SettingSection
+        title="Experimental Thumbnail Support"
+        tooltip="Thumbnails are extracted from gcode. Please enable PNG thumbnails in your slicer."
+        :usecols="false"
+      >
+        <div class="d-flex align-center">
+          <v-checkbox
+            v-model="experimentalThumbnailSupport"
+            :disabled="isThumbnailSupportLoading"
+            @change="updateThumbnailSupport"
+            hide-details
+            label="Enable Experimental Thumbnail Support"
+          />
+          <v-progress-circular
+            v-if="isThumbnailSupportLoading"
+            indeterminate
+            size="30"
+            width="4"
+            class="ml-2"
+          />
+          <v-icon v-if="showThumbnailSuccess" color="success" class="ml-2">
+            check_circle
+          </v-icon>
+        </div>
+      </SettingSection>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { SettingsService } from '@/backend'
+import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
+import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
+import { settingsPage } from '@/components/Settings/Shared/setting.constants'
 
+const page = settingsPage['experimental']
 const experimentalMoonrakerSupport = ref(false)
 const experimentalPrusaLinkSupport = ref(false)
 const experimentalBambuSupport = ref(false)
-const experimentalClientSupport = ref(false)
+const experimentalThumbnailSupport = ref(false)
+const isMoonrakerSupportLoading = ref(false)
+const isPrusaLinkSupportLoading = ref(false)
+const isBambuSupportLoading = ref(false)
+const isThumbnailSupportLoading = ref(false)
+const showMoonrakerSuccess = ref(false)
+const showPrusaLinkSuccess = ref(false)
+const showBambuSuccess = ref(false)
+const showThumbnailSuccess = ref(false)
 
 async function loadSettings() {
   const settings = await SettingsService.getSettings()
   experimentalMoonrakerSupport.value = settings.server.experimentalMoonrakerSupport
   experimentalPrusaLinkSupport.value = settings.server.experimentalPrusaLinkSupport
   experimentalBambuSupport.value = settings.server.experimentalBambuSupport
-  experimentalClientSupport.value = settings.server.experimentalClientSupport
+  experimentalThumbnailSupport.value = settings.server.experimentalThumbnailSupport
 }
 
 onMounted(async () => {
   await loadSettings()
 })
 
-const saveSettings = async () => {
-  await SettingsService.updateExperimentalMoonrakerSupport(
-    experimentalMoonrakerSupport.value
-  )
-  await SettingsService.updateExperimentalPrusaLinkSupport(
-    experimentalPrusaLinkSupport.value
-  )
-  await SettingsService.updateExperimentalBambuSupport(
-    experimentalBambuSupport.value
-  )
-  await SettingsService.updateExperimentalClientSupport(
-    experimentalClientSupport.value
-  )
-  await loadSettings()
+const updateMoonrakerSupport = async () => {
+  isMoonrakerSupportLoading.value = true
+  showMoonrakerSuccess.value = false
+
+  try {
+    await SettingsService.updateExperimentalMoonrakerSupport(experimentalMoonrakerSupport.value)
+    await loadSettings()
+    setTimeout(() => {
+      isMoonrakerSupportLoading.value = false
+      showMoonrakerSuccess.value = true
+    }, 250)
+
+    setTimeout(() => {
+      showMoonrakerSuccess.value = false
+    }, 3000)
+  } catch (error) {
+    console.error('Failed to update Moonraker support:', error)
+    experimentalMoonrakerSupport.value = !experimentalMoonrakerSupport.value
+    isMoonrakerSupportLoading.value = false
+  }
 }
 
-const resetSettings = async () => {
-  await SettingsService.updateExperimentalMoonrakerSupport(false)
-  await SettingsService.updateExperimentalPrusaLinkSupport(false)
-  await SettingsService.updateExperimentalBambuSupport(false)
-  await SettingsService.updateExperimentalClientSupport(false)
-  await loadSettings()
+const updatePrusaLinkSupport = async () => {
+  isPrusaLinkSupportLoading.value = true
+  showPrusaLinkSuccess.value = false
+
+  try {
+    await SettingsService.updateExperimentalPrusaLinkSupport(experimentalPrusaLinkSupport.value)
+    await loadSettings()
+    setTimeout(() => {
+      isPrusaLinkSupportLoading.value = false
+      showPrusaLinkSuccess.value = true
+    }, 250)
+
+    setTimeout(() => {
+      showPrusaLinkSuccess.value = false
+    }, 3000)
+  } catch (error) {
+    console.error('Failed to update PrusaLink support:', error)
+    experimentalPrusaLinkSupport.value = !experimentalPrusaLinkSupport.value
+    isPrusaLinkSupportLoading.value = false
+  }
 }
 
-const onExperimentalClientSupportChange = async () => {
-  await SettingsService.updateExperimentalClientSupport(
-    experimentalClientSupport.value
-  )
-  globalThis.location.reload()
+const updateBambuSupport = async () => {
+  isBambuSupportLoading.value = true
+  showBambuSuccess.value = false
+
+  try {
+    await SettingsService.updateExperimentalBambuSupport(experimentalBambuSupport.value)
+    await loadSettings()
+    setTimeout(() => {
+      isBambuSupportLoading.value = false
+      showBambuSuccess.value = true
+    }, 250)
+
+    setTimeout(() => {
+      showBambuSuccess.value = false
+    }, 3000)
+  } catch (error) {
+    console.error('Failed to update Bambu support:', error)
+    experimentalBambuSupport.value = !experimentalBambuSupport.value
+    isBambuSupportLoading.value = false
+  }
+}
+
+const updateThumbnailSupport = async () => {
+  isThumbnailSupportLoading.value = true
+  showThumbnailSuccess.value = false
+
+  try {
+    await SettingsService.updateExperimentalThumbnailSupport(experimentalThumbnailSupport.value)
+    await loadSettings()
+    setTimeout(() => {
+      isThumbnailSupportLoading.value = false
+      showThumbnailSuccess.value = true
+    }, 250)
+
+    setTimeout(() => {
+      showThumbnailSuccess.value = false
+    }, 3000)
+  } catch (error) {
+    console.error('Failed to update Thumbnail support:', error)
+    experimentalThumbnailSupport.value = !experimentalThumbnailSupport.value
+    isThumbnailSupportLoading.value = false
+  }
 }
 </script>

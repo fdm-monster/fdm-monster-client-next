@@ -1,115 +1,18 @@
 <template>
   <v-card>
-    <v-toolbar color="primary">
-      <v-avatar>
-        <v-icon>settings</v-icon>
-      </v-avatar>
-      <v-toolbar-title> Emergency Commands</v-toolbar-title>
-    </v-toolbar>
-    <v-list
-      lines="three"
-      subheader
-    >
-      <v-list-subheader>
-        Emergency Commands to rectify problematic situations
-      </v-list-subheader>
-
-      <v-list-item>
-        <v-list-item-title> Batch disabling</v-list-item-title>
-        <v-list-item-subtitle>
-          Disable all printers in batch (will not affect print)
-          <br />
-          <v-btn
-            :disabled="isLoading || noPrintersOrAllDisabled"
-            class="ml-4"
-            color="primary"
-            @click="batchToggleEnabled(false)"
-          >
-            Batch disable
-          </v-btn>
-          <v-progress-circular
-            v-if="isLoading"
-            class="ml-2"
-            indeterminate
-            size="30"
-            width="4"
-          />
-          <v-icon
-            v-if="noPrintersOrAllDisabled"
-            class="ml-2"
-            color="warning"
-          >
-            warning
-          </v-icon>
-        </v-list-item-subtitle>
-      </v-list-item>
-
-      <v-list-item>
-        <v-list-item-title> Batch enabling</v-list-item-title>
-        <v-list-item-subtitle>
-          Enabling all printers in batch (will not affect print and it will skip
-          printers in maintenance mode)
-          <br />
-          <v-btn
-            :disabled="isLoading || noPrintersOrAllEnabled"
-            class="ml-4"
-            color="primary"
-            @click="batchToggleEnabled(true)"
-          >
-            Batch enable
-          </v-btn>
-          <v-progress-circular
-            v-if="isLoading"
-            class="ml-2"
-            indeterminate
-            size="30"
-            width="4"
-          />
-          <v-icon
-            v-if="noPrintersOrAllEnabled"
-            v-tooltip.bottom="'No printers available'"
-            class="ml-2"
-            color="warning"
-            >warning
-          </v-icon>
-        </v-list-item-subtitle>
-      </v-list-item>
-
-      <v-list-item>
-        <v-list-item-title> Batch USB connect</v-list-item-title>
-        <v-list-item-subtitle>
-          Connect all USB devices
-          <br />
-          <v-btn
-            :disabled="isLoading || noPrintersOrAllDisabled"
-            class="ml-4"
-            color="primary"
-            @click="connectUSBs"
-          >
-            <v-icon class="mr-2">usb</v-icon>
-            Connect USBs
-          </v-btn>
-          <v-progress-circular
-            v-if="isLoading"
-            class="ml-2"
-            indeterminate
-            size="30"
-            width="4"
-          />
-        </v-list-item-subtitle>
-        <v-list-item-subtitle class="mt-2">
-          Connect all Sockets
-          <br />
-          <v-btn
-            :disabled="isLoading || noPrintersOrAllDisabled"
-            class="ml-4"
-            color="primary"
-            @click="connectSockets"
-          >
-            <v-icon class="mr-2">hub</v-icon>
-            Connect Sockets
-          </v-btn>
-        </v-list-item-subtitle>
+    <SettingsToolbar :icon="page.icon" :title="page.title" />
+    <v-card-text>
+      <SettingSection
+        title="Batch disabling"
+        tooltip="Disable all printers in batch (will not affect print)"
+      >
+        <v-btn
+          :disabled="isLoading || noPrintersOrAllDisabled"
+          color="primary"
+          @click="batchToggleEnabled(false)"
+        >
+          Batch disable
+        </v-btn>
         <v-progress-circular
           v-if="isLoading"
           class="ml-2"
@@ -117,12 +20,94 @@
           size="30"
           width="4"
         />
-      </v-list-item>
-    </v-list>
+        <v-icon
+          v-if="noPrintersOrAllDisabled"
+          class="ml-2"
+          color="warning"
+        >
+          warning
+        </v-icon>
+      </SettingSection>
 
-    <div class="ma-3">
-      <v-alert> Test all OctoPrint response times</v-alert>
-      <div class="ml-6">
+      <v-divider />
+
+      <SettingSection
+        title="Batch enabling"
+        tooltip="Enabling all printers in batch (will not affect print and it will skip printers in maintenance mode)"
+      >
+        <v-btn
+          :disabled="isLoading || noPrintersOrAllEnabled"
+          color="primary"
+          @click="batchToggleEnabled(true)"
+        >
+          Batch enable
+        </v-btn>
+        <v-progress-circular
+          v-if="isLoading"
+          class="ml-2"
+          indeterminate
+          size="30"
+          width="4"
+        />
+        <v-icon
+          v-if="noPrintersOrAllEnabled"
+          class="ml-2"
+          color="warning"
+        >
+          warning
+        </v-icon>
+      </SettingSection>
+
+      <v-divider />
+
+      <SettingSection
+        title="Batch USB connect"
+        tooltip="Connect all USB devices"
+      >
+        <v-btn
+          :disabled="isLoading || noPrintersOrAllDisabled"
+          color="primary"
+          @click="connectUSBs"
+        >
+          <v-icon class="mr-2">usb</v-icon>
+          Connect USBs
+        </v-btn>
+        <v-progress-circular
+          v-if="isLoading"
+          class="ml-2"
+          indeterminate
+          size="30"
+          width="4"
+        />
+      </SettingSection>
+
+      <SettingSection
+        title="Batch Socket connect"
+        tooltip="Connect all Sockets"
+      >
+        <v-btn
+          :disabled="isLoading || noPrintersOrAllDisabled"
+          color="primary"
+          @click="connectSockets"
+        >
+          <v-icon class="mr-2">hub</v-icon>
+          Connect Sockets
+        </v-btn>
+        <v-progress-circular
+          v-if="isLoading"
+          class="ml-2"
+          indeterminate
+          size="30"
+          width="4"
+        />
+      </SettingSection>
+
+      <v-divider />
+
+      <SettingSection
+        title="Test all OctoPrint response times"
+        :usecols="false"
+      >
         <v-btn
           :loading="isLoading"
           color="primary"
@@ -130,29 +115,21 @@
         >
           Measure network response times
         </v-btn>
-      </div>
-      <div class="ml-7 mt-3">
-        <span v-if="namesFetched"> Response times: </span>
-        <Bar
-          v-if="namesFetched"
-          :data="chartConfig"
-          :options="chartOptions"
-          height="100"
-          style="background-color: #272727"
-        />
-        <span v-else
-          >A graph will be shown, presenting the times in milliseconds
-          (ms)</span
-        >
-        <v-progress-circular
-          v-if="isLoading"
-          class="ml-2"
-          indeterminate
-          size="30"
-          width="4"
-        />
-      </div>
-    </div>
+        <div class="mt-3">
+          <span v-if="namesFetched">Response times:</span>
+          <Bar
+            v-if="namesFetched"
+            :data="chartConfig"
+            :options="chartOptions"
+            height="100"
+            style="background-color: #272727"
+          />
+          <span v-else>
+            A graph will be shown, presenting the times in milliseconds (ms)
+          </span>
+        </div>
+      </SettingSection>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -173,8 +150,13 @@ import {
 } from 'chart.js'
 import { Bar } from 'vue-chartjs'
 import { OctoPrintSettingsDto } from '@/backend/dto/octoprint-settings.dto'
+import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
+import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
+import { settingsPage } from '@/components/Settings/Shared/setting.constants'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+
+const page = settingsPage['emergencyCommands']
 
 export type BatchOctoPrintSettingsDto = {
   success: boolean
