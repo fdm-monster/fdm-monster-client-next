@@ -17,6 +17,8 @@ Fixes
 - Page content height now calculated with 100% to avoid pixel discrepancies on Edge for Desktop
 - Border of tile color was wrong
 - Printer drop default border was wrong
+- Disable printer tile ripple when printer not online
+- Close side explorer or dialogs when server has suddenly disconnected
 
 Chores
 

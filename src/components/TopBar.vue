@@ -136,13 +136,3 @@ async function logout() {
   await routeToLogin(router)
 }
 </script>
-
-<style lang="scss">
-.border-time {
-  border: 1px solid white;
-
-  * {
-    border: none;
-  }
-}
-</style>

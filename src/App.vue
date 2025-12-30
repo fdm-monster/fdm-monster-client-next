@@ -77,6 +77,6 @@ onMounted(() => {
 
 /* Fix the main app height calculation as 100dvh or 100vh seem to wrong (on Edge for Desktop) */
 .v-application__wrap {
-  min-height: 100% !important;
+  min-height: calc(100vh - 1px) !important;
 }
 </style>

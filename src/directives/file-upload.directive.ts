@@ -7,6 +7,7 @@ import { usePrinterStore } from '@/store/printer.store'
 import { useUploadsStore } from '@/store/uploads.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { AppContext, Directive } from 'vue'
+import { QueuedUpload } from "@/models/uploads/queued-upload.model";
 
 const bindDropConditionally = (
   el: HTMLElement,
@@ -29,7 +30,7 @@ const bindDropConditionally = (
       if (!filesArray?.length) return
 
       const clonedFiles = Array.from(filesArray)
-      let convertedUploads = []
+      let convertedUploads: QueuedUpload[] = []
       if (isSinglePrinter) {
         const printedFilename =
           clonedFiles.length === 1 ? clonedFiles[0].name : null
