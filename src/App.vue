@@ -7,6 +7,7 @@
     <NavigationBar
       v-if="
         !appLoaderStore.loading &&
+        authStore.wizardState?.wizardCompleted &&
         ((authStore.hasAuthToken && !authStore.isLoginExpired) ||
         !authStore.loginRequired)
       "
@@ -14,6 +15,7 @@
     <TopBar
       v-if="
         !appLoaderStore.loading &&
+        authStore.wizardState?.wizardCompleted &&
         ((authStore.hasAuthToken && !authStore.isLoginExpired) ||
         !authStore.loginRequired)
       "
