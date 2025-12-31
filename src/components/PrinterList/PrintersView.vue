@@ -418,8 +418,7 @@ const camerasOfPrinter = (printerId: number) => {
 }
 
 const openEditDialog = (printer: PrinterDto) => {
-  printerStore.setUpdateDialogPrinter(printer)
-  addOrUpdatePrinterDialog.openDialog(printer)
+  addOrUpdatePrinterDialog.openDialog({ id: printer.id })
 }
 
 const openCreatePrinterDialog = () => {

@@ -3,6 +3,7 @@
     :id="dialog.dialogId"
     :max-width="'700px'"
     @escape="closeDialog"
+    @opened="onDialogOpened"
   >
     <v-card>
       <v-card-title>
@@ -63,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref, computed, watch, onMounted } from 'vue'
+import { inject, ref, computed } from 'vue'
 import {
   generateInitials,
   newRandomNamePair
@@ -122,14 +123,7 @@ const closeDialog = () => {
   dialog.closeDialog()
 }
 
-watch(printerFloorId, (val) => {
-  if (val) {
-    const printerFloor = floorStore.floor(val)
-    formData.value = FloorService.convertPrinterFloorToCreateForm(printerFloor)
-  }
-})
-
-onMounted(() => {
+const onDialogOpened = () => {
   if (printerFloorId.value) {
     const crudeData = floorStore.floor(printerFloorId.value)
     formData.value = FloorService.convertPrinterFloorToCreateForm(crudeData)
@@ -137,5 +131,5 @@ onMounted(() => {
     const maxIndex = Math.max(...floorStore.floors.map((pf) => pf.floor)) + 1
     formData.value.floor = maxIndex.toString()
   }
-})
+}
 </script>

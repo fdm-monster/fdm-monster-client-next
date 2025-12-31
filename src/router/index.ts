@@ -192,8 +192,10 @@ router.beforeEach(async (to, from, next) => {
   authStore.loadTokens()
   if (!authStore.hasAuthToken && !authStore.hasRefreshToken) {
     console.debug('Not logged in, redirecting to login page')
-    if (from.path == '/login') {
-      throw new Error('Already on login page, cannot redirect')
+    // Prevent redirect loop if already on login page
+    if (to.name === RouteNames.Login) {
+      console.debug('Already on login page, allowing navigation')
+      return next()
     }
     return next({
       path: '/login',

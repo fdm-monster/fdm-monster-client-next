@@ -191,7 +191,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref, computed, onMounted, watch } from "vue";
+import { inject, ref, computed } from "vue";
 import { generateInitials, newRandomNamePair } from "@/shared/noun-adjectives.data";
 import { usePrinterStore } from "@/store/printer.store";
 import { PrintersService } from "@/backend";
@@ -282,38 +282,24 @@ const serviceTypes = computed(() => {
 });
 
 const printerId = computed(() => {
-  return printersStore.updateDialogPrinter?.id;
-});
-
-onMounted(async () => {
-  if (printerId.value) {
-    const crudeData = printersStore.printer(printerId.value) as CreatePrinter;
-    formData.value = PrintersService.convertPrinterToCreateForm(crudeData);
-  }
+  return dialog.context()?.id;
 });
 
 async function onDialogOpened() {
   await featureStore.loadFeatures();
 
   if (!printerId.value) {
+    formData.value = getDefaultCreatePrinter();
     return;
   }
   const printer = printersStore.printer(printerId.value) as CreatePrinter;
-  formData.value = PrintersService.convertPrinterToCreateForm(printer);
+  if (printer) {
+    formData.value = PrintersService.convertPrinterToCreateForm(printer);
+  }
 }
 
-watch(printerId, (val) => {
-  if (!val) return;
-  const printer = printersStore.printer(val) as CreatePrinter;
-  formData.value = PrintersService.convertPrinterToCreateForm(printer);
-});
-
-const storedPrinter = computed(() => {
-  return printersStore.updateDialogPrinter;
-});
-
 const isUpdating = computed(() => {
-  return !!storedPrinter.value;
+  return !!printerId.value;
 });
 
 const dialogTitle = computed(() => {
@@ -441,9 +427,15 @@ async function submit() {
 
       try {
         const dialogContext = dialog.context();
-        if (dialogContext?.floorId && dialogContext?.floorX >= 0 && dialogContext?.floorY >= 0) {
+        if (
+          dialogContext?.floorId &&
+          typeof dialogContext.floorX === 'number' &&
+          typeof dialogContext.floorY === 'number' &&
+          dialogContext.floorX >= 0 &&
+          dialogContext.floorY >= 0
+        ) {
           await useFloorStore().addPrinterToFloor({
-            floorId: dialogContext?.floorId,
+            floorId: dialogContext.floorId,
             printerId: printer.id,
             y: dialogContext.floorY,
             x: dialogContext.floorX,
@@ -473,10 +465,8 @@ async function submit() {
 
 async function duplicatePrinter() {
   formData.value.name = newRandomNamePair();
-  printersStore.updateDialogPrinter = undefined;
   printerValidationError.value = null;
   forceSavePrinter.value = false;
-  printerValidationError.value = null;
 }
 
 function closeDialog() {
@@ -486,7 +476,6 @@ function closeDialog() {
   showChecksPanel.value = false;
   testPrinterStore.clearEvents();
   resetForm();
-  printersStore.updateDialogPrinter = undefined;
   copyPasteConnectionString.value = "";
 }
 </script>

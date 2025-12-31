@@ -403,7 +403,9 @@ async function submitWizard() {
 }
 
 async function continueNext() {
-  await router.push({ name: 'Login' })
+  // Reload authentication requirements to update wizard state
+  // This will trigger the AppLoader watcher which handles navigation automatically
+  await authStore.checkAuthenticationRequirements()
 }
 
 async function validateYamlFile() {

@@ -22,11 +22,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, onUnmounted } from 'vue'
+import { captureException } from '@sentry/vue'
+import { computed, onBeforeMount, onUnmounted, watch } from 'vue'
 import { useEventBus } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { AxiosError } from 'axios'
-import { captureException } from '@sentry/vue'
 import { useTheme } from 'vuetify'
 import { useAuthStore } from './store/auth.store'
 import { useOverlayStore } from './store/overlay.store'
@@ -226,6 +226,22 @@ backendRetryEventKey.on(() => {
   retryBackendConnection()
 })
 
+// Watch for wizard completion to trigger app loading (e.g., after YAML import or manual setup)
+watch(() => authStore.wizardState?.wizardCompleted, async (completed, wasCompleted) => {
+  if (completed && !wasCompleted) {
+    const currentRoute = router.currentRoute.value.name
+
+    // Skip if already on Login or Registration pages - those handle their own navigation
+    if (currentRoute === RouteNames.Login || currentRoute === RouteNames.Registration) {
+      console.debug('[AppLoader] Wizard completed but already on auth page, skipping loadApp')
+      return
+    }
+
+    console.debug('[AppLoader] Wizard completed detected, triggering app load')
+    await loadApp()
+  }
+})
+
 onUnmounted(() => {
   stopRetryLoop()
 
@@ -236,7 +252,7 @@ onUnmounted(() => {
   socketIoClient.disconnect()
 })
 
-onBeforeMount(async () => {
+async function loadApp() {
   appLoaderStore.setLoading(true)
   const loadingMessages = [
     'Loading FDM Monster',
@@ -332,5 +348,9 @@ onBeforeMount(async () => {
   }
 
   await loadAppWithAuthenticationReady()
+}
+
+onBeforeMount(async () => {
+  await loadApp()
 })
 </script>

@@ -17,7 +17,6 @@ interface State {
   printers: PrinterDto[]
   printerFileCache: Record<number, FileDto[]>
 
-  updateDialogPrinter?: PrinterDto
   selectedPrinters: PrinterDto[]
   maintenanceDialogPrinter?: PrinterDto
 }
@@ -27,7 +26,6 @@ export const usePrinterStore = defineStore('Printers', {
     printers: [],
     printerFileCache: {},
 
-    updateDialogPrinter: undefined,
     selectedPrinters: [],
     maintenanceDialogPrinter: undefined
   }),
@@ -81,9 +79,6 @@ export const usePrinterStore = defineStore('Printers', {
     },
     clearSelectedPrinters() {
       this.selectedPrinters = []
-    },
-    setUpdateDialogPrinter(printer?: PrinterDto) {
-      this.updateDialogPrinter = printer
     },
     setMaintenanceDialogPrinter(printer?: PrinterDto) {
       this.maintenanceDialogPrinter = printer

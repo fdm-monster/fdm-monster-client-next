@@ -485,16 +485,17 @@ const onDragStart = (ev: DragEvent) => {
 }
 
 const clickOpenSettings = () => {
-  printerStore.setUpdateDialogPrinter(props.printer)
-  addOrUpdateDialog.openDialog()
+  const printer = props.printer
+  if (!printer) return
+  addOrUpdateDialog.openDialog({ id: printer.id })
 }
 
 const clickOpenPrinterControlDialog = async () => {
-  if (!printerId.value) {
+  if (!printerId.value || !props.printer) {
     throw new Error('PrinterId not set, cant open dialog')
   }
 
-  await controlDialog.openDialog({ printerId })
+  await controlDialog.openDialog({ printer: props.printer })
 }
 
 const clickQuickStop = async () => {

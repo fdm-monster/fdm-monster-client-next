@@ -14,7 +14,7 @@ import { useDebugSocketStore } from "@/store/debug-socket.store";
 import { useOverlayStore } from "@/store/overlay.store";
 
 enum IO_MESSAGES {
-  LegacyUpdate = "legacy-update",
+  Update = "update",
   TestPrinterState = "test-printer-state",
 }
 
@@ -208,7 +208,7 @@ export class SocketIoService {
     });
 
     // Register legacy update handler
-    appSocketIO.on(IO_MESSAGES.LegacyUpdate, (data) => this.onMessage(data));
+    appSocketIO.on(IO_MESSAGES.Update, (data) => this.onMessage(data));
 
     // Register test printer state handler
     appSocketIO.on(IO_MESSAGES.TestPrinterState, (data) => {

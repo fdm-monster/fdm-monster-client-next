@@ -630,8 +630,7 @@ async function clickDeleteAllFiles() {
 
 function clickSettings() {
   if (!storedSideNavPrinter.value) return
-  printersStore.setUpdateDialogPrinter(storedSideNavPrinter.value)
-  useDialog(DialogName.AddOrUpdatePrinterDialog).openDialog()
+  useDialog(DialogName.AddOrUpdatePrinterDialog).openDialog({ id: storedSideNavPrinter.value.id })
   closeDrawer()
 }
 
