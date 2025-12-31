@@ -1,6 +1,6 @@
 {
   "name": "@fdm-monster/client-next",
-  "version": "0.0.28",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fdm-monster/fdm-monster-client-next.git"
