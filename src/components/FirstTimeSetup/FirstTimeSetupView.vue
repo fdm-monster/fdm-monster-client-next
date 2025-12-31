@@ -7,7 +7,7 @@
       style="opacity: 0.08"
     />
 
-    <v-row class="fill-height justify-center">
+    <v-row class="justify-center">
       <v-col cols="12" md="10" lg="8">
         <v-stepper
           v-model="stepper"
@@ -40,15 +40,18 @@
             <v-stepper-window-item :value="1">
               <!-- Introduction Header -->
               <div class="d-flex flex-column align-center text-center" style="padding: 60px 40px 40px;">
-                <img
-                  class="rounded-pill mb-6"
-                  alt="User setting up software"
-                  src="/img/OIG.jpg"
-                  style="opacity: 0.7"
-                  width="300"
-                />
-                <h1 class="text-h3 mb-3">FDM Monster</h1>
-                <p class="text-subtitle-1 text-medium-emphasis mb-8">
+                <div class="d-flex align-center justify-center mb-4">
+                  <img
+                    class="rounded-pill"
+                    alt="User setting up software"
+                    src="/img/OIG.jpg"
+                    style="opacity: 0.7"
+                    width="80"
+                    height="80"
+                  />
+                  <h1 class="text-h3 ml-4">FDM Monster</h1>
+                </div>
+                <p class="text-subtitle-1 text-medium-emphasis">
                   Welcome! Let's set up your 3D printing farm management system. <br/>
                   Choose an option below.
                 </p>
