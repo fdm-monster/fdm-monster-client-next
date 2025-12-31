@@ -45,6 +45,7 @@ Fixes
 - Regression YAML import would not trigger validation
 - YAML import will not allow importing users, user roles, settings as that will lead to failure
 - First Time Setup page uses new backend endpoint
+- CreateUserDialog will not load user roles on mount anymore 
 
 Chores
 
