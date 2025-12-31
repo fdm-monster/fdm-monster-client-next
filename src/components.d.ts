@@ -11,7 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AboutView: typeof import('./components/AboutHelp/AboutView.vue')['default']
+    AboutSettings: typeof import('./components/Settings/AboutSettings.vue')['default']
     AccountSettings: typeof import('./components/Settings/AccountSettings.vue')['default']
     AddOrUpdateCameraStreamDialog: typeof import('./components/Generic/Dialogs/AddOrUpdateCameraStreamDialog.vue')['default']
     AddOrUpdateFloorDialog: typeof import('./components/Generic/Dialogs/AddOrUpdateFloorDialog.vue')['default']
@@ -27,6 +27,7 @@ declare module 'vue' {
     DashboardView: typeof import('./components/Dashboard/DashboardView.vue')['default']
     DebugSocketSettings: typeof import('./components/Settings/DebugSocketSettings.vue')['default']
     DiagnosticsSettings: typeof import('./components/Settings/DiagnosticsSettings.vue')['default']
+    DiscordInviteButton: typeof import('./components/Generic/Actions/DiscordInviteButton.vue')['default']
     EmergencyCommands: typeof import('./components/Settings/EmergencyCommands.vue')['default']
     ErrorStateMessage: typeof import('./components/Generic/Loaders/ErrorStateMessage.vue')['default']
     ExperimentalSettings: typeof import('./components/Settings/ExperimentalSettings.vue')['default']
@@ -34,8 +35,8 @@ declare module 'vue' {
     FileExplorerSideNav: typeof import('./components/Generic/FileExplorerSideNav.vue')['default']
     FirstTimeSetupView: typeof import('./components/FirstTimeSetup/FirstTimeSetupView.vue')['default']
     FloorSettings: typeof import('./components/Settings/FloorSettings.vue')['default']
+    GithubIssuesButton: typeof import('./components/Generic/Actions/GithubIssuesButton.vue')['default']
     GridLoader: typeof import('./components/Generic/Loaders/GridLoader.vue')['default']
-    GridSettingsList: typeof import('./components/Settings/Shared/GridSettingsList.vue')['default']
     GridSettingsMenu: typeof import('./components/PrinterGrid/GridSettingsMenu.vue')['default']
     GridSizeControl: typeof import('./components/PrinterGrid/GridSizeControl.vue')['default']
     HelpOverlay: typeof import('./components/HelpOverlay/HelpOverlay.vue')['default']

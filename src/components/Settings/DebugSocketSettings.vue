@@ -101,7 +101,7 @@ import { useDebugSocketStore, SocketMessage } from "@/store/debug-socket.store";
 import { useDialog } from "@/shared/dialog.composable";
 import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
 import SettingsToolbar from "@/components/Settings/Shared/SettingsToolbar.vue";
-import { settingsPage } from "@/components/Settings/Shared/setting.constants";
+import { settingsPage } from "@/router/setting.constants";
 
 const page = settingsPage["debugSocket"];
 const debugStore = useDebugSocketStore();

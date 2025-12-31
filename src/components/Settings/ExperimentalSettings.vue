@@ -109,7 +109,7 @@ import { onMounted, ref } from 'vue'
 import { SettingsService } from '@/backend'
 import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/components/Settings/Shared/setting.constants'
+import { settingsPage } from '@/router/setting.constants'
 
 const page = settingsPage['experimental']
 const experimentalMoonrakerSupport = ref(false)

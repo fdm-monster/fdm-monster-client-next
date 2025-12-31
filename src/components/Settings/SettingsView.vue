@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-import { settingsPage } from '@/components/Settings/Shared/setting.constants'
+import { settingsPage } from '@/router/setting.constants'
 
 const items = ref(settingsPage)
 </script>
