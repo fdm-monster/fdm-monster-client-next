@@ -8,8 +8,7 @@
     :size="size"
     :block="block"
   >
-    <v-icon v-if="!iconOnly" class="mr-2">mdi:mdi-discord</v-icon>
-    <v-icon v-else>mdi:mdi-discord</v-icon>
+    <v-icon :class="iconOnly ? '' : 'mr-2'">discord</v-icon>
     <span v-if="!iconOnly">{{ label }}</span>
   </v-btn>
 </template>

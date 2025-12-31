@@ -37,7 +37,6 @@ declare module 'vue' {
     FloorSettings: typeof import('./components/Settings/FloorSettings.vue')['default']
     GithubIssuesButton: typeof import('./components/Generic/Actions/GithubIssuesButton.vue')['default']
     GridLoader: typeof import('./components/Generic/Loaders/GridLoader.vue')['default']
-    GridSettingsList: typeof import('./components/Settings/Shared/GridSettingsList.vue')['default']
     GridSettingsMenu: typeof import('./components/PrinterGrid/GridSettingsMenu.vue')['default']
     GridSizeControl: typeof import('./components/PrinterGrid/GridSizeControl.vue')['default']
     HelpOverlay: typeof import('./components/HelpOverlay/HelpOverlay.vue')['default']
