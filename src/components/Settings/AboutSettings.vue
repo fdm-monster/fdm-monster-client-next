@@ -35,26 +35,10 @@
       </v-btn>
       <br />
 
-      <v-btn
-        href="https://discord.gg/mwA8uP8CMc"
-        target="_blank"
-        color="indigo"
-        variant="elevated"
-        class="mb-2"
-      >
-        <v-icon class="mr-2">discord</v-icon>
-        Join our Discord
-      </v-btn>
+      <DiscordInviteButton class="mb-2" />
 
       <br />
-      <v-btn
-        href="https://github.com/fdm-monster/fdm-monster/issues"
-        variant="tonal"
-        target="_blank"
-      >
-        <v-icon class="mr-2">mdi:mdi-github</v-icon>
-        Report Issue on GitHub
-      </v-btn>
+      <GithubIssuesButton />
     </v-card-text>
 
     <v-card-title>Author</v-card-title>
@@ -99,6 +83,8 @@
 import { onMounted, ref } from 'vue'
 import { AppService } from '@/backend/app.service'
 import { version as clientVersion } from '../../../package.json'
+import DiscordInviteButton from '@/components/Generic/Actions/DiscordInviteButton.vue'
+import GithubIssuesButton from '@/components/Generic/Actions/GithubIssuesButton.vue'
 
 const serverVersion = ref('')
 const monsterPiVersion = ref<string | null>('')
