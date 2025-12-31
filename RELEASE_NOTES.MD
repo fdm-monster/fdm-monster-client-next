@@ -21,6 +21,7 @@ Features
 - Design new Printer Status Menu
 - Redesign the floor settings page
 - Implement capabilities feature to allow better UI customization for different printer types
+- Redesign About page and move into settings
 
 Fixes
 
