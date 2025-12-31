@@ -37,8 +37,9 @@ const deselectFile = () => {
   }
 }
 const batchReprintFiles = async () => {
+  const printerIds = printersStore.selectedPrinters?.map((p) => p.id) ?? []
   const output = await useDialog(DialogName.BatchReprintDialog).handleAsync(
-    printersStore.selectedPrinters?.map((p) => p.id)
+    printerIds as any
   )
   console.log('[PrinterGridView] Dialog completed', output)
 }

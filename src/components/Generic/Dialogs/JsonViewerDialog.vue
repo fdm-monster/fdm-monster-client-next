@@ -21,19 +21,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
 import BaseDialog from "@/components/Generic/Dialogs/BaseDialog.vue";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
+import { computed } from "vue";
+import { DialogName } from "./dialog.constants";
 import { useDialog } from "@/shared/dialog.composable";
 import { useSnackbar } from "@/shared/snackbar.composable";
 
-interface JsonViewerContext {
-  title?: string;
-  data: unknown;
-}
-
 const dialogId = DialogName.JsonViewerDialog;
-const dialog = useDialog<JsonViewerContext>(dialogId);
+const dialog = useDialog(dialogId);
 const snackbar = useSnackbar();
 
 const title = computed(() => {

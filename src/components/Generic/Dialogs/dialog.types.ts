@@ -15,6 +15,7 @@ export interface AddOrUpdateFloorDialogContext {
 
 export interface AddOrUpdateCameraDialogContext {
   cameraId?: number
+  addOrUpdate?: 'add' | 'update'
 }
 
 export interface PrinterMaintenanceDialogContext {
