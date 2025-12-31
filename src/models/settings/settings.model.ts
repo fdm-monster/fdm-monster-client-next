@@ -42,7 +42,6 @@ export interface CredentialSettingsDto {
 export interface ServerSettingsSensitiveDto {
   experimentalMoonrakerSupport: boolean
   experimentalPrusaLinkSupport: boolean
-  experimentalClientSupport: boolean
   experimentalThumbnailSupport: boolean
 }
 

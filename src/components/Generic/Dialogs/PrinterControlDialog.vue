@@ -160,10 +160,10 @@ import { usePrinterStore } from '@/store/printer.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import { PrintersService } from '@/backend'
 
-const dialog = useDialog<{ printerId: number }>(DialogName.PrinterControlDialog)
+const dialog = useDialog(DialogName.PrinterControlDialog)
 const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
-const printerId = computed(() => dialog.context()?.printerId)
+const printerId = computed(() => dialog.context()?.printer?.id)
 const printer = computed(() => {
   if (!printerId.value) return
 
@@ -173,6 +173,8 @@ const printer = computed(() => {
 const multiplier = ref<number>(10)
 
 const printerTemps = computed(() => {
+  if (!printerId.value) return null
+
   const events = printerStateStore.printerEventsById[printerId.value]
   if (
     events?.current?.payload?.temps?.length &&
@@ -184,6 +186,8 @@ const printerTemps = computed(() => {
 })
 
 const jogPrinterHead = async (x: number, y: number, z: number) => {
+  if (!printerId.value) return
+
   await PrintersService.sendPrinterJogCommand(printerId.value, {
     x: x * multiplier.value,
     y: y * multiplier.value,
@@ -192,6 +196,8 @@ const jogPrinterHead = async (x: number, y: number, z: number) => {
 }
 
 const homeAxes = async (axes: string[]) => {
+  if (!printerId.value) return
+
   await PrintersService.sendPrinterHomeCommand(printerId.value, axes)
 }
 

@@ -314,9 +314,15 @@ async function createCamera() {
 async function updateCamera() {
   if (!formRef.value?.validate()) return
 
+  const cameraId = dialog.context()?.cameraId
+  if (!cameraId) {
+    console.error('No camera ID provided')
+    return
+  }
+
   saving.value = true
   try {
-    await CameraStreamService.updateCameraStream(dialog.context()?.cameraId, {
+    await CameraStreamService.updateCameraStream(cameraId, {
       streamURL: cameraStream.value.streamURL,
       name: cameraStream.value.name,
       printerId: cameraStream.value.printerId

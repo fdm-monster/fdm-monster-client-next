@@ -136,12 +136,12 @@ function onBeforeDialogOpened() {}
 
 async function onDialogOpened() {
   try {
-    roles.value = await UserService.listRoles();
+    roles.value = await UserService.listRoles()
   } catch (error) {
     snackbar.openErrorMessage({
-      title: "Failed to load roles",
-      subtitle: error instanceof Error ? error.message : "Unknown error",
-    });
+      title: 'Failed to load roles',
+      subtitle: error instanceof Error ? error.message : 'Unknown error'
+    })
   }
 }
 
