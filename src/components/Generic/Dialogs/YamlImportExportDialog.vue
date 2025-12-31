@@ -167,7 +167,7 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import { load } from 'js-yaml'
+import { dump, load } from 'js-yaml'
 import BaseDialog from './BaseDialog.vue'
 import YamlImportSummary from '@/components/Generic/YamlImportSummary.vue'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
@@ -315,7 +315,6 @@ const uploadAndImportYamlFile = async () => {
     }
 
     // Create a new YAML file from the filtered data
-    const { dump } = await import('js-yaml')
     const filteredYaml = dump(parsed)
     const filteredFile = new File([filteredYaml], importFile.value.name, {
       type: 'application/x-yaml'
