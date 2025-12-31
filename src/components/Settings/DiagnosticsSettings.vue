@@ -61,7 +61,7 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { captureException } from '@sentry/vue'
 import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/components/Settings/Shared/setting.constants'
+import { settingsPage } from '@/router/setting.constants'
 
 const page = settingsPage['diagnostics']
 const snackBar = useSnackbar()

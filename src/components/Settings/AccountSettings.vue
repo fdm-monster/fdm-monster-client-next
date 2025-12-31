@@ -74,7 +74,7 @@ import { routeToLogin } from '@/router/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/components/Settings/Shared/setting.constants'
+import { settingsPage } from '@/router/setting.constants'
 
 const page = settingsPage['account']
 const settingsStore = useSettingsStore()

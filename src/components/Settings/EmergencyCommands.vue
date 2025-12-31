@@ -112,7 +112,7 @@ import { BatchService } from '@/backend/batch.service'
 import { usePrinterStore } from '@/store/printer.store'
 import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/components/Settings/Shared/setting.constants'
+import { settingsPage } from '@/router/setting.constants'
 import { hasSerialConnection } from '@/shared/printer-capabilities.constants'
 
 const page = settingsPage['emergencyCommands']

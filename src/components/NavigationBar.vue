@@ -44,11 +44,10 @@ import imgLogo from '@/assets/logo.png'
 const items = [
   ['dashboard', 'Dashboard', '/dashboard'],
   ['view_module', 'Printer Grid', '/printers-grid'],
-  ['print', 'Printers', '/printers'],
-  ['camera_alt', 'Cameras', '/cameras'],
-  ['timeline', 'Print Jobs', '/jobs'],
-  ['settings', 'Settings', '/settings'],
-  ['contact_support', 'About', '/about']
+  ['mdi:mdi-printer', 'Printers', '/printers'],
+  ['mdi:mdi-camera', 'Cameras', '/cameras'],
+  ['mdi:mdi-history', 'Print Jobs', '/jobs'],
+  ['mdi:mdi-cog', 'Settings', '/settings']
 ]
 </script>
 

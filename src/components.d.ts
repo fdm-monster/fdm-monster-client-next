@@ -11,7 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AboutView: typeof import('./components/AboutHelp/AboutView.vue')['default']
+    AboutSettings: typeof import('./components/Settings/AboutSettings.vue')['default']
     AccountSettings: typeof import('./components/Settings/AccountSettings.vue')['default']
     AddOrUpdateCameraStreamDialog: typeof import('./components/Generic/Dialogs/AddOrUpdateCameraStreamDialog.vue')['default']
     AddOrUpdateFloorDialog: typeof import('./components/Generic/Dialogs/AddOrUpdateFloorDialog.vue')['default']

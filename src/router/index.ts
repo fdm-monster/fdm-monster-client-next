@@ -6,7 +6,6 @@ import Settings from '@/components/Settings/SettingsView.vue'
 import UserManagementSettings from '@/components/Settings/UserManagementSettings.vue'
 import PrinterSettings from '@/components/Settings/PrinterSettings.vue'
 import FloorSettings from '@/components/Settings/FloorSettings.vue'
-import AboutView from '@/components/AboutHelp/AboutView.vue'
 import EmergencyCommands from '@/components/Settings/EmergencyCommands.vue'
 import NotFoundView from '@/components/NotFound/NotFoundView.vue'
 import { useAuthStore } from '@/store/auth.store'
@@ -23,6 +22,7 @@ import DiagnosticsSettings from '../components/Settings/DiagnosticsSettings.vue'
 import PrintJobsView from '../components/PrintJobs/PrintJobsView.vue'
 import ExperimentalSettings from '@/components/Settings/ExperimentalSettings.vue'
 import DebugSocketSettings from "@/components/Settings/DebugSocketSettings.vue";
+import AboutSettings from "@/components/Settings/AboutSettings.vue";
 
 const NeedsAuth = {
   requiresAuth: true
@@ -142,6 +142,11 @@ const router = createRouter({
           path: "debug-socket",
           meta: NeedsAuth,
           component: DebugSocketSettings,
+        },
+        {
+          path: "about",
+          meta: NeedsAuth,
+          component: AboutSettings,
         }
       ]
     },
@@ -150,11 +155,6 @@ const router = createRouter({
       name: RouteNames.PrintJobs,
       meta: NeedsAuth,
       component: PrintJobsView
-    },
-    {
-      path: '/about',
-      name: 'About',
-      component: AboutView
     },
     {
       path: '/permission-denied',
