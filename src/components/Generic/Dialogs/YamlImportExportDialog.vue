@@ -52,78 +52,12 @@
               </div>
             </v-alert>
 
-            <v-card v-if="importSummary" variant="tonal" class="mt-4">
-              <v-card-title class="text-h6">
-                <v-icon class="mr-2" color="success">info</v-icon>
-                Import Summary
-              </v-card-title>
-              <v-card-text>
-                <v-list density="compact">
-                  <v-list-item>
-                    <template v-slot:prepend>
-                      <v-icon>info</v-icon>
-                    </template>
-                    <v-list-item-title>Version: {{ importSummary.version }}</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item>
-                    <template v-slot:prepend>
-                      <v-icon>storage</v-icon>
-                    </template>
-                    <v-list-item-title>Database: {{ importSummary.databaseType }}</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item>
-                    <template v-slot:prepend>
-                      <v-icon>schedule</v-icon>
-                    </template>
-                    <v-list-item-title>Exported: {{ importSummary.exportedAt }}</v-list-item-title>
-                  </v-list-item>
-                  <v-divider class="my-2" />
-                  <v-list-item>
-                    <template v-slot:prepend>
-                      <v-icon>print</v-icon>
-                    </template>
-                    <v-list-item-title>{{ importSummary.printersCount }} Printers</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item>
-                    <template v-slot:prepend>
-                      <v-icon>layers</v-icon>
-                    </template>
-                    <v-list-item-title>{{ importSummary.floorsCount }} Floors</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item>
-                    <template v-slot:prepend>
-                      <v-icon>label</v-icon>
-                    </template>
-                    <v-list-item-title>{{ importSummary.groupsCount }} Tags</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item v-if="importSummary.hasSettings">
-                    <template v-slot:prepend>
-                      <v-icon color="error">block</v-icon>
-                    </template>
-                    <v-list-item-title class="text-decoration-line-through text-medium-emphasis">
-                      Settings (will be excluded)
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item v-if="importSummary.usersCount > 0">
-                    <template v-slot:prepend>
-                      <v-icon color="error">block</v-icon>
-                    </template>
-                    <v-list-item-title class="text-decoration-line-through text-medium-emphasis">
-                      {{ importSummary.usersCount }} Users (will be excluded)
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-                <v-alert
-                  v-if="importSummary.hasSettings || importSummary.usersCount > 0"
-                  type="info"
-                  variant="tonal"
-                  density="compact"
-                  class="mt-3"
-                >
-                  Settings and users will be excluded to prevent conflicts with your existing setup.
-                </v-alert>
-              </v-card-text>
-            </v-card>
+            <YamlImportSummary
+              v-if="importSummary"
+              :summary="importSummary"
+              :exclude-settings-and-users="true"
+              class="mt-4"
+            />
 
             <v-btn
               v-if="isImportMode && importSummary"
@@ -235,6 +169,7 @@
 import { ref, computed } from 'vue'
 import { load } from 'js-yaml'
 import BaseDialog from './BaseDialog.vue'
+import YamlImportSummary from '@/components/Generic/YamlImportSummary.vue'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { ServerPrivateService } from '@/backend/server-private.service'
 import { useDialog } from '@/shared/dialog.composable'

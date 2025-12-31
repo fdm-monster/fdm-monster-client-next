@@ -22,6 +22,7 @@ Features
 - Redesign the floor settings page
 - Implement capabilities feature to allow better UI customization for different printer types
 - Redesign About page and move into settings
+- Redesign First Time Setup page with shared HelpBanner across pages using new GitHub and Discord button components
 
 Fixes
 
@@ -43,6 +44,7 @@ Fixes
 - Regression settings page should route to floor settings
 - Regression YAML import would not trigger validation
 - YAML import will not allow importing users, user roles, settings as that will lead to failure
+- First Time Setup page uses new backend endpoint
 
 Chores
 
@@ -57,6 +59,8 @@ Chores
 - Rename backend group service to tag service
 - Indicate on printer create that we're creating a printer on a floor
 - Add tooltips to NavBar
+- Share Discord and GitHub buttons as component across pages
+- Share YAML Import summary for First Time Setup and YAML import dialog
 
 ## Client 0.0.27
 

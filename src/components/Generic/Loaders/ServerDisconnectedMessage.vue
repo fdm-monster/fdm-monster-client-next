@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useOverlayStore } from "@/store/overlay.store";
+import DiscordInviteButton from '@/components/Generic/Actions/DiscordInviteButton.vue'
+import GithubIssuesButton from '@/components/Generic/Actions/GithubIssuesButton.vue'
 
 const appLoaderStore = useOverlayStore();
 const countdown = ref(0)
@@ -109,25 +111,16 @@ onUnmounted(() => {
             Documentation
           </v-btn>
 
-          <v-btn
-            color="purple"
-            variant="outlined"
-            href="https://discord.gg/mwA8uP8CMc"
-            target="_blank"
-          >
-            <v-icon class="mr-2">chat</v-icon>
-            Discord Support
-          </v-btn>
+          <DiscordInviteButton
+            label="Discord Support"
+            variant="elevated"
+          />
 
-          <v-btn
-            color="surface-variant"
+          <GithubIssuesButton
+            label="GitHub"
             variant="outlined"
-            href="https://github.com/fdm-monster/fdm-monster"
-            target="_blank"
-          >
-            <v-icon class="mr-2">mdi:mdi-github</v-icon>
-            GitHub
-          </v-btn>
+            color="surface-variant"
+          />
         </div>
 
         <p class="text-caption text-medium-emphasis mb-3">
