@@ -464,11 +464,6 @@ async function importYaml() {
   }
 
   try {
-    snackbar.openInfoMessage({
-      title: 'Importing configuration...',
-      subtitle: 'This may take a moment.'
-    })
-
     await FirstTimeSetupService.postYamlImport(yamlFile.value)
 
     snackbar.openInfoMessage({
