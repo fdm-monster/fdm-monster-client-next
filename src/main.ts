@@ -24,7 +24,7 @@ console.log(
 
 initSentry({
   app,
-  dsn: 'https://f64683e8d1cb4ac291434993cff1bf9b@o4503975545733120.ingest.sentry.io/4503975546912768',
+  dsn: 'https://0831d0eec221b85ee4ae69b8410fe31c@o4503975545733120.ingest.us.sentry.io/4510641487937536',
   integrations: [
     browserTracingIntegration({
       router
@@ -40,7 +40,8 @@ initSentry({
   // Capture Replay for 10% of all sessions,
   // plus for 100% of sessions with an error
   replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1
+  replaysOnErrorSampleRate: 1,
+  sendDefaultPii: false
 })
 
 app.config.errorHandler = (err: unknown) => {

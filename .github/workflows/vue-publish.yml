@@ -19,7 +19,7 @@ jobs:
       - run: yarn run build
       - run: yarn run test:unit
       - uses: JS-DevTools/npm-publish@v4
-        if: ${{ github.repository.name == 'fdm-monster-client' }}
+        if: ${{ github.repository.name == 'fdm-monster-client-next' }}
         with:
           dry-run: true
           token: ${{ secrets.NPM_TOKEN }}

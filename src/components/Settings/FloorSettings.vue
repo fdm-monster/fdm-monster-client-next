@@ -4,7 +4,7 @@
 
     <v-card-text>
       <SettingSection title="Manage Floors" :usecols="false">
-        <div class="mb-4">
+        <div class="mb-4 d-flex align-center ga-3">
           <v-btn
             color="primary"
             prepend-icon="add"
@@ -12,26 +12,38 @@
           >
             Create New Floor
           </v-btn>
+          <div class="text-caption text-medium-emphasis">
+            <v-icon size="small" class="mr-1">drag_indicator</v-icon>
+            Drag floors to reorder them
+          </div>
         </div>
 
-        <v-expansion-panels variant="accordion">
-          <v-expansion-panel
-            v-for="floor in floors"
-            :key="floor.id"
-          >
-            <v-expansion-panel-title>
-              <div class="d-flex align-center justify-space-between" style="width: 100%">
-                <div class="d-flex align-center">
-                  <v-icon class="mr-3">layers</v-icon>
-                  <div>
-                    <div class="text-subtitle-1 font-weight-medium">{{ floor.name }}</div>
-                    <div class="text-caption text-medium-emphasis">
-                      Floor #{{ floor.floor }} • {{ floor.printers.length }} printer(s) assigned
+        <Draggable
+          v-model="sortableFloors"
+          item-key="id"
+          handle=".drag-handle"
+          @end="onDragEnd"
+        >
+          <template #item="{ element: floor }">
+            <v-expansion-panels
+              variant="accordion"
+              class="mb-2"
+            >
+              <v-expansion-panel>
+                <v-expansion-panel-title>
+                  <div class="d-flex align-center justify-space-between" style="width: 100%">
+                    <div class="d-flex align-center">
+                      <v-icon class="drag-handle mr-2" style="cursor: move">drag_indicator</v-icon>
+                      <v-icon class="mr-3">layers</v-icon>
+                      <div>
+                        <div class="text-subtitle-1 font-weight-medium">{{ floor.name }}</div>
+                        <div class="text-caption text-medium-emphasis">
+                          Floor Order #{{ floor.order }} • {{ floor.printers.length }} printer(s) assigned
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </v-expansion-panel-title>
+                </v-expansion-panel-title>
 
             <v-expansion-panel-text>
               <!-- Floor details and actions -->
@@ -49,13 +61,13 @@
                   </v-col>
                   <v-col cols="6">
                     <v-text-field
-                      :model-value="floor.floor"
-                      label="Floor Number"
+                      :model-value="floor.order"
+                      label="Floor Order"
                       type="number"
                       variant="outlined"
                       density="compact"
                       hide-details
-                      @blur="updateFloorNumber(floor.id, Number($event.target.value))"
+                      @blur="updateFloorOrder(floor.id, Number($event.target.value))"
                     />
                   </v-col>
                 </v-row>
@@ -112,6 +124,8 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
+          </template>
+        </Draggable>
 
         <div v-if="!floors.length" class="text-center pa-8 text-medium-emphasis">
           <v-icon size="large" class="mb-2">layers_clear</v-icon>
@@ -125,6 +139,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import Draggable from 'vuedraggable'
 import { useFloorStore } from '@/store/floor.store'
 import { usePrinterStore } from '@/store/printer.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
@@ -132,6 +147,7 @@ import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
+import { FloorDto } from '@/models/floors/floor.model'
 
 const router = useRouter()
 const floorStore = useFloorStore()
@@ -140,6 +156,14 @@ const snackbar = useSnackbar()
 const addOrUpdateFloorDialog = useDialog(DialogName.AddOrUpdateFloorDialog)
 
 const floors = computed(() => floorStore.floors)
+
+// Local sortable array for drag and drop
+const sortableFloors = computed({
+  get: () => [...floors.value],
+  set: () => {
+    // The actual reordering is handled in onDragEnd
+  }
+})
 
 function getPrinterName(printerId: number) {
   const printer = printerStore.printers.find(p => p.id === printerId)
@@ -163,10 +187,10 @@ async function updateFloorName(floorId: number, name: string) {
   snackbar.info('Floor name updated')
 }
 
-async function updateFloorNumber(floorId: number, floorNumber: number) {
-  if (!floorNumber || floorNumber < 0) return
-  await floorStore.updateFloorNumber({ floorId, floorNumber })
-  snackbar.info('Floor number updated')
+async function updateFloorOrder(floorId: number, order: number) {
+  if (!order || order < 0) return
+  await floorStore.updateFloorOrder({ floorId, order })
+  snackbar.info('Floor order updated')
 }
 
 async function deleteFloor(floorId: number) {
@@ -178,5 +202,22 @@ async function deleteFloor(floorId: number) {
 async function removePrinterFromFloor(floorId: number, printerId: number) {
   await floorStore.deletePrinterFromFloor({ floorId, printerId })
   snackbar.info('Printer removed from floor')
+}
+
+async function onDragEnd() {
+  // Update order based on new positions
+  const updates: Promise<any>[] = []
+
+  sortableFloors.value.forEach((floor: FloorDto, index: number) => {
+    const newOrder = index + 1
+    if (floor.order !== newOrder) {
+      updates.push(floorStore.updateFloorOrder({ floorId: floor.id, order: newOrder }))
+    }
+  })
+
+  if (updates.length > 0) {
+    await Promise.all(updates)
+    snackbar.info('Floor order updated')
+  }
 }
 </script>
