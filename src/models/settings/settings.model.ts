@@ -1,5 +1,4 @@
 import { ServerSettingsDto } from './server-settings.dto'
-import { FileCleanSettings } from './printer-file-clean-settings.model'
 
 export interface FrontendSettings {
   largeTiles: boolean
@@ -28,7 +27,6 @@ export interface SettingsDto {
   server: ServerSettingsDto
   wizard: WizardSettingsDto
   frontend: FrontendSettings
-  printerFileClean: FileCleanSettings
   timeout: TimeoutSettings
   connection?: ConnectionInfo
 }
