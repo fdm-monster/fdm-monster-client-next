@@ -104,12 +104,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { generateInitials } from '@/shared/noun-adjectives.data'
 import { UserService } from '@/backend/user.service'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useDialog } from '@/shared/dialog.composable'
-import { AppConstants } from '@/shared/app.constants'
+import { appConstants } from '@/shared/app.constants'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { Role } from '@/models/user.model'
 
@@ -120,7 +120,6 @@ interface CreateUserForm {
 }
 
 const dialog = useDialog(DialogName.CreateUserDialog)
-const appConstants = inject('appConstants') as AppConstants
 const snackbar = useSnackbar()
 
 const formData = ref<CreateUserForm>({

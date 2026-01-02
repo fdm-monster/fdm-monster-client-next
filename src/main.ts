@@ -11,7 +11,6 @@ import { AxiosError } from 'axios'
 import { useSnackbar } from './shared/snackbar.composable'
 import { getFileDropDirective } from './directives/file-upload.directive'
 import { getDropPrinterPositionDirective } from './directives/printer-drop-position.directive'
-import { generateAppConstants } from '@/shared/app.constants'
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import { createPinia } from "pinia";
 import { vuetify } from "@/plugins/vuetify";
@@ -114,6 +113,5 @@ app.use(pinia)
 
 app.use(VueQueryPlugin)
 app.use(vuetify)
-app.provide('appConstants', generateAppConstants())
 app.use(router)
 app.mount('#app')
