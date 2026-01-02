@@ -108,6 +108,25 @@
           </template>
           <template v-slot:default>Files</template>
         </v-tooltip>
+
+        <v-tooltip location="top">
+          <template v-slot:activator="{ props }">
+            <v-btn
+              color="info"
+              elevation="2"
+              size="x-small"
+              rounded="xl"
+              :disabled="!hasActiveJob"
+              v-bind="props"
+              @click.prevent.stop="clickShowCurrentJob()"
+            >
+              <v-icon size="16">work</v-icon>
+            </v-btn>
+          </template>
+          <template v-slot:default>
+            {{ hasActiveJob ? 'View Current Job' : 'No active job' }}
+          </template>
+        </v-tooltip>
       </div>
 
       <div
@@ -315,7 +334,6 @@
 
 <script lang="ts" setup>
 import { computed, PropType } from 'vue'
-import { CustomGcodeService } from '@/backend/custom-gcode.service'
 import { PrintersService } from '@/backend'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
@@ -349,6 +367,8 @@ const floorStore = useFloorStore()
 const settingsStore = useSettingsStore()
 const controlDialog = useDialog(DialogName.PrinterControlDialog)
 const addOrUpdateDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
+// @ts-ignore - Will be used when backend provides job IDs via SocketIO
+const jobDetailsDialog = useDialog(DialogName.PrintJobDetailsDialog)
 const fileExplorer = useFileExplorer()
 const snackbar = useSnackbar()
 
@@ -425,6 +445,12 @@ const currentJob = computed(() => {
   return printerStateStore.printerJobsById[printerId.value]
 })
 
+// For now, use printer state to determine if there's an active job
+// In the future, SocketIO will provide the actual job ID
+const hasActiveJob = computed(() => {
+  return isPrinting.value || isPaused.value
+})
+
 const currentProgress = computed(() => {
   if (!printerId.value) return undefined
 
@@ -490,6 +516,32 @@ const clickOpenSettings = () => {
   addOrUpdateDialog.openDialog({ id: printer.id })
 }
 
+const clickShowCurrentJob = async () => {
+  if (!hasActiveJob.value || !currentJob.value) {
+    snackbar.openInfoMessage({
+      title: 'No Active Job',
+      subtitle: 'This printer is not currently printing'
+    })
+    return
+  }
+
+  // TODO: Once SocketIO provides job ID from the backend, use it to open the dialog
+  // For now, show a snackbar with the current job file name
+  const fileName = currentJob.value.job?.file?.display || 'Unknown file'
+
+  // Placeholder: When backend adds jobId to the SocketIO job state, replace this with:
+  // const jobId = currentJob.value.jobId
+  // if (jobId) {
+  //   await jobDetailsDialog.openDialog({ jobId })
+  // }
+
+  snackbar.openInfoMessage({
+    title: 'Current Job',
+    subtitle: `Printing: ${fileName}`,
+    timeout: 3000
+  })
+}
+
 const clickOpenPrinterControlDialog = async () => {
   if (!printerId.value || !props.printer) {
     throw new Error('PrinterId not set, cant open dialog')
@@ -506,7 +558,7 @@ const clickQuickStop = async () => {
       'Are you sure to abort the print in Quick Stop mode? Please reconnect after.'
     )
   ) {
-    await CustomGcodeService.postQuickStopM112Command(printerId.value)
+    await PrintersService.postQuickStopM112Command(printerId.value)
   }
 }
 

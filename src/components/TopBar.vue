@@ -16,6 +16,8 @@
 
     <PrinterStatusMenu />
 
+    <QueueMenu />
+
     <PrintJobsMenu />
 
     <v-menu
@@ -87,6 +89,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useIntervalFn } from '@vueuse/core'
 import PrinterStatusMenu from '@/components/Generic/PrinterStatusMenu.vue'
+import QueueMenu from '@/components/Generic/QueueMenu.vue'
 import PrintJobsMenu from '@/components/Generic/PrintJobsMenu.vue'
 import { useAuthStore } from '@/store/auth.store'
 import { useProfileStore } from '@/store/profile.store'

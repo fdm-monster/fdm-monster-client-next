@@ -62,8 +62,14 @@ yarn test:unit --watch
 - Use `Set-Location` or `cd` to ensure you're in the right directory
 - File paths use backslashes (`\`) in Windows
 - Always use Yarn (not NPM) - Node 22/24 environment
-- **Prefer `yarn build` for validation over `yarn dev` for running the server**
-- Use typecheck (`vue-tsc --noEmit`) to validate TypeScript without building
+- **Prefer `npx vue-tsc --noEmit` for quick validation over full `yarn build`**
+- Only use `yarn build` when you need to test the actual build output
+- Use `yarn dev` sparingly for running the development server
+
+### Code Documentation Rules
+- **DO NOT create summary markdown files** (e.g., `FIXES.md`, `SUMMARY.md`, `IMPLEMENTATION.md`)
+- Document changes in commit messages or inline comments only
+- If documentation is needed, update existing README.md or relevant docs
 
 ### Test Files Created
 - `OctoFarmImportDialog.spec.ts` - Main component tests

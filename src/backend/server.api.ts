@@ -16,6 +16,7 @@ export class ServerApi {
   static readonly printJobsRoute = `${ServerApi.base}/print-jobs`
   static readonly printJobsSearchRoute = `${ServerApi.printJobsRoute}/search`
   static readonly printJobsSearchPagedRoute = `${ServerApi.printJobsRoute}/search-paged`
+  static readonly printQueueRoute = `${ServerApi.base}/print-queue`
   static readonly printerFilesRoute = `${ServerApi.base}/printer-files`
   static readonly printerFilesPurgeRoute = `${ServerApi.printerFilesRoute}/purge`
   static readonly printerTagRoute = `${ServerApi.base}/printer-tag`

@@ -39,6 +39,7 @@
     <BatchReprintDialog />
     <PrinterControlDialog />
     <JsonViewerDialog />
+    <PrintJobDetailsDialog />
   </v-app>
 </template>
 

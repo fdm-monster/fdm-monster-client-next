@@ -36,6 +36,10 @@ export interface ManageTagsDialogContext {
   tagName?: string
 }
 
+export interface PrintJobDetailsDialogContext {
+  jobId: number
+}
+
 // Map dialog names to their context types
 export interface DialogContextTypeMap {
   [DialogName.AddOrUpdatePrinterDialog]: AddOrUpdatePrinterDialogContext
@@ -44,6 +48,7 @@ export interface DialogContextTypeMap {
   [DialogName.PrinterMaintenanceDialog]: PrinterMaintenanceDialogContext
   [DialogName.PrinterControlDialog]: PrinterControlDialogContext
   [DialogName.JsonViewerDialog]: JsonViewerDialogContext
+  [DialogName.PrintJobDetailsDialog]: PrintJobDetailsDialogContext
   [DialogName.CreateUserDialog]: undefined
   [DialogName.ImportOctoFarmDialog]: undefined
   [DialogName.BatchReprintDialog]: undefined
