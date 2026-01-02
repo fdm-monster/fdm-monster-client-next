@@ -25,7 +25,6 @@ export class ServerApi {
   static readonly updateLoginRequiredRoute = `${ServerApi.settingsRoute}/login-required`
   static readonly updateRegistrationEnabledRoute = `${ServerApi.settingsRoute}/registration-enabled`
   static readonly updateCredentialSettings = `${ServerApi.settingsRoute}/credential`
-  static readonly fileCleanSettingsRoute = `${ServerApi.settingsRoute}/file-clean`
   static readonly updateFrontendSettingsRoute = `${ServerApi.settingsRoute}/frontend`
   static readonly updateTimeoutSettingRoute = `${ServerApi.settingsRoute}/timeout`
   static readonly serverSentryDiagnosticsSettingRoute = `${ServerApi.settingsRoute}/sentry-diagnostics`
