@@ -23,7 +23,7 @@ export const useFloorStore = defineStore('Floors', {
       return state.floors[state.selectedFloorIndex]
     },
     sortedFloors(state) {
-      return state.floors.sort((f, f2) => f.floor - f2.floor)
+      return state.floors.sort((f, f2) => f.order - f2.order)
     },
     floor(state) {
       return (floorId: number) => state.floors.find((pf) => pf.id === floorId)
@@ -78,6 +78,7 @@ export const useFloorStore = defineStore('Floors', {
   actions: {
     async loadFloors() {
       const floors = await FloorService.getFloors()
+
       this.saveFloors(floors)
       return floors
     },
@@ -88,7 +89,7 @@ export const useFloorStore = defineStore('Floors', {
     },
     saveFloors(floors: FloorDto[]) {
       if (!floors?.length) return
-      this.floors = floors.sort((f, f2) => f.floor - f2.floor)
+      this.floors = floors.sort((f, f2) => f.order - f2.order)
       const floorId = this.selectedFloor?.id
       const foundFloorIndex = this.floors.findIndex((f) => f.id === floorId)
       this.selectedFloorIndex = foundFloorIndex === -1 ? 0 : foundFloorIndex
@@ -108,14 +109,14 @@ export const useFloorStore = defineStore('Floors', {
       this._replaceFloor(floor)
       return floor
     },
-    async updateFloorNumber({
+    async updateFloorOrder({
       floorId,
-      floorNumber
+      order
     }: {
       floorId: number
-      floorNumber: number
+      order: number
     }) {
-      const floor = await FloorService.updateFloorNumber(floorId, floorNumber)
+      const floor = await FloorService.updateFloorOrder(floorId, order)
       this._replaceFloor(floor)
       return floor
     },

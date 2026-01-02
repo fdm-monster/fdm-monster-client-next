@@ -12,7 +12,7 @@ export class FloorService extends BaseService {
     newFormData.name = printerFloor?.name || newRandomNamePair();
     newFormData.printers = [];
 
-    newFormData.floor = (printerFloor?.floor || 1).toString();
+    newFormData.order = (printerFloor?.order || 1).toString();
 
     return newFormData;
   }
@@ -21,10 +21,10 @@ export class FloorService extends BaseService {
     const modifiedData: any = { ...formData };
 
     // Fix the string properties to become int
-    modifiedData.floor = Number.parseInt(modifiedData.floor);
+    modifiedData.order = Number.parseInt(modifiedData.order);
 
-    if (Number.isNaN(modifiedData.floor)) {
-      throw new TypeError("Floor number did not convert to number.");
+    if (Number.isNaN(modifiedData.order)) {
+      throw new TypeError("Floor order did not convert to number.");
     }
 
     return modifiedData as FloorDto;
@@ -48,10 +48,10 @@ export class FloorService extends BaseService {
     return await this.patch<FloorDto>(path, { name });
   }
 
-  static async updateFloorNumber(floorId: number, floor: number) {
-    const path = `${ServerApi.updatePrinterFloorNumberRoute(floorId)}/`;
+  static async updateFloorOrder(floorId: number, order: number) {
+    const path = `${ServerApi.updatePrinterFloorOrderRoute(floorId)}/`;
 
-    return await this.patch<FloorDto>(path, { floor });
+    return await this.patch<FloorDto>(path, { order });
   }
 
   static async deleteFloor(floorId: number) {

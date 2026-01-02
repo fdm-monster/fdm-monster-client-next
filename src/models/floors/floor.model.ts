@@ -3,14 +3,14 @@ import { newRandomNamePair } from "@/shared/noun-adjectives.data";
 export interface FloorDto {
   id: number;
   name: string;
-  floor: number;
+  order: number;
   printers: PositionDto[];
 }
 
 export interface PreCreateFloor {
   id?: number;
   name: string;
-  floor: string;
+  order: string;
   printers: PositionDto[];
 }
 
@@ -24,6 +24,6 @@ export interface PositionDto {
 export const getDefaultCreateFloor = (): PreCreateFloor => ({
   id: undefined,
   name: newRandomNamePair(),
-  floor: "1",
+  order: "1",
   printers: [],
 });

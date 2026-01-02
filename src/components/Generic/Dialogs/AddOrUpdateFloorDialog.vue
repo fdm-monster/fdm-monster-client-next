@@ -33,8 +33,8 @@
                     required
                   />
                   <v-text-field
-                    v-model="formData.floor"
-                    label="Floor number"
+                    v-model="formData.order"
+                    label="Floor order"
                     required
                     type="number"
                   />
@@ -100,8 +100,8 @@ const validateFormData = () => {
     snackbar.openErrorMessage({ title: 'Invalid floor name' })
     return false
   }
-  if (!Number.isInteger(Number(formData.value.floor))) {
-    snackbar.openErrorMessage({ title: 'Floor number must be an integer' })
+  if (!Number.isInteger(Number(formData.value.order))) {
+    snackbar.openErrorMessage({ title: 'Floor order must be an integer' })
     return false
   }
   return true
@@ -113,8 +113,8 @@ const submit = async () => {
   await floorStore.createFloor(floorData)
   snackbar.openInfoMessage({ title: `Floor ${floorData.name} created` })
   formData.value.name = newRandomNamePair()
-  const maxIndex = Math.max(...floorStore.floors.map((f) => f.floor)) + 1
-  formData.value.floor = maxIndex.toString()
+  const maxIndex = Math.max(...floorStore.floors.map((f) => f.order)) + 1
+  formData.value.order = maxIndex.toString()
   closeDialog()
 }
 
@@ -127,8 +127,8 @@ const onDialogOpened = () => {
     const crudeData = floorStore.floor(printerFloorId.value)
     formData.value = FloorService.convertPrinterFloorToCreateForm(crudeData)
   } else if (floorStore.floors?.length) {
-    const maxIndex = Math.max(...floorStore.floors.map((pf) => pf.floor)) + 1
-    formData.value.floor = maxIndex.toString()
+    const maxIndex = Math.max(...floorStore.floors.map((pf) => pf.order)) + 1
+    formData.value.order = maxIndex.toString()
   }
 }
 </script>
