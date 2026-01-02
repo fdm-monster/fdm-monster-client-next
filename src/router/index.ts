@@ -39,7 +39,7 @@ const router = createRouter({
       path: '/',
       name: RouteNames.Home,
       meta: NeedsAuth,
-      redirect: '/dashboard'
+      component: DashboardView
     },
     {
       path: '/dashboard',
