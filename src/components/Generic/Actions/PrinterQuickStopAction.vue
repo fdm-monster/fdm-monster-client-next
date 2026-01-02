@@ -25,8 +25,8 @@
 
 <script lang="ts" setup>
 import { PrinterDto } from '@/models/printers/printer.model'
-import { CustomGcodeService } from '@/backend/custom-gcode.service'
 import { hasEmergencyStop } from '@/shared/printer-capabilities.constants'
+import { PrintersService } from "@/backend";
 
 const props = defineProps<{
   printer: PrinterDto
@@ -35,6 +35,6 @@ const props = defineProps<{
 async function clickQuickStop() {
   if (!confirm('Are you sure to quick stop this printer?')) return
 
-  await CustomGcodeService.postQuickStopM112Command(props.printer.id)
+  await PrintersService.postQuickStopM112Command(props.printer.id)
 }
 </script>
