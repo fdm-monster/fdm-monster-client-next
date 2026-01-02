@@ -2,6 +2,26 @@
 
 This is the official scaffolding tool for Vuetify, designed to give you a head start in building your new Vuetify application. It sets up a base template with all the necessary configurations and standard directory structure, enabling you to begin development without the hassle of setting up the project from scratch.
 
+### Prerequisites
+- Backend server must be running at `http://127.0.0.1:4000`
+
+### Generate API Client
+
+```bash
+# One command to fetch spec and generate client
+yarn generate:api
+```
+
+Or run the steps separately:
+
+```bash
+# 1. Fetch OpenAPI spec from backend
+yarn fetch:openapi
+
+# 2. Generate TypeScript client
+yarn openapi-ts
+```
+
 ## Notes to self
 
 - Example to fix alias includes https://github.com/mutoe/vue3-realworld-example-app/blob/master/tsconfig.json
@@ -13,6 +33,7 @@ This is the official scaffolding tool for Vuetify, designed to give you a head s
     "src/**/*.vue"
   ],
 ```
+
 
 ## ❗️ Important Links
 
