@@ -64,8 +64,8 @@ export class ServerApi {
     `${ServerApi.printerRoute}/${id}/send-emergency-m112`
   static readonly updatePrinterFloorNameRoute = (id: number) =>
     `${ServerApi.getFloorRoute(id)}/name`
-  static readonly updatePrinterFloorNumberRoute = (id: number) =>
-    `${ServerApi.getFloorRoute(id)}/floor-number`
+  static readonly updatePrinterFloorOrderRoute = (id: number) =>
+    `${ServerApi.getFloorRoute(id)}/floor-order`
   static readonly printerFilesClearRoute = (id: number) =>
     `${ServerApi.printerFilesRoute}/${id}/clear`
   static readonly printerFilesStartPrintRoute = (id: number) =>
