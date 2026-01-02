@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref, computed } from 'vue'
+import { ref, computed } from 'vue'
 import {
   generateInitials,
   newRandomNamePair
@@ -73,7 +73,7 @@ import { FloorService } from '@/backend/floor.service'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useFloorStore } from '@/store/floor.store'
 import { useDialog } from '@/shared/dialog.composable'
-import { AppConstants } from '@/shared/app.constants'
+import { appConstants } from '@/shared/app.constants'
 import {
   getDefaultCreateFloor,
   PreCreateFloor
@@ -82,7 +82,6 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 
 const dialog = useDialog(DialogName.AddOrUpdateFloorDialog)
 const floorStore = useFloorStore()
-const appConstants = inject('appConstants') as AppConstants
 const snackbar = useSnackbar()
 
 const formData = ref<PreCreateFloor>(getDefaultCreateFloor())
@@ -96,7 +95,7 @@ const avatarInitials = computed(() => {
 const validateFormData = () => {
   if (
     !formData.value.name ||
-    formData.value.name.length < appConstants.minPrinterFloorNameLength
+    formData.value.name.length < appConstants.minFloorNameLength
   ) {
     snackbar.openErrorMessage({ title: 'Invalid floor name' })
     return false

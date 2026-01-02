@@ -191,7 +191,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import { generateInitials, newRandomNamePair } from "@/shared/noun-adjectives.data";
 import { usePrinterStore } from "@/store/printer.store";
 import { PrintersService } from "@/backend";
@@ -199,7 +199,7 @@ import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
 import { useTestPrinterStore } from "@/store/test-printer.store";
 import { CreatePrinter, getDefaultCreatePrinter } from "@/models/printers/create-printer.model";
 import { useDialog } from "@/shared/dialog.composable";
-import { AppConstants } from "@/shared/app.constants";
+import { appConstants } from "@/shared/app.constants";
 import { useSnackbar } from "@/shared/snackbar.composable";
 import { AxiosError } from "axios";
 import { useFeatureStore } from "@/store/features.store";
@@ -224,7 +224,6 @@ const printersStore = usePrinterStore();
 const testPrinterStore = useTestPrinterStore();
 const featureStore = useFeatureStore();
 const floorStore = useFloorStore();
-const appConstants = inject("appConstants") as AppConstants;
 const snackbar = useSnackbar();
 
 const printerValidationError = ref<null | string>(null);

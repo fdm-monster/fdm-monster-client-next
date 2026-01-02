@@ -50,6 +50,7 @@ Fixes
 - Redirect from login to login prevented
 - First time setup YAML import and manual setup will now trigger AppLoad through wizardCompleted
 - Reimplement dialog context to be more strictly typed
+- Remove AppConstants as it's not useful
 
 Chores
 
