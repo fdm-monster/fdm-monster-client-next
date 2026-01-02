@@ -6,29 +6,28 @@ import {
   TimeoutSettings,
   SettingsSensitiveDto
 } from '@/models/settings/settings.model'
-import { FileCleanSettings } from '@/models/settings/printer-file-clean-settings.model'
 
 export class SettingsService extends BaseService {
   static async getSettings() {
     const path = ServerApi.settingsRoute
-    return (await this.get(path)) as SettingsDto
+    return await this.get<SettingsDto>(path)
   }
 
   static async getSettingsSensitive() {
     const path = ServerApi.settingsSensitiveRoute
-    return (await this.get(path)) as SettingsSensitiveDto
+    return await this.get<SettingsSensitiveDto>(path)
   }
 
   static async updateLoginRequiredSettings(loginRequired: boolean) {
-    const path = `${ServerApi.updateLoginRequiredRoute}`
+    const path = `${ ServerApi.updateLoginRequiredRoute }`
 
-    return (await this.put(path, { loginRequired })) as SettingsDto
+    return await this.put<SettingsDto>(path, { loginRequired })
   }
 
   static async updateRegistrationEnabledSettings(registrationEnabled: boolean) {
-    const path = `${ServerApi.updateRegistrationEnabledRoute}`
+    const path = `${ ServerApi.updateRegistrationEnabledRoute }`
 
-    return (await this.put(path, { registrationEnabled })) as SettingsDto
+    return await this.put<SettingsDto>(path, { registrationEnabled })
   }
 
   static async updateCredentialSettings(
@@ -36,7 +35,7 @@ export class SettingsService extends BaseService {
     refreshTokenAttempts: number,
     refreshTokenExpiry: number
   ) {
-    const path = `${ServerApi.updateCredentialSettings}`
+    const path = `${ ServerApi.updateCredentialSettings }`
 
     return await this.put(path, {
       jwtExpiresIn,
@@ -46,48 +45,39 @@ export class SettingsService extends BaseService {
   }
 
   static async updateFrontendSettings(frontendSettings: FrontendSettings) {
-    const path = `${ServerApi.updateFrontendSettingsRoute}`
+    const path = `${ ServerApi.updateFrontendSettingsRoute }`
 
-    return (await this.put(
-      path,
-      frontendSettings as FrontendSettings
-    )) as SettingsDto
+    return await this.put<SettingsDto>(path, frontendSettings)
   }
 
   static async setSentryDiagnosticsSettings(enabled: boolean) {
-    const path = `${ServerApi.serverSentryDiagnosticsSettingRoute}`
+    const path = `${ ServerApi.serverSentryDiagnosticsSettingRoute }`
     return await this.patch(path, { enabled })
   }
 
   static async updateTimeoutSettings(subSettings: TimeoutSettings) {
-    const path = `${ServerApi.updateTimeoutSettingRoute}`
+    const path = `${ ServerApi.updateTimeoutSettingRoute }`
 
-    return (await this.put(path, subSettings as TimeoutSettings)) as SettingsDto
-  }
-
-  static async setFileCleanSettings(subSettings: FileCleanSettings) {
-    const path = `${ServerApi.fileCleanSettingsRoute}`
-
-    return (await this.put(path, subSettings)) as SettingsDto
+    return await this.put<SettingsDto>(path, subSettings)
   }
 
   static async updateExperimentalMoonrakerSupport(enabled: boolean) {
     const path = ServerApi.updateExperimentalMoonrakerSupportRoute
-    return (await this.put(path, { enabled })) as SettingsDto // Assuming it returns SettingsDto
+    return await this.put<SettingsDto>(path, { enabled })
   }
 
   static async updateExperimentalPrusaLinkSupport(enabled: boolean) {
     const path = ServerApi.updateExperimentalPrusaLinkSupportRoute;
-    return (await this.put(path, { enabled })) as SettingsDto; // Assuming it returns SettingsDto
+    return await this.put<SettingsDto>(path, { enabled })
   }
 
   static async updateExperimentalBambuSupport(enabled: boolean) {
     const path = ServerApi.updateExperimentalBambuSupportRoute
-    return (await this.put(path, { enabled })) as SettingsDto
+    return await this.put<SettingsDto>(path, { enabled })
   }
 
   static async updateExperimentalThumbnailSupport(enabled: boolean) {
     const path = ServerApi.updateExperimentalThumbnailSupportRoute;
-    return (await this.put(path, { enabled })) as SettingsDto; // Assuming it returns SettingsDto
+    return await this.put<SettingsDto>(path, { enabled })
   }
 }
