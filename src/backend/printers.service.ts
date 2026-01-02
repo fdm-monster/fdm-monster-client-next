@@ -52,6 +52,12 @@ export class PrintersService extends BaseService {
     return (await this.post(path)) as any;
   }
 
+  static async postQuickStopM112Command(printerId: number) {
+    const path = ServerApi.sendQuickStopM112Route(printerId)
+
+    return await this.post(path)
+  }
+
   static async sendPrinterConnectCommand(printerId: number) {
     const path = ServerApi.printerSerialConnectRoute(printerId);
 

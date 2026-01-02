@@ -17,7 +17,6 @@ export class ServerApi {
   static readonly printerFilesPurgeRoute = `${ServerApi.printerFilesRoute}/purge`
   static readonly printerTagsRoute = `${ServerApi.base}/printer-group`
   static readonly createGroupRoute = `${ServerApi.base}/printer-group`
-  static readonly customGCodeRoute = `${ServerApi.base}/custom-gcode`
   static readonly userRoute = `${ServerApi.base}/user`
   static readonly rolesRoute = `${ServerApi.base}/user/roles`
   static readonly userProfileRoute = `${ServerApi.userRoute}/profile`
@@ -63,7 +62,7 @@ export class ServerApi {
   static readonly addOrRemovePrinterFromFloorRoute = (id: number) =>
     `${ServerApi.getFloorRoute(id)}/printer`
   static readonly sendQuickStopM112Route = (id: number) =>
-    `${ServerApi.customGCodeRoute}/send-emergency-m112/${id}`
+    `${ServerApi.printerRoute}/${id}/send-emergency-m112`
   static readonly updatePrinterFloorNameRoute = (id: number) =>
     `${ServerApi.getFloorRoute(id)}/name`
   static readonly updatePrinterFloorNumberRoute = (id: number) =>
