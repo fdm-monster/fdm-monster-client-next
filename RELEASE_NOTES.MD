@@ -6,6 +6,9 @@ Features
 - Tag management dialog with color picker
 - Clickable floor/tag/camera chips to open edit dialogs
 - Action menus on printer list for floors, tags, and cameras
+- Job (and queue) page
+- Queue top menu
+- Files page
 - Set complete/failed/cancelled/unknown on job page
 - Job thumbnails viewer dialog
 - Redesign navigation bars
@@ -15,6 +18,7 @@ Fixes
 - Reordering floors now works
 - YAML export dialog now exports exportTags
 - Camera grid camera filter clear now works
+- AppLoader will redirect properly even when VueRouter hasnt kicked in
 
 ## Client 2.0.0
 
