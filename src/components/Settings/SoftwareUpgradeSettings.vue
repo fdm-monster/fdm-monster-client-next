@@ -119,11 +119,8 @@ import { computed, onMounted, ref } from 'vue'
 import { version as packageJsonVersion } from '../../../package.json'
 import { IRelease } from '@/models/server/client-releases.model'
 import { compare, minor } from 'semver'
-import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/router/setting.constants'
 
-const page = settingsPage['softwareUpgrade']
 const errorMessage = ref('')
 const loading = ref(true)
 const rateLimitExceeded = ref(false)

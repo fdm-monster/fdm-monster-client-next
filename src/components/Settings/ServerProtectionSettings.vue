@@ -97,15 +97,11 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { useAuthStore } from '@/store/auth.store'
 import { useRouter } from 'vue-router'
 import { RouteNames } from '@/router/route-names'
-import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/router/setting.constants'
 
 const router = useRouter()
 const snackbar = useSnackbar()
 const authStore = useAuthStore()
-
-const page = settingsPage['serverProtection']
 
 const ipAddress = ref<string>('')
 

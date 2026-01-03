@@ -79,9 +79,7 @@
 import { onMounted, ref } from 'vue'
 import { SettingsService } from '@/backend'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/router/setting.constants'
 
-const page = settingsPage['experimental']
 const experimentalMoonrakerSupport = ref(false)
 const experimentalPrusaLinkSupport = ref(false)
 const experimentalBambuSupport = ref(false)

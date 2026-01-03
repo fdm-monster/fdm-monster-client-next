@@ -71,11 +71,8 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { useAuthStore } from '@/store/auth.store'
 import { routeToLogin } from '@/router/utils'
 import { useSettingsStore } from '@/store/settings.store'
-import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/router/setting.constants'
 
-const page = settingsPage['account']
 const settingsStore = useSettingsStore()
 const profileStore = useProfileStore()
 const authStore = useAuthStore()

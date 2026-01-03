@@ -58,11 +58,8 @@ import { setSentryEnabled } from '@/utils/sentry.util'
 import { ServerPrivateService } from '@/backend/server-private.service'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { captureException } from '@sentry/vue'
-import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/router/setting.constants'
 
-const page = settingsPage['diagnostics']
 const snackBar = useSnackbar()
 const settingsStore = useSettingsStore()
 const sentryDiagnosticsEnabled = ref(false)

@@ -86,7 +86,6 @@ declare module 'vue' {
     ServerDisconnectedMessage: typeof import('./components/Generic/Loaders/ServerDisconnectedMessage.vue')['default']
     ServerProtectionSettings: typeof import('./components/Settings/ServerProtectionSettings.vue')['default']
     SettingSection: typeof import('./components/Settings/Shared/SettingSection.vue')['default']
-    SettingsToolbar: typeof import('./components/Settings/Shared/SettingsToolbar.vue')['default']
     SettingsView: typeof import('./components/Settings/SettingsView.vue')['default']
     SoftwareUpgradeSettings: typeof import('./components/Settings/SoftwareUpgradeSettings.vue')['default']
     SyncPrinterNameAction: typeof import('./components/Generic/Actions/SyncPrinterNameAction.vue')['default']

@@ -175,11 +175,8 @@ import { useQuery } from '@tanstack/vue-query'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/router/setting.constants'
 
-const page = settingsPage['users']
 const snackbar = useSnackbar()
 const loading = ref<boolean>(false)
 const profile = ref<User>()
