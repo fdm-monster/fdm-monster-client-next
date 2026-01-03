@@ -499,13 +499,6 @@ const openCameraEditDialog = (cameraId?: number) => {
   }
 }
 
-const goToCameraPageForPrinter = (printerId: number) => {
-  router.push({
-    path: '/cameras',
-    query: { printer: printerId.toString() }
-  })
-}
-
 const addPrinterToTag = async (tagId: number, printerId: number) => {
   await PrinterTagService.addPrinterToTag(tagId, printerId)
   await printerTagsQuery.refetch()
