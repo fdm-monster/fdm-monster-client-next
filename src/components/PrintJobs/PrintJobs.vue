@@ -450,7 +450,7 @@
                 </v-list-item>
 
                 <v-list-item
-                  @click="handleSubmitToPrinter(item)"
+                  @click="submitToPrinter(item)"
                   :disabled="!canSubmitToPrinter(item)"
                 >
                   <template #prepend>
@@ -943,16 +943,6 @@ const loadingQueue = ref(false)
 const queueCurrentPage = ref(1)
 const queuePageSize = ref(50)
 const queueCount = ref(0)
-
-const queueHeaders = [
-  { title: 'Printer', key: 'printerName', sortable: false },
-  { title: 'File Name', key: 'fileName', sortable: false },
-  { title: 'Position', key: 'queuePosition', sortable: false },
-  { title: 'Status', key: 'status', sortable: false },
-  { title: 'Queued At', key: 'createdAt', sortable: false },
-  { title: 'Filament', key: 'filamentGrams', sortable: false },
-  { title: 'Actions', key: 'actions', sortable: false, align: 'end' as const }
-]
 
 // Snackbar for notifications
 const { info, error } = useSnackbar()

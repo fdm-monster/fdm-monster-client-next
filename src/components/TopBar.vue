@@ -161,17 +161,6 @@ const pageTitle = computed(() => {
   return pageTitles[routeName]?.title || ''
 })
 
-const pageSubtitle = computed(() => {
-  const routeName = route.name as string
-  const routePath = route.path as string
-
-  // No subtitles for settings subpages
-  if (routePath.startsWith('/settings/')) {
-    return 'Configure your system'
-  }
-
-  return pageTitles[routeName]?.subtitle || ''
-})
 const items = [
   { title: 'Open Profile', icon: 'mdi:mdi-account', path: '/settings/account' }
 ]

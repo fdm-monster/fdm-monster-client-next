@@ -1128,25 +1128,6 @@ export class PrintQueueController {
   }
 
   /**
-   * removeFromQueue
-   */
-  public static deleteApiV2PrintQueueByPrinterIdByJobId<
-    ThrowOnError extends boolean = false
-  >(
-    options: Options<DeleteApiV2PrintQueueByPrinterIdByJobIdData, ThrowOnError>
-  ) {
-    return (options.client ?? client).delete<
-      DeleteApiV2PrintQueueByPrinterIdByJobIdResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/v2/print-queue/{printerId}/{jobId}',
-      ...options
-    })
-  }
-
-  /**
    * reorderQueue
    */
   public static putApiV2PrintQueueByPrinterIdReorder<
@@ -1176,6 +1157,25 @@ export class PrintQueueController {
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
       url: '/api/v2/print-queue/{printerId}/clear',
+      ...options
+    })
+  }
+
+  /**
+   * removeFromQueue
+   */
+  public static deleteApiV2PrintQueueByPrinterIdByJobId<
+    ThrowOnError extends boolean = false
+  >(
+    options: Options<DeleteApiV2PrintQueueByPrinterIdByJobIdData, ThrowOnError>
+  ) {
+    return (options.client ?? client).delete<
+      DeleteApiV2PrintQueueByPrinterIdByJobIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-queue/{printerId}/{jobId}',
       ...options
     })
   }

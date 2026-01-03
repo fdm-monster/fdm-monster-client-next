@@ -789,29 +789,6 @@ export type PostApiV2PrintQueueByPrinterIdAddByJobIdResponses = {
   200: unknown
 }
 
-export type DeleteApiV2PrintQueueByPrinterIdByJobIdData = {
-  body?: never
-  path: {
-    /**
-     * The printerId parameter
-     */
-    printerId: string
-    /**
-     * The jobId parameter
-     */
-    jobId: string
-  }
-  query?: never
-  url: '/api/v2/print-queue/{printerId}/{jobId}'
-}
-
-export type DeleteApiV2PrintQueueByPrinterIdByJobIdResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
 export type PutApiV2PrintQueueByPrinterIdReorderData = {
   body?: never
   path: {
@@ -844,6 +821,29 @@ export type DeleteApiV2PrintQueueByPrinterIdClearData = {
 }
 
 export type DeleteApiV2PrintQueueByPrinterIdClearResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type DeleteApiV2PrintQueueByPrinterIdByJobIdData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+    /**
+     * The jobId parameter
+     */
+    jobId: string
+  }
+  query?: never
+  url: '/api/v2/print-queue/{printerId}/{jobId}'
+}
+
+export type DeleteApiV2PrintQueueByPrinterIdByJobIdResponses = {
   /**
    * Successful response
    */
