@@ -4,6 +4,10 @@ export interface CreateCameraStreamDto {
   streamURL: string
   name?: string
   printerId?: number
+  aspectRatio?: string
+  rotationClockwise?: number
+  flipHorizontal?: boolean
+  flipVertical?: boolean
 }
 
 export interface CameraStream {
@@ -11,6 +15,10 @@ export interface CameraStream {
   printerId?: number
   streamURL: string
   name?: string
+  aspectRatio?: string
+  rotationClockwise?: number
+  flipHorizontal?: boolean
+  flipVertical?: boolean
 }
 
 export interface CameraWithPrinter {

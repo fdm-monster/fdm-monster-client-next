@@ -4,6 +4,10 @@ Features
 
 - Auto place printers on grid
 
+Fixes
+- Extra camera and floor actions on printer list
+- Camera advanced settings applied
+
 ## Client 2.0.1
 
 Features
