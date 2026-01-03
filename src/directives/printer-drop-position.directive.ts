@@ -25,14 +25,6 @@ const bindDropConditionally = (
 
   const floorStore = useFloorStore()
 
-  // If a printer is placed, we will not (yet) allow placing another printer
-  if (printerSet) {
-    el.ondrop = null
-    el.ondragover = null
-    el.ondragleave = null
-    return
-  }
-
   el.style.border = defaultBorder
   el.ondrop = async (e) => {
     el.style.border = defaultBorder
@@ -54,6 +46,27 @@ const bindDropConditionally = (
     const printerId = data.printerId
     if (!printerId) throw new Error('PrinterId was not provided')
 
+    // If dropping on an occupied position, swap the printers
+    if (printerSet && printerSet.id !== printerId) {
+      const targetPrinter = printerSet
+      const targetPosition = floorStore.selectedFloor?.printers.find(
+        p => p.printerId === targetPrinter.id
+      )
+      const draggedPosition = floorStore.selectedFloor?.printers.find(
+        p => p.printerId === printerId
+      )
+
+      if (targetPosition && draggedPosition) {
+        // Swap positions: move target to dragged position first
+        await FloorService.addPrinterToFloor(floorId, {
+          printerId: targetPrinter.id,
+          x: draggedPosition.x,
+          y: draggedPosition.y
+        })
+      }
+    }
+
+    // Place the dragged printer at the target position
     await FloorService.addPrinterToFloor(floorId, {
       printerId,
       x: bindingValue.x,

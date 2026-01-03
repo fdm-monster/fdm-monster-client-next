@@ -41,6 +41,20 @@
       @update:model-value="onPrinterTypeFilterChange"
     />
 
+    <!-- Auto Place button -->
+    <v-btn
+      v-if="floorStore.floorlessPrinters.length"
+      color="primary"
+      variant="elevated"
+      size="small"
+      class="ml-4"
+      @click="autoPlacePrinters"
+      :loading="autoPlacing"
+    >
+      <v-icon start>grid_on</v-icon>
+      Auto Place
+    </v-btn>
+
     <!-- Unplaced printers menu -->
     <v-menu v-if="floorStore.floorlessPrinters.length" :close-on-content-click="false">
       <template v-slot:activator="{ props }">
@@ -49,7 +63,7 @@
           color="warning"
           variant="tonal"
           size="small"
-          class="ml-4"
+          class="ml-2"
         >
           <v-icon start>warning</v-icon>
           {{ floorStore.floorlessPrinters.length }} Unplaced
@@ -62,7 +76,7 @@
         </v-card-title>
         <v-card-text>
           <div class="text-caption mb-2 text-medium-emphasis">
-            Drag these printers onto the grid:
+            Drag these printers onto the grid or use Auto Place:
           </div>
           <div class="d-flex flex-wrap ga-2">
             <v-chip
@@ -96,9 +110,10 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useGridStore } from '@/store/grid.store'
 import { useFloorStore } from '@/store/floor.store'
+import { useSettingsStore } from '@/store/settings.store'
 import { usePrinterFilters } from '@/shared/printer-filter.composable'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
@@ -110,6 +125,8 @@ import type { PrinterDto } from '@/models/printers/printer.model'
 
 const floorStore = useFloorStore()
 const gridStore = useGridStore()
+const settingsStore = useSettingsStore()
+const autoPlacing = ref(false)
 
 const {
   selectedTags,
@@ -151,5 +168,57 @@ function onUnplacedDragStart(printer: PrinterDto, ev: DragEvent) {
       printerId: printer.id
     } as PrinterPlace)
   )
+}
+
+async function autoPlacePrinters() {
+  if (!floorStore.selectedFloor) return
+
+  autoPlacing.value = true
+  try {
+    // Sort printers by type, then alphabetically by name
+    const sortedPrinters = [...floorStore.floorlessPrinters].sort((a, b) => {
+      if (a.printerType !== b.printerType) {
+        return a.printerType - b.printerType
+      }
+      return a.name.localeCompare(b.name)
+    })
+
+    // Get current grid size
+    const gridCols = settingsStore.gridCols
+    const gridRows = settingsStore.gridRows
+
+    // Get occupied positions
+    const occupiedPositions = new Set(
+      floorStore.selectedFloor.printers.map(p => `${p.x},${p.y}`)
+    )
+
+    // Find available positions
+    const availablePositions: { x: number; y: number }[] = []
+    for (let y = 0; y < gridRows; y++) {
+      for (let x = 0; x < gridCols; x++) {
+        const posKey = `${x},${y}`
+        if (!occupiedPositions.has(posKey)) {
+          availablePositions.push({ x, y })
+        }
+      }
+    }
+
+    // Place each printer in the next available position
+    const printersToPlace = Math.min(sortedPrinters.length, availablePositions.length)
+    for (let i = 0; i < printersToPlace; i++) {
+      const printer = sortedPrinters[i]
+      const position = availablePositions[i]
+      await floorStore.addPrinterToFloor({
+        floorId: floorStore.selectedFloor.id,
+        printerId: printer.id,
+        x: position.x,
+        y: position.y
+      })
+    }
+  } catch (error) {
+    console.error('Failed to auto-place printers:', error)
+  } finally {
+    autoPlacing.value = false
+  }
 }
 </script>

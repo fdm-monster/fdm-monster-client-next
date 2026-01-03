@@ -23,6 +23,19 @@
         {{ printer?.name ?? '&nbsp;' }}
       </div>
 
+      <!-- Temperatures - positioned as overlay in top left -->
+      <div
+        v-if="printer && (toolTemp || bedTemp)"
+        class="temperature-overlay"
+      >
+        <small v-if="toolTemp" class="temp-item">
+          🔥 {{ toolTemp }}
+        </small>
+        <small v-if="bedTemp" class="temp-item">
+          🛏️ {{ bedTemp }}
+        </small>
+      </div>
+
       <!-- Create printer or no printers message -->
       <div
         v-if="!printer"
@@ -137,16 +150,6 @@
         class="printer-info"
         style="overflow: clip"
       >
-        <!-- Temperatures -->
-        <div v-if="toolTemp || bedTemp" class="temperature-display">
-          <small v-if="toolTemp" class="temp-item">
-            🔥 {{ toolTemp }}
-          </small>
-          <small v-if="bedTemp" class="temp-item">
-            🛏️ {{ bedTemp }}
-          </small>
-        </div>
-
         <!-- File name -->
         <small class="file-name">
           {{ currentPrintingFilePath ?? 'No File' }}
@@ -676,6 +679,19 @@ const selectPrinterPosition = async () => {
   z-index: 1;
 }
 
+.temperature-overlay {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 3px 5px;
+  border-radius: 6px;
+}
+
 .printer-info {
   width: 100%;
   display: flex;
@@ -703,19 +719,11 @@ const selectPrinterPosition = async () => {
   border-radius: 4px;
 }
 
-.temperature-display {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1px;
-}
-
 .temp-item {
-  font-size: 10px;
-  color: #e0e0e0;
+  font-size: 9px;
+  color: #ffffff;
   white-space: nowrap;
-  line-height: 1;
+  line-height: 1.3;
 }
 
 .centered-controls {
