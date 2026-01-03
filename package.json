@@ -34,7 +34,7 @@
   "devDependencies": {
     "@babel/types": "7.28.5",
     "@hey-api/client-axios": "0.9.1",
-    "@hey-api/openapi-ts": "0.89.2",
+    "@hey-api/openapi-ts": "0.90.0",
     "@mdi/font": "7.4.47",
     "@sentry/tracing": "7.120.4",
     "@sentry/vite-plugin": "4.6.1",
