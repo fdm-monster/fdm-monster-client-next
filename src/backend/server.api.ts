@@ -1,3 +1,6 @@
+/**
+ * @deprecated THIS FILE IS DEPRECATED. Move API routes to services.
+ */
 export class ServerApi {
   static readonly base = "/api"
   static readonly firstTimeSetupRoute = `${ServerApi.base}/first-time-setup`

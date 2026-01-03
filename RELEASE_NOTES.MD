@@ -1,5 +1,12 @@
 # Develop
 
+Features
+
+- Tag color system
+- Tag management dialog with color picker
+- Clickable floor/tag/camera chips to open edit dialogs
+- Action menus on printer list for floors, tags, and cameras
+
 ## Client 2.0.0
 
 Features
@@ -23,7 +30,6 @@ Features
 - Implement capabilities feature to allow better UI customization for different printer types
 - Redesign About page and move into settings
 - Redesign First Time Setup page with shared HelpBanner across pages using new GitHub and Discord button components
-- Tag color system
 
 Fixes
 
