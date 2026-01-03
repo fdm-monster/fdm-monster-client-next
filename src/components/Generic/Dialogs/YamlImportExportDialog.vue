@@ -106,7 +106,7 @@
                     class="mb-2"
                   />
                   <v-checkbox
-                    v-model="exportGroups"
+                    v-model="exportTags"
                     label="Tags"
                     hide-details
                     density="comfortable"
@@ -185,7 +185,7 @@ const errorDetailedMessage = ref('')
 const selectedMode = ref(0)
 const exportFloors = ref(true)
 const exportFloorGrid = ref(true)
-const exportGroups = ref(true)
+const exportTags = ref(true)
 const exportPrinters = ref(true)
 const exportSettings = ref(true)
 const exportUsers = ref(true)
@@ -273,7 +273,7 @@ const downloadExportYamlFile = async () => {
 
   await ServerPrivateService.downloadYamlExport({
     exportPrinters: exportPrinters.value,
-    exportGroups: exportGroups.value,
+    exportTags: exportTags.value,
     exportFloorGrid: exportFloorGrid.value,
     exportSettings: exportSettings.value,
     exportUsers: exportUsers.value,

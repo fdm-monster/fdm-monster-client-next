@@ -1,6 +1,6 @@
 export interface ExportYamlModel {
   exportPrinters: boolean
-  exportGroups: boolean
+  exportTags: boolean
   exportFloorGrid: boolean
   exportFloors: boolean
   exportSettings: boolean
