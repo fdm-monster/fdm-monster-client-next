@@ -12,7 +12,7 @@
         <template #activator="{ props: tooltipProps }">
           <v-btn
             variant="tonal"
-            class="ml-2 mr-2"
+            class="ml-2 mr-6"
             v-bind="{ ...dialogActivatorProps, ...tooltipProps }"
           >
             <v-icon icon="mdi:mdi-help" class="mr-2"></v-icon>

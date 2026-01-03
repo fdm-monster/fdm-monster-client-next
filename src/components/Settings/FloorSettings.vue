@@ -1,7 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar icon="house_siding" title="Floors" />
-
     <v-card-text>
       <SettingSection title="Manage Floors" :usecols="false">
         <div class="mb-4 d-flex align-center ga-3">
@@ -145,7 +143,6 @@ import { usePrinterStore } from '@/store/printer.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
 import { FloorDto } from '@/models/floors/floor.model'
 
@@ -176,7 +173,7 @@ function getPrinterName(printerId: number) {
 
 function goToGridForFloor(floorId: number) {
   router.push({
-    path: '/printers-grid',
+    path: '/printer-grid',
     query: { floor: floorId.toString() }
   })
 }

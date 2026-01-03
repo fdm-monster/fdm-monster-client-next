@@ -8,7 +8,7 @@ export class ServerPrivateService extends BaseService {
     const client = await getHttpClient()
     const response = await client.request<any>({
       method: 'POST',
-      url: 'api/server/yaml-export',
+      url: 'api/v2/server/yaml-export',
       data: input,
       responseType: 'arraybuffer'
     })
@@ -22,7 +22,7 @@ export class ServerPrivateService extends BaseService {
     const formData = new FormData()
     formData.append('file', file)
     return await this.postUpload(
-      'api/server/yaml-import',
+      'api/v2/server/yaml-import',
       formData,
       {}
     )
@@ -32,7 +32,7 @@ export class ServerPrivateService extends BaseService {
     const client = await getHttpClient()
     const response = await client.request<any>({
       method: 'POST',
-      url: `api/server/dump-fdm-monster-logs`,
+      url: `api/v2/server/dump-fdm-monster-logs`,
       responseType: 'arraybuffer'
     })
     downloadFileByBlob(
@@ -42,7 +42,7 @@ export class ServerPrivateService extends BaseService {
   }
 
   public static async clearLogFilesOlderThanWeek() {
-    const path = `api/server/clear-outdated-fdm-monster-logs`
+    const path = `api/v2/server/clear-outdated-fdm-monster-logs`
     return await this.delete(path)
   }
 }

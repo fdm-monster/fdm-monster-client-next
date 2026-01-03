@@ -43,10 +43,11 @@ import imgLogo from '@/assets/logo.png'
 
 const items = [
   ['dashboard', 'Dashboard', '/dashboard'],
-  ['view_module', 'Printer Grid', '/printers-grid'],
-  ['mdi:mdi-printer', 'Printers', '/printers'],
+  ['view_module', 'Printer Grid', '/printer-grid'],
+  ['mdi:mdi-printer', 'Printers', '/printer-list'],
   ['mdi:mdi-camera', 'Cameras', '/cameras'],
   ['mdi:mdi-history', 'Print Jobs', '/jobs'],
+  ['mdi:mdi-folder', 'Files', '/files'],
   ['mdi:mdi-cog', 'Settings', '/settings']
 ]
 </script>

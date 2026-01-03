@@ -1,20 +1,5 @@
 <template>
   <div class="camera-grid-view">
-    <!-- Header Toolbar -->
-    <v-toolbar
-      color="surface"
-      elevation="1"
-      class="px-4"
-    >
-      <v-icon
-        size="32"
-        class="mr-3"
-      >videocam</v-icon>
-      <v-toolbar-title class="text-h5 font-weight-bold">
-        Camera Overview
-      </v-toolbar-title>
-    </v-toolbar>
-
     <!-- Search and Action Bar -->
     <div class="pa-4">
       <v-row align="center">
@@ -347,7 +332,7 @@ import { CameraWithPrinter } from '@/models/camera-streams/camera-stream'
 import { usePrinterStore } from '@/store/printer.store'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
 import type { PrinterDto } from '@/models/printers/printer.model'
-import { getServiceName } from '@/shared/printer-types.constants'
+import { getPrinterTypeName } from '@/shared/printer-types.constants'
 import { usePrinterFilters } from '@/shared/printer-filter.composable'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
@@ -552,14 +537,8 @@ function deleteCamera(cameraId?: number) {
   deleteMutation.mutateAsync(cameraId)
 }
 
-// Open printer sidenav for associated printer
 function openPrinterSideNav(printer: PrinterDto) {
   fileExplorer.openFileExplorer(printer)
-}
-
-// Get printer type name
-function getPrinterTypeName(printerType?: number) {
-  return getServiceName(printerType)
 }
 </script>
 

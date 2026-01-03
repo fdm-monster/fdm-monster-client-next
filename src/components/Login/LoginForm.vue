@@ -115,12 +115,23 @@ onMounted(async () => {
   if (authStore.loginRequired === false) {
     // As AppLoader might not trigger, we trigger it ourselves
     console.debug(
-      'LoginView, no login required, redirecting to',
-      route.query.redirect,
-      'or home'
+      'LoginView, no login required, checking redirect:',
+      route.query.redirect
     )
-    loginEvent.emit(true)
-    return await routeToRedirect()
+
+    // Only redirect if we have a valid redirect query parameter
+    // This prevents race condition where login page loads before router sets redirect
+    if (route.query.redirect) {
+      console.debug('LoginView, redirecting to:', route.query.redirect)
+      loginEvent.emit(true)
+      return await routeToRedirect()
+    } else {
+      // If no redirect query, just emit login event and let the router handle navigation
+      // Don't auto-redirect to avoid race condition
+      console.debug('LoginView, no redirect query, emitting login event only')
+      loginEvent.emit(true)
+      return
+    }
   }
   if (!authStore.hasRefreshToken) {
     return

@@ -108,20 +108,49 @@
           </template>
           <template v-slot:default>Files</template>
         </v-tooltip>
+
+        <v-tooltip location="top">
+          <template v-slot:activator="{ props }">
+            <v-btn
+              color="info"
+              elevation="2"
+              size="x-small"
+              rounded="xl"
+              v-bind="props"
+              @click.prevent.stop="clickShowCurrentJob()"
+            >
+              <v-icon size="16">work</v-icon>
+            </v-btn>
+          </template>
+          <template v-slot:default>
+            View Printer Jobs
+          </template>
+        </v-tooltip>
       </div>
 
       <div
         v-if="printer"
         :style="{
           position: largeTilesEnabled ? 'inherit' : 'absolute',
-          top: largeTilesEnabled ? 'inherit' : '30px'
+          top: largeTilesEnabled ? 'inherit' : '28px'
         }"
-        class="printer-controls"
+        class="printer-info"
         style="overflow: clip"
       >
+        <!-- Temperatures -->
+        <div v-if="toolTemp || bedTemp" class="temperature-display">
+          <small v-if="toolTemp" class="temp-item">
+            🔥 {{ toolTemp }}
+          </small>
+          <small v-if="bedTemp" class="temp-item">
+            🛏️ {{ bedTemp }}
+          </small>
+        </div>
+
+        <!-- File name -->
         <small class="file-name">
-          {{ currentPrintingFilePath ?? '&nbsp;' }}</small
-        >
+          {{ currentPrintingFilePath ?? 'No File' }}
+        </small>
       </div>
 
       <!-- Hover controls -->
@@ -315,7 +344,7 @@
 
 <script lang="ts" setup>
 import { computed, PropType } from 'vue'
-import { CustomGcodeService } from '@/backend/custom-gcode.service'
+import { useRouter } from 'vue-router'
 import { PrintersService } from '@/backend'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
@@ -351,6 +380,7 @@ const controlDialog = useDialog(DialogName.PrinterControlDialog)
 const addOrUpdateDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 const fileExplorer = useFileExplorer()
 const snackbar = useSnackbar()
+const router = useRouter()
 
 const printerId = computed(() => props.printer?.id)
 
@@ -362,10 +392,7 @@ const tileIconThumbnailSize = computed(() =>
   largeTilesEnabled.value ? '80px' : '40px'
 )
 
-const { data: thumbnail } = useThumbnailQuery(
-  printerId,
-  settingsStore.thumbnailsEnabled
-)
+const { data: thumbnail } = useThumbnailQuery(printerId)
 
 const isOnline = computed(() =>
   printerId.value ? printerStateStore.isApiResponding(printerId.value) : false
@@ -437,6 +464,26 @@ const currentPrintingFilePath = computed(() => {
   return printerStateStore.printingFilePathsByPrinterId[printerId.value]
 })
 
+const currentTemperatures = computed(() => {
+  if (!printerId.value) return null
+  const printerEvents = printerStateStore.printerEventsById[printerId.value]
+  if (!printerEvents?.current?.payload?.temps || printerEvents.current.payload.temps.length === 0) {
+    return null
+  }
+  // Get the most recent temperature reading
+  return printerEvents.current.payload.temps[printerEvents.current.payload.temps.length - 1]
+})
+
+const toolTemp = computed(() => {
+  const temps = currentTemperatures.value
+  return temps?.tool0 ? `${Math.round(temps.tool0.actual)}°/${Math.round(temps.tool0.target)}°` : null
+})
+
+const bedTemp = computed(() => {
+  const temps = currentTemperatures.value
+  return temps?.bed ? `${Math.round(temps.bed.actual)}°/${Math.round(temps.bed.target)}°` : null
+})
+
 const clickStop = async () => {
   if (!printerId.value) return
 
@@ -490,6 +537,21 @@ const clickOpenSettings = () => {
   addOrUpdateDialog.openDialog({ id: printer.id })
 }
 
+const clickShowCurrentJob = async () => {
+  if (!printerId.value) {
+    snackbar.openInfoMessage({
+      title: 'No Printer',
+      subtitle: 'No printer to find jobs for'
+    })
+    return
+  }
+
+  await router.push({
+    path: '/jobs',
+    query: { printerId: printerId.value.toString() }
+  })
+}
+
 const clickOpenPrinterControlDialog = async () => {
   if (!printerId.value || !props.printer) {
     throw new Error('PrinterId not set, cant open dialog')
@@ -506,7 +568,7 @@ const clickQuickStop = async () => {
       'Are you sure to abort the print in Quick Stop mode? Please reconnect after.'
     )
   ) {
-    await CustomGcodeService.postQuickStopM112Command(printerId.value)
+    await PrintersService.postQuickStopM112Command(printerId.value)
   }
 }
 
@@ -614,24 +676,46 @@ const selectPrinterPosition = async () => {
   z-index: 1;
 }
 
-.printer-controls {
+.printer-info {
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 0;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  gap: 0;
 }
 
 .file-name {
-  font-size: 14px;
-  color: #bfbfbf;
-  max-width: 70%;
+  font-size: 11px;
+  color: #ffffff;
+  max-width: 80%;
   display: block;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  line-height: 1.3;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.temperature-display {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.temp-item {
+  font-size: 10px;
+  color: #e0e0e0;
+  white-space: nowrap;
+  line-height: 1;
 }
 
 .centered-controls {

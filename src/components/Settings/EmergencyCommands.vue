@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar :icon="page.icon" :title="page.title" />
     <v-card-text>
       <SettingSection
         title="Batch disabling"
@@ -110,12 +109,9 @@
 import { computed, ref } from 'vue'
 import { BatchService } from '@/backend/batch.service'
 import { usePrinterStore } from '@/store/printer.store'
-import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
-import { settingsPage } from '@/router/setting.constants'
 import { hasSerialConnection } from '@/shared/printer-capabilities.constants'
 
-const page = settingsPage['emergencyCommands']
 const printerStore = usePrinterStore()
 
 const isLoading = ref(false)

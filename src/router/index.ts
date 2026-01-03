@@ -20,6 +20,7 @@ import ServerProtectionSettings from '../components/Settings/ServerProtectionSet
 import SoftwareUpgradeSettings from '../components/Settings/SoftwareUpgradeSettings.vue'
 import DiagnosticsSettings from '../components/Settings/DiagnosticsSettings.vue'
 import PrintJobsView from '../components/PrintJobs/PrintJobsView.vue'
+import FilesView from '../components/Files/FilesView.vue'
 import ExperimentalSettings from '@/components/Settings/ExperimentalSettings.vue'
 import DebugSocketSettings from "@/components/Settings/DebugSocketSettings.vue";
 import AboutSettings from "@/components/Settings/AboutSettings.vue";
@@ -39,7 +40,7 @@ const router = createRouter({
       path: '/',
       name: RouteNames.Home,
       meta: NeedsAuth,
-      redirect: '/dashboard'
+      component: DashboardView
     },
     {
       path: '/dashboard',
@@ -48,7 +49,7 @@ const router = createRouter({
       component: DashboardView
     },
     {
-      path: '/printers-grid',
+      path: '/printer-grid',
       name: 'PrinterGrid',
       meta: NeedsAuth,
       component: PrinterGridView
@@ -72,7 +73,7 @@ const router = createRouter({
       component: RegistrationView
     },
     {
-      path: '/printers',
+      path: '/printer-list',
       name: RouteNames.PrintersView,
       meta: NeedsAuth,
       component: PrintersView
@@ -155,6 +156,12 @@ const router = createRouter({
       name: RouteNames.PrintJobs,
       meta: NeedsAuth,
       component: PrintJobsView
+    },
+    {
+      path: '/files',
+      name: RouteNames.Files,
+      meta: NeedsAuth,
+      component: FilesView
     },
     {
       path: '/permission-denied',

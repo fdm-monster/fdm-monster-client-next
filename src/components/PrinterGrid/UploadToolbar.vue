@@ -9,7 +9,7 @@ import { usePrinterStore } from "@/store/printer.store";
 import { usePrinterStateStore } from "@/store/printer-state.store";
 import { useUploadsStore } from "@/store/uploads.store";
 import { useSnackbar } from "@/shared/snackbar.composable";
-import { formatBytes } from "@/utils/file-size.util";
+import { formatFileSize } from "@/utils/file-size.util";
 
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
@@ -125,7 +125,7 @@ const openPrinter = (printer: PrinterDto) => {
           >
             {{ selectedFile.name }}
             <strong class="pl-1">
-              {{ formatBytes(selectedFile.size) }}
+              {{ formatFileSize(selectedFile.size) }}
             </strong>
           </v-chip>
         </v-chip-group>

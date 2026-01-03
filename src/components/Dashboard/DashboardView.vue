@@ -304,7 +304,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePrinterStore } from '@/store/printer.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
@@ -318,10 +318,22 @@ import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { PrintJobService, type PrintJobDto } from '@/backend/print-job.service'
+import {
+  calculateJobPerformanceMetrics,
+  formatPrintTime
+} from '@/shared/dashboard-statistics'
+import { useGlobalQueueQuery } from '@/queries/global-queue.query'
 
 const router = useRouter()
 const printerStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
+
+// Print jobs data for performance insights
+const recentJobs = ref<PrintJobDto[]>([])
+
+// Queue data
+const { data: queueData } = useGlobalQueueQuery()
 
 const {
   selectedTags,
@@ -333,7 +345,28 @@ const {
 
 onMounted(async () => {
   await loadTags()
+  await loadRecentJobs()
 })
+
+// Load recent jobs for performance metrics
+async function loadRecentJobs() {
+  try {
+    // Get jobs from last 7 days for better statistics
+    const sevenDaysAgo = new Date()
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+
+    const response = await PrintJobService.searchJobsPaged({
+      startDate: sevenDaysAgo.toISOString().split('T')[0],
+      page: 1,
+      pageSize: 500 // API maximum
+    })
+
+    recentJobs.value = response.items
+  } catch (error) {
+    console.error('Failed to load recent jobs:', error)
+    recentJobs.value = []
+  }
+}
 
 // Computed properties for dashboard metrics
 const printers = computed(() => printerStore.printers)
@@ -355,19 +388,19 @@ const farmUtilization = computed(() => {
   return Math.round((printingCount.value / totalPrinters.value) * 100)
 })
 
-const successRate = computed(() => {
-  // This would need to be implemented with actual statistics data
-  // For now, return a placeholder
-  return 94
+// Job performance metrics computed from real data
+const jobMetrics = computed(() => {
+  return calculateJobPerformanceMetrics(recentJobs.value, 24)
 })
 
-const activeJobs = computed(() => printingCount.value)
-const queueLength = computed(() => 0) // Placeholder - would need queue implementation
-const avgPrintTime = computed(() => '2h 34m') // Placeholder - would calculate from stats
+const successRate = computed(() => jobMetrics.value.successRate)
+const activeJobs = computed(() => jobMetrics.value.activeJobs)
+const queueLength = computed(() => queueData.value?.totalJobs || 0)
+const avgPrintTime = computed(() => formatPrintTime(jobMetrics.value.averagePrintTimeHours))
 
 // Navigation methods
 const goToPrinterGrid = () => {
-  router.push('/printers-grid')
+  router.push('/printer-grid')
 }
 
 const goToPrinterList = () => {
@@ -396,7 +429,7 @@ const openOctoFarmImportDialog = () => {
 
 // Printer interaction methods
 const openPrinter = () => {
-  router.push('/printers-grid')
+  router.push('/printer-grid')
 }
 
 // Printer status helpers

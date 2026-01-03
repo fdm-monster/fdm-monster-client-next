@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar :icon="page.icon" :title="page.title" />
     <v-card-text class="pa-2">
       <!-- Controls -->
       <div class="d-flex align-center flex-wrap gap-2 mb-2">
@@ -100,10 +99,7 @@ import { ref, watch, nextTick, onMounted } from "vue";
 import { useDebugSocketStore, SocketMessage } from "@/store/debug-socket.store";
 import { useDialog } from "@/shared/dialog.composable";
 import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import SettingsToolbar from "@/components/Settings/Shared/SettingsToolbar.vue";
-import { settingsPage } from "@/router/setting.constants";
 
-const page = settingsPage["debugSocket"];
 const debugStore = useDebugSocketStore();
 const jsonViewerDialog = useDialog(DialogName.JsonViewerDialog);
 

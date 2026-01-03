@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar :icon="page.icon" :title="page.title" />
     <v-card-text>
       <SettingSection
         v-if="settingsStore.settings?.timeout"
@@ -73,11 +72,7 @@ import { ref } from "vue";
 import { PrinterFileService } from "@/backend";
 import { useSnackbar } from "@/shared/snackbar.composable";
 import { useSettingsStore } from "@/store/settings.store";
-import SettingsToolbar from "@/components/Settings/Shared/SettingsToolbar.vue";
 import SettingSection from "@/components/Settings/Shared/SettingSection.vue";
-import { settingsPage } from "@/router/setting.constants";
-
-const page = settingsPage["printer"];
 
 const settingsStore = useSettingsStore();
 const snackbar = useSnackbar();

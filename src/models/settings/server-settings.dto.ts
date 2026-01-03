@@ -5,5 +5,4 @@ export interface ServerSettingsDto {
   experimentalMoonrakerSupport: boolean
   experimentalPrusaLinkSupport: boolean
   experimentalBambuSupport: boolean
-  experimentalThumbnailSupport: boolean
 }

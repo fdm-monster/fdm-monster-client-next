@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import { captureException } from '@sentry/vue'
-import { computed, onBeforeMount, onUnmounted, watch } from 'vue'
+import { computed, onBeforeMount, onUnmounted, ref, watch } from 'vue'
 import { useEventBus } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { AxiosError } from 'axios'
@@ -35,7 +35,6 @@ import { useSettingsStore } from '@/store/settings.store'
 import { setSentryEnabled } from '@/utils/sentry.util'
 import { useFeatureStore } from '@/store/features.store'
 import { useProfileStore } from '@/store/profile.store'
-import { sleep } from '@/utils/time.utils'
 import { RouteNames } from '@/router/route-names'
 import { AppService } from '@/backend/app.service'
 import {
@@ -55,6 +54,10 @@ const profileStore = useProfileStore();
 const router = useRouter();
 const snackbar = useSnackbar();
 const socketIoClient: SocketIoService = new SocketIoService();
+
+// Store the initial route on mount to preserve it during auth flows
+// Initialize as empty, will be set in onBeforeMount when router is ready
+const initialRoute = ref('')
 
 const theme = useTheme()
 const scrimColor = computed(() => theme.current.value.colors.background)
@@ -168,7 +171,14 @@ authFailKey.on(async (event: any) => {
   setOverlay(true, 'Authentication failed, going back to login')
 
   if (router.currentRoute.value.name !== RouteNames.Login) {
-    await router.push({ name: RouteNames.Login })
+    const redirectPath = initialRoute.value && initialRoute.value !== '/'
+      ? initialRoute.value
+      : router.currentRoute.value.fullPath
+    console.debug('[AppLoader] Redirecting to login with redirect:', redirectPath)
+    await router.push({
+      name: RouteNames.Login,
+      query: { redirect: redirectPath }
+    })
   }
   setOverlay(false)
 })
@@ -197,7 +207,13 @@ accountNotVerifiedEventKey.on(async () => {
     'Account not verified, please ask an administrator to verify your account.'
   )
   if (router.currentRoute.value.name !== RouteNames.Login) {
-    await router.push({ name: RouteNames.Login })
+    const redirectPath = initialRoute.value && initialRoute.value !== '/'
+      ? initialRoute.value
+      : router.currentRoute.value.fullPath
+    await router.push({
+      name: RouteNames.Login,
+      query: { redirect: redirectPath }
+    })
   }
   setOverlay(false)
 })
@@ -213,7 +229,13 @@ passwordChangeRequiredEventKey.on(async () => {
   snackbar.error('Password change required, please change your password.')
   setOverlay(true, 'Password change required, please change your password.')
   if (router.currentRoute.value.name !== RouteNames.Login) {
-    await router.push({ name: RouteNames.Login })
+    const redirectPath = initialRoute.value && initialRoute.value !== '/'
+      ? initialRoute.value
+      : router.currentRoute.value.fullPath
+    await router.push({
+      name: RouteNames.Login,
+      query: { redirect: redirectPath }
+    })
   }
   setOverlay(false)
 })
@@ -327,9 +349,15 @@ async function loadApp() {
       console.debug('[AppLoader] No success refreshing')
       setOverlay(true, 'Login expired, going back to login')
 
-      await sleep(500)
       if (router.currentRoute.value.name !== RouteNames.Login) {
-        await router.push({ name: RouteNames.Login })
+        const redirectPath = initialRoute.value && initialRoute.value !== '/'
+          ? initialRoute.value
+          : router.currentRoute.value.fullPath
+        console.debug('[AppLoader] Token refresh failed, redirecting to login with redirect:', redirectPath)
+        await router.push({
+          name: RouteNames.Login,
+          query: { redirect: redirectPath }
+        })
       }
       setOverlay(false)
       // Don't load app as it will be redirected to login
@@ -351,6 +379,10 @@ async function loadApp() {
 }
 
 onBeforeMount(async () => {
+  // Capture the route the user is trying to access before any auth logic runs
+  initialRoute.value = router.currentRoute.value.fullPath
+  console.debug('[AppLoader] Initial route captured:', initialRoute.value)
+
   await loadApp()
 })
 </script>

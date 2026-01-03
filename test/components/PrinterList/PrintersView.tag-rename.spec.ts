@@ -74,7 +74,7 @@ describe('ManageTagsDialog - Tag Rename Functionality', () => {
       history: createMemoryHistory(),
       routes: [
         { path: '/', component: { template: '<div>Home</div>' } },
-        { path: '/printers-grid', component: { template: '<div>Printers Grid</div>' } },
+        { path: '/printer-grid', component: { template: '<div>Printers Grid</div>' } },
         { path: '/cameras', component: { template: '<div>Cameras</div>' } }
       ]
     })

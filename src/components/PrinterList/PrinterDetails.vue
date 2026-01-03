@@ -26,7 +26,7 @@
             </div>
             <div class="d-flex align-center">
               <v-icon size="small" class="mr-2">hub</v-icon>
-              <span class="text-caption text-medium-emphasis mr-2">WebSocket:</span>
+              <span class="text-caption text-medium-emphasis mr-2">Connection:</span>
               <v-chip size="x-small" variant="tonal">{{ socketState }}</v-chip>
             </div>
             <div class="d-flex align-center">

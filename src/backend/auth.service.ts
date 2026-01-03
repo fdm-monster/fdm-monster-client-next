@@ -17,13 +17,13 @@ export class AuthService {
   static async getLoginRequired() {
     const httpClient = await getHttpClient(false, false)
     return await httpClient.get<LoginRequiredResponse>(
-      '/api/auth/login-required'
+      '/api/v2/auth/login-required'
     )
   }
 
   static async postLogin(username: string, password: string) {
     const httpClient = await getHttpClient(false, false)
-    return await httpClient.post<Tokens>('/api/auth/login', {
+    return await httpClient.post<Tokens>('/api/v2/auth/login', {
       username,
       password
     })
@@ -31,24 +31,24 @@ export class AuthService {
 
   static async logout() {
     const httpClient = await getHttpClient(true, false)
-    return await httpClient.post('/api/auth/logout')
+    return await httpClient.post('/api/v2/auth/logout')
   }
 
   static async refreshLogin(refreshToken: string) {
     const httpClient = await getHttpClient(false, false)
     return await httpClient.post<{
       token: string
-    }>('/api/auth/refresh', { refreshToken })
+    }>('/api/v2/auth/refresh', { refreshToken })
   }
 
   static async verifyLogin() {
     const httpClient = await getHttpClient(true, false)
-    return await httpClient.post('/api/auth/verify')
+    return await httpClient.post('/api/v2/auth/verify')
   }
 
   static async registerAccount(username: string, password: string) {
     const httpClient = await getHttpClient(true, false)
-    return await httpClient.post('/api/auth/register', {
+    return await httpClient.post('/api/v2/auth/register', {
       username,
       password
     })

@@ -2,8 +2,6 @@
   <div>
     <v-card>
       <v-card-title class="d-flex align-center">
-        <span>Printers</span>
-        <v-spacer/>
         <div class="d-flex align-center ga-2">
           <PrinterTagFilter
             v-model="selectedTagIds"
@@ -25,6 +23,40 @@
             hide-details
             style="width: 220px"
           />
+        </div>
+        <v-spacer/>
+        <div class="d-flex align-center ga-2">
+          <v-btn
+            variant="elevated"
+            color="purple"
+            prepend-icon="publish"
+            @click="openImportOctoFarmPrintersDialog()"
+          >
+            Import OctoFarm
+          </v-btn>
+          <v-btn
+            variant="elevated"
+            color="success"
+            prepend-icon="add"
+            @click="openCreatePrinterDialog()"
+          >
+            Create Printer
+          </v-btn>
+          <v-btn
+            variant="elevated"
+            prepend-icon="label"
+            @click="openManageTagsDialog()"
+          >
+            Manage Tags
+          </v-btn>
+          <v-btn
+            variant="elevated"
+            color="primary"
+            prepend-icon="code"
+            @click="openYamlImportExportDialog()"
+          >
+            Import/Export Backup
+          </v-btn>
         </div>
       </v-card-title>
 
@@ -48,48 +80,6 @@
             <PrinterCreateAction/>
           </div>
         </template>
-        <template #top>
-          <v-toolbar flat>
-            <v-toolbar-title>
-              Showing {{ printers.length || 0 }} printers
-            </v-toolbar-title>
-            <v-spacer/>
-            <v-btn
-              variant="elevated"
-              color="purple"
-              prepend-icon="publish"
-              @click="openImportOctoFarmPrintersDialog()"
-            >
-              Import OctoFarm
-            </v-btn>
-            <v-btn
-              class="ml-2"
-              variant="elevated"
-              color="success"
-              prepend-icon="add"
-              @click="openCreatePrinterDialog()"
-            >
-              Create Printer
-            </v-btn>
-            <v-btn
-              class="ml-2"
-              variant="elevated"
-              prepend-icon="label"
-              @click="openManageTagsDialog()"
-            >
-              Manage Tags
-            </v-btn>
-            <v-btn
-              class="ml-2 mr-2"
-              variant="elevated"
-              color="primary"
-              prepend-icon="code"
-              @click="openYamlImportExportDialog()"
-            >
-              Import/Export Backup
-            </v-btn>
-          </v-toolbar>
-        </template>
         <template #item.enabled="{ item }">
           <v-switch
             v-model="item.enabled"
@@ -101,7 +91,7 @@
           </v-switch>
         </template>
         <template v-slot:item.printerType="{ item }">
-          {{ getServiceName(item.printerType) }}
+          {{ getPrinterTypeName(item.printerType) }}
         </template>
         <template v-slot:item.name="{ item }">
           <v-chip>
@@ -315,7 +305,7 @@ import {
 } from '@/backend/printer-tag.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { VDataTable } from 'vuetify/components'
-import { getServiceName } from '@/shared/printer-types.constants'
+import { getPrinterTypeName } from '@/shared/printer-types.constants'
 import { CameraStreamService } from '@/backend/camera-stream.service'
 import { printerTagsQueryKey } from '@/queries/printer-tags.query'
 
@@ -457,11 +447,11 @@ const goToPrinterGrid = (printerId: number) => {
   const floor = floorOfPrinter(printerId)
   if (floor) {
     router.push({
-      path: '/printers-grid',
+      path: '/printer-grid',
       query: { floor: floor.id.toString() }
     })
   } else {
-    router.push('/printers-grid')
+    router.push('/printer-grid')
   }
 }
 
