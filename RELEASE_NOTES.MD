@@ -10,6 +10,7 @@ Features
 Fixes
 
 - Reordering floors now works
+- YAML export dialog now exports exportTags
 
 ## Client 2.0.0
 
