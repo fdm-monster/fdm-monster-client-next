@@ -1,5 +1,9 @@
 # Develop
 
+Features
+
+- Auto place printers on grid
+
 ## Client 2.0.1
 
 Features
