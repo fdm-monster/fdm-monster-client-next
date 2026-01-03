@@ -199,8 +199,10 @@ export const usePrinterStateStore = defineStore('PrinterState', {
         const printerEvents = this.printerEventsById[id]
         const flags = printerEvents?.current?.payload?.state?.flags
         if (flags?.printing || flags?.paused || flags?.pausing) {
+          const file = printerEvents?.current?.payload?.job?.file
+          // Use display name if available, otherwise fall back to name or path
           printingFilesByPrinterId[id] =
-            printerEvents?.current?.payload?.job?.file?.path
+            file?.display || file?.name || file?.path || 'Unknown file'
         }
       })
       return printingFilesByPrinterId

@@ -137,11 +137,6 @@
         class="printer-info"
         style="overflow: clip"
       >
-        <!-- File name -->
-        <small class="file-name">
-          {{ currentPrintingFilePath ?? '!!&nbsp;' }}
-        </small>
-
         <!-- Temperatures -->
         <div v-if="toolTemp || bedTemp" class="temperature-display">
           <small v-if="toolTemp" class="temp-item">
@@ -151,6 +146,11 @@
             🛏️ {{ bedTemp }}
           </small>
         </div>
+
+        <!-- File name -->
+        <small class="file-name">
+          {{ currentPrintingFilePath ?? 'No File' }}
+        </small>
       </div>
 
       <!-- Hover controls -->
@@ -699,7 +699,7 @@ const selectPrinterPosition = async () => {
   line-height: 1.3;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.3);
-  padding: 2px 6px;
+  padding: 2px 4px;
   border-radius: 4px;
 }
 
