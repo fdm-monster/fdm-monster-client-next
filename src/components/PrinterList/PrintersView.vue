@@ -75,7 +75,7 @@
               class="ml-2"
               variant="elevated"
               prepend-icon="label"
-              @click="showTagDialog = true"
+              @click="openManageTagsDialog()"
             >
               Manage Tags
             </v-btn>
@@ -109,9 +109,45 @@
           </v-chip>
         </template>
         <template #item.floor="{ item }">
-          <v-chip v-if="item.id">
-            {{ floorOfPrinter(item.id)?.name }}
-          </v-chip>
+          <div class="d-flex align-center ga-1">
+            <v-chip
+              v-if="floorOfPrinter(item.id)"
+              closable
+              size="small"
+              @click="openFloorEditDialog(floorOfPrinter(item.id)?.id)"
+              @click:close="removePrinterFromFloor(item.id)"
+            >
+              <v-icon start size="x-small">layers</v-icon>
+              {{ floorOfPrinter(item.id)?.name }}
+            </v-chip>
+            <span v-else class="text-caption text-medium-emphasis">
+              No floor
+            </span>
+
+            <v-menu>
+              <template #activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  size="x-small"
+                  icon
+                  variant="text"
+                >
+                  <v-icon>more_vert</v-icon>
+                </v-btn>
+              </template>
+
+              <v-list density="compact" min-width="200">
+                <v-list-item
+                  prepend-icon="grid_on"
+                  @click="goToPrinterGrid(item.id)"
+                >
+                  <v-list-item-title>
+                    {{ floorOfPrinter(item.id) ? 'View Floor Grid' : 'View Printer Grid' }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </div>
         </template>
         <template #item.cameras="{ item }">
           <div class="d-flex align-center flex-wrap ga-1">
@@ -120,6 +156,7 @@
               :key="camera.id"
               size="x-small"
               variant="tonal"
+              @click="openCameraEditDialog(camera.id)"
             >
               <v-icon start size="x-small">videocam</v-icon>
               {{ camera.name }}
@@ -134,6 +171,28 @@
             <span v-if="!camerasOfPrinter(item.id).length" class="text-caption text-medium-emphasis">
               No cameras
             </span>
+
+            <v-menu>
+              <template #activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  size="x-small"
+                  icon
+                  variant="text"
+                >
+                  <v-icon>more_vert</v-icon>
+                </v-btn>
+              </template>
+
+              <v-list density="compact" min-width="180">
+                <v-list-item
+                  prepend-icon="videocam"
+                  @click="goToCameraPageForPrinter(item.id)"
+                >
+                  <v-list-item-title>View Cameras</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </div>
         </template>
         <template #item.group="{ item }">
@@ -141,9 +200,11 @@
             <v-chip
               v-for="tag of tagsOfPrinter(item.id)"
               :key="tag.id"
+              :color="tag.color"
               size="small"
               variant="tonal"
               closable
+              @click="openManageTagsDialogAndEdit(tag.id)"
               @click:close="deletePrinterFromTag(tag.id, item.id)"
             >
               <v-icon start size="x-small">label</v-icon>
@@ -171,7 +232,14 @@
                   @click="addPrinterToTag(tag.id, item.id)"
                 >
                   <template v-slot:prepend>
-                    <v-icon size="small">label</v-icon>
+                    <v-chip
+                      :color="tag.color"
+                      size="x-small"
+                      variant="flat"
+                      class="mr-2"
+                    >
+                      <v-icon size="x-small">label</v-icon>
+                    </v-chip>
                   </template>
                   <v-list-item-title>{{ tag.name }}</v-list-item-title>
                 </v-list-item>
@@ -213,72 +281,12 @@
         </template>
       </v-data-table>
     </v-card>
-
-    <!-- Tag Management Dialog -->
-    <v-dialog v-model="showTagDialog" max-width="500">
-      <v-card>
-        <v-card-title class="d-flex align-center">
-          <v-icon class="mr-2">label</v-icon>
-          Manage Tags
-        </v-card-title>
-        <v-card-text>
-          <div class="mb-4">
-            <div class="text-subtitle-2 mb-2">Available Tags:</div>
-            <div class="d-flex flex-wrap ga-2">
-              <v-chip
-                v-for="tag of tagsWithPrinters"
-                :key="tag.id"
-                closable
-                size="small"
-                @click:close="deleteTag(tag.id)"
-              >
-                {{ tag.name }}
-              </v-chip>
-              <v-chip
-                v-if="!tagsWithPrinters.length"
-                disabled
-                size="small"
-              >
-                No tags yet
-              </v-chip>
-            </div>
-          </div>
-
-          <v-divider class="my-4"/>
-
-          <div>
-            <div class="text-subtitle-2 mb-2">Create New Tag:</div>
-            <v-text-field
-              v-model="newTagName"
-              label="Tag Name"
-              placeholder="Enter tag name"
-              density="compact"
-              variant="outlined"
-              hide-details
-              @keyup.enter="createTag()"
-            />
-            <v-btn
-              class="mt-2"
-              color="primary"
-              size="small"
-              prepend-icon="add"
-              @click="createTag()"
-            >
-              Create Tag
-            </v-btn>
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer/>
-          <v-btn @click="showTagDialog = false">Close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { PrintersService } from '@/backend/printers.service'
 import PrinterDetails from '@/components/PrinterList/PrinterDetails.vue'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
@@ -302,13 +310,17 @@ import { useQuery } from '@tanstack/vue-query'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import {
   TagWithPrintersDto,
+  TagDto,
   PrinterTagService
 } from '@/backend/printer-tag.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { VDataTable } from 'vuetify/components'
 import { getServiceName } from '@/shared/printer-types.constants'
+import { CameraStreamService } from '@/backend/camera-stream.service'
+import { printerTagsQueryKey } from '@/queries/printer-tags.query'
 
 const snackbar = useSnackbar()
+const router = useRouter()
 const printerStore = usePrinterStore()
 const loading = ref<boolean>(false)
 const printerStateStore = usePrinterStateStore()
@@ -318,10 +330,8 @@ const featureStore = useFeatureStore()
 const addOrUpdatePrinterDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 
 const tagsWithPrinters = ref<TagWithPrintersDto[]>([])
-const tags = ref<{ id: number; name: string }[]>([])
+const tags = ref<TagDto[]>([])
 const selectedTagIds = ref<number[]>([])
-const newTagName = ref('')
-const showTagDialog = ref(false)
 const selectedPrinterTypes = ref<number[]>([])
 const cameras = ref<any[]>([])
 
@@ -349,10 +359,8 @@ async function loadData() {
   loading.value = true
   await featureStore.loadFeatures()
   tagsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
-  tags.value = tagsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
+  tags.value = tagsWithPrinters.value.map(g => ({ id: g.id, name: g.name, color: g.color }))
 
-  // Load cameras
-  const { CameraStreamService } = await import('@/backend/camera-stream.service')
   cameras.value = await CameraStreamService.listCameraStreams()
 
   loading.value = false
@@ -360,7 +368,7 @@ async function loadData() {
 }
 
 const printerTagsQuery = useQuery({
-  queryKey: ['printerGroups'],
+  queryKey: [printerTagsQueryKey],
   queryFn: loadData
 })
 
@@ -433,49 +441,77 @@ const openYamlImportExportDialog = () => {
   useDialog(DialogName.YamlImportExport).openDialog()
 }
 
-const createTag = async () => {
-  if (!newTagName.value?.trim()?.length) {
-    throw new Error('Please set a non-empty tag name')
-  }
-
-  await PrinterTagService.createTag(newTagName.value.trim())
-  await printerTagsQuery.refetch()
-  newTagName.value = ''
-  showTagDialog.value = false
-  snackbar.info('Created tag')
+const openManageTagsDialog = () => {
+  useDialog(DialogName.ManageTagsDialog).openDialog()
 }
 
-const deleteTag = async (groupId: number) => {
-  const existingTag = tagsWithPrinters.value.find((g) => g.id === groupId)
-  if (!existingTag) {
-    throw new Error('Tag was not found, please reload the page')
+const openManageTagsDialogAndEdit = (tagId: number) => {
+  const tag = tagsWithPrinters.value.find(t => t.id === tagId)
+  if (tag) {
+    const manageTagsDialog = useDialog(DialogName.ManageTagsDialog)
+    manageTagsDialog.openDialog({ tagId, tagName: tag.name })
   }
-
-  const printerCount = existingTag.printers.length
-  if (
-    printerCount > 0 &&
-    !confirm(
-      `This tag contains ${ printerCount } printers, are you sure to delete it?`
-    )
-  ) {
-    return
-  }
-
-  await PrinterTagService.deleteTag(groupId)
-  await printerTagsQuery.refetch()
-  snackbar.info('Deleted tag')
 }
 
-const addPrinterToTag = async (groupId: number, printerId: number) => {
-  await PrinterTagService.addPrinterToTag(groupId, printerId)
+const goToPrinterGrid = (printerId: number) => {
+  const floor = floorOfPrinter(printerId)
+  if (floor) {
+    router.push({
+      path: '/printers-grid',
+      query: { floor: floor.id.toString() }
+    })
+  } else {
+    router.push('/printers-grid')
+  }
+}
+
+const openFloorEditDialog = (floorId?: number) => {
+  if (floorId) {
+    useDialog(DialogName.AddOrUpdateFloorDialog).openDialog({ printerFloorId: floorId })
+  }
+}
+
+const openCameraEditDialog = (cameraId?: number) => {
+  if (cameraId) {
+    useDialog(DialogName.AddOrUpdateCameraDialog).openDialog({ addOrUpdate: 'update', cameraId })
+  }
+}
+
+const goToCameraPageForPrinter = (printerId: number) => {
+  router.push({
+    path: '/cameras',
+    query: { printer: printerId.toString() }
+  })
+}
+
+const addPrinterToTag = async (tagId: number, printerId: number) => {
+  await PrinterTagService.addPrinterToTag(tagId, printerId)
   await printerTagsQuery.refetch()
   snackbar.info('Added printer to tag')
 }
 
-const deletePrinterFromTag = async (groupId: number, printerId: number) => {
-  await PrinterTagService.deletePrinterTag(groupId, printerId)
+const deletePrinterFromTag = async (tagId: number, printerId: number) => {
+  await PrinterTagService.deletePrinterTag(tagId, printerId)
   await printerTagsQuery.refetch()
   snackbar.info('Removed printer from tag')
+}
+
+const removePrinterFromFloor = async (printerId: number) => {
+  const floor = floorOfPrinter(printerId)
+  if (!floor) {
+    snackbar.error('Printer is not assigned to any floor')
+    return
+  }
+
+  if (!confirm(`Remove printer from floor "${floor.name}"?`)) {
+    return
+  }
+
+  await floorStore.deletePrinterFromFloor({
+    floorId: floor.id,
+    printerId
+  })
+  snackbar.info('Removed printer from floor')
 }
 
 const toggleEnabled = async (printer: PrinterDto) => {

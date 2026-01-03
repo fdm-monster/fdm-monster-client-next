@@ -137,7 +137,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Draggable from 'vuedraggable'
 import { useFloorStore } from '@/store/floor.store'
@@ -156,12 +156,16 @@ const snackbar = useSnackbar()
 const addOrUpdateFloorDialog = useDialog(DialogName.AddOrUpdateFloorDialog)
 
 const floors = computed(() => floorStore.floors)
+const localFloors = ref<FloorDto[]>([])
 
-// Local sortable array for drag and drop
+watch(floors, (newFloors) => {
+  localFloors.value = [...newFloors]
+}, { immediate: true })
+
 const sortableFloors = computed({
-  get: () => [...floors.value],
-  set: () => {
-    // The actual reordering is handled in onDragEnd
+  get: () => localFloors.value,
+  set: (value) => {
+    localFloors.value = value
   }
 })
 
@@ -204,11 +208,16 @@ async function removePrinterFromFloor(floorId: number, printerId: number) {
   snackbar.info('Printer removed from floor')
 }
 
-async function onDragEnd() {
-  // Update order based on new positions
+async function onDragEnd(event: any) {
+  const { oldIndex, newIndex } = event
+
+  if (oldIndex === newIndex) {
+    return // No change
+  }
+
   const updates: Promise<any>[] = []
 
-  sortableFloors.value.forEach((floor: FloorDto, index: number) => {
+  localFloors.value.forEach((floor: FloorDto, index: number) => {
     const newOrder = index + 1
     if (floor.order !== newOrder) {
       updates.push(floorStore.updateFloorOrder({ floorId: floor.id, order: newOrder }))
@@ -216,8 +225,14 @@ async function onDragEnd() {
   })
 
   if (updates.length > 0) {
-    await Promise.all(updates)
-    snackbar.info('Floor order updated')
+    try {
+      await Promise.all(updates)
+      snackbar.info('Floor order updated')
+    } catch (error) {
+      // Revert local state on error
+      localFloors.value = [...floors.value]
+      snackbar.error('Failed to update floor order')
+    }
   }
 }
 </script>

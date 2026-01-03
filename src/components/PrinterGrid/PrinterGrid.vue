@@ -109,9 +109,9 @@ const printerMatrix = computed(() => {
       // Check tag filter
       let matchesTagFilter = !hasTagFilter
       if (hasTagFilter) {
-        matchesTagFilter = tagsWithPrinters.value.some(group =>
-          gridStore.selectedTagFilter.includes(group.id) &&
-          group.printers.some(p => p.printerId === printer.id)
+        matchesTagFilter = tagsWithPrinters.value.some(tag =>
+          gridStore.selectedTagFilter.includes(tag.id) &&
+          tag.printers.some(p => p.printerId === printer.id)
         )
       }
 

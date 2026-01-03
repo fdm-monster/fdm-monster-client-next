@@ -1,6 +1,6 @@
 import { ref } from 'vue'
-import { PrinterTagService, TagDto, TagWithPrintersDto } from '@/backend/printer-tag.service'
 import type { PrinterDto } from '@/models/printers/printer.model'
+import { PrinterTagService, TagDto, TagWithPrintersDto } from "@/backend/printer-tag.service";
 
 export function usePrinterFilters() {
   const selectedTags = ref<number[]>([])
@@ -10,15 +10,15 @@ export function usePrinterFilters() {
 
   const loadTags = async () => {
     tagsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
-    tags.value = tagsWithPrinters.value.map(g => ({ id: g.id, name: g.name }))
+    tags.value = tagsWithPrinters.value.map(t => ({ id: t.id, name: t.name, color: t.color }))
   }
 
   const matchesTagFilter = (printerId: number): boolean => {
     if (selectedTags.value.length === 0) return true
 
-    return tagsWithPrinters.value.some(group =>
-      selectedTags.value.includes(group.id) &&
-      group.printers.some(p => p.printerId === printerId)
+    return tagsWithPrinters.value.some(tag =>
+      selectedTags.value.includes(tag.id) &&
+      tag.printers.some(p => p.printerId === printerId)
     )
   }
 

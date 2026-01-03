@@ -17,7 +17,30 @@
     :clearable="clearable"
     :hide-details="hideDetails"
     @update:model-value="$emit('update:modelValue', $event)"
-  />
+  >
+    <template #chip="{ item, props }">
+      <v-chip
+        v-bind="props"
+        :color="item.raw.color"
+      >
+        {{ item.title }}
+      </v-chip>
+    </template>
+    <template #item="{ item, props }">
+      <v-list-item v-bind="props">
+        <template #prepend>
+          <v-chip
+            :color="item.raw.color"
+            size="x-small"
+            variant="flat"
+            class="mr-2"
+          >
+            <v-icon size="x-small">label</v-icon>
+          </v-chip>
+        </template>
+      </v-list-item>
+    </template>
+  </v-select>
 </template>
 
 <script setup lang="ts">

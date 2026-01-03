@@ -455,326 +455,6 @@ export type GetMetricsResponses = {
   200: unknown
 }
 
-export type GetApiPrintJobsSearchData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/print-jobs/search'
-}
-
-export type GetApiPrintJobsSearchResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiPrintJobsSearchPagedData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/print-jobs/search-paged'
-}
-
-export type GetApiPrintJobsSearchPagedResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type DeleteApiPrintJobsByIdData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/print-jobs/{id}'
-}
-
-export type DeleteApiPrintJobsByIdResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiPrintJobsByIdData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/print-jobs/{id}'
-}
-
-export type GetApiPrintJobsByIdResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PostApiPrintJobsByIdSetSkuCountData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/print-jobs/{id}/set-sku-count'
-}
-
-export type PostApiPrintJobsByIdSetSkuCountResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PostApiPrintJobsByIdSetCompletedData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/print-jobs/{id}/set-completed'
-}
-
-export type PostApiPrintJobsByIdSetCompletedResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PostApiPrintJobsByIdReAnalyzeData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/print-jobs/{id}/re-analyze'
-}
-
-export type PostApiPrintJobsByIdReAnalyzeResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiPrintJobsByIdThumbnailsData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/print-jobs/{id}/thumbnails'
-}
-
-export type GetApiPrintJobsByIdThumbnailsResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiPrintJobsByIdThumbnailsByIndexData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-    /**
-     * The index parameter
-     */
-    index: string
-  }
-  query?: never
-  url: '/api/print-jobs/{id}/thumbnails/{index}'
-}
-
-export type GetApiPrintJobsByIdThumbnailsByIndexResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiPrintQueueGlobalData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/print-queue/global'
-}
-
-export type GetApiPrintQueueGlobalResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiPrintQueueByPrinterIdData = {
-  body?: never
-  path: {
-    /**
-     * The printerId parameter
-     */
-    printerId: string
-  }
-  query?: never
-  url: '/api/print-queue/{printerId}'
-}
-
-export type GetApiPrintQueueByPrinterIdResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PostApiPrintQueueByPrinterIdAddByJobIdData = {
-  body?: never
-  path: {
-    /**
-     * The printerId parameter
-     */
-    printerId: string
-    /**
-     * The jobId parameter
-     */
-    jobId: string
-  }
-  query?: never
-  url: '/api/print-queue/{printerId}/add/{jobId}'
-}
-
-export type PostApiPrintQueueByPrinterIdAddByJobIdResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type DeleteApiPrintQueueByPrinterIdByJobIdData = {
-  body?: never
-  path: {
-    /**
-     * The printerId parameter
-     */
-    printerId: string
-    /**
-     * The jobId parameter
-     */
-    jobId: string
-  }
-  query?: never
-  url: '/api/print-queue/{printerId}/{jobId}'
-}
-
-export type DeleteApiPrintQueueByPrinterIdByJobIdResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PutApiPrintQueueByPrinterIdReorderData = {
-  body?: never
-  path: {
-    /**
-     * The printerId parameter
-     */
-    printerId: string
-  }
-  query?: never
-  url: '/api/print-queue/{printerId}/reorder'
-}
-
-export type PutApiPrintQueueByPrinterIdReorderResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type DeleteApiPrintQueueByPrinterIdClearData = {
-  body?: never
-  path: {
-    /**
-     * The printerId parameter
-     */
-    printerId: string
-  }
-  query?: never
-  url: '/api/print-queue/{printerId}/clear'
-}
-
-export type DeleteApiPrintQueueByPrinterIdClearResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PostApiPrintQueueByPrinterIdProcessData = {
-  body?: never
-  path: {
-    /**
-     * The printerId parameter
-     */
-    printerId: string
-  }
-  query?: never
-  url: '/api/print-queue/{printerId}/process'
-}
-
-export type PostApiPrintQueueByPrinterIdProcessResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiPrintQueueByPrinterIdNextData = {
-  body?: never
-  path: {
-    /**
-     * The printerId parameter
-     */
-    printerId: string
-  }
-  query?: never
-  url: '/api/print-queue/{printerId}/next'
-}
-
-export type GetApiPrintQueueByPrinterIdNextResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
 export type PostApiPrinterFilesPurgeData = {
   body?: never
   path?: never
@@ -1029,6 +709,148 @@ export type PostApiPrinterSettingsByIdSyncPrinternameData = {
 }
 
 export type PostApiPrinterSettingsByIdSyncPrinternameResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiPrinterTagData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/printer-tag/'
+}
+
+export type GetApiPrinterTagResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiPrinterTagData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/printer-tag/'
+}
+
+export type PostApiPrinterTagResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type DeleteApiPrinterTagByIdData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/printer-tag/{id}'
+}
+
+export type DeleteApiPrinterTagByIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiPrinterTagByIdData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/printer-tag/{id}'
+}
+
+export type GetApiPrinterTagByIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PatchApiPrinterTagByIdNameData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/printer-tag/{id}/name'
+}
+
+export type PatchApiPrinterTagByIdNameResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PatchApiPrinterTagByIdColorData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/printer-tag/{id}/color'
+}
+
+export type PatchApiPrinterTagByIdColorResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type DeleteApiPrinterTagByIdPrinterData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/printer-tag/{id}/printer'
+}
+
+export type DeleteApiPrinterTagByIdPrinterResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiPrinterTagByIdPrinterData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/printer-tag/{id}/printer'
+}
+
+export type PostApiPrinterTagByIdPrinterResponses = {
   /**
    * Successful response
    */
@@ -1867,129 +1689,6 @@ export type PutApiSettingsTimeoutData = {
 }
 
 export type PutApiSettingsTimeoutResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiTagData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/tag/'
-}
-
-export type GetApiTagResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PostApiTagData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/tag/'
-}
-
-export type PostApiTagResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type DeleteApiTagByIdData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/tag/{id}'
-}
-
-export type DeleteApiTagByIdResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiTagByIdData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/tag/{id}'
-}
-
-export type GetApiTagByIdResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PatchApiTagByIdNameData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/tag/{id}/name'
-}
-
-export type PatchApiTagByIdNameResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type DeleteApiTagByIdPrinterData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/tag/{id}/printer'
-}
-
-export type DeleteApiTagByIdPrinterResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PostApiTagByIdPrinterData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/tag/{id}/printer'
-}
-
-export type PostApiTagByIdPrinterResponses = {
   /**
    * Successful response
    */

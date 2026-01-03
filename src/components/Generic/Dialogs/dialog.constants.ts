@@ -20,4 +20,6 @@ export enum DialogName {
   CreateUserDialog = 'CreateUserDialog',
   // Dialog for viewing JSON data in a pretty-printed format
   JsonViewerDialog = "JsonViewerDialog",
+  // Dialog for managing tags (create, edit, delete)
+  ManageTagsDialog = 'ManageTagsDialog',
 }

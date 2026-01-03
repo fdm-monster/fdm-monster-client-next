@@ -34,6 +34,7 @@
     <PrinterMaintenanceDialog />
     <OctoFarmImportDialog />
     <YamlImportExportDialog />
+    <ManageTagsDialog />
     <FileExplorerSideNav />
     <BatchReprintDialog />
     <PrinterControlDialog />

@@ -1,7 +1,7 @@
 import { defineConfig } from '@hey-api/openapi-ts'
 
 export default defineConfig({
-  input: './openapi.json',
+  input: 'http://localhost:4000/api-docs/swagger.json',
   output: {
     path: './src/backend/generated',
     format: 'prettier',

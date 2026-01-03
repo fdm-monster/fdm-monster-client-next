@@ -46,6 +46,7 @@ declare module 'vue' {
     LoginForm: typeof import('./components/Login/LoginForm.vue')['default']
     LoginView: typeof import('./components/Login/LoginView.vue')['default']
     Logo: typeof import('./components/Login/Logo.vue')['default']
+    ManageTagsDialog: typeof import('./components/Generic/Dialogs/ManageTagsDialog.vue')['default']
     NavigationBar: typeof import('./components/NavigationBar.vue')['default']
     NotFoundView: typeof import('./components/NotFound/NotFoundView.vue')['default']
     OctoFarmImportDialog: typeof import('./components/Generic/Dialogs/OctoFarmImportDialog.vue')['default']

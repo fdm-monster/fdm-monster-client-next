@@ -337,6 +337,7 @@
 
 <script lang="ts" setup>
 import { computed, reactive, ref, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { CameraStreamService } from '@/backend/camera-stream.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
@@ -350,6 +351,7 @@ import { usePrinterFilters } from '@/shared/printer-filter.composable'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 
+const route = useRoute()
 const printerStore = usePrinterStore()
 const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
 const fileExplorer = useFileExplorer()
@@ -371,6 +373,12 @@ const cameraLoading = reactive<Record<number, boolean>>({})
 
 onMounted(async () => {
   await loadTags()
+
+  // Check for printer query parameter
+  const printerParam = route.query.printer
+  if (printerParam) {
+    filterPrinter.value = Number(printerParam)
+  }
 })
 
 // Fetch cameras with printer data
@@ -436,9 +444,9 @@ const filteredCameras = computed(() => {
     // Tag filter
     let matchesTags = selectedTags.value.length === 0
     if (selectedTags.value.length > 0 && camera.printer?.id) {
-      matchesTags = tagsWithPrinters.value.some(group =>
-        selectedTags.value.includes(group.id) &&
-        group.printers.some(p => p.printerId === camera.printer?.id)
+      matchesTags = tagsWithPrinters.value.some(tag =>
+        selectedTags.value.includes(tag.id) &&
+        tag.printers.some(p => p.printerId === camera.printer?.id)
       )
     }
 
@@ -566,11 +574,6 @@ function getPrinterTypeName(printerType?: number) {
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.camera-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .camera-stream-container {

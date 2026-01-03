@@ -92,7 +92,15 @@
               @click="goToPrinterGrid"
             >
               <v-icon class="mr-2">view_module</v-icon>
-              Manage Printers
+              View Printer Grid
+            </v-btn>
+            <v-btn
+              color="secondary"
+              variant="elevated"
+              @click="goToPrinterList"
+            >
+              <v-icon class="mr-2">view_module</v-icon>
+              View Printer List
             </v-btn>
             <v-btn
               color="success"
@@ -360,6 +368,10 @@ const avgPrintTime = computed(() => '2h 34m') // Placeholder - would calculate f
 // Navigation methods
 const goToPrinterGrid = () => {
   router.push('/printers-grid')
+}
+
+const goToPrinterList = () => {
+  router.push('/printer-list')
 }
 
 const goToCameras = () => {

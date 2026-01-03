@@ -15,20 +15,14 @@ import type {
   DeleteApiPrinterFilesByIdClearResponses,
   DeleteApiPrinterFilesByIdData,
   DeleteApiPrinterFilesByIdResponses,
-  DeleteApiPrintJobsByIdData,
-  DeleteApiPrintJobsByIdResponses,
-  DeleteApiPrintQueueByPrinterIdByJobIdData,
-  DeleteApiPrintQueueByPrinterIdByJobIdResponses,
-  DeleteApiPrintQueueByPrinterIdClearData,
-  DeleteApiPrintQueueByPrinterIdClearResponses,
+  DeleteApiPrinterTagByIdData,
+  DeleteApiPrinterTagByIdPrinterData,
+  DeleteApiPrinterTagByIdPrinterResponses,
+  DeleteApiPrinterTagByIdResponses,
   DeleteApiServerClearOutdatedFdmMonsterLogsData,
   DeleteApiServerClearOutdatedFdmMonsterLogsResponses,
   DeleteApiServerDeleteAllPrintersData,
   DeleteApiServerDeleteAllPrintersResponses,
-  DeleteApiTagByIdData,
-  DeleteApiTagByIdPrinterData,
-  DeleteApiTagByIdPrinterResponses,
-  DeleteApiTagByIdResponses,
   DeleteApiUserByIdData,
   DeleteApiUserByIdResponses,
   GetApiAuthLoginRequiredData,
@@ -64,22 +58,10 @@ import type {
   GetApiPrinterResponses,
   GetApiPrinterSettingsByIdData,
   GetApiPrinterSettingsByIdResponses,
-  GetApiPrintJobsByIdData,
-  GetApiPrintJobsByIdResponses,
-  GetApiPrintJobsByIdThumbnailsByIndexData,
-  GetApiPrintJobsByIdThumbnailsByIndexResponses,
-  GetApiPrintJobsByIdThumbnailsData,
-  GetApiPrintJobsByIdThumbnailsResponses,
-  GetApiPrintJobsSearchData,
-  GetApiPrintJobsSearchPagedData,
-  GetApiPrintJobsSearchPagedResponses,
-  GetApiPrintJobsSearchResponses,
-  GetApiPrintQueueByPrinterIdData,
-  GetApiPrintQueueByPrinterIdNextData,
-  GetApiPrintQueueByPrinterIdNextResponses,
-  GetApiPrintQueueByPrinterIdResponses,
-  GetApiPrintQueueGlobalData,
-  GetApiPrintQueueGlobalResponses,
+  GetApiPrinterTagByIdData,
+  GetApiPrinterTagByIdResponses,
+  GetApiPrinterTagData,
+  GetApiPrinterTagResponses,
   GetApiResponses,
   GetApiServerClientReleasesData,
   GetApiServerClientReleasesResponses,
@@ -93,10 +75,6 @@ import type {
   GetApiSettingsResponses,
   GetApiSettingsSensitiveData,
   GetApiSettingsSensitiveResponses,
-  GetApiTagByIdData,
-  GetApiTagByIdResponses,
-  GetApiTagData,
-  GetApiTagResponses,
   GetApiTestData,
   GetApiTestResponses,
   GetApiUserByIdData,
@@ -125,10 +103,12 @@ import type {
   PatchApiPrinterByIdFlowRateData,
   PatchApiPrinterByIdFlowRateResponses,
   PatchApiPrinterByIdResponses,
+  PatchApiPrinterTagByIdColorData,
+  PatchApiPrinterTagByIdColorResponses,
+  PatchApiPrinterTagByIdNameData,
+  PatchApiPrinterTagByIdNameResponses,
   PatchApiSettingsSentryDiagnosticsData,
   PatchApiSettingsSentryDiagnosticsResponses,
-  PatchApiTagByIdNameData,
-  PatchApiTagByIdNameResponses,
   PostApiAuthLoginData,
   PostApiAuthLoginResponses,
   PostApiAuthLogoutData,
@@ -205,18 +185,12 @@ import type {
   PostApiPrinterResponses,
   PostApiPrinterSettingsByIdSyncPrinternameData,
   PostApiPrinterSettingsByIdSyncPrinternameResponses,
+  PostApiPrinterTagByIdPrinterData,
+  PostApiPrinterTagByIdPrinterResponses,
+  PostApiPrinterTagData,
+  PostApiPrinterTagResponses,
   PostApiPrinterTestConnectionData,
   PostApiPrinterTestConnectionResponses,
-  PostApiPrintJobsByIdReAnalyzeData,
-  PostApiPrintJobsByIdReAnalyzeResponses,
-  PostApiPrintJobsByIdSetCompletedData,
-  PostApiPrintJobsByIdSetCompletedResponses,
-  PostApiPrintJobsByIdSetSkuCountData,
-  PostApiPrintJobsByIdSetSkuCountResponses,
-  PostApiPrintQueueByPrinterIdAddByJobIdData,
-  PostApiPrintQueueByPrinterIdAddByJobIdResponses,
-  PostApiPrintQueueByPrinterIdProcessData,
-  PostApiPrintQueueByPrinterIdProcessResponses,
   PostApiServerDumpFdmMonsterLogsData,
   PostApiServerDumpFdmMonsterLogsResponses,
   PostApiServerUpdateClientBundleGithubData,
@@ -225,10 +199,6 @@ import type {
   PostApiServerYamlExportResponses,
   PostApiServerYamlImportData,
   PostApiServerYamlImportResponses,
-  PostApiTagByIdPrinterData,
-  PostApiTagByIdPrinterResponses,
-  PostApiTagData,
-  PostApiTagResponses,
   PostApiUserByIdChangePasswordData,
   PostApiUserByIdChangePasswordResponses,
   PostApiUserByIdChangeUsernameData,
@@ -243,8 +213,6 @@ import type {
   PostApiUserResponses,
   PutApiCameraStreamByIdData,
   PutApiCameraStreamByIdResponses,
-  PutApiPrintQueueByPrinterIdReorderData,
-  PutApiPrintQueueByPrinterIdReorderResponses,
   PutApiSettingsCredentialData,
   PutApiSettingsCredentialResponses,
   PutApiSettingsExperimentalBambuSupportData,
@@ -787,301 +755,6 @@ export class MetricsController {
   }
 }
 
-export class PrintJobController {
-  /**
-   * searchJobs
-   */
-  public static getApiPrintJobsSearch<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiPrintJobsSearchData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).get<
-      GetApiPrintJobsSearchResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-jobs/search',
-      ...options
-    })
-  }
-
-  /**
-   * searchJobsPaged
-   */
-  public static getApiPrintJobsSearchPaged<
-    ThrowOnError extends boolean = false
-  >(options?: Options<GetApiPrintJobsSearchPagedData, ThrowOnError>) {
-    return (options?.client ?? client).get<
-      GetApiPrintJobsSearchPagedResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-jobs/search-paged',
-      ...options
-    })
-  }
-
-  /**
-   * deleteJob
-   */
-  public static deleteApiPrintJobsById<ThrowOnError extends boolean = false>(
-    options: Options<DeleteApiPrintJobsByIdData, ThrowOnError>
-  ) {
-    return (options.client ?? client).delete<
-      DeleteApiPrintJobsByIdResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-jobs/{id}',
-      ...options
-    })
-  }
-
-  /**
-   * getJob
-   */
-  public static getApiPrintJobsById<ThrowOnError extends boolean = false>(
-    options: Options<GetApiPrintJobsByIdData, ThrowOnError>
-  ) {
-    return (options.client ?? client).get<
-      GetApiPrintJobsByIdResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-jobs/{id}',
-      ...options
-    })
-  }
-
-  /**
-   * setSkuCount
-   */
-  public static postApiPrintJobsByIdSetSkuCount<
-    ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrintJobsByIdSetSkuCountData, ThrowOnError>) {
-    return (options.client ?? client).post<
-      PostApiPrintJobsByIdSetSkuCountResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-jobs/{id}/set-sku-count',
-      ...options
-    })
-  }
-
-  /**
-   * setCompleted
-   */
-  public static postApiPrintJobsByIdSetCompleted<
-    ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrintJobsByIdSetCompletedData, ThrowOnError>) {
-    return (options.client ?? client).post<
-      PostApiPrintJobsByIdSetCompletedResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-jobs/{id}/set-completed',
-      ...options
-    })
-  }
-
-  /**
-   * reAnalyzeJob
-   */
-  public static postApiPrintJobsByIdReAnalyze<
-    ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrintJobsByIdReAnalyzeData, ThrowOnError>) {
-    return (options.client ?? client).post<
-      PostApiPrintJobsByIdReAnalyzeResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-jobs/{id}/re-analyze',
-      ...options
-    })
-  }
-
-  /**
-   * getThumbnails
-   */
-  public static getApiPrintJobsByIdThumbnails<
-    ThrowOnError extends boolean = false
-  >(options: Options<GetApiPrintJobsByIdThumbnailsData, ThrowOnError>) {
-    return (options.client ?? client).get<
-      GetApiPrintJobsByIdThumbnailsResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-jobs/{id}/thumbnails',
-      ...options
-    })
-  }
-
-  /**
-   * getThumbnail
-   */
-  public static getApiPrintJobsByIdThumbnailsByIndex<
-    ThrowOnError extends boolean = false
-  >(options: Options<GetApiPrintJobsByIdThumbnailsByIndexData, ThrowOnError>) {
-    return (options.client ?? client).get<
-      GetApiPrintJobsByIdThumbnailsByIndexResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-jobs/{id}/thumbnails/{index}',
-      ...options
-    })
-  }
-}
-
-export class PrintQueueController {
-  /**
-   * getGlobalQueue
-   */
-  public static getApiPrintQueueGlobal<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiPrintQueueGlobalData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).get<
-      GetApiPrintQueueGlobalResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-queue/global',
-      ...options
-    })
-  }
-
-  /**
-   * getQueue
-   */
-  public static getApiPrintQueueByPrinterId<
-    ThrowOnError extends boolean = false
-  >(options: Options<GetApiPrintQueueByPrinterIdData, ThrowOnError>) {
-    return (options.client ?? client).get<
-      GetApiPrintQueueByPrinterIdResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-queue/{printerId}',
-      ...options
-    })
-  }
-
-  /**
-   * addToQueue
-   */
-  public static postApiPrintQueueByPrinterIdAddByJobId<
-    ThrowOnError extends boolean = false
-  >(
-    options: Options<PostApiPrintQueueByPrinterIdAddByJobIdData, ThrowOnError>
-  ) {
-    return (options.client ?? client).post<
-      PostApiPrintQueueByPrinterIdAddByJobIdResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-queue/{printerId}/add/{jobId}',
-      ...options
-    })
-  }
-
-  /**
-   * removeFromQueue
-   */
-  public static deleteApiPrintQueueByPrinterIdByJobId<
-    ThrowOnError extends boolean = false
-  >(options: Options<DeleteApiPrintQueueByPrinterIdByJobIdData, ThrowOnError>) {
-    return (options.client ?? client).delete<
-      DeleteApiPrintQueueByPrinterIdByJobIdResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-queue/{printerId}/{jobId}',
-      ...options
-    })
-  }
-
-  /**
-   * reorderQueue
-   */
-  public static putApiPrintQueueByPrinterIdReorder<
-    ThrowOnError extends boolean = false
-  >(options: Options<PutApiPrintQueueByPrinterIdReorderData, ThrowOnError>) {
-    return (options.client ?? client).put<
-      PutApiPrintQueueByPrinterIdReorderResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-queue/{printerId}/reorder',
-      ...options
-    })
-  }
-
-  /**
-   * clearQueue
-   */
-  public static deleteApiPrintQueueByPrinterIdClear<
-    ThrowOnError extends boolean = false
-  >(options: Options<DeleteApiPrintQueueByPrinterIdClearData, ThrowOnError>) {
-    return (options.client ?? client).delete<
-      DeleteApiPrintQueueByPrinterIdClearResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-queue/{printerId}/clear',
-      ...options
-    })
-  }
-
-  /**
-   * processQueue
-   */
-  public static postApiPrintQueueByPrinterIdProcess<
-    ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrintQueueByPrinterIdProcessData, ThrowOnError>) {
-    return (options.client ?? client).post<
-      PostApiPrintQueueByPrinterIdProcessResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-queue/{printerId}/process',
-      ...options
-    })
-  }
-
-  /**
-   * getNextInQueue
-   */
-  public static getApiPrintQueueByPrinterIdNext<
-    ThrowOnError extends boolean = false
-  >(options: Options<GetApiPrintQueueByPrinterIdNextData, ThrowOnError>) {
-    return (options.client ?? client).get<
-      GetApiPrintQueueByPrinterIdNextResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/print-queue/{printerId}/next',
-      ...options
-    })
-  }
-}
-
 export class PrinterFilesController {
   /**
    * purgeIndexedFiles
@@ -1326,6 +999,144 @@ export class PrinterSettingsController {
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
       url: '/api/printer-settings/{id}/sync-printername',
+      ...options
+    })
+  }
+}
+
+export class PrinterTagController {
+  /**
+   * listTags
+   */
+  public static getApiPrinterTag<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiPrinterTagData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetApiPrinterTagResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/printer-tag/',
+      ...options
+    })
+  }
+
+  /**
+   * createTag
+   */
+  public static postApiPrinterTag<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiPrinterTagData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostApiPrinterTagResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/printer-tag/',
+      ...options
+    })
+  }
+
+  /**
+   * deleteTag
+   */
+  public static deleteApiPrinterTagById<ThrowOnError extends boolean = false>(
+    options: Options<DeleteApiPrinterTagByIdData, ThrowOnError>
+  ) {
+    return (options.client ?? client).delete<
+      DeleteApiPrinterTagByIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/printer-tag/{id}',
+      ...options
+    })
+  }
+
+  /**
+   * getTagWithPrinters
+   */
+  public static getApiPrinterTagById<ThrowOnError extends boolean = false>(
+    options: Options<GetApiPrinterTagByIdData, ThrowOnError>
+  ) {
+    return (options.client ?? client).get<
+      GetApiPrinterTagByIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/printer-tag/{id}',
+      ...options
+    })
+  }
+
+  /**
+   * updateTagName
+   */
+  public static patchApiPrinterTagByIdName<
+    ThrowOnError extends boolean = false
+  >(options: Options<PatchApiPrinterTagByIdNameData, ThrowOnError>) {
+    return (options.client ?? client).patch<
+      PatchApiPrinterTagByIdNameResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/printer-tag/{id}/name',
+      ...options
+    })
+  }
+
+  /**
+   * updateTagColor
+   */
+  public static patchApiPrinterTagByIdColor<
+    ThrowOnError extends boolean = false
+  >(options: Options<PatchApiPrinterTagByIdColorData, ThrowOnError>) {
+    return (options.client ?? client).patch<
+      PatchApiPrinterTagByIdColorResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/printer-tag/{id}/color',
+      ...options
+    })
+  }
+
+  /**
+   * removePrinterFromTag
+   */
+  public static deleteApiPrinterTagByIdPrinter<
+    ThrowOnError extends boolean = false
+  >(options: Options<DeleteApiPrinterTagByIdPrinterData, ThrowOnError>) {
+    return (options.client ?? client).delete<
+      DeleteApiPrinterTagByIdPrinterResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/printer-tag/{id}/printer',
+      ...options
+    })
+  }
+
+  /**
+   * addPrinterToTag
+   */
+  public static postApiPrinterTagByIdPrinter<
+    ThrowOnError extends boolean = false
+  >(options: Options<PostApiPrinterTagByIdPrinterData, ThrowOnError>) {
+    return (options.client ?? client).post<
+      PostApiPrinterTagByIdPrinterResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/printer-tag/{id}/printer',
       ...options
     })
   }
@@ -2244,127 +2055,6 @@ export class SettingsController {
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
       url: '/api/settings/timeout',
-      ...options
-    })
-  }
-}
-
-export class TagController {
-  /**
-   * list
-   */
-  public static getApiTag<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiTagData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).get<
-      GetApiTagResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/tag/',
-      ...options
-    })
-  }
-
-  /**
-   * create
-   */
-  public static postApiTag<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiTagData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).post<
-      PostApiTagResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/tag/',
-      ...options
-    })
-  }
-
-  /**
-   * delete
-   */
-  public static deleteApiTagById<ThrowOnError extends boolean = false>(
-    options: Options<DeleteApiTagByIdData, ThrowOnError>
-  ) {
-    return (options.client ?? client).delete<
-      DeleteApiTagByIdResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/tag/{id}',
-      ...options
-    })
-  }
-
-  /**
-   * get
-   */
-  public static getApiTagById<ThrowOnError extends boolean = false>(
-    options: Options<GetApiTagByIdData, ThrowOnError>
-  ) {
-    return (options.client ?? client).get<
-      GetApiTagByIdResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/tag/{id}',
-      ...options
-    })
-  }
-
-  /**
-   * updateTagName
-   */
-  public static patchApiTagByIdName<ThrowOnError extends boolean = false>(
-    options: Options<PatchApiTagByIdNameData, ThrowOnError>
-  ) {
-    return (options.client ?? client).patch<
-      PatchApiTagByIdNameResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/tag/{id}/name',
-      ...options
-    })
-  }
-
-  /**
-   * removePrinterFromTag
-   */
-  public static deleteApiTagByIdPrinter<ThrowOnError extends boolean = false>(
-    options: Options<DeleteApiTagByIdPrinterData, ThrowOnError>
-  ) {
-    return (options.client ?? client).delete<
-      DeleteApiTagByIdPrinterResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/tag/{id}/printer',
-      ...options
-    })
-  }
-
-  /**
-   * addPrinterToTag
-   */
-  public static postApiTagByIdPrinter<ThrowOnError extends boolean = false>(
-    options: Options<PostApiTagByIdPrinterData, ThrowOnError>
-  ) {
-    return (options.client ?? client).post<
-      PostApiTagByIdPrinterResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/tag/{id}/printer',
       ...options
     })
   }

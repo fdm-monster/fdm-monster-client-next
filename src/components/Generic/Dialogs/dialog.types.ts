@@ -31,6 +31,11 @@ export interface JsonViewerDialogContext {
   title?: string
 }
 
+export interface ManageTagsDialogContext {
+  tagId?: number
+  tagName?: string
+}
+
 // Map dialog names to their context types
 export interface DialogContextTypeMap {
   [DialogName.AddOrUpdatePrinterDialog]: AddOrUpdatePrinterDialogContext
@@ -43,6 +48,7 @@ export interface DialogContextTypeMap {
   [DialogName.ImportOctoFarmDialog]: undefined
   [DialogName.BatchReprintDialog]: undefined
   [DialogName.YamlImportExport]: undefined
+  [DialogName.ManageTagsDialog]: ManageTagsDialogContext
 }
 
 // Helper type to get context type for a specific dialog

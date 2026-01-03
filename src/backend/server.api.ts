@@ -1,3 +1,6 @@
+/**
+ * @deprecated THIS FILE IS DEPRECATED. Move API routes to services.
+ */
 export class ServerApi {
   static readonly base = "/api"
   static readonly firstTimeSetupRoute = `${ServerApi.base}/first-time-setup`
@@ -15,8 +18,8 @@ export class ServerApi {
   static readonly printJobsSearchPagedRoute = `${ServerApi.printJobsRoute}/search-paged`
   static readonly printerFilesRoute = `${ServerApi.base}/printer-files`
   static readonly printerFilesPurgeRoute = `${ServerApi.printerFilesRoute}/purge`
-  static readonly printerTagsRoute = `${ServerApi.base}/printer-group`
-  static readonly createGroupRoute = `${ServerApi.base}/printer-group`
+  static readonly printerTagRoute = `${ServerApi.base}/printer-tag`
+  static readonly createTagRoute = `${ServerApi.base}/printer-tag`
   static readonly userRoute = `${ServerApi.base}/user`
   static readonly rolesRoute = `${ServerApi.base}/user/roles`
   static readonly userProfileRoute = `${ServerApi.userRoute}/profile`
@@ -33,15 +36,18 @@ export class ServerApi {
   static readonly updateExperimentalPrusaLinkSupportRoute = `${ServerApi.settingsRoute}/experimental-prusa-link-support`
   static readonly updateExperimentalBambuSupportRoute = `${ServerApi.settingsRoute}/experimental-bambu-support`
 
-  static readonly deleteTagRoute = (id: number) => `${ServerApi.base}/printer-group/${id}`
+  static readonly deleteTagRoute = (id: number) => `${ServerApi.base}/printer-tag/${id}`
 
   static readonly updateTagNameRoute = (id: number) =>
-    `${ServerApi.base}/printer-group/${id}/name`
+    `${ServerApi.base}/printer-tag/${id}/name`
 
-  static readonly addPrinterToGroupRoute = (id: number) =>
-    `${ServerApi.base}/printer-group/${id}/printer`
+  static readonly updateTagColorRoute = (id: number) =>
+    `${ServerApi.base}/printer-tag/${id}/color`
 
-  static readonly deletePrinterFromTagRoute = ServerApi.addPrinterToGroupRoute
+  static readonly addPrinterToTagRoute = (id: number) =>
+    `${ServerApi.base}/printer-tag/${id}/printer`
+
+  static readonly deletePrinterFromTagRoute = ServerApi.addPrinterToTagRoute
 
   static readonly getPrinterRoute = (id: number) => `${ServerApi.printerRoute}/${id}`
   static readonly postPrinterDisabledReasonRoute = (id: number) =>
