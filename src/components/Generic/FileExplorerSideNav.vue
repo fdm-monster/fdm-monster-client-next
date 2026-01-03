@@ -319,7 +319,7 @@
                       {{ file.path }}
                     </div>
                     <div class="text-caption text-medium-emphasis">
-                      {{ formatBytes(file.size) }}
+                      {{ formatFileSize(file.size) }}
                     </div>
                   </div>
 
@@ -404,7 +404,7 @@ import { computed, ref, watch } from 'vue'
 import { generateInitials } from '@/shared/noun-adjectives.data'
 import { PrinterFileService, PrintersService } from '@/backend'
 import { FileDto } from '@/models/printers/printer-file.model'
-import { formatBytes } from '@/utils/file-size.util'
+import { formatFileSize } from '@/utils/file-size.util'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from './Dialogs/dialog.constants'
 import { usePrinterStateStore } from '@/store/printer-state.store'

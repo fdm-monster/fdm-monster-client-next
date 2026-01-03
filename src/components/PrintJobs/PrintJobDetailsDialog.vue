@@ -559,6 +559,7 @@ import { PrintJobService } from '@/backend/print-job.service'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { formatFileSize } from "@/utils/file-size.util";
 
 const jobDetailsDialog = useDialog(DialogName.PrintJobDetailsDialog)
 const { info, error } = useSnackbar()
@@ -735,20 +736,6 @@ const formatDuration = (seconds: number | null | undefined): string => {
     return `${minutes}m ${secs}s`
   }
   return `${secs}s`
-}
-
-const formatFileSize = (bytes: number | null | undefined): string => {
-  if (!bytes) return 'N/A'
-  const units = ['B', 'KB', 'MB', 'GB']
-  let size = bytes
-  let unitIndex = 0
-
-  while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024
-    unitIndex++
-  }
-
-  return `${size.toFixed(2)} ${units[unitIndex]}`
 }
 
 const copyToClipboard = async () => {

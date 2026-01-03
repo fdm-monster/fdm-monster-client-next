@@ -442,6 +442,7 @@ import bambuLogo from '@/assets/bambu-logo.png'
 import klipperLogo from '@/assets/klipper-logo.svg'
 import prusaLinkLogo from '@/assets/prusa-link-logo.svg'
 import octoprintLogo from '@/assets/octoprint-tentacle.svg'
+import { formatFileSize } from "@/utils/file-size.util";
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -675,13 +676,6 @@ const getPrinterTypeName = (printerType: number) => {
 
 const getThumbnailUrl = (fileStorageId: string, index: number = 0) => {
   return FileStorageService.getThumbnailUrl(fileStorageId, index)
-}
-
-const formatFileSize = (bytes: number) => {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`
 }
 
 const formatDate = (date: Date | string) => {
