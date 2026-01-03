@@ -4,7 +4,8 @@ import { createPinia } from 'pinia'
 import { createVuetify } from 'vuetify'
 import { nextTick } from 'vue'
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
-import PrintersView from '@/components/PrinterList/PrintersView.vue'
+import { createRouter, createMemoryHistory } from 'vue-router'
+import ManageTagsDialog from '@/components/Generic/Dialogs/ManageTagsDialog.vue'
 import { PrinterTagService } from '@/backend/printer-tag.service'
 
 // Mock the services
@@ -17,6 +18,7 @@ vi.mock('@/backend/printer-tag.service', () => ({
     createTag: vi.fn().mockResolvedValue({}),
     deleteTag: vi.fn().mockResolvedValue([]),
     updateTagName: vi.fn().mockResolvedValue([]),
+    updateTagColor: vi.fn().mockResolvedValue([]),
     addPrinterToTag: vi.fn().mockResolvedValue([]),
     deletePrinterTag: vi.fn().mockResolvedValue([])
   }
@@ -50,10 +52,11 @@ vi.mock('@/shared/snackbar.composable', () => ({
   })
 }))
 
-describe('PrintersView - Tag Rename Functionality', () => {
+describe('ManageTagsDialog - Tag Rename Functionality', () => {
   let wrapper: any
   let pinia: any
   let queryClient: QueryClient
+  let router: any
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -67,9 +70,18 @@ describe('PrintersView - Tag Rename Functionality', () => {
       },
     })
 
-    wrapper = mount(PrintersView, {
+    router = createRouter({
+      history: createMemoryHistory(),
+      routes: [
+        { path: '/', component: { template: '<div>Home</div>' } },
+        { path: '/printers-grid', component: { template: '<div>Printers Grid</div>' } },
+        { path: '/cameras', component: { template: '<div>Cameras</div>' } }
+      ]
+    })
+
+    wrapper = mount(ManageTagsDialog, {
       global: {
-        plugins: [pinia, vuetify, [VueQueryPlugin, { queryClient }]]
+        plugins: [pinia, vuetify, router, [VueQueryPlugin, { queryClient }]]
       }
     })
   })
