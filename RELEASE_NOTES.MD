@@ -7,6 +7,10 @@ Features
 - Clickable floor/tag/camera chips to open edit dialogs
 - Action menus on printer list for floors, tags, and cameras
 
+Fixes
+
+- Reordering floors now works
+
 ## Client 2.0.0
 
 Features
