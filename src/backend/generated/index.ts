@@ -253,8 +253,6 @@ export type {
   PostApiV2PrintJobsByIdSetCompletedResponses,
   PostApiV2PrintJobsByIdSetFailedData,
   PostApiV2PrintJobsByIdSetFailedResponses,
-  PostApiV2PrintJobsByIdSetSkuCountData,
-  PostApiV2PrintJobsByIdSetSkuCountResponses,
   PostApiV2PrintJobsByIdSetUnknownData,
   PostApiV2PrintJobsByIdSetUnknownResponses,
   PostApiV2PrintJobsFromFileData,

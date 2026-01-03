@@ -233,8 +233,6 @@ import type {
   PostApiV2PrintJobsByIdSetCompletedResponses,
   PostApiV2PrintJobsByIdSetFailedData,
   PostApiV2PrintJobsByIdSetFailedResponses,
-  PostApiV2PrintJobsByIdSetSkuCountData,
-  PostApiV2PrintJobsByIdSetSkuCountResponses,
   PostApiV2PrintJobsByIdSetUnknownData,
   PostApiV2PrintJobsByIdSetUnknownResponses,
   PostApiV2PrintJobsFromFileData,
@@ -949,23 +947,6 @@ export class PrintJobController {
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
       url: '/api/v2/print-jobs/{id}',
-      ...options
-    })
-  }
-
-  /**
-   * setSkuCount
-   */
-  public static postApiV2PrintJobsByIdSetSkuCount<
-    ThrowOnError extends boolean = false
-  >(options: Options<PostApiV2PrintJobsByIdSetSkuCountData, ThrowOnError>) {
-    return (options.client ?? client).post<
-      PostApiV2PrintJobsByIdSetSkuCountResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/v2/print-jobs/{id}/set-sku-count',
       ...options
     })
   }

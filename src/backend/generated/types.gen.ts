@@ -596,25 +596,6 @@ export type GetApiV2PrintJobsByIdResponses = {
   200: unknown
 }
 
-export type PostApiV2PrintJobsByIdSetSkuCountData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/v2/print-jobs/{id}/set-sku-count'
-}
-
-export type PostApiV2PrintJobsByIdSetSkuCountResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
 export type PostApiV2PrintJobsByIdSetCompletedData = {
   body?: never
   path: {
