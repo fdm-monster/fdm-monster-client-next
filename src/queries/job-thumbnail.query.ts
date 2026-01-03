@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/vue-query";
-import { PrintJobsService } from "@/backend/print-jobs.service";
+import { PrintJobService } from "@/backend/print-job.service";
 import { ComputedRef, Ref } from "vue";
 
 export const jobThumbnailQueryKey = "job-thumbnail";
@@ -14,7 +14,7 @@ export const useJobThumbnailQuery = (
       if (!jobId.value) return null;
 
       try {
-        const thumbnails = await PrintJobsService.getThumbnails(jobId.value);
+        const thumbnails = await PrintJobService.getThumbnails(jobId.value);
 
         if (!thumbnails || thumbnails.length === 0) {
           return null;
@@ -27,7 +27,7 @@ export const useJobThumbnailQuery = (
           return null;
         }
 
-        return await PrintJobsService.getThumbnailUrl(jobId.value, bestThumbnail.index);
+        return await PrintJobService.getThumbnailUrl(jobId.value, bestThumbnail.index);
       } catch (err) {
         console.debug(`Failed to load thumbnail for job ${jobId.value}:`, err);
         return null;

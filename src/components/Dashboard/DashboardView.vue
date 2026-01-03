@@ -318,7 +318,7 @@ import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { PrintJobsService, type PrintJobDto } from '@/backend/print-jobs.service'
+import { PrintJobService, type PrintJobDto } from '@/backend/print-job.service'
 import {
   calculateJobPerformanceMetrics,
   formatPrintTime
@@ -355,7 +355,7 @@ async function loadRecentJobs() {
     const sevenDaysAgo = new Date()
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
 
-    const response = await PrintJobsService.searchJobsPaged({
+    const response = await PrintJobService.searchJobsPaged({
       startDate: sevenDaysAgo.toISOString().split('T')[0],
       page: 1,
       pageSize: 500 // API maximum

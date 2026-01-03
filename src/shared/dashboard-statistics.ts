@@ -1,4 +1,4 @@
-import type { PrintJobDto, PrintJobStatus } from '@/backend/print-jobs.service'
+import type { PrintJobDto, PrintJobStatus } from '@/backend/print-job.service'
 
 /**
  * Dashboard statistics utilities

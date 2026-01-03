@@ -905,7 +905,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, computed, watch } from 'vue'
-import { PrintJobsService, type PrintJobDto, type PrintJobSearchPagedParams } from '@/backend/print-jobs.service'
+import { PrintJobService, type PrintJobDto, type PrintJobSearchPagedParams } from '@/backend/print-job.service'
 import { PrintQueueService } from '@/backend/print-queue.service'
 import { useFloorStore } from '@/store/floor.store'
 import { useDebounceFn } from '@vueuse/core'
@@ -1215,7 +1215,7 @@ const loadPrintJobs = async () => {
     })
 
     console.debug('[LoadJobs] Fetching jobs with params:', params)
-    const response = await PrintJobsService.searchJobsPaged(params)
+    const response = await PrintJobService.searchJobsPaged(params)
     printJobs.value = response.items
     totalJobs.value = response.count
     console.debug('[LoadJobs] Received', response.items.length, 'jobs')
@@ -1470,7 +1470,7 @@ const canSubmitToPrinter = (job: PrintJobDto): boolean => {
 
 const handleReAnalyzeJob = async (job: PrintJobDto) => {
   try {
-    const updatedJob = await PrintJobsService.reAnalyzeJob(job.id)
+    const updatedJob = await PrintJobService.reAnalyzeJob(job.id)
 
     // Update the job in the list
     const index = printJobs.value.findIndex(j => j.id === job.id)
@@ -1502,7 +1502,7 @@ const confirmMarkAsCompleted = async () => {
 
   completing.value = true
   try {
-    const updatedJob = await PrintJobsService.setJobCompleted(jobToComplete.value.id)
+    const updatedJob = await PrintJobService.setJobCompleted(jobToComplete.value.id)
 
     // Update the job in the list
     const index = printJobs.value.findIndex(j => j.id === jobToComplete.value!.id)
@@ -1544,7 +1544,7 @@ const confirmMarkAsFailed = async () => {
 
   failing.value = true
   try {
-    const updatedJob = await PrintJobsService.setJobFailed(jobToFail.value.id)
+    const updatedJob = await PrintJobService.setJobFailed(jobToFail.value.id)
 
     // Update the job in the list
     const index = printJobs.value.findIndex(j => j.id === jobToFail.value!.id)
@@ -1586,7 +1586,7 @@ const confirmMarkAsCancelled = async () => {
 
   cancelling.value = true
   try {
-    const updatedJob = await PrintJobsService.setJobCancelled(jobToCancel.value.id)
+    const updatedJob = await PrintJobService.setJobCancelled(jobToCancel.value.id)
 
     // Update the job in the list
     const index = printJobs.value.findIndex(j => j.id === jobToCancel.value!.id)
@@ -1628,7 +1628,7 @@ const confirmMarkAsUnknown = async () => {
 
   settingUnknown.value = true
   try {
-    const updatedJob = await PrintJobsService.setJobUnknown(jobToSetUnknown.value.id)
+    const updatedJob = await PrintJobService.setJobUnknown(jobToSetUnknown.value.id)
 
     // Update the job in the list
     const index = printJobs.value.findIndex(j => j.id === jobToSetUnknown.value!.id)
@@ -1671,7 +1671,7 @@ const confirmDeleteJob = async () => {
 
   deleting.value = true
   try {
-    const response = await PrintJobsService.deleteJob(jobToDelete.value.id, deleteFileWithJob.value)
+    const response = await PrintJobService.deleteJob(jobToDelete.value.id, deleteFileWithJob.value)
 
     // Remove the job from the list
     const index = printJobs.value.findIndex(j => j.id === jobToDelete.value!.id)

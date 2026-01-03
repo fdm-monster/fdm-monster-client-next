@@ -554,8 +554,8 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import type { PrintJobDto } from '@/backend/print-jobs.service'
-import { PrintJobsService } from '@/backend/print-jobs.service'
+import type { PrintJobDto } from '@/backend/print-job.service'
+import { PrintJobService } from '@/backend/print-job.service'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
@@ -578,7 +578,7 @@ watch(() => context.value?.jobId, async (jobId) => {
   if (jobId && isOpen.value) {
     loading.value = true
     try {
-      job.value = await PrintJobsService.getJob(jobId)
+      job.value = await PrintJobService.getJob(jobId)
     } catch (err: any) {
       error(
         'Failed to Load Job',
@@ -635,7 +635,7 @@ const handleReAnalyze = async () => {
 
   reAnalyzing.value = true
   try {
-    job.value = await PrintJobsService.reAnalyzeJob(job.value.id)
+    job.value = await PrintJobService.reAnalyzeJob(job.value.id)
 
     info(
       'Job Re-Analysis Started',
@@ -662,7 +662,7 @@ const handleDeleteConfirm = async () => {
 
   deleting.value = true
   try {
-    await PrintJobsService.deleteJob(job.value.id)
+    await PrintJobService.deleteJob(job.value.id)
 
     info(
       'Job Deleted',

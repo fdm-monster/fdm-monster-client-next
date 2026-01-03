@@ -110,7 +110,7 @@
 
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
-import { PrintJobsService, type ThumbnailInfo } from '@/backend/print-jobs.service'
+import { PrintJobService, type ThumbnailInfo } from '@/backend/print-job.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 
@@ -155,7 +155,7 @@ const currentThumbnailUrl = computed(() => {
 const loadThumbnails = async (id: number) => {
   loading.value = true
   try {
-    const thumbs = await PrintJobsService.getThumbnails(id)
+    const thumbs = await PrintJobService.getThumbnails(id)
 
     // Sort thumbnails by resolution (highest first)
     const sortedThumbs = (thumbs || []).sort((a, b) => {
@@ -170,7 +170,7 @@ const loadThumbnails = async (id: number) => {
     // Load URLs for all thumbnails
     thumbnailUrls.value.clear()
     for (const thumb of sortedThumbs) {
-      const url = await PrintJobsService.getThumbnailUrl(id, thumb.index)
+      const url = await PrintJobService.getThumbnailUrl(id, thumb.index)
       thumbnailUrls.value.set(thumb.index, url)
     }
   } catch (err) {
