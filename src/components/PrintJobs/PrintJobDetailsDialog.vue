@@ -84,19 +84,19 @@
                   <v-row dense>
                     <v-col cols="6" md="3">
                       <div class="text-caption text-medium-emphasis">Created</div>
-                      <div class="text-body-2">{{ formatDateTime(job?.createdAt) }}</div>
+                      <div class="text-body-2">{{ formatDate(job?.createdAt) }}</div>
                     </v-col>
                     <v-col cols="6" md="3">
                       <div class="text-caption text-medium-emphasis">Updated</div>
-                      <div class="text-body-2">{{ formatDateTime(job?.updatedAt) }}</div>
+                      <div class="text-body-2">{{ formatDate(job?.updatedAt) }}</div>
                     </v-col>
                     <v-col cols="6" md="3">
                       <div class="text-caption text-medium-emphasis">Started</div>
-                      <div class="text-body-2">{{ formatDateTime(job?.startedAt) }}</div>
+                      <div class="text-body-2">{{ formatDate(job?.startedAt) }}</div>
                     </v-col>
                     <v-col cols="6" md="3">
                       <div class="text-caption text-medium-emphasis">Ended</div>
-                      <div class="text-body-2">{{ formatDateTime(job?.endedAt) }}</div>
+                      <div class="text-body-2">{{ formatDate(job?.endedAt) }}</div>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -376,11 +376,11 @@
                   <v-row dense>
                     <v-col cols="6" md="3">
                       <div class="text-caption text-medium-emphasis">Started At</div>
-                      <div class="text-body-2">{{ formatDateTime(job.statistics.startedAt) }}</div>
+                      <div class="text-body-2">{{ formatDate(job.statistics.startedAt) }}</div>
                     </v-col>
                     <v-col cols="6" md="3">
                       <div class="text-caption text-medium-emphasis">Ended At</div>
-                      <div class="text-body-2">{{ formatDateTime(job.statistics.endedAt) }}</div>
+                      <div class="text-body-2">{{ formatDate(job.statistics.endedAt) }}</div>
                     </v-col>
                     <v-col cols="6" md="3">
                       <div class="text-caption text-medium-emphasis">Actual Print Time</div>
@@ -448,7 +448,7 @@
                 <div class="text-subtitle-2 mb-1">Failure Reason</div>
                 <div>{{ job.statistics.failureReason }}</div>
                 <div v-if="job.statistics.failureTime" class="text-caption mt-2">
-                  Failed at: {{ formatDateTime(job.statistics.failureTime) }}
+                  Failed at: {{ formatDate(job.statistics.failureTime) }}
                 </div>
               </v-alert>
             </div>
@@ -560,6 +560,7 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { formatFileSize } from "@/utils/file-size.util";
+import { formatDate, formatDuration } from "@/utils/date-time.utils";
 
 const jobDetailsDialog = useDialog(DialogName.PrintJobDetailsDialog)
 const { info, error } = useSnackbar()
@@ -710,32 +711,6 @@ const getProgressColor = (progress: number | null | undefined): string => {
   if (progress >= 50) return 'primary'
   if (progress >= 25) return 'warning'
   return 'error'
-}
-
-const formatDateTime = (date: Date | null | undefined): string => {
-  if (!date) return 'N/A'
-  return new Date(date).toLocaleString('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  })
-}
-
-const formatDuration = (seconds: number | null | undefined): string => {
-  if (!seconds) return 'N/A'
-  const hours = Math.floor(seconds / 3600)
-  const minutes = Math.floor((seconds % 3600) / 60)
-  const secs = Math.floor(seconds % 60)
-
-  if (hours > 0) {
-    return `${hours}h ${minutes}m ${secs}s`
-  } else if (minutes > 0) {
-    return `${minutes}m ${secs}s`
-  }
-  return `${secs}s`
 }
 
 const copyToClipboard = async () => {

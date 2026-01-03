@@ -41,16 +41,28 @@
       <v-card-text class="py-3">
         <v-row dense>
           <v-col cols="12" md="6">
-            <v-text-field
-              v-model="searchParams.searchPrinter"
-              label="Search by printer"
+            <v-autocomplete
+              v-model="selectedPrinterIds"
+              :items="allPrinters"
+              item-title="name"
+              item-value="id"
+              label="Filter by printer"
               prepend-inner-icon="print"
               variant="outlined"
               density="compact"
+              multiple
+              chips
               clearable
+              closable-chips
               hide-details
-              @input="debouncedSearch"
-            />
+              @update:model-value="debouncedSearch"
+            >
+              <template #chip="{ item, props }">
+                <v-chip v-bind="props" size="small" closable>
+                  {{ item.title }}
+                </v-chip>
+              </template>
+            </v-autocomplete>
           </v-col>
           <v-col cols="12" md="6">
             <v-text-field
@@ -905,6 +917,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { PrintJobService, type PrintJobDto, type PrintJobSearchPagedParams } from '@/backend/print-job.service'
 import { PrintQueueService } from '@/backend/print-queue.service'
 import { useFloorStore } from '@/store/floor.store'
@@ -920,6 +933,8 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { formatDate, formatRelativeTime, formatDuration } from '@/utils/date-time.utils'
+
+const route = useRoute()
 
 // Tab state
 const activeTab = ref('jobs')
@@ -1002,6 +1017,7 @@ const {
 } = usePrinterFilters()
 
 // Additional filter selections
+const selectedPrinterIds = ref<number[]>([])
 const selectedJobStatuses = ref<string[]>([])
 const selectedPrinterStates = ref<string[]>([])
 const selectedMaterialTypes = ref<string[]>([])
@@ -1069,6 +1085,13 @@ const getPrinterState = (printerId: number | null): string => {
 
 const filteredPrintJobs = computed(() => {
   let filtered = printJobs.value
+
+  // Filter by selected printers
+  if (selectedPrinterIds.value.length > 0) {
+    filtered = filtered.filter(job => {
+      return job.printerId && selectedPrinterIds.value.includes(job.printerId)
+    })
+  }
 
   // Filter by tags
   if (selectedTags.value.length > 0) {
@@ -1187,6 +1210,16 @@ const debouncedSearch = useDebounceFn(() => {
 }, 500)
 
 onMounted(async () => {
+  // Load printers first
+  await printerStore.loadPrinters()
+
+  // Check for printerId query parameter and auto-select
+  const printerIdParam = route.query.printerId
+  if (printerIdParam) {
+    const printerId = Number(printerIdParam)
+    selectedPrinterIds.value = [printerId]
+  }
+
   await loadPrintJobs()
   await loadTags()
 })
@@ -1350,6 +1383,7 @@ const clearFilters = () => {
     page: 1,
     pageSize: 25
   }
+  selectedPrinterIds.value = []
   selectedTags.value = []
   selectedPrinterTypes.value = []
   selectedJobStatuses.value = []
@@ -1364,7 +1398,12 @@ const viewJobDetails = (job: PrintJobDto) => {
   jobDetailsDialog.openDialog({ jobId: job.id })
 }
 
-// Available printers for queue selection
+// All printers for filter selection
+const allPrinters = computed(() => {
+  return printerStore.printers
+})
+
+// Available printers for queue selection (only enabled)
 const availablePrinters = computed(() => {
   return printerStore.printers.filter(p => p.enabled)
 })
