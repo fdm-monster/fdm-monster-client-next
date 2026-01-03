@@ -12,7 +12,7 @@ global.ResizeObserver = class ResizeObserver {
 }
 
 beforeAll(() => {
-  mock.onGet('/api/auth/login-required').reply(200, {
+  mock.onGet('/api/v2/auth/login-required').reply(200, {
     loginRequired: true
   })
 })

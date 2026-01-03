@@ -1,108 +1,110 @@
 import { BaseService } from '@/backend/base.service'
 import { ServerApi } from '@/backend/server.api'
-import type { PrintJobDto } from '@/backend/print-jobs.service'
 
-export interface QueuedJobDto {
+export interface QueuedJob {
   id: number
-  printerId: number
-  jobId: number
-  position: number
-  addedAt: Date
-  job?: PrintJobDto
-  skuCount?: number
-}
-
-export interface PrinterQueueDto {
-  printerId: number
-  printerName: string
-  jobs: QueuedJobDto[]
-}
-
-export interface GlobalQueuePlateDto {
-  jobId: number
   fileName: string
-  skuCount: number
-  totalQueued: number
-  printers: {
+  queuePosition: number
+  status: string
+  estimatedTimeSeconds?: number
+  filamentGrams?: number
+  createdAt: Date
+}
+
+export interface GlobalQueueResponse {
+  items: Array<{
+    jobId: number
+    fileName: string
     printerId: number
-    printerName: string
+    printerName?: string
     queuePosition: number
-  }[]
+    status: string
+    createdAt: Date
+    estimatedTimeSeconds?: number
+    filamentGrams?: number
+  }>
+  page: number
+  pageSize: number
+  totalCount: number
+  totalPages: number
 }
 
-export interface GlobalQueueViewDto {
-  plates: GlobalQueuePlateDto[]
-  totalPlates: number
-  totalJobs: number
-}
-
-export interface ReorderQueueDto {
-  jobId: number
-  newPosition: number
+export interface PrinterQueueResponse {
+  printerId: number
+  queue: QueuedJob[]
+  count: number
 }
 
 export class PrintQueueService extends BaseService {
   /**
-   * Get global plate view with SKU count
+   * Get global queue across all printers with pagination
    */
-  static async getGlobalQueue(): Promise<GlobalQueueViewDto> {
-    return await this.get<GlobalQueueViewDto>(`${ServerApi.printQueueRoute}/global`)
+  static async getGlobalQueue(page: number = 1, pageSize: number = 50): Promise<GlobalQueueResponse> {
+    const path = `${ServerApi.printQueueRoute}?page=${page}&pageSize=${pageSize}`
+    return this.get<GlobalQueueResponse>(path)
   }
 
   /**
-   * Get printer-specific queue
+   * Get queue for specific printer
    */
-  static async getPrinterQueue(printerId: number): Promise<PrinterQueueDto> {
-    return await this.get<PrinterQueueDto>(`${ServerApi.printQueueRoute}/${printerId}`)
-  }
-
-  /**
-   * Get next job for printer
-   */
-  static async getNextJob(printerId: number): Promise<QueuedJobDto | null> {
-    return await this.get<QueuedJobDto | null>(`${ServerApi.printQueueRoute}/${printerId}/next`)
+  static async getPrinterQueue(printerId: number): Promise<PrinterQueueResponse> {
+    const path = `${ServerApi.printQueueRoute}/${printerId}`
+    return this.get<PrinterQueueResponse>(path)
   }
 
   /**
    * Add job to printer queue
    */
-  static async addToQueue(printerId: number, jobId: number): Promise<QueuedJobDto> {
-    return await this.post<QueuedJobDto>(`${ServerApi.printQueueRoute}/${printerId}/add/${jobId}`)
+  static async addToQueue(printerId: number, jobId: number, position?: number): Promise<PrinterQueueResponse> {
+    const path = `${ServerApi.printQueueRoute}/${printerId}/add/${jobId}`
+    return this.post<PrinterQueueResponse>(path, { position })
   }
 
   /**
    * Remove job from queue
    */
-  static async removeFromQueue(printerId: number, jobId: number): Promise<void> {
-    return await this.delete<void>(`${ServerApi.printQueueRoute}/${printerId}/${jobId}`)
+  static async removeFromQueue(printerId: number, jobId: number): Promise<PrinterQueueResponse> {
+    const path = `${ServerApi.printQueueRoute}/${printerId}/${jobId}`
+    return this.delete<PrinterQueueResponse>(path)
   }
 
   /**
-   * Reorder queue
+   * Reorder queue for a printer
    */
-  static async reorderQueue(printerId: number, reorder: ReorderQueueDto[]): Promise<PrinterQueueDto> {
-    return await this.put<PrinterQueueDto>(`${ServerApi.printQueueRoute}/${printerId}/reorder`, reorder)
+  static async reorderQueue(printerId: number, jobIds: number[]): Promise<PrinterQueueResponse> {
+    const path = `${ServerApi.printQueueRoute}/${printerId}/reorder`
+    return this.put<PrinterQueueResponse>(path, { jobIds })
   }
 
   /**
-   * Clear printer queue
+   * Clear all jobs from printer queue
    */
-  static async clearQueue(printerId: number): Promise<void> {
-    return await this.delete<void>(`${ServerApi.printQueueRoute}/${printerId}/clear`)
+  static async clearQueue(printerId: number): Promise<{ message: string; printerId: number }> {
+    const path = `${ServerApi.printQueueRoute}/${printerId}/clear`
+    return this.delete<{ message: string; printerId: number }>(path)
   }
 
   /**
-   * Process next job in queue
+   * Get next job in queue
    */
-  static async processNext(printerId: number): Promise<QueuedJobDto> {
-    return await this.post<QueuedJobDto>(`${ServerApi.printQueueRoute}/${printerId}/process`)
+  static async getNextInQueue(printerId: number): Promise<{ printerId: number; nextJob: QueuedJob | null }> {
+    const path = `${ServerApi.printQueueRoute}/${printerId}/next`
+    return this.get<{ printerId: number; nextJob: QueuedJob | null }>(path)
   }
 
   /**
-   * Set SKU/part count for a job
+   * Process queue - start next job
    */
-  static async setSkuCount(jobId: number, skuCount: number): Promise<PrintJobDto> {
-    return await this.post<PrintJobDto>(`${ServerApi.printJobsRoute}/${jobId}/set-sku-count`, { skuCount })
+  static async processQueue(printerId: number): Promise<{ message: string; printerId: number; nextJob: QueuedJob | null }> {
+    const path = `${ServerApi.printQueueRoute}/${printerId}/process`
+    return this.post<{ message: string; printerId: number; nextJob: QueuedJob | null }>(path)
+  }
+
+  /**
+   * Submit job directly to printer for immediate printing
+   */
+  static async submitToPrinter(jobId: number, printerId: number): Promise<{ message: string; jobId: number; printerId: number }> {
+    const path = `${ServerApi.printQueueRoute}/${printerId}/submit/${jobId}`
+    return this.post<{ message: string; jobId: number; printerId: number }>(path)
   }
 }
-

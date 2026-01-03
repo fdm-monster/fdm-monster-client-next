@@ -1,4 +1,4 @@
-import { DialogName } from './dialog.constants'
+ import { DialogName } from './dialog.constants'
 import { PrinterDto } from '@/models/printers/printer.model'
 
 // Context types for each dialog
@@ -40,6 +40,10 @@ export interface PrintJobDetailsDialogContext {
   jobId: number
 }
 
+export interface JobThumbnailViewerContext {
+  jobId: number
+}
+
 // Map dialog names to their context types
 export interface DialogContextTypeMap {
   [DialogName.AddOrUpdatePrinterDialog]: AddOrUpdatePrinterDialogContext
@@ -49,6 +53,7 @@ export interface DialogContextTypeMap {
   [DialogName.PrinterControlDialog]: PrinterControlDialogContext
   [DialogName.JsonViewerDialog]: JsonViewerDialogContext
   [DialogName.PrintJobDetailsDialog]: PrintJobDetailsDialogContext
+  [DialogName.JobThumbnailViewer]: JobThumbnailViewerContext
   [DialogName.CreateUserDialog]: undefined
   [DialogName.ImportOctoFarmDialog]: undefined
   [DialogName.BatchReprintDialog]: undefined

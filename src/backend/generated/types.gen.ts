@@ -4,203 +4,203 @@ export type ClientOptions = {
   baseUrl: `${string}://${string}/api` | (string & {})
 }
 
-export type PostApiAuthLoginData = {
+export type PostApiV2AuthLoginData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/auth/login'
+  url: '/api/v2/auth/login'
 }
 
-export type PostApiAuthLoginResponses = {
+export type PostApiV2AuthLoginResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiAuthLoginRequiredData = {
+export type GetApiV2AuthLoginRequiredData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/auth/login-required'
+  url: '/api/v2/auth/login-required'
 }
 
-export type GetApiAuthLoginRequiredResponses = {
+export type GetApiV2AuthLoginRequiredResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiAuthVerifyData = {
+export type PostApiV2AuthVerifyData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/auth/verify'
+  url: '/api/v2/auth/verify'
 }
 
-export type PostApiAuthVerifyResponses = {
+export type PostApiV2AuthVerifyResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiAuthNeedsPasswordChangeData = {
+export type PostApiV2AuthNeedsPasswordChangeData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/auth/needs-password-change'
+  url: '/api/v2/auth/needs-password-change'
 }
 
-export type PostApiAuthNeedsPasswordChangeResponses = {
+export type PostApiV2AuthNeedsPasswordChangeResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiAuthRefreshData = {
+export type PostApiV2AuthRefreshData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/auth/refresh'
+  url: '/api/v2/auth/refresh'
 }
 
-export type PostApiAuthRefreshResponses = {
+export type PostApiV2AuthRefreshResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiAuthLogoutData = {
+export type PostApiV2AuthLogoutData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/auth/logout'
+  url: '/api/v2/auth/logout'
 }
 
-export type PostApiAuthLogoutResponses = {
+export type PostApiV2AuthLogoutResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiAuthRegisterData = {
+export type PostApiV2AuthRegisterData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/auth/register'
+  url: '/api/v2/auth/register'
 }
 
-export type PostApiAuthRegisterResponses = {
+export type PostApiV2AuthRegisterResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiBatchConnectUsbData = {
+export type PostApiV2BatchConnectUsbData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/batch/connect/usb'
+  url: '/api/v2/batch/connect/usb'
 }
 
-export type PostApiBatchConnectUsbResponses = {
+export type PostApiV2BatchConnectUsbResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiBatchConnectSocketData = {
+export type PostApiV2BatchConnectSocketData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/batch/connect/socket'
+  url: '/api/v2/batch/connect/socket'
 }
 
-export type PostApiBatchConnectSocketResponses = {
+export type PostApiV2BatchConnectSocketResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiBatchReprintListData = {
+export type PostApiV2BatchReprintListData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/batch/reprint/list'
+  url: '/api/v2/batch/reprint/list'
 }
 
-export type PostApiBatchReprintListResponses = {
+export type PostApiV2BatchReprintListResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiBatchReprintExecuteData = {
+export type PostApiV2BatchReprintExecuteData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/batch/reprint/execute'
+  url: '/api/v2/batch/reprint/execute'
 }
 
-export type PostApiBatchReprintExecuteResponses = {
+export type PostApiV2BatchReprintExecuteResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiBatchToggleEnabledData = {
+export type PostApiV2BatchToggleEnabledData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/batch/toggle-enabled'
+  url: '/api/v2/batch/toggle-enabled'
 }
 
-export type PostApiBatchToggleEnabledResponses = {
+export type PostApiV2BatchToggleEnabledResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiCameraStreamData = {
+export type GetApiV2CameraStreamData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/camera-stream/'
+  url: '/api/v2/camera-stream/'
 }
 
-export type GetApiCameraStreamResponses = {
+export type GetApiV2CameraStreamResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiCameraStreamData = {
+export type PostApiV2CameraStreamData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/camera-stream/'
+  url: '/api/v2/camera-stream/'
 }
 
-export type PostApiCameraStreamResponses = {
+export type PostApiV2CameraStreamResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type DeleteApiCameraStreamByIdData = {
+export type DeleteApiV2CameraStreamByIdData = {
   body?: never
   path: {
     /**
@@ -209,17 +209,17 @@ export type DeleteApiCameraStreamByIdData = {
     id: string
   }
   query?: never
-  url: '/api/camera-stream/{id}'
+  url: '/api/v2/camera-stream/{id}'
 }
 
-export type DeleteApiCameraStreamByIdResponses = {
+export type DeleteApiV2CameraStreamByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiCameraStreamByIdData = {
+export type GetApiV2CameraStreamByIdData = {
   body?: never
   path: {
     /**
@@ -228,17 +228,17 @@ export type GetApiCameraStreamByIdData = {
     id: string
   }
   query?: never
-  url: '/api/camera-stream/{id}'
+  url: '/api/v2/camera-stream/{id}'
 }
 
-export type GetApiCameraStreamByIdResponses = {
+export type GetApiV2CameraStreamByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PutApiCameraStreamByIdData = {
+export type PutApiV2CameraStreamByIdData = {
   body?: never
   path: {
     /**
@@ -247,87 +247,162 @@ export type PutApiCameraStreamByIdData = {
     id: string
   }
   query?: never
-  url: '/api/camera-stream/{id}'
+  url: '/api/v2/camera-stream/{id}'
 }
 
-export type PutApiCameraStreamByIdResponses = {
+export type PutApiV2CameraStreamByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiFirstTimeSetupValidateData = {
+export type DeleteApiV2FileStorageByFileStorageIdData = {
+  body?: never
+  path: {
+    /**
+     * The fileStorageId parameter
+     */
+    fileStorageId: string
+  }
+  query?: never
+  url: '/api/v2/file-storage/{fileStorageId}'
+}
+
+export type DeleteApiV2FileStorageByFileStorageIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2FileStorageByFileStorageIdData = {
+  body?: never
+  path: {
+    /**
+     * The fileStorageId parameter
+     */
+    fileStorageId: string
+  }
+  query?: never
+  url: '/api/v2/file-storage/{fileStorageId}'
+}
+
+export type GetApiV2FileStorageByFileStorageIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2FileStorageByFileStorageIdThumbnailByIndexData = {
+  body?: never
+  path: {
+    /**
+     * The fileStorageId parameter
+     */
+    fileStorageId: string
+    /**
+     * The index parameter
+     */
+    index: string
+  }
+  query?: never
+  url: '/api/v2/file-storage/{fileStorageId}/thumbnail/{index}'
+}
+
+export type GetApiV2FileStorageByFileStorageIdThumbnailByIndexResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2FileStorageUploadData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/first-time-setup/validate'
+  url: '/api/v2/file-storage/upload'
 }
 
-export type PostApiFirstTimeSetupValidateResponses = {
+export type PostApiV2FileStorageUploadResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiFirstTimeSetupCompleteData = {
+export type PostApiV2FirstTimeSetupValidateData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/first-time-setup/complete'
+  url: '/api/v2/first-time-setup/validate'
 }
 
-export type PostApiFirstTimeSetupCompleteResponses = {
+export type PostApiV2FirstTimeSetupValidateResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiFirstTimeSetupYamlImportData = {
+export type PostApiV2FirstTimeSetupCompleteData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/first-time-setup/yaml-import'
+  url: '/api/v2/first-time-setup/complete'
 }
 
-export type PostApiFirstTimeSetupYamlImportResponses = {
+export type PostApiV2FirstTimeSetupCompleteResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiFloorData = {
+export type PostApiV2FirstTimeSetupYamlImportData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/floor/'
+  url: '/api/v2/first-time-setup/yaml-import'
 }
 
-export type GetApiFloorResponses = {
+export type PostApiV2FirstTimeSetupYamlImportResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiFloorData = {
+export type GetApiV2FloorData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/floor/'
+  url: '/api/v2/floor/'
 }
 
-export type PostApiFloorResponses = {
+export type GetApiV2FloorResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type DeleteApiFloorByIdData = {
+export type PostApiV2FloorData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/floor/'
+}
+
+export type PostApiV2FloorResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type DeleteApiV2FloorByIdData = {
   body?: never
   path: {
     /**
@@ -336,17 +411,17 @@ export type DeleteApiFloorByIdData = {
     id: string
   }
   query?: never
-  url: '/api/floor/{id}'
+  url: '/api/v2/floor/{id}'
 }
 
-export type DeleteApiFloorByIdResponses = {
+export type DeleteApiV2FloorByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiFloorByIdData = {
+export type GetApiV2FloorByIdData = {
   body?: never
   path: {
     /**
@@ -355,17 +430,17 @@ export type GetApiFloorByIdData = {
     id: string
   }
   query?: never
-  url: '/api/floor/{id}'
+  url: '/api/v2/floor/{id}'
 }
 
-export type GetApiFloorByIdResponses = {
+export type GetApiV2FloorByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PatchApiFloorByIdNameData = {
+export type PatchApiV2FloorByIdNameData = {
   body?: never
   path: {
     /**
@@ -374,17 +449,17 @@ export type PatchApiFloorByIdNameData = {
     id: string
   }
   query?: never
-  url: '/api/floor/{id}/name'
+  url: '/api/v2/floor/{id}/name'
 }
 
-export type PatchApiFloorByIdNameResponses = {
+export type PatchApiV2FloorByIdNameResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PatchApiFloorByIdFloorOrderData = {
+export type PatchApiV2FloorByIdFloorOrderData = {
   body?: never
   path: {
     /**
@@ -393,17 +468,17 @@ export type PatchApiFloorByIdFloorOrderData = {
     id: string
   }
   query?: never
-  url: '/api/floor/{id}/floor-order'
+  url: '/api/v2/floor/{id}/floor-order'
 }
 
-export type PatchApiFloorByIdFloorOrderResponses = {
+export type PatchApiV2FloorByIdFloorOrderResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type DeleteApiFloorByIdPrinterData = {
+export type DeleteApiV2FloorByIdPrinterData = {
   body?: never
   path: {
     /**
@@ -412,17 +487,17 @@ export type DeleteApiFloorByIdPrinterData = {
     id: string
   }
   query?: never
-  url: '/api/floor/{id}/printer'
+  url: '/api/v2/floor/{id}/printer'
 }
 
-export type DeleteApiFloorByIdPrinterResponses = {
+export type DeleteApiV2FloorByIdPrinterResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiFloorByIdPrinterData = {
+export type PostApiV2FloorByIdPrinterData = {
   body?: never
   path: {
     /**
@@ -431,10 +506,10 @@ export type PostApiFloorByIdPrinterData = {
     id: string
   }
   query?: never
-  url: '/api/floor/{id}/printer'
+  url: '/api/v2/floor/{id}/printer'
 }
 
-export type PostApiFloorByIdPrinterResponses = {
+export type PostApiV2FloorByIdPrinterResponses = {
   /**
    * Successful response
    */
@@ -455,35 +530,35 @@ export type GetMetricsResponses = {
   200: unknown
 }
 
-export type PostApiPrinterFilesPurgeData = {
+export type GetApiV2PrintJobsSearchData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/printer-files/purge'
+  url: '/api/v2/print-jobs/search'
 }
 
-export type PostApiPrinterFilesPurgeResponses = {
+export type GetApiV2PrintJobsSearchResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterFilesThumbnailsData = {
+export type GetApiV2PrintJobsSearchPagedData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/printer-files/thumbnails'
+  url: '/api/v2/print-jobs/search-paged'
 }
 
-export type GetApiPrinterFilesThumbnailsResponses = {
+export type GetApiV2PrintJobsSearchPagedResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type DeleteApiPrinterFilesByIdData = {
+export type DeleteApiV2PrintJobsByIdData = {
   body?: never
   path: {
     /**
@@ -492,17 +567,17 @@ export type DeleteApiPrinterFilesByIdData = {
     id: string
   }
   query?: never
-  url: '/api/printer-files/{id}'
+  url: '/api/v2/print-jobs/{id}'
 }
 
-export type DeleteApiPrinterFilesByIdResponses = {
+export type DeleteApiV2PrintJobsByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterFilesByIdData = {
+export type GetApiV2PrintJobsByIdData = {
   body?: never
   path: {
     /**
@@ -511,17 +586,17 @@ export type GetApiPrinterFilesByIdData = {
     id: string
   }
   query?: never
-  url: '/api/printer-files/{id}'
+  url: '/api/v2/print-jobs/{id}'
 }
 
-export type GetApiPrinterFilesByIdResponses = {
+export type GetApiV2PrintJobsByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterFilesByIdReloadThumbnailData = {
+export type PostApiV2PrintJobsByIdSetSkuCountData = {
   body?: never
   path: {
     /**
@@ -530,17 +605,17 @@ export type PostApiPrinterFilesByIdReloadThumbnailData = {
     id: string
   }
   query?: never
-  url: '/api/printer-files/{id}/reload-thumbnail'
+  url: '/api/v2/print-jobs/{id}/set-sku-count'
 }
 
-export type PostApiPrinterFilesByIdReloadThumbnailResponses = {
+export type PostApiV2PrintJobsByIdSetSkuCountResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterFilesByIdPrintData = {
+export type PostApiV2PrintJobsByIdSetCompletedData = {
   body?: never
   path: {
     /**
@@ -549,17 +624,17 @@ export type PostApiPrinterFilesByIdPrintData = {
     id: string
   }
   query?: never
-  url: '/api/printer-files/{id}/print'
+  url: '/api/v2/print-jobs/{id}/set-completed'
 }
 
-export type PostApiPrinterFilesByIdPrintResponses = {
+export type PostApiV2PrintJobsByIdSetCompletedResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterFilesByIdSelectData = {
+export type PostApiV2PrintJobsByIdSetFailedData = {
   body?: never
   path: {
     /**
@@ -568,17 +643,17 @@ export type PostApiPrinterFilesByIdSelectData = {
     id: string
   }
   query?: never
-  url: '/api/printer-files/{id}/select'
+  url: '/api/v2/print-jobs/{id}/set-failed'
 }
 
-export type PostApiPrinterFilesByIdSelectResponses = {
+export type PostApiV2PrintJobsByIdSetFailedResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterFilesByIdCacheData = {
+export type PostApiV2PrintJobsByIdSetCancelledData = {
   body?: never
   path: {
     /**
@@ -587,17 +662,398 @@ export type GetApiPrinterFilesByIdCacheData = {
     id: string
   }
   query?: never
-  url: '/api/printer-files/{id}/cache'
+  url: '/api/v2/print-jobs/{id}/set-cancelled'
 }
 
-export type GetApiPrinterFilesByIdCacheResponses = {
+export type PostApiV2PrintJobsByIdSetCancelledResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterFilesByIdDownloadByPathData = {
+export type PostApiV2PrintJobsByIdSetUnknownData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/print-jobs/{id}/set-unknown'
+}
+
+export type PostApiV2PrintJobsByIdSetUnknownResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrintJobsByIdReAnalyzeData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/print-jobs/{id}/re-analyze'
+}
+
+export type PostApiV2PrintJobsByIdReAnalyzeResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrintJobsByIdThumbnailsData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/print-jobs/{id}/thumbnails'
+}
+
+export type GetApiV2PrintJobsByIdThumbnailsResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrintJobsByIdThumbnailsByIndexData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+    /**
+     * The index parameter
+     */
+    index: string
+  }
+  query?: never
+  url: '/api/v2/print-jobs/{id}/thumbnails/{index}'
+}
+
+export type GetApiV2PrintJobsByIdThumbnailsByIndexResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrintJobsFromFileData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/print-jobs/from-file'
+}
+
+export type PostApiV2PrintJobsFromFileResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrintQueueByPrinterIdData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+  }
+  query?: never
+  url: '/api/v2/print-queue/{printerId}'
+}
+
+export type GetApiV2PrintQueueByPrinterIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrintQueueByPrinterIdAddByJobIdData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+    /**
+     * The jobId parameter
+     */
+    jobId: string
+  }
+  query?: never
+  url: '/api/v2/print-queue/{printerId}/add/{jobId}'
+}
+
+export type PostApiV2PrintQueueByPrinterIdAddByJobIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type DeleteApiV2PrintQueueByPrinterIdByJobIdData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+    /**
+     * The jobId parameter
+     */
+    jobId: string
+  }
+  query?: never
+  url: '/api/v2/print-queue/{printerId}/{jobId}'
+}
+
+export type DeleteApiV2PrintQueueByPrinterIdByJobIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PutApiV2PrintQueueByPrinterIdReorderData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+  }
+  query?: never
+  url: '/api/v2/print-queue/{printerId}/reorder'
+}
+
+export type PutApiV2PrintQueueByPrinterIdReorderResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type DeleteApiV2PrintQueueByPrinterIdClearData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+  }
+  query?: never
+  url: '/api/v2/print-queue/{printerId}/clear'
+}
+
+export type DeleteApiV2PrintQueueByPrinterIdClearResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrintQueueByPrinterIdNextData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+  }
+  query?: never
+  url: '/api/v2/print-queue/{printerId}/next'
+}
+
+export type GetApiV2PrintQueueByPrinterIdNextResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrintQueueByPrinterIdProcessData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+  }
+  query?: never
+  url: '/api/v2/print-queue/{printerId}/process'
+}
+
+export type PostApiV2PrintQueueByPrinterIdProcessResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrintQueueByPrinterIdSubmitByJobIdData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+    /**
+     * The jobId parameter
+     */
+    jobId: string
+  }
+  query?: never
+  url: '/api/v2/print-queue/{printerId}/submit/{jobId}'
+}
+
+export type PostApiV2PrintQueueByPrinterIdSubmitByJobIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrinterFilesPurgeData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/printer-files/purge'
+}
+
+export type PostApiV2PrinterFilesPurgeResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrinterFilesThumbnailsData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/printer-files/thumbnails'
+}
+
+export type GetApiV2PrinterFilesThumbnailsResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type DeleteApiV2PrinterFilesByIdData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/printer-files/{id}'
+}
+
+export type DeleteApiV2PrinterFilesByIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrinterFilesByIdData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/printer-files/{id}'
+}
+
+export type GetApiV2PrinterFilesByIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrinterFilesByIdPrintData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/printer-files/{id}/print'
+}
+
+export type PostApiV2PrinterFilesByIdPrintResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrinterFilesByIdSelectData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/printer-files/{id}/select'
+}
+
+export type PostApiV2PrinterFilesByIdSelectResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrinterFilesByIdCacheData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/printer-files/{id}/cache'
+}
+
+export type GetApiV2PrinterFilesByIdCacheResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrinterFilesByIdDownloadByPathData = {
   body?: never
   path: {
     /**
@@ -610,17 +1066,17 @@ export type GetApiPrinterFilesByIdDownloadByPathData = {
     path: string
   }
   query?: never
-  url: '/api/printer-files/{id}/download/{path}'
+  url: '/api/v2/printer-files/{id}/download/{path}'
 }
 
-export type GetApiPrinterFilesByIdDownloadByPathResponses = {
+export type GetApiV2PrinterFilesByIdDownloadByPathResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type DeleteApiPrinterFilesByIdClearData = {
+export type DeleteApiV2PrinterFilesByIdClearData = {
   body?: never
   path: {
     /**
@@ -629,17 +1085,17 @@ export type DeleteApiPrinterFilesByIdClearData = {
     id: string
   }
   query?: never
-  url: '/api/printer-files/{id}/clear'
+  url: '/api/v2/printer-files/{id}/clear'
 }
 
-export type DeleteApiPrinterFilesByIdClearResponses = {
+export type DeleteApiV2PrinterFilesByIdClearResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterFilesByIdThumbnailData = {
+export type GetApiV2PrinterFilesByIdThumbnailData = {
   body?: never
   path: {
     /**
@@ -648,17 +1104,17 @@ export type GetApiPrinterFilesByIdThumbnailData = {
     id: string
   }
   query?: never
-  url: '/api/printer-files/{id}/thumbnail'
+  url: '/api/v2/printer-files/{id}/thumbnail'
 }
 
-export type GetApiPrinterFilesByIdThumbnailResponses = {
+export type GetApiV2PrinterFilesByIdThumbnailResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterFilesByIdUploadData = {
+export type PostApiV2PrinterFilesByIdUploadData = {
   body?: never
   path: {
     /**
@@ -667,17 +1123,17 @@ export type PostApiPrinterFilesByIdUploadData = {
     id: string
   }
   query?: never
-  url: '/api/printer-files/{id}/upload'
+  url: '/api/v2/printer-files/{id}/upload'
 }
 
-export type PostApiPrinterFilesByIdUploadResponses = {
+export type PostApiV2PrinterFilesByIdUploadResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterSettingsByIdData = {
+export type GetApiV2PrinterSettingsByIdData = {
   body?: never
   path: {
     /**
@@ -686,17 +1142,17 @@ export type GetApiPrinterSettingsByIdData = {
     id: string
   }
   query?: never
-  url: '/api/printer-settings/{id}'
+  url: '/api/v2/printer-settings/{id}'
 }
 
-export type GetApiPrinterSettingsByIdResponses = {
+export type GetApiV2PrinterSettingsByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterSettingsByIdSyncPrinternameData = {
+export type PostApiV2PrinterSettingsByIdSyncPrinternameData = {
   body?: never
   path: {
     /**
@@ -705,45 +1161,45 @@ export type PostApiPrinterSettingsByIdSyncPrinternameData = {
     id: string
   }
   query?: never
-  url: '/api/printer-settings/{id}/sync-printername'
+  url: '/api/v2/printer-settings/{id}/sync-printername'
 }
 
-export type PostApiPrinterSettingsByIdSyncPrinternameResponses = {
+export type PostApiV2PrinterSettingsByIdSyncPrinternameResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterTagData = {
+export type GetApiV2PrinterTagData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/printer-tag/'
+  url: '/api/v2/printer-tag/'
 }
 
-export type GetApiPrinterTagResponses = {
+export type GetApiV2PrinterTagResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterTagData = {
+export type PostApiV2PrinterTagData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/printer-tag/'
+  url: '/api/v2/printer-tag/'
 }
 
-export type PostApiPrinterTagResponses = {
+export type PostApiV2PrinterTagResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type DeleteApiPrinterTagByIdData = {
+export type DeleteApiV2PrinterTagByIdData = {
   body?: never
   path: {
     /**
@@ -752,17 +1208,17 @@ export type DeleteApiPrinterTagByIdData = {
     id: string
   }
   query?: never
-  url: '/api/printer-tag/{id}'
+  url: '/api/v2/printer-tag/{id}'
 }
 
-export type DeleteApiPrinterTagByIdResponses = {
+export type DeleteApiV2PrinterTagByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterTagByIdData = {
+export type GetApiV2PrinterTagByIdData = {
   body?: never
   path: {
     /**
@@ -771,17 +1227,17 @@ export type GetApiPrinterTagByIdData = {
     id: string
   }
   query?: never
-  url: '/api/printer-tag/{id}'
+  url: '/api/v2/printer-tag/{id}'
 }
 
-export type GetApiPrinterTagByIdResponses = {
+export type GetApiV2PrinterTagByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PatchApiPrinterTagByIdNameData = {
+export type PatchApiV2PrinterTagByIdNameData = {
   body?: never
   path: {
     /**
@@ -790,17 +1246,17 @@ export type PatchApiPrinterTagByIdNameData = {
     id: string
   }
   query?: never
-  url: '/api/printer-tag/{id}/name'
+  url: '/api/v2/printer-tag/{id}/name'
 }
 
-export type PatchApiPrinterTagByIdNameResponses = {
+export type PatchApiV2PrinterTagByIdNameResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PatchApiPrinterTagByIdColorData = {
+export type PatchApiV2PrinterTagByIdColorData = {
   body?: never
   path: {
     /**
@@ -809,17 +1265,17 @@ export type PatchApiPrinterTagByIdColorData = {
     id: string
   }
   query?: never
-  url: '/api/printer-tag/{id}/color'
+  url: '/api/v2/printer-tag/{id}/color'
 }
 
-export type PatchApiPrinterTagByIdColorResponses = {
+export type PatchApiV2PrinterTagByIdColorResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type DeleteApiPrinterTagByIdPrinterData = {
+export type DeleteApiV2PrinterTagByIdPrinterData = {
   body?: never
   path: {
     /**
@@ -828,17 +1284,17 @@ export type DeleteApiPrinterTagByIdPrinterData = {
     id: string
   }
   query?: never
-  url: '/api/printer-tag/{id}/printer'
+  url: '/api/v2/printer-tag/{id}/printer'
 }
 
-export type DeleteApiPrinterTagByIdPrinterResponses = {
+export type DeleteApiV2PrinterTagByIdPrinterResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterTagByIdPrinterData = {
+export type PostApiV2PrinterTagByIdPrinterData = {
   body?: never
   path: {
     /**
@@ -847,59 +1303,59 @@ export type PostApiPrinterTagByIdPrinterData = {
     id: string
   }
   query?: never
-  url: '/api/printer-tag/{id}/printer'
+  url: '/api/v2/printer-tag/{id}/printer'
 }
 
-export type PostApiPrinterTagByIdPrinterResponses = {
+export type PostApiV2PrinterTagByIdPrinterResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterData = {
+export type GetApiV2PrinterData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/printer/'
+  url: '/api/v2/printer/'
 }
 
-export type GetApiPrinterResponses = {
+export type GetApiV2PrinterResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterData = {
+export type PostApiV2PrinterData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/printer/'
+  url: '/api/v2/printer/'
 }
 
-export type PostApiPrinterResponses = {
+export type PostApiV2PrinterResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterBatchData = {
+export type PostApiV2PrinterBatchData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/printer/batch'
+  url: '/api/v2/printer/batch'
 }
 
-export type PostApiPrinterBatchResponses = {
+export type PostApiV2PrinterBatchResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type DeleteApiPrinterByIdData = {
+export type DeleteApiV2PrinterByIdData = {
   body?: never
   path: {
     /**
@@ -908,17 +1364,17 @@ export type DeleteApiPrinterByIdData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}'
+  url: '/api/v2/printer/{id}'
 }
 
-export type DeleteApiPrinterByIdResponses = {
+export type DeleteApiV2PrinterByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterByIdData = {
+export type GetApiV2PrinterByIdData = {
   body?: never
   path: {
     /**
@@ -927,17 +1383,17 @@ export type GetApiPrinterByIdData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}'
+  url: '/api/v2/printer/{id}'
 }
 
-export type GetApiPrinterByIdResponses = {
+export type GetApiV2PrinterByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PatchApiPrinterByIdData = {
+export type PatchApiV2PrinterByIdData = {
   body?: never
   path: {
     /**
@@ -946,17 +1402,17 @@ export type PatchApiPrinterByIdData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}'
+  url: '/api/v2/printer/{id}'
 }
 
-export type PatchApiPrinterByIdResponses = {
+export type PatchApiV2PrinterByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterByIdSocketData = {
+export type GetApiV2PrinterByIdSocketData = {
   body?: never
   path: {
     /**
@@ -965,17 +1421,17 @@ export type GetApiPrinterByIdSocketData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/socket'
+  url: '/api/v2/printer/{id}/socket'
 }
 
-export type GetApiPrinterByIdSocketResponses = {
+export type GetApiV2PrinterByIdSocketResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PatchApiPrinterByIdEnabledData = {
+export type PatchApiV2PrinterByIdEnabledData = {
   body?: never
   path: {
     /**
@@ -984,17 +1440,17 @@ export type PatchApiPrinterByIdEnabledData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/enabled'
+  url: '/api/v2/printer/{id}/enabled'
 }
 
-export type PatchApiPrinterByIdEnabledResponses = {
+export type PatchApiV2PrinterByIdEnabledResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PatchApiPrinterByIdDisabledReasonData = {
+export type PatchApiV2PrinterByIdDisabledReasonData = {
   body?: never
   path: {
     /**
@@ -1003,17 +1459,17 @@ export type PatchApiPrinterByIdDisabledReasonData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/disabled-reason'
+  url: '/api/v2/printer/{id}/disabled-reason'
 }
 
-export type PatchApiPrinterByIdDisabledReasonResponses = {
+export type PatchApiV2PrinterByIdDisabledReasonResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdRefreshSocketData = {
+export type PostApiV2PrinterByIdRefreshSocketData = {
   body?: never
   path: {
     /**
@@ -1022,31 +1478,31 @@ export type PostApiPrinterByIdRefreshSocketData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/refresh-socket'
+  url: '/api/v2/printer/{id}/refresh-socket'
 }
 
-export type PostApiPrinterByIdRefreshSocketResponses = {
+export type PostApiV2PrinterByIdRefreshSocketResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterTestConnectionData = {
+export type PostApiV2PrinterTestConnectionData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/printer/test-connection'
+  url: '/api/v2/printer/test-connection'
 }
 
-export type PostApiPrinterTestConnectionResponses = {
+export type PostApiV2PrinterTestConnectionResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiPrinterByIdLoginDetailsData = {
+export type GetApiV2PrinterByIdLoginDetailsData = {
   body?: never
   path: {
     /**
@@ -1055,17 +1511,17 @@ export type GetApiPrinterByIdLoginDetailsData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/login-details'
+  url: '/api/v2/printer/{id}/login-details'
 }
 
-export type GetApiPrinterByIdLoginDetailsResponses = {
+export type GetApiV2PrinterByIdLoginDetailsResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdSendEmergencyM112Data = {
+export type PostApiV2PrinterByIdSendEmergencyM112Data = {
   body?: never
   path: {
     /**
@@ -1074,17 +1530,17 @@ export type PostApiPrinterByIdSendEmergencyM112Data = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/send-emergency-m112'
+  url: '/api/v2/printer/{id}/send-emergency-m112'
 }
 
-export type PostApiPrinterByIdSendEmergencyM112Responses = {
+export type PostApiV2PrinterByIdSendEmergencyM112Responses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdSerialConnectData = {
+export type PostApiV2PrinterByIdSerialConnectData = {
   body?: never
   path: {
     /**
@@ -1093,17 +1549,17 @@ export type PostApiPrinterByIdSerialConnectData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/serial-connect'
+  url: '/api/v2/printer/{id}/serial-connect'
 }
 
-export type PostApiPrinterByIdSerialConnectResponses = {
+export type PostApiV2PrinterByIdSerialConnectResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdSerialDisconnectData = {
+export type PostApiV2PrinterByIdSerialDisconnectData = {
   body?: never
   path: {
     /**
@@ -1112,17 +1568,17 @@ export type PostApiPrinterByIdSerialDisconnectData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/serial-disconnect'
+  url: '/api/v2/printer/{id}/serial-disconnect'
 }
 
-export type PostApiPrinterByIdSerialDisconnectResponses = {
+export type PostApiV2PrinterByIdSerialDisconnectResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdMoveData = {
+export type PostApiV2PrinterByIdMoveData = {
   body?: never
   path: {
     /**
@@ -1131,17 +1587,17 @@ export type PostApiPrinterByIdMoveData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/move'
+  url: '/api/v2/printer/{id}/move'
 }
 
-export type PostApiPrinterByIdMoveResponses = {
+export type PostApiV2PrinterByIdMoveResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdJogData = {
+export type PostApiV2PrinterByIdJogData = {
   body?: never
   path: {
     /**
@@ -1150,17 +1606,17 @@ export type PostApiPrinterByIdJogData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/jog'
+  url: '/api/v2/printer/{id}/jog'
 }
 
-export type PostApiPrinterByIdJogResponses = {
+export type PostApiV2PrinterByIdJogResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdHomeData = {
+export type PostApiV2PrinterByIdHomeData = {
   body?: never
   path: {
     /**
@@ -1169,17 +1625,17 @@ export type PostApiPrinterByIdHomeData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/home'
+  url: '/api/v2/printer/{id}/home'
 }
 
-export type PostApiPrinterByIdHomeResponses = {
+export type PostApiV2PrinterByIdHomeResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdJobPauseData = {
+export type PostApiV2PrinterByIdJobPauseData = {
   body?: never
   path: {
     /**
@@ -1188,17 +1644,17 @@ export type PostApiPrinterByIdJobPauseData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/job/pause'
+  url: '/api/v2/printer/{id}/job/pause'
 }
 
-export type PostApiPrinterByIdJobPauseResponses = {
+export type PostApiV2PrinterByIdJobPauseResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdJobResumeData = {
+export type PostApiV2PrinterByIdJobResumeData = {
   body?: never
   path: {
     /**
@@ -1207,17 +1663,17 @@ export type PostApiPrinterByIdJobResumeData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/job/resume'
+  url: '/api/v2/printer/{id}/job/resume'
 }
 
-export type PostApiPrinterByIdJobResumeResponses = {
+export type PostApiV2PrinterByIdJobResumeResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdJobCancelData = {
+export type PostApiV2PrinterByIdJobCancelData = {
   body?: never
   path: {
     /**
@@ -1226,17 +1682,17 @@ export type PostApiPrinterByIdJobCancelData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/job/cancel'
+  url: '/api/v2/printer/{id}/job/cancel'
 }
 
-export type PostApiPrinterByIdJobCancelResponses = {
+export type PostApiV2PrinterByIdJobCancelResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdJobStopData = {
+export type PostApiV2PrinterByIdJobStopData = {
   body?: never
   path: {
     /**
@@ -1245,17 +1701,17 @@ export type PostApiPrinterByIdJobStopData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/job/stop'
+  url: '/api/v2/printer/{id}/job/stop'
 }
 
-export type PostApiPrinterByIdJobStopResponses = {
+export type PostApiV2PrinterByIdJobStopResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdServerRestartData = {
+export type PostApiV2PrinterByIdServerRestartData = {
   body?: never
   path: {
     /**
@@ -1264,17 +1720,17 @@ export type PostApiPrinterByIdServerRestartData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/server/restart'
+  url: '/api/v2/printer/{id}/server/restart'
 }
 
-export type PostApiPrinterByIdServerRestartResponses = {
+export type PostApiV2PrinterByIdServerRestartResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiPrinterByIdOctoprintServerRestartData = {
+export type PostApiV2PrinterByIdOctoprintServerRestartData = {
   body?: never
   path: {
     /**
@@ -1283,17 +1739,17 @@ export type PostApiPrinterByIdOctoprintServerRestartData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/octoprint/server/restart'
+  url: '/api/v2/printer/{id}/octoprint/server/restart'
 }
 
-export type PostApiPrinterByIdOctoprintServerRestartResponses = {
+export type PostApiV2PrinterByIdOctoprintServerRestartResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PatchApiPrinterByIdFeedRateData = {
+export type PatchApiV2PrinterByIdFeedRateData = {
   body?: never
   path: {
     /**
@@ -1302,17 +1758,17 @@ export type PatchApiPrinterByIdFeedRateData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/feed-rate'
+  url: '/api/v2/printer/{id}/feed-rate'
 }
 
-export type PatchApiPrinterByIdFeedRateResponses = {
+export type PatchApiV2PrinterByIdFeedRateResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PatchApiPrinterByIdFlowRateData = {
+export type PatchApiV2PrinterByIdFlowRateData = {
   body?: never
   path: {
     /**
@@ -1321,178 +1777,360 @@ export type PatchApiPrinterByIdFlowRateData = {
     id: string
   }
   query?: never
-  url: '/api/printer/{id}/flow-rate'
+  url: '/api/v2/printer/{id}/flow-rate'
 }
 
-export type PatchApiPrinterByIdFlowRateResponses = {
+export type PatchApiV2PrinterByIdFlowRateResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiServerData = {
+export type GetApiV2ServerData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/server/'
+  url: '/api/v2/server/'
 }
 
-export type GetApiServerResponses = {
+export type GetApiV2ServerResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiServerClientReleasesData = {
+export type GetApiV2ServerClientReleasesData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/server/client-releases'
+  url: '/api/v2/server/client-releases'
 }
 
-export type GetApiServerClientReleasesResponses = {
+export type GetApiV2ServerClientReleasesResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiServerUpdateClientBundleGithubData = {
+export type PostApiV2ServerUpdateClientBundleGithubData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/server/update-client-bundle-github'
+  url: '/api/v2/server/update-client-bundle-github'
 }
 
-export type PostApiServerUpdateClientBundleGithubResponses = {
+export type PostApiV2ServerUpdateClientBundleGithubResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiServerGithubRateLimitData = {
+export type GetApiV2ServerGithubRateLimitData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/server/github-rate-limit'
+  url: '/api/v2/server/github-rate-limit'
 }
 
-export type GetApiServerGithubRateLimitResponses = {
+export type GetApiV2ServerGithubRateLimitResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiServerYamlImportData = {
+export type PostApiV2ServerYamlImportData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/server/yaml-import'
+  url: '/api/v2/server/yaml-import'
 }
 
-export type PostApiServerYamlImportResponses = {
+export type PostApiV2ServerYamlImportResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiServerYamlExportData = {
+export type PostApiV2ServerYamlExportData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/server/yaml-export'
+  url: '/api/v2/server/yaml-export'
 }
 
-export type PostApiServerYamlExportResponses = {
+export type PostApiV2ServerYamlExportResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type DeleteApiServerDeleteAllPrintersData = {
+export type DeleteApiV2ServerDeleteAllPrintersData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/server/delete-all-printers'
+  url: '/api/v2/server/delete-all-printers'
 }
 
-export type DeleteApiServerDeleteAllPrintersResponses = {
+export type DeleteApiV2ServerDeleteAllPrintersResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type DeleteApiServerClearOutdatedFdmMonsterLogsData = {
+export type DeleteApiV2ServerClearOutdatedFdmMonsterLogsData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/server/clear-outdated-fdm-monster-logs'
+  url: '/api/v2/server/clear-outdated-fdm-monster-logs'
 }
 
-export type DeleteApiServerClearOutdatedFdmMonsterLogsResponses = {
+export type DeleteApiV2ServerClearOutdatedFdmMonsterLogsResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiServerDumpFdmMonsterLogsData = {
+export type GetApiV2ServerDumpFdmMonsterLogsData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/server/dump-fdm-monster-logs'
+  url: '/api/v2/server/dump-fdm-monster-logs'
 }
 
-export type GetApiServerDumpFdmMonsterLogsResponses = {
+export type GetApiV2ServerDumpFdmMonsterLogsResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiServerDumpFdmMonsterLogsData = {
+export type PostApiV2ServerDumpFdmMonsterLogsData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/server/dump-fdm-monster-logs'
+  url: '/api/v2/server/dump-fdm-monster-logs'
 }
 
-export type PostApiServerDumpFdmMonsterLogsResponses = {
+export type PostApiV2ServerDumpFdmMonsterLogsResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiData = {
+export type GetApiV2Data = {
   body?: never
   path?: never
   query?: never
-  url: '/api/'
+  url: '/api/v2/'
 }
 
-export type GetApiResponses = {
+export type GetApiV2Responses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiFeaturesData = {
+export type GetApiV2FeaturesData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/features'
+  url: '/api/v2/features'
 }
 
-export type GetApiFeaturesResponses = {
+export type GetApiV2FeaturesResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2VersionData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/version'
+}
+
+export type GetApiV2VersionResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2TestData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/test'
+}
+
+export type GetApiV2TestResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2SettingsData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/'
+}
+
+export type GetApiV2SettingsResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2SettingsSensitiveData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/sensitive'
+}
+
+export type GetApiV2SettingsSensitiveResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PatchApiV2SettingsSentryDiagnosticsData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/sentry-diagnostics'
+}
+
+export type PatchApiV2SettingsSentryDiagnosticsResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PutApiV2SettingsExperimentalMoonrakerSupportData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/experimental-moonraker-support'
+}
+
+export type PutApiV2SettingsExperimentalMoonrakerSupportResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PutApiV2SettingsExperimentalPrusaLinkSupportData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/experimental-prusa-link-support'
+}
+
+export type PutApiV2SettingsExperimentalPrusaLinkSupportResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PutApiV2SettingsExperimentalBambuSupportData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/experimental-bambu-support'
+}
+
+export type PutApiV2SettingsExperimentalBambuSupportResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PutApiV2SettingsFrontendData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/frontend'
+}
+
+export type PutApiV2SettingsFrontendResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PutApiV2SettingsLoginRequiredData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/login-required'
+}
+
+export type PutApiV2SettingsLoginRequiredResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PutApiV2SettingsRegistrationEnabledData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/registration-enabled'
+}
+
+export type PutApiV2SettingsRegistrationEnabledResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PutApiV2SettingsCredentialData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/credential'
+}
+
+export type PutApiV2SettingsCredentialResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PutApiV2SettingsTimeoutData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/timeout'
+}
+
+export type PutApiV2SettingsTimeoutResponses = {
   /**
    * Successful response
    */
@@ -1513,245 +2151,105 @@ export type GetApiVersionResponses = {
   200: unknown
 }
 
-export type GetApiTestData = {
+export type PostApiFilesLocalData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/test'
+  url: '/api/files/local'
 }
 
-export type GetApiTestResponses = {
+export type PostApiFilesLocalResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiSettingsData = {
+export type GetApiFilesData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/settings/'
+  url: '/api/files'
 }
 
-export type GetApiSettingsResponses = {
+export type GetApiFilesResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiSettingsSensitiveData = {
+export type GetApiServerData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/settings/sensitive'
+  url: '/api/server'
 }
 
-export type GetApiSettingsSensitiveResponses = {
+export type GetApiServerResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PatchApiSettingsSentryDiagnosticsData = {
+export type GetApiV2UserData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/settings/sentry-diagnostics'
+  url: '/api/v2/user/'
 }
 
-export type PatchApiSettingsSentryDiagnosticsResponses = {
+export type GetApiV2UserResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PutApiSettingsExperimentalMoonrakerSupportData = {
+export type PostApiV2UserData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/settings/experimental-moonraker-support'
+  url: '/api/v2/user/'
 }
 
-export type PutApiSettingsExperimentalMoonrakerSupportResponses = {
+export type PostApiV2UserResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PutApiSettingsExperimentalPrusaLinkSupportData = {
+export type GetApiV2UserRolesData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/settings/experimental-prusa-link-support'
+  url: '/api/v2/user/roles'
 }
 
-export type PutApiSettingsExperimentalPrusaLinkSupportResponses = {
+export type GetApiV2UserRolesResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PutApiSettingsExperimentalBambuSupportData = {
+export type GetApiV2UserProfileData = {
   body?: never
   path?: never
   query?: never
-  url: '/api/settings/experimental-bambu-support'
+  url: '/api/v2/user/profile'
 }
 
-export type PutApiSettingsExperimentalBambuSupportResponses = {
+export type GetApiV2UserProfileResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PutApiSettingsExperimentalThumbnailSupportData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/settings/experimental-thumbnail-support'
-}
-
-export type PutApiSettingsExperimentalThumbnailSupportResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PutApiSettingsFrontendData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/settings/frontend'
-}
-
-export type PutApiSettingsFrontendResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PutApiSettingsLoginRequiredData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/settings/login-required'
-}
-
-export type PutApiSettingsLoginRequiredResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PutApiSettingsRegistrationEnabledData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/settings/registration-enabled'
-}
-
-export type PutApiSettingsRegistrationEnabledResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PutApiSettingsCredentialData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/settings/credential'
-}
-
-export type PutApiSettingsCredentialResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PutApiSettingsTimeoutData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/settings/timeout'
-}
-
-export type PutApiSettingsTimeoutResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiUserData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/user/'
-}
-
-export type GetApiUserResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PostApiUserData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/user/'
-}
-
-export type PostApiUserResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiUserRolesData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/user/roles'
-}
-
-export type GetApiUserRolesResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiUserProfileData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/user/profile'
-}
-
-export type GetApiUserProfileResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type DeleteApiUserByIdData = {
+export type DeleteApiV2UserByIdData = {
   body?: never
   path: {
     /**
@@ -1760,17 +2258,17 @@ export type DeleteApiUserByIdData = {
     id: string
   }
   query?: never
-  url: '/api/user/{id}'
+  url: '/api/v2/user/{id}'
 }
 
-export type DeleteApiUserByIdResponses = {
+export type DeleteApiV2UserByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type GetApiUserByIdData = {
+export type GetApiV2UserByIdData = {
   body?: never
   path: {
     /**
@@ -1779,17 +2277,17 @@ export type GetApiUserByIdData = {
     id: string
   }
   query?: never
-  url: '/api/user/{id}'
+  url: '/api/v2/user/{id}'
 }
 
-export type GetApiUserByIdResponses = {
+export type GetApiV2UserByIdResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiUserByIdChangeUsernameData = {
+export type PostApiV2UserByIdChangeUsernameData = {
   body?: never
   path: {
     /**
@@ -1798,17 +2296,17 @@ export type PostApiUserByIdChangeUsernameData = {
     id: string
   }
   query?: never
-  url: '/api/user/{id}/change-username'
+  url: '/api/v2/user/{id}/change-username'
 }
 
-export type PostApiUserByIdChangeUsernameResponses = {
+export type PostApiV2UserByIdChangeUsernameResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiUserByIdChangePasswordData = {
+export type PostApiV2UserByIdChangePasswordData = {
   body?: never
   path: {
     /**
@@ -1817,17 +2315,17 @@ export type PostApiUserByIdChangePasswordData = {
     id: string
   }
   query?: never
-  url: '/api/user/{id}/change-password'
+  url: '/api/v2/user/{id}/change-password'
 }
 
-export type PostApiUserByIdChangePasswordResponses = {
+export type PostApiV2UserByIdChangePasswordResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiUserByIdSetUserRolesData = {
+export type PostApiV2UserByIdSetUserRolesData = {
   body?: never
   path: {
     /**
@@ -1836,17 +2334,17 @@ export type PostApiUserByIdSetUserRolesData = {
     id: string
   }
   query?: never
-  url: '/api/user/{id}/set-user-roles'
+  url: '/api/v2/user/{id}/set-user-roles'
 }
 
-export type PostApiUserByIdSetUserRolesResponses = {
+export type PostApiV2UserByIdSetUserRolesResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiUserByIdSetVerifiedData = {
+export type PostApiV2UserByIdSetVerifiedData = {
   body?: never
   path: {
     /**
@@ -1855,17 +2353,17 @@ export type PostApiUserByIdSetVerifiedData = {
     id: string
   }
   query?: never
-  url: '/api/user/{id}/set-verified'
+  url: '/api/v2/user/{id}/set-verified'
 }
 
-export type PostApiUserByIdSetVerifiedResponses = {
+export type PostApiV2UserByIdSetVerifiedResponses = {
   /**
    * Successful response
    */
   200: unknown
 }
 
-export type PostApiUserByIdSetRootUserData = {
+export type PostApiV2UserByIdSetRootUserData = {
   body?: never
   path: {
     /**
@@ -1874,10 +2372,10 @@ export type PostApiUserByIdSetRootUserData = {
     id: string
   }
   query?: never
-  url: '/api/user/{id}/set-root-user'
+  url: '/api/v2/user/{id}/set-root-user'
 }
 
-export type PostApiUserByIdSetRootUserResponses = {
+export type PostApiV2UserByIdSetRootUserResponses = {
   /**
    * Successful response
    */

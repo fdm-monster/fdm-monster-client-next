@@ -24,4 +24,6 @@ export enum DialogName {
   ManageTagsDialog = 'ManageTagsDialog',
   // Dialog for viewing print job details with metadata, statistics, and actions
   PrintJobDetailsDialog = "PrintJobDetailsDialog",
+  // Dialog for viewing job thumbnails with navigation for multiple images
+  JobThumbnailViewer = "JobThumbnailViewer",
 }

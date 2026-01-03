@@ -3,234 +3,288 @@
 import type { Client, Options as Options2, TDataShape } from './client'
 import { client } from './client.gen'
 import type {
-  DeleteApiCameraStreamByIdData,
-  DeleteApiCameraStreamByIdResponses,
-  DeleteApiFloorByIdData,
-  DeleteApiFloorByIdPrinterData,
-  DeleteApiFloorByIdPrinterResponses,
-  DeleteApiFloorByIdResponses,
-  DeleteApiPrinterByIdData,
-  DeleteApiPrinterByIdResponses,
-  DeleteApiPrinterFilesByIdClearData,
-  DeleteApiPrinterFilesByIdClearResponses,
-  DeleteApiPrinterFilesByIdData,
-  DeleteApiPrinterFilesByIdResponses,
-  DeleteApiPrinterTagByIdData,
-  DeleteApiPrinterTagByIdPrinterData,
-  DeleteApiPrinterTagByIdPrinterResponses,
-  DeleteApiPrinterTagByIdResponses,
-  DeleteApiServerClearOutdatedFdmMonsterLogsData,
-  DeleteApiServerClearOutdatedFdmMonsterLogsResponses,
-  DeleteApiServerDeleteAllPrintersData,
-  DeleteApiServerDeleteAllPrintersResponses,
-  DeleteApiUserByIdData,
-  DeleteApiUserByIdResponses,
-  GetApiAuthLoginRequiredData,
-  GetApiAuthLoginRequiredResponses,
-  GetApiCameraStreamByIdData,
-  GetApiCameraStreamByIdResponses,
-  GetApiCameraStreamData,
-  GetApiCameraStreamResponses,
-  GetApiData,
-  GetApiFeaturesData,
-  GetApiFeaturesResponses,
-  GetApiFloorByIdData,
-  GetApiFloorByIdResponses,
-  GetApiFloorData,
-  GetApiFloorResponses,
-  GetApiPrinterByIdData,
-  GetApiPrinterByIdLoginDetailsData,
-  GetApiPrinterByIdLoginDetailsResponses,
-  GetApiPrinterByIdResponses,
-  GetApiPrinterByIdSocketData,
-  GetApiPrinterByIdSocketResponses,
-  GetApiPrinterData,
-  GetApiPrinterFilesByIdCacheData,
-  GetApiPrinterFilesByIdCacheResponses,
-  GetApiPrinterFilesByIdData,
-  GetApiPrinterFilesByIdDownloadByPathData,
-  GetApiPrinterFilesByIdDownloadByPathResponses,
-  GetApiPrinterFilesByIdResponses,
-  GetApiPrinterFilesByIdThumbnailData,
-  GetApiPrinterFilesByIdThumbnailResponses,
-  GetApiPrinterFilesThumbnailsData,
-  GetApiPrinterFilesThumbnailsResponses,
-  GetApiPrinterResponses,
-  GetApiPrinterSettingsByIdData,
-  GetApiPrinterSettingsByIdResponses,
-  GetApiPrinterTagByIdData,
-  GetApiPrinterTagByIdResponses,
-  GetApiPrinterTagData,
-  GetApiPrinterTagResponses,
-  GetApiResponses,
-  GetApiServerClientReleasesData,
-  GetApiServerClientReleasesResponses,
+  DeleteApiV2CameraStreamByIdData,
+  DeleteApiV2CameraStreamByIdResponses,
+  DeleteApiV2FileStorageByFileStorageIdData,
+  DeleteApiV2FileStorageByFileStorageIdResponses,
+  DeleteApiV2FloorByIdData,
+  DeleteApiV2FloorByIdPrinterData,
+  DeleteApiV2FloorByIdPrinterResponses,
+  DeleteApiV2FloorByIdResponses,
+  DeleteApiV2PrinterByIdData,
+  DeleteApiV2PrinterByIdResponses,
+  DeleteApiV2PrinterFilesByIdClearData,
+  DeleteApiV2PrinterFilesByIdClearResponses,
+  DeleteApiV2PrinterFilesByIdData,
+  DeleteApiV2PrinterFilesByIdResponses,
+  DeleteApiV2PrinterTagByIdData,
+  DeleteApiV2PrinterTagByIdPrinterData,
+  DeleteApiV2PrinterTagByIdPrinterResponses,
+  DeleteApiV2PrinterTagByIdResponses,
+  DeleteApiV2PrintJobsByIdData,
+  DeleteApiV2PrintJobsByIdResponses,
+  DeleteApiV2PrintQueueByPrinterIdByJobIdData,
+  DeleteApiV2PrintQueueByPrinterIdByJobIdResponses,
+  DeleteApiV2PrintQueueByPrinterIdClearData,
+  DeleteApiV2PrintQueueByPrinterIdClearResponses,
+  DeleteApiV2ServerClearOutdatedFdmMonsterLogsData,
+  DeleteApiV2ServerClearOutdatedFdmMonsterLogsResponses,
+  DeleteApiV2ServerDeleteAllPrintersData,
+  DeleteApiV2ServerDeleteAllPrintersResponses,
+  DeleteApiV2UserByIdData,
+  DeleteApiV2UserByIdResponses,
+  GetApiFilesData,
+  GetApiFilesResponses,
   GetApiServerData,
-  GetApiServerDumpFdmMonsterLogsData,
-  GetApiServerDumpFdmMonsterLogsResponses,
-  GetApiServerGithubRateLimitData,
-  GetApiServerGithubRateLimitResponses,
   GetApiServerResponses,
-  GetApiSettingsData,
-  GetApiSettingsResponses,
-  GetApiSettingsSensitiveData,
-  GetApiSettingsSensitiveResponses,
-  GetApiTestData,
-  GetApiTestResponses,
-  GetApiUserByIdData,
-  GetApiUserByIdResponses,
-  GetApiUserData,
-  GetApiUserProfileData,
-  GetApiUserProfileResponses,
-  GetApiUserResponses,
-  GetApiUserRolesData,
-  GetApiUserRolesResponses,
+  GetApiV2AuthLoginRequiredData,
+  GetApiV2AuthLoginRequiredResponses,
+  GetApiV2CameraStreamByIdData,
+  GetApiV2CameraStreamByIdResponses,
+  GetApiV2CameraStreamData,
+  GetApiV2CameraStreamResponses,
+  GetApiV2Data,
+  GetApiV2FeaturesData,
+  GetApiV2FeaturesResponses,
+  GetApiV2FileStorageByFileStorageIdData,
+  GetApiV2FileStorageByFileStorageIdResponses,
+  GetApiV2FileStorageByFileStorageIdThumbnailByIndexData,
+  GetApiV2FileStorageByFileStorageIdThumbnailByIndexResponses,
+  GetApiV2FloorByIdData,
+  GetApiV2FloorByIdResponses,
+  GetApiV2FloorData,
+  GetApiV2FloorResponses,
+  GetApiV2PrinterByIdData,
+  GetApiV2PrinterByIdLoginDetailsData,
+  GetApiV2PrinterByIdLoginDetailsResponses,
+  GetApiV2PrinterByIdResponses,
+  GetApiV2PrinterByIdSocketData,
+  GetApiV2PrinterByIdSocketResponses,
+  GetApiV2PrinterData,
+  GetApiV2PrinterFilesByIdCacheData,
+  GetApiV2PrinterFilesByIdCacheResponses,
+  GetApiV2PrinterFilesByIdData,
+  GetApiV2PrinterFilesByIdDownloadByPathData,
+  GetApiV2PrinterFilesByIdDownloadByPathResponses,
+  GetApiV2PrinterFilesByIdResponses,
+  GetApiV2PrinterFilesByIdThumbnailData,
+  GetApiV2PrinterFilesByIdThumbnailResponses,
+  GetApiV2PrinterFilesThumbnailsData,
+  GetApiV2PrinterFilesThumbnailsResponses,
+  GetApiV2PrinterResponses,
+  GetApiV2PrinterSettingsByIdData,
+  GetApiV2PrinterSettingsByIdResponses,
+  GetApiV2PrinterTagByIdData,
+  GetApiV2PrinterTagByIdResponses,
+  GetApiV2PrinterTagData,
+  GetApiV2PrinterTagResponses,
+  GetApiV2PrintJobsByIdData,
+  GetApiV2PrintJobsByIdResponses,
+  GetApiV2PrintJobsByIdThumbnailsByIndexData,
+  GetApiV2PrintJobsByIdThumbnailsByIndexResponses,
+  GetApiV2PrintJobsByIdThumbnailsData,
+  GetApiV2PrintJobsByIdThumbnailsResponses,
+  GetApiV2PrintJobsSearchData,
+  GetApiV2PrintJobsSearchPagedData,
+  GetApiV2PrintJobsSearchPagedResponses,
+  GetApiV2PrintJobsSearchResponses,
+  GetApiV2PrintQueueByPrinterIdData,
+  GetApiV2PrintQueueByPrinterIdNextData,
+  GetApiV2PrintQueueByPrinterIdNextResponses,
+  GetApiV2PrintQueueByPrinterIdResponses,
+  GetApiV2Responses,
+  GetApiV2ServerClientReleasesData,
+  GetApiV2ServerClientReleasesResponses,
+  GetApiV2ServerData,
+  GetApiV2ServerDumpFdmMonsterLogsData,
+  GetApiV2ServerDumpFdmMonsterLogsResponses,
+  GetApiV2ServerGithubRateLimitData,
+  GetApiV2ServerGithubRateLimitResponses,
+  GetApiV2ServerResponses,
+  GetApiV2SettingsData,
+  GetApiV2SettingsResponses,
+  GetApiV2SettingsSensitiveData,
+  GetApiV2SettingsSensitiveResponses,
+  GetApiV2TestData,
+  GetApiV2TestResponses,
+  GetApiV2UserByIdData,
+  GetApiV2UserByIdResponses,
+  GetApiV2UserData,
+  GetApiV2UserProfileData,
+  GetApiV2UserProfileResponses,
+  GetApiV2UserResponses,
+  GetApiV2UserRolesData,
+  GetApiV2UserRolesResponses,
+  GetApiV2VersionData,
+  GetApiV2VersionResponses,
   GetApiVersionData,
   GetApiVersionResponses,
   GetMetricsData,
   GetMetricsResponses,
-  PatchApiFloorByIdFloorOrderData,
-  PatchApiFloorByIdFloorOrderResponses,
-  PatchApiFloorByIdNameData,
-  PatchApiFloorByIdNameResponses,
-  PatchApiPrinterByIdData,
-  PatchApiPrinterByIdDisabledReasonData,
-  PatchApiPrinterByIdDisabledReasonResponses,
-  PatchApiPrinterByIdEnabledData,
-  PatchApiPrinterByIdEnabledResponses,
-  PatchApiPrinterByIdFeedRateData,
-  PatchApiPrinterByIdFeedRateResponses,
-  PatchApiPrinterByIdFlowRateData,
-  PatchApiPrinterByIdFlowRateResponses,
-  PatchApiPrinterByIdResponses,
-  PatchApiPrinterTagByIdColorData,
-  PatchApiPrinterTagByIdColorResponses,
-  PatchApiPrinterTagByIdNameData,
-  PatchApiPrinterTagByIdNameResponses,
-  PatchApiSettingsSentryDiagnosticsData,
-  PatchApiSettingsSentryDiagnosticsResponses,
-  PostApiAuthLoginData,
-  PostApiAuthLoginResponses,
-  PostApiAuthLogoutData,
-  PostApiAuthLogoutResponses,
-  PostApiAuthNeedsPasswordChangeData,
-  PostApiAuthNeedsPasswordChangeResponses,
-  PostApiAuthRefreshData,
-  PostApiAuthRefreshResponses,
-  PostApiAuthRegisterData,
-  PostApiAuthRegisterResponses,
-  PostApiAuthVerifyData,
-  PostApiAuthVerifyResponses,
-  PostApiBatchConnectSocketData,
-  PostApiBatchConnectSocketResponses,
-  PostApiBatchConnectUsbData,
-  PostApiBatchConnectUsbResponses,
-  PostApiBatchReprintExecuteData,
-  PostApiBatchReprintExecuteResponses,
-  PostApiBatchReprintListData,
-  PostApiBatchReprintListResponses,
-  PostApiBatchToggleEnabledData,
-  PostApiBatchToggleEnabledResponses,
-  PostApiCameraStreamData,
-  PostApiCameraStreamResponses,
-  PostApiFirstTimeSetupCompleteData,
-  PostApiFirstTimeSetupCompleteResponses,
-  PostApiFirstTimeSetupValidateData,
-  PostApiFirstTimeSetupValidateResponses,
-  PostApiFirstTimeSetupYamlImportData,
-  PostApiFirstTimeSetupYamlImportResponses,
-  PostApiFloorByIdPrinterData,
-  PostApiFloorByIdPrinterResponses,
-  PostApiFloorData,
-  PostApiFloorResponses,
-  PostApiPrinterBatchData,
-  PostApiPrinterBatchResponses,
-  PostApiPrinterByIdHomeData,
-  PostApiPrinterByIdHomeResponses,
-  PostApiPrinterByIdJobCancelData,
-  PostApiPrinterByIdJobCancelResponses,
-  PostApiPrinterByIdJobPauseData,
-  PostApiPrinterByIdJobPauseResponses,
-  PostApiPrinterByIdJobResumeData,
-  PostApiPrinterByIdJobResumeResponses,
-  PostApiPrinterByIdJobStopData,
-  PostApiPrinterByIdJobStopResponses,
-  PostApiPrinterByIdJogData,
-  PostApiPrinterByIdJogResponses,
-  PostApiPrinterByIdMoveData,
-  PostApiPrinterByIdMoveResponses,
-  PostApiPrinterByIdOctoprintServerRestartData,
-  PostApiPrinterByIdOctoprintServerRestartResponses,
-  PostApiPrinterByIdRefreshSocketData,
-  PostApiPrinterByIdRefreshSocketResponses,
-  PostApiPrinterByIdSendEmergencyM112Data,
-  PostApiPrinterByIdSendEmergencyM112Responses,
-  PostApiPrinterByIdSerialConnectData,
-  PostApiPrinterByIdSerialConnectResponses,
-  PostApiPrinterByIdSerialDisconnectData,
-  PostApiPrinterByIdSerialDisconnectResponses,
-  PostApiPrinterByIdServerRestartData,
-  PostApiPrinterByIdServerRestartResponses,
-  PostApiPrinterData,
-  PostApiPrinterFilesByIdPrintData,
-  PostApiPrinterFilesByIdPrintResponses,
-  PostApiPrinterFilesByIdReloadThumbnailData,
-  PostApiPrinterFilesByIdReloadThumbnailResponses,
-  PostApiPrinterFilesByIdSelectData,
-  PostApiPrinterFilesByIdSelectResponses,
-  PostApiPrinterFilesByIdUploadData,
-  PostApiPrinterFilesByIdUploadResponses,
-  PostApiPrinterFilesPurgeData,
-  PostApiPrinterFilesPurgeResponses,
-  PostApiPrinterResponses,
-  PostApiPrinterSettingsByIdSyncPrinternameData,
-  PostApiPrinterSettingsByIdSyncPrinternameResponses,
-  PostApiPrinterTagByIdPrinterData,
-  PostApiPrinterTagByIdPrinterResponses,
-  PostApiPrinterTagData,
-  PostApiPrinterTagResponses,
-  PostApiPrinterTestConnectionData,
-  PostApiPrinterTestConnectionResponses,
-  PostApiServerDumpFdmMonsterLogsData,
-  PostApiServerDumpFdmMonsterLogsResponses,
-  PostApiServerUpdateClientBundleGithubData,
-  PostApiServerUpdateClientBundleGithubResponses,
-  PostApiServerYamlExportData,
-  PostApiServerYamlExportResponses,
-  PostApiServerYamlImportData,
-  PostApiServerYamlImportResponses,
-  PostApiUserByIdChangePasswordData,
-  PostApiUserByIdChangePasswordResponses,
-  PostApiUserByIdChangeUsernameData,
-  PostApiUserByIdChangeUsernameResponses,
-  PostApiUserByIdSetRootUserData,
-  PostApiUserByIdSetRootUserResponses,
-  PostApiUserByIdSetUserRolesData,
-  PostApiUserByIdSetUserRolesResponses,
-  PostApiUserByIdSetVerifiedData,
-  PostApiUserByIdSetVerifiedResponses,
-  PostApiUserData,
-  PostApiUserResponses,
-  PutApiCameraStreamByIdData,
-  PutApiCameraStreamByIdResponses,
-  PutApiSettingsCredentialData,
-  PutApiSettingsCredentialResponses,
-  PutApiSettingsExperimentalBambuSupportData,
-  PutApiSettingsExperimentalBambuSupportResponses,
-  PutApiSettingsExperimentalMoonrakerSupportData,
-  PutApiSettingsExperimentalMoonrakerSupportResponses,
-  PutApiSettingsExperimentalPrusaLinkSupportData,
-  PutApiSettingsExperimentalPrusaLinkSupportResponses,
-  PutApiSettingsExperimentalThumbnailSupportData,
-  PutApiSettingsExperimentalThumbnailSupportResponses,
-  PutApiSettingsFrontendData,
-  PutApiSettingsFrontendResponses,
-  PutApiSettingsLoginRequiredData,
-  PutApiSettingsLoginRequiredResponses,
-  PutApiSettingsRegistrationEnabledData,
-  PutApiSettingsRegistrationEnabledResponses,
-  PutApiSettingsTimeoutData,
-  PutApiSettingsTimeoutResponses
+  PatchApiV2FloorByIdFloorOrderData,
+  PatchApiV2FloorByIdFloorOrderResponses,
+  PatchApiV2FloorByIdNameData,
+  PatchApiV2FloorByIdNameResponses,
+  PatchApiV2PrinterByIdData,
+  PatchApiV2PrinterByIdDisabledReasonData,
+  PatchApiV2PrinterByIdDisabledReasonResponses,
+  PatchApiV2PrinterByIdEnabledData,
+  PatchApiV2PrinterByIdEnabledResponses,
+  PatchApiV2PrinterByIdFeedRateData,
+  PatchApiV2PrinterByIdFeedRateResponses,
+  PatchApiV2PrinterByIdFlowRateData,
+  PatchApiV2PrinterByIdFlowRateResponses,
+  PatchApiV2PrinterByIdResponses,
+  PatchApiV2PrinterTagByIdColorData,
+  PatchApiV2PrinterTagByIdColorResponses,
+  PatchApiV2PrinterTagByIdNameData,
+  PatchApiV2PrinterTagByIdNameResponses,
+  PatchApiV2SettingsSentryDiagnosticsData,
+  PatchApiV2SettingsSentryDiagnosticsResponses,
+  PostApiFilesLocalData,
+  PostApiFilesLocalResponses,
+  PostApiV2AuthLoginData,
+  PostApiV2AuthLoginResponses,
+  PostApiV2AuthLogoutData,
+  PostApiV2AuthLogoutResponses,
+  PostApiV2AuthNeedsPasswordChangeData,
+  PostApiV2AuthNeedsPasswordChangeResponses,
+  PostApiV2AuthRefreshData,
+  PostApiV2AuthRefreshResponses,
+  PostApiV2AuthRegisterData,
+  PostApiV2AuthRegisterResponses,
+  PostApiV2AuthVerifyData,
+  PostApiV2AuthVerifyResponses,
+  PostApiV2BatchConnectSocketData,
+  PostApiV2BatchConnectSocketResponses,
+  PostApiV2BatchConnectUsbData,
+  PostApiV2BatchConnectUsbResponses,
+  PostApiV2BatchReprintExecuteData,
+  PostApiV2BatchReprintExecuteResponses,
+  PostApiV2BatchReprintListData,
+  PostApiV2BatchReprintListResponses,
+  PostApiV2BatchToggleEnabledData,
+  PostApiV2BatchToggleEnabledResponses,
+  PostApiV2CameraStreamData,
+  PostApiV2CameraStreamResponses,
+  PostApiV2FileStorageUploadData,
+  PostApiV2FileStorageUploadResponses,
+  PostApiV2FirstTimeSetupCompleteData,
+  PostApiV2FirstTimeSetupCompleteResponses,
+  PostApiV2FirstTimeSetupValidateData,
+  PostApiV2FirstTimeSetupValidateResponses,
+  PostApiV2FirstTimeSetupYamlImportData,
+  PostApiV2FirstTimeSetupYamlImportResponses,
+  PostApiV2FloorByIdPrinterData,
+  PostApiV2FloorByIdPrinterResponses,
+  PostApiV2FloorData,
+  PostApiV2FloorResponses,
+  PostApiV2PrinterBatchData,
+  PostApiV2PrinterBatchResponses,
+  PostApiV2PrinterByIdHomeData,
+  PostApiV2PrinterByIdHomeResponses,
+  PostApiV2PrinterByIdJobCancelData,
+  PostApiV2PrinterByIdJobCancelResponses,
+  PostApiV2PrinterByIdJobPauseData,
+  PostApiV2PrinterByIdJobPauseResponses,
+  PostApiV2PrinterByIdJobResumeData,
+  PostApiV2PrinterByIdJobResumeResponses,
+  PostApiV2PrinterByIdJobStopData,
+  PostApiV2PrinterByIdJobStopResponses,
+  PostApiV2PrinterByIdJogData,
+  PostApiV2PrinterByIdJogResponses,
+  PostApiV2PrinterByIdMoveData,
+  PostApiV2PrinterByIdMoveResponses,
+  PostApiV2PrinterByIdOctoprintServerRestartData,
+  PostApiV2PrinterByIdOctoprintServerRestartResponses,
+  PostApiV2PrinterByIdRefreshSocketData,
+  PostApiV2PrinterByIdRefreshSocketResponses,
+  PostApiV2PrinterByIdSendEmergencyM112Data,
+  PostApiV2PrinterByIdSendEmergencyM112Responses,
+  PostApiV2PrinterByIdSerialConnectData,
+  PostApiV2PrinterByIdSerialConnectResponses,
+  PostApiV2PrinterByIdSerialDisconnectData,
+  PostApiV2PrinterByIdSerialDisconnectResponses,
+  PostApiV2PrinterByIdServerRestartData,
+  PostApiV2PrinterByIdServerRestartResponses,
+  PostApiV2PrinterData,
+  PostApiV2PrinterFilesByIdPrintData,
+  PostApiV2PrinterFilesByIdPrintResponses,
+  PostApiV2PrinterFilesByIdSelectData,
+  PostApiV2PrinterFilesByIdSelectResponses,
+  PostApiV2PrinterFilesByIdUploadData,
+  PostApiV2PrinterFilesByIdUploadResponses,
+  PostApiV2PrinterFilesPurgeData,
+  PostApiV2PrinterFilesPurgeResponses,
+  PostApiV2PrinterResponses,
+  PostApiV2PrinterSettingsByIdSyncPrinternameData,
+  PostApiV2PrinterSettingsByIdSyncPrinternameResponses,
+  PostApiV2PrinterTagByIdPrinterData,
+  PostApiV2PrinterTagByIdPrinterResponses,
+  PostApiV2PrinterTagData,
+  PostApiV2PrinterTagResponses,
+  PostApiV2PrinterTestConnectionData,
+  PostApiV2PrinterTestConnectionResponses,
+  PostApiV2PrintJobsByIdReAnalyzeData,
+  PostApiV2PrintJobsByIdReAnalyzeResponses,
+  PostApiV2PrintJobsByIdSetCancelledData,
+  PostApiV2PrintJobsByIdSetCancelledResponses,
+  PostApiV2PrintJobsByIdSetCompletedData,
+  PostApiV2PrintJobsByIdSetCompletedResponses,
+  PostApiV2PrintJobsByIdSetFailedData,
+  PostApiV2PrintJobsByIdSetFailedResponses,
+  PostApiV2PrintJobsByIdSetSkuCountData,
+  PostApiV2PrintJobsByIdSetSkuCountResponses,
+  PostApiV2PrintJobsByIdSetUnknownData,
+  PostApiV2PrintJobsByIdSetUnknownResponses,
+  PostApiV2PrintJobsFromFileData,
+  PostApiV2PrintJobsFromFileResponses,
+  PostApiV2PrintQueueByPrinterIdAddByJobIdData,
+  PostApiV2PrintQueueByPrinterIdAddByJobIdResponses,
+  PostApiV2PrintQueueByPrinterIdProcessData,
+  PostApiV2PrintQueueByPrinterIdProcessResponses,
+  PostApiV2PrintQueueByPrinterIdSubmitByJobIdData,
+  PostApiV2PrintQueueByPrinterIdSubmitByJobIdResponses,
+  PostApiV2ServerDumpFdmMonsterLogsData,
+  PostApiV2ServerDumpFdmMonsterLogsResponses,
+  PostApiV2ServerUpdateClientBundleGithubData,
+  PostApiV2ServerUpdateClientBundleGithubResponses,
+  PostApiV2ServerYamlExportData,
+  PostApiV2ServerYamlExportResponses,
+  PostApiV2ServerYamlImportData,
+  PostApiV2ServerYamlImportResponses,
+  PostApiV2UserByIdChangePasswordData,
+  PostApiV2UserByIdChangePasswordResponses,
+  PostApiV2UserByIdChangeUsernameData,
+  PostApiV2UserByIdChangeUsernameResponses,
+  PostApiV2UserByIdSetRootUserData,
+  PostApiV2UserByIdSetRootUserResponses,
+  PostApiV2UserByIdSetUserRolesData,
+  PostApiV2UserByIdSetUserRolesResponses,
+  PostApiV2UserByIdSetVerifiedData,
+  PostApiV2UserByIdSetVerifiedResponses,
+  PostApiV2UserData,
+  PostApiV2UserResponses,
+  PutApiV2CameraStreamByIdData,
+  PutApiV2CameraStreamByIdResponses,
+  PutApiV2PrintQueueByPrinterIdReorderData,
+  PutApiV2PrintQueueByPrinterIdReorderResponses,
+  PutApiV2SettingsCredentialData,
+  PutApiV2SettingsCredentialResponses,
+  PutApiV2SettingsExperimentalBambuSupportData,
+  PutApiV2SettingsExperimentalBambuSupportResponses,
+  PutApiV2SettingsExperimentalMoonrakerSupportData,
+  PutApiV2SettingsExperimentalMoonrakerSupportResponses,
+  PutApiV2SettingsExperimentalPrusaLinkSupportData,
+  PutApiV2SettingsExperimentalPrusaLinkSupportResponses,
+  PutApiV2SettingsFrontendData,
+  PutApiV2SettingsFrontendResponses,
+  PutApiV2SettingsLoginRequiredData,
+  PutApiV2SettingsLoginRequiredResponses,
+  PutApiV2SettingsRegistrationEnabledData,
+  PutApiV2SettingsRegistrationEnabledResponses,
+  PutApiV2SettingsTimeoutData,
+  PutApiV2SettingsTimeoutResponses
 } from './types.gen'
 
 export type Options<
@@ -254,16 +308,16 @@ export class AuthController {
   /**
    * login
    */
-  public static postApiAuthLogin<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiAuthLoginData, ThrowOnError>
+  public static postApiV2AuthLogin<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2AuthLoginData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiAuthLoginResponses,
+      PostApiV2AuthLoginResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/auth/login',
+      url: '/api/v2/auth/login',
       ...options
     })
   }
@@ -271,16 +325,16 @@ export class AuthController {
   /**
    * getLoginRequired
    */
-  public static getApiAuthLoginRequired<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiAuthLoginRequiredData, ThrowOnError>
+  public static getApiV2AuthLoginRequired<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2AuthLoginRequiredData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiAuthLoginRequiredResponses,
+      GetApiV2AuthLoginRequiredResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/auth/login-required',
+      url: '/api/v2/auth/login-required',
       ...options
     })
   }
@@ -288,16 +342,16 @@ export class AuthController {
   /**
    * verifyLogin
    */
-  public static postApiAuthVerify<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiAuthVerifyData, ThrowOnError>
+  public static postApiV2AuthVerify<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2AuthVerifyData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiAuthVerifyResponses,
+      PostApiV2AuthVerifyResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/auth/verify',
+      url: '/api/v2/auth/verify',
       ...options
     })
   }
@@ -305,16 +359,16 @@ export class AuthController {
   /**
    * needsPasswordChange
    */
-  public static postApiAuthNeedsPasswordChange<
+  public static postApiV2AuthNeedsPasswordChange<
     ThrowOnError extends boolean = false
-  >(options?: Options<PostApiAuthNeedsPasswordChangeData, ThrowOnError>) {
+  >(options?: Options<PostApiV2AuthNeedsPasswordChangeData, ThrowOnError>) {
     return (options?.client ?? client).post<
-      PostApiAuthNeedsPasswordChangeResponses,
+      PostApiV2AuthNeedsPasswordChangeResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/auth/needs-password-change',
+      url: '/api/v2/auth/needs-password-change',
       ...options
     })
   }
@@ -322,16 +376,16 @@ export class AuthController {
   /**
    * refreshLogin
    */
-  public static postApiAuthRefresh<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiAuthRefreshData, ThrowOnError>
+  public static postApiV2AuthRefresh<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2AuthRefreshData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiAuthRefreshResponses,
+      PostApiV2AuthRefreshResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/auth/refresh',
+      url: '/api/v2/auth/refresh',
       ...options
     })
   }
@@ -339,16 +393,16 @@ export class AuthController {
   /**
    * logout
    */
-  public static postApiAuthLogout<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiAuthLogoutData, ThrowOnError>
+  public static postApiV2AuthLogout<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2AuthLogoutData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiAuthLogoutResponses,
+      PostApiV2AuthLogoutResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/auth/logout',
+      url: '/api/v2/auth/logout',
       ...options
     })
   }
@@ -356,16 +410,16 @@ export class AuthController {
   /**
    * register
    */
-  public static postApiAuthRegister<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiAuthRegisterData, ThrowOnError>
+  public static postApiV2AuthRegister<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2AuthRegisterData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiAuthRegisterResponses,
+      PostApiV2AuthRegisterResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/auth/register',
+      url: '/api/v2/auth/register',
       ...options
     })
   }
@@ -375,16 +429,16 @@ export class BatchCallController {
   /**
    * batchConnectUsb
    */
-  public static postApiBatchConnectUsb<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiBatchConnectUsbData, ThrowOnError>
+  public static postApiV2BatchConnectUsb<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2BatchConnectUsbData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiBatchConnectUsbResponses,
+      PostApiV2BatchConnectUsbResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/batch/connect/usb',
+      url: '/api/v2/batch/connect/usb',
       ...options
     })
   }
@@ -392,16 +446,16 @@ export class BatchCallController {
   /**
    * batchConnectSocket
    */
-  public static postApiBatchConnectSocket<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiBatchConnectSocketData, ThrowOnError>
-  ) {
+  public static postApiV2BatchConnectSocket<
+    ThrowOnError extends boolean = false
+  >(options?: Options<PostApiV2BatchConnectSocketData, ThrowOnError>) {
     return (options?.client ?? client).post<
-      PostApiBatchConnectSocketResponses,
+      PostApiV2BatchConnectSocketResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/batch/connect/socket',
+      url: '/api/v2/batch/connect/socket',
       ...options
     })
   }
@@ -409,16 +463,16 @@ export class BatchCallController {
   /**
    * getLastPrintedFiles
    */
-  public static postApiBatchReprintList<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiBatchReprintListData, ThrowOnError>
+  public static postApiV2BatchReprintList<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2BatchReprintListData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiBatchReprintListResponses,
+      PostApiV2BatchReprintListResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/batch/reprint/list',
+      url: '/api/v2/batch/reprint/list',
       ...options
     })
   }
@@ -426,16 +480,16 @@ export class BatchCallController {
   /**
    * batchReprintFiles
    */
-  public static postApiBatchReprintExecute<
+  public static postApiV2BatchReprintExecute<
     ThrowOnError extends boolean = false
-  >(options?: Options<PostApiBatchReprintExecuteData, ThrowOnError>) {
+  >(options?: Options<PostApiV2BatchReprintExecuteData, ThrowOnError>) {
     return (options?.client ?? client).post<
-      PostApiBatchReprintExecuteResponses,
+      PostApiV2BatchReprintExecuteResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/batch/reprint/execute',
+      url: '/api/v2/batch/reprint/execute',
       ...options
     })
   }
@@ -443,16 +497,16 @@ export class BatchCallController {
   /**
    * batchTogglePrintersEnabled
    */
-  public static postApiBatchToggleEnabled<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiBatchToggleEnabledData, ThrowOnError>
-  ) {
+  public static postApiV2BatchToggleEnabled<
+    ThrowOnError extends boolean = false
+  >(options?: Options<PostApiV2BatchToggleEnabledData, ThrowOnError>) {
     return (options?.client ?? client).post<
-      PostApiBatchToggleEnabledResponses,
+      PostApiV2BatchToggleEnabledResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/batch/toggle-enabled',
+      url: '/api/v2/batch/toggle-enabled',
       ...options
     })
   }
@@ -462,16 +516,16 @@ export class CameraStreamController {
   /**
    * list
    */
-  public static getApiCameraStream<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiCameraStreamData, ThrowOnError>
+  public static getApiV2CameraStream<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2CameraStreamData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiCameraStreamResponses,
+      GetApiV2CameraStreamResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/camera-stream/',
+      url: '/api/v2/camera-stream/',
       ...options
     })
   }
@@ -479,16 +533,16 @@ export class CameraStreamController {
   /**
    * create
    */
-  public static postApiCameraStream<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiCameraStreamData, ThrowOnError>
+  public static postApiV2CameraStream<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2CameraStreamData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiCameraStreamResponses,
+      PostApiV2CameraStreamResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/camera-stream/',
+      url: '/api/v2/camera-stream/',
       ...options
     })
   }
@@ -496,16 +550,16 @@ export class CameraStreamController {
   /**
    * delete
    */
-  public static deleteApiCameraStreamById<ThrowOnError extends boolean = false>(
-    options: Options<DeleteApiCameraStreamByIdData, ThrowOnError>
-  ) {
+  public static deleteApiV2CameraStreamById<
+    ThrowOnError extends boolean = false
+  >(options: Options<DeleteApiV2CameraStreamByIdData, ThrowOnError>) {
     return (options.client ?? client).delete<
-      DeleteApiCameraStreamByIdResponses,
+      DeleteApiV2CameraStreamByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/camera-stream/{id}',
+      url: '/api/v2/camera-stream/{id}',
       ...options
     })
   }
@@ -513,16 +567,16 @@ export class CameraStreamController {
   /**
    * get
    */
-  public static getApiCameraStreamById<ThrowOnError extends boolean = false>(
-    options: Options<GetApiCameraStreamByIdData, ThrowOnError>
+  public static getApiV2CameraStreamById<ThrowOnError extends boolean = false>(
+    options: Options<GetApiV2CameraStreamByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).get<
-      GetApiCameraStreamByIdResponses,
+      GetApiV2CameraStreamByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/camera-stream/{id}',
+      url: '/api/v2/camera-stream/{id}',
       ...options
     })
   }
@@ -530,16 +584,91 @@ export class CameraStreamController {
   /**
    * update
    */
-  public static putApiCameraStreamById<ThrowOnError extends boolean = false>(
-    options: Options<PutApiCameraStreamByIdData, ThrowOnError>
+  public static putApiV2CameraStreamById<ThrowOnError extends boolean = false>(
+    options: Options<PutApiV2CameraStreamByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).put<
-      PutApiCameraStreamByIdResponses,
+      PutApiV2CameraStreamByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/camera-stream/{id}',
+      url: '/api/v2/camera-stream/{id}',
+      ...options
+    })
+  }
+}
+
+export class FileStorageController {
+  /**
+   * deleteFile
+   */
+  public static deleteApiV2FileStorageByFileStorageId<
+    ThrowOnError extends boolean = false
+  >(options: Options<DeleteApiV2FileStorageByFileStorageIdData, ThrowOnError>) {
+    return (options.client ?? client).delete<
+      DeleteApiV2FileStorageByFileStorageIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/file-storage/{fileStorageId}',
+      ...options
+    })
+  }
+
+  /**
+   * getFileMetadata
+   */
+  public static getApiV2FileStorageByFileStorageId<
+    ThrowOnError extends boolean = false
+  >(options: Options<GetApiV2FileStorageByFileStorageIdData, ThrowOnError>) {
+    return (options.client ?? client).get<
+      GetApiV2FileStorageByFileStorageIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/file-storage/{fileStorageId}',
+      ...options
+    })
+  }
+
+  /**
+   * getThumbnail
+   */
+  public static getApiV2FileStorageByFileStorageIdThumbnailByIndex<
+    ThrowOnError extends boolean = false
+  >(
+    options: Options<
+      GetApiV2FileStorageByFileStorageIdThumbnailByIndexData,
+      ThrowOnError
+    >
+  ) {
+    return (options.client ?? client).get<
+      GetApiV2FileStorageByFileStorageIdThumbnailByIndexResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/file-storage/{fileStorageId}/thumbnail/{index}',
+      ...options
+    })
+  }
+
+  /**
+   * uploadFile
+   */
+  public static postApiV2FileStorageUpload<
+    ThrowOnError extends boolean = false
+  >(options?: Options<PostApiV2FileStorageUploadData, ThrowOnError>) {
+    return (options?.client ?? client).post<
+      PostApiV2FileStorageUploadResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/file-storage/upload',
       ...options
     })
   }
@@ -549,16 +678,16 @@ export class FirstTimeSetupController {
   /**
    * validateWizard
    */
-  public static postApiFirstTimeSetupValidate<
+  public static postApiV2FirstTimeSetupValidate<
     ThrowOnError extends boolean = false
-  >(options?: Options<PostApiFirstTimeSetupValidateData, ThrowOnError>) {
+  >(options?: Options<PostApiV2FirstTimeSetupValidateData, ThrowOnError>) {
     return (options?.client ?? client).post<
-      PostApiFirstTimeSetupValidateResponses,
+      PostApiV2FirstTimeSetupValidateResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/first-time-setup/validate',
+      url: '/api/v2/first-time-setup/validate',
       ...options
     })
   }
@@ -566,16 +695,16 @@ export class FirstTimeSetupController {
   /**
    * completeWizard
    */
-  public static postApiFirstTimeSetupComplete<
+  public static postApiV2FirstTimeSetupComplete<
     ThrowOnError extends boolean = false
-  >(options?: Options<PostApiFirstTimeSetupCompleteData, ThrowOnError>) {
+  >(options?: Options<PostApiV2FirstTimeSetupCompleteData, ThrowOnError>) {
     return (options?.client ?? client).post<
-      PostApiFirstTimeSetupCompleteResponses,
+      PostApiV2FirstTimeSetupCompleteResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/first-time-setup/complete',
+      url: '/api/v2/first-time-setup/complete',
       ...options
     })
   }
@@ -583,16 +712,16 @@ export class FirstTimeSetupController {
   /**
    * importYamlFile
    */
-  public static postApiFirstTimeSetupYamlImport<
+  public static postApiV2FirstTimeSetupYamlImport<
     ThrowOnError extends boolean = false
-  >(options?: Options<PostApiFirstTimeSetupYamlImportData, ThrowOnError>) {
+  >(options?: Options<PostApiV2FirstTimeSetupYamlImportData, ThrowOnError>) {
     return (options?.client ?? client).post<
-      PostApiFirstTimeSetupYamlImportResponses,
+      PostApiV2FirstTimeSetupYamlImportResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/first-time-setup/yaml-import',
+      url: '/api/v2/first-time-setup/yaml-import',
       ...options
     })
   }
@@ -602,16 +731,16 @@ export class FloorController {
   /**
    * list
    */
-  public static getApiFloor<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiFloorData, ThrowOnError>
+  public static getApiV2Floor<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2FloorData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiFloorResponses,
+      GetApiV2FloorResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/floor/',
+      url: '/api/v2/floor/',
       ...options
     })
   }
@@ -619,16 +748,16 @@ export class FloorController {
   /**
    * create
    */
-  public static postApiFloor<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiFloorData, ThrowOnError>
+  public static postApiV2Floor<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2FloorData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiFloorResponses,
+      PostApiV2FloorResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/floor/',
+      url: '/api/v2/floor/',
       ...options
     })
   }
@@ -636,16 +765,16 @@ export class FloorController {
   /**
    * delete
    */
-  public static deleteApiFloorById<ThrowOnError extends boolean = false>(
-    options: Options<DeleteApiFloorByIdData, ThrowOnError>
+  public static deleteApiV2FloorById<ThrowOnError extends boolean = false>(
+    options: Options<DeleteApiV2FloorByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).delete<
-      DeleteApiFloorByIdResponses,
+      DeleteApiV2FloorByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/floor/{id}',
+      url: '/api/v2/floor/{id}',
       ...options
     })
   }
@@ -653,16 +782,16 @@ export class FloorController {
   /**
    * get
    */
-  public static getApiFloorById<ThrowOnError extends boolean = false>(
-    options: Options<GetApiFloorByIdData, ThrowOnError>
+  public static getApiV2FloorById<ThrowOnError extends boolean = false>(
+    options: Options<GetApiV2FloorByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).get<
-      GetApiFloorByIdResponses,
+      GetApiV2FloorByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/floor/{id}',
+      url: '/api/v2/floor/{id}',
       ...options
     })
   }
@@ -670,16 +799,16 @@ export class FloorController {
   /**
    * updateName
    */
-  public static patchApiFloorByIdName<ThrowOnError extends boolean = false>(
-    options: Options<PatchApiFloorByIdNameData, ThrowOnError>
+  public static patchApiV2FloorByIdName<ThrowOnError extends boolean = false>(
+    options: Options<PatchApiV2FloorByIdNameData, ThrowOnError>
   ) {
     return (options.client ?? client).patch<
-      PatchApiFloorByIdNameResponses,
+      PatchApiV2FloorByIdNameResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/floor/{id}/name',
+      url: '/api/v2/floor/{id}/name',
       ...options
     })
   }
@@ -687,16 +816,16 @@ export class FloorController {
   /**
    * updateFloorOrder
    */
-  public static patchApiFloorByIdFloorOrder<
+  public static patchApiV2FloorByIdFloorOrder<
     ThrowOnError extends boolean = false
-  >(options: Options<PatchApiFloorByIdFloorOrderData, ThrowOnError>) {
+  >(options: Options<PatchApiV2FloorByIdFloorOrderData, ThrowOnError>) {
     return (options.client ?? client).patch<
-      PatchApiFloorByIdFloorOrderResponses,
+      PatchApiV2FloorByIdFloorOrderResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/floor/{id}/floor-order',
+      url: '/api/v2/floor/{id}/floor-order',
       ...options
     })
   }
@@ -704,16 +833,16 @@ export class FloorController {
   /**
    * removePrinterFromFloor
    */
-  public static deleteApiFloorByIdPrinter<ThrowOnError extends boolean = false>(
-    options: Options<DeleteApiFloorByIdPrinterData, ThrowOnError>
-  ) {
+  public static deleteApiV2FloorByIdPrinter<
+    ThrowOnError extends boolean = false
+  >(options: Options<DeleteApiV2FloorByIdPrinterData, ThrowOnError>) {
     return (options.client ?? client).delete<
-      DeleteApiFloorByIdPrinterResponses,
+      DeleteApiV2FloorByIdPrinterResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/floor/{id}/printer',
+      url: '/api/v2/floor/{id}/printer',
       ...options
     })
   }
@@ -721,16 +850,16 @@ export class FloorController {
   /**
    * addPrinterToFloor
    */
-  public static postApiFloorByIdPrinter<ThrowOnError extends boolean = false>(
-    options: Options<PostApiFloorByIdPrinterData, ThrowOnError>
+  public static postApiV2FloorByIdPrinter<ThrowOnError extends boolean = false>(
+    options: Options<PostApiV2FloorByIdPrinterData, ThrowOnError>
   ) {
     return (options.client ?? client).post<
-      PostApiFloorByIdPrinterResponses,
+      PostApiV2FloorByIdPrinterResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/floor/{id}/printer',
+      url: '/api/v2/floor/{id}/printer',
       ...options
     })
   }
@@ -755,20 +884,173 @@ export class MetricsController {
   }
 }
 
-export class PrinterFilesController {
+export class PrintJobController {
   /**
-   * purgeIndexedFiles
+   * searchJobs
    */
-  public static postApiPrinterFilesPurge<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiPrinterFilesPurgeData, ThrowOnError>
+  public static getApiV2PrintJobsSearch<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2PrintJobsSearchData, ThrowOnError>
   ) {
-    return (options?.client ?? client).post<
-      PostApiPrinterFilesPurgeResponses,
+    return (options?.client ?? client).get<
+      GetApiV2PrintJobsSearchResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/purge',
+      url: '/api/v2/print-jobs/search',
+      ...options
+    })
+  }
+
+  /**
+   * searchJobsPaged
+   */
+  public static getApiV2PrintJobsSearchPaged<
+    ThrowOnError extends boolean = false
+  >(options?: Options<GetApiV2PrintJobsSearchPagedData, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetApiV2PrintJobsSearchPagedResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/search-paged',
+      ...options
+    })
+  }
+
+  /**
+   * deleteJob
+   */
+  public static deleteApiV2PrintJobsById<ThrowOnError extends boolean = false>(
+    options: Options<DeleteApiV2PrintJobsByIdData, ThrowOnError>
+  ) {
+    return (options.client ?? client).delete<
+      DeleteApiV2PrintJobsByIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/{id}',
+      ...options
+    })
+  }
+
+  /**
+   * getJob
+   */
+  public static getApiV2PrintJobsById<ThrowOnError extends boolean = false>(
+    options: Options<GetApiV2PrintJobsByIdData, ThrowOnError>
+  ) {
+    return (options.client ?? client).get<
+      GetApiV2PrintJobsByIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/{id}',
+      ...options
+    })
+  }
+
+  /**
+   * setSkuCount
+   */
+  public static postApiV2PrintJobsByIdSetSkuCount<
+    ThrowOnError extends boolean = false
+  >(options: Options<PostApiV2PrintJobsByIdSetSkuCountData, ThrowOnError>) {
+    return (options.client ?? client).post<
+      PostApiV2PrintJobsByIdSetSkuCountResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/{id}/set-sku-count',
+      ...options
+    })
+  }
+
+  /**
+   * setCompleted
+   */
+  public static postApiV2PrintJobsByIdSetCompleted<
+    ThrowOnError extends boolean = false
+  >(options: Options<PostApiV2PrintJobsByIdSetCompletedData, ThrowOnError>) {
+    return (options.client ?? client).post<
+      PostApiV2PrintJobsByIdSetCompletedResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/{id}/set-completed',
+      ...options
+    })
+  }
+
+  /**
+   * setFailed
+   */
+  public static postApiV2PrintJobsByIdSetFailed<
+    ThrowOnError extends boolean = false
+  >(options: Options<PostApiV2PrintJobsByIdSetFailedData, ThrowOnError>) {
+    return (options.client ?? client).post<
+      PostApiV2PrintJobsByIdSetFailedResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/{id}/set-failed',
+      ...options
+    })
+  }
+
+  /**
+   * setCancelled
+   */
+  public static postApiV2PrintJobsByIdSetCancelled<
+    ThrowOnError extends boolean = false
+  >(options: Options<PostApiV2PrintJobsByIdSetCancelledData, ThrowOnError>) {
+    return (options.client ?? client).post<
+      PostApiV2PrintJobsByIdSetCancelledResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/{id}/set-cancelled',
+      ...options
+    })
+  }
+
+  /**
+   * setUnknown
+   */
+  public static postApiV2PrintJobsByIdSetUnknown<
+    ThrowOnError extends boolean = false
+  >(options: Options<PostApiV2PrintJobsByIdSetUnknownData, ThrowOnError>) {
+    return (options.client ?? client).post<
+      PostApiV2PrintJobsByIdSetUnknownResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/{id}/set-unknown',
+      ...options
+    })
+  }
+
+  /**
+   * reAnalyzeJob
+   */
+  public static postApiV2PrintJobsByIdReAnalyze<
+    ThrowOnError extends boolean = false
+  >(options: Options<PostApiV2PrintJobsByIdReAnalyzeData, ThrowOnError>) {
+    return (options.client ?? client).post<
+      PostApiV2PrintJobsByIdReAnalyzeResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/{id}/re-analyze',
       ...options
     })
   }
@@ -776,16 +1058,235 @@ export class PrinterFilesController {
   /**
    * getThumbnails
    */
-  public static getApiPrinterFilesThumbnails<
+  public static getApiV2PrintJobsByIdThumbnails<
     ThrowOnError extends boolean = false
-  >(options?: Options<GetApiPrinterFilesThumbnailsData, ThrowOnError>) {
-    return (options?.client ?? client).get<
-      GetApiPrinterFilesThumbnailsResponses,
+  >(options: Options<GetApiV2PrintJobsByIdThumbnailsData, ThrowOnError>) {
+    return (options.client ?? client).get<
+      GetApiV2PrintJobsByIdThumbnailsResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/thumbnails',
+      url: '/api/v2/print-jobs/{id}/thumbnails',
+      ...options
+    })
+  }
+
+  /**
+   * getThumbnail
+   */
+  public static getApiV2PrintJobsByIdThumbnailsByIndex<
+    ThrowOnError extends boolean = false
+  >(
+    options: Options<GetApiV2PrintJobsByIdThumbnailsByIndexData, ThrowOnError>
+  ) {
+    return (options.client ?? client).get<
+      GetApiV2PrintJobsByIdThumbnailsByIndexResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/{id}/thumbnails/{index}',
+      ...options
+    })
+  }
+
+  /**
+   * createJobFromFile
+   */
+  public static postApiV2PrintJobsFromFile<
+    ThrowOnError extends boolean = false
+  >(options?: Options<PostApiV2PrintJobsFromFileData, ThrowOnError>) {
+    return (options?.client ?? client).post<
+      PostApiV2PrintJobsFromFileResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-jobs/from-file',
+      ...options
+    })
+  }
+}
+
+export class PrintQueueController {
+  /**
+   * getQueue
+   */
+  public static getApiV2PrintQueueByPrinterId<
+    ThrowOnError extends boolean = false
+  >(options: Options<GetApiV2PrintQueueByPrinterIdData, ThrowOnError>) {
+    return (options.client ?? client).get<
+      GetApiV2PrintQueueByPrinterIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-queue/{printerId}',
+      ...options
+    })
+  }
+
+  /**
+   * addToQueue
+   */
+  public static postApiV2PrintQueueByPrinterIdAddByJobId<
+    ThrowOnError extends boolean = false
+  >(
+    options: Options<PostApiV2PrintQueueByPrinterIdAddByJobIdData, ThrowOnError>
+  ) {
+    return (options.client ?? client).post<
+      PostApiV2PrintQueueByPrinterIdAddByJobIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-queue/{printerId}/add/{jobId}',
+      ...options
+    })
+  }
+
+  /**
+   * removeFromQueue
+   */
+  public static deleteApiV2PrintQueueByPrinterIdByJobId<
+    ThrowOnError extends boolean = false
+  >(
+    options: Options<DeleteApiV2PrintQueueByPrinterIdByJobIdData, ThrowOnError>
+  ) {
+    return (options.client ?? client).delete<
+      DeleteApiV2PrintQueueByPrinterIdByJobIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-queue/{printerId}/{jobId}',
+      ...options
+    })
+  }
+
+  /**
+   * reorderQueue
+   */
+  public static putApiV2PrintQueueByPrinterIdReorder<
+    ThrowOnError extends boolean = false
+  >(options: Options<PutApiV2PrintQueueByPrinterIdReorderData, ThrowOnError>) {
+    return (options.client ?? client).put<
+      PutApiV2PrintQueueByPrinterIdReorderResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-queue/{printerId}/reorder',
+      ...options
+    })
+  }
+
+  /**
+   * clearQueue
+   */
+  public static deleteApiV2PrintQueueByPrinterIdClear<
+    ThrowOnError extends boolean = false
+  >(options: Options<DeleteApiV2PrintQueueByPrinterIdClearData, ThrowOnError>) {
+    return (options.client ?? client).delete<
+      DeleteApiV2PrintQueueByPrinterIdClearResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-queue/{printerId}/clear',
+      ...options
+    })
+  }
+
+  /**
+   * getNextInQueue
+   */
+  public static getApiV2PrintQueueByPrinterIdNext<
+    ThrowOnError extends boolean = false
+  >(options: Options<GetApiV2PrintQueueByPrinterIdNextData, ThrowOnError>) {
+    return (options.client ?? client).get<
+      GetApiV2PrintQueueByPrinterIdNextResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-queue/{printerId}/next',
+      ...options
+    })
+  }
+
+  /**
+   * processQueue
+   */
+  public static postApiV2PrintQueueByPrinterIdProcess<
+    ThrowOnError extends boolean = false
+  >(options: Options<PostApiV2PrintQueueByPrinterIdProcessData, ThrowOnError>) {
+    return (options.client ?? client).post<
+      PostApiV2PrintQueueByPrinterIdProcessResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-queue/{printerId}/process',
+      ...options
+    })
+  }
+
+  /**
+   * submitToPrinter
+   */
+  public static postApiV2PrintQueueByPrinterIdSubmitByJobId<
+    ThrowOnError extends boolean = false
+  >(
+    options: Options<
+      PostApiV2PrintQueueByPrinterIdSubmitByJobIdData,
+      ThrowOnError
+    >
+  ) {
+    return (options.client ?? client).post<
+      PostApiV2PrintQueueByPrinterIdSubmitByJobIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-queue/{printerId}/submit/{jobId}',
+      ...options
+    })
+  }
+}
+
+export class PrinterFilesController {
+  /**
+   * purgeIndexedFiles
+   */
+  public static postApiV2PrinterFilesPurge<
+    ThrowOnError extends boolean = false
+  >(options?: Options<PostApiV2PrinterFilesPurgeData, ThrowOnError>) {
+    return (options?.client ?? client).post<
+      PostApiV2PrinterFilesPurgeResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/printer-files/purge',
+      ...options
+    })
+  }
+
+  /**
+   * getThumbnails
+   */
+  public static getApiV2PrinterFilesThumbnails<
+    ThrowOnError extends boolean = false
+  >(options?: Options<GetApiV2PrinterFilesThumbnailsData, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetApiV2PrinterFilesThumbnailsResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/printer-files/thumbnails',
       ...options
     })
   }
@@ -793,16 +1294,16 @@ export class PrinterFilesController {
   /**
    * deleteFileOrFolder
    */
-  public static deleteApiPrinterFilesById<ThrowOnError extends boolean = false>(
-    options: Options<DeleteApiPrinterFilesByIdData, ThrowOnError>
-  ) {
+  public static deleteApiV2PrinterFilesById<
+    ThrowOnError extends boolean = false
+  >(options: Options<DeleteApiV2PrinterFilesByIdData, ThrowOnError>) {
     return (options.client ?? client).delete<
-      DeleteApiPrinterFilesByIdResponses,
+      DeleteApiV2PrinterFilesByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/{id}',
+      url: '/api/v2/printer-files/{id}',
       ...options
     })
   }
@@ -810,35 +1311,16 @@ export class PrinterFilesController {
   /**
    * getFiles
    */
-  public static getApiPrinterFilesById<ThrowOnError extends boolean = false>(
-    options: Options<GetApiPrinterFilesByIdData, ThrowOnError>
+  public static getApiV2PrinterFilesById<ThrowOnError extends boolean = false>(
+    options: Options<GetApiV2PrinterFilesByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).get<
-      GetApiPrinterFilesByIdResponses,
+      GetApiV2PrinterFilesByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/{id}',
-      ...options
-    })
-  }
-
-  /**
-   * reloadThumbnail
-   */
-  public static postApiPrinterFilesByIdReloadThumbnail<
-    ThrowOnError extends boolean = false
-  >(
-    options: Options<PostApiPrinterFilesByIdReloadThumbnailData, ThrowOnError>
-  ) {
-    return (options.client ?? client).post<
-      PostApiPrinterFilesByIdReloadThumbnailResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/{id}/reload-thumbnail',
+      url: '/api/v2/printer-files/{id}',
       ...options
     })
   }
@@ -846,16 +1328,16 @@ export class PrinterFilesController {
   /**
    * startPrintFile
    */
-  public static postApiPrinterFilesByIdPrint<
+  public static postApiV2PrinterFilesByIdPrint<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterFilesByIdPrintData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterFilesByIdPrintData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterFilesByIdPrintResponses,
+      PostApiV2PrinterFilesByIdPrintResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/{id}/print',
+      url: '/api/v2/printer-files/{id}/print',
       ...options
     })
   }
@@ -863,16 +1345,16 @@ export class PrinterFilesController {
   /**
    * startPrintFile
    */
-  public static postApiPrinterFilesByIdSelect<
+  public static postApiV2PrinterFilesByIdSelect<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterFilesByIdSelectData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterFilesByIdSelectData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterFilesByIdSelectResponses,
+      PostApiV2PrinterFilesByIdSelectResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/{id}/select',
+      url: '/api/v2/printer-files/{id}/select',
       ...options
     })
   }
@@ -880,16 +1362,16 @@ export class PrinterFilesController {
   /**
    * getFilesCache
    */
-  public static getApiPrinterFilesByIdCache<
+  public static getApiV2PrinterFilesByIdCache<
     ThrowOnError extends boolean = false
-  >(options: Options<GetApiPrinterFilesByIdCacheData, ThrowOnError>) {
+  >(options: Options<GetApiV2PrinterFilesByIdCacheData, ThrowOnError>) {
     return (options.client ?? client).get<
-      GetApiPrinterFilesByIdCacheResponses,
+      GetApiV2PrinterFilesByIdCacheResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/{id}/cache',
+      url: '/api/v2/printer-files/{id}/cache',
       ...options
     })
   }
@@ -897,16 +1379,18 @@ export class PrinterFilesController {
   /**
    * downloadFile
    */
-  public static getApiPrinterFilesByIdDownloadByPath<
+  public static getApiV2PrinterFilesByIdDownloadByPath<
     ThrowOnError extends boolean = false
-  >(options: Options<GetApiPrinterFilesByIdDownloadByPathData, ThrowOnError>) {
+  >(
+    options: Options<GetApiV2PrinterFilesByIdDownloadByPathData, ThrowOnError>
+  ) {
     return (options.client ?? client).get<
-      GetApiPrinterFilesByIdDownloadByPathResponses,
+      GetApiV2PrinterFilesByIdDownloadByPathResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/{id}/download/{path}',
+      url: '/api/v2/printer-files/{id}/download/{path}',
       ...options
     })
   }
@@ -914,16 +1398,16 @@ export class PrinterFilesController {
   /**
    * clearPrinterFiles
    */
-  public static deleteApiPrinterFilesByIdClear<
+  public static deleteApiV2PrinterFilesByIdClear<
     ThrowOnError extends boolean = false
-  >(options: Options<DeleteApiPrinterFilesByIdClearData, ThrowOnError>) {
+  >(options: Options<DeleteApiV2PrinterFilesByIdClearData, ThrowOnError>) {
     return (options.client ?? client).delete<
-      DeleteApiPrinterFilesByIdClearResponses,
+      DeleteApiV2PrinterFilesByIdClearResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/{id}/clear',
+      url: '/api/v2/printer-files/{id}/clear',
       ...options
     })
   }
@@ -931,16 +1415,16 @@ export class PrinterFilesController {
   /**
    * getPrinterThumbnail
    */
-  public static getApiPrinterFilesByIdThumbnail<
+  public static getApiV2PrinterFilesByIdThumbnail<
     ThrowOnError extends boolean = false
-  >(options: Options<GetApiPrinterFilesByIdThumbnailData, ThrowOnError>) {
+  >(options: Options<GetApiV2PrinterFilesByIdThumbnailData, ThrowOnError>) {
     return (options.client ?? client).get<
-      GetApiPrinterFilesByIdThumbnailResponses,
+      GetApiV2PrinterFilesByIdThumbnailResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/{id}/thumbnail',
+      url: '/api/v2/printer-files/{id}/thumbnail',
       ...options
     })
   }
@@ -948,16 +1432,16 @@ export class PrinterFilesController {
   /**
    * uploadPrinterFile
    */
-  public static postApiPrinterFilesByIdUpload<
+  public static postApiV2PrinterFilesByIdUpload<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterFilesByIdUploadData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterFilesByIdUploadData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterFilesByIdUploadResponses,
+      PostApiV2PrinterFilesByIdUploadResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-files/{id}/upload',
+      url: '/api/v2/printer-files/{id}/upload',
       ...options
     })
   }
@@ -967,16 +1451,16 @@ export class PrinterSettingsController {
   /**
    * get
    */
-  public static getApiPrinterSettingsById<ThrowOnError extends boolean = false>(
-    options: Options<GetApiPrinterSettingsByIdData, ThrowOnError>
-  ) {
+  public static getApiV2PrinterSettingsById<
+    ThrowOnError extends boolean = false
+  >(options: Options<GetApiV2PrinterSettingsByIdData, ThrowOnError>) {
     return (options.client ?? client).get<
-      GetApiPrinterSettingsByIdResponses,
+      GetApiV2PrinterSettingsByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-settings/{id}',
+      url: '/api/v2/printer-settings/{id}',
       ...options
     })
   }
@@ -984,21 +1468,21 @@ export class PrinterSettingsController {
   /**
    * syncPrinterName
    */
-  public static postApiPrinterSettingsByIdSyncPrintername<
+  public static postApiV2PrinterSettingsByIdSyncPrintername<
     ThrowOnError extends boolean = false
   >(
     options: Options<
-      PostApiPrinterSettingsByIdSyncPrinternameData,
+      PostApiV2PrinterSettingsByIdSyncPrinternameData,
       ThrowOnError
     >
   ) {
     return (options.client ?? client).post<
-      PostApiPrinterSettingsByIdSyncPrinternameResponses,
+      PostApiV2PrinterSettingsByIdSyncPrinternameResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-settings/{id}/sync-printername',
+      url: '/api/v2/printer-settings/{id}/sync-printername',
       ...options
     })
   }
@@ -1008,16 +1492,16 @@ export class PrinterTagController {
   /**
    * listTags
    */
-  public static getApiPrinterTag<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiPrinterTagData, ThrowOnError>
+  public static getApiV2PrinterTag<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2PrinterTagData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiPrinterTagResponses,
+      GetApiV2PrinterTagResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-tag/',
+      url: '/api/v2/printer-tag/',
       ...options
     })
   }
@@ -1025,16 +1509,16 @@ export class PrinterTagController {
   /**
    * createTag
    */
-  public static postApiPrinterTag<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiPrinterTagData, ThrowOnError>
+  public static postApiV2PrinterTag<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2PrinterTagData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiPrinterTagResponses,
+      PostApiV2PrinterTagResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-tag/',
+      url: '/api/v2/printer-tag/',
       ...options
     })
   }
@@ -1042,16 +1526,16 @@ export class PrinterTagController {
   /**
    * deleteTag
    */
-  public static deleteApiPrinterTagById<ThrowOnError extends boolean = false>(
-    options: Options<DeleteApiPrinterTagByIdData, ThrowOnError>
+  public static deleteApiV2PrinterTagById<ThrowOnError extends boolean = false>(
+    options: Options<DeleteApiV2PrinterTagByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).delete<
-      DeleteApiPrinterTagByIdResponses,
+      DeleteApiV2PrinterTagByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-tag/{id}',
+      url: '/api/v2/printer-tag/{id}',
       ...options
     })
   }
@@ -1059,16 +1543,16 @@ export class PrinterTagController {
   /**
    * getTagWithPrinters
    */
-  public static getApiPrinterTagById<ThrowOnError extends boolean = false>(
-    options: Options<GetApiPrinterTagByIdData, ThrowOnError>
+  public static getApiV2PrinterTagById<ThrowOnError extends boolean = false>(
+    options: Options<GetApiV2PrinterTagByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).get<
-      GetApiPrinterTagByIdResponses,
+      GetApiV2PrinterTagByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-tag/{id}',
+      url: '/api/v2/printer-tag/{id}',
       ...options
     })
   }
@@ -1076,16 +1560,16 @@ export class PrinterTagController {
   /**
    * updateTagName
    */
-  public static patchApiPrinterTagByIdName<
+  public static patchApiV2PrinterTagByIdName<
     ThrowOnError extends boolean = false
-  >(options: Options<PatchApiPrinterTagByIdNameData, ThrowOnError>) {
+  >(options: Options<PatchApiV2PrinterTagByIdNameData, ThrowOnError>) {
     return (options.client ?? client).patch<
-      PatchApiPrinterTagByIdNameResponses,
+      PatchApiV2PrinterTagByIdNameResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-tag/{id}/name',
+      url: '/api/v2/printer-tag/{id}/name',
       ...options
     })
   }
@@ -1093,16 +1577,16 @@ export class PrinterTagController {
   /**
    * updateTagColor
    */
-  public static patchApiPrinterTagByIdColor<
+  public static patchApiV2PrinterTagByIdColor<
     ThrowOnError extends boolean = false
-  >(options: Options<PatchApiPrinterTagByIdColorData, ThrowOnError>) {
+  >(options: Options<PatchApiV2PrinterTagByIdColorData, ThrowOnError>) {
     return (options.client ?? client).patch<
-      PatchApiPrinterTagByIdColorResponses,
+      PatchApiV2PrinterTagByIdColorResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-tag/{id}/color',
+      url: '/api/v2/printer-tag/{id}/color',
       ...options
     })
   }
@@ -1110,16 +1594,16 @@ export class PrinterTagController {
   /**
    * removePrinterFromTag
    */
-  public static deleteApiPrinterTagByIdPrinter<
+  public static deleteApiV2PrinterTagByIdPrinter<
     ThrowOnError extends boolean = false
-  >(options: Options<DeleteApiPrinterTagByIdPrinterData, ThrowOnError>) {
+  >(options: Options<DeleteApiV2PrinterTagByIdPrinterData, ThrowOnError>) {
     return (options.client ?? client).delete<
-      DeleteApiPrinterTagByIdPrinterResponses,
+      DeleteApiV2PrinterTagByIdPrinterResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-tag/{id}/printer',
+      url: '/api/v2/printer-tag/{id}/printer',
       ...options
     })
   }
@@ -1127,16 +1611,16 @@ export class PrinterTagController {
   /**
    * addPrinterToTag
    */
-  public static postApiPrinterTagByIdPrinter<
+  public static postApiV2PrinterTagByIdPrinter<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterTagByIdPrinterData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterTagByIdPrinterData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterTagByIdPrinterResponses,
+      PostApiV2PrinterTagByIdPrinterResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer-tag/{id}/printer',
+      url: '/api/v2/printer-tag/{id}/printer',
       ...options
     })
   }
@@ -1146,16 +1630,16 @@ export class PrinterController {
   /**
    * list
    */
-  public static getApiPrinter<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiPrinterData, ThrowOnError>
+  public static getApiV2Printer<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2PrinterData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiPrinterResponses,
+      GetApiV2PrinterResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/',
+      url: '/api/v2/printer/',
       ...options
     })
   }
@@ -1163,16 +1647,16 @@ export class PrinterController {
   /**
    * create
    */
-  public static postApiPrinter<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiPrinterData, ThrowOnError>
+  public static postApiV2Printer<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2PrinterData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiPrinterResponses,
+      PostApiV2PrinterResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/',
+      url: '/api/v2/printer/',
       ...options
     })
   }
@@ -1180,16 +1664,16 @@ export class PrinterController {
   /**
    * createBatch
    */
-  public static postApiPrinterBatch<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiPrinterBatchData, ThrowOnError>
+  public static postApiV2PrinterBatch<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2PrinterBatchData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiPrinterBatchResponses,
+      PostApiV2PrinterBatchResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/batch',
+      url: '/api/v2/printer/batch',
       ...options
     })
   }
@@ -1197,16 +1681,16 @@ export class PrinterController {
   /**
    * delete
    */
-  public static deleteApiPrinterById<ThrowOnError extends boolean = false>(
-    options: Options<DeleteApiPrinterByIdData, ThrowOnError>
+  public static deleteApiV2PrinterById<ThrowOnError extends boolean = false>(
+    options: Options<DeleteApiV2PrinterByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).delete<
-      DeleteApiPrinterByIdResponses,
+      DeleteApiV2PrinterByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}',
+      url: '/api/v2/printer/{id}',
       ...options
     })
   }
@@ -1214,16 +1698,16 @@ export class PrinterController {
   /**
    * getPrinter
    */
-  public static getApiPrinterById<ThrowOnError extends boolean = false>(
-    options: Options<GetApiPrinterByIdData, ThrowOnError>
+  public static getApiV2PrinterById<ThrowOnError extends boolean = false>(
+    options: Options<GetApiV2PrinterByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).get<
-      GetApiPrinterByIdResponses,
+      GetApiV2PrinterByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}',
+      url: '/api/v2/printer/{id}',
       ...options
     })
   }
@@ -1231,16 +1715,16 @@ export class PrinterController {
   /**
    * update
    */
-  public static patchApiPrinterById<ThrowOnError extends boolean = false>(
-    options: Options<PatchApiPrinterByIdData, ThrowOnError>
+  public static patchApiV2PrinterById<ThrowOnError extends boolean = false>(
+    options: Options<PatchApiV2PrinterByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).patch<
-      PatchApiPrinterByIdResponses,
+      PatchApiV2PrinterByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}',
+      url: '/api/v2/printer/{id}',
       ...options
     })
   }
@@ -1248,16 +1732,16 @@ export class PrinterController {
   /**
    * getPrinterSocketInfo
    */
-  public static getApiPrinterByIdSocket<ThrowOnError extends boolean = false>(
-    options: Options<GetApiPrinterByIdSocketData, ThrowOnError>
+  public static getApiV2PrinterByIdSocket<ThrowOnError extends boolean = false>(
+    options: Options<GetApiV2PrinterByIdSocketData, ThrowOnError>
   ) {
     return (options.client ?? client).get<
-      GetApiPrinterByIdSocketResponses,
+      GetApiV2PrinterByIdSocketResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/socket',
+      url: '/api/v2/printer/{id}/socket',
       ...options
     })
   }
@@ -1265,16 +1749,16 @@ export class PrinterController {
   /**
    * updateEnabled
    */
-  public static patchApiPrinterByIdEnabled<
+  public static patchApiV2PrinterByIdEnabled<
     ThrowOnError extends boolean = false
-  >(options: Options<PatchApiPrinterByIdEnabledData, ThrowOnError>) {
+  >(options: Options<PatchApiV2PrinterByIdEnabledData, ThrowOnError>) {
     return (options.client ?? client).patch<
-      PatchApiPrinterByIdEnabledResponses,
+      PatchApiV2PrinterByIdEnabledResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/enabled',
+      url: '/api/v2/printer/{id}/enabled',
       ...options
     })
   }
@@ -1282,16 +1766,16 @@ export class PrinterController {
   /**
    * updatePrinterDisabledReason
    */
-  public static patchApiPrinterByIdDisabledReason<
+  public static patchApiV2PrinterByIdDisabledReason<
     ThrowOnError extends boolean = false
-  >(options: Options<PatchApiPrinterByIdDisabledReasonData, ThrowOnError>) {
+  >(options: Options<PatchApiV2PrinterByIdDisabledReasonData, ThrowOnError>) {
     return (options.client ?? client).patch<
-      PatchApiPrinterByIdDisabledReasonResponses,
+      PatchApiV2PrinterByIdDisabledReasonResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/disabled-reason',
+      url: '/api/v2/printer/{id}/disabled-reason',
       ...options
     })
   }
@@ -1299,16 +1783,16 @@ export class PrinterController {
   /**
    * refreshPrinterSocket
    */
-  public static postApiPrinterByIdRefreshSocket<
+  public static postApiV2PrinterByIdRefreshSocket<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterByIdRefreshSocketData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterByIdRefreshSocketData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdRefreshSocketResponses,
+      PostApiV2PrinterByIdRefreshSocketResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/refresh-socket',
+      url: '/api/v2/printer/{id}/refresh-socket',
       ...options
     })
   }
@@ -1316,16 +1800,16 @@ export class PrinterController {
   /**
    * testConnection
    */
-  public static postApiPrinterTestConnection<
+  public static postApiV2PrinterTestConnection<
     ThrowOnError extends boolean = false
-  >(options?: Options<PostApiPrinterTestConnectionData, ThrowOnError>) {
+  >(options?: Options<PostApiV2PrinterTestConnectionData, ThrowOnError>) {
     return (options?.client ?? client).post<
-      PostApiPrinterTestConnectionResponses,
+      PostApiV2PrinterTestConnectionResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/test-connection',
+      url: '/api/v2/printer/test-connection',
       ...options
     })
   }
@@ -1333,16 +1817,16 @@ export class PrinterController {
   /**
    * getPrinterLoginDetails
    */
-  public static getApiPrinterByIdLoginDetails<
+  public static getApiV2PrinterByIdLoginDetails<
     ThrowOnError extends boolean = false
-  >(options: Options<GetApiPrinterByIdLoginDetailsData, ThrowOnError>) {
+  >(options: Options<GetApiV2PrinterByIdLoginDetailsData, ThrowOnError>) {
     return (options.client ?? client).get<
-      GetApiPrinterByIdLoginDetailsResponses,
+      GetApiV2PrinterByIdLoginDetailsResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/login-details',
+      url: '/api/v2/printer/{id}/login-details',
       ...options
     })
   }
@@ -1350,16 +1834,16 @@ export class PrinterController {
   /**
    * sendEmergencyM112
    */
-  public static postApiPrinterByIdSendEmergencyM112<
+  public static postApiV2PrinterByIdSendEmergencyM112<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterByIdSendEmergencyM112Data, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterByIdSendEmergencyM112Data, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdSendEmergencyM112Responses,
+      PostApiV2PrinterByIdSendEmergencyM112Responses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/send-emergency-m112',
+      url: '/api/v2/printer/{id}/send-emergency-m112',
       ...options
     })
   }
@@ -1367,16 +1851,16 @@ export class PrinterController {
   /**
    * sendSerialConnectCommand
    */
-  public static postApiPrinterByIdSerialConnect<
+  public static postApiV2PrinterByIdSerialConnect<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterByIdSerialConnectData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterByIdSerialConnectData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdSerialConnectResponses,
+      PostApiV2PrinterByIdSerialConnectResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/serial-connect',
+      url: '/api/v2/printer/{id}/serial-connect',
       ...options
     })
   }
@@ -1384,16 +1868,16 @@ export class PrinterController {
   /**
    * sendSerialDisconnectCommand
    */
-  public static postApiPrinterByIdSerialDisconnect<
+  public static postApiV2PrinterByIdSerialDisconnect<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterByIdSerialDisconnectData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterByIdSerialDisconnectData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdSerialDisconnectResponses,
+      PostApiV2PrinterByIdSerialDisconnectResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/serial-disconnect',
+      url: '/api/v2/printer/{id}/serial-disconnect',
       ...options
     })
   }
@@ -1401,16 +1885,16 @@ export class PrinterController {
   /**
    * movePrintHead
    */
-  public static postApiPrinterByIdMove<ThrowOnError extends boolean = false>(
-    options: Options<PostApiPrinterByIdMoveData, ThrowOnError>
+  public static postApiV2PrinterByIdMove<ThrowOnError extends boolean = false>(
+    options: Options<PostApiV2PrinterByIdMoveData, ThrowOnError>
   ) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdMoveResponses,
+      PostApiV2PrinterByIdMoveResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/move',
+      url: '/api/v2/printer/{id}/move',
       ...options
     })
   }
@@ -1418,16 +1902,16 @@ export class PrinterController {
   /**
    * movePrintHead
    */
-  public static postApiPrinterByIdJog<ThrowOnError extends boolean = false>(
-    options: Options<PostApiPrinterByIdJogData, ThrowOnError>
+  public static postApiV2PrinterByIdJog<ThrowOnError extends boolean = false>(
+    options: Options<PostApiV2PrinterByIdJogData, ThrowOnError>
   ) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdJogResponses,
+      PostApiV2PrinterByIdJogResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/jog',
+      url: '/api/v2/printer/{id}/jog',
       ...options
     })
   }
@@ -1435,16 +1919,16 @@ export class PrinterController {
   /**
    * homeAxes
    */
-  public static postApiPrinterByIdHome<ThrowOnError extends boolean = false>(
-    options: Options<PostApiPrinterByIdHomeData, ThrowOnError>
+  public static postApiV2PrinterByIdHome<ThrowOnError extends boolean = false>(
+    options: Options<PostApiV2PrinterByIdHomeData, ThrowOnError>
   ) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdHomeResponses,
+      PostApiV2PrinterByIdHomeResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/home',
+      url: '/api/v2/printer/{id}/home',
       ...options
     })
   }
@@ -1452,16 +1936,16 @@ export class PrinterController {
   /**
    * pausePrint
    */
-  public static postApiPrinterByIdJobPause<
+  public static postApiV2PrinterByIdJobPause<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterByIdJobPauseData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterByIdJobPauseData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdJobPauseResponses,
+      PostApiV2PrinterByIdJobPauseResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/job/pause',
+      url: '/api/v2/printer/{id}/job/pause',
       ...options
     })
   }
@@ -1469,16 +1953,16 @@ export class PrinterController {
   /**
    * resumePrint
    */
-  public static postApiPrinterByIdJobResume<
+  public static postApiV2PrinterByIdJobResume<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterByIdJobResumeData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterByIdJobResumeData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdJobResumeResponses,
+      PostApiV2PrinterByIdJobResumeResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/job/resume',
+      url: '/api/v2/printer/{id}/job/resume',
       ...options
     })
   }
@@ -1486,16 +1970,16 @@ export class PrinterController {
   /**
    * cancelPrint
    */
-  public static postApiPrinterByIdJobCancel<
+  public static postApiV2PrinterByIdJobCancel<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterByIdJobCancelData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterByIdJobCancelData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdJobCancelResponses,
+      PostApiV2PrinterByIdJobCancelResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/job/cancel',
+      url: '/api/v2/printer/{id}/job/cancel',
       ...options
     })
   }
@@ -1503,33 +1987,16 @@ export class PrinterController {
   /**
    * cancelPrint
    */
-  public static postApiPrinterByIdJobStop<ThrowOnError extends boolean = false>(
-    options: Options<PostApiPrinterByIdJobStopData, ThrowOnError>
-  ) {
-    return (options.client ?? client).post<
-      PostApiPrinterByIdJobStopResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/job/stop',
-      ...options
-    })
-  }
-
-  /**
-   * restartServer
-   */
-  public static postApiPrinterByIdServerRestart<
+  public static postApiV2PrinterByIdJobStop<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiPrinterByIdServerRestartData, ThrowOnError>) {
+  >(options: Options<PostApiV2PrinterByIdJobStopData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdServerRestartResponses,
+      PostApiV2PrinterByIdJobStopResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/server/restart',
+      url: '/api/v2/printer/{id}/job/stop',
       ...options
     })
   }
@@ -1537,18 +2004,38 @@ export class PrinterController {
   /**
    * restartServer
    */
-  public static postApiPrinterByIdOctoprintServerRestart<
+  public static postApiV2PrinterByIdServerRestart<
+    ThrowOnError extends boolean = false
+  >(options: Options<PostApiV2PrinterByIdServerRestartData, ThrowOnError>) {
+    return (options.client ?? client).post<
+      PostApiV2PrinterByIdServerRestartResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/printer/{id}/server/restart',
+      ...options
+    })
+  }
+
+  /**
+   * restartServer
+   */
+  public static postApiV2PrinterByIdOctoprintServerRestart<
     ThrowOnError extends boolean = false
   >(
-    options: Options<PostApiPrinterByIdOctoprintServerRestartData, ThrowOnError>
+    options: Options<
+      PostApiV2PrinterByIdOctoprintServerRestartData,
+      ThrowOnError
+    >
   ) {
     return (options.client ?? client).post<
-      PostApiPrinterByIdOctoprintServerRestartResponses,
+      PostApiV2PrinterByIdOctoprintServerRestartResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/octoprint/server/restart',
+      url: '/api/v2/printer/{id}/octoprint/server/restart',
       ...options
     })
   }
@@ -1556,16 +2043,16 @@ export class PrinterController {
   /**
    * setFeedRate
    */
-  public static patchApiPrinterByIdFeedRate<
+  public static patchApiV2PrinterByIdFeedRate<
     ThrowOnError extends boolean = false
-  >(options: Options<PatchApiPrinterByIdFeedRateData, ThrowOnError>) {
+  >(options: Options<PatchApiV2PrinterByIdFeedRateData, ThrowOnError>) {
     return (options.client ?? client).patch<
-      PatchApiPrinterByIdFeedRateResponses,
+      PatchApiV2PrinterByIdFeedRateResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/feed-rate',
+      url: '/api/v2/printer/{id}/feed-rate',
       ...options
     })
   }
@@ -1573,16 +2060,16 @@ export class PrinterController {
   /**
    * setFlowRate
    */
-  public static patchApiPrinterByIdFlowRate<
+  public static patchApiV2PrinterByIdFlowRate<
     ThrowOnError extends boolean = false
-  >(options: Options<PatchApiPrinterByIdFlowRateData, ThrowOnError>) {
+  >(options: Options<PatchApiV2PrinterByIdFlowRateData, ThrowOnError>) {
     return (options.client ?? client).patch<
-      PatchApiPrinterByIdFlowRateResponses,
+      PatchApiV2PrinterByIdFlowRateResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/printer/{id}/flow-rate',
+      url: '/api/v2/printer/{id}/flow-rate',
       ...options
     })
   }
@@ -1592,16 +2079,16 @@ export class ServerPrivateController {
   /**
    * getReleaseStateInfo
    */
-  public static getApiServer<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiServerData, ThrowOnError>
+  public static getApiV2Server<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2ServerData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiServerResponses,
+      GetApiV2ServerResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/server/',
+      url: '/api/v2/server/',
       ...options
     })
   }
@@ -1609,16 +2096,16 @@ export class ServerPrivateController {
   /**
    * getClientReleases
    */
-  public static getApiServerClientReleases<
+  public static getApiV2ServerClientReleases<
     ThrowOnError extends boolean = false
-  >(options?: Options<GetApiServerClientReleasesData, ThrowOnError>) {
+  >(options?: Options<GetApiV2ServerClientReleasesData, ThrowOnError>) {
     return (options?.client ?? client).get<
-      GetApiServerClientReleasesResponses,
+      GetApiV2ServerClientReleasesResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/server/client-releases',
+      url: '/api/v2/server/client-releases',
       ...options
     })
   }
@@ -1626,18 +2113,18 @@ export class ServerPrivateController {
   /**
    * updateClientBundleGithub
    */
-  public static postApiServerUpdateClientBundleGithub<
+  public static postApiV2ServerUpdateClientBundleGithub<
     ThrowOnError extends boolean = false
   >(
-    options?: Options<PostApiServerUpdateClientBundleGithubData, ThrowOnError>
+    options?: Options<PostApiV2ServerUpdateClientBundleGithubData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiServerUpdateClientBundleGithubResponses,
+      PostApiV2ServerUpdateClientBundleGithubResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/server/update-client-bundle-github',
+      url: '/api/v2/server/update-client-bundle-github',
       ...options
     })
   }
@@ -1645,16 +2132,16 @@ export class ServerPrivateController {
   /**
    * getGithubRateLimit
    */
-  public static getApiServerGithubRateLimit<
+  public static getApiV2ServerGithubRateLimit<
     ThrowOnError extends boolean = false
-  >(options?: Options<GetApiServerGithubRateLimitData, ThrowOnError>) {
+  >(options?: Options<GetApiV2ServerGithubRateLimitData, ThrowOnError>) {
     return (options?.client ?? client).get<
-      GetApiServerGithubRateLimitResponses,
+      GetApiV2ServerGithubRateLimitResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/server/github-rate-limit',
+      url: '/api/v2/server/github-rate-limit',
       ...options
     })
   }
@@ -1662,16 +2149,16 @@ export class ServerPrivateController {
   /**
    * importYaml
    */
-  public static postApiServerYamlImport<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiServerYamlImportData, ThrowOnError>
+  public static postApiV2ServerYamlImport<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2ServerYamlImportData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiServerYamlImportResponses,
+      PostApiV2ServerYamlImportResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/server/yaml-import',
+      url: '/api/v2/server/yaml-import',
       ...options
     })
   }
@@ -1679,16 +2166,16 @@ export class ServerPrivateController {
   /**
    * exportYaml
    */
-  public static postApiServerYamlExport<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiServerYamlExportData, ThrowOnError>
+  public static postApiV2ServerYamlExport<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2ServerYamlExportData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiServerYamlExportResponses,
+      PostApiV2ServerYamlExportResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/server/yaml-export',
+      url: '/api/v2/server/yaml-export',
       ...options
     })
   }
@@ -1696,16 +2183,16 @@ export class ServerPrivateController {
   /**
    * deleteAllPrinters
    */
-  public static deleteApiServerDeleteAllPrinters<
+  public static deleteApiV2ServerDeleteAllPrinters<
     ThrowOnError extends boolean = false
-  >(options?: Options<DeleteApiServerDeleteAllPrintersData, ThrowOnError>) {
+  >(options?: Options<DeleteApiV2ServerDeleteAllPrintersData, ThrowOnError>) {
     return (options?.client ?? client).delete<
-      DeleteApiServerDeleteAllPrintersResponses,
+      DeleteApiV2ServerDeleteAllPrintersResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/server/delete-all-printers',
+      url: '/api/v2/server/delete-all-printers',
       ...options
     })
   }
@@ -1713,21 +2200,21 @@ export class ServerPrivateController {
   /**
    * clearLogs
    */
-  public static deleteApiServerClearOutdatedFdmMonsterLogs<
+  public static deleteApiV2ServerClearOutdatedFdmMonsterLogs<
     ThrowOnError extends boolean = false
   >(
     options?: Options<
-      DeleteApiServerClearOutdatedFdmMonsterLogsData,
+      DeleteApiV2ServerClearOutdatedFdmMonsterLogsData,
       ThrowOnError
     >
   ) {
     return (options?.client ?? client).delete<
-      DeleteApiServerClearOutdatedFdmMonsterLogsResponses,
+      DeleteApiV2ServerClearOutdatedFdmMonsterLogsResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/server/clear-outdated-fdm-monster-logs',
+      url: '/api/v2/server/clear-outdated-fdm-monster-logs',
       ...options
     })
   }
@@ -1735,16 +2222,16 @@ export class ServerPrivateController {
   /**
    * dumpLogZips
    */
-  public static getApiServerDumpFdmMonsterLogs<
+  public static getApiV2ServerDumpFdmMonsterLogs<
     ThrowOnError extends boolean = false
-  >(options?: Options<GetApiServerDumpFdmMonsterLogsData, ThrowOnError>) {
+  >(options?: Options<GetApiV2ServerDumpFdmMonsterLogsData, ThrowOnError>) {
     return (options?.client ?? client).get<
-      GetApiServerDumpFdmMonsterLogsResponses,
+      GetApiV2ServerDumpFdmMonsterLogsResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/server/dump-fdm-monster-logs',
+      url: '/api/v2/server/dump-fdm-monster-logs',
       ...options
     })
   }
@@ -1752,16 +2239,16 @@ export class ServerPrivateController {
   /**
    * dumpLogZips
    */
-  public static postApiServerDumpFdmMonsterLogs<
+  public static postApiV2ServerDumpFdmMonsterLogs<
     ThrowOnError extends boolean = false
-  >(options?: Options<PostApiServerDumpFdmMonsterLogsData, ThrowOnError>) {
+  >(options?: Options<PostApiV2ServerDumpFdmMonsterLogsData, ThrowOnError>) {
     return (options?.client ?? client).post<
-      PostApiServerDumpFdmMonsterLogsResponses,
+      PostApiV2ServerDumpFdmMonsterLogsResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/server/dump-fdm-monster-logs',
+      url: '/api/v2/server/dump-fdm-monster-logs',
       ...options
     })
   }
@@ -1771,16 +2258,16 @@ export class ServerPublicController {
   /**
    * welcome
    */
-  public static getApi<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiData, ThrowOnError>
+  public static getApiV2<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2Data, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiResponses,
+      GetApiV2Responses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/',
+      url: '/api/v2/',
       ...options
     })
   }
@@ -1788,20 +2275,260 @@ export class ServerPublicController {
   /**
    * getFeatures
    */
-  public static getApiFeatures<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiFeaturesData, ThrowOnError>
+  public static getApiV2Features<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2FeaturesData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiFeaturesResponses,
+      GetApiV2FeaturesResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/features',
+      url: '/api/v2/features',
       ...options
     })
   }
 
+  /**
+   * getVersion
+   */
+  public static getApiV2Version<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2VersionData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetApiV2VersionResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/version',
+      ...options
+    })
+  }
+
+  /**
+   * test
+   */
+  public static getApiV2Test<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2TestData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetApiV2TestResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/test',
+      ...options
+    })
+  }
+}
+
+export class SettingsController {
+  /**
+   * getSettings
+   */
+  public static getApiV2Settings<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2SettingsData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetApiV2SettingsResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/',
+      ...options
+    })
+  }
+
+  /**
+   * getSettingsSensitive
+   */
+  public static getApiV2SettingsSensitive<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2SettingsSensitiveData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetApiV2SettingsSensitiveResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/sensitive',
+      ...options
+    })
+  }
+
+  /**
+   * updateSentryDiagnosticsEnabled
+   */
+  public static patchApiV2SettingsSentryDiagnostics<
+    ThrowOnError extends boolean = false
+  >(options?: Options<PatchApiV2SettingsSentryDiagnosticsData, ThrowOnError>) {
+    return (options?.client ?? client).patch<
+      PatchApiV2SettingsSentryDiagnosticsResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/sentry-diagnostics',
+      ...options
+    })
+  }
+
+  /**
+   * updateMoonrakerSupport
+   */
+  public static putApiV2SettingsExperimentalMoonrakerSupport<
+    ThrowOnError extends boolean = false
+  >(
+    options?: Options<
+      PutApiV2SettingsExperimentalMoonrakerSupportData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).put<
+      PutApiV2SettingsExperimentalMoonrakerSupportResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/experimental-moonraker-support',
+      ...options
+    })
+  }
+
+  /**
+   * updatePrusaLinkSupport
+   */
+  public static putApiV2SettingsExperimentalPrusaLinkSupport<
+    ThrowOnError extends boolean = false
+  >(
+    options?: Options<
+      PutApiV2SettingsExperimentalPrusaLinkSupportData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).put<
+      PutApiV2SettingsExperimentalPrusaLinkSupportResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/experimental-prusa-link-support',
+      ...options
+    })
+  }
+
+  /**
+   * updateBambuSupport
+   */
+  public static putApiV2SettingsExperimentalBambuSupport<
+    ThrowOnError extends boolean = false
+  >(
+    options?: Options<
+      PutApiV2SettingsExperimentalBambuSupportData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).put<
+      PutApiV2SettingsExperimentalBambuSupportResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/experimental-bambu-support',
+      ...options
+    })
+  }
+
+  /**
+   * updateFrontendSettings
+   */
+  public static putApiV2SettingsFrontend<ThrowOnError extends boolean = false>(
+    options?: Options<PutApiV2SettingsFrontendData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).put<
+      PutApiV2SettingsFrontendResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/frontend',
+      ...options
+    })
+  }
+
+  /**
+   * updateLoginRequiredSettings
+   */
+  public static putApiV2SettingsLoginRequired<
+    ThrowOnError extends boolean = false
+  >(options?: Options<PutApiV2SettingsLoginRequiredData, ThrowOnError>) {
+    return (options?.client ?? client).put<
+      PutApiV2SettingsLoginRequiredResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/login-required',
+      ...options
+    })
+  }
+
+  /**
+   * updateRegistrationEnabledSettings
+   */
+  public static putApiV2SettingsRegistrationEnabled<
+    ThrowOnError extends boolean = false
+  >(options?: Options<PutApiV2SettingsRegistrationEnabledData, ThrowOnError>) {
+    return (options?.client ?? client).put<
+      PutApiV2SettingsRegistrationEnabledResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/registration-enabled',
+      ...options
+    })
+  }
+
+  /**
+   * updateCredentialSettings
+   */
+  public static putApiV2SettingsCredential<
+    ThrowOnError extends boolean = false
+  >(options?: Options<PutApiV2SettingsCredentialData, ThrowOnError>) {
+    return (options?.client ?? client).put<
+      PutApiV2SettingsCredentialResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/credential',
+      ...options
+    })
+  }
+
+  /**
+   * updateTimeoutSettings
+   */
+  public static putApiV2SettingsTimeout<ThrowOnError extends boolean = false>(
+    options?: Options<PutApiV2SettingsTimeoutData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).put<
+      PutApiV2SettingsTimeoutResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/timeout',
+      ...options
+    })
+  }
+}
+
+export class SlicerCompatController {
   /**
    * getVersion
    */
@@ -1820,241 +2547,52 @@ export class ServerPublicController {
   }
 
   /**
-   * test
+   * uploadFile
    */
-  public static getApiTest<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiTestData, ThrowOnError>
+  public static postApiFilesLocal<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiFilesLocalData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostApiFilesLocalResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/files/local',
+      ...options
+    })
+  }
+
+  /**
+   * listFiles
+   */
+  public static getApiFiles<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiFilesData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiTestResponses,
+      GetApiFilesResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/test',
+      url: '/api/files',
       ...options
     })
   }
-}
 
-export class SettingsController {
   /**
-   * getSettings
+   * getServer
    */
-  public static getApiSettings<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiSettingsData, ThrowOnError>
+  public static getApiServer<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiServerData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiSettingsResponses,
+      GetApiServerResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/',
-      ...options
-    })
-  }
-
-  /**
-   * getSettingsSensitive
-   */
-  public static getApiSettingsSensitive<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiSettingsSensitiveData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).get<
-      GetApiSettingsSensitiveResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/sensitive',
-      ...options
-    })
-  }
-
-  /**
-   * updateSentryDiagnosticsEnabled
-   */
-  public static patchApiSettingsSentryDiagnostics<
-    ThrowOnError extends boolean = false
-  >(options?: Options<PatchApiSettingsSentryDiagnosticsData, ThrowOnError>) {
-    return (options?.client ?? client).patch<
-      PatchApiSettingsSentryDiagnosticsResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/sentry-diagnostics',
-      ...options
-    })
-  }
-
-  /**
-   * updateMoonrakerSupport
-   */
-  public static putApiSettingsExperimentalMoonrakerSupport<
-    ThrowOnError extends boolean = false
-  >(
-    options?: Options<
-      PutApiSettingsExperimentalMoonrakerSupportData,
-      ThrowOnError
-    >
-  ) {
-    return (options?.client ?? client).put<
-      PutApiSettingsExperimentalMoonrakerSupportResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/experimental-moonraker-support',
-      ...options
-    })
-  }
-
-  /**
-   * updatePrusaLinkSupport
-   */
-  public static putApiSettingsExperimentalPrusaLinkSupport<
-    ThrowOnError extends boolean = false
-  >(
-    options?: Options<
-      PutApiSettingsExperimentalPrusaLinkSupportData,
-      ThrowOnError
-    >
-  ) {
-    return (options?.client ?? client).put<
-      PutApiSettingsExperimentalPrusaLinkSupportResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/experimental-prusa-link-support',
-      ...options
-    })
-  }
-
-  /**
-   * updateBambuSupport
-   */
-  public static putApiSettingsExperimentalBambuSupport<
-    ThrowOnError extends boolean = false
-  >(
-    options?: Options<PutApiSettingsExperimentalBambuSupportData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).put<
-      PutApiSettingsExperimentalBambuSupportResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/experimental-bambu-support',
-      ...options
-    })
-  }
-
-  /**
-   * updateThumbnailSupport
-   */
-  public static putApiSettingsExperimentalThumbnailSupport<
-    ThrowOnError extends boolean = false
-  >(
-    options?: Options<
-      PutApiSettingsExperimentalThumbnailSupportData,
-      ThrowOnError
-    >
-  ) {
-    return (options?.client ?? client).put<
-      PutApiSettingsExperimentalThumbnailSupportResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/experimental-thumbnail-support',
-      ...options
-    })
-  }
-
-  /**
-   * updateFrontendSettings
-   */
-  public static putApiSettingsFrontend<ThrowOnError extends boolean = false>(
-    options?: Options<PutApiSettingsFrontendData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).put<
-      PutApiSettingsFrontendResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/frontend',
-      ...options
-    })
-  }
-
-  /**
-   * updateLoginRequiredSettings
-   */
-  public static putApiSettingsLoginRequired<
-    ThrowOnError extends boolean = false
-  >(options?: Options<PutApiSettingsLoginRequiredData, ThrowOnError>) {
-    return (options?.client ?? client).put<
-      PutApiSettingsLoginRequiredResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/login-required',
-      ...options
-    })
-  }
-
-  /**
-   * updateRegistrationEnabledSettings
-   */
-  public static putApiSettingsRegistrationEnabled<
-    ThrowOnError extends boolean = false
-  >(options?: Options<PutApiSettingsRegistrationEnabledData, ThrowOnError>) {
-    return (options?.client ?? client).put<
-      PutApiSettingsRegistrationEnabledResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/registration-enabled',
-      ...options
-    })
-  }
-
-  /**
-   * updateCredentialSettings
-   */
-  public static putApiSettingsCredential<ThrowOnError extends boolean = false>(
-    options?: Options<PutApiSettingsCredentialData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).put<
-      PutApiSettingsCredentialResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/credential',
-      ...options
-    })
-  }
-
-  /**
-   * updateTimeoutSettings
-   */
-  public static putApiSettingsTimeout<ThrowOnError extends boolean = false>(
-    options?: Options<PutApiSettingsTimeoutData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).put<
-      PutApiSettingsTimeoutResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/settings/timeout',
+      url: '/api/server',
       ...options
     })
   }
@@ -2064,16 +2602,16 @@ export class UserController {
   /**
    * list
    */
-  public static getApiUser<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiUserData, ThrowOnError>
+  public static getApiV2User<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2UserData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiUserResponses,
+      GetApiV2UserResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/',
+      url: '/api/v2/user/',
       ...options
     })
   }
@@ -2081,16 +2619,16 @@ export class UserController {
   /**
    * create
    */
-  public static postApiUser<ThrowOnError extends boolean = false>(
-    options?: Options<PostApiUserData, ThrowOnError>
+  public static postApiV2User<ThrowOnError extends boolean = false>(
+    options?: Options<PostApiV2UserData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostApiUserResponses,
+      PostApiV2UserResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/',
+      url: '/api/v2/user/',
       ...options
     })
   }
@@ -2098,16 +2636,16 @@ export class UserController {
   /**
    * listRoles
    */
-  public static getApiUserRoles<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiUserRolesData, ThrowOnError>
+  public static getApiV2UserRoles<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2UserRolesData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiUserRolesResponses,
+      GetApiV2UserRolesResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/roles',
+      url: '/api/v2/user/roles',
       ...options
     })
   }
@@ -2115,16 +2653,16 @@ export class UserController {
   /**
    * profile
    */
-  public static getApiUserProfile<ThrowOnError extends boolean = false>(
-    options?: Options<GetApiUserProfileData, ThrowOnError>
+  public static getApiV2UserProfile<ThrowOnError extends boolean = false>(
+    options?: Options<GetApiV2UserProfileData, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetApiUserProfileResponses,
+      GetApiV2UserProfileResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/profile',
+      url: '/api/v2/user/profile',
       ...options
     })
   }
@@ -2132,16 +2670,16 @@ export class UserController {
   /**
    * delete
    */
-  public static deleteApiUserById<ThrowOnError extends boolean = false>(
-    options: Options<DeleteApiUserByIdData, ThrowOnError>
+  public static deleteApiV2UserById<ThrowOnError extends boolean = false>(
+    options: Options<DeleteApiV2UserByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).delete<
-      DeleteApiUserByIdResponses,
+      DeleteApiV2UserByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/{id}',
+      url: '/api/v2/user/{id}',
       ...options
     })
   }
@@ -2149,16 +2687,16 @@ export class UserController {
   /**
    * get
    */
-  public static getApiUserById<ThrowOnError extends boolean = false>(
-    options: Options<GetApiUserByIdData, ThrowOnError>
+  public static getApiV2UserById<ThrowOnError extends boolean = false>(
+    options: Options<GetApiV2UserByIdData, ThrowOnError>
   ) {
     return (options.client ?? client).get<
-      GetApiUserByIdResponses,
+      GetApiV2UserByIdResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/{id}',
+      url: '/api/v2/user/{id}',
       ...options
     })
   }
@@ -2166,16 +2704,16 @@ export class UserController {
   /**
    * changeUsername
    */
-  public static postApiUserByIdChangeUsername<
+  public static postApiV2UserByIdChangeUsername<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiUserByIdChangeUsernameData, ThrowOnError>) {
+  >(options: Options<PostApiV2UserByIdChangeUsernameData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiUserByIdChangeUsernameResponses,
+      PostApiV2UserByIdChangeUsernameResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/{id}/change-username',
+      url: '/api/v2/user/{id}/change-username',
       ...options
     })
   }
@@ -2183,16 +2721,16 @@ export class UserController {
   /**
    * changePassword
    */
-  public static postApiUserByIdChangePassword<
+  public static postApiV2UserByIdChangePassword<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiUserByIdChangePasswordData, ThrowOnError>) {
+  >(options: Options<PostApiV2UserByIdChangePasswordData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiUserByIdChangePasswordResponses,
+      PostApiV2UserByIdChangePasswordResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/{id}/change-password',
+      url: '/api/v2/user/{id}/change-password',
       ...options
     })
   }
@@ -2200,16 +2738,16 @@ export class UserController {
   /**
    * setUserRoles
    */
-  public static postApiUserByIdSetUserRoles<
+  public static postApiV2UserByIdSetUserRoles<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiUserByIdSetUserRolesData, ThrowOnError>) {
+  >(options: Options<PostApiV2UserByIdSetUserRolesData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiUserByIdSetUserRolesResponses,
+      PostApiV2UserByIdSetUserRolesResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/{id}/set-user-roles',
+      url: '/api/v2/user/{id}/set-user-roles',
       ...options
     })
   }
@@ -2217,16 +2755,16 @@ export class UserController {
   /**
    * setVerified
    */
-  public static postApiUserByIdSetVerified<
+  public static postApiV2UserByIdSetVerified<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiUserByIdSetVerifiedData, ThrowOnError>) {
+  >(options: Options<PostApiV2UserByIdSetVerifiedData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiUserByIdSetVerifiedResponses,
+      PostApiV2UserByIdSetVerifiedResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/{id}/set-verified',
+      url: '/api/v2/user/{id}/set-verified',
       ...options
     })
   }
@@ -2234,16 +2772,16 @@ export class UserController {
   /**
    * setRootUser
    */
-  public static postApiUserByIdSetRootUser<
+  public static postApiV2UserByIdSetRootUser<
     ThrowOnError extends boolean = false
-  >(options: Options<PostApiUserByIdSetRootUserData, ThrowOnError>) {
+  >(options: Options<PostApiV2UserByIdSetRootUserData, ThrowOnError>) {
     return (options.client ?? client).post<
-      PostApiUserByIdSetRootUserResponses,
+      PostApiV2UserByIdSetRootUserResponses,
       unknown,
       ThrowOnError
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/user/{id}/set-root-user',
+      url: '/api/v2/user/{id}/set-root-user',
       ...options
     })
   }

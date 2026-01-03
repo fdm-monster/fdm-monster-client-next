@@ -61,6 +61,8 @@ export interface PrintJobDto {
   printerName: string | null
   fileName: string
   fileFormat: FileFormatType | null
+  fileStorageId: string | null
+  fileHash: string | null
   createdAt: Date
   updatedAt: Date
   startedAt: Date | null
@@ -148,8 +150,23 @@ export class PrintJobsService extends BaseService {
     return await this.post<PrintJobDto>(path);
   }
 
-  static async deleteJob(jobId: number): Promise<void> {
-    const path = `${ServerApi.printJobsRoute}/${jobId}`
+  static async setJobFailed(jobId: number): Promise<PrintJobDto> {
+    const path = `${ServerApi.printJobsRoute}/${jobId}/set-failed`
+    return await this.post<PrintJobDto>(path);
+  }
+
+  static async setJobCancelled(jobId: number): Promise<PrintJobDto> {
+    const path = `${ServerApi.printJobsRoute}/${jobId}/set-cancelled`
+    return await this.post<PrintJobDto>(path);
+  }
+
+  static async setJobUnknown(jobId: number): Promise<PrintJobDto> {
+    const path = `${ServerApi.printJobsRoute}/${jobId}/set-unknown`
+    return await this.post<PrintJobDto>(path);
+  }
+
+  static async deleteJob(jobId: number, deleteFile: boolean = false): Promise<any> {
+    const path = `${ServerApi.printJobsRoute}/${jobId}${deleteFile ? '?deleteFile=true' : ''}`
     return await this.delete(path);
   }
 

@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar :icon="page.icon" :title="page.title" />
     <v-card-text>
       <SettingSection
         v-if="settingsStore.settings?.timeout"

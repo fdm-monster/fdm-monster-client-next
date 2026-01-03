@@ -64,9 +64,6 @@ export const useSettingsStore = defineStore('Settings', {
     preferCancelOverQuickStop(): boolean {
       return this.settings?.frontend?.tilePreferCancelOverQuickStop || false
     },
-    thumbnailsEnabled(): boolean {
-      return this.settings?.server.experimentalThumbnailSupport || false
-    },
     largeTiles(): boolean {
       return this.settings?.frontend?.largeTiles || false
     },

@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar :icon="page.icon" :title="page.title" />
     <v-card-text>
       <SettingSection
         title="Batch disabling"

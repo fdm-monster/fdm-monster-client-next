@@ -1,20 +1,5 @@
 <template>
   <div class="camera-grid-view">
-    <!-- Header Toolbar -->
-    <v-toolbar
-      color="surface"
-      elevation="1"
-      class="px-4"
-    >
-      <v-icon
-        size="32"
-        class="mr-3"
-      >videocam</v-icon>
-      <v-toolbar-title class="text-h5 font-weight-bold">
-        Camera Overview
-      </v-toolbar-title>
-    </v-toolbar>
-
     <!-- Search and Action Bar -->
     <div class="pa-4">
       <v-row align="center">

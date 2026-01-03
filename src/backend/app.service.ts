@@ -7,30 +7,30 @@ import { GithubRateLimit } from "@/models/server/github-rate-limit.model";
 
 export class AppService extends BaseService {
   static async updateClientDistGithub(version?: string, allowDowngrade?: boolean) {
-    return await this.post("/api/server/update-client-bundle-github", {
+    return await this.post("/api/v2/server/update-client-bundle-github", {
       downloadRelease: version,
       allowDowngrade,
     });
   }
 
   static async getGithubRateLimit() {
-    return await this.get<GithubRateLimit>("/api/server/github-rate-limit");
+    return await this.get<GithubRateLimit>("/api/v2/server/github-rate-limit");
   }
 
   static async getClientReleases() {
-    return await this.get<IClientReleases>("/api/server/client-releases");
+    return await this.get<IClientReleases>("/api/v2/server/client-releases");
   }
 
   static async getVersion() {
-    return await this.get<VersionModel>("/api/version");
+    return await this.get<VersionModel>("/api/v2/version");
   }
 
   static async getFeatures() {
-    return await this.get<FeaturesModel>("/api/features");
+    return await this.get<FeaturesModel>("/api/v2/features");
   }
 
   static async test() {
     const httpClient = await getHttpClient(false, false);
-    return await httpClient.get<{ message: string }>("/api/test");
+    return await httpClient.get<{ message: string }>("/api/v2/test");
   }
 }

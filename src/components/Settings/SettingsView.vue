@@ -2,13 +2,6 @@
   <div>
     <v-row no-gutters>
       <v-navigation-drawer :permanent="true">
-        <v-list-item>
-          <v-list-item-title class="text-h6"> Settings </v-list-item-title>
-          <v-list-item-subtitle> Adjust your FDM Monster </v-list-item-subtitle>
-        </v-list-item>
-
-        <v-divider />
-
         <v-list
           density="compact"
           nav

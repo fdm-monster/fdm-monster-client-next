@@ -400,7 +400,7 @@ const avgPrintTime = computed(() => formatPrintTime(jobMetrics.value.averagePrin
 
 // Navigation methods
 const goToPrinterGrid = () => {
-  router.push('/printers-grid')
+  router.push('/printer-grid')
 }
 
 const goToPrinterList = () => {
@@ -429,7 +429,7 @@ const openOctoFarmImportDialog = () => {
 
 // Printer interaction methods
 const openPrinter = () => {
-  router.push('/printers-grid')
+  router.push('/printer-grid')
 }
 
 // Printer status helpers

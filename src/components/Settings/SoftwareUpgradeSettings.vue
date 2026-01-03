@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar :icon="page.icon" :title="page.title" />
     <v-card-text>
       <SettingSection title="Current versions in use" :usecols="false">
         <div>Your server's version is: {{ serverVersion }}</div>

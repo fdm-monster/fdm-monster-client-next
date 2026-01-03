@@ -6,6 +6,9 @@ Features
 - Tag management dialog with color picker
 - Clickable floor/tag/camera chips to open edit dialogs
 - Action menus on printer list for floors, tags, and cameras
+- Set complete/failed/cancelled/unknown on job page
+- Job thumbnails viewer dialog
+- Redesign navigation bars
 
 Fixes
 

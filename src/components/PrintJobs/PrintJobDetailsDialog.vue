@@ -489,20 +489,6 @@
         </v-btn>
 
         <v-btn
-          v-if="canMarkAsCompleted"
-          color="success"
-          variant="elevated"
-          prepend-icon="check_circle"
-          :loading="completing"
-          @click="handleMarkAsCompletedClick"
-        >
-          Mark as Completed
-          <v-tooltip activator="parent" location="top">
-            Mark this job as completed and set the end time
-          </v-tooltip>
-        </v-btn>
-
-        <v-btn
           v-if="canDelete"
           color="error"
           variant="outlined"
@@ -520,49 +506,6 @@
         <v-btn color="primary" variant="elevated" @click="close">Close</v-btn>
       </v-card-actions>
     </v-card>
-
-    <!-- Mark as Completed Confirmation Dialog -->
-    <v-dialog v-model="showCompleteConfirm" max-width="500" persistent>
-      <v-card>
-        <v-card-title class="d-flex align-center bg-success text-on-success">
-          <v-icon class="mr-3">check_circle</v-icon>
-          <span>Mark Job as Completed?</span>
-        </v-card-title>
-
-        <v-card-text class="pt-4">
-          <p class="text-body-1 mb-2">
-            Are you sure you want to mark this print job as completed?
-          </p>
-          <v-alert type="info" density="compact" class="mb-2">
-            <strong>Job:</strong> {{ job?.fileName }}
-          </v-alert>
-          <p class="text-body-2 text-medium-emphasis">
-            This will set the job status to COMPLETED and update the end time to now.
-          </p>
-        </v-card-text>
-
-        <v-divider />
-
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            variant="text"
-            @click="handleMarkAsCompletedCancel"
-            :disabled="completing"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="success"
-            variant="elevated"
-            @click="handleMarkAsCompletedConfirm"
-            :loading="completing"
-          >
-            Mark as Completed
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
 
     <!-- Delete Confirmation Dialog -->
     <v-dialog v-model="showDeleteConfirm" max-width="500" persistent>
@@ -628,9 +571,7 @@ const loading = ref(false)
 const activeTab = ref('overview')
 const reAnalyzing = ref(false)
 const deleting = ref(false)
-const completing = ref(false)
 const showDeleteConfirm = ref(false)
-const showCompleteConfirm = ref(false)
 
 // Load job when dialog opens with a jobId in context
 watch(() => context.value?.jobId, async (jobId) => {
@@ -679,16 +620,6 @@ const canReAnalyze = computed(() => {
   return status !== 'PRINTING' && status !== 'STARTING'
 })
 
-const canMarkAsCompleted = computed(() => {
-  // Allow marking as completed for jobs that are printing, paused, failed, cancelled, or unknown
-  const status = job.value?.status
-  return status === 'PRINTING' ||
-         status === 'PAUSED' ||
-         status === 'FAILED' ||
-         status === 'CANCELLED' ||
-         status === 'UNKNOWN'
-})
-
 const canDelete = computed(() => {
   // Allow deletion for jobs that are not currently printing
   const status = job.value?.status
@@ -720,39 +651,6 @@ const handleReAnalyze = async () => {
   } finally {
     reAnalyzing.value = false
   }
-}
-
-const handleMarkAsCompletedClick = () => {
-  showCompleteConfirm.value = true
-}
-
-const handleMarkAsCompletedConfirm = async () => {
-  if (!job.value?.id) return
-
-  completing.value = true
-  try {
-    const updatedJob = await PrintJobsService.setJobCompleted(job.value.id)
-    job.value = updatedJob
-
-    info(
-      'Job Marked as Completed',
-      `Job "${job.value.fileName}" has been marked as completed.`,
-      5000
-    )
-  } catch (err: any) {
-    console.error('Failed to mark job as completed:', err)
-    error(
-      'Mark as Completed Failed',
-      err?.response?.data?.message || err?.message || 'Failed to mark job as completed. Please try again.'
-    )
-  } finally {
-    completing.value = false
-  }
-  showCompleteConfirm.value = false
-}
-
-const handleMarkAsCompletedCancel = () => {
-  showCompleteConfirm.value = false
 }
 
 const handleDeleteClick = () => {

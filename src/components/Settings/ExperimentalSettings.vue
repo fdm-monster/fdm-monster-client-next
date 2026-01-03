@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar :icon="page.icon" :title="page.title" />
     <v-card-text>
       <SettingSection
         title="Experimental Server Features"
@@ -72,34 +71,6 @@
           </v-icon>
         </div>
       </SettingSection>
-
-      <v-divider />
-
-      <SettingSection
-        title="Experimental Thumbnail Support"
-        tooltip="Thumbnails are extracted from gcode. Please enable PNG thumbnails in your slicer."
-        :usecols="false"
-      >
-        <div class="d-flex align-center">
-          <v-checkbox
-            v-model="experimentalThumbnailSupport"
-            :disabled="isThumbnailSupportLoading"
-            @change="updateThumbnailSupport"
-            hide-details
-            label="Enable Experimental Thumbnail Support"
-          />
-          <v-progress-circular
-            v-if="isThumbnailSupportLoading"
-            indeterminate
-            size="30"
-            width="4"
-            class="ml-2"
-          />
-          <v-icon v-if="showThumbnailSuccess" color="success" class="ml-2">
-            check_circle
-          </v-icon>
-        </div>
-      </SettingSection>
     </v-card-text>
   </v-card>
 </template>
@@ -107,7 +78,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { SettingsService } from '@/backend'
-import SettingsToolbar from '@/components/Settings/Shared/SettingsToolbar.vue'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
 import { settingsPage } from '@/router/setting.constants'
 
@@ -115,22 +85,18 @@ const page = settingsPage['experimental']
 const experimentalMoonrakerSupport = ref(false)
 const experimentalPrusaLinkSupport = ref(false)
 const experimentalBambuSupport = ref(false)
-const experimentalThumbnailSupport = ref(false)
 const isMoonrakerSupportLoading = ref(false)
 const isPrusaLinkSupportLoading = ref(false)
 const isBambuSupportLoading = ref(false)
-const isThumbnailSupportLoading = ref(false)
 const showMoonrakerSuccess = ref(false)
 const showPrusaLinkSuccess = ref(false)
 const showBambuSuccess = ref(false)
-const showThumbnailSuccess = ref(false)
 
 async function loadSettings() {
   const settings = await SettingsService.getSettings()
   experimentalMoonrakerSupport.value = settings.server.experimentalMoonrakerSupport
   experimentalPrusaLinkSupport.value = settings.server.experimentalPrusaLinkSupport
   experimentalBambuSupport.value = settings.server.experimentalBambuSupport
-  experimentalThumbnailSupport.value = settings.server.experimentalThumbnailSupport
 }
 
 onMounted(async () => {
@@ -200,28 +166,6 @@ const updateBambuSupport = async () => {
     console.error('Failed to update Bambu support:', error)
     experimentalBambuSupport.value = !experimentalBambuSupport.value
     isBambuSupportLoading.value = false
-  }
-}
-
-const updateThumbnailSupport = async () => {
-  isThumbnailSupportLoading.value = true
-  showThumbnailSuccess.value = false
-
-  try {
-    await SettingsService.updateExperimentalThumbnailSupport(experimentalThumbnailSupport.value)
-    await loadSettings()
-    setTimeout(() => {
-      isThumbnailSupportLoading.value = false
-      showThumbnailSuccess.value = true
-    }, 250)
-
-    setTimeout(() => {
-      showThumbnailSuccess.value = false
-    }, 3000)
-  } catch (error) {
-    console.error('Failed to update Thumbnail support:', error)
-    experimentalThumbnailSupport.value = !experimentalThumbnailSupport.value
-    isThumbnailSupportLoading.value = false
   }
 }
 </script>

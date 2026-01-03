@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar :icon="page.icon" :title="page.title" />
     <v-card-text>
       <v-alert v-if="!loginEnabled" color="primary" variant="tonal" class="mb-4">
         Login is currently disabled. To adjust your username and password,

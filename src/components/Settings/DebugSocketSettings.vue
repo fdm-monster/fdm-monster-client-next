@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar :icon="page.icon" :title="page.title" />
     <v-card-text class="pa-2">
       <!-- Controls -->
       <div class="d-flex align-center flex-wrap gap-2 mb-2">

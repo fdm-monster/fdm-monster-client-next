@@ -1,7 +1,5 @@
 <template>
   <v-card>
-    <SettingsToolbar icon="house_siding" title="Floors" />
-
     <v-card-text>
       <SettingSection title="Manage Floors" :usecols="false">
         <div class="mb-4 d-flex align-center ga-3">
@@ -176,7 +174,7 @@ function getPrinterName(printerId: number) {
 
 function goToGridForFloor(floorId: number) {
   router.push({
-    path: '/printers-grid',
+    path: '/printer-grid',
     query: { floor: floorId.toString() }
   })
 }

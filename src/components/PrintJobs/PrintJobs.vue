@@ -1,39 +1,36 @@
 <template>
   <v-container fluid class="print-jobs-container">
-    <!-- Page Header -->
-    <v-row class="mb-4">
-      <v-col cols="12">
-        <div class="d-flex align-center justify-space-between">
-          <div>
-            <h1 class="text-h5 font-weight-bold mb-1">Print Jobs</h1>
-            <p class="text-body-2 text-medium-emphasis mb-0">
-              Track and monitor all your 3D printing jobs
-            </p>
-          </div>
-          <v-chip
-            v-if="totalJobs > 0"
-            color="primary"
-            variant="elevated"
-            size="default"
-            class="px-3"
-          >
-            <v-icon start size="small">work</v-icon>
-            {{ totalJobs }} jobs
-          </v-chip>
-        </div>
-      </v-col>
-    </v-row>
-
     <!-- Search and Filters Section -->
     <v-card class="mb-4" elevation="1">
       <v-card-title class="d-flex align-center py-2">
         <v-icon class="mr-2" color="primary" size="small">search</v-icon>
         <span class="text-subtitle-1">Search & Filters</span>
-        <v-spacer />
+        <v-spacer/>
+
+        <!-- Mode Toggle -->
+        <v-btn-toggle
+          v-model="activeTab"
+          color="primary"
+          variant="outlined"
+          mandatory
+          divided
+          class="mr-3"
+        >
+          <v-btn value="jobs" size="small">
+            <v-icon start size="small">history</v-icon>
+            Jobs
+          </v-btn>
+          <v-btn value="queue" size="small">
+            <v-icon start size="small">queue</v-icon>
+            Queue
+            <v-badge v-if="queueCount > 0" :content="queueCount" color="primary" inline class="ml-1"/>
+          </v-btn>
+        </v-btn-toggle>
+
         <v-btn
           color="primary"
-          @click="loadPrintJobs"
-          :loading="loading"
+          @click="activeTab === 'jobs' ? loadPrintJobs() : loadQueue()"
+          :loading="activeTab === 'jobs' ? loading : loadingQueue"
           variant="elevated"
           size="small"
         >
@@ -70,7 +67,7 @@
         </v-row>
 
         <v-row dense class="mt-2">
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <v-text-field
               v-model="searchParams.startDate"
               label="Start Date"
@@ -82,7 +79,7 @@
               @input="debouncedSearch"
             />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <v-text-field
               v-model="searchParams.endDate"
               label="End Date"
@@ -94,16 +91,13 @@
               @input="debouncedSearch"
             />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <PrinterTypeFilter
               v-model="selectedPrinterTypes"
               label="Filter by Type"
             />
           </v-col>
-        </v-row>
-
-        <v-row v-if="tags.length" dense class="mt-2">
-          <v-col cols="12">
+          <v-col v-if="tags.length" cols="12" md="3">
             <PrinterTagFilter
               v-model="selectedTags"
               :tags="tags"
@@ -111,44 +105,149 @@
             />
           </v-col>
         </v-row>
+
+        <v-row dense class="mt-2">
+          <v-col cols="12" md="3">
+            <v-select
+              v-model="selectedJobStatuses"
+              :items="availableJobStatuses"
+              label="Filter by Job Status"
+              prepend-inner-icon="info"
+              variant="outlined"
+              density="compact"
+              multiple
+              chips
+              clearable
+              hide-details
+            >
+              <template #chip="{ item, props }">
+                <v-chip v-bind="props" :color="getStatusColor(item.value)" size="small" closable>
+                  {{ item.value }}
+                </v-chip>
+              </template>
+            </v-select>
+          </v-col>
+
+          <v-col cols="12" md="3">
+            <v-select
+              v-model="selectedPrinterStates"
+              :items="['Disabled', 'Maintenance', 'Offline', 'Error', 'Paused', 'Operational', 'Printing']"
+              label="Filter by Printer State"
+              prepend-inner-icon="settings"
+              variant="outlined"
+              density="compact"
+              multiple
+              chips
+              clearable
+              hide-details
+            >
+              <template #chip="{ item, props }">
+                <v-chip v-bind="props" size="small" closable>
+                  {{ item.value }}
+                </v-chip>
+              </template>
+            </v-select>
+          </v-col>
+
+          <v-col cols="12" md="3">
+            <v-select
+              v-model="selectedMaterialTypes"
+              :items="availableMaterialTypes"
+              label="Filter by Material Type"
+              prepend-inner-icon="fiber_manual_record"
+              variant="outlined"
+              density="compact"
+              multiple
+              chips
+              clearable
+              hide-details
+            >
+              <template #chip="{ item, props }">
+                <v-chip v-bind="props" size="small" closable color="green">
+                  {{ item.value }}
+                </v-chip>
+              </template>
+            </v-select>
+          </v-col>
+
+          <v-col cols="12" md="3">
+            <v-select
+              v-model="selectedPrinterModels"
+              :items="availablePrinterModels"
+              label="Filter by Printer Model"
+              prepend-inner-icon="print"
+              variant="outlined"
+              density="compact"
+              multiple
+              chips
+              clearable
+              hide-details
+            >
+              <template #chip="{ item, props }">
+                <v-chip v-bind="props" size="small" closable color="primary">
+                  {{ item.value }}
+                </v-chip>
+              </template>
+            </v-select>
+          </v-col>
+        </v-row>
       </v-card-text>
     </v-card>
 
-    <!-- Results Section -->
+    <!-- Results Section - Unified Table -->
     <v-card elevation="1">
       <v-card-title class="d-flex align-center py-2">
-        <v-icon class="mr-2" color="primary" size="small">list_alt</v-icon>
-        <span class="text-subtitle-1">Results</span>
-        <v-spacer />
-        <div v-if="!loading && totalJobs > 0" class="text-caption text-medium-emphasis">
-          {{ ((currentPage - 1) * itemsPerPage) + 1 }}-{{ Math.min(currentPage * itemsPerPage, totalJobs) }} of {{ totalJobs }}
+        <v-icon class="mr-2" color="primary" size="small">{{ activeTab === 'jobs' ? 'list_alt' : 'queue' }}</v-icon>
+        <span class="text-subtitle-1">{{ activeTab === 'jobs' ? 'Results' : 'Queue' }}</span>
+        <v-spacer/>
+
+        <div v-if="activeTab === 'jobs' && !loading && totalJobs > 0" class="text-caption text-medium-emphasis">
+          {{ ((currentPage - 1) * itemsPerPage) + 1 }}-{{ Math.min(currentPage * itemsPerPage, totalJobs) }} of
+          {{ totalJobs }}
+        </div>
+        <div v-if="activeTab === 'queue' && !loadingQueue && queueCount > 0" class="text-caption text-medium-emphasis">
+          {{ ((queueCurrentPage - 1) * queuePageSize) + 1 }}-{{
+            Math.min(queueCurrentPage * queuePageSize, queueCount)
+          }} of {{ queueCount }}
         </div>
       </v-card-title>
 
       <v-card-text class="pa-0">
         <v-data-table-server
-          v-model:items-per-page="itemsPerPage"
-          v-model:page="currentPage"
-          :headers="headers"
-          :items="filteredPrintJobs"
-          :items-length="totalJobs"
-          :loading="loading"
-          :search="searchText"
+          v-model:items-per-page="currentItemsPerPage"
+          v-model:page="currentPageNumber"
+          :headers="computedHeaders"
+          :items="activeTab === 'jobs' ? filteredPrintJobs : queueItems"
+          :items-length="activeTab === 'jobs' ? totalJobs : queueCount"
+          :loading="activeTab === 'jobs' ? loading : loadingQueue"
+          :search="activeTab === 'jobs' ? searchText : ''"
           class="print-jobs-table"
-          loading-text="Loading print jobs..."
-          no-data-text="No print jobs found"
-          @update:options="loadPrintJobs"
+          :loading-text="activeTab === 'jobs' ? 'Loading print jobs...' : 'Loading queue...'"
+          :no-data-text="activeTab === 'jobs' ? 'No print jobs found' : 'No jobs in queue'"
+          @update:options="handleUpdateOptions"
         >
-          <!-- Thumbnail Column -->
-          <template #item.thumbnail="{ item }">
-            <JobThumbnailCell :job-id="item.id" />
+          <!-- Thumbnail Column (Jobs only) -->
+          <template v-if="activeTab === 'jobs'" #item.thumbnail="{ item }">
+            <JobThumbnailCell :job-id="item.id"/>
+          </template>
+
+          <!-- Queue Position Column (Queue only) -->
+          <template v-if="activeTab === 'queue'" #item.queuePosition="{ item }">
+            <v-chip
+              size="small"
+              color="info"
+              variant="tonal"
+            >
+              <v-icon start size="small">format_list_numbered</v-icon>
+              Position {{ item.queuePosition }}
+            </v-chip>
           </template>
 
           <!-- Status Column -->
           <template #item.status="{ item }">
             <v-chip
-              :color="getStatusColor(item.status)"
-              :icon="getStatusIcon(item.status)"
+              :color="activeTab === 'jobs' ? getStatusColor(item.status) : getQueueStatusColor(item.status)"
+              :icon="activeTab === 'jobs' ? getStatusIcon(item.status) : undefined"
               size="small"
               variant="elevated"
             >
@@ -156,7 +255,7 @@
             </v-chip>
           </template>
 
-          <!-- Created Date Column -->
+          <!-- Created/Queued Date Column -->
           <template #item.createdAt="{ item }">
             <div class="text-body-2">
               <div>{{ formatDate(item.createdAt) }}</div>
@@ -166,8 +265,8 @@
             </div>
           </template>
 
-          <!-- Ended Date Column -->
-          <template #item.endedAt="{ item }">
+          <!-- Ended Date Column (Jobs only) -->
+          <template v-if="activeTab === 'jobs'" #item.endedAt="{ item }">
             <div v-if="item.endedAt" class="text-body-2">
               <div>{{ formatDate(item.endedAt) }}</div>
               <div class="text-caption text-medium-emphasis">
@@ -177,8 +276,8 @@
             <span v-else class="text-medium-emphasis">-</span>
           </template>
 
-          <!-- Progress Column -->
-          <template #item.progress="{ item }">
+          <!-- Progress Column (Jobs only) -->
+          <template v-if="activeTab === 'jobs'" #item.progress="{ item }">
             <div v-if="item.progress !== null" class="progress-container">
               <v-progress-linear
                 :model-value="item.progress"
@@ -197,8 +296,8 @@
             <span v-else class="text-medium-emphasis">-</span>
           </template>
 
-          <!-- Duration Column -->
-          <template #item.duration="{ item }">
+          <!-- Duration Column (Jobs only) -->
+          <template v-if="activeTab === 'jobs'" #item.duration="{ item }">
             <div v-if="item.statistics?.actualPrintTimeSeconds" class="text-body-2">
               <v-chip
                 :color="getDurationColor(item.statistics.actualPrintTimeSeconds)"
@@ -220,10 +319,13 @@
               </v-avatar>
               <div>
                 <div class="text-body-2 font-weight-medium">
-                  {{ item.printerName || `Printer ${item.printerId}` }}
+                  {{ item.printerName || `Printer ${ item.printerId }` }}
                 </div>
-                <div class="text-caption text-medium-emphasis">
+                <div class="text-caption text-medium-emphasis" v-if="activeTab === 'jobs'">
                   {{ getFloorName(item.printerId) }}
+                </div>
+                <div class="text-caption text-medium-emphasis" v-else>
+                  ID: {{ item.printerId }}
                 </div>
               </div>
             </div>
@@ -235,15 +337,20 @@
               <v-icon class="mr-2" size="small" color="primary">description</v-icon>
               <div>
                 <div class="text-body-2 font-weight-medium">{{ item.fileName }}</div>
-                <div v-if="item.metadata?.gcodePrintTimeSeconds" class="text-caption text-medium-emphasis">
+                <div v-if="activeTab === 'jobs' && item.metadata?.gcodePrintTimeSeconds"
+                     class="text-caption text-medium-emphasis">
                   Est. {{ formatDuration(item.metadata.gcodePrintTimeSeconds) }}
+                </div>
+                <div v-if="activeTab === 'queue' && item.estimatedTimeSeconds"
+                     class="text-caption text-medium-emphasis">
+                  Est. {{ formatDuration(item.estimatedTimeSeconds) }}
                 </div>
               </div>
             </div>
           </template>
 
-          <!-- Reason Column -->
-          <template #item.reason="{ item }">
+          <!-- Reason Column (Jobs only) -->
+          <template v-if="activeTab === 'jobs'" #item.reason="{ item }">
             <v-tooltip location="top" v-if="item.statusReason">
               <template #activator="{ props }">
                 <v-icon v-bind="props" color="warning" size="small">info</v-icon>
@@ -255,7 +362,8 @@
 
           <!-- Filament Column -->
           <template #item.filament="{ item }">
-            <div v-if="item.metadata?.filamentUsedGrams || item.metadata?.filamentUsedMm" class="filament-info">
+            <div v-if="activeTab === 'jobs' && (item.metadata?.filamentUsedGrams || item.metadata?.filamentUsedMm)"
+                 class="filament-info">
               <v-chip
                 color="green"
                 size="small"
@@ -269,12 +377,50 @@
                 {{ Math.round(item.metadata.filamentUsedMm / 1000) }}m
               </div>
             </div>
+            <div v-else-if="activeTab === 'queue' && item.filamentGrams" class="text-body-2">
+              <v-chip
+                color="purple"
+                size="small"
+                variant="tonal"
+              >
+                <v-icon start size="small">science</v-icon>
+                {{ item.filamentGrams.toFixed(1) }}g
+              </v-chip>
+            </div>
             <span v-else class="text-medium-emphasis">-</span>
           </template>
 
           <!-- Actions Column -->
           <template #item.actions="{ item }">
-            <v-menu>
+            <!-- Queue actions -->
+            <div v-if="activeTab === 'queue'">
+              <v-btn
+                icon="send"
+                size="small"
+                variant="text"
+                color="success"
+                @click="submitToPrinter(item)"
+              >
+                <v-icon>send</v-icon>
+                <v-tooltip activator="parent" location="top">
+                  Submit to printer
+                </v-tooltip>
+              </v-btn>
+              <v-btn
+                icon="delete"
+                size="small"
+                variant="text"
+                color="error"
+                @click="removeFromQueue(item.printerId, item.jobId)"
+              >
+                <v-icon>delete</v-icon>
+                <v-tooltip activator="parent" location="top">
+                  Remove from queue
+                </v-tooltip>
+              </v-btn>
+            </div>
+            <!-- Jobs actions -->
+            <v-menu v-else>
               <template #activator="{ props }">
                 <v-btn
                   icon
@@ -303,7 +449,17 @@
                   <v-list-item-title>Add to Queue</v-list-item-title>
                 </v-list-item>
 
-                <v-divider />
+                <v-list-item
+                  @click="handleSubmitToPrinter(item)"
+                  :disabled="!canSubmitToPrinter(item)"
+                >
+                  <template #prepend>
+                    <v-icon>send</v-icon>
+                  </template>
+                  <v-list-item-title>Submit to Printer</v-list-item-title>
+                </v-list-item>
+
+                <v-divider/>
 
                 <v-list-item
                   @click="handleReAnalyzeJob(item)"
@@ -325,7 +481,37 @@
                   <v-list-item-title>Mark as Completed</v-list-item-title>
                 </v-list-item>
 
-                <v-divider />
+                <v-list-item
+                  @click="handleMarkAsFailed(item)"
+                  :disabled="!canMarkAsFailed(item)"
+                >
+                  <template #prepend>
+                    <v-icon>error</v-icon>
+                  </template>
+                  <v-list-item-title>Mark as Failed</v-list-item-title>
+                </v-list-item>
+
+                <v-list-item
+                  @click="handleMarkAsCancelled(item)"
+                  :disabled="!canMarkAsCancelled(item)"
+                >
+                  <template #prepend>
+                    <v-icon>cancel</v-icon>
+                  </template>
+                  <v-list-item-title>Mark as Cancelled</v-list-item-title>
+                </v-list-item>
+
+                <v-list-item
+                  @click="handleMarkAsUnknown(item)"
+                  :disabled="!canMarkAsUnknown(item)"
+                >
+                  <template #prepend>
+                    <v-icon>help</v-icon>
+                  </template>
+                  <v-list-item-title>Mark as Unknown</v-list-item-title>
+                </v-list-item>
+
+                <v-divider/>
 
                 <v-list-item
                   @click="handleDeleteJob(item)"
@@ -343,14 +529,14 @@
 
           <!-- Loading State -->
           <template #loading>
-            <v-skeleton-loader type="table-row@5" />
+            <v-skeleton-loader type="table-row@5"/>
           </template>
         </v-data-table-server>
       </v-card-text>
     </v-card>
 
     <!-- Empty State -->
-    <v-card v-if="!loading && totalJobs === 0" class="mt-4" elevation="1">
+    <v-card v-if="activeTab === 'jobs' && !loading && totalJobs === 0" class="mt-4" elevation="1">
       <v-card-text class="text-center py-8">
         <v-icon size="48" color="grey-lighten-1" class="mb-3">work_off</v-icon>
         <h3 class="text-subtitle-1 mb-2">No Print Jobs Found</h3>
@@ -384,10 +570,10 @@
           </p>
         </v-card-text>
 
-        <v-divider />
+        <v-divider/>
 
         <v-card-actions>
-          <v-spacer />
+          <v-spacer/>
           <v-btn
             variant="text"
             @click="cancelMarkAsCompleted"
@@ -402,6 +588,135 @@
             :loading="completing"
           >
             Mark as Completed
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Mark as Failed Confirmation Dialog -->
+    <v-dialog v-model="showFailedConfirmDialog" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex align-center bg-error text-on-error">
+          <v-icon class="mr-3">error</v-icon>
+          <span>Mark Job as Failed?</span>
+        </v-card-title>
+
+        <v-card-text class="pt-4">
+          <p class="text-body-1 mb-2">
+            Are you sure you want to mark this print job as failed?
+          </p>
+          <v-alert type="info" density="compact" class="mb-2">
+            <strong>Job:</strong> {{ jobToFail?.fileName }}
+          </v-alert>
+          <p class="text-body-2 text-medium-emphasis">
+            This will set the job status to FAILED and update the end time to now.
+          </p>
+        </v-card-text>
+
+        <v-divider/>
+
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn
+            variant="text"
+            @click="cancelMarkAsFailed"
+            :disabled="failing"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="error"
+            variant="elevated"
+            @click="confirmMarkAsFailed"
+            :loading="failing"
+          >
+            Mark as Failed
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Mark as Cancelled Confirmation Dialog -->
+    <v-dialog v-model="showCancelledConfirmDialog" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex align-center bg-warning text-on-warning">
+          <v-icon class="mr-3">cancel</v-icon>
+          <span>Mark Job as Cancelled?</span>
+        </v-card-title>
+
+        <v-card-text class="pt-4">
+          <p class="text-body-1 mb-2">
+            Are you sure you want to mark this print job as cancelled?
+          </p>
+          <v-alert type="info" density="compact" class="mb-2">
+            <strong>Job:</strong> {{ jobToCancel?.fileName }}
+          </v-alert>
+          <p class="text-body-2 text-medium-emphasis">
+            This will set the job status to CANCELLED and update the end time to now.
+          </p>
+        </v-card-text>
+
+        <v-divider/>
+
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn
+            variant="text"
+            @click="cancelMarkAsCancelled"
+            :disabled="cancelling"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="warning"
+            variant="elevated"
+            @click="confirmMarkAsCancelled"
+            :loading="cancelling"
+          >
+            Mark as Cancelled
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Mark as Unknown Confirmation Dialog -->
+    <v-dialog v-model="showUnknownConfirmDialog" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex align-center bg-grey text-on-grey">
+          <v-icon class="mr-3">help</v-icon>
+          <span>Mark Job as Unknown?</span>
+        </v-card-title>
+
+        <v-card-text class="pt-4">
+          <p class="text-body-1 mb-2">
+            Are you sure you want to mark this print job status as unknown?
+          </p>
+          <v-alert type="info" density="compact" class="mb-2">
+            <strong>Job:</strong> {{ jobToSetUnknown?.fileName }}
+          </v-alert>
+          <p class="text-body-2 text-medium-emphasis">
+            This will set the job status to UNKNOWN.
+          </p>
+        </v-card-text>
+
+        <v-divider/>
+
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn
+            variant="text"
+            @click="cancelMarkAsUnknown"
+            :disabled="settingUnknown"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="grey"
+            variant="elevated"
+            @click="confirmMarkAsUnknown"
+            :loading="settingUnknown"
+          >
+            Mark as Unknown
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -446,10 +761,10 @@
           </v-select>
         </v-card-text>
 
-        <v-divider />
+        <v-divider/>
 
         <v-card-actions>
-          <v-spacer />
+          <v-spacer/>
           <v-btn
             variant="text"
             @click="cancelAddToQueue"
@@ -485,15 +800,35 @@
           <v-alert type="info" density="compact" class="mb-2">
             <strong>Job:</strong> {{ jobToDelete?.fileName }}
           </v-alert>
+
+          <v-checkbox
+            v-if="jobToDelete?.fileStorageId"
+            v-model="deleteFileWithJob"
+            label="Also delete the file from storage"
+            color="error"
+            density="compact"
+            hide-details
+            class="mb-2"
+          >
+            <template #label>
+              <div class="text-body-2">
+                Also delete the file from storage
+                <div class="text-caption text-medium-emphasis">
+                  (File will only be deleted if not used by other jobs)
+                </div>
+              </div>
+            </template>
+          </v-checkbox>
+
           <p class="text-body-2 text-medium-emphasis">
             This action cannot be undone. All job data and metadata will be permanently removed.
           </p>
         </v-card-text>
 
-        <v-divider />
+        <v-divider/>
 
         <v-card-actions>
-          <v-spacer />
+          <v-spacer/>
           <v-btn
             variant="text"
             @click="cancelDelete"
@@ -512,17 +847,72 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!-- Submit to Printer Dialog -->
+    <v-dialog v-model="showSubmitToPrinterDialog" max-width="500">
+      <v-card>
+        <v-card-title class="d-flex align-center bg-success text-on-success">
+          <v-icon class="mr-3">print</v-icon>
+          <span>Submit Job to Printer</span>
+        </v-card-title>
+
+        <v-card-text class="pt-4">
+          <p class="text-body-1 mb-2">
+            Select the printer you want to submit this job to:
+          </p>
+          <v-alert type="info" density="compact" class="mb-2">
+            <strong>Job:</strong> {{ jobToSubmit?.fileName }}
+          </v-alert>
+
+          <!-- Printer Selection -->
+          <v-select
+            v-model="selectedPrinterForSubmit"
+            :items="availablePrinters"
+            item-title="name"
+            item-value="id"
+            label="Select Printer"
+            prepend-inner-icon="print"
+            variant="outlined"
+            density="comfortable"
+          />
+        </v-card-text>
+
+        <v-divider/>
+
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn
+            variant="text"
+            @click="cancelSubmitToPrinter"
+            :disabled="submitting"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="success"
+            variant="elevated"
+            @click="confirmSubmitToPrinter"
+            :loading="submitting"
+            :disabled="!selectedPrinterForSubmit"
+          >
+            Submit to Printer
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import { PrintJobsService, type PrintJobDto, type PrintJobSearchPagedParams } from '@/backend/print-jobs.service'
 import { PrintQueueService } from '@/backend/print-queue.service'
 import { useFloorStore } from '@/store/floor.store'
 import { useDebounceFn } from '@vueuse/core'
 import { usePrinterStore } from '@/store/printer.store'
+import { usePrinterStateStore } from '@/store/printer-state.store'
 import { usePrinterFilters } from '@/shared/printer-filter.composable'
+import { interpretStates } from '@/shared/printer-state.constants'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 import JobThumbnailCell from '@/components/PrintJobs/JobThumbnailCell.vue'
@@ -530,17 +920,45 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 
+// Tab state
+const activeTab = ref('jobs')
+
+// Watch for tab changes to load queue data
+watch(activeTab, (newTab) => {
+  if (newTab === 'queue') {
+    loadQueue()
+  }
+})
+
+// Jobs tab state
 const printJobs = ref<PrintJobDto[]>([])
 const loading = ref(false)
 const currentPage = ref(1)
 const itemsPerPage = ref(25)
 const totalJobs = ref(0)
 
+// Queue tab state
+const queueItems = ref<any[]>([])
+const loadingQueue = ref(false)
+const queueCurrentPage = ref(1)
+const queuePageSize = ref(50)
+const queueCount = ref(0)
+
+const queueHeaders = [
+  { title: 'Printer', key: 'printerName', sortable: false },
+  { title: 'File Name', key: 'fileName', sortable: false },
+  { title: 'Position', key: 'queuePosition', sortable: false },
+  { title: 'Status', key: 'status', sortable: false },
+  { title: 'Queued At', key: 'createdAt', sortable: false },
+  { title: 'Filament', key: 'filamentGrams', sortable: false },
+  { title: 'Actions', key: 'actions', sortable: false, align: 'end' as const }
+]
 
 // Snackbar for notifications
 const { info, error } = useSnackbar()
 
 const printerStore = usePrinterStore()
+const printerStateStore = usePrinterStateStore()
 const floorStore = useFloorStore()
 
 // Dialog composables
@@ -550,17 +968,39 @@ const jobDetailsDialog = useDialog(DialogName.PrintJobDetailsDialog)
 const showDeleteConfirmDialog = ref(false)
 const jobToDelete = ref<PrintJobDto | null>(null)
 const deleting = ref(false)
+const deleteFileWithJob = ref(false)
 
 // Mark as completed confirmation
 const showCompleteConfirmDialog = ref(false)
 const jobToComplete = ref<PrintJobDto | null>(null)
 const completing = ref(false)
 
+// Mark as failed confirmation
+const showFailedConfirmDialog = ref(false)
+const jobToFail = ref<PrintJobDto | null>(null)
+const failing = ref(false)
+
+// Mark as cancelled confirmation
+const showCancelledConfirmDialog = ref(false)
+const jobToCancel = ref<PrintJobDto | null>(null)
+const cancelling = ref(false)
+
+// Mark as unknown confirmation
+const showUnknownConfirmDialog = ref(false)
+const jobToSetUnknown = ref<PrintJobDto | null>(null)
+const settingUnknown = ref(false)
+
 // Add to queue confirmation
 const showAddToQueueDialog = ref(false)
 const jobToQueue = ref<PrintJobDto | null>(null)
 const selectedPrintersForQueue = ref<number[]>([])
 const addingToQueue = ref(false)
+
+// Submit to printer confirmation
+const showSubmitToPrinterDialog = ref(false)
+const jobToSubmit = ref<any | null>(null)
+const selectedPrinterForSubmit = ref<number | null>(null)
+const submitting = ref(false)
 
 const {
   selectedTags,
@@ -569,6 +1009,12 @@ const {
   tagsWithPrinters,
   loadTags
 } = usePrinterFilters()
+
+// Additional filter selections
+const selectedJobStatuses = ref<string[]>([])
+const selectedPrinterStates = ref<string[]>([])
+const selectedMaterialTypes = ref<string[]>([])
+const selectedPrinterModels = ref<string[]>([])
 
 // Calculate default date range: last week to today
 const today = new Date()
@@ -589,6 +1035,46 @@ const searchText = computed(() => {
     .filter(Boolean)
     .join(' ')
 })
+
+// Unique values for filters
+const availableJobStatuses = computed(() => {
+  const statuses = new Set<string>()
+  printJobs.value.forEach(job => {
+    if (job.status) statuses.add(job.status)
+  })
+  return Array.from(statuses).sort()
+})
+
+const availableMaterialTypes = computed(() => {
+  const materials = new Set<string>()
+  printJobs.value.forEach(job => {
+    if (job.metadata?.filamentType) materials.add(job.metadata.filamentType)
+  })
+  return Array.from(materials).sort()
+})
+
+const availablePrinterModels = computed(() => {
+  const models = new Set<string>()
+  printJobs.value.forEach(job => {
+    if (job.metadata?.printerModel) models.add(job.metadata.printerModel)
+  })
+  return Array.from(models).sort()
+})
+
+// Get printer state for a job
+const getPrinterState = (printerId: number | null): string => {
+  if (!printerId) return 'Unknown'
+  const printer = printerStore.printers.find(p => p.id === printerId)
+  if (!printer) return 'Unknown'
+
+  const socketState = printerStateStore.socketStatesById[printerId]
+  const printerState = printerStateStore.printerEventsById[printerId]
+
+  if (!socketState || !printerState) return 'Unknown'
+
+  const interpreted = interpretStates(printer, socketState, printerState)
+  return interpreted?.text || 'Unknown'
+}
 
 const filteredPrintJobs = computed(() => {
   let filtered = printJobs.value
@@ -613,22 +1099,96 @@ const filteredPrintJobs = computed(() => {
     })
   }
 
+  // Filter by job status
+  if (selectedJobStatuses.value.length > 0) {
+    filtered = filtered.filter(job => {
+      return selectedJobStatuses.value.includes(job.status)
+    })
+  }
+
+  // Filter by printer state
+  if (selectedPrinterStates.value.length > 0) {
+    filtered = filtered.filter(job => {
+      const state = getPrinterState(job.printerId)
+      return selectedPrinterStates.value.includes(state)
+    })
+  }
+
+  // Filter by material type
+  if (selectedMaterialTypes.value.length > 0) {
+    filtered = filtered.filter(job => {
+      return job.metadata?.filamentType && selectedMaterialTypes.value.includes(job.metadata.filamentType)
+    })
+  }
+
+  // Filter by printer model
+  if (selectedPrinterModels.value.length > 0) {
+    filtered = filtered.filter(job => {
+      return job.metadata?.printerModel && selectedPrinterModels.value.includes(job.metadata.printerModel)
+    })
+  }
+
   return filtered
 })
 
-const headers = [
-  { title: '', key: 'thumbnail', sortable: false, width: '80px' },
-  { title: 'Printer', key: 'printerName', sortable: false },
-  { title: 'File Name', key: 'fileName', sortable: false },
-  { title: 'Status', key: 'status', sortable: false },
-  { title: 'Progress', key: 'progress', sortable: false },
-  { title: 'Started', key: 'createdAt', sortable: false },
-  { title: 'Ended', key: 'endedAt', sortable: false },
-  { title: 'Duration', key: 'duration', sortable: false },
-  { title: 'Filament', key: 'filament', sortable: false },
-  { title: 'Reason', key: 'reason', sortable: false },
-  { title: 'Actions', key: 'actions', sortable: false, align: 'center' as const }
-]
+const computedHeaders = computed(() => {
+  if (activeTab.value === 'queue') {
+    return [
+      { title: 'Position', key: 'queuePosition', sortable: false },
+      { title: 'Printer', key: 'printerName', sortable: false },
+      { title: 'File Name', key: 'fileName', sortable: false },
+      { title: 'Status', key: 'status', sortable: false },
+      { title: 'Queued At', key: 'createdAt', sortable: false },
+      { title: 'Filament', key: 'filament', sortable: false },
+      { title: 'Actions', key: 'actions', sortable: false, align: 'center' as const }
+    ]
+  } else {
+    return [
+      { title: '', key: 'thumbnail', sortable: false, width: '80px' },
+      { title: 'Printer', key: 'printerName', sortable: false },
+      { title: 'File Name', key: 'fileName', sortable: false },
+      { title: 'Status', key: 'status', sortable: false },
+      { title: 'Progress', key: 'progress', sortable: false },
+      { title: 'Started', key: 'createdAt', sortable: false },
+      { title: 'Ended', key: 'endedAt', sortable: false },
+      { title: 'Duration', key: 'duration', sortable: false },
+      { title: 'Filament', key: 'filament', sortable: false },
+      { title: 'Reason', key: 'reason', sortable: false },
+      { title: 'Actions', key: 'actions', sortable: false, align: 'center' as const }
+    ]
+  }
+})
+
+// Computed properties for v-model bindings (can't use ternary in v-model)
+const currentItemsPerPage = computed({
+  get: () => activeTab.value === 'jobs' ? itemsPerPage.value : queuePageSize.value,
+  set: (val) => {
+    if (activeTab.value === 'jobs') {
+      itemsPerPage.value = val
+    } else {
+      queuePageSize.value = val
+    }
+  }
+})
+
+const currentPageNumber = computed({
+  get: () => activeTab.value === 'jobs' ? currentPage.value : queueCurrentPage.value,
+  set: (val) => {
+    if (activeTab.value === 'jobs') {
+      currentPage.value = val
+    } else {
+      queueCurrentPage.value = val
+    }
+  }
+})
+
+const handleUpdateOptions = () => {
+  if (activeTab.value === 'jobs') {
+    loadPrintJobs()
+  } else {
+    loadQueue()
+  }
+}
 
 const debouncedSearch = useDebounceFn(() => {
   currentPage.value = 1
@@ -679,6 +1239,44 @@ const loadPrintJobs = async () => {
   }
 }
 
+// Queue functions
+const loadQueue = async () => {
+  loadingQueue.value = true
+  try {
+    const response = await PrintQueueService.getGlobalQueue(queueCurrentPage.value, queuePageSize.value)
+    queueItems.value = response.items
+    queueCount.value = response.totalCount
+  } catch (error) {
+    console.error('Failed to load queue:', error)
+    queueItems.value = []
+    queueCount.value = 0
+  } finally {
+    loadingQueue.value = false
+  }
+}
+
+const removeFromQueue = async (printerId: number, jobId: number) => {
+  try {
+    await PrintQueueService.removeFromQueue(printerId, jobId)
+    info('Removed from Queue', 'Job removed from queue successfully')
+    await loadQueue()
+  } catch (err: any) {
+    console.error('Failed to remove from queue:', err)
+    error('Remove Failed', err?.response?.data?.message || 'Failed to remove job from queue')
+  }
+}
+
+const getQueueStatusColor = (status: string) => {
+  const colors: Record<string, string> = {
+    'QUEUED': 'info',
+    'PENDING': 'warning',
+    'PRINTING': 'success',
+    'COMPLETED': 'success',
+    'FAILED': 'error',
+    'CANCELLED': 'warning'
+  }
+  return colors[status] || 'default'
+}
 
 const getStatusColor = (status: string | null): string => {
   switch (status) {
@@ -762,16 +1360,16 @@ const formatRelativeTime = (dateString: Date): string => {
   const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
 
   if (diffInMinutes < 1) return 'Just now'
-  if (diffInMinutes < 60) return `${diffInMinutes}m ago`
+  if (diffInMinutes < 60) return `${ diffInMinutes }m ago`
 
   const diffInHours = Math.floor(diffInMinutes / 60)
-  if (diffInHours < 24) return `${diffInHours}h ago`
+  if (diffInHours < 24) return `${ diffInHours }h ago`
 
   const diffInDays = Math.floor(diffInHours / 24)
-  if (diffInDays < 7) return `${diffInDays}d ago`
+  if (diffInDays < 7) return `${ diffInDays }d ago`
 
   const diffInWeeks = Math.floor(diffInDays / 7)
-  return `${diffInWeeks}w ago`
+  return `${ diffInWeeks }w ago`
 }
 
 const formatDuration = (seconds: number | null): string => {
@@ -781,9 +1379,9 @@ const formatDuration = (seconds: number | null): string => {
   const minutes = Math.floor((seconds % 3600) / 60)
 
   if (hours > 0) {
-    return `${hours}h ${minutes}m`
+    return `${ hours }h ${ minutes }m`
   }
-  return `${minutes}m`
+  return `${ minutes }m`
 }
 
 const getFloorName = (printerId: number | null): string => {
@@ -801,6 +1399,12 @@ const clearFilters = () => {
     page: 1,
     pageSize: 25
   }
+  selectedTags.value = []
+  selectedPrinterTypes.value = []
+  selectedJobStatuses.value = []
+  selectedPrinterStates.value = []
+  selectedMaterialTypes.value = []
+  selectedPrinterModels.value = []
   currentPage.value = 1
   loadPrintJobs()
 }
@@ -811,7 +1415,7 @@ const viewJobDetails = (job: PrintJobDto) => {
 
 // Available printers for queue selection
 const availablePrinters = computed(() => {
-  return printerStore.printers.filter(p => !p.disabled)
+  return printerStore.printers.filter(p => p.enabled)
 })
 
 // Note: Job updates/deletes will be handled by the dialog itself
@@ -831,15 +1435,47 @@ const canReAnalyzeJob = (job: PrintJobDto): boolean => {
 const canMarkAsCompleted = (job: PrintJobDto): boolean => {
   // Allow marking as completed for jobs that are printing, paused, failed, cancelled, or unknown
   return job.status === 'PRINTING' ||
-         job.status === 'PAUSED' ||
-         job.status === 'FAILED' ||
-         job.status === 'CANCELLED' ||
-         job.status === 'UNKNOWN'
+    job.status === 'PAUSED' ||
+    job.status === 'FAILED' ||
+    job.status === 'CANCELLED' ||
+    job.status === 'UNKNOWN'
+}
+
+const canMarkAsFailed = (job: PrintJobDto): boolean => {
+  // Allow marking as failed for jobs that are printing, paused, or completed
+  return job.status === 'PRINTING' ||
+    job.status === 'PAUSED' ||
+    job.status === 'COMPLETED' ||
+    job.status === 'CANCELLED' ||
+    job.status === 'UNKNOWN'
+}
+
+const canMarkAsCancelled = (job: PrintJobDto): boolean => {
+  // Allow marking as cancelled for jobs that are printing, paused, or completed
+  return job.status === 'PRINTING' ||
+    job.status === 'PAUSED' ||
+    job.status === 'COMPLETED' ||
+    job.status === 'FAILED' ||
+    job.status === 'UNKNOWN'
+}
+
+const canMarkAsUnknown = (job: PrintJobDto): boolean => {
+  // Allow marking as unknown for any job that has a definitive status
+  return job.status === 'PRINTING' ||
+    job.status === 'PAUSED' ||
+    job.status === 'COMPLETED' ||
+    job.status === 'FAILED' ||
+    job.status === 'CANCELLED'
 }
 
 const canDeleteJob = (job: PrintJobDto): boolean => {
   // Allow deletion for jobs that are not currently printing
   return job.status !== 'PRINTING' && job.status !== 'STARTING'
+}
+
+const canSubmitToPrinter = (job: PrintJobDto): boolean => {
+  // Allow submitting completed, failed, or cancelled jobs
+  return job.status === 'COMPLETED' || job.status === 'FAILED' || job.status === 'CANCELLED'
 }
 
 const handleReAnalyzeJob = async (job: PrintJobDto) => {
@@ -854,7 +1490,7 @@ const handleReAnalyzeJob = async (job: PrintJobDto) => {
 
     info(
       'Job Re-Analysis Started',
-      `Re-analysis triggered for "${job.fileName}". The job will be analyzed in the background.`,
+      `Re-analysis triggered for "${ job.fileName }". The job will be analyzed in the background.`,
       5000
     )
   } catch (err: any) {
@@ -886,7 +1522,7 @@ const confirmMarkAsCompleted = async () => {
 
     info(
       'Job Marked as Completed',
-      `Successfully marked "${jobToComplete.value.fileName}" as completed.`,
+      `Successfully marked "${ jobToComplete.value.fileName }" as completed.`,
       3000
     )
 
@@ -908,8 +1544,135 @@ const cancelMarkAsCompleted = () => {
   jobToComplete.value = null
 }
 
+const handleMarkAsFailed = (job: PrintJobDto) => {
+  jobToFail.value = job
+  showFailedConfirmDialog.value = true
+}
+
+const confirmMarkAsFailed = async () => {
+  if (!jobToFail.value) return
+
+  failing.value = true
+  try {
+    const updatedJob = await PrintJobsService.setJobFailed(jobToFail.value.id)
+
+    // Update the job in the list
+    const index = printJobs.value.findIndex(j => j.id === jobToFail.value!.id)
+    if (index !== -1) {
+      printJobs.value[index] = updatedJob
+    }
+
+    info(
+      'Job Marked as Failed',
+      `Successfully marked "${ jobToFail.value.fileName }" as failed.`,
+      3000
+    )
+
+    showFailedConfirmDialog.value = false
+    jobToFail.value = null
+  } catch (err: any) {
+    console.error('Failed to mark job as failed:', err)
+    error(
+      'Mark as Failed Failed',
+      err?.response?.data?.message || err?.message || 'Failed to mark job as failed. Please try again.'
+    )
+  } finally {
+    failing.value = false
+  }
+}
+
+const cancelMarkAsFailed = () => {
+  showFailedConfirmDialog.value = false
+  jobToFail.value = null
+}
+
+const handleMarkAsCancelled = (job: PrintJobDto) => {
+  jobToCancel.value = job
+  showCancelledConfirmDialog.value = true
+}
+
+const confirmMarkAsCancelled = async () => {
+  if (!jobToCancel.value) return
+
+  cancelling.value = true
+  try {
+    const updatedJob = await PrintJobsService.setJobCancelled(jobToCancel.value.id)
+
+    // Update the job in the list
+    const index = printJobs.value.findIndex(j => j.id === jobToCancel.value!.id)
+    if (index !== -1) {
+      printJobs.value[index] = updatedJob
+    }
+
+    info(
+      'Job Marked as Cancelled',
+      `Successfully marked "${ jobToCancel.value.fileName }" as cancelled.`,
+      3000
+    )
+
+    showCancelledConfirmDialog.value = false
+    jobToCancel.value = null
+  } catch (err: any) {
+    console.error('Failed to mark job as cancelled:', err)
+    error(
+      'Mark as Cancelled Failed',
+      err?.response?.data?.message || err?.message || 'Failed to mark job as cancelled. Please try again.'
+    )
+  } finally {
+    cancelling.value = false
+  }
+}
+
+const cancelMarkAsCancelled = () => {
+  showCancelledConfirmDialog.value = false
+  jobToCancel.value = null
+}
+
+const handleMarkAsUnknown = (job: PrintJobDto) => {
+  jobToSetUnknown.value = job
+  showUnknownConfirmDialog.value = true
+}
+
+const confirmMarkAsUnknown = async () => {
+  if (!jobToSetUnknown.value) return
+
+  settingUnknown.value = true
+  try {
+    const updatedJob = await PrintJobsService.setJobUnknown(jobToSetUnknown.value.id)
+
+    // Update the job in the list
+    const index = printJobs.value.findIndex(j => j.id === jobToSetUnknown.value!.id)
+    if (index !== -1) {
+      printJobs.value[index] = updatedJob
+    }
+
+    info(
+      'Job Marked as Unknown',
+      `Successfully marked "${ jobToSetUnknown.value.fileName }" as unknown.`,
+      3000
+    )
+
+    showUnknownConfirmDialog.value = false
+    jobToSetUnknown.value = null
+  } catch (err: any) {
+    console.error('Failed to mark job as unknown:', err)
+    error(
+      'Mark as Unknown Failed',
+      err?.response?.data?.message || err?.message || 'Failed to mark job as unknown. Please try again.'
+    )
+  } finally {
+    settingUnknown.value = false
+  }
+}
+
+const cancelMarkAsUnknown = () => {
+  showUnknownConfirmDialog.value = false
+  jobToSetUnknown.value = null
+}
+
 const handleDeleteJob = (job: PrintJobDto) => {
   jobToDelete.value = job
+  deleteFileWithJob.value = false
   showDeleteConfirmDialog.value = true
 }
 
@@ -918,7 +1681,7 @@ const confirmDeleteJob = async () => {
 
   deleting.value = true
   try {
-    await PrintJobsService.deleteJob(jobToDelete.value.id)
+    const response = await PrintJobsService.deleteJob(jobToDelete.value.id, deleteFileWithJob.value)
 
     // Remove the job from the list
     const index = printJobs.value.findIndex(j => j.id === jobToDelete.value!.id)
@@ -927,14 +1690,25 @@ const confirmDeleteJob = async () => {
       totalJobs.value--
     }
 
+    // Show appropriate message based on response
+    let message = `Successfully deleted job "${ jobToDelete.value.fileName }".`
+    if (response?.fileDeleted) {
+      message += ' File was also deleted from storage.'
+    } else if (response?.remainingReferences) {
+      message += ` File kept (used by ${ response.remainingReferences } other job${ response.remainingReferences > 1 ? 's' : '' }).`
+    } else if (deleteFileWithJob.value && !response?.fileDeleted) {
+      message += ' File was kept (no other jobs reference it).'
+    }
+
     info(
       'Job Deleted',
-      `Successfully deleted job "${jobToDelete.value.fileName}".`,
-      3000
+      message,
+      4000
     )
 
     showDeleteConfirmDialog.value = false
     jobToDelete.value = null
+    deleteFileWithJob.value = false
   } catch (err: any) {
     console.error('Failed to delete job:', err)
     error(
@@ -949,6 +1723,88 @@ const confirmDeleteJob = async () => {
 const cancelDelete = () => {
   showDeleteConfirmDialog.value = false
   jobToDelete.value = null
+  deleteFileWithJob.value = false
+}
+
+const handleAddToQueue = (job: PrintJobDto) => {
+  jobToQueue.value = job
+  selectedPrintersForQueue.value = []
+  showAddToQueueDialog.value = true
+}
+
+const confirmAddToQueue = async () => {
+  if (!jobToQueue.value || selectedPrintersForQueue.value.length === 0) return
+
+  addingToQueue.value = true
+  try {
+    // Add the job to queue for each selected printer
+    for (const printerId of selectedPrintersForQueue.value) {
+      await PrintQueueService.addToQueue(printerId, jobToQueue.value.id)
+    }
+
+    info(
+      'Job Added to Queue',
+      `Successfully added "${ jobToQueue.value.fileName }" to ${ selectedPrintersForQueue.value.length } printer queue(s).`,
+      3000
+    )
+
+    showAddToQueueDialog.value = false
+    jobToQueue.value = null
+    selectedPrintersForQueue.value = []
+  } catch (err: any) {
+    console.error('Failed to add job to queue:', err)
+    error(
+      'Add to Queue Failed',
+      err?.response?.data?.message || err?.message || 'Failed to add job to queue. Please try again.'
+    )
+  } finally {
+    addingToQueue.value = false
+  }
+}
+
+const cancelAddToQueue = () => {
+  showAddToQueueDialog.value = false
+  jobToQueue.value = null
+  selectedPrintersForQueue.value = []
+}
+
+const submitToPrinter = (job: PrintJobDto) => {
+  jobToSubmit.value = job
+  showSubmitToPrinterDialog.value = true
+}
+
+const confirmSubmitToPrinter = async () => {
+  if (!jobToSubmit.value || !selectedPrinterForSubmit.value) return
+
+  submitting.value = true
+  try {
+    // Submit the job to the selected printer
+    await PrintQueueService.submitToPrinter(jobToSubmit.value.jobId, selectedPrinterForSubmit.value)
+
+    info(
+      'Job Submitted to Printer',
+      `Successfully submitted "${ jobToSubmit.value.fileName }" to the printer.`,
+      3000
+    )
+
+    showSubmitToPrinterDialog.value = false
+    jobToSubmit.value = null
+    selectedPrinterForSubmit.value = null
+  } catch (err: any) {
+    console.error('Failed to submit job to printer:', err)
+    error(
+      'Submit to Printer Failed',
+      err?.response?.data?.message || err?.message || 'Failed to submit job to printer. Please try again.'
+    )
+  } finally {
+    submitting.value = false
+  }
+}
+
+const cancelSubmitToPrinter = () => {
+  showSubmitToPrinterDialog.value = false
+  jobToSubmit.value = null
+  selectedPrinterForSubmit.value = null
 }
 </script>
 

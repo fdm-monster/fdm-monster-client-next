@@ -40,6 +40,7 @@
     <PrinterControlDialog />
     <JsonViewerDialog />
     <PrintJobDetailsDialog />
+    <JobThumbnailViewer />
   </v-app>
 </template>
 

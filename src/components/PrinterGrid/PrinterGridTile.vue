@@ -382,10 +382,7 @@ const tileIconThumbnailSize = computed(() =>
   largeTilesEnabled.value ? '80px' : '40px'
 )
 
-const { data: thumbnail } = useThumbnailQuery(
-  printerId,
-  settingsStore.thumbnailsEnabled
-)
+const { data: thumbnail } = useThumbnailQuery(printerId)
 
 const isOnline = computed(() =>
   printerId.value ? printerStateStore.isApiResponding(printerId.value) : false

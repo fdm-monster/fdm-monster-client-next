@@ -2,7 +2,7 @@
  * @deprecated THIS FILE IS DEPRECATED. Move API routes to services.
  */
 export class ServerApi {
-  static readonly base = "/api"
+  static readonly base = "/api/v2"
   static readonly firstTimeSetupRoute = `${ServerApi.base}/first-time-setup`
   static readonly completeFirstTimeSetupRoute = `${ServerApi.firstTimeSetupRoute}/complete`
   static readonly printerRoute = `${ServerApi.base}/printer`

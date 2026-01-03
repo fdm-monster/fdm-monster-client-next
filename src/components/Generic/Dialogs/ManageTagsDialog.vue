@@ -167,7 +167,6 @@ const closeDialog = () => {
 const onDialogOpened = async (context?: { tagId?: number; tagName?: string }) => {
   await loadTags()
 
-  // If context contains tagId, auto-start editing that tag
   if (context?.tagId && context?.tagName) {
     startEditingTag(context.tagId, context.tagName)
   }
