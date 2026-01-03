@@ -1,8 +1,15 @@
 # Develop
 
+## Client 2.1.0
+
 Features
 
 - Auto place printers on grid
+- Queue submit button in top bar panel
+
+Fixes
+- Extra camera and floor actions on printer list
+- Camera advanced settings applied
 
 ## Client 2.0.1
 

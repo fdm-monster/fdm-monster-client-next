@@ -166,6 +166,7 @@
           sm="6"
           md="4"
           lg="3"
+          xl="2"
         >
           <v-card
             class="camera-card empty-camera-tile"
@@ -208,6 +209,7 @@
           sm="6"
           md="4"
           lg="3"
+          xl="2"
         >
           <v-card
             class="camera-card"
@@ -249,13 +251,17 @@
             </v-card-title>
 
             <!-- Camera Stream -->
-            <div class="camera-stream-container">
+            <div
+              class="camera-stream-container"
+              :style="getCameraContainerStyle(camera.cameraStream)"
+            >
               <img
                 v-if="camera.cameraStream.id"
                 alt="Camera stream"
                 v-show="camera.cameraStream.id && !cameraErrors[camera.cameraStream.id] && !cameraLoading[camera.cameraStream.id]"
                 :src="camera.cameraStream.streamURL"
                 class="camera-stream"
+                :style="getCameraTransformStyle(camera.cameraStream)"
                 @error="handleCameraError(camera.cameraStream.id)"
                 @load="handleCameraLoad(camera.cameraStream.id)"
               />
@@ -540,6 +546,32 @@ function deleteCamera(cameraId?: number) {
 function openPrinterSideNav(printer: PrinterDto) {
   fileExplorer.openFileExplorer(printer)
 }
+
+// Get camera container style (aspect ratio)
+function getCameraContainerStyle(cameraStream: any) {
+  const aspectRatio = cameraStream.aspectRatio || '16:9'
+  return {
+    aspectRatio: aspectRatio.replace(':', ' / ')
+  }
+}
+
+// Get camera transform style based on settings
+function getCameraTransformStyle(cameraStream: any) {
+  const transforms = []
+
+  if (cameraStream.rotationClockwise) {
+    transforms.push(`rotate(${cameraStream.rotationClockwise}deg)`)
+  }
+
+  const scaleX = cameraStream.flipHorizontal ? -1 : 1
+  const scaleY = cameraStream.flipVertical ? -1 : 1
+
+  if (scaleX !== 1 || scaleY !== 1) {
+    transforms.push(`scale(${scaleX}, ${scaleY})`)
+  }
+
+  return transforms.length > 0 ? { transform: transforms.join(' ') } : {}
+}
 </script>
 
 <style scoped>
@@ -559,7 +591,6 @@ function openPrinterSideNav(printer: PrinterDto) {
 .camera-stream-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 5 / 2;
   background: #000;
   overflow: hidden;
 }

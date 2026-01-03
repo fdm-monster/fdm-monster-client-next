@@ -135,6 +135,19 @@
                     {{ floorOfPrinter(item.id) ? 'View Floor Grid' : 'View Printer Grid' }}
                   </v-list-item-title>
                 </v-list-item>
+                <v-list-item
+                  v-if="floorOfPrinter(item.id)"
+                  prepend-icon="edit"
+                  @click="openFloorEditDialog(floorOfPrinter(item.id)?.id)"
+                >
+                  <v-list-item-title>Edit Floor</v-list-item-title>
+                </v-list-item>
+                <v-list-item
+                  prepend-icon="settings"
+                  @click="goToFloorSettings()"
+                >
+                  <v-list-item-title>Floor Settings</v-list-item-title>
+                </v-list-item>
               </v-list>
             </v-menu>
           </div>
@@ -146,7 +159,9 @@
               :key="camera.id"
               size="x-small"
               variant="tonal"
+              closable
               @click="openCameraEditDialog(camera.id)"
+              @click:close="detachCameraFromPrinter(camera.id)"
             >
               <v-icon start size="x-small">videocam</v-icon>
               {{ camera.name }}
@@ -166,20 +181,29 @@
               <template #activator="{ props }">
                 <v-btn
                   v-bind="props"
+                  :disabled="!availableCamerasForPrinter(item.id).length"
                   size="x-small"
                   icon
                   variant="text"
                 >
-                  <v-icon>more_vert</v-icon>
+                  <v-icon>add</v-icon>
                 </v-btn>
               </template>
 
               <v-list density="compact" min-width="180">
+                <v-list-subheader>Attach Camera</v-list-subheader>
                 <v-list-item
-                  prepend-icon="videocam"
-                  @click="goToCameraPageForPrinter(item.id)"
+                  v-for="camera in availableCamerasForPrinter(item.id)"
+                  :key="camera.id"
+                  @click="attachCameraToPrinter(camera.id!, item.id)"
                 >
-                  <v-list-item-title>View Cameras</v-list-item-title>
+                  <template v-slot:prepend>
+                    <v-icon class="mr-2" size="small">videocam</v-icon>
+                  </template>
+                  <v-list-item-title>{{ camera.name || camera.streamURL }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item v-if="!availableCamerasForPrinter(item.id).length" disabled>
+                  <v-list-item-title class="text-caption">No available cameras</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -415,6 +439,10 @@ const camerasOfPrinter = (printerId: number) => {
   return cameras.value.filter(camera => camera.printerId === printerId)
 }
 
+const availableCamerasForPrinter = (printerId: number) => {
+  return cameras.value.filter(camera => camera.printerId !== printerId)
+}
+
 const openEditDialog = (printer: PrinterDto) => {
   addOrUpdatePrinterDialog.openDialog({ id: printer.id })
 }
@@ -455,6 +483,10 @@ const goToPrinterGrid = (printerId: number) => {
   }
 }
 
+const goToFloorSettings = () => {
+  router.push('/settings/floors')
+}
+
 const openFloorEditDialog = (floorId?: number) => {
   if (floorId) {
     useDialog(DialogName.AddOrUpdateFloorDialog).openDialog({ printerFloorId: floorId })
@@ -465,13 +497,6 @@ const openCameraEditDialog = (cameraId?: number) => {
   if (cameraId) {
     useDialog(DialogName.AddOrUpdateCameraDialog).openDialog({ addOrUpdate: 'update', cameraId })
   }
-}
-
-const goToCameraPageForPrinter = (printerId: number) => {
-  router.push({
-    path: '/cameras',
-    query: { printer: printerId.toString() }
-  })
 }
 
 const addPrinterToTag = async (tagId: number, printerId: number) => {
@@ -511,6 +536,48 @@ const toggleEnabled = async (printer: PrinterDto) => {
 
   printer.enabled = !printer.enabled
   await PrintersService.toggleEnabled(printer.id, printer.enabled)
+}
+
+const attachCameraToPrinter = async (cameraId: number, printerId: number) => {
+  const camera = cameras.value.find(c => c.id === cameraId)
+  if (!camera) {
+    snackbar.error('Camera not found')
+    return
+  }
+
+  await CameraStreamService.updateCameraStream(cameraId, {
+    streamURL: camera.streamURL,
+    name: camera.name,
+    printerId,
+    aspectRatio: camera.aspectRatio,
+    rotationClockwise: camera.rotationClockwise,
+    flipHorizontal: camera.flipHorizontal,
+    flipVertical: camera.flipVertical
+  })
+
+  camera.printerId = printerId
+  snackbar.info('Attached camera to printer')
+}
+
+const detachCameraFromPrinter = async (cameraId: number) => {
+  const camera = cameras.value.find(c => c.id === cameraId)
+  if (!camera) {
+    snackbar.error('Camera not found')
+    return
+  }
+
+  await CameraStreamService.updateCameraStream(cameraId, {
+    streamURL: camera.streamURL,
+    name: camera.name,
+    printerId: undefined,
+    aspectRatio: camera.aspectRatio,
+    rotationClockwise: camera.rotationClockwise,
+    flipHorizontal: camera.flipHorizontal,
+    flipVertical: camera.flipVertical
+  })
+
+  camera.printerId = undefined
+  snackbar.info('Detached camera from printer')
 }
 </script>
 

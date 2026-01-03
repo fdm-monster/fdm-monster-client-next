@@ -71,6 +71,55 @@
             persistent-hint
           />
 
+          <!-- Camera Settings Section -->
+          <v-divider class="my-4" />
+          <div class="text-subtitle-2 font-weight-bold mb-3">
+            <v-icon start size="small">tune</v-icon>
+            Camera Settings
+          </div>
+
+          <!-- Aspect Ratio -->
+          <v-select
+            v-model="cameraStream.aspectRatio"
+            :items="aspectRatioOptions"
+            label="Aspect Ratio"
+            prepend-inner-icon="aspect_ratio"
+            variant="outlined"
+            density="comfortable"
+            class="mb-2"
+            hint="Camera aspect ratio"
+            persistent-hint
+          />
+
+          <!-- Rotation -->
+          <v-select
+            v-model="cameraStream.rotationClockwise"
+            :items="rotationOptions"
+            label="Rotation (Clockwise)"
+            prepend-inner-icon="rotate_right"
+            variant="outlined"
+            density="comfortable"
+            class="mb-2"
+            hint="Rotate the camera feed"
+            persistent-hint
+          />
+
+          <!-- Flip Options -->
+          <div class="d-flex gap-4 mb-2">
+            <v-checkbox
+              v-model="cameraStream.flipHorizontal"
+              label="Flip Horizontal"
+              density="compact"
+              hide-details
+            />
+            <v-checkbox
+              v-model="cameraStream.flipVertical"
+              label="Flip Vertical"
+              density="compact"
+              hide-details
+            />
+          </div>
+
           <!-- Preview Section -->
           <v-card
             v-if="cameraStream.streamURL"
@@ -105,6 +154,7 @@
                   :key="imageRetryKey"
                   :src="cameraStream.streamURL"
                   class="camera-preview"
+                  :style="cameraPreviewStyle"
                   @error="handleImageError"
                   @load="handleImageLoad"
                 />
@@ -202,8 +252,28 @@ const imageRetryKey = ref(0)
 const cameraStream = ref<CameraStream>({
   name: '',
   streamURL: '',
-  printerId: undefined
+  printerId: undefined,
+  aspectRatio: '16:9',
+  rotationClockwise: 0,
+  flipHorizontal: false,
+  flipVertical: false
 })
+
+// Aspect ratio options
+const aspectRatioOptions = [
+  { title: '16:9 (Widescreen)', value: '16:9' },
+  { title: '4:3 (Standard)', value: '4:3' },
+  { title: '1:1 (Square)', value: '1:1' },
+  { title: '21:9 (Ultrawide)', value: '21:9' }
+]
+
+// Rotation options
+const rotationOptions = [
+  { title: 'None (0°)', value: 0 },
+  { title: '90° Clockwise', value: 90 },
+  { title: '180° Clockwise', value: 180 },
+  { title: '270° Clockwise', value: 270 }
+]
 
 // Validation rules
 const rules = {
@@ -233,6 +303,26 @@ const isFormValid = computed(() => {
     cameraStream.value.name?.trim() &&
     cameraStream.value.streamURL?.trim()
   )
+})
+
+// Computed style for camera preview with transformations
+const cameraPreviewStyle = computed(() => {
+  const transforms = []
+
+  if (cameraStream.value.rotationClockwise) {
+    transforms.push(`rotate(${cameraStream.value.rotationClockwise}deg)`)
+  }
+
+  const scaleX = cameraStream.value.flipHorizontal ? -1 : 1
+  const scaleY = cameraStream.value.flipVertical ? -1 : 1
+
+  if (scaleX !== 1 || scaleY !== 1) {
+    transforms.push(`scale(${scaleX}, ${scaleY})`)
+  }
+
+  return {
+    transform: transforms.join(' ')
+  }
 })
 
 const isDialogUpdate = () => dialog.context()?.addOrUpdate === 'update'
@@ -271,6 +361,10 @@ watch(
       cameraStream.value.streamURL = ''
       cameraStream.value.name = ''
       cameraStream.value.printerId = undefined
+      cameraStream.value.aspectRatio = '16:9'
+      cameraStream.value.rotationClockwise = 0
+      cameraStream.value.flipHorizontal = false
+      cameraStream.value.flipVertical = false
       return
     }
 
@@ -284,6 +378,10 @@ watch(
       cameraStream.value.name = stream.cameraStream.name || ''
       cameraStream.value.streamURL = stream.cameraStream.streamURL || ''
       cameraStream.value.printerId = stream.cameraStream.printerId
+      cameraStream.value.aspectRatio = stream.cameraStream.aspectRatio || '16:9'
+      cameraStream.value.rotationClockwise = stream.cameraStream.rotationClockwise ?? 0
+      cameraStream.value.flipHorizontal = stream.cameraStream.flipHorizontal ?? false
+      cameraStream.value.flipVertical = stream.cameraStream.flipVertical ?? false
     }
   }
 )
@@ -300,7 +398,11 @@ async function createCamera() {
     await CameraStreamService.createCameraStream({
       streamURL: cameraStream.value.streamURL,
       name: cameraStream.value.name,
-      printerId: cameraStream.value.printerId
+      printerId: cameraStream.value.printerId,
+      aspectRatio: cameraStream.value.aspectRatio,
+      rotationClockwise: cameraStream.value.rotationClockwise,
+      flipHorizontal: cameraStream.value.flipHorizontal,
+      flipVertical: cameraStream.value.flipVertical
     })
     await queryClient.refetchQueries({ queryKey: ['cameraStream'] })
     dialog.closeDialog()
@@ -325,7 +427,11 @@ async function updateCamera() {
     await CameraStreamService.updateCameraStream(cameraId, {
       streamURL: cameraStream.value.streamURL,
       name: cameraStream.value.name,
-      printerId: cameraStream.value.printerId
+      printerId: cameraStream.value.printerId,
+      aspectRatio: cameraStream.value.aspectRatio,
+      rotationClockwise: cameraStream.value.rotationClockwise,
+      flipHorizontal: cameraStream.value.flipHorizontal,
+      flipVertical: cameraStream.value.flipVertical
     })
     await queryClient.refetchQueries({ queryKey: ['cameraStream'] })
     dialog.closeDialog()
