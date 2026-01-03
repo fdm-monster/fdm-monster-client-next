@@ -132,14 +132,25 @@
         v-if="printer"
         :style="{
           position: largeTilesEnabled ? 'inherit' : 'absolute',
-          top: largeTilesEnabled ? 'inherit' : '30px'
+          top: largeTilesEnabled ? 'inherit' : '28px'
         }"
-        class="printer-controls"
+        class="printer-info"
         style="overflow: clip"
       >
+        <!-- File name -->
         <small class="file-name">
-          {{ currentPrintingFilePath ?? '&nbsp;' }}</small
-        >
+          {{ currentPrintingFilePath ?? '!!&nbsp;' }}
+        </small>
+
+        <!-- Temperatures -->
+        <div v-if="toolTemp || bedTemp" class="temperature-display">
+          <small v-if="toolTemp" class="temp-item">
+            🔥 {{ toolTemp }}
+          </small>
+          <small v-if="bedTemp" class="temp-item">
+            🛏️ {{ bedTemp }}
+          </small>
+        </div>
       </div>
 
       <!-- Hover controls -->
@@ -453,6 +464,26 @@ const currentPrintingFilePath = computed(() => {
   return printerStateStore.printingFilePathsByPrinterId[printerId.value]
 })
 
+const currentTemperatures = computed(() => {
+  if (!printerId.value) return null
+  const printerEvents = printerStateStore.printerEventsById[printerId.value]
+  if (!printerEvents?.current?.payload?.temps || printerEvents.current.payload.temps.length === 0) {
+    return null
+  }
+  // Get the most recent temperature reading
+  return printerEvents.current.payload.temps[printerEvents.current.payload.temps.length - 1]
+})
+
+const toolTemp = computed(() => {
+  const temps = currentTemperatures.value
+  return temps?.tool0 ? `${Math.round(temps.tool0.actual)}°/${Math.round(temps.tool0.target)}°` : null
+})
+
+const bedTemp = computed(() => {
+  const temps = currentTemperatures.value
+  return temps?.bed ? `${Math.round(temps.bed.actual)}°/${Math.round(temps.bed.target)}°` : null
+})
+
 const clickStop = async () => {
   if (!printerId.value) return
 
@@ -645,24 +676,46 @@ const selectPrinterPosition = async () => {
   z-index: 1;
 }
 
-.printer-controls {
+.printer-info {
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 0;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  gap: 0;
 }
 
 .file-name {
-  font-size: 14px;
-  color: #bfbfbf;
-  max-width: 70%;
+  font-size: 11px;
+  color: #ffffff;
+  max-width: 80%;
   display: block;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  line-height: 1.3;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.temperature-display {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.temp-item {
+  font-size: 10px;
+  color: #e0e0e0;
+  white-space: nowrap;
+  line-height: 1;
 }
 
 .centered-controls {
