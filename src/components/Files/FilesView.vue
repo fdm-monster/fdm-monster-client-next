@@ -133,8 +133,8 @@
 
           <!-- Printer Type Column -->
           <template #item.printerType="{ item }">
-            <v-avatar size="32" v-if="getPrinterTypeLogo(item)" rounded="0">
-              <v-img :src="getPrinterTypeLogo(item)" contain />
+            <v-avatar size="32" v-if="getPrinterTypeLogo(item.metadata || {}, item.fileFormat)" rounded="0">
+              <v-img :src="getPrinterTypeLogo(item.metadata || {}, item.fileFormat)" contain />
             </v-avatar>
             <span v-else class="text-medium-emphasis">-</span>
           </template>
@@ -438,11 +438,9 @@ import { PrintQueueService } from '@/backend/print-queue.service'
 import { PrintJobService } from '@/backend/print-job.service'
 import { usePrinterStore } from '@/store/printer.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
-import bambuLogo from '@/assets/bambu-logo.png'
-import klipperLogo from '@/assets/klipper-logo.svg'
-import prusaLinkLogo from '@/assets/prusa-link-logo.svg'
-import octoprintLogo from '@/assets/octoprint-tentacle.svg'
-import { formatFileSize } from "@/utils/file-size.util";
+import { formatFileSize } from "@/utils/file-size.util"
+import { formatDate, formatRelativeTime, formatDuration } from '@/utils/date-time.utils'
+import { getPrinterTypeName, getPrinterTypeLogo } from '@/shared/printer-types.constants'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -648,67 +646,8 @@ const queueToSelectedPrinters = async () => {
   }
 }
 
-const getPrinterTypeLogo = (file: FileMetadata) => {
-  const printerModel = file.metadata?.printerModel?.toLowerCase() || ''
-
-  if (printerModel.includes('bambu') || printerModel.includes('x1') || printerModel.includes('p1')) {
-    return bambuLogo
-  } else if (printerModel.includes('klipper') || printerModel.includes('voron') || printerModel.includes('ratrig')) {
-    return klipperLogo
-  } else if (printerModel.includes('prusa') || printerModel.includes('mk3') || printerModel.includes('mk4') || printerModel.includes('mini')) {
-    return prusaLinkLogo
-  } else if (printerModel.includes('ender') || printerModel.includes('creality') || file.fileFormat === 'gcode') {
-    return octoprintLogo
-  }
-
-  return undefined
-}
-
-const getPrinterTypeName = (printerType: number) => {
-  const types: Record<number, string> = {
-    0: 'OctoPrint',
-    1: 'Moonraker (Klipper)',
-    2: 'PrusaLink',
-    3: 'Bambu Lab'
-  }
-  return types[printerType] || 'Unknown'
-}
-
 const getThumbnailUrl = (fileStorageId: string, index: number = 0) => {
   return FileStorageService.getThumbnailUrl(fileStorageId, index)
-}
-
-const formatDate = (date: Date | string) => {
-  return new Date(date).toLocaleString()
-}
-
-const formatRelativeTime = (date: Date | string) => {
-  const now = Date.now()
-  const then = new Date(date).getTime()
-  const diffMs = now - then
-  const diffMins = Math.floor(diffMs / 60000)
-  const diffHours = Math.floor(diffMins / 60)
-  const diffDays = Math.floor(diffHours / 24)
-
-  if (diffDays > 0) {
-    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
-  } else if (diffHours > 0) {
-    return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
-  } else if (diffMins > 0) {
-    return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`
-  } else {
-    return 'just now'
-  }
-}
-
-const formatDuration = (seconds: number) => {
-  const hours = Math.floor(seconds / 3600)
-  const minutes = Math.floor((seconds % 3600) / 60)
-
-  if (hours > 0) {
-    return `${hours}h ${minutes}m`
-  }
-  return `${minutes}m`
 }
 </script>
 

@@ -409,7 +409,7 @@ import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from './Dialogs/dialog.constants'
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import {
-  getServiceName,
+  getPrinterTypeName,
 } from "@/shared/printer-types.constants";
 import { hasWebInterface } from '@/shared/printer-capabilities.constants'
 import { useDialog } from '@/shared/dialog.composable'
@@ -435,7 +435,7 @@ const isOnline = computed(() =>
 )
 
 const serviceName = computed(() =>
-  getServiceName(storedSideNavPrinter.value?.printerType)
+  getPrinterTypeName(storedSideNavPrinter.value?.printerType)
 )
 
 const isOperational = computed(() =>

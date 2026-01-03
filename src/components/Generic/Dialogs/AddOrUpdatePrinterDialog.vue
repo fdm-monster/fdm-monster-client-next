@@ -208,7 +208,7 @@ import octoPrintTentacleSvg from "@/assets/octoprint-tentacle.svg";
 import prusaLinkLogoSvg from "@/assets/prusa-link-logo.svg";
 import bambuLogoSvg from "@/assets/bambu-logo.png";
 import {
-  getServiceName,
+  getPrinterTypeName,
   isMoonrakerType, isPrusaLinkType, isBambuType,
   MoonrakerType,
   OctoPrintType,
@@ -244,25 +244,25 @@ const serviceTypes = computed(() => {
 
     return [
       {
-        name: getServiceName(OctoPrintType),
+        name: getPrinterTypeName(OctoPrintType),
         type: OctoPrintType,
         logo: octoPrintTentacleSvg,
         height: "60px",
       },
       ...(hasKlipperSupport ? [{
-        name: getServiceName(MoonrakerType),
+        name: getPrinterTypeName(MoonrakerType),
         type: MoonrakerType,
         logo: klipperLogoSvg,
         height: "60px",
       }] : []),
       ...(hasPrusaLinkSupport ? [{
-        name: getServiceName(PrusaLinkType),
+        name: getPrinterTypeName(PrusaLinkType),
         type: PrusaLinkType,
         logo: prusaLinkLogoSvg,
         height: "20px",
       }] : []),
       ...(hasBambuSupport ? [{
-        name: getServiceName(BambuType),
+        name: getPrinterTypeName(BambuType),
         type: BambuType,
         logo: bambuLogoSvg,
         height: "60px",

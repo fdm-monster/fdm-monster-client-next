@@ -169,7 +169,7 @@
 import { ref } from 'vue'
 import { UserService } from '@/backend/user.service'
 import { Role, User } from '@/models/user.model'
-import { formatIntlDate } from '@/utils/date.utils'
+import { formatIntlDate } from '@/utils/date-time.utils'
 import GridLoader from '@/components/Generic/Loaders/GridLoader.vue'
 import { useQuery } from '@tanstack/vue-query'
 import { useSnackbar } from '@/shared/snackbar.composable'

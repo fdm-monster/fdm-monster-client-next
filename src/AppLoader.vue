@@ -35,7 +35,6 @@ import { useSettingsStore } from '@/store/settings.store'
 import { setSentryEnabled } from '@/utils/sentry.util'
 import { useFeatureStore } from '@/store/features.store'
 import { useProfileStore } from '@/store/profile.store'
-import { sleep } from '@/utils/time.utils'
 import { RouteNames } from '@/router/route-names'
 import { AppService } from '@/backend/app.service'
 import {
@@ -350,7 +349,6 @@ async function loadApp() {
       console.debug('[AppLoader] No success refreshing')
       setOverlay(true, 'Login expired, going back to login')
 
-      await sleep(500)
       if (router.currentRoute.value.name !== RouteNames.Login) {
         const redirectPath = initialRoute.value && initialRoute.value !== '/'
           ? initialRoute.value

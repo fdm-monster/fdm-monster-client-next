@@ -77,7 +77,7 @@
               <v-icon start size="x-small">drag_indicator</v-icon>
               <span class="font-weight-medium">{{ printer.name }}</span>
               <v-chip size="x-small" variant="flat" class="ml-2 px-2" style="height: 18px">
-                {{ getServiceName(printer.printerType) }}
+                {{ getPrinterTypeName(printer.printerType) }}
               </v-chip>
             </v-chip>
           </div>
@@ -105,7 +105,7 @@ import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vu
 import GridSizeControl from '@/components/PrinterGrid/GridSizeControl.vue'
 import GridSettingsMenu from '@/components/PrinterGrid/GridSettingsMenu.vue'
 import { dragAppId, INTENT, PrinterPlace } from '@/shared/drag.constants'
-import { getServiceName } from '@/shared/printer-types.constants'
+import { getPrinterTypeName } from '@/shared/printer-types.constants'
 import type { PrinterDto } from '@/models/printers/printer.model'
 
 const floorStore = useFloorStore()

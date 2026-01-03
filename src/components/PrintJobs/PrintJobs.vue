@@ -919,6 +919,7 @@ import JobThumbnailCell from '@/components/PrintJobs/JobThumbnailCell.vue'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { formatDate, formatRelativeTime, formatDuration } from '@/utils/date-time.utils'
 
 // Tab state
 const activeTab = ref('jobs')
@@ -1332,46 +1333,6 @@ const getDurationColor = (seconds: number): string => {
   if (hours < 4) return 'primary'
   if (hours < 8) return 'warning'
   return 'error'
-}
-
-const formatDate = (dateString: Date): string => {
-  return new Date(dateString).toLocaleString('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
-
-const formatRelativeTime = (dateString: Date): string => {
-  const now = new Date()
-  const date = new Date(dateString)
-  const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
-
-  if (diffInMinutes < 1) return 'Just now'
-  if (diffInMinutes < 60) return `${ diffInMinutes }m ago`
-
-  const diffInHours = Math.floor(diffInMinutes / 60)
-  if (diffInHours < 24) return `${ diffInHours }h ago`
-
-  const diffInDays = Math.floor(diffInHours / 24)
-  if (diffInDays < 7) return `${ diffInDays }d ago`
-
-  const diffInWeeks = Math.floor(diffInDays / 7)
-  return `${ diffInWeeks }w ago`
-}
-
-const formatDuration = (seconds: number | null): string => {
-  if (!seconds) return '-'
-
-  const hours = Math.floor(seconds / 3600)
-  const minutes = Math.floor((seconds % 3600) / 60)
-
-  if (hours > 0) {
-    return `${ hours }h ${ minutes }m`
-  }
-  return `${ minutes }m`
 }
 
 const getFloorName = (printerId: number | null): string => {

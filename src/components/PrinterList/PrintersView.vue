@@ -91,7 +91,7 @@
           </v-switch>
         </template>
         <template v-slot:item.printerType="{ item }">
-          {{ getServiceName(item.printerType) }}
+          {{ getPrinterTypeName(item.printerType) }}
         </template>
         <template v-slot:item.name="{ item }">
           <v-chip>
@@ -305,7 +305,7 @@ import {
 } from '@/backend/printer-tag.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { VDataTable } from 'vuetify/components'
-import { getServiceName } from '@/shared/printer-types.constants'
+import { getPrinterTypeName } from '@/shared/printer-types.constants'
 import { CameraStreamService } from '@/backend/camera-stream.service'
 import { printerTagsQueryKey } from '@/queries/printer-tags.query'
 
