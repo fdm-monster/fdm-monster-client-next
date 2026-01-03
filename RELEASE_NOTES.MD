@@ -11,6 +11,7 @@ Fixes
 
 - Reordering floors now works
 - YAML export dialog now exports exportTags
+- Camera grid camera filter clear now works
 
 ## Client 2.0.0
 

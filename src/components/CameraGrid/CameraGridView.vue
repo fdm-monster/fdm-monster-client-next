@@ -63,6 +63,7 @@
                     clearable
                     hide-details
                     class="mb-3"
+                    @click:clear="filterPrinter = null"
                   />
                   <PrinterTagFilter
                     v-model="selectedTags"
@@ -315,7 +316,7 @@
                 @click="openPrinterSideNav(camera.printer)"
               >
                 <v-icon start>folder</v-icon>
-                Files
+                Printer Files
               </v-btn>
               <v-spacer />
               <v-btn
@@ -366,7 +367,7 @@ const {
 
 // Reactive state
 const searchQuery = ref('')
-const filterPrinter = ref<number | undefined>(undefined)
+const filterPrinter = ref<number | null>(null)
 const showOnlyUnavailable = ref(false)
 const cameraErrors = reactive<Record<number, boolean>>({})
 const cameraLoading = reactive<Record<number, boolean>>({})
@@ -405,9 +406,9 @@ const deleteMutation = useMutation({
 
 // Printer filter options
 const printerFilterOptions = computed(() => {
-  const options: { title: string; value: number | null | undefined }[] = [
-    { title: 'All Printers', value: undefined },
-    { title: 'Unassigned Cameras', value: null }
+  const options: { title: string; value: number | null }[] = [
+    { title: 'All Cameras', value: null },
+    { title: 'Unassigned Cameras', value: -1 }
   ]
 
   printerStore.printers.forEach((printer) => {
@@ -437,8 +438,8 @@ const filteredCameras = computed(() => {
 
     // Printer filter
     const matchesPrinter =
-      filterPrinter.value === undefined ||
-      (filterPrinter.value === null && !camera.cameraStream.printerId) ||
+      filterPrinter.value === null ||
+      (filterPrinter.value === -1 && !camera.cameraStream.printerId) ||
       camera.cameraStream.printerId === filterPrinter.value
 
     // Tag filter
@@ -473,7 +474,7 @@ const unavailableCount = computed(() => {
 // Check if filters are active
 const hasActiveFilters = computed(() => {
   return (
-    filterPrinter.value !== undefined ||
+    (filterPrinter.value !== null && filterPrinter.value !== undefined) ||
     showOnlyUnavailable.value ||
     selectedTags.value.length > 0 ||
     selectedPrinterTypes.value.length > 0
@@ -483,7 +484,7 @@ const hasActiveFilters = computed(() => {
 // Count active filters
 const activeFilterCount = computed(() => {
   let count = 0
-  if (filterPrinter.value !== undefined) count++
+  if (filterPrinter.value !== null && filterPrinter.value !== undefined) count++
   if (showOnlyUnavailable.value) count++
   if (selectedTags.value.length > 0) count++
   if (selectedPrinterTypes.value.length > 0) count++
@@ -522,7 +523,7 @@ watch(
 
 // Clear all filters
 function clearFilters() {
-  filterPrinter.value = undefined
+  filterPrinter.value = null
   showOnlyUnavailable.value = false
   selectedTags.value = []
   selectedPrinterTypes.value = []
