@@ -192,24 +192,28 @@ async function autoPlacePrinters() {
       floorStore.selectedFloor.printers.map(p => `${p.x},${p.y}`)
     )
 
-    // Find available positions and place printers
-    let printerIndex = 0
-    outerLoop: for (let y = 0; y < gridRows; y++) {
+    // Find available positions
+    const availablePositions: { x: number; y: number }[] = []
+    for (let y = 0; y < gridRows; y++) {
       for (let x = 0; x < gridCols; x++) {
-        if (printerIndex >= sortedPrinters.length) break outerLoop
-
         const posKey = `${x},${y}`
         if (!occupiedPositions.has(posKey)) {
-          const printer = sortedPrinters[printerIndex]
-          await floorStore.addPrinterToFloor({
-            floorId: floorStore.selectedFloor.id,
-            printerId: printer.id,
-            x,
-            y
-          })
-          printerIndex++
+          availablePositions.push({ x, y })
         }
       }
+    }
+
+    // Place each printer in the next available position
+    const printersToPlace = Math.min(sortedPrinters.length, availablePositions.length)
+    for (let i = 0; i < printersToPlace; i++) {
+      const printer = sortedPrinters[i]
+      const position = availablePositions[i]
+      await floorStore.addPrinterToFloor({
+        floorId: floorStore.selectedFloor.id,
+        printerId: printer.id,
+        x: position.x,
+        y: position.y
+      })
     }
   } catch (error) {
     console.error('Failed to auto-place printers:', error)
