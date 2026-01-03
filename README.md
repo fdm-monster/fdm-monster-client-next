@@ -8,18 +8,15 @@ This is the official scaffolding tool for Vuetify, designed to give you a head s
 ### Generate API Client
 
 ```bash
-# One command to fetch spec and generate client
-yarn generate:api
+# Fetch OpenAPI spec from backend and generate TypeScript client
+yarn openapi-ts
 ```
 
 Or run the steps separately:
 
 ```bash
-# 1. Fetch OpenAPI spec from backend
-yarn fetch:openapi
-
-# 2. Generate TypeScript client
-yarn openapi-ts
+# Start watch mode 
+yarn openapi-ts:watch
 ```
 
 ## Notes to self

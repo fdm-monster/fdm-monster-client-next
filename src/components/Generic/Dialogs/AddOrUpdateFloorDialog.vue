@@ -13,7 +13,7 @@
             size="56"
             >{{ avatarInitials }}</v-avatar
           >
-          New Floor
+          {{ printerFloorId ? 'Edit Floor' : 'New Floor' }}
         </span>
       </v-card-title>
       <v-card-text>
@@ -56,7 +56,7 @@
           color="blue-darken-1"
           variant="text"
           @click="submit"
-          >Create</v-btn
+          >{{ printerFloorId ? 'Update' : 'Create' }}</v-btn
         >
       </v-card-actions>
     </v-card>
@@ -109,12 +109,29 @@ const validateFormData = () => {
 
 const submit = async () => {
   if (!validateFormData()) return
+
   const floorData = FloorService.convertCreateFormToFloor(formData.value)
-  await floorStore.createFloor(floorData)
-  snackbar.openInfoMessage({ title: `Floor ${floorData.name} created` })
-  formData.value.name = newRandomNamePair()
-  const maxIndex = Math.max(...floorStore.floors.map((f) => f.order)) + 1
-  formData.value.order = maxIndex.toString()
+
+  if (printerFloorId.value) {
+    // Update existing floor
+    await floorStore.updateFloorName({
+      floorId: printerFloorId.value,
+      name: floorData.name
+    })
+    await floorStore.updateFloorOrder({
+      floorId: printerFloorId.value,
+      order: floorData.order
+    })
+    snackbar.openInfoMessage({ title: `Floor ${floorData.name} updated` })
+  } else {
+    // Create new floor
+    await floorStore.createFloor(floorData)
+    snackbar.openInfoMessage({ title: `Floor ${floorData.name} created` })
+    formData.value.name = newRandomNamePair()
+    const maxIndex = Math.max(...floorStore.floors.map((f) => f.order)) + 1
+    formData.value.order = maxIndex.toString()
+  }
+
   closeDialog()
 }
 

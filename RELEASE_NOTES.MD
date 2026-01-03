@@ -23,6 +23,7 @@ Features
 - Implement capabilities feature to allow better UI customization for different printer types
 - Redesign About page and move into settings
 - Redesign First Time Setup page with shared HelpBanner across pages using new GitHub and Discord button components
+- Tag color system
 
 Fixes
 
