@@ -1,5 +1,12 @@
 # Develop
 
+Features
+ 
+- Printer grid and other pages share type and tag filter
+
+Fixes
+- Printer Tag filter is now of AND type. This makes more sense in its usage.
+
 ## Client 2.1.0
 
 Features
@@ -8,6 +15,7 @@ Features
 - Queue submit button in top bar panel
 
 Fixes
+
 - Extra camera and floor actions on printer list
 - Camera advanced settings applied
 

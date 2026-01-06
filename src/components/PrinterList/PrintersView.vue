@@ -311,7 +311,6 @@ import PrinterConnectionAction from '@/components/Generic/Actions/PrinterConnect
 import PrinterQuickStopAction from '@/components/Generic/Actions/PrinterQuickStopAction.vue'
 import FileExplorerAction from '@/components/Generic/Actions/FileExplorerAction.vue'
 import SyncPrinterNameAction from '@/components/Generic/Actions/SyncPrinterNameAction.vue'
-
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import PrinterCreateAction from '@/components/Generic/Actions/PrinterCreateAction.vue'
@@ -322,11 +321,7 @@ import { PrinterDto } from '@/models/printers/printer.model'
 import { useFeatureStore } from '@/store/features.store'
 import { useQuery } from '@tanstack/vue-query'
 import { useSnackbar } from '@/shared/snackbar.composable'
-import {
-  TagWithPrintersDto,
-  TagDto,
-  PrinterTagService
-} from '@/backend/printer-tag.service'
+import { PrinterTagService } from '@/backend/printer-tag.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { VDataTable } from 'vuetify/components'
 import { getPrinterTypeName } from '@/shared/printer-types.constants'
@@ -504,7 +499,7 @@ const removePrinterFromFloor = async (printerId: number) => {
     return
   }
 
-  if (!confirm(`Remove printer from floor "${floor.name}"?`)) {
+  if (!confirm(`Remove printer from floor "${ floor.name }"?`)) {
     return
   }
 
