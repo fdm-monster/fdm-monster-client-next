@@ -42,7 +42,7 @@ export const useFloorStore = defineStore('Floors', {
       const printersStore = usePrinterStore()
       return printersStore.printers.filter(
         (p) =>
-          !state.floors.find((f) =>
+          !state.floors.some((f) =>
             f.printers.find((fp) => fp.printerId === p.id)
           )
       )
@@ -64,11 +64,45 @@ export const useFloorStore = defineStore('Floors', {
         matrix.push(row)
         for (let j = 0; j < gridRows; j++) {
           const position = positions.find((p) => p.x === i && p.y === j)
-          if (!position) {
-            row.push(undefined)
-          } else {
+          if (position) {
             const printer = printers.find((p) => p.id === position.printerId)
             row.push(printer)
+          } else {
+            row.push(undefined)
+          }
+        }
+      }
+      return matrix
+    },
+    gridNameSortedPrinters() {
+      const settingsStore = useSettingsStore()
+      const gridCols = settingsStore.gridCols
+      const gridRows = settingsStore.gridRows
+
+      const printersStore = usePrinterStore()
+      const printers = printersStore.printers
+      if (!printers.length) return []
+      if (!this.selectedFloor) return []
+
+      // Get all printers on this floor and sort them by name
+      const floorPrinterIds = new Set(this.selectedFloor.printers.map(p => p.printerId))
+      const floorPrinters = printers
+        .filter(p => floorPrinterIds.has(p.id))
+        .sort((a, b) => a.name.localeCompare(b.name))
+
+      // Create non-sparse grid (fill horizontally)
+      const matrix: (PrinterDto | undefined)[][] = []
+      let printerIndex = 0
+
+      for (let i = 0; i < gridCols; i++) {
+        const row: (PrinterDto | undefined)[] = []
+        matrix.push(row)
+        for (let j = 0; j < gridRows; j++) {
+          if (printerIndex < floorPrinters.length) {
+            row.push(floorPrinters[printerIndex])
+            printerIndex++
+          } else {
+            row.push(undefined)
           }
         }
       }
@@ -89,7 +123,7 @@ export const useFloorStore = defineStore('Floors', {
     },
     saveFloors(floors: FloorDto[]) {
       if (!floors?.length) return
-      this.floors = floors.sort((f, f2) => f.order - f2.order)
+      this.floors = floors.toSorted((f, f2) => f.order - f2.order)
       const floorId = this.selectedFloor?.id
       const foundFloorIndex = this.floors.findIndex((f) => f.id === floorId)
       this.selectedFloorIndex = foundFloorIndex === -1 ? 0 : foundFloorIndex
@@ -147,7 +181,6 @@ export const useFloorStore = defineStore('Floors', {
       }
 
       const newFloor = this.floors[selectedPrinterFloorIndex]
-      // TODO throw warning?
       if (!newFloor) {
         console.warn('Selected floor index did not exist in floors array')
         this.selectedFloorIndex = 0

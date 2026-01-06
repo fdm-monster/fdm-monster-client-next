@@ -53,10 +53,12 @@ import { useSettingsStore } from '@/store/settings.store'
 import { useFloorStore } from '@/store/floor.store'
 import { FloorService } from '@/backend/floor.service'
 import { usePrinterFilters } from '@/shared/printer-filter.composable'
+import { useGridStore } from '@/store/grid.store'
 
 const printerStore = usePrinterStore()
 const floorStore = useFloorStore()
 const settingsStore = useSettingsStore()
+const gridStore = useGridStore()
 const isDragging = ref(false)
 const isDraggingPlacedPrinter = ref(false)
 const isOverRemoveZone = ref(false)
@@ -64,7 +66,7 @@ const isOverRemoveZone = ref(false)
 const { loadTags, filterPrinterMatrix } = usePrinterFilters()
 
 // Track when dragging placed vs unplaced printers
-globalThis.addEventListener('dragstart', (e: any) => {
+globalThis.addEventListener('dragstart', () => {
   isDragging.value = true
 })
 globalThis.addEventListener('dragend', () => {
@@ -91,7 +93,11 @@ const props = defineProps({
 })
 
 const printerMatrix = computed(() => {
-  return filterPrinterMatrix(floorStore.gridSortedPrinters)
+  // Use different sorting based on the mode
+  const baseMatrix = gridStore.sortMode === 'name'
+    ? floorStore.gridNameSortedPrinters
+    : floorStore.gridSortedPrinters
+  return filterPrinterMatrix(baseMatrix)
 })
 const columns = computed(() => settingsStore.gridCols)
 const rows = computed(() => settingsStore.gridRows)
