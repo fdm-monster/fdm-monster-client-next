@@ -352,8 +352,8 @@ const {
   selectedTags,
   selectedPrinterTypes,
   tags,
-  tagsWithPrinters,
-  loadTags
+  loadTags,
+  matchesPrinter
 } = usePrinterFilters()
 
 // Reactive state
@@ -428,32 +428,22 @@ const filteredCameras = computed(() => {
         .includes(searchQuery.value.toLowerCase())
 
     // Printer filter
-    const matchesPrinter =
+    const matchesSpecificPrinter =
       filterPrinter.value === null ||
       (filterPrinter.value === -1 && !camera.cameraStream.printerId) ||
       camera.cameraStream.printerId === filterPrinter.value
 
-    // Tag filter
-    let matchesTags = selectedTags.value.length === 0
-    if (selectedTags.value.length > 0 && camera.printer?.id) {
-      matchesTags = tagsWithPrinters.value.some(tag =>
-        selectedTags.value.includes(tag.id) &&
-        tag.printers.some(p => p.printerId === camera.printer?.id)
-      )
-    }
-
-    // Printer type filter
-    let matchesPrinterType = selectedPrinterTypes.value.length === 0
-    if (selectedPrinterTypes.value.length > 0 && camera.printer) {
-      matchesPrinterType = selectedPrinterTypes.value.includes(camera.printer.printerType)
-    }
+    // Printer filter (tags and type)
+    const matchesPrinterFilter = camera.printer
+      ? matchesPrinter(camera.printer)
+      : (selectedTags.value.length === 0 && selectedPrinterTypes.value.length === 0)
 
     // Unavailable filter
     const matchesAvailability =
       !showOnlyUnavailable.value ||
       cameraErrors[camera.cameraStream.id!]
 
-    return matchesSearch && matchesPrinter && matchesTags && matchesPrinterType && matchesAvailability
+    return matchesSearch && matchesSpecificPrinter && matchesPrinterFilter && matchesAvailability
   })
 })
 

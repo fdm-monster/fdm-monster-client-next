@@ -4,7 +4,7 @@
       <v-card-title class="d-flex align-center">
         <div class="d-flex align-center ga-2">
           <PrinterTagFilter
-            v-model="selectedTagIds"
+            v-model="selectedTags"
             :tags="tags"
             label="Filter by tags"
             style="width: 220px"
@@ -311,7 +311,6 @@ import PrinterConnectionAction from '@/components/Generic/Actions/PrinterConnect
 import PrinterQuickStopAction from '@/components/Generic/Actions/PrinterQuickStopAction.vue'
 import FileExplorerAction from '@/components/Generic/Actions/FileExplorerAction.vue'
 import SyncPrinterNameAction from '@/components/Generic/Actions/SyncPrinterNameAction.vue'
-
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import PrinterCreateAction from '@/components/Generic/Actions/PrinterCreateAction.vue'
@@ -322,16 +321,13 @@ import { PrinterDto } from '@/models/printers/printer.model'
 import { useFeatureStore } from '@/store/features.store'
 import { useQuery } from '@tanstack/vue-query'
 import { useSnackbar } from '@/shared/snackbar.composable'
-import {
-  TagWithPrintersDto,
-  TagDto,
-  PrinterTagService
-} from '@/backend/printer-tag.service'
+import { PrinterTagService } from '@/backend/printer-tag.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { VDataTable } from 'vuetify/components'
 import { getPrinterTypeName } from '@/shared/printer-types.constants'
 import { CameraStreamService } from '@/backend/camera-stream.service'
 import { printerTagsQueryKey } from '@/queries/printer-tags.query'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
 
 const snackbar = useSnackbar()
 const router = useRouter()
@@ -343,10 +339,15 @@ const featureStore = useFeatureStore()
 
 const addOrUpdatePrinterDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 
-const tagsWithPrinters = ref<TagWithPrintersDto[]>([])
-const tags = ref<TagDto[]>([])
-const selectedTagIds = ref<number[]>([])
-const selectedPrinterTypes = ref<number[]>([])
+const {
+  selectedTags,
+  selectedPrinterTypes,
+  tags,
+  tagsWithPrinters,
+  loadTags,
+  filterPrinters
+} = usePrinterFilters()
+
 const cameras = ref<any[]>([])
 
 type ReadonlyHeaders = VDataTable['$props']['headers']
@@ -372,8 +373,7 @@ const tableHeaders = computed(
 async function loadData() {
   loading.value = true
   await featureStore.loadFeatures()
-  tagsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
-  tags.value = tagsWithPrinters.value.map(g => ({ id: g.id, name: g.name, color: g.color }))
+  await loadTags()
 
   cameras.value = await CameraStreamService.listCameraStreams()
 
@@ -387,26 +387,7 @@ const printerTagsQuery = useQuery({
 })
 
 const printers = computed(() => {
-  let filtered = printerStore.printers
-
-  // Filter by tags
-  if (selectedTagIds.value?.length > 0) {
-    const printerIdsInSelectedTags = tagsWithPrinters.value
-      .filter(g => selectedTagIds.value.includes(g.id))
-      .flatMap(g => g.printers.map(p => p.printerId))
-    filtered = filtered.filter((p) =>
-      printerIdsInSelectedTags.includes(p.id)
-    )
-  }
-
-  // Filter by printer type
-  if (selectedPrinterTypes.value?.length > 0) {
-    filtered = filtered.filter((p) =>
-      selectedPrinterTypes.value.includes(p.printerType)
-    )
-  }
-
-  return filtered
+  return filterPrinters(printerStore.printers)
 })
 
 const currentEventReceivedAt = computed(
@@ -518,7 +499,7 @@ const removePrinterFromFloor = async (printerId: number) => {
     return
   }
 
-  if (!confirm(`Remove printer from floor "${floor.name}"?`)) {
+  if (!confirm(`Remove printer from floor "${ floor.name }"?`)) {
     return
   }
 

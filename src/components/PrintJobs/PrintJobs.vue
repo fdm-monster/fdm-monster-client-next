@@ -1012,8 +1012,8 @@ const {
   selectedTags,
   selectedPrinterTypes,
   tags,
-  tagsWithPrinters,
-  loadTags
+  loadTags,
+  matchesPrinter
 } = usePrinterFilters()
 
 // Additional filter selections
@@ -1093,23 +1093,12 @@ const filteredPrintJobs = computed(() => {
     })
   }
 
-  // Filter by tags
-  if (selectedTags.value.length > 0) {
-    filtered = filtered.filter(job => {
-      if (!job.printerId) return false
-      return tagsWithPrinters.value.some(group =>
-        selectedTags.value.includes(group.id) &&
-        group.printers.some(p => p.printerId === job.printerId)
-      )
-    })
-  }
-
-  // Filter by printer type
-  if (selectedPrinterTypes.value.length > 0) {
+  // Filter by tags and printer type using composable
+  if (selectedTags.value.length > 0 || selectedPrinterTypes.value.length > 0) {
     filtered = filtered.filter(job => {
       if (!job.printerId) return false
       const printer = printerStore.printers.find(p => p.id === job.printerId)
-      return printer && selectedPrinterTypes.value.includes(printer.printerType)
+      return printer && matchesPrinter(printer)
     })
   }
 

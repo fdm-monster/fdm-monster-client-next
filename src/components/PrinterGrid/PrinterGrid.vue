@@ -48,21 +48,20 @@
 import { computed, onMounted, ref } from 'vue'
 import PrinterGridTile from '@/components/PrinterGrid/PrinterGridTile.vue'
 import { usePrinterStore } from '@/store/printer.store'
-import { useGridStore } from '@/store/grid.store'
 import { dragAppId, INTENT, DRAG_EVENTS } from '@/shared/drag.constants'
 import { useSettingsStore } from '@/store/settings.store'
 import { useFloorStore } from '@/store/floor.store'
 import { FloorService } from '@/backend/floor.service'
-import { PrinterTagService, TagWithPrintersDto } from '@/backend/printer-tag.service'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
 
 const printerStore = usePrinterStore()
 const floorStore = useFloorStore()
 const settingsStore = useSettingsStore()
-const gridStore = useGridStore()
-const tagsWithPrinters = ref<TagWithPrintersDto[]>([])
 const isDragging = ref(false)
 const isDraggingPlacedPrinter = ref(false)
 const isOverRemoveZone = ref(false)
+
+const { loadTags, filterPrinterMatrix } = usePrinterFilters()
 
 // Track when dragging placed vs unplaced printers
 globalThis.addEventListener('dragstart', (e: any) => {
@@ -81,7 +80,7 @@ globalThis.addEventListener(DRAG_EVENTS.TILE_DRAG_START, () => {
 onMounted(async () => {
   await printerStore.loadPrinters()
   await floorStore.loadFloors()
-  tagsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
+  await loadTags()
 })
 
 const props = defineProps({
@@ -92,39 +91,7 @@ const props = defineProps({
 })
 
 const printerMatrix = computed(() => {
-  const matrix = floorStore.gridSortedPrinters
-  const hasTagFilter = gridStore.selectedTagFilter?.length > 0
-  const hasPrinterTypeFilter = gridStore.selectedPrinterTypeFilter?.length > 0
-
-  // If no filters, return all printers
-  if (!hasTagFilter && !hasPrinterTypeFilter) {
-    return matrix
-  }
-
-  // Filter printers based on selected tags and printer types
-  return matrix.map(row =>
-    row.map(printer => {
-      if (!printer) return undefined
-
-      // Check tag filter
-      let matchesTagFilter = !hasTagFilter
-      if (hasTagFilter) {
-        matchesTagFilter = tagsWithPrinters.value.some(tag =>
-          gridStore.selectedTagFilter.includes(tag.id) &&
-          tag.printers.some(p => p.printerId === printer.id)
-        )
-      }
-
-      // Check printer type filter
-      let matchesPrinterType = !hasPrinterTypeFilter
-      if (hasPrinterTypeFilter) {
-        matchesPrinterType = gridStore.selectedPrinterTypeFilter.includes(printer.printerType)
-      }
-
-      // Printer must match both filters (if active)
-      return matchesTagFilter && matchesPrinterType ? printer : undefined
-    })
-  )
+  return filterPrinterMatrix(floorStore.gridSortedPrinters)
 })
 const columns = computed(() => settingsStore.gridCols)
 const rows = computed(() => settingsStore.gridRows)
