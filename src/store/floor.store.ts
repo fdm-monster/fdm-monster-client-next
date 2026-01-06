@@ -78,6 +78,7 @@ export const useFloorStore = defineStore('Floors', {
       const settingsStore = useSettingsStore()
       const gridCols = settingsStore.gridCols
       const gridRows = settingsStore.gridRows
+      const sortDirection = settingsStore.gridNameSortDirection
 
       const printersStore = usePrinterStore()
       const printers = printersStore.printers
@@ -90,22 +91,38 @@ export const useFloorStore = defineStore('Floors', {
         .filter(p => floorPrinterIds.has(p.id))
         .sort((a, b) => a.name.localeCompare(b.name))
 
-      // Create non-sparse grid (fill horizontally)
+      // Create non-sparse grid - matrix is [col][row] format
       const matrix: (PrinterDto | undefined)[][] = []
-      let printerIndex = 0
 
+      // Initialize empty matrix
       for (let i = 0; i < gridCols; i++) {
         const row: (PrinterDto | undefined)[] = []
         matrix.push(row)
         for (let j = 0; j < gridRows; j++) {
-          if (printerIndex < floorPrinters.length) {
-            row.push(floorPrinters[printerIndex])
+          row.push(undefined)
+        }
+      }
+
+      let printerIndex = 0
+
+      if (sortDirection === 'vertical') {
+        // Fill vertically: down each column, then move to next column
+        for (let x = 0; x < gridCols && printerIndex < floorPrinters.length; x++) {
+          for (let y = 0; y < gridRows && printerIndex < floorPrinters.length; y++) {
+            matrix[x][y] = floorPrinters[printerIndex]
             printerIndex++
-          } else {
-            row.push(undefined)
+          }
+        }
+      } else {
+        // Fill horizontally: across each row, then move to next row
+        for (let y = 0; y < gridRows && printerIndex < floorPrinters.length; y++) {
+          for (let x = 0; x < gridCols && printerIndex < floorPrinters.length; x++) {
+            matrix[x][y] = floorPrinters[printerIndex]
+            printerIndex++
           }
         }
       }
+
       return matrix
     }
   },

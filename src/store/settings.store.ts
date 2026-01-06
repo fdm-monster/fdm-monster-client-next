@@ -72,6 +72,9 @@ export const useSettingsStore = defineStore('Settings', {
     },
     gridRows(): number {
       return this.settings?.frontend?.gridRows || 8
+    },
+    gridNameSortDirection(): 'horizontal' | 'vertical' {
+      return this.settings?.frontend?.gridNameSortDirection || 'horizontal'
     }
   }
 })

@@ -29,6 +29,29 @@
           class="mt-2"
           @update:model-value="updatePreferCancel"
         />
+
+        <v-divider class="my-3" />
+
+        <div class="text-caption text-medium-emphasis mb-2">
+          Name Sort Direction
+        </div>
+        <v-radio-group
+          v-model="sortDirectionModel"
+          density="compact"
+          hide-details
+          @update:model-value="updateSortDirection"
+        >
+          <v-radio
+            label="Horizontal (left to right)"
+            value="horizontal"
+            density="compact"
+          />
+          <v-radio
+            label="Vertical (top to bottom)"
+            value="vertical"
+            density="compact"
+          />
+        </v-radio-group>
       </v-card-text>
     </v-card>
   </v-menu>
@@ -42,6 +65,7 @@ const settingsStore = useSettingsStore()
 
 const largeTilesModel = ref(settingsStore.largeTiles)
 const preferCancelModel = ref(settingsStore.preferCancelOverQuickStop)
+const sortDirectionModel = ref(settingsStore.gridNameSortDirection)
 
 async function updateLargeTiles(value: boolean | null) {
   if (!settingsStore.frontendSettings) return
@@ -56,6 +80,14 @@ async function updatePreferCancel(value: boolean | null) {
   await settingsStore.updateFrontendSettings({
     ...settingsStore.frontendSettings,
     tilePreferCancelOverQuickStop: value ?? false
+  })
+}
+
+async function updateSortDirection(value: 'horizontal' | 'vertical' | null) {
+  if (!settingsStore.frontendSettings || !value) return
+  await settingsStore.updateFrontendSettings({
+    ...settingsStore.frontendSettings,
+    gridNameSortDirection: value
   })
 }
 </script>
