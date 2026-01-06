@@ -180,11 +180,11 @@ function handleKeyDown(event: KeyboardEvent) {
 
 onMounted(async () => {
   await loadTags()
-  window.addEventListener('keydown', handleKeyDown)
+  globalThis.addEventListener('keydown', handleKeyDown)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyDown)
+  globalThis.removeEventListener('keydown', handleKeyDown)
 })
 
 function changeFloorIndex(index: any) {
