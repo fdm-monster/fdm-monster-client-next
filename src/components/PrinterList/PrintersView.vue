@@ -4,7 +4,7 @@
       <v-card-title class="d-flex align-center">
         <div class="d-flex align-center ga-2">
           <PrinterTagFilter
-            v-model="selectedTagIds"
+            v-model="selectedTags"
             :tags="tags"
             label="Filter by tags"
             style="width: 220px"
@@ -332,6 +332,7 @@ import { VDataTable } from 'vuetify/components'
 import { getPrinterTypeName } from '@/shared/printer-types.constants'
 import { CameraStreamService } from '@/backend/camera-stream.service'
 import { printerTagsQueryKey } from '@/queries/printer-tags.query'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
 
 const snackbar = useSnackbar()
 const router = useRouter()
@@ -343,10 +344,15 @@ const featureStore = useFeatureStore()
 
 const addOrUpdatePrinterDialog = useDialog(DialogName.AddOrUpdatePrinterDialog)
 
-const tagsWithPrinters = ref<TagWithPrintersDto[]>([])
-const tags = ref<TagDto[]>([])
-const selectedTagIds = ref<number[]>([])
-const selectedPrinterTypes = ref<number[]>([])
+const {
+  selectedTags,
+  selectedPrinterTypes,
+  tags,
+  tagsWithPrinters,
+  loadTags,
+  filterPrinters
+} = usePrinterFilters()
+
 const cameras = ref<any[]>([])
 
 type ReadonlyHeaders = VDataTable['$props']['headers']
@@ -372,8 +378,7 @@ const tableHeaders = computed(
 async function loadData() {
   loading.value = true
   await featureStore.loadFeatures()
-  tagsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
-  tags.value = tagsWithPrinters.value.map(g => ({ id: g.id, name: g.name, color: g.color }))
+  await loadTags()
 
   cameras.value = await CameraStreamService.listCameraStreams()
 
@@ -387,26 +392,7 @@ const printerTagsQuery = useQuery({
 })
 
 const printers = computed(() => {
-  let filtered = printerStore.printers
-
-  // Filter by tags
-  if (selectedTagIds.value?.length > 0) {
-    const printerIdsInSelectedTags = tagsWithPrinters.value
-      .filter(g => selectedTagIds.value.includes(g.id))
-      .flatMap(g => g.printers.map(p => p.printerId))
-    filtered = filtered.filter((p) =>
-      printerIdsInSelectedTags.includes(p.id)
-    )
-  }
-
-  // Filter by printer type
-  if (selectedPrinterTypes.value?.length > 0) {
-    filtered = filtered.filter((p) =>
-      selectedPrinterTypes.value.includes(p.printerType)
-    )
-  }
-
-  return filtered
+  return filterPrinters(printerStore.printers)
 })
 
 const currentEventReceivedAt = computed(

@@ -44,57 +44,35 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed, ref } from 'vue'
 import { PrinterDto } from '@/models/printers/printer.model'
 import RefreshFilesAction from '@/components/Generic/Actions/RefreshFilesAction.vue'
-import { usePrinterStore } from '@/store/printer.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'
 
-interface Data {
-  dragging: boolean
-}
+const props = defineProps<{
+  printer?: PrinterDto
+}>()
 
-export default defineComponent({
-  name: 'PrinterDetails',
-  components: {
-    RefreshFilesAction
-  },
-  props: {
-    printer: Object as PropType<PrinterDto>
-  },
+const printerStateStore = usePrinterStateStore()
 
-  setup: () => {
-    return {
-      printersStore: usePrinterStore(),
-      printerStateStore: usePrinterStateStore()
-    }
-  },
+const dragging = ref(false)
 
-  data: (): Data => ({
-    dragging: false
-  }),
+const printerId = computed(() => props.printer?.id)
 
-  computed: {
-    printerId() {
-      return this.printer?.id
-    },
+const socketState = computed(() => {
+  if (!printerId.value) return
+  return printerStateStore.socketStatesById[printerId.value]?.socket
+})
 
-    socketState() {
-      if (!this.printerId) return
-      return this.printerStateStore.socketStatesById[this.printerId]?.socket
-    },
+const apiState = computed(() => {
+  if (!printerId.value) return
+  return printerStateStore.socketStatesById[printerId.value]?.api
+})
 
-    apiState() {
-      if (!this.printerId) return
-      return this.printerStateStore.socketStatesById[this.printerId]?.api
-    },
-
-    printerTextState() {
-      if (!this.printerId) return
-      return this.printerStateStore.printerEventsById[this.printerId]?.current
-        ?.payload?.state.text
-    }
-  }
+const printerTextState = computed(() => {
+  if (!printerId.value) return
+  return printerStateStore.printerEventsById[printerId.value]?.current
+    ?.payload?.state.text
 })
 </script>
