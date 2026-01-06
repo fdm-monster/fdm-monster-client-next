@@ -58,7 +58,7 @@
       </v-btn>
       <v-btn
         size="small"
-        title="Name mode - Sort alphabetically (Shift+S)"
+        title="Name mode - Sort alphabetically (Shift+S). Change direction in grid settings."
       >
         <v-icon>sort_by_alpha</v-icon>
         Name

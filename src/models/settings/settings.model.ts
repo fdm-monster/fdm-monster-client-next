@@ -5,6 +5,7 @@ export interface FrontendSettings {
   gridCols: number
   gridRows: number
   tilePreferCancelOverQuickStop: boolean
+  gridNameSortDirection?: 'horizontal' | 'vertical'
 }
 
 export interface ConnectionInfo {
