@@ -1,5 +1,13 @@
 # Develop
 
+## Client 2.1.3
+
+Fixes
+
+- Grid sort is now horizontal.
+
+## Client 2.1.2
+
 Features
 
 - Grid can sort by name without leaving gaps, Shift+S is a shortcut for it.
