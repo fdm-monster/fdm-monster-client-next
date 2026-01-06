@@ -352,7 +352,6 @@ const {
   selectedTags,
   selectedPrinterTypes,
   tags,
-  tagsWithPrinters,
   loadTags,
   matchesPrinter
 } = usePrinterFilters()
