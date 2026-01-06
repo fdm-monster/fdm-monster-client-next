@@ -1,10 +1,17 @@
 # Develop
 
+Fixes
+
+- Add Files Nav title (it was missing).
+
+## Client 2.1.1
+
 Features
  
 - Printer grid and other pages share type and tag filter
 
 Fixes
+
 - Printer Tag filter is now of AND type. This makes more sense in its usage.
 
 ## Client 2.1.0

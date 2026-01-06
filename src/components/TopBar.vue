@@ -110,28 +110,25 @@ const route = useRoute()
 // Page titles and subtitles based on route
 const pageTitles: Record<string, { title: string; subtitle?: string }> = {
   'Print Jobs': {
-    title: 'Print Jobs',
-    subtitle: 'Track and monitor all your 3D printing jobs'
+    title: 'Print Jobs'
   },
   'Print Queue': {
-    title: 'Print Queue',
-    subtitle: 'Manage your print queue'
+    title: 'Print Queue'
   },
   'CameraGridView': {
-    title: 'Cameras',
-    subtitle: 'Monitor your camera feeds'
+    title: 'Cameras'
   },
   'PrintersView': {
-    title: 'Printer List',
-    subtitle: 'Manage your 3D printers'
+    title: 'Printer List'
   },
   'PrinterGrid': {
-    title: 'Printer Grid',
-    subtitle: 'Monitor your printer farm'
+    title: 'Printer Grid'
   },
   'Settings': {
-    title: 'Settings',
-    subtitle: 'Configure your system'
+    title: 'Settings'
+  },
+  "Files": {
+    title: 'Files'
   }
   // Add more page titles as needed
 }
