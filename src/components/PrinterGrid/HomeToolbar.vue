@@ -41,6 +41,30 @@
       @update:model-value="onPrinterTypeFilterChange"
     />
 
+    <!-- Sort mode toggle -->
+    <v-btn-toggle
+      :model-value="sortModeIndex"
+      class="ml-4"
+      rounded
+      mandatory
+      @update:model-value="onSortModeChange"
+    >
+      <v-btn
+        size="small"
+        title="Position mode - Sort by grid position"
+      >
+        <v-icon>grid_on</v-icon>
+        Position
+      </v-btn>
+      <v-btn
+        size="small"
+        title="Name mode - Sort alphabetically (Shift+S)"
+      >
+        <v-icon>sort_by_alpha</v-icon>
+        Name
+      </v-btn>
+    </v-btn-toggle>
+
     <!-- Auto Place button -->
     <v-btn
       v-if="floorStore.floorlessPrinters.length"
@@ -110,7 +134,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useGridStore } from '@/store/grid.store'
 import { useFloorStore } from '@/store/floor.store'
 import { useSettingsStore } from '@/store/settings.store'
@@ -141,8 +165,26 @@ const floors = computed(() => {
   return floorStore.floors
 })
 
+const sortModeIndex = computed(() => {
+  return gridStore.sortMode === 'position' ? 0 : 1
+})
+
+// Keyboard shortcut handler
+function handleKeyDown(event: KeyboardEvent) {
+  // Shift+S toggles sort mode
+  if (event.shiftKey && event.key.toLowerCase() === 's') {
+    event.preventDefault()
+    gridStore.toggleSortMode()
+  }
+}
+
 onMounted(async () => {
   await loadTags()
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown)
 })
 
 function changeFloorIndex(index: any) {
@@ -155,6 +197,10 @@ function onTagFilterChange(tagIds: number[]) {
 
 function onPrinterTypeFilterChange(typeIds: number[]) {
   gridStore.setPrinterTypeFilter(typeIds)
+}
+
+function onSortModeChange(index: number) {
+  gridStore.setSortMode(index === 0 ? 'position' : 'name')
 }
 
 function onUnplacedDragStart(printer: PrinterDto, ev: DragEvent) {

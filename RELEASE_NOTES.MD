@@ -1,5 +1,9 @@
 # Develop
 
+Features
+
+- Grid can sort by name without leaving gaps, Shift+S is a shortcut for it.
+
 Fixes
 
 - Add Files Nav title (it was missing).

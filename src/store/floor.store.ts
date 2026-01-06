@@ -73,6 +73,40 @@ export const useFloorStore = defineStore('Floors', {
         }
       }
       return matrix
+    },
+    gridNameSortedPrinters() {
+      const settingsStore = useSettingsStore()
+      const gridCols = settingsStore.gridCols
+      const gridRows = settingsStore.gridRows
+
+      const printersStore = usePrinterStore()
+      const printers = printersStore.printers
+      if (!printers.length) return []
+      if (!this.selectedFloor) return []
+
+      // Get all printers on this floor and sort them by name
+      const floorPrinterIds = this.selectedFloor.printers.map(p => p.printerId)
+      const floorPrinters = printers
+        .filter(p => floorPrinterIds.includes(p.id))
+        .sort((a, b) => a.name.localeCompare(b.name))
+
+      // Create non-sparse grid (fill horizontally)
+      const matrix: (PrinterDto | undefined)[][] = []
+      let printerIndex = 0
+
+      for (let i = 0; i < gridCols; i++) {
+        const row: (PrinterDto | undefined)[] = []
+        matrix.push(row)
+        for (let j = 0; j < gridRows; j++) {
+          if (printerIndex < floorPrinters.length) {
+            row.push(floorPrinters[printerIndex])
+            printerIndex++
+          } else {
+            row.push(undefined)
+          }
+        }
+      }
+      return matrix
     }
   },
   actions: {
