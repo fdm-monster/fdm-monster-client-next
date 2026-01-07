@@ -1,5 +1,9 @@
 # Develop
 
+Fixes
+
+- Drag over files page upload box would flicker
+
 ## Client 2.1.4
 
 Features
