@@ -983,7 +983,7 @@ __metadata:
   dependencies:
     "@babel/types": "npm:7.28.5"
     "@hey-api/client-axios": "npm:0.9.1"
-    "@hey-api/openapi-ts": "npm:0.90.1"
+    "@hey-api/openapi-ts": "npm:0.90.2"
     "@mdi/font": "npm:7.4.47"
     "@sentry/tracing": "npm:7.120.4"
     "@sentry/vite-plugin": "npm:4.6.1"
@@ -1051,15 +1051,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/codegen-core@npm:^0.5.1":
-  version: 0.5.1
-  resolution: "@hey-api/codegen-core@npm:0.5.1"
+"@hey-api/codegen-core@npm:^0.5.2":
+  version: 0.5.2
+  resolution: "@hey-api/codegen-core@npm:0.5.2"
   dependencies:
     ansi-colors: "npm:4.1.3"
     color-support: "npm:1.1.3"
   peerDependencies:
     typescript: ">=5.5.3"
-  checksum: 10c0/38c2296f1505157a216b004eae46b2dd8a7456395ba484e41e3c96ff3e76ae54c0159468346ab45d331e221483e3f7108ca5d3f94730992d701a9858bd3c8da5
+  checksum: 10c0/448857f83e7591b2af3daf8a26d23dad5347739f89ba139a513c4db07cd2b8ca2b4ddfbfd7670a7658ff7baf7e6c6dc29a8df9bb5d9bf3d87e59854768f915b6
   languageName: node
   linkType: hard
 
@@ -1075,11 +1075,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:0.90.1":
-  version: 0.90.1
-  resolution: "@hey-api/openapi-ts@npm:0.90.1"
+"@hey-api/openapi-ts@npm:0.90.2":
+  version: 0.90.2
+  resolution: "@hey-api/openapi-ts@npm:0.90.2"
   dependencies:
-    "@hey-api/codegen-core": "npm:^0.5.1"
+    "@hey-api/codegen-core": "npm:^0.5.2"
     "@hey-api/json-schema-ref-parser": "npm:1.2.2"
     ansi-colors: "npm:4.1.3"
     c12: "npm:3.3.3"
@@ -1091,7 +1091,7 @@ __metadata:
     typescript: ">=5.5.3"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/864e895d1228af10506ab88a2e658d3a06eb65b8d2df94ca45c1e0580ae282807fb40c458a6aecf8563c1860828de0082d4c22a952496073f449ff3503d5aeb4
+  checksum: 10c0/ff814eecb6f189622b78a648bd4ed32ba9ca95ae87e10f544485355b01bd24d39fc6c47b9fed7e1a8a2f7443377f1e6a21ac092b0f6aabd2dbe31161398d2d94
   languageName: node
   linkType: hard
 
