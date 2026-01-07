@@ -1,28 +1,11 @@
 <template>
   <v-container fluid>
-    <!-- Page Header -->
-    <v-row class="mb-6">
-      <v-col cols="12">
-        <div class="d-flex align-center justify-space-between">
-          <v-chip
-            v-if="totalCount > 0"
-            color="primary"
-            variant="elevated"
-            size="large"
-            class="px-4"
-          >
-            <v-icon start>folder</v-icon>
-            {{ totalCount }} files
-          </v-chip>
-        </div>
-      </v-col>
-    </v-row>
-
     <!-- Drag and Drop Upload Area -->
     <v-card
       class="mb-6 upload-drop-zone"
       elevation="2"
       :class="{ 'drag-over': isDragging }"
+      @dragenter.prevent="handleDragEnter"
       @dragover.prevent="handleDragOver"
       @dragleave.prevent="handleDragLeave"
       @drop.prevent="handleDrop"
@@ -75,6 +58,14 @@
         <v-icon class="mr-3" color="primary">inventory_2</v-icon>
         <span class="text-h6">File Storage</span>
         <v-spacer />
+        <v-chip
+          v-if="totalCount > 0"
+          variant="tonal"
+          size="small"
+          class="mr-3"
+        >
+          {{ totalCount }} files
+        </v-chip>
         <v-text-field
           v-model="searchQuery"
           prepend-inner-icon="search"
@@ -456,6 +447,7 @@ const selectedPrinters = ref<number[]>([])
 const queuing = ref(false)
 const uploading = ref(false)
 const isDragging = ref(false)
+const dragDepth = ref(0)
 const uploadProgress = ref<Array<{ fileName: string; percent: number; error?: string }>>([])
 const fileInput = ref<HTMLInputElement | null>(null)
 
@@ -530,14 +522,28 @@ const deleteFile = async (file: FileMetadata) => {
 }
 
 const handleDragOver = (e: DragEvent) => {
-  isDragging.value = true
+  e.preventDefault()
+}
+
+const handleDragEnter = (e: DragEvent) => {
+  e.preventDefault()
+  dragDepth.value++
+  if (dragDepth.value === 1) {
+    isDragging.value = true
+  }
 }
 
 const handleDragLeave = (e: DragEvent) => {
-  isDragging.value = false
+  e.preventDefault()
+  dragDepth.value--
+  if (dragDepth.value === 0) {
+    isDragging.value = false
+  }
 }
 
 const handleDrop = async (e: DragEvent) => {
+  e.preventDefault()
+  dragDepth.value = 0
   isDragging.value = false
   const droppedFiles = Array.from(e.dataTransfer?.files || [])
   await uploadFiles(droppedFiles)
