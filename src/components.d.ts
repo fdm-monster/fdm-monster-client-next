@@ -86,6 +86,7 @@ declare module 'vue' {
     ServerProtectionSettings: typeof import('./components/Settings/ServerProtectionSettings.vue')['default']
     SettingSection: typeof import('./components/Settings/Shared/SettingSection.vue')['default']
     SettingsView: typeof import('./components/Settings/SettingsView.vue')['default']
+    SlicerSettings: typeof import('./components/Settings/SlicerSettings.vue')['default']
     SoftwareUpgradeSettings: typeof import('./components/Settings/SoftwareUpgradeSettings.vue')['default']
     SyncPrinterNameAction: typeof import('./components/Generic/Actions/SyncPrinterNameAction.vue')['default']
     TooltipButton: typeof import('./components/Generic/Vuetify/TooltipButton.vue')['default']

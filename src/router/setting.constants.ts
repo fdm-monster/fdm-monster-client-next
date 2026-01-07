@@ -8,6 +8,7 @@ export const settingPage = {
   softwareUpgrade: "softwareUpgrade",
   diagnostics: "diagnostics",
   experimental: "experimental",
+  slicer: "slicer",
   debugSocket: "debugSocket",
   about: "about",
 } as const;
@@ -67,6 +68,11 @@ export const settingsPage = {
     path: "/settings/experimental",
     divider: false,
   },
+  [settingPage.slicer]: {
+    title: "Slicer Integration",
+    icon: "print",
+    path: "/settings/slicer",
+    divider: false, },
   [settingPage.debugSocket]: {
     title: "SocketIO Debug",
     icon: "wifi_tethering",

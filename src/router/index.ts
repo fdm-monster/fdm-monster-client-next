@@ -22,6 +22,7 @@ import DiagnosticsSettings from '../components/Settings/DiagnosticsSettings.vue'
 import PrintJobsView from '../components/PrintJobs/PrintJobsView.vue'
 import FilesView from '../components/Files/FilesView.vue'
 import ExperimentalSettings from '@/components/Settings/ExperimentalSettings.vue'
+import SlicerSettings from '@/components/Settings/SlicerSettings.vue'
 import DebugSocketSettings from "@/components/Settings/DebugSocketSettings.vue";
 import AboutSettings from "@/components/Settings/AboutSettings.vue";
 
@@ -138,6 +139,11 @@ const router = createRouter({
           path: 'experimental',
           meta: NeedsAuth,
           component: ExperimentalSettings
+        },
+        {
+          path: 'slicer',
+          meta: NeedsAuth,
+          component: SlicerSettings
         },
         {
           path: "debug-socket",
