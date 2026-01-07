@@ -52,8 +52,7 @@
                 variant="outlined"
                 density="compact"
                 hide-details
-                class="flex-grow-1 mr-2"
-                style="font-family: monospace;"
+                style="font-family: monospace; max-width: 400px;"
               >
                 <template #append-inner>
                   <v-btn
@@ -72,6 +71,7 @@
                 icon
                 variant="tonal"
                 color="primary"
+                class="ml-2"
                 @click="copyApiKey"
                 :title="copied ? 'Copied!' : 'Copy to clipboard'"
               >
@@ -80,6 +80,16 @@
             </div>
 
             <div class="d-flex gap-2">
+              <v-btn
+                color="primary"
+                class="mr-2"
+                variant="tonal"
+                @click="copyApiKey"
+                prepend-icon="content_copy"
+              >
+                {{ copied ? 'Copied!' : 'Copy Key' }}
+              </v-btn>
+
               <v-btn
                 color="warning"
                 variant="tonal"
