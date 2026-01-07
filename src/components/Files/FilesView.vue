@@ -245,6 +245,19 @@
               </v-tooltip>
             </v-btn>
             <v-btn
+              icon="analytics"
+              size="small"
+              variant="text"
+              color="info"
+              @click="analyzeFile(item)"
+              :loading="analyzingFiles.has(item.fileStorageId)"
+            >
+              <v-icon>analytics</v-icon>
+              <v-tooltip activator="parent" location="top">
+                Trigger analysis
+              </v-tooltip>
+            </v-btn>
+            <v-btn
               icon="visibility"
               size="small"
               variant="text"
@@ -450,6 +463,7 @@ const isDragging = ref(false)
 const dragDepth = ref(0)
 const uploadProgress = ref<Array<{ fileName: string; percent: number; error?: string }>>([])
 const fileInput = ref<HTMLInputElement | null>(null)
+const analyzingFiles = ref<Set<string>>(new Set())
 
 const headers = [
   { title: 'File Name', key: 'fileName', sortable: true },
@@ -518,6 +532,26 @@ const deleteFile = async (file: FileMetadata) => {
   } catch (error) {
     console.error('Failed to delete file:', error)
     snackbar.error('Failed to delete file')
+  }
+}
+
+const analyzeFile = async (file: FileMetadata) => {
+  if (analyzingFiles.value.has(file.fileStorageId)) {
+    return
+  }
+
+  analyzingFiles.value.add(file.fileStorageId)
+
+  try {
+    const result = await FileStorageService.analyzeFile(file.fileStorageId)
+    snackbar.info(`Analysis complete! Found ${result.thumbnailCount} thumbnail(s)`)
+
+    await loadFiles()
+  } catch (error) {
+    console.error('Failed to analyze file:', error)
+    snackbar.error('Failed to analyze file')
+  } finally {
+    analyzingFiles.value.delete(file.fileStorageId)
   }
 }
 

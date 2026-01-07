@@ -1,5 +1,11 @@
 # Develop
 
+## Client 2.1.5
+
+Features
+
+- Ability to analyze file from Files page
+
 Fixes
 
 - Drag over files page upload box would flicker
