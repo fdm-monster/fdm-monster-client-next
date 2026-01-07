@@ -49,6 +49,16 @@ export class FileStorageService extends BaseService {
     return this.delete(path)
   }
 
+  static async analyzeFile(fileStorageId: string): Promise<{
+    message: string
+    fileStorageId: string
+    metadata: any
+    thumbnailCount: number
+  }> {
+    const path = `/api/v2/file-storage/${fileStorageId}/analyze`
+    return this.post(path, {})
+  }
+
   /**
    * Get thumbnail URL
    */
