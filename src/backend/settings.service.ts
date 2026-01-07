@@ -80,4 +80,18 @@ export class SettingsService extends BaseService {
     const path = ServerApi.updateExperimentalThumbnailSupportRoute;
     return await this.put<SettingsDto>(path, { enabled })
   }
+ static async getSlicerApiKey() {
+    const path = ServerApi.slicerApiKeyRoute
+    return await this.get<{ slicerApiKey: string | null }>(path)
+  }
+
+  static async regenerateSlicerApiKey() {
+    const path = ServerApi.regenerateSlicerApiKeyRoute
+    return await this.post<{ slicerApiKey: string }>(path, {})
+  }
+
+  static async deleteSlicerApiKey() {
+    const path = ServerApi.slicerApiKeyRoute
+    return await this.delete<{ slicerApiKey: null }>(path)
+  }
 }

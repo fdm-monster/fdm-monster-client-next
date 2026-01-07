@@ -1,4 +1,7 @@
 # Develop
+Fixes
+
+- Sorting grid by name (instead of showing by position) is not leaving gaps anymore.
 
 ## Client 2.1.3
 

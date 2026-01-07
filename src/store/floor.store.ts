@@ -75,55 +75,60 @@ export const useFloorStore = defineStore('Floors', {
       return matrix
     },
     gridNameSortedPrinters() {
-      const settingsStore = useSettingsStore()
-      const gridCols = settingsStore.gridCols
-      const gridRows = settingsStore.gridRows
-      const sortDirection = settingsStore.gridNameSortDirection
+      return (filteredPrinters?: PrinterDto[]) => {
+        const settingsStore = useSettingsStore()
+        const gridCols = settingsStore.gridCols
+        const gridRows = settingsStore.gridRows
+        const sortDirection = settingsStore.gridNameSortDirection
 
-      const printersStore = usePrinterStore()
-      const printers = printersStore.printers
-      if (!printers.length) return []
-      if (!this.selectedFloor) return []
+        const printersStore = usePrinterStore()
+        const printers = printersStore.printers
 
-      // Get all printers on this floor and sort them by name
-      const floorPrinterIds = new Set(this.selectedFloor.printers.map(p => p.printerId))
-      const floorPrinters = printers
-        .filter(p => floorPrinterIds.has(p.id))
-        .sort((a, b) => a.name.localeCompare(b.name))
+        if (!printers.length) return []
+        if (!this.selectedFloor) return []
 
-      // Create non-sparse grid - matrix is [col][row] format
-      const matrix: (PrinterDto | undefined)[][] = []
+        // Get all printers on this floor
+        const floorPrinterIds = new Set(this.selectedFloor.printers.map(p => p.printerId))
+        let floorPrinters = filteredPrinters
+          ? filteredPrinters.filter(p => floorPrinterIds.has(p.id))
+          : printers.filter(p => floorPrinterIds.has(p.id))
 
-      // Initialize empty matrix
-      for (let i = 0; i < gridCols; i++) {
-        const row: (PrinterDto | undefined)[] = []
-        matrix.push(row)
-        for (let j = 0; j < gridRows; j++) {
-          row.push(undefined)
-        }
-      }
+        // Sort filtered printers by name
+        floorPrinters.sort((a, b) => a.name.localeCompare(b.name))
 
-      let printerIndex = 0
+        // Create non-sparse grid - matrix is [col][row] format
+        const matrix: (PrinterDto | undefined)[][] = []
 
-      if (sortDirection === 'vertical') {
-        // Fill vertically: down each column, then move to next column
-        for (let x = 0; x < gridCols && printerIndex < floorPrinters.length; x++) {
-          for (let y = 0; y < gridRows && printerIndex < floorPrinters.length; y++) {
-            matrix[x][y] = floorPrinters[printerIndex]
-            printerIndex++
+        // Initialize empty matrix
+        for (let i = 0; i < gridCols; i++) {
+          const row: (PrinterDto | undefined)[] = []
+          matrix.push(row)
+          for (let j = 0; j < gridRows; j++) {
+            row.push(undefined)
           }
         }
-      } else {
-        // Fill horizontally: across each row, then move to next row
-        for (let y = 0; y < gridRows && printerIndex < floorPrinters.length; y++) {
+
+        let printerIndex = 0
+        if (sortDirection === 'vertical') {
+          // Fill vertically: down each column, then move to next column
           for (let x = 0; x < gridCols && printerIndex < floorPrinters.length; x++) {
-            matrix[x][y] = floorPrinters[printerIndex]
-            printerIndex++
+            for (let y = 0; y < gridRows && printerIndex < floorPrinters.length; y++) {
+              matrix[x][y] = floorPrinters[printerIndex]
+              printerIndex++
+            }
+          }
+        } else {
+          // Fill horizontally: across each row, then move to next row
+          for (let y = 0; y < gridRows && printerIndex < floorPrinters.length; y++) {
+            for (let x = 0; x < gridCols && printerIndex < floorPrinters.length; x++) {
+              matrix[x][y] = floorPrinters[printerIndex]
+              printerIndex++
+            }
           }
         }
-      }
 
-      return matrix
+        return matrix
+      }
     }
   },
   actions: {
