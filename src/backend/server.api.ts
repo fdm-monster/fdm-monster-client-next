@@ -36,6 +36,8 @@ export class ServerApi {
   static readonly updateExperimentalThumbnailSupportRoute = `${ServerApi.settingsRoute}/experimental-thumbnail-support`
   static readonly updateExperimentalPrusaLinkSupportRoute = `${ServerApi.settingsRoute}/experimental-prusa-link-support`
   static readonly updateExperimentalBambuSupportRoute = `${ServerApi.settingsRoute}/experimental-bambu-support`
+  static readonly slicerApiKeyRoute = `${ServerApi.settingsRoute}/slicer-api-key`
+  static readonly regenerateSlicerApiKeyRoute = `${ServerApi.slicerApiKeyRoute}/regenerate`
 
   static readonly deleteTagRoute = (id: number) => `${ServerApi.base}/printer-tag/${id}`
 

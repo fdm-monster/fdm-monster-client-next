@@ -63,7 +63,7 @@ const isDragging = ref(false)
 const isDraggingPlacedPrinter = ref(false)
 const isOverRemoveZone = ref(false)
 
-const { loadTags, filterPrinterMatrix } = usePrinterFilters()
+const { loadTags, filterPrinterMatrix, filterPrinters } = usePrinterFilters()
 
 // Track when dragging placed vs unplaced printers
 globalThis.addEventListener('dragstart', () => {
@@ -93,11 +93,12 @@ const props = defineProps({
 })
 
 const printerMatrix = computed(() => {
-  // Use different sorting based on the mode
-  const baseMatrix = gridStore.sortMode === 'name'
-    ? floorStore.gridNameSortedPrinters
-    : floorStore.gridSortedPrinters
-  return filterPrinterMatrix(baseMatrix)
+  if (gridStore.sortMode === 'name') {
+    const filteredPrinters = filterPrinters(printerStore.printers)
+    return floorStore.gridNameSortedPrinters(filteredPrinters)
+  }
+
+  return filterPrinterMatrix(floorStore.gridSortedPrinters)
 })
 const columns = computed(() => settingsStore.gridCols)
 const rows = computed(() => settingsStore.gridRows)
@@ -106,7 +107,7 @@ const largeTileMode = computed(() => settingsStore.largeTiles)
 const totalCells = computed(() => rows.value * columns.value)
 const gridStyle = computed(() => ({
   display: 'grid',
-  gridTemplateColumns: `repeat(${columns.value}, 1fr)`,
+  gridTemplateColumns: `repeat(${ columns.value }, 1fr)`,
   gap: props.gap
 }))
 

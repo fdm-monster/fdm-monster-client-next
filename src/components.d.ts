@@ -76,7 +76,6 @@ declare module 'vue' {
     PrintJobs: typeof import('./components/PrintJobs/PrintJobs.vue')['default']
     PrintJobsMenu: typeof import('./components/Generic/PrintJobsMenu.vue')['default']
     PrintJobsView: typeof import('./components/PrintJobs/PrintJobsView.vue')['default']
-    PrintQueueView: typeof import('./components/PrintQueue/PrintQueueView.vue')['default']
     QueueMenu: typeof import('./components/Generic/QueueMenu.vue')['default']
     RefreshFilesAction: typeof import('./components/Generic/Actions/RefreshFilesAction.vue')['default']
     RegistrationForm: typeof import('./components/Login/RegistrationForm.vue')['default']

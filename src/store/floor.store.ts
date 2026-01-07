@@ -10,6 +10,50 @@ export interface State {
   selectedFloorIndex: number
 }
 
+type PrinterMatrix = (PrinterDto | undefined)[][]
+
+function createEmptyMatrix(cols: number, rows: number): PrinterMatrix {
+  const matrix: PrinterMatrix = []
+  for (let i = 0; i < cols; i++) {
+    const row: (PrinterDto | undefined)[] = []
+    matrix.push(row)
+    for (let j = 0; j < rows; j++) {
+      row.push(undefined)
+    }
+  }
+  return matrix
+}
+
+function fillMatrixVertically(
+  matrix: PrinterMatrix,
+  printers: PrinterDto[],
+  cols: number,
+  rows: number
+): void {
+  let printerIndex = 0
+  for (let x = 0; x < cols && printerIndex < printers.length; x++) {
+    for (let y = 0; y < rows && printerIndex < printers.length; y++) {
+      matrix[x][y] = printers[printerIndex]
+      printerIndex++
+    }
+  }
+}
+
+function fillMatrixHorizontally(
+  matrix: PrinterMatrix,
+  printers: PrinterDto[],
+  cols: number,
+  rows: number
+): void {
+  let printerIndex = 0
+  for (let y = 0; y < rows && printerIndex < printers.length; y++) {
+    for (let x = 0; x < cols && printerIndex < printers.length; x++) {
+      matrix[x][y] = printers[printerIndex]
+      printerIndex++
+    }
+  }
+}
+
 export const useFloorStore = defineStore('Floors', {
   state: (): State => ({
     floors: [],
@@ -49,81 +93,52 @@ export const useFloorStore = defineStore('Floors', {
     },
     gridSortedPrinters() {
       const settingsStore = useSettingsStore()
-      const gridCols = settingsStore.gridCols
-      const gridRows = settingsStore.gridRows
-
       const printersStore = usePrinterStore()
-      const printers = printersStore.printers
-      if (!printers.length) return []
-      if (!this.selectedFloor) return []
 
+      if (!printersStore.printers.length || !this.selectedFloor) {
+        return []
+      }
+
+      const matrix = createEmptyMatrix(settingsStore.gridCols, settingsStore.gridRows)
       const positions = this.selectedFloor.printers
-      const matrix: (PrinterDto | undefined)[][] = []
-      for (let i = 0; i < gridCols; i++) {
-        const row: (PrinterDto | undefined)[] = []
-        matrix.push(row)
-        for (let j = 0; j < gridRows; j++) {
-          const position = positions.find((p) => p.x === i && p.y === j)
+
+      for (let x = 0; x < settingsStore.gridCols; x++) {
+        for (let y = 0; y < settingsStore.gridRows; y++) {
+          const position = positions.find((p) => p.x === x && p.y === y)
           if (position) {
-            const printer = printers.find((p) => p.id === position.printerId)
-            row.push(printer)
-          } else {
-            row.push(undefined)
+            const printer = printersStore.printers.find((p) => p.id === position.printerId)
+            if (printer) {
+              matrix[x][y] = printer
+            }
           }
         }
       }
       return matrix
     },
     gridNameSortedPrinters() {
-      const settingsStore = useSettingsStore()
-      const gridCols = settingsStore.gridCols
-      const gridRows = settingsStore.gridRows
-      const sortDirection = settingsStore.gridNameSortDirection
+      return (filteredPrinters?: PrinterDto[]) => {
+        const settingsStore = useSettingsStore()
+        const printersStore = usePrinterStore()
 
-      const printersStore = usePrinterStore()
-      const printers = printersStore.printers
-      if (!printers.length) return []
-      if (!this.selectedFloor) return []
-
-      // Get all printers on this floor and sort them by name
-      const floorPrinterIds = new Set(this.selectedFloor.printers.map(p => p.printerId))
-      const floorPrinters = printers
-        .filter(p => floorPrinterIds.has(p.id))
-        .sort((a, b) => a.name.localeCompare(b.name))
-
-      // Create non-sparse grid - matrix is [col][row] format
-      const matrix: (PrinterDto | undefined)[][] = []
-
-      // Initialize empty matrix
-      for (let i = 0; i < gridCols; i++) {
-        const row: (PrinterDto | undefined)[] = []
-        matrix.push(row)
-        for (let j = 0; j < gridRows; j++) {
-          row.push(undefined)
+        if (!printersStore.printers.length || !this.selectedFloor) {
+          return []
         }
+
+        const floorPrinterIds = new Set(this.selectedFloor.printers.map(p => p.printerId))
+        const sourcePrinters = filteredPrinters ?? printersStore.printers
+        const floorPrinters = sourcePrinters.filter(p => floorPrinterIds.has(p.id))
+
+        floorPrinters.sort((a, b) => a.name.localeCompare(b.name))
+
+        const matrix = createEmptyMatrix(settingsStore.gridCols, settingsStore.gridRows)
+        const fillFunction = settingsStore.gridNameSortDirection === 'vertical'
+          ? fillMatrixVertically
+          : fillMatrixHorizontally
+
+        fillFunction(matrix, floorPrinters, settingsStore.gridCols, settingsStore.gridRows)
+
+        return matrix
       }
-
-      let printerIndex = 0
-
-      if (sortDirection === 'vertical') {
-        // Fill vertically: down each column, then move to next column
-        for (let x = 0; x < gridCols && printerIndex < floorPrinters.length; x++) {
-          for (let y = 0; y < gridRows && printerIndex < floorPrinters.length; y++) {
-            matrix[x][y] = floorPrinters[printerIndex]
-            printerIndex++
-          }
-        }
-      } else {
-        // Fill horizontally: across each row, then move to next row
-        for (let y = 0; y < gridRows && printerIndex < floorPrinters.length; y++) {
-          for (let x = 0; x < gridCols && printerIndex < floorPrinters.length; x++) {
-            matrix[x][y] = floorPrinters[printerIndex]
-            printerIndex++
-          }
-        }
-      }
-
-      return matrix
     }
   },
   actions: {
