@@ -1,4 +1,11 @@
 # Develop
+
+## Client 2.1.4
+
+Features
+
+- Add ability to set slicer api key, which exempts it from needing normal JWT Bearer token for login in headers.
+
 Fixes
 
 - Sorting grid by name (instead of showing by position) is not leaving gaps anymore.
