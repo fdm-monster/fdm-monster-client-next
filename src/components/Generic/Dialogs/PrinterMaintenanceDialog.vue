@@ -31,18 +31,19 @@
               @update:model-value="updateText()"
             />
             <v-textarea
-              v-model="formData.disabledReason"
+              v-model="formData.cause"
+              label="Cause"
               data-vv-validate-on="change|blur"
-            >
-              <template #label>
-                <div>Type the reason*</div>
-              </template>
-            </v-textarea>
+            />
+            <v-textarea
+              v-model="formData.notes"
+              label="Additional notes"
+              data-vv-validate-on="change|blur"
+            />
           </v-col>
         </v-row>
       </v-card-text>
       <v-card-actions>
-        <em class="text-red"> * indicates required field </em>
         <v-spacer />
         <v-btn
           variant="text"
@@ -64,7 +65,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { PrintersService } from '@/backend'
+import { PrinterMaintenanceLogService } from '@/backend/printer-maintenance-log.service'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useDialog } from '@/shared/dialog.composable'
@@ -97,7 +98,8 @@ const quickItems = [
   'Clean'
 ]
 const formData = ref<{
-  disabledReason?: string
+  cause?: string
+  notes?: string
 }>({})
 const printersStore = usePrinterStore()
 const dialog = useDialog(DialogName.PrinterMaintenanceDialog)
@@ -107,7 +109,7 @@ const printer = computed(() => {
 })
 
 const updateText = () => {
-  formData.value.disabledReason = selectedQuickItems.value.join(', ')
+  formData.value.cause = selectedQuickItems.value.join(', ')
 }
 
 const submit = async () => {
@@ -118,8 +120,14 @@ const submit = async () => {
     return
   }
 
-  const disabledReason = formData.value.disabledReason
-  await PrintersService.updatePrinterMaintenance(printerId, disabledReason)
+  await PrinterMaintenanceLogService.create({
+    printerId,
+    metadata: {
+      cause: formData.value.cause,
+      notes: formData.value.notes,
+      partsInvolved: selectedQuickItems.value
+    }
+  })
 
   formData.value = {}
   closeDialog()

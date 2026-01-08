@@ -20,6 +20,7 @@ import ServerProtectionSettings from '../components/Settings/ServerProtectionSet
 import SoftwareUpgradeSettings from '../components/Settings/SoftwareUpgradeSettings.vue'
 import DiagnosticsSettings from '../components/Settings/DiagnosticsSettings.vue'
 import PrintJobsView from '../components/PrintJobs/PrintJobsView.vue'
+import MaintenanceLogsView from '../components/MaintenanceLogs/MaintenanceLogsView.vue'
 import FilesView from '../components/Files/FilesView.vue'
 import ExperimentalSettings from '@/components/Settings/ExperimentalSettings.vue'
 import SlicerSettings from '@/components/Settings/SlicerSettings.vue'
@@ -162,6 +163,12 @@ const router = createRouter({
       name: RouteNames.PrintJobs,
       meta: NeedsAuth,
       component: PrintJobsView
+    },
+    {
+      path: '/maintenance-logs',
+      name: 'MaintenanceLogs',
+      meta: NeedsAuth,
+      component: MaintenanceLogsView
     },
     {
       path: '/files',

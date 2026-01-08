@@ -23,7 +23,7 @@ import { PrinterDto } from '@/models/printers/printer.model'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { isPrinterInMaintenance } from '@/shared/printer-state.constants'
-import { PrintersService } from "@/backend";
+import { PrinterMaintenanceLogService } from '@/backend/printer-maintenance-log.service'
 
 const props = defineProps<{
   printer: PrinterDto
@@ -35,7 +35,10 @@ async function toggleMaintenance() {
   }
 
   if (props.printer?.disabledReason?.length) {
-    await PrintersService.updatePrinterMaintenance(props.printer.id)
+    const activeLog = await PrinterMaintenanceLogService.getActiveByPrinterId(props.printer.id)
+    if (activeLog) {
+      await PrinterMaintenanceLogService.complete(activeLog.id, {})
+    }
     return
   }
 
