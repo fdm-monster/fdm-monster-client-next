@@ -1,8 +1,10 @@
 # Develop
 
+## Client 2.1.6
+
 Fixes
 
-- Disabled printers would show as READY on dashboard page.
+- Disabled printers would show as READY on dashboard page
 
 Chores
 
