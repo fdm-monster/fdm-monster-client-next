@@ -1,5 +1,16 @@
 # Develop
 
+## Client 2.1.8
+
+Fixes
+
+- Maintenance dialog now uses context, not store variable
+- Sidenav would log warning that its open state could not be written to
+
+Chore
+
+- Clean up printer store code a bit
+
 ## Client 2.1.7
 
 Features

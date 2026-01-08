@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    v-model="drawerOpened"
+    :model-value="drawerOpened"
     location="right"
     temporary
     width="420"
@@ -586,8 +586,7 @@ async function toggleMaintenance() {
     await PrintersService.updatePrinterMaintenance(printerId.value)
     return
   }
-  printersStore.setMaintenanceDialogPrinter(storedSideNavPrinter.value)
-  await useDialog(DialogName.PrinterMaintenanceDialog).openDialog()
+  await useDialog(DialogName.PrinterMaintenanceDialog).openDialog({ printerId: printerId.value })
 
   closeDrawer()
 }

@@ -101,7 +101,10 @@ const formData = ref<{
 }>({})
 const printersStore = usePrinterStore()
 const dialog = useDialog(DialogName.PrinterMaintenanceDialog)
-const printer = computed(() => printersStore.maintenanceDialogPrinter)
+const printer = computed(() => {
+  const context = dialog.context()
+  return context?.printerId ? printersStore.printer(context.printerId) : undefined
+})
 
 const updateText = () => {
   formData.value.disabledReason = selectedQuickItems.value.join(', ')
@@ -125,6 +128,5 @@ const submit = async () => {
 const closeDialog = () => {
   selectedQuickItems.value = []
   dialog.closeDialog()
-  printersStore.setMaintenanceDialogPrinter()
 }
 </script>
