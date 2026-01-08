@@ -20,7 +20,7 @@
 
       <v-card-text class="py-3">
         <v-row dense>
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="4">
             <v-autocomplete
               v-model="selectedPrinterId"
               :items="allPrinters"
@@ -35,7 +35,7 @@
               @update:model-value="debouncedSearch"
             />
           </v-col>
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="4">
             <v-select
               v-model="selectedStatus"
               :items="statusOptions"
@@ -45,6 +45,24 @@
               density="compact"
               clearable
               hide-details
+              @update:model-value="debouncedSearch"
+            />
+          </v-col>
+          <v-col cols="12" md="4">
+            <PrinterTypeFilter
+              v-model="selectedPrinterTypes"
+              label="Filter by Type"
+              @update:model-value="debouncedSearch"
+            />
+          </v-col>
+        </v-row>
+
+        <v-row v-if="tags.length" dense class="mt-2">
+          <v-col cols="12">
+            <PrinterTagFilter
+              v-model="selectedTags"
+              :tags="tags"
+              label="Filter by Tags"
               @update:model-value="debouncedSearch"
             />
           </v-col>
@@ -119,10 +137,10 @@
               </v-avatar>
               <div>
                 <div class="text-body-2 font-weight-medium">
-                  {{ item.printerName || `Printer ${item.printerId}` }}
+                  {{ item.printerName || 'Unknown Printer' }}
                 </div>
                 <div class="text-caption text-medium-emphasis">
-                  ID: {{ item.printerId }}
+                  {{ getFloorName(item.printerId) }}
                 </div>
               </div>
             </div>
@@ -248,10 +266,17 @@ import { ref, computed, onMounted } from 'vue'
 import { PrinterMaintenanceLogService } from '@/backend'
 import { PrinterMaintenanceLog } from '@/models/printers/printer-maintenance-log.model'
 import { usePrinterStore } from '@/store/printer.store'
+import { useFloorStore } from '@/store/floor.store'
+import { useDebounceFn } from '@vueuse/core'
 import { formatDate, formatRelativeTime } from '@/utils/date-time.utils'
+import { usePrinterFilters } from '@/shared/printer-filter.composable'
+import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
+import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
 import MaintenanceLogDetailsDialog from './MaintenanceLogDetailsDialog.vue'
 
 const printerStore = usePrinterStore()
+const floorStore = useFloorStore()
+const { tags, selectedTags, selectedPrinterTypes, filterPrinters, loadTags } = usePrinterFilters()
 
 // State
 const logs = ref<PrinterMaintenanceLog[]>([])
@@ -265,32 +290,40 @@ const detailsDialog = ref(false)
 const selectedLog = ref<PrinterMaintenanceLog | null>(null)
 
 // Computed
-const allPrinters = computed(() => printerStore.printers)
+const allPrinters = computed(() => {
+  return filterPrinters(printerStore.printers)
+})
 
 const statusOptions = [
   { title: 'Active', value: 'active' },
   { title: 'Completed', value: 'completed' }
 ]
-// Headers
+
 const headers = [
   { title: 'Status', key: 'completed', sortable: false, width: '120px' },
   { title: 'Printer', key: 'printerName', sortable: false, width: '200px' },
-  { title: 'Cause', key: 'cause', sortable: false, width: '200px' },
-  { title: 'Parts Involved', key: 'parts', sortable: false, width: '180px' },
+  { title: 'Cause', key: 'cause', sortable: false, width: '250px' },
+  { title: 'Parts Involved', key: 'partsInvolved', sortable: false, width: '200px' },
   { title: 'Created', key: 'createdAt', sortable: false, width: '180px' },
   { title: 'Created By', key: 'createdBy', sortable: false, width: '150px' },
   { title: 'Completed', key: 'completedAt', sortable: false, width: '180px' },
-  { title: 'Duration', key: 'duration', sortable: false, width: '150px' },
-  { title: 'Actions', key: 'actions', sortable: false, align: 'center' as const, width: '100px' }
+  { title: 'Completed By', key: 'completedBy', sortable: false, width: '150px' },
+  { title: 'Actions', key: 'actions', sortable: false, align: 'end' as const, width: '100px' }
 ]
 
 // Methods
 async function loadLogs() {
   loading.value = true
   try {
+    const completed = selectedStatus.value === 'active'
+      ? false
+      : selectedStatus.value === 'completed'
+        ? true
+        : undefined
+
     const response = await PrinterMaintenanceLogService.listLogs({
       printerId: selectedPrinterId.value,
-      completed: selectedStatus.value === 'active' ? false : selectedStatus.value === 'completed' ? true : undefined,
+      completed,
       page: currentPage.value,
       pageSize: itemsPerPage.value
     })
@@ -304,23 +337,18 @@ async function loadLogs() {
   }
 }
 
-const debouncedSearch = () => {
-  if (searchTimeout) clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(() => {
-    currentPage.value = 1
-    loadMaintenanceLogs()
-  }, 300)
-}
-
-let searchTimeout: ReturnType<typeof setTimeout> | null = null
+const debouncedSearch = useDebounceFn(() => {
+  currentPage.value = 1
+  loadLogs()
+}, 500)
 
 function handleUpdateOptions(options: any) {
   currentPage.value = options.page
   itemsPerPage.value = options.itemsPerPage
-  loadMaintenanceLogs()
+  loadLogs()
 }
 
-function calculateDuration(startDate: string, endDate: string) {
+function viewLogDetails(log: PrinterMaintenanceLog) {
   selectedLog.value = log
   detailsDialog.value = true
 }
@@ -347,9 +375,16 @@ async function deleteLog(log: PrinterMaintenanceLog) {
   }
 }
 
+function getFloorName(printerId: number | null): string {
+  if (!printerId) return 'Unknown'
+  const floor = floorStore.floorOfPrinter(printerId)
+  return floor?.name || 'No floor assigned'
+}
+
 // Lifecycle
 onMounted(() => {
   loadLogs()
+  loadTags()
 })
 </script>
 

@@ -44,7 +44,7 @@
                   {{ log.printerName }}
                 </div>
                 <div class="text-caption text-medium-emphasis">
-                  ID: {{ log.printerId }} • {{ log.printerUrl }}
+                  {{ getFloorName(log.printerId) }}
                 </div>
               </div>
             </div>
@@ -181,10 +181,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
 import { PrinterMaintenanceLog } from '@/models/printers/printer-maintenance-log.model'
 import { PrinterMaintenanceLogService } from '@/backend'
-import { formatDistanceToNow } from 'date-fns'
+import { useFloorStore } from '@/store/floor.store'
+import { formatDate, formatDuration } from '@/utils/date-time.utils'
+
+const floorStore = useFloorStore()
 
 const props = defineProps<{
   modelValue: boolean
@@ -200,15 +202,10 @@ function close() {
   emit('update:modelValue', false)
 }
 
-function formatDate(dateString: string) {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
+function getFloorName(printerId: number | null): string {
+  if (!printerId) return 'Unknown'
+  const floor = floorStore.floorOfPrinter(printerId)
+  return floor?.name || 'No floor assigned'
 }
 
 function calculateDuration() {
@@ -217,14 +214,8 @@ function calculateDuration() {
   const start = new Date(props.log.createdAt)
   const end = props.log.completedAt ? new Date(props.log.completedAt) : new Date()
 
-  const diffMs = end.getTime() - start.getTime()
-  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-  const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-  const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))
-
-  if (days > 0) return `${days} day${days > 1 ? 's' : ''} ${hours} hour${hours !== 1 ? 's' : ''}`
-  if (hours > 0) return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`
-  return `${minutes} minute${minutes !== 1 ? 's' : ''}`
+  const diffSeconds = Math.floor((end.getTime() - start.getTime()) / 1000)
+  return formatDuration(diffSeconds)
 }
 
 async function handleComplete() {
