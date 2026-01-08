@@ -1,5 +1,9 @@
 # Develop
 
+Chores
+
+- Remove corepack enable in cicd as duplicate
+
 ## Client 2.1.5
 
 Features
