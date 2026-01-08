@@ -1,6 +1,10 @@
 # Develop
 
-## Client 2.1.8
+## Client 2.1.7
+
+Features
+
+- Bring back printer maintenance dialog
 
 Fixes
 
@@ -10,12 +14,6 @@ Fixes
 Chore
 
 - Clean up printer store code a bit
-
-## Client 2.1.7
-
-Features
-
-- Bring back printer maintenance dialog
 
 ## Client 2.1.6
 
