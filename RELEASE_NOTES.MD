@@ -1,5 +1,9 @@
 # Develop
 
+Fixes
+
+- Disabled printers would show as READY on dashboard page.
+
 Chores
 
 - Remove corepack enable in cicd as duplicate
