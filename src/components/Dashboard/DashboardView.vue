@@ -311,7 +311,8 @@ import { usePrinterStateStore } from '@/store/printer-state.store'
 import {
   isPrinterPrinting,
   isPrinterDisconnected,
-  isPrinterInMaintenance
+  isPrinterInMaintenance,
+  isPrinterDisabled
 } from '@/shared/printer-state.constants'
 import { usePrinterFilters } from '@/shared/printer-filter.composable'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
@@ -441,6 +442,7 @@ const isPrinterPrintingState = (printer: any) => {
 const getPrinterStatus = (printer: any) => {
   const state = printerStateStore.printerEventsById[printer.id]
   if (isPrinterInMaintenance(printer)) return 'MAINTENANCE'
+  if (isPrinterDisabled(printer)) return 'DISABLED'
   if (isPrinterDisconnected(printer, state)) return 'OFFLINE'
   if (isPrinterPrinting(state)) return 'PRINTING'
   return 'READY'
@@ -453,6 +455,7 @@ const getPrinterStatusColor = (printer: any) => {
     case 'READY': return 'primary'
     case 'MAINTENANCE': return 'warning'
     case 'OFFLINE': return 'error'
+    case 'DISABLED': return 'secondary'
     default: return 'surface'
   }
 }
@@ -463,7 +466,8 @@ const getPrinterCardClass = (printer: any) => {
     'border-l-4 border-success': status === 'PRINTING',
     'border-l-4 border-primary': status === 'READY',
     'border-l-4 border-warning': status === 'MAINTENANCE',
-    'border-l-4 border-error': status === 'OFFLINE'
+    'border-l-4 border-error': status === 'OFFLINE',
+    'border-l-4 border-secondary': status === 'DISABLED'
   }
 }
 
