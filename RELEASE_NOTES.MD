@@ -1,5 +1,11 @@
 # Develop
 
+## Client 2.1.7
+
+Features
+
+- Bring back printer maintenance dialog
+
 ## Client 2.1.6
 
 Fixes

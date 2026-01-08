@@ -63,6 +63,7 @@ declare module 'vue' {
     PrinterGrid: typeof import('./components/PrinterGrid/PrinterGrid.vue')['default']
     PrinterGridTile: typeof import('./components/PrinterGrid/PrinterGridTile.vue')['default']
     PrinterGridView: typeof import('./components/PrinterGrid/PrinterGridView.vue')['default']
+    PrinterMaintenanceAction: typeof import('./components/Generic/Actions/PrinterMaintenanceAction.vue')['default']
     PrinterMaintenanceDialog: typeof import('./components/Generic/Dialogs/PrinterMaintenanceDialog.vue')['default']
     PrinterQuickStopAction: typeof import('./components/Generic/Actions/PrinterQuickStopAction.vue')['default']
     PrinterSettings: typeof import('./components/Settings/PrinterSettings.vue')['default']

@@ -184,6 +184,16 @@
             <v-icon start>refresh</v-icon>
             Refresh
           </v-btn>
+
+          <v-btn
+            :color="isUnderMaintenance ? 'warning' : 'default'"
+            size="small"
+            variant="outlined"
+            @click="toggleMaintenance()"
+          >
+            <v-icon start>{{ isUnderMaintenance ? 'build_circle' : 'build' }}</v-icon>
+            {{ isUnderMaintenance ? 'Update' : 'Maintenance' }}
+          </v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -381,17 +391,6 @@
           >
             <v-icon start>settings</v-icon>
             Settings
-          </v-btn>
-
-          <v-btn
-            v-if="isUnderMaintenance"
-            size="small"
-            variant="outlined"
-            color="warning"
-            @click="toggleMaintenance()"
-          >
-            <v-icon start>build</v-icon>
-            Maintenance
           </v-btn>
         </div>
       </v-card-text>
