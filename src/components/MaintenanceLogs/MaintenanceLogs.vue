@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="maintenance-logs-container">
     <!-- Search and Filters Section -->
-    <v-card class="mb-4" elevation="1">
+    <v-card class="mb-4 mt-4" elevation="1">
       <v-card-title class="d-flex align-center py-2">
         <v-icon class="mr-2" color="primary" size="small">search</v-icon>
         <span class="text-subtitle-1">Search & Filters</span>
@@ -315,11 +315,12 @@ const headers = [
 async function loadLogs() {
   loading.value = true
   try {
+    const completedFalsy = selectedStatus.value === 'completed'
+      ? true
+      : undefined
     const completed = selectedStatus.value === 'active'
       ? false
-      : selectedStatus.value === 'completed'
-        ? true
-        : undefined
+      : completedFalsy
 
     const response = await PrinterMaintenanceLogService.listLogs({
       printerId: selectedPrinterId.value,
@@ -391,6 +392,11 @@ onMounted(() => {
 <style scoped>
 .maintenance-logs-container {
   max-width: 100%;
+  padding: 0 16px;
+}
+
+.maintenance-logs-table {
+  border-radius: 8px !important;
 }
 
 .maintenance-logs-table :deep(.v-data-table__td) {
