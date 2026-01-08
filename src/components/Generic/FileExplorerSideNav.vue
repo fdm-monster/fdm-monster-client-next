@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    v-model="drawerOpened"
+    :model-value="drawerOpened"
     location="right"
     temporary
     width="420"
@@ -183,6 +183,16 @@
           >
             <v-icon start>refresh</v-icon>
             Refresh
+          </v-btn>
+
+          <v-btn
+            :color="isUnderMaintenance ? 'warning' : 'default'"
+            size="small"
+            variant="outlined"
+            @click="toggleMaintenance()"
+          >
+            <v-icon start>{{ isUnderMaintenance ? 'build_circle' : 'build' }}</v-icon>
+            {{ isUnderMaintenance ? 'Update' : 'Maintenance' }}
           </v-btn>
         </div>
       </v-card-text>
@@ -382,17 +392,6 @@
             <v-icon start>settings</v-icon>
             Settings
           </v-btn>
-
-          <v-btn
-            v-if="isUnderMaintenance"
-            size="small"
-            variant="outlined"
-            color="warning"
-            @click="toggleMaintenance()"
-          >
-            <v-icon start>build</v-icon>
-            Maintenance
-          </v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -587,8 +586,7 @@ async function toggleMaintenance() {
     await PrintersService.updatePrinterMaintenance(printerId.value)
     return
   }
-  printersStore.setMaintenanceDialogPrinter(storedSideNavPrinter.value)
-  await useDialog(DialogName.PrinterMaintenanceDialog).openDialog()
+  await useDialog(DialogName.PrinterMaintenanceDialog).openDialog({ printerId: printerId.value })
 
   closeDrawer()
 }

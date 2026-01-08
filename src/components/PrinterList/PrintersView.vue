@@ -274,6 +274,7 @@
                 @update:show="openEditDialog(item)"
               />
               <PrinterDeleteAction :printer="item"/>
+              <PrinterMaintenanceAction :printer="item"/>
               <PrinterUrlAction :printer="item"/>
               <PrinterQuickStopAction :printer="item"/>
               <PrinterConnectionAction :printer="item"/>
@@ -309,6 +310,7 @@ import PrinterUrlAction from '@/components/Generic/Actions/PrinterUrlAction.vue'
 import PrinterSettingsAction from '@/components/Generic/Actions/PrinterSettingsAction.vue'
 import PrinterConnectionAction from '@/components/Generic/Actions/PrinterConnectionAction.vue'
 import PrinterQuickStopAction from '@/components/Generic/Actions/PrinterQuickStopAction.vue'
+import PrinterMaintenanceAction from '@/components/Generic/Actions/PrinterMaintenanceAction.vue'
 import FileExplorerAction from '@/components/Generic/Actions/FileExplorerAction.vue'
 import SyncPrinterNameAction from '@/components/Generic/Actions/SyncPrinterNameAction.vue'
 import { usePrinterStore } from '@/store/printer.store'

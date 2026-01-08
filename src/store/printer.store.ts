@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { PrinterDto } from '@/models/printers/printer.model'
 import {
-  ClearedFilesResult,
   FileDto
 } from '@/models/printers/printer-file.model'
 import { PrinterFileService, PrintersService } from '@/backend'
@@ -16,18 +15,14 @@ import {
 interface State {
   printers: PrinterDto[]
   printerFileCache: Record<number, FileDto[]>
-
   selectedPrinters: PrinterDto[]
-  maintenanceDialogPrinter?: PrinterDto
 }
 
 export const usePrinterStore = defineStore('Printers', {
   state: (): State => ({
     printers: [],
     printerFileCache: {},
-
-    selectedPrinters: [],
-    maintenanceDialogPrinter: undefined
+    selectedPrinters: []
   }),
   getters: {
     printer() {
@@ -37,7 +32,7 @@ export const usePrinterStore = defineStore('Printers', {
     },
     isSelectedPrinter(state) {
       return (printerId?: number) =>
-        !!state.selectedPrinters.find((p: PrinterDto) => p.id === printerId)
+        !!state.selectedPrinters.some((p: PrinterDto) => p.id === printerId)
     },
     printerFiles() {
       return (printerId: number) => this.printerFileCache[printerId]
@@ -80,9 +75,6 @@ export const usePrinterStore = defineStore('Printers', {
     clearSelectedPrinters() {
       this.selectedPrinters = []
     },
-    setMaintenanceDialogPrinter(printer?: PrinterDto) {
-      this.maintenanceDialogPrinter = printer
-    },
     async updatePrinter(
       {
         printerId,
@@ -116,7 +108,7 @@ export const usePrinterStore = defineStore('Printers', {
         this.printers = []
         return
       }
-      this.printers = printers.sort((a: PrinterDto, b: PrinterDto) =>
+      this.printers = printers.toSorted((a: PrinterDto, b: PrinterDto) =>
         a.name?.toLowerCase()?.localeCompare(b?.name?.toLowerCase()) ? 1 : -1
       )
     },
@@ -125,19 +117,20 @@ export const usePrinterStore = defineStore('Printers', {
         (p: PrinterDto) => p.id === printerId
       )
 
-      if (printerIndex !== -1) {
-        this.printers.splice(printerIndex, 1)
-      } else {
+      if (printerIndex === -1) {
         console.warn(
           'Printer was not popped as it did not occur in state',
           printerId
         )
+        return;
       }
+
+      this.printers.splice(printerIndex, 1)
     },
     _replacePrinter({
-      printerId,
-      printer
-    }: {
+                      printerId,
+                      printer
+                    }: {
       printerId: number
       printer: PrinterDto
     }) {
@@ -145,22 +138,24 @@ export const usePrinterStore = defineStore('Printers', {
         (p: PrinterDto) => p.id === printerId
       )
 
-      if (printerIndex !== -1) {
-        this.printers[printerIndex] = printer
-      } else {
+      if (printerIndex === -1) {
         console.warn(
           'Printer was not purged as it did not occur in state',
           printerId
         )
+        return;
       }
+
+
+      this.printers[printerIndex] = printer
     },
     async deletePrinterFiles(printerId: number) {
       if (!printerId) {
         throw new Error('No printerId was provided')
       }
-      const result = (await PrinterFileService.clearFiles(
+      const result = await PrinterFileService.clearFiles(
         printerId
-      )) as ClearedFilesResult
+      )
       if (!result?.failedFiles) {
         throw new Error('No failed files were returned')
       }
@@ -190,15 +185,12 @@ export const usePrinterStore = defineStore('Printers', {
 
       const deletedFileIndex = fileBucket.findIndex((f) => f.path === fullPath)
 
-      if (deletedFileIndex !== -1) {
-        fileBucket.splice(deletedFileIndex, 1)
-      } else {
-        console.warn(
-          'File was not purged as it did not occur in state',
-          fullPath
-        )
+      if (deletedFileIndex === -1) {
+        console.warn('File was not purged as it did not occur in state', fullPath)
+        return;
       }
 
+      fileBucket.splice(deletedFileIndex, 1)
       return this.printerFiles(printerId)
     },
     async sendStopJobCommand(printerId?: number) {
