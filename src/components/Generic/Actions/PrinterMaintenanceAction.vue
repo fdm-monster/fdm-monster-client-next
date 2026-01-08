@@ -3,7 +3,8 @@
     <template v-slot:activator="{ props }">
       <v-btn
         v-bind="props"
-        :color="isPrinterInMaintenance(printer) ? 'warning' : 'default'"
+        :color="isPrinterInMaintenance(printer) ? 'warning' : 'secondary'"
+        class="ms-4"
         size="small"
         rounded
         @click.stop="openMaintenanceDialog"
