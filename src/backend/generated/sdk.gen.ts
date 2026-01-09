@@ -17,6 +17,8 @@ import type {
   DeleteApiV2PrinterFilesByIdClearResponses,
   DeleteApiV2PrinterFilesByIdData,
   DeleteApiV2PrinterFilesByIdResponses,
+  DeleteApiV2PrinterMaintenanceLogByIdData,
+  DeleteApiV2PrinterMaintenanceLogByIdResponses,
   DeleteApiV2PrinterTagByIdData,
   DeleteApiV2PrinterTagByIdPrinterData,
   DeleteApiV2PrinterTagByIdPrinterResponses,
@@ -31,6 +33,8 @@ import type {
   DeleteApiV2ServerClearOutdatedFdmMonsterLogsResponses,
   DeleteApiV2ServerDeleteAllPrintersData,
   DeleteApiV2ServerDeleteAllPrintersResponses,
+  DeleteApiV2SettingsSlicerApiKeyData,
+  DeleteApiV2SettingsSlicerApiKeyResponses,
   DeleteApiV2UserByIdData,
   DeleteApiV2UserByIdResponses,
   GetApiFilesData,
@@ -71,6 +75,12 @@ import type {
   GetApiV2PrinterFilesByIdThumbnailResponses,
   GetApiV2PrinterFilesThumbnailsData,
   GetApiV2PrinterFilesThumbnailsResponses,
+  GetApiV2PrinterMaintenanceLogByIdData,
+  GetApiV2PrinterMaintenanceLogByIdResponses,
+  GetApiV2PrinterMaintenanceLogData,
+  GetApiV2PrinterMaintenanceLogPrinterByPrinterIdActiveData,
+  GetApiV2PrinterMaintenanceLogPrinterByPrinterIdActiveResponses,
+  GetApiV2PrinterMaintenanceLogResponses,
   GetApiV2PrinterResponses,
   GetApiV2PrinterSettingsByIdData,
   GetApiV2PrinterSettingsByIdResponses,
@@ -105,6 +115,8 @@ import type {
   GetApiV2SettingsResponses,
   GetApiV2SettingsSensitiveData,
   GetApiV2SettingsSensitiveResponses,
+  GetApiV2SettingsSlicerApiKeyData,
+  GetApiV2SettingsSlicerApiKeyResponses,
   GetApiV2TestData,
   GetApiV2TestResponses,
   GetApiV2UserByIdData,
@@ -167,6 +179,8 @@ import type {
   PostApiV2BatchToggleEnabledResponses,
   PostApiV2CameraStreamData,
   PostApiV2CameraStreamResponses,
+  PostApiV2FileStorageByFileStorageIdAnalyzeData,
+  PostApiV2FileStorageByFileStorageIdAnalyzeResponses,
   PostApiV2FileStorageUploadData,
   PostApiV2FileStorageUploadResponses,
   PostApiV2FirstTimeSetupCompleteData,
@@ -216,6 +230,10 @@ import type {
   PostApiV2PrinterFilesByIdUploadResponses,
   PostApiV2PrinterFilesPurgeData,
   PostApiV2PrinterFilesPurgeResponses,
+  PostApiV2PrinterMaintenanceLogByIdCompleteData,
+  PostApiV2PrinterMaintenanceLogByIdCompleteResponses,
+  PostApiV2PrinterMaintenanceLogData,
+  PostApiV2PrinterMaintenanceLogResponses,
   PostApiV2PrinterResponses,
   PostApiV2PrinterSettingsByIdSyncPrinternameData,
   PostApiV2PrinterSettingsByIdSyncPrinternameResponses,
@@ -251,6 +269,8 @@ import type {
   PostApiV2ServerYamlExportResponses,
   PostApiV2ServerYamlImportData,
   PostApiV2ServerYamlImportResponses,
+  PostApiV2SettingsSlicerApiKeyRegenerateData,
+  PostApiV2SettingsSlicerApiKeyRegenerateResponses,
   PostApiV2UserByIdChangePasswordData,
   PostApiV2UserByIdChangePasswordResponses,
   PostApiV2UserByIdChangeUsernameData,
@@ -628,6 +648,28 @@ export class FileStorageController {
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
       url: '/api/v2/file-storage/{fileStorageId}',
+      ...options
+    })
+  }
+
+  /**
+   * analyzeFile
+   */
+  public static postApiV2FileStorageByFileStorageIdAnalyze<
+    ThrowOnError extends boolean = false
+  >(
+    options: Options<
+      PostApiV2FileStorageByFileStorageIdAnalyzeData,
+      ThrowOnError
+    >
+  ) {
+    return (options.client ?? client).post<
+      PostApiV2FileStorageByFileStorageIdAnalyzeResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/file-storage/{fileStorageId}/analyze',
       ...options
     })
   }
@@ -1423,6 +1465,120 @@ export class PrinterFilesController {
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
       url: '/api/v2/printer-files/{id}/upload',
+      ...options
+    })
+  }
+}
+
+export class PrinterMaintenanceLogController {
+  /**
+   * list
+   */
+  public static getApiV2PrinterMaintenanceLog<
+    ThrowOnError extends boolean = false
+  >(options?: Options<GetApiV2PrinterMaintenanceLogData, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetApiV2PrinterMaintenanceLogResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/printer-maintenance-log/',
+      ...options
+    })
+  }
+
+  /**
+   * create
+   */
+  public static postApiV2PrinterMaintenanceLog<
+    ThrowOnError extends boolean = false
+  >(options?: Options<PostApiV2PrinterMaintenanceLogData, ThrowOnError>) {
+    return (options?.client ?? client).post<
+      PostApiV2PrinterMaintenanceLogResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/printer-maintenance-log/',
+      ...options
+    })
+  }
+
+  /**
+   * delete
+   */
+  public static deleteApiV2PrinterMaintenanceLogById<
+    ThrowOnError extends boolean = false
+  >(options: Options<DeleteApiV2PrinterMaintenanceLogByIdData, ThrowOnError>) {
+    return (options.client ?? client).delete<
+      DeleteApiV2PrinterMaintenanceLogByIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/printer-maintenance-log/{id}',
+      ...options
+    })
+  }
+
+  /**
+   * get
+   */
+  public static getApiV2PrinterMaintenanceLogById<
+    ThrowOnError extends boolean = false
+  >(options: Options<GetApiV2PrinterMaintenanceLogByIdData, ThrowOnError>) {
+    return (options.client ?? client).get<
+      GetApiV2PrinterMaintenanceLogByIdResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/printer-maintenance-log/{id}',
+      ...options
+    })
+  }
+
+  /**
+   * getActiveByPrinterId
+   */
+  public static getApiV2PrinterMaintenanceLogPrinterByPrinterIdActive<
+    ThrowOnError extends boolean = false
+  >(
+    options: Options<
+      GetApiV2PrinterMaintenanceLogPrinterByPrinterIdActiveData,
+      ThrowOnError
+    >
+  ) {
+    return (options.client ?? client).get<
+      GetApiV2PrinterMaintenanceLogPrinterByPrinterIdActiveResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/printer-maintenance-log/printer/{printerId}/active',
+      ...options
+    })
+  }
+
+  /**
+   * complete
+   */
+  public static postApiV2PrinterMaintenanceLogByIdComplete<
+    ThrowOnError extends boolean = false
+  >(
+    options: Options<
+      PostApiV2PrinterMaintenanceLogByIdCompleteData,
+      ThrowOnError
+    >
+  ) {
+    return (options.client ?? client).post<
+      PostApiV2PrinterMaintenanceLogByIdCompleteResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/printer-maintenance-log/{id}/complete',
       ...options
     })
   }
@@ -2504,6 +2660,59 @@ export class SettingsController {
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
       url: '/api/v2/settings/timeout',
+      ...options
+    })
+  }
+
+  /**
+   * deleteSlicerApiKey
+   */
+  public static deleteApiV2SettingsSlicerApiKey<
+    ThrowOnError extends boolean = false
+  >(options?: Options<DeleteApiV2SettingsSlicerApiKeyData, ThrowOnError>) {
+    return (options?.client ?? client).delete<
+      DeleteApiV2SettingsSlicerApiKeyResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/slicer-api-key',
+      ...options
+    })
+  }
+
+  /**
+   * getSlicerApiKey
+   */
+  public static getApiV2SettingsSlicerApiKey<
+    ThrowOnError extends boolean = false
+  >(options?: Options<GetApiV2SettingsSlicerApiKeyData, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetApiV2SettingsSlicerApiKeyResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/slicer-api-key',
+      ...options
+    })
+  }
+
+  /**
+   * regenerateSlicerApiKey
+   */
+  public static postApiV2SettingsSlicerApiKeyRegenerate<
+    ThrowOnError extends boolean = false
+  >(
+    options?: Options<PostApiV2SettingsSlicerApiKeyRegenerateData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostApiV2SettingsSlicerApiKeyRegenerateResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/settings/slicer-api-key/regenerate',
       ...options
     })
   }
