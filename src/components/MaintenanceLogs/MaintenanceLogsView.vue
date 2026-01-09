@@ -1,15 +1,16 @@
 <template>
   <v-container fluid class="pa-0">
-    <PrintJobs />
+    <MaintenanceLogs />
   </v-container>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import PrintJobs from '@/components/PrintJobs/PrintJobs.vue'
+import MaintenanceLogs from '@/components/MaintenanceLogs/MaintenanceLogs.vue'
 
 export default defineComponent({
-  name: 'PrintJobsView',
-  components: { PrintJobs }
+  name: 'MaintenanceLogsView',
+  components: { MaintenanceLogs }
 })
 </script>
+

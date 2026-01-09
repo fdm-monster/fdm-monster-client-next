@@ -129,6 +129,9 @@ const pageTitles: Record<string, { title: string; subtitle?: string }> = {
   },
   "Files": {
     title: 'Files'
+  },
+  "MaintenanceLogs": {
+    title: 'Maintenance Logs'
   }
   // Add more page titles as needed
 }

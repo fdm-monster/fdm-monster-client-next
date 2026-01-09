@@ -1,5 +1,6 @@
 export * from './printer-file.service'
 export * from './printers.service'
+export * from './printer-maintenance-log.service'
 export * from './print-job.service'
 export * from './server.api'
 export * from './settings.service'

@@ -295,6 +295,25 @@ export type GetApiV2FileStorageByFileStorageIdResponses = {
   200: unknown
 }
 
+export type PostApiV2FileStorageByFileStorageIdAnalyzeData = {
+  body?: never
+  path: {
+    /**
+     * The fileStorageId parameter
+     */
+    fileStorageId: string
+  }
+  query?: never
+  url: '/api/v2/file-storage/{fileStorageId}/analyze'
+}
+
+export type PostApiV2FileStorageByFileStorageIdAnalyzeResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
 export type GetApiV2FileStorageByFileStorageIdThumbnailByIndexData = {
   body?: never
   path: {
@@ -1108,6 +1127,110 @@ export type PostApiV2PrinterFilesByIdUploadData = {
 }
 
 export type PostApiV2PrinterFilesByIdUploadResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrinterMaintenanceLogData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/printer-maintenance-log/'
+}
+
+export type GetApiV2PrinterMaintenanceLogResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrinterMaintenanceLogData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/printer-maintenance-log/'
+}
+
+export type PostApiV2PrinterMaintenanceLogResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type DeleteApiV2PrinterMaintenanceLogByIdData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/printer-maintenance-log/{id}'
+}
+
+export type DeleteApiV2PrinterMaintenanceLogByIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrinterMaintenanceLogByIdData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/printer-maintenance-log/{id}'
+}
+
+export type GetApiV2PrinterMaintenanceLogByIdResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2PrinterMaintenanceLogPrinterByPrinterIdActiveData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+  }
+  query?: never
+  url: '/api/v2/printer-maintenance-log/printer/{printerId}/active'
+}
+
+export type GetApiV2PrinterMaintenanceLogPrinterByPrinterIdActiveResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrinterMaintenanceLogByIdCompleteData = {
+  body?: never
+  path: {
+    /**
+     * The id parameter
+     */
+    id: string
+  }
+  query?: never
+  url: '/api/v2/printer-maintenance-log/{id}/complete'
+}
+
+export type PostApiV2PrinterMaintenanceLogByIdCompleteResponses = {
   /**
    * Successful response
    */
@@ -2112,6 +2235,48 @@ export type PutApiV2SettingsTimeoutData = {
 }
 
 export type PutApiV2SettingsTimeoutResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type DeleteApiV2SettingsSlicerApiKeyData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/slicer-api-key'
+}
+
+export type DeleteApiV2SettingsSlicerApiKeyResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type GetApiV2SettingsSlicerApiKeyData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/slicer-api-key'
+}
+
+export type GetApiV2SettingsSlicerApiKeyResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2SettingsSlicerApiKeyRegenerateData = {
+  body?: never
+  path?: never
+  query?: never
+  url: '/api/v2/settings/slicer-api-key/regenerate'
+}
+
+export type PostApiV2SettingsSlicerApiKeyRegenerateResponses = {
   /**
    * Successful response
    */

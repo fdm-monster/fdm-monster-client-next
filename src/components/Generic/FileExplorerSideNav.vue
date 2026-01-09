@@ -402,6 +402,7 @@
 import { computed, ref, watch } from 'vue'
 import { generateInitials } from '@/shared/noun-adjectives.data'
 import { PrinterFileService, PrintersService } from '@/backend'
+import { PrinterMaintenanceLogService } from '@/backend/printer-maintenance-log.service'
 import { FileDto } from '@/models/printers/printer-file.model'
 import { formatFileSize } from '@/utils/file-size.util'
 import { usePrinterStore } from '@/store/printer.store'
@@ -583,7 +584,10 @@ async function toggleMaintenance() {
     throw new Error('Cant toggle enabled, sidenav printer unset')
   }
   if (isUnderMaintenance.value) {
-    await PrintersService.updatePrinterMaintenance(printerId.value)
+    const activeLog = await PrinterMaintenanceLogService.getActiveByPrinterId(printerId.value)
+    if (activeLog) {
+      await PrinterMaintenanceLogService.complete(activeLog.id, {})
+    }
     return
   }
   await useDialog(DialogName.PrinterMaintenanceDialog).openDialog({ printerId: printerId.value })

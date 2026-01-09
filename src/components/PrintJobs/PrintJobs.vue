@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="print-jobs-container">
     <!-- Search and Filters Section -->
-    <v-card class="mb-4" elevation="1">
+    <v-card class="mb-4 mt-4" elevation="1">
       <v-card-title class="d-flex align-center py-2">
         <v-icon class="mr-2" color="primary" size="small">search</v-icon>
         <span class="text-subtitle-1">Search & Filters</span>
@@ -1803,46 +1803,6 @@ const cancelSubmitToPrinter = () => {
 
 .filament-info {
   min-width: 100px;
-}
-
-.thumbnail-container {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-}
-
-.thumbnail-image {
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  object-fit: cover;
-  display: block;
-}
-
-.thumbnail-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(var(--v-theme-surface-variant), 0.2);
-  border-radius: 8px;
-}
-
-.thumbnail-loading {
-  background: linear-gradient(
-    90deg,
-    rgba(var(--v-theme-surface-variant), 0.3) 25%,
-    rgba(var(--v-theme-surface-variant), 0.5) 50%,
-    rgba(var(--v-theme-surface-variant), 0.3) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
 }
 
 @keyframes shimmer {
