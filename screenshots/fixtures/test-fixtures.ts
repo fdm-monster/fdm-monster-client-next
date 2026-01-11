@@ -34,32 +34,7 @@ export const test = base.extend<ScreenshotFixtures>({
     // Mock SocketIO before page loads
     await mockSocketIO(page);
 
-    // Mock static assets to prevent loading errors
-    await page.route('**/*.png', (route) => {
-      // Return a 1x1 transparent PNG for any image requests
-      route.fulfill({
-        status: 200,
-        contentType: 'image/png',
-        body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64'),
-      });
-    });
-
-    await page.route('**/*.jpg', (route) => {
-      route.fulfill({
-        status: 200,
-        contentType: 'image/jpeg',
-        body: Buffer.from('/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA//2Q==', 'base64'),
-      });
-    });
-
-    await page.route('**/*.svg', (route) => {
-      route.fulfill({
-        status: 200,
-        contentType: 'image/svg+xml',
-        body: '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>',
-      });
-    });
-
+    // Let all assets (PNG, JPG, SVG) load normally from Vite dev server
     await use(page);
   },
 
