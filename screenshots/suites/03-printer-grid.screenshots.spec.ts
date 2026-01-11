@@ -30,13 +30,22 @@ test.describe('Printer Grid Screenshots', () => {
     await captureFullPage(authenticatedPage, 'printer-grid-empty.png', 'printer-grid');
   });
 
-  test('02-printer-grid-with-printers', async ({ authenticatedPage }) => {
+  test('02-printer-grid-with-printers', async ({ authenticatedPage, apiMock }) => {
+    // Explicitly mock with data (not empty)
+    await apiMock.mockAllEndpoints({ loginRequired: false, emptyData: false });
+
     const nav = createNavigationHelper(authenticatedPage);
     await nav.goToPrinterGrid();
 
-    // Wait for grid and printers to load
+    // Wait for toolbar with floor tabs to appear (indicates floors are loaded)
     await authenticatedPage.waitForSelector(
-      '[data-testid="printer-grid"], .printer-grid',
+      'v-btn-toggle:has(button:has-text("Main Workshop")), .v-btn-group:has(button:has-text("Main")), button:has-text("Main")',
+      { timeout: 5000 }
+    ).catch(() => {});
+
+    // Also wait for printer tiles to appear
+    await authenticatedPage.waitForSelector(
+      '.printer-card, [data-testid="printer-card"], .printer-tile',
       { timeout: 5000 }
     ).catch(() => {});
 
