@@ -1,5 +1,17 @@
 # Develop
 
+## Client 2.2.2
+
+Features
+
+- Redesigned printer dialog 
+
+Fixes
+
+- Printer dialog duplicate wouldn't work
+
+## Client 2.2.1
+
 Fixes
 
 - Shift+S would cause problems in dialog, removed short-cut

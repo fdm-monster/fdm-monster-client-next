@@ -5,56 +5,71 @@
     @escape="closeDialog()"
     @opened="onDialogOpened()"
   >
-    <v-card class="pa-4">
-      <v-card-title>
-        <span class="text-h5">
+    <v-card class="pa-6">
+      <v-card-title class="pb-4">
+        <div class="d-flex align-center">
           <v-avatar
-            color="primary"
-            size="56"
+            color="grey-darken-2"
+            size="48"
+            class="mr-4"
           >
-            {{ avatarInitials }}
+            <span class="text-h6">{{ avatarInitials }}</span>
           </v-avatar>
-          {{ dialogTitle }}
-        </span>
+          <span class="text-h5">{{ dialogTitle }}</span>
+        </div>
       </v-card-title>
 
+      <v-divider class="mb-6"/>
+
       <v-card-text>
-        <h4>Printer type</h4>
-        <v-item-group
+        <div class="d-flex align-center mb-4">
+          <h4 class="text-h6">Printer type</h4>
+          <v-btn
+            v-if="!hasAllPrinterTypes"
+            variant="text"
+            size="small"
+            color="primary"
+            class="ml-2"
+            @click="openExperimentalSettings"
+          >
+            Enable more types
+          </v-btn>
+        </div>
+        <v-select
           v-model="formData.printerType"
-          mandatory
+          :items="serviceTypes"
+          item-title="name"
+          item-value="type"
+          label="Select printer type*"
+          class="mb-4"
+          required
         >
-          <v-container>
-            <v-row>
-              <v-col
-                v-for="item of serviceTypes"
-                :key="item.name"
-                cols="4"
-                md="4"
-              >
-                <v-item v-slot="{ isSelected, toggle }" :value="item.type">
-                  <v-card
-                    :color="isSelected ? 'primary' : 'blue-grey darken-4'"
-                    class="d-flex align-center justify-center elevation-8"
-                    height="60px"
-                    width="225px"
-                    @click="toggle"
-                  >
-                    <v-img
-                      :height="item.height"
-                      :src="item.logo"
-                      max-width="100px"
-                      width="125px"
-                    />
-                    <v-scroll-y-transition>
-                      <h3 class="ml-3 align-center">{{ item.name }}</h3>
-                    </v-scroll-y-transition>
-                  </v-card>
-                </v-item>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-item-group>
+          <template #selection="{ item }">
+            <div class="d-flex align-center">
+              <v-img
+                :src="item.raw.logo"
+                :height="item.raw.height"
+                max-width="30px"
+                width="30px"
+                class="mr-3"
+              />
+              <span>{{ item.raw.name }}</span>
+            </div>
+          </template>
+          <template #item="{ item, props }">
+            <v-list-item v-bind="props">
+              <template #prepend>
+                <v-img
+                  :src="item.raw.logo"
+                  :height="item.raw.height"
+                  max-width="30px"
+                  width="30px"
+                  class="mr-3"
+                />
+              </template>
+            </v-list-item>
+          </template>
+        </v-select>
 
         <v-row>
           <v-col :cols="showChecksPanel ? 8 : 12">
@@ -133,26 +148,51 @@
         <v-alert
           v-if="printerValidationError?.length"
           class="my-3"
-          color="primary"
+          type="error"
+          variant="tonal"
         >
-          {{ printerValidationError }}
-          <v-checkbox
-            v-model="forceSavePrinter"
-            color="warning"
-            label="Force save"
-          />
+          <div class="d-flex flex-column">
+            <strong>Connection Error</strong>
+            <span class="mt-2">{{ printerValidationError }}</span>
+            <v-checkbox
+              v-model="forceSavePrinter"
+              color="warning"
+              label="Force save"
+              class="mt-2"
+            />
+          </div>
         </v-alert>
         <v-alert
           v-if="validatingPrinter"
           class="my-3"
+          type="info"
+          variant="tonal"
         >
-          Validating printer
-          <v-progress-circular indeterminate />
+          <div class="d-flex align-center">
+            <v-progress-circular
+              indeterminate
+              size="20"
+              class="mr-3"
+            />
+            <span>Validating printer connection...</span>
+          </div>
+        </v-alert>
+        <v-alert
+          v-if="duplicatingPrinter"
+          class="my-3"
+          color="info"
+        >
+          Duplicating printer...
+          <v-progress-circular
+            class="ml-2"
+            indeterminate
+            size="20"
+          />
         </v-alert>
       </v-card-text>
       <v-card-actions>
         <em class="text-red"> * indicates required field </em>
-        <v-spacer />
+        <v-spacer/>
         <v-btn
           variant="text"
           @click="closeDialog()"
@@ -161,7 +201,8 @@
         </v-btn>
         <v-btn
           v-if="isUpdating"
-          :disabled="!isValid()"
+          :disabled="!isValid() || duplicatingPrinter"
+          :loading="duplicatingPrinter"
           color="gray"
           variant="text"
           @click="duplicatePrinter()"
@@ -192,7 +233,8 @@
 
 <script lang="ts" setup>
 import { ref, computed } from "vue";
-import { generateInitials, newRandomNamePair } from "@/shared/noun-adjectives.data";
+import { useRouter } from "vue-router";
+import { generateInitials } from "@/shared/noun-adjectives.data";
 import { usePrinterStore } from "@/store/printer.store";
 import { PrintersService } from "@/backend";
 import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
@@ -219,6 +261,8 @@ import PrinterChecksPanel from "@/components/Generic/Dialogs/PrinterChecksPanel.
 import { useFloorStore } from "@/store/floor.store";
 import { captureException } from "@sentry/vue";
 
+const router = useRouter();
+
 const dialog = useDialog(DialogName.AddOrUpdatePrinterDialog);
 const printersStore = usePrinterStore();
 const testPrinterStore = useTestPrinterStore();
@@ -232,6 +276,9 @@ const forceSavePrinter = ref(false);
 const showChecksPanel = ref(false);
 const copyPasteConnectionString = ref("");
 const formData = ref(getDefaultCreatePrinter());
+const duplicatingPrinter = ref(false);
+const isDuplicating = ref(false);
+const duplicatedFromName = ref<string | null>(null);
 
 const serviceTypes = computed(() => {
   if (featureStore.hasFeature("multiplePrinterServices")) {
@@ -280,12 +327,30 @@ const serviceTypes = computed(() => {
   ];
 });
 
+const hasAllPrinterTypes = computed(() => {
+  if (!featureStore.hasFeature("multiplePrinterServices")) {
+    return false;
+  }
+  const feature = featureStore.getFeature<{ types: string[] }>(
+    "multiplePrinterServices",
+  );
+  const hasKlipperSupport = feature?.subFeatures?.types?.includes("klipper");
+  const hasPrusaLinkSupport = feature?.subFeatures?.types?.includes("prusaLink");
+  const hasBambuSupport = feature?.subFeatures?.types?.includes("bambu");
+
+  return hasKlipperSupport && hasPrusaLinkSupport && hasBambuSupport;
+});
+
 const printerId = computed(() => {
   return dialog.context()?.id;
 });
 
 async function onDialogOpened() {
   await featureStore.loadFeatures();
+
+  // Reset duplication state when dialog opens
+  isDuplicating.value = false;
+  duplicatedFromName.value = null;
 
   if (!printerId.value) {
     formData.value = getDefaultCreatePrinter();
@@ -298,10 +363,14 @@ async function onDialogOpened() {
 }
 
 const isUpdating = computed(() => {
-  return !!printerId.value;
+  return !!printerId.value && !isDuplicating.value;
 });
 
 const dialogTitle = computed(() => {
+  if (isDuplicating.value && duplicatedFromName.value) {
+    return `Duplicating from "${ duplicatedFromName.value }"`
+  }
+
   if (isUpdating.value) {
     return 'Updating Printer'
   }
@@ -310,7 +379,7 @@ const dialogTitle = computed(() => {
   if (ctx?.floorId) {
     const floor = floorStore.floors.find(f => f.id === ctx.floorId)
     if (floor) {
-      return `Add Printer to ${floor.name}`
+      return `Add Printer to ${ floor.name }`
     }
   }
 
@@ -375,7 +444,7 @@ const isValid = () => {
 async function createPrinter(newPrinterData: CreatePrinter) {
   const printer = await printersStore.createPrinter(newPrinterData, forceSavePrinter.value);
   snackbar.openInfoMessage({
-    title: `Printer ${newPrinterData.name} created`,
+    title: `Printer ${ newPrinterData.name } created`,
   });
   return printer;
 }
@@ -392,7 +461,7 @@ async function updatePrinter(updatedPrinter: CreatePrinter) {
   );
 
   snackbar.openInfoMessage({
-    title: `Printer ${updatedPrinter.name} updated`,
+    title: `Printer ${ updatedPrinter.name } updated`,
   });
 
   return printer;
@@ -462,10 +531,23 @@ async function submit() {
   }
 }
 
-async function duplicatePrinter() {
-  formData.value.name = newRandomNamePair();
+function duplicatePrinter() {
+  if (!isValid()) return;
+
+  duplicatingPrinter.value = true;
   printerValidationError.value = null;
   forceSavePrinter.value = false;
+
+  duplicatedFromName.value = formData.value.name || null;
+  formData.value.name = "";
+  delete formData.value.id;
+  isDuplicating.value = true;
+  duplicatingPrinter.value = false;
+}
+
+function openExperimentalSettings() {
+  closeDialog();
+  router.push('/settings/experimental');
 }
 
 function closeDialog() {
@@ -473,6 +555,9 @@ function closeDialog() {
   forceSavePrinter.value = false;
   printerValidationError.value = null;
   showChecksPanel.value = false;
+  duplicatingPrinter.value = false;
+  isDuplicating.value = false;
+  duplicatedFromName.value = null;
   testPrinterStore.clearEvents();
   resetForm();
   copyPasteConnectionString.value = "";
