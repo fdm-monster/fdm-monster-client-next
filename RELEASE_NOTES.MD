@@ -1,5 +1,15 @@
 # Develop
 
+## Client 2.2.3
+
+Features
+
+- Add playwright for automated screenshot taking
+
+Fixes
+
+- Redesign registration form to Vuetify 3
+
 ## Client 2.2.2
 
 Features
