@@ -1,5 +1,11 @@
 # Develop
 
+Fixes
+
+- Shift+S would cause problems in dialog, removed short-cut
+
+## Client 2.2.0
+
 Features
 
 - Designed a printer maintenance log page
