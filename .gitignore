@@ -34,3 +34,7 @@ pnpm-debug.log*
 !.yarn/versions
 
 /openapi.json
+
+test-results/
+
+.claude/

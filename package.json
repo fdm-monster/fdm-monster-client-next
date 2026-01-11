@@ -1,6 +1,6 @@
 {
   "name": "@fdm-monster/client-next",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fdm-monster/fdm-monster-client-next.git"
@@ -22,7 +22,26 @@
     "test:coverage": "vitest run --coverage --environment jsdom",
     "test:e2e": "start-server-and-test preview http://127.0.0.1:5050/ 'cypress open'",
     "openapi-ts": "openapi-ts",
-    "openapi-ts:watch": "openapi-ts --watch"
+    "openapi-ts:watch": "openapi-ts --watch",
+    "screenshots": "playwright test --config=screenshots/playwright.screenshots.config.ts",
+    "screenshots:headed": "playwright test --config=screenshots/playwright.screenshots.config.ts --headed",
+    "screenshots:debug": "playwright test --config=screenshots/playwright.screenshots.config.ts --debug",
+    "screenshots:ui": "playwright test --config=screenshots/playwright.screenshots.config.ts --ui",
+    "screenshots:chrome": "playwright test --config=screenshots/playwright.screenshots.config.ts --project=chrome-screenshots",
+    "screenshots:example": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/00-example --headed",
+    "screenshots:auth": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/01-auth",
+    "screenshots:dashboard": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/02-dashboard",
+    "screenshots:printer-grid": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/03-printer-grid",
+    "screenshots:printer-list": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/04-printer-list",
+    "screenshots:cameras": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/05-camera-grid",
+    "screenshots:jobs": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/06-print-jobs",
+    "screenshots:queue": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/07-queue",
+    "screenshots:files": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/08-files",
+    "screenshots:settings": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/09-settings",
+    "screenshots:dialogs": "playwright test --config=screenshots/playwright.screenshots.config.ts suites/10-panels-dialogs",
+    "screenshots:ci": "playwright test --config=screenshots/playwright.screenshots.config.ts",
+    "playwright:install": "playwright install",
+    "playwright:install-chromium": "playwright install chromium"
   },
   "dependencies": {
     "core-js": "3.47.0",
@@ -36,6 +55,7 @@
     "@hey-api/client-axios": "0.9.1",
     "@hey-api/openapi-ts": "0.90.3",
     "@mdi/font": "7.4.47",
+    "@playwright/test": "1.57.0",
     "@sentry/tracing": "7.120.4",
     "@sentry/vite-plugin": "4.6.1",
     "@sentry/vue": "10.32.1",
@@ -69,6 +89,7 @@
     "jsdom": "27.4.0",
     "jwt-decode": "4.0.0",
     "pinia": "3.0.4",
+    "playwright": "1.57.0",
     "prettier": "3.7.4",
     "sass-embedded": "1.97.2",
     "selective-object-reuse": "1.0.6",
