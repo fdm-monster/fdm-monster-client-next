@@ -25,12 +25,8 @@
               </v-toolbar-title>
 
               <v-toolbar-title class="mt-lg-6 mt-sm-5 mb-md-5">
-                Login to your account
-              </v-toolbar-title>
-
-              <v-card-subtitle class="text-grey mb-md-5">
                 Welcome back! Please enter your details
-              </v-card-subtitle>
+              </v-toolbar-title>
             </div>
 
             <v-col
