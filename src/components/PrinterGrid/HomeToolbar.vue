@@ -58,7 +58,7 @@
       </v-btn>
       <v-btn
         size="small"
-        title="Name mode - Sort alphabetically (Shift+S). Change direction in grid settings."
+        title="Name mode - Sort alphabetically. Change direction in grid settings."
       >
         <v-icon>sort_by_alpha</v-icon>
         Name
@@ -123,18 +123,18 @@
       </v-card>
     </v-menu>
 
-    <v-spacer />
+    <v-spacer/>
 
     <!-- Grid size controls - always visible -->
-    <GridSizeControl class="ml-4" />
+    <GridSizeControl class="ml-4"/>
 
     <!-- Grid settings menu -->
-    <GridSettingsMenu class="ml-4" />
+    <GridSettingsMenu class="ml-4"/>
   </v-toolbar>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useGridStore } from '@/store/grid.store'
 import { useFloorStore } from '@/store/floor.store'
 import { useSettingsStore } from '@/store/settings.store'
@@ -169,22 +169,8 @@ const sortModeIndex = computed(() => {
   return gridStore.sortMode === 'position' ? 0 : 1
 })
 
-// Keyboard shortcut handler
-function handleKeyDown(event: KeyboardEvent) {
-  // Shift+S toggles sort mode
-  if (event.shiftKey && event.key.toLowerCase() === 's') {
-    event.preventDefault()
-    gridStore.toggleSortMode()
-  }
-}
-
 onMounted(async () => {
   await loadTags()
-  globalThis.addEventListener('keydown', handleKeyDown)
-})
-
-onUnmounted(() => {
-  globalThis.removeEventListener('keydown', handleKeyDown)
 })
 
 function changeFloorIndex(index: any) {
@@ -235,14 +221,14 @@ async function autoPlacePrinters() {
 
     // Get occupied positions
     const occupiedPositions = new Set(
-      floorStore.selectedFloor.printers.map(p => `${p.x},${p.y}`)
+      floorStore.selectedFloor.printers.map(p => `${ p.x },${ p.y }`)
     )
 
     // Find available positions
     const availablePositions: { x: number; y: number }[] = []
     for (let y = 0; y < gridRows; y++) {
       for (let x = 0; x < gridCols; x++) {
-        const posKey = `${x},${y}`
+        const posKey = `${ x },${ y }`
         if (!occupiedPositions.has(posKey)) {
           availablePositions.push({ x, y })
         }
