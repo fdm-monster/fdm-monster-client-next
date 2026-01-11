@@ -93,6 +93,25 @@ yarn build
 
 Once the build process is completed, your application will be ready for deployment in a production environment.
 
+## 📸 Documentation Screenshots
+
+This project includes Playwright setup for capturing screenshots for documentation purposes.
+
+### Quick Start
+
+```bash
+# Install Playwright browsers (first time only)
+yarn playwright:install
+
+# Generate screenshots
+yarn screenshots
+
+# Run in headed mode (see the browser)
+yarn screenshots:headed
+```
+
+For detailed documentation, see [screenshots/SETUP.md](screenshots/SETUP.md).
+
 ## 💪 Support Vuetify Development
 
 This project is built with [Vuetify](https://vuetifyjs.com/en/), a UI Library with a comprehensive collection of Vue components. Vuetify is an MIT licensed Open Source project that has been made possible due to the generous contributions by our [sponsors and backers](https://vuetifyjs.com/introduction/sponsors-and-backers/). If you are interested in supporting this project, please consider:

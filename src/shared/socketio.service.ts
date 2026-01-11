@@ -52,6 +52,16 @@ export class SocketIoService {
   }
 
   async setupSocketConnection() {
+    // Skip Socket.IO setup in screenshot/test mode
+    if ((window as any).__DISABLE_SOCKETIO__ || (window as any).__SCREENSHOT_MODE__) {
+      console.debug("Socket.IO disabled (test/screenshot mode)");
+      socketState.setup = true;
+      socketState.connected = true;
+      socketState.active = true;
+      socketState.id = "test-mode-socket";
+      return;
+    }
+
     console.debug("Setting up socket.io client");
 
     if (socketState.setup) {
@@ -107,6 +117,12 @@ export class SocketIoService {
   }
 
   reconnect() {
+    // Skip reconnect in test/screenshot mode
+    if ((window as any).__DISABLE_SOCKETIO__ || (window as any).__SCREENSHOT_MODE__) {
+      console.debug("Socket.IO reconnect skipped (test/screenshot mode)");
+      return;
+    }
+
     if (!appSocketIO) {
       throw new Error("Cant reconnect socket, socket not created");
     }

@@ -16,7 +16,7 @@
       >
         <div class="d-flex flex-column align-center">
           <v-img
-            :src="require('@/assets/logo.png')"
+            :src="imgUrl"
             class="shrink mr-1 pt-3 ml-1"
             contain
             style="opacity: 0.85"
@@ -145,6 +145,7 @@ import { useRouter } from 'vue-router'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { AuthService } from '@/backend/auth.service'
 import { RouteNames } from '@/router/route-names'
+import imgUrl from '@/assets/logo.png'
 
 const authStore = useAuthStore()
 const router = useRouter()
