@@ -4,7 +4,7 @@ import { createNavigationHelper } from '../helpers/navigation.helper';
 
 /**
  * Settings Screenshots
- * Captures: All settings pages including server, floor, user role settings
+ * Captures: All settings pages based on actual routes from setting.constants.ts
  */
 test.describe('Settings Screenshots', () => {
   test.beforeEach(async ({ apiMock }) => {
@@ -15,27 +15,12 @@ test.describe('Settings Screenshots', () => {
     const nav = createNavigationHelper(authenticatedPage);
     await nav.goToSettings();
 
-    // Wait for settings page to load
-    await authenticatedPage.waitForSelector(
-      '[data-testid="settings"], .settings, main',
-      { timeout: 5000 }
-    ).catch(() => {});
-
     await authenticatedPage.waitForTimeout(1000);
 
     await captureFullPage(authenticatedPage, 'settings-overview.png', 'settings');
   });
 
-  test('02-settings-server', async ({ authenticatedPage }) => {
-    const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToSettings('server');
-
-    await authenticatedPage.waitForTimeout(1000);
-
-    await captureFullPage(authenticatedPage, 'settings-server.png', 'settings');
-  });
-
-  test('03-settings-floors', async ({ authenticatedPage }) => {
+  test('02-settings-floors', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
     await nav.goToSettings('floors');
 
@@ -44,68 +29,61 @@ test.describe('Settings Screenshots', () => {
     await captureFullPage(authenticatedPage, 'settings-floors.png', 'settings');
   });
 
-  test('04-settings-users', async ({ authenticatedPage }) => {
+  test('03-settings-printer', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToSettings('users');
+    await nav.goToSettings('printer');
 
     await authenticatedPage.waitForTimeout(1000);
 
-    await captureFullPage(authenticatedPage, 'settings-users.png', 'settings');
+    await captureFullPage(authenticatedPage, 'settings-printer.png', 'settings');
   });
 
-  test('05-settings-user-roles', async ({ authenticatedPage }) => {
+  test('04-settings-emergency-commands', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToSettings('users');
+    await nav.goToSettings('emergency-commands');
 
     await authenticatedPage.waitForTimeout(1000);
 
-    // Try to open user role editor or dialog
-    const userRow = authenticatedPage.locator('tr, .user-item').first();
-    if (await userRow.isVisible().catch(() => false)) {
-      await userRow.click();
-      await authenticatedPage.waitForTimeout(1000);
-    }
-
-    await captureFullPage(authenticatedPage, 'settings-user-roles.png', 'settings');
+    await captureFullPage(authenticatedPage, 'settings-emergency-commands.png', 'settings');
   });
 
-  test('06-settings-frontend', async ({ authenticatedPage }) => {
+  test('05-settings-server-protection', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToSettings('frontend');
+    await nav.goToSettings('server-protection');
 
     await authenticatedPage.waitForTimeout(1000);
 
-    await captureFullPage(authenticatedPage, 'settings-frontend.png', 'settings');
+    await captureFullPage(authenticatedPage, 'settings-server-protection.png', 'settings');
   });
 
-  test('07-settings-timeout', async ({ authenticatedPage }) => {
+  test('06-settings-user-management', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToSettings('timeout');
+    await nav.goToSettings('user-management');
 
     await authenticatedPage.waitForTimeout(1000);
 
-    await captureFullPage(authenticatedPage, 'settings-timeout.png', 'settings');
+    await captureFullPage(authenticatedPage, 'settings-user-management.png', 'settings');
   });
 
-  test('08-settings-printer-defaults', async ({ authenticatedPage }) => {
+  test('07-settings-account', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToSettings('printer-defaults');
+    await nav.goToSettings('account');
 
     await authenticatedPage.waitForTimeout(1000);
 
-    await captureFullPage(authenticatedPage, 'settings-printer-defaults.png', 'settings');
+    await captureFullPage(authenticatedPage, 'settings-account.png', 'settings');
   });
 
-  test('09-settings-wizard', async ({ authenticatedPage }) => {
+  test('08-settings-software-upgrade', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToSettings('wizard');
+    await nav.goToSettings('software-upgrade');
 
     await authenticatedPage.waitForTimeout(1000);
 
-    await captureFullPage(authenticatedPage, 'settings-wizard.png', 'settings');
+    await captureFullPage(authenticatedPage, 'settings-software-upgrade.png', 'settings');
   });
 
-  test('10-settings-diagnostics', async ({ authenticatedPage }) => {
+  test('09-settings-diagnostics', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
     await nav.goToSettings('diagnostics');
 
@@ -114,7 +92,34 @@ test.describe('Settings Screenshots', () => {
     await captureFullPage(authenticatedPage, 'settings-diagnostics.png', 'settings');
   });
 
-  test('11-settings-about', async ({ authenticatedPage }) => {
+  test('10-settings-experimental', async ({ authenticatedPage }) => {
+    const nav = createNavigationHelper(authenticatedPage);
+    await nav.goToSettings('experimental');
+
+    await authenticatedPage.waitForTimeout(1000);
+
+    await captureFullPage(authenticatedPage, 'settings-experimental.png', 'settings');
+  });
+
+  test('11-settings-slicer', async ({ authenticatedPage }) => {
+    const nav = createNavigationHelper(authenticatedPage);
+    await nav.goToSettings('slicer');
+
+    await authenticatedPage.waitForTimeout(1000);
+
+    await captureFullPage(authenticatedPage, 'settings-slicer.png', 'settings');
+  });
+
+  test('12-settings-debug-socket', async ({ authenticatedPage }) => {
+    const nav = createNavigationHelper(authenticatedPage);
+    await nav.goToSettings('debug-socket');
+
+    await authenticatedPage.waitForTimeout(1000);
+
+    await captureFullPage(authenticatedPage, 'settings-debug-socket.png', 'settings');
+  });
+
+  test('13-settings-about', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
     await nav.goToSettings('about');
 

@@ -3,14 +3,19 @@ import { Page } from '@playwright/test';
 /**
  * Mock SocketIO to prevent "server disconnected" messages
  * Sets flags that the app checks to skip Socket.IO setup entirely
+ * Also injects Socket.IO update data into stores
  */
-export async function mockSocketIO(page: Page): Promise<void> {
-  // Set test mode flags BEFORE page loads
-  await page.addInitScript(() => {
+export async function mockSocketIO(page: Page, data?: any): Promise<void> {
+  // Set test mode flags AND inject Socket.IO data BEFORE page loads
+  await page.addInitScript((mockData) => {
     (window as any).__DISABLE_SOCKETIO__ = true;
     (window as any).__SCREENSHOT_MODE__ = true;
-    console.log('[Mock] Socket.IO disabled via test flags');
-  });
+
+    // Store mock data to be consumed by stores
+    if (mockData) {
+      (window as any).__SOCKETIO_MOCK_DATA__ = mockData;
+    }
+  }, data);
 
   // Block any Socket.IO network requests as a fallback (should not happen now)
   await page.route('**/socket.io/**', (route) => {

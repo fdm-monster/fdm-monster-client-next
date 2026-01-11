@@ -28,11 +28,17 @@ type ScreenshotFixtures = {
 export const test = base.extend<ScreenshotFixtures>({
   /**
    * Page fixture override - automatically mocks SocketIO for all pages
-   * This prevents "server disconnected" messages
+   * This prevents "server disconnected" messages and injects initial data
    */
   page: async ({ page }, use) => {
-    // Mock SocketIO before page loads
-    await mockSocketIO(page);
+    // Mock SocketIO with initial data before page loads
+    await mockSocketIO(page, {
+      floors: mockFloors,
+      printers: mockPrinters,
+      socketStates: {},
+      printerEvents: {},
+      trackedUploads: { current: [] },
+    });
 
     // Let all assets (PNG, JPG, SVG) load normally from Vite dev server
     await use(page);
@@ -51,6 +57,7 @@ export const test = base.extend<ScreenshotFixtures>({
   /**
    * Authenticated page fixture - provides a page with mocked authentication
    * Use this when you need to test pages that require login
+   * Note: Socket.IO data is injected via page fixture above
    */
   authenticatedPage: async ({ page, apiMock }, use) => {
     // Mock authentication endpoints (no login required)

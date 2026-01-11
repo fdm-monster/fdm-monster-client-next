@@ -54,21 +54,18 @@ test.describe('Printer Grid Screenshots', () => {
     await captureFullPage(authenticatedPage, 'printer-grid-with-printers.png', 'printer-grid');
   });
 
-  test('03-create-floor-dialog', async ({ authenticatedPage }) => {
+  test('03-create-floor-dialog', async ({ authenticatedPage, apiMock }) => {
+    // Use empty floors so "Create First Floor" button appears
+    await apiMock.mockAllEndpoints({ loginRequired: false, emptyData: true });
+
     const nav = createNavigationHelper(authenticatedPage);
     await nav.goToPrinterGrid();
 
     await authenticatedPage.waitForTimeout(1000);
 
-    // Click add floor button
-    const addFloorBtn = authenticatedPage.locator('button').filter({ hasText: /add.*floor|create.*floor|new.*floor/i }).first();
-    if (await addFloorBtn.isVisible().catch(() => false)) {
-      await addFloorBtn.click();
-    } else {
-      // Try fab button or icon button
-      const fabBtn = authenticatedPage.locator('[data-testid="add-floor-btn"], .v-btn--floating, button[aria-label*="floor" i]').first();
-      await fabBtn.click().catch(() => {});
-    }
+    // Click "Create First Floor" button (only appears when no floors exist)
+    const createFloorBtn = authenticatedPage.locator('button').filter({ hasText: /create.*first.*floor/i }).first();
+    await createFloorBtn.click();
 
     // Wait for dialog
     const dialog = createDialogHelper(authenticatedPage);
@@ -79,21 +76,19 @@ test.describe('Printer Grid Screenshots', () => {
     await captureFullPage(authenticatedPage, 'create-floor-dialog.png', 'printer-grid');
   });
 
-  test('04-create-printer-on-floor-dialog', async ({ authenticatedPage }) => {
+  test('04-create-printer-dialog', async ({ authenticatedPage, apiMock }) => {
+    // Mock with data so printers list page shows normally
+    await apiMock.mockAllEndpoints({ loginRequired: false, emptyData: false });
+
+    // Navigate to Printer List page (not grid) where "Create Printer" button exists
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToPrinterGrid();
+    await nav.goToPrinterList();
 
     await authenticatedPage.waitForTimeout(1000);
 
-    // Click add printer button
-    const addPrinterBtn = authenticatedPage.locator('button').filter({ hasText: /add.*printer|create.*printer|new.*printer/i }).first();
-    if (await addPrinterBtn.isVisible().catch(() => false)) {
-      await addPrinterBtn.click();
-    } else {
-      // Try icon button
-      const iconBtn = authenticatedPage.locator('[data-testid="add-printer-btn"], button[aria-label*="printer" i]').first();
-      await iconBtn.click().catch(() => {});
-    }
+    // Click "Create Printer" button
+    const createPrinterBtn = authenticatedPage.locator('button').filter({ hasText: /create.*printer/i }).first();
+    await createPrinterBtn.click();
 
     // Wait for dialog
     const dialog = createDialogHelper(authenticatedPage);
@@ -101,10 +96,12 @@ test.describe('Printer Grid Screenshots', () => {
 
     await authenticatedPage.waitForTimeout(500);
 
-    await captureFullPage(authenticatedPage, 'create-printer-on-floor-dialog.png', 'printer-grid');
+    await captureFullPage(authenticatedPage, 'create-printer-dialog.png', 'printer-grid');
   });
 
-  test('05-printer-grid-drag-hint', async ({ authenticatedPage }) => {
+  test('05-printer-grid-drag-hint', async ({ authenticatedPage, apiMock }) => {
+    await apiMock.mockAllEndpoints({ loginRequired: false, emptyData: false });
+
     const nav = createNavigationHelper(authenticatedPage);
     await nav.goToPrinterGrid();
 
@@ -120,7 +117,9 @@ test.describe('Printer Grid Screenshots', () => {
     await captureFullPage(authenticatedPage, 'printer-grid-drag-hint.png', 'printer-grid');
   });
 
-  test('06-batch-operations-bar', async ({ authenticatedPage }) => {
+  test('06-batch-operations-bar', async ({ authenticatedPage, apiMock }) => {
+    await apiMock.mockAllEndpoints({ loginRequired: false, emptyData: false });
+
     const nav = createNavigationHelper(authenticatedPage);
     await nav.goToPrinterGrid();
 
@@ -141,7 +140,9 @@ test.describe('Printer Grid Screenshots', () => {
     await captureFullPage(authenticatedPage, 'batch-operations-bar.png', 'printer-grid');
   });
 
-  test('07-printer-grid-context-menu', async ({ authenticatedPage }) => {
+  test('07-printer-grid-context-menu', async ({ authenticatedPage, apiMock }) => {
+    await apiMock.mockAllEndpoints({ loginRequired: false, emptyData: false });
+
     const nav = createNavigationHelper(authenticatedPage);
     await nav.goToPrinterGrid();
 

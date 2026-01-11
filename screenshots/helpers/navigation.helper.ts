@@ -34,14 +34,14 @@ export class NavigationHelper {
    * Navigate to printer list
    */
   async goToPrinterList(): Promise<void> {
-    await this.navigateTo('/printers');
+    await this.navigateTo('/printer-list');
   }
 
   /**
    * Navigate to camera grid
    */
-  async goToCameraGrid(): Promise<void> {
-    await this.navigateTo('/camera-grid');
+  async goToCameras(): Promise<void> {
+    await this.navigateTo('/cameras');
   }
 
   /**

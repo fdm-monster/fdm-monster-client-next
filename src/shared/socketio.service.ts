@@ -59,6 +59,13 @@ export class SocketIoService {
       socketState.connected = true;
       socketState.active = true;
       socketState.id = "test-mode-socket";
+
+      // Inject mock Socket.IO data into stores if available
+      const mockData = (window as any).__SOCKETIO_MOCK_DATA__;
+      if (mockData) {
+        this.onMessage(mockData);
+      }
+
       return;
     }
 

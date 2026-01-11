@@ -15,7 +15,7 @@ test.describe('Printer List Screenshots', () => {
 
   test('01-printer-list-view', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToPrinters();
+    await nav.goToPrinterList();
 
     // Wait for list to load
     await authenticatedPage.waitForSelector(
@@ -33,7 +33,7 @@ test.describe('Printer List Screenshots', () => {
     await apiMock.mockAllEndpoints({ loginRequired: false, emptyData: true });
 
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToPrinters();
+    await nav.goToPrinterList();
 
     await authenticatedPage.waitForSelector(
       '[data-testid="empty-state"], .empty-state, main',
@@ -47,7 +47,7 @@ test.describe('Printer List Screenshots', () => {
 
   test('03-create-printer-dialog', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToPrinters();
+    await nav.goToPrinterList();
 
     await authenticatedPage.waitForTimeout(1000);
 
@@ -66,7 +66,7 @@ test.describe('Printer List Screenshots', () => {
 
   test('04-create-printer-dialog-filled', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToPrinters();
+    await nav.goToPrinterList();
 
     await authenticatedPage.waitForTimeout(1000);
 
@@ -99,7 +99,7 @@ test.describe('Printer List Screenshots', () => {
 
   test('05-printer-details-panel', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToPrinters();
+    await nav.goToPrinterList();
 
     await authenticatedPage.waitForTimeout(1000);
 
@@ -115,7 +115,7 @@ test.describe('Printer List Screenshots', () => {
 
   test('06-attach-floor-to-printer', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToPrinters();
+    await nav.goToPrinterList();
 
     await authenticatedPage.waitForTimeout(1000);
 
@@ -138,7 +138,7 @@ test.describe('Printer List Screenshots', () => {
 
   test('07-attach-camera-to-printer', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToPrinters();
+    await nav.goToPrinterList();
 
     await authenticatedPage.waitForTimeout(1000);
 
@@ -161,7 +161,7 @@ test.describe('Printer List Screenshots', () => {
 
   test('08-attach-tag-to-printer', async ({ authenticatedPage }) => {
     const nav = createNavigationHelper(authenticatedPage);
-    await nav.goToPrinters();
+    await nav.goToPrinterList();
 
     await authenticatedPage.waitForTimeout(1000);
 

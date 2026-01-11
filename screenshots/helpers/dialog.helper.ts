@@ -13,12 +13,36 @@ export class DialogHelper {
    * @param timeout Maximum time to wait in milliseconds
    */
   async waitForDialog(selector?: string, timeout = 5000): Promise<Locator> {
-    const dialogSelector = selector || '.v-dialog--active';
-    await this.page.waitForSelector(dialogSelector, {
+    if (selector) {
+      await this.page.waitForSelector(selector, {
+        state: 'visible',
+        timeout,
+      });
+      return this.page.locator(selector).first();
+    }
+
+    // For Vuetify 3, try multiple selectors
+    const selectors = [
+      '.v-overlay--active .v-card',
+      '.v-dialog .v-card',
+      '[role="dialog"]',
+      '.v-dialog--active',
+    ];
+
+    for (const sel of selectors) {
+      const visible = await this.page.locator(sel).isVisible().catch(() => false);
+      if (visible) {
+        return this.page.locator(sel).first();
+      }
+    }
+
+    // Wait for any of the selectors
+    await this.page.waitForSelector('.v-overlay--active .v-card, .v-dialog .v-card, [role="dialog"]', {
       state: 'visible',
       timeout,
     });
-    return this.page.locator(dialogSelector).first();
+
+    return this.page.locator('.v-overlay--active .v-card, .v-dialog .v-card').first();
   }
 
   /**

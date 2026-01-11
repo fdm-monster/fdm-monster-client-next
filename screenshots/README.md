@@ -415,10 +415,10 @@ All test suites have been implemented covering all pages and features from `scre
 - ✅ **06-print-jobs** - Jobs list, job details dialog, filtering by status (7 tests)
 - ✅ **07-queue** - Queue view, reordering, context menus (5 tests)
 - ✅ **08-files** - File browser, upload, grid/list views, file operations (8 tests)
-- ✅ **09-settings** - All settings pages including server, floors, users, roles, frontend, timeout, wizard, diagnostics, about (11 tests)
+- ✅ **09-settings** - All settings pages: overview, floors, printer, emergency commands, server protection, user management, account, software upgrade, diagnostics, experimental, slicer, debug socket, about (13 tests)
 - ✅ **10-panels-dialogs** - YAML import/export, OctoFarm import, menus, printer dialogs (create, update, duplicate, test connection, type dropdown, force save), edit floor, delete confirmation (13 tests)
 
-**Total: 74 screenshot tests covering all pages and dialogs**
+**Total: 76 screenshot tests covering all pages and dialogs**
 
 ## Resources
 

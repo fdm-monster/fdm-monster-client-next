@@ -9,7 +9,7 @@ import {
   mockRefreshResponse,
 } from './data/auth.fixtures';
 import { mockPrinters, mockPrinterEmpty, mockPrinterStates } from './data/printers.fixtures';
-import { mockFloors, mockFloorsEmpty, mockSingleFloor } from './data/floors.fixtures';
+import { mockFloors, mockFloorsEmpty } from './data/floors.fixtures';
 import { mockCameras, mockCamerasEmpty } from './data/cameras.fixtures';
 import { mockFiles, mockFilesEmpty } from './data/files.fixtures';
 import { mockJobs, mockJobsEmpty, mockJobDetails, mockQueue } from './data/jobs.fixtures';
@@ -153,12 +153,60 @@ export class ApiMock {
   async mockFloorEndpoints(options?: { empty?: boolean }) {
     const floors = options?.empty ? mockFloorsEmpty : mockFloors;
 
-    // Mock GET /api/v2/floor - list floors
-    await this.page.route('**/api/v2/floor', (route) => {
+    // Mock GET /api/v2/floor/:id - get single floor (must be before generic floor route)
+    await this.page.route('**/api/v2/floor/*/**', (route) => {
+      const url = route.request().url();
+      const idMatch = url.match(/\/floor\/(\d+)\//);
+      if (idMatch) {
+        const id = Number.parseInt(idMatch[1]);
+
+        // Handle floor-specific operations
+        if (url.includes('/printer')) {
+          // Add/remove printer from floor
+          if (route.request().method() === 'POST') {
+            const floor = floors.find((f) => f.id === id);
+            if (floor) {
+              return this.fulfillJson(route, floor);
+            }
+          }
+          if (route.request().method() === 'DELETE') {
+            const floor = floors.find((f) => f.id === id);
+            if (floor) {
+              return this.fulfillJson(route, floor);
+            }
+          }
+        }
+
+        // Handle floor name/order updates
+        if (route.request().method() === 'PATCH' || route.request().method() === 'PUT') {
+          const floor = floors.find((f) => f.id === id);
+          if (floor) {
+            return this.fulfillJson(route, floor);
+          }
+        }
+
+        // Handle floor GET
+        if (route.request().method() === 'GET') {
+          const floor = floors.find((f) => f.id === id);
+          if (floor) {
+            return this.fulfillJson(route, floor);
+          }
+          return this.fulfillJson(route, { error: 'Floor not found' }, 404);
+        }
+
+        // Handle floor DELETE
+        if (route.request().method() === 'DELETE') {
+          return this.fulfillJson(route, { success: true });
+        }
+      }
+      return route.continue();
+    });
+
+    // Mock GET/POST /api/v2/floor/ - list/create floors (generic endpoint)
+    await this.page.route('**/api/v2/floor/', (route) => {
       if (route.request().method() === 'GET') {
         return this.fulfillJson(route, floors);
       }
-      // POST /api/v2/floor - create floor
       if (route.request().method() === 'POST') {
         const newFloor = {
           id: floors.length + 1,
@@ -166,21 +214,6 @@ export class ApiMock {
           printers: [],
         };
         return this.fulfillJson(route, newFloor, 201);
-      }
-      return route.continue();
-    });
-
-    // Mock GET /api/v2/floor/:id - get single floor
-    await this.page.route('**/api/v2/floor/*', (route) => {
-      const url = route.request().url();
-      const idMatch = url.match(/\/floor\/(\d+)$/);
-      if (idMatch && route.request().method() === 'GET') {
-        const id = Number.parseInt(idMatch[1]);
-        const floor = floors.find((f) => f.id === id);
-        if (floor) {
-          return this.fulfillJson(route, floor);
-        }
-        return this.fulfillJson(route, { error: 'Floor not found' }, 404);
       }
       return route.continue();
     });
@@ -192,12 +225,66 @@ export class ApiMock {
   async mockCameraEndpoints(options?: { empty?: boolean }) {
     const cameras = options?.empty ? mockCamerasEmpty : mockCameras;
 
-    // Mock GET /api/v2/camera-stream - list cameras
-    await this.page.route('**/api/v2/camera-stream', (route) => {
+    // Mock actual camera stream URLs to return a placeholder image
+    // This prevents the browser from trying to load real camera streams
+    await this.page.route('**://*/webcam/**', (route) => {
+      // Return a simple 1x1 gray pixel as PNG
+      const grayPixel = Buffer.from(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8w8DwHwAEOQHNmnaaOAAAAABJRU5ErkJggg==',
+        'base64'
+      );
+      return route.fulfill({
+        status: 200,
+        contentType: 'image/png',
+        body: grayPixel,
+      });
+    });
+
+    // Mock any IP-based camera stream URLs (like http://192.168.1.100/...)
+    await this.page.route('**://192.168.*/**', (route) => {
+      const grayPixel = Buffer.from(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM8w8DwHwAEOQHNmnaaOAAAAABJRU5ErkJggg==',
+        'base64'
+      );
+      return route.fulfill({
+        status: 200,
+        contentType: 'image/png',
+        body: grayPixel,
+      });
+    });
+
+    // Mock individual camera operations /api/v2/camera-stream/:id (must be before generic route)
+    await this.page.route('**/api/v2/camera-stream/*/***', (route) => {
+      const url = route.request().url();
+      const idMatch = url.match(/\/camera-stream\/(\d+)/);
+
+      if (idMatch) {
+        const id = Number.parseInt(idMatch[1]);
+        const camera = cameras.find((c) => c.id === id);
+
+        if (route.request().method() === 'GET' && camera) {
+          return this.fulfillJson(route, camera);
+        }
+
+        if (route.request().method() === 'PATCH' || route.request().method() === 'PUT') {
+          if (camera) {
+            return this.fulfillJson(route, camera);
+          }
+        }
+
+        if (route.request().method() === 'DELETE') {
+          return this.fulfillJson(route, { success: true });
+        }
+      }
+
+      return route.continue();
+    });
+
+    // Mock GET/POST /api/v2/camera-stream/ - list/create cameras
+    await this.page.route('**/api/v2/camera-stream/', (route) => {
       if (route.request().method() === 'GET') {
         return this.fulfillJson(route, cameras);
       }
-      // POST /api/v2/camera-stream - create camera
       if (route.request().method() === 'POST') {
         const newCamera = {
           id: cameras.length + 1,
@@ -302,8 +389,16 @@ export class ApiMock {
    * Mock settings endpoints
    */
   async mockSettingsEndpoints() {
-    // Mock GET /api/v2/settings - full settings object
+    // Register settings routes in LIFO order (generic FIRST, specific LAST)
+
+    // Mock GET /api/v2/settings - full settings object (generic)
     await this.page.route('**/api/v2/settings', (route) => {
+      const url = route.request().url();
+      // Skip if it's a more specific settings endpoint
+      if (url.includes('/settings/')) {
+        return route.continue();
+      }
+
       if (route.request().method() === 'GET') {
         return this.fulfillJson(route, {
           server: mockServerSettings,
@@ -340,20 +435,74 @@ export class ApiMock {
       return route.continue();
     });
 
-    // Mock user endpoints
-    await this.page.route('**/api/v2/user**', (route) => {
+    // Mock GET /api/v2/settings/sensitive (specific - registered late)
+    await this.page.route('**/api/v2/settings/sensitive', (route) => {
+      if (route.request().method() === 'GET') {
+        return this.fulfillJson(route, {
+          sentryDiagnosticsEnabled: false,
+        });
+      }
+      return route.continue();
+    });
+
+    // Mock GET /api/v2/settings/slicer-api-key (specific - registered late)
+    await this.page.route('**/api/v2/settings/slicer-api-key', (route) => {
+      if (route.request().method() === 'GET') {
+        return this.fulfillJson(route, {
+          slicerApiKey: 'mock-slicer-api-key-12345',
+        });
+      }
+      return route.continue();
+    });
+
+    // Register user routes in reverse order (LIFO - Last In First Out)
+    // Most generic routes registered FIRST, specific routes LAST
+
+    // Mock individual user operations (generic)
+    await this.page.route('**/api/v2/user/*', (route) => {
+      const url = route.request().url();
+      // Skip if it's /user/profile, /user/me, or /user/roles (handled by more specific routes)
+      if (url.endsWith('/user/profile') || url.endsWith('/user/me') || url.endsWith('/user/roles')) {
+        return route.continue();
+      }
+
+      const idMatch = url.match(/\/user\/(\d+)$/);
+      if (idMatch && route.request().method() === 'GET') {
+        const id = Number.parseInt(idMatch[1]);
+        const user = mockUsers.find((u) => u.id === id);
+        if (user) {
+          return this.fulfillJson(route, user);
+        }
+      }
+      return route.continue();
+    });
+
+    // Mock user list endpoint
+    await this.page.route('**/api/v2/user/', (route) => {
       if (route.request().method() === 'GET') {
         return this.fulfillJson(route, mockUsers);
       }
       return route.continue();
     });
 
-    // Mock current user endpoint
+    // Mock user roles endpoint (specific)
+    await this.page.route('**/api/v2/user/roles', (route) => {
+      if (route.request().method() === 'GET') {
+        return this.fulfillJson(route, [
+          { id: 1, name: 'admin', description: 'Administrator' },
+          { id: 2, name: 'user', description: 'Regular User' },
+          { id: 3, name: 'guest', description: 'Guest' },
+        ]);
+      }
+      return route.continue();
+    });
+
+    // Mock current user endpoint (more specific)
     await this.page.route('**/api/v2/user/me', (route) => {
       return this.fulfillJson(route, mockCurrentUser);
     });
 
-    // Mock user profile endpoint
+    // Mock user profile endpoint (most specific - registered LAST, matched FIRST)
     await this.page.route('**/api/v2/user/profile', (route) => {
       return this.fulfillJson(route, mockCurrentUser);
     });
@@ -382,6 +531,15 @@ export class ApiMock {
       });
     });
 
+    // Mock GET /api/v2/version
+    await this.page.route('**/api/v2/version', (route) => {
+      return this.fulfillJson(route, {
+        version: '2.0.0-mock',
+        installedAt: 1704067200000,
+        updateAvailable: false,
+      });
+    });
+
     // Mock GET /api/v2/server/version
     await this.page.route('**/api/v2/server/version', (route) => {
       return this.fulfillJson(route, {
@@ -397,26 +555,93 @@ export class ApiMock {
         uptime: 123456,
       });
     });
+
+    // Mock GET /api/v2/server/github-rate-limit
+    await this.page.route('**/api/v2/server/github-rate-limit', (route) => {
+      return this.fulfillJson(route, {
+        limit: 60,
+        remaining: 58,
+        reset: Date.now() + 3600000, // 1 hour from now
+        used: 2,
+      });
+    });
   }
 
   /**
    * Mock printer tag endpoints
    */
   async mockPrinterTagEndpoints() {
-    // Mock GET /api/v2/printer-tag - list all tags
+    // Mock GET /api/v2/printer-tag - list all tags with printers
     await this.page.route('**/api/v2/printer-tag', (route) => {
       if (route.request().method() === 'GET') {
         return this.fulfillJson(route, [
-          { id: 1, name: 'Production', color: '#4CAF50' },
-          { id: 2, name: 'Testing', color: '#2196F3' },
-          { id: 3, name: 'Maintenance', color: '#FF9800' },
+          {
+            id: 1,
+            name: 'Production',
+            color: '#4CAF50',
+            printers: [
+              { printerId: 1, tagId: 1 },
+              { printerId: 2, tagId: 1 },
+            ],
+          },
+          {
+            id: 2,
+            name: 'Testing',
+            color: '#2196F3',
+            printers: [
+              { printerId: 3, tagId: 2 },
+            ],
+          },
+          {
+            id: 3,
+            name: 'Maintenance',
+            color: '#FF9800',
+            printers: [],
+          },
         ]);
       }
       // POST /api/v2/printer-tag - create tag
       if (route.request().method() === 'POST') {
-        return this.fulfillJson(route, { id: 4, name: 'New Tag', color: '#9C27B0' }, 201);
+        return this.fulfillJson(
+          route,
+          {
+            id: 4,
+            name: 'New Tag',
+            color: '#9C27B0',
+            printers: [],
+          },
+          201
+        );
       }
       return route.continue();
+    });
+
+    // Mock tag operations (update name, color, add/remove printer)
+    await this.page.route('**/api/v2/printer-tag/*', (route) => {
+      // Return updated tags array for all operations
+      return this.fulfillJson(route, [
+        {
+          id: 1,
+          name: 'Production',
+          color: '#4CAF50',
+          printers: [
+            { printerId: 1, tagId: 1 },
+            { printerId: 2, tagId: 1 },
+          ],
+        },
+        {
+          id: 2,
+          name: 'Testing',
+          color: '#2196F3',
+          printers: [{ printerId: 3, tagId: 2 }],
+        },
+        {
+          id: 3,
+          name: 'Maintenance',
+          color: '#FF9800',
+          printers: [],
+        },
+      ]);
     });
   }
 
@@ -427,8 +652,11 @@ export class ApiMock {
     loginRequired?: boolean;
     emptyData?: boolean;
   }) {
-    // Register catch-all FIRST so it's matched LAST (Playwright uses LIFO)
-    // Catch-all for unmocked API endpoints - log and return generic success
+    // Playwright uses LIFO (Last In First Out) for route matching
+    // Routes registered LAST are matched FIRST
+    // So: register catch-all FIRST, specific routes LAST
+
+    // Register catch-all FIRST (will be matched LAST, only if nothing else matched)
     await this.page.route('**/api/v2/**', (route) => {
       const url = route.request().url();
       const method = route.request().method();
@@ -441,7 +669,7 @@ export class ApiMock {
       });
     });
 
-    // Register specific endpoints AFTER catch-all so they take precedence
+    // Register specific endpoints LAST (will be matched FIRST, taking precedence)
     await this.mockAuthEndpoints({ loginRequired: options?.loginRequired });
     await this.mockServerEndpoints();
     await this.mockSettingsEndpoints();
@@ -451,6 +679,15 @@ export class ApiMock {
     await this.mockCameraEndpoints({ empty: options?.emptyData });
     await this.mockFileEndpoints({ empty: options?.emptyData });
     await this.mockJobEndpoints({ empty: options?.emptyData });
+  }
+
+  /**
+   * Update Socket.IO mock data at runtime (for empty data scenarios)
+   */
+  async updateSocketIOData(data: any) {
+    await this.page.evaluate((newData) => {
+      (globalThis as any).__SOCKETIO_MOCK_DATA__ = newData;
+    }, data);
   }
 
   /**

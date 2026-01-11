@@ -22,8 +22,8 @@ export const mockFloors: FloorDto[] = [
     name: 'Main Workshop',
     order: 1,
     printers: [
-      { x: 100, y: 150, printerId: 1, floorId: 1 },
-      { x: 300, y: 150, printerId: 2, floorId: 1 },
+      { x: 0, y: 0, printerId: 1, floorId: 1 },
+      { x: 1, y: 0, printerId: 2, floorId: 1 },
     ],
   },
   {
@@ -31,19 +31,9 @@ export const mockFloors: FloorDto[] = [
     name: 'Test Lab',
     order: 2,
     printers: [
-      { x: 200, y: 200, printerId: 3, floorId: 2 },
+      { x: 0, y: 0, printerId: 3, floorId: 2 },
     ],
   },
 ];
 
 export const mockFloorsEmpty: FloorDto[] = [];
-
-export const mockSingleFloor: FloorDto = {
-  id: 1,
-  name: 'Main Workshop',
-  order: 1,
-  printers: [
-    { x: 100, y: 150, printerId: 1, floorId: 1 },
-    { x: 300, y: 150, printerId: 2, floorId: 1 },
-  ],
-};
