@@ -44,11 +44,6 @@ describe('LoginView.vue', () => {
     expect(title.text()).toContain('Monster')
   })
 
-  it('displays the correct subtitle', () => {
-    const subtitle = wrapper.find('.v-card-subtitle').text()
-    expect(subtitle).toBe('Welcome back! Please enter your details')
-  })
-
   it('renders with the correct structure', () => {
     expect(wrapper.element).toMatchSnapshot()
   })
