@@ -1041,7 +1041,7 @@ __metadata:
     typescript: "npm:5.9.3"
     unplugin-auto-import: "npm:21.0.0"
     unplugin-fonts: "npm:1.4.0"
-    unplugin-vue-components: "npm:30.0.0"
+    unplugin-vue-components: "npm:31.0.0"
     vite: "npm:7.3.1"
     vite-plugin-vuetify: "npm:2.1.2"
     vitest: "npm:4.0.17"
@@ -3437,15 +3437,6 @@ __metadata:
   dependencies:
     readdirp: "npm:^4.0.1"
   checksum: 10c0/42d03c53b0ad200689e4fae7763133561480561cab8ba5304e8f2298ff45ff84bf0f6065c3f02b9e557b74b156813734439a1a2ff19a1ea6b35692395cd92738
-  languageName: node
-  linkType: hard
-
-"chokidar@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "chokidar@npm:4.0.3"
-  dependencies:
-    readdirp: "npm:^4.0.1"
-  checksum: 10c0/a58b9df05bb452f7d105d9e7229ac82fa873741c0c40ddcc7bb82f8a909fbe3f7814c9ebe9bc9a2bef9b737c0ec6e2d699d179048ef06ad3ec46315df0ebe6ad
   languageName: node
   linkType: hard
 
@@ -6539,15 +6530,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.30.19":
-  version: 0.30.19
-  resolution: "magic-string@npm:0.30.19"
-  dependencies:
-    "@jridgewell/sourcemap-codec": "npm:^1.5.5"
-  checksum: 10c0/db23fd2e2ee98a1aeb88a4cdb2353137fcf05819b883c856dd79e4c7dfb25151e2a5a4d5dbd88add5e30ed8ae5c51bcf4accbc6becb75249d924ec7b4fbcae27
-  languageName: node
-  linkType: hard
-
 "magic-string@npm:^0.30.21":
   version: 0.30.21
   resolution: "magic-string@npm:0.30.21"
@@ -9081,28 +9063,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-vue-components@npm:30.0.0":
-  version: 30.0.0
-  resolution: "unplugin-vue-components@npm:30.0.0"
+"unplugin-vue-components@npm:31.0.0":
+  version: 31.0.0
+  resolution: "unplugin-vue-components@npm:31.0.0"
   dependencies:
-    chokidar: "npm:^4.0.3"
-    debug: "npm:^4.4.3"
+    chokidar: "npm:^5.0.0"
     local-pkg: "npm:^1.1.2"
-    magic-string: "npm:^0.30.19"
+    magic-string: "npm:^0.30.21"
     mlly: "npm:^1.8.0"
+    obug: "npm:^2.1.1"
+    picomatch: "npm:^4.0.3"
     tinyglobby: "npm:^0.2.15"
-    unplugin: "npm:^2.3.10"
+    unplugin: "npm:^2.3.11"
     unplugin-utils: "npm:^0.3.1"
   peerDependencies:
-    "@babel/parser": ^7.15.8
     "@nuxt/kit": ^3.2.2 || ^4.0.0
-    vue: 2 || 3
+    vue: ^3.0.0
   peerDependenciesMeta:
-    "@babel/parser":
-      optional: true
     "@nuxt/kit":
       optional: true
-  checksum: 10c0/8d6699669e53f71a2c380d81a704270f4675cf30e3c4ad383171f29e8a25de76d5128dab613df1e0c28b38b083f42bda9a287c282b3722540b5b6eb50578232f
+  checksum: 10c0/6c90d402e64595d3012e959b2c00917217cd5fcfc98695d4c8208902ea9ad3bc646c5727deed0cbd75f53d388255ea14ae55dedfff339a28616e50e6461c25fa
   languageName: node
   linkType: hard
 
@@ -9126,18 +9106,6 @@ __metadata:
     picomatch: "npm:^4.0.2"
     webpack-virtual-modules: "npm:^0.6.2"
   checksum: 10c0/42d172be9b52cc139c69a8baefab6c44e99d7fbdafb9e5738348bc60f6c1302b9913543641f69b76bb07c6ff7d01fde3d8a67c9d3d7a976cc17d972c1ff88081
-  languageName: node
-  linkType: hard
-
-"unplugin@npm:^2.3.10":
-  version: 2.3.10
-  resolution: "unplugin@npm:2.3.10"
-  dependencies:
-    "@jridgewell/remapping": "npm:^2.3.5"
-    acorn: "npm:^8.15.0"
-    picomatch: "npm:^4.0.3"
-    webpack-virtual-modules: "npm:^0.6.2"
-  checksum: 10c0/29dcd738772aeff91c6f0154f156c95c58a37a4674fcb7cc34d6868af763834f0f447a1c3af074818c0c5602baead49bd3b9399a13f0425d69a00a527e58ddda
   languageName: node
   linkType: hard
 
