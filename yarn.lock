@@ -993,7 +993,7 @@ __metadata:
   dependencies:
     "@babel/types": "npm:7.28.6"
     "@hey-api/client-axios": "npm:0.9.1"
-    "@hey-api/openapi-ts": "npm:0.90.3"
+    "@hey-api/openapi-ts": "npm:0.90.4"
     "@mdi/font": "npm:7.4.47"
     "@playwright/test": "npm:1.57.0"
     "@sentry/tracing": "npm:7.120.4"
@@ -1087,9 +1087,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:0.90.3":
-  version: 0.90.3
-  resolution: "@hey-api/openapi-ts@npm:0.90.3"
+"@hey-api/openapi-ts@npm:0.90.4":
+  version: 0.90.4
+  resolution: "@hey-api/openapi-ts@npm:0.90.4"
   dependencies:
     "@hey-api/codegen-core": "npm:^0.5.2"
     "@hey-api/json-schema-ref-parser": "npm:1.2.2"
@@ -1103,7 +1103,7 @@ __metadata:
     typescript: ">=5.5.3"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/3d93eaeb3b8808d898f7578e18b0d333715fdc699168b5d91e9eb8be23f96349b9e0c875dc562ec1a619c0b745aa3f05127474251799523b75f682af1fb28ac4
+  checksum: 10c0/87a1107d8a0974110a4fd455622eac6decf249d0a8dec177a210dc50c750482fd254fa5dd4c86f9dbf09d83f8db5e9ad3b83de3b8a48bd49013d969d60d345da
   languageName: node
   linkType: hard
 
