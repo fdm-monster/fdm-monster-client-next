@@ -374,20 +374,16 @@
 
           <!-- Filament Column -->
           <template #item.filament="{ item }">
-            <div v-if="activeTab === 'jobs' && (item.metadata?.filamentUsedGrams || item.metadata?.filamentUsedMm)"
+            <div v-if="activeTab === 'jobs' && item.metadata?.filamentUsedGrams"
                  class="filament-info">
               <v-chip
                 color="green"
                 size="small"
                 variant="tonal"
-                v-if="item.metadata?.filamentUsedGrams"
               >
                 <v-icon start size="small">fitness_center</v-icon>
                 {{ Math.round(item.metadata.filamentUsedGrams) }}g
               </v-chip>
-              <div v-if="item.metadata?.filamentUsedMm" class="text-caption text-medium-emphasis mt-1">
-                {{ Math.round(item.metadata.filamentUsedMm / 1000) }}m
-              </div>
             </div>
             <div v-else-if="activeTab === 'queue' && item.filamentGrams" class="text-body-2">
               <v-chip

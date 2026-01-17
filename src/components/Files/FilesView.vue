@@ -195,11 +195,11 @@
           <template #item.filament="{ item }">
             <div v-if="item.metadata?.filamentUsedGrams" class="text-body-2">
               <v-chip
-                color="purple"
+                color="green"
                 size="small"
                 variant="tonal"
               >
-                <v-icon start size="small">science</v-icon>
+                <v-icon start size="small">fitness_center</v-icon>
                 {{ item.metadata.filamentUsedGrams.toFixed(1) }}g
               </v-chip>
             </div>

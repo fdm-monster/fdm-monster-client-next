@@ -1,5 +1,9 @@
 # Develop
 
+## Client 2.2.5
+
+- Remove filament length on Job page / dialog
+
 ## Client 2.2.4
 
 Features
