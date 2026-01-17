@@ -151,25 +151,19 @@
                 </v-card-title>
                 <v-card-text>
                   <v-row dense>
-                    <v-col cols="6" md="3">
+                    <v-col cols="6" md="4">
                       <div class="text-caption text-medium-emphasis">Used (Grams)</div>
                       <div class="text-h6 text-green">
                         {{ Math.round(job?.metadata?.filamentUsedGrams || 0) }}g
                       </div>
                     </v-col>
-                    <v-col cols="6" md="3">
-                      <div class="text-caption text-medium-emphasis">Used (Length)</div>
-                      <div class="text-h6 text-green">
-                        {{ Math.round((job?.metadata?.filamentUsedMm || 0) / 1000) }}m
-                      </div>
-                    </v-col>
-                    <v-col cols="6" md="3">
+                    <v-col cols="6" md="4">
                       <div class="text-caption text-medium-emphasis">Filament Type</div>
                       <div class="text-body-2">
                         {{ job?.metadata?.filamentType || 'Unknown' }}
                       </div>
                     </v-col>
-                    <v-col cols="6" md="3">
+                    <v-col cols="6" md="4">
                       <div class="text-caption text-medium-emphasis">Nozzle Ø</div>
                       <div class="text-body-2">
                         {{ job?.metadata?.nozzleDiameterMm || 'N/A' }}mm
