@@ -1,5 +1,20 @@
 # Develop
 
+## Client 2.2.5
+
+- Remove filament length on Job page / dialog
+
+## Client 2.2.4
+
+Features
+
+- Job menu added remaining time
+
+Fixes
+
+- Remove profanity from suggested printer names
+- Job menu time wasn't formatted as 15m 30s
+
 ## Client 2.2.3
 
 Features
