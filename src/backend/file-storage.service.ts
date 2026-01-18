@@ -81,5 +81,18 @@ export class FileStorageService extends BaseService {
     })
     return response.data
   }
+
+  /**
+   * Get G-code thumbnail from storage and return as base64
+   * issue 1455
+   */
+  static async getThumbnail(fileStorageId: string, thumbID: number) {
+    const path = `/api/v2/file-storage/${fileStorageId}/thumbnail/${thumbID}`;
+
+    const rawFile = await this.get(path);
+    const base64 = rawFile.toString('base64');
+
+    return `data:image/png;base64,${base64}`;
+  }
 }
 
