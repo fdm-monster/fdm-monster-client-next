@@ -87,7 +87,7 @@ export class FileStorageService extends BaseService {
    * Get G-code thumbnail from storage and return as base64
    * issue 1455
    */
-  static async getThumbnail(fileStorageId: string, thumbID: number): Promise<string> {
+  static async getThumbnail(fileStorageId: string, thumbID: number = 0): Promise<string> {
 
     const path = `/app/media/file-storage/${fileStorageId}_thumbnails/thumb_${thumbID}.png`;
 
