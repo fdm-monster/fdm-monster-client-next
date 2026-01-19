@@ -1,4 +1,5 @@
 import { BaseService } from '@/backend/base.service'
+import fs from 'fs'; //added for 1455
 
 export interface FileMetadata {
   fileStorageId: string
@@ -87,9 +88,10 @@ export class FileStorageService extends BaseService {
    * issue 1455
    */
   static async getThumbnail(fileStorageId: string, thumbID: number) {
-    const path = `/api/v2/file-storage/${fileStorageId}/thumbnail/${thumbID}`;
 
-    const rawFile = await this.get(path);
+    const path = `/app/media/file-storage/${fileStorageId}_thumbnails/thumb_${thumbID}.png`;
+
+    const rawFile = fs.readFileSync(path);
     const base64 = rawFile.toString('base64');
 
     return `data:image/png;base64,${base64}`;
