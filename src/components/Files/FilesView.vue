@@ -104,7 +104,7 @@
               <v-avatar size="40" class="mr-3" rounded>
                 <v-img
                   v-if="item.thumbnailCount > 0"
-                  :src=FileStorageService.getThumbnail(item.fileStorageId)
+                  :src="getThumbnail(item.fileStorageId)"
                   cover
                 >
                   <template #error>
@@ -684,6 +684,10 @@ const queueToSelectedPrinters = async () => {
   } finally {
     queuing.value = false
   }
+}
+
+const getThumbnail = (fileStorageId: string, index: number = 0) => {
+  return FileStorageService.getThumbnail(fileStorageId, index)
 }
 
 const getThumbnailUrl = (fileStorageId: string, index: number = 0) => {
