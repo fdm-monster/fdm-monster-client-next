@@ -154,19 +154,44 @@
                     <v-col cols="6" md="4">
                       <div class="text-caption text-medium-emphasis">Used (Grams)</div>
                       <div class="text-h6 text-green">
-                        {{ Math.round(job?.metadata?.filamentUsedGrams || 0) }}g
+                        <template v-if="Array.isArray(job?.metadata?.filamentUsedGrams)">
+                          <span v-for="(val, idx) in job.metadata.filamentUsedGrams" :key="idx">
+                            {{ val != null ? Math.round(val) : '-' }}g<span v-if="idx < job.metadata.filamentUsedGrams.length - 1">, </span>
+                          </span>
+                        </template>
+                        <template v-else>
+                          {{ Math.round(job?.metadata?.filamentUsedGrams || 0) }}g
+                        </template>
                       </div>
                     </v-col>
                     <v-col cols="6" md="4">
                       <div class="text-caption text-medium-emphasis">Filament Type</div>
                       <div class="text-body-2">
-                        {{ job?.metadata?.filamentType || 'Unknown' }}
+                        <template v-if="Array.isArray(job?.metadata?.filamentType)">
+                          <v-chip v-for="(type, idx) in job.metadata.filamentType" :key="idx" size="small" variant="tonal" color="orange" class="mr-1 mb-1">
+                            {{ type }}
+                          </v-chip>
+                        </template>
+                        <template v-else>
+                          <v-chip size="small" variant="tonal" color="orange">
+                            {{ job?.metadata?.filamentType || 'Unknown' }}
+                          </v-chip>
+                        </template>
                       </div>
                     </v-col>
                     <v-col cols="6" md="4">
                       <div class="text-caption text-medium-emphasis">Nozzle Ø</div>
                       <div class="text-body-2">
-                        {{ job?.metadata?.nozzleDiameterMm || 'N/A' }}mm
+                        <template v-if="Array.isArray(job?.metadata?.nozzleDiameterMm)">
+                          <v-chip v-for="(diam, idx) in job.metadata.nozzleDiameterMm" :key="idx" size="small" variant="tonal" color="blue-grey" class="mr-1 mb-1">
+                            {{ diam }}mm
+                          </v-chip>
+                        </template>
+                        <template v-else>
+                          <v-chip size="small" variant="tonal" color="blue-grey">
+                            {{ job?.metadata?.nozzleDiameterMm || 'N/A' }}mm
+                          </v-chip>
+                        </template>
                       </div>
                     </v-col>
                   </v-row>
@@ -228,7 +253,16 @@
                           </v-col>
                           <v-col cols="4">
                             <div class="text-caption text-medium-emphasis">Filament</div>
-                            <div class="text-body-2">{{ Math.round(plate.filamentUsedGrams || 0) }}g</div>
+                            <div class="text-body-2">
+                              <template v-if="Array.isArray(plate.filamentUsedGrams)">
+                                <span v-for="(val, idx) in plate.filamentUsedGrams" :key="idx">
+                                  {{ val != null ? Math.round(val) : '-' }}g<span v-if="idx < plate.filamentUsedGrams.length - 1">, </span>
+                                </span>
+                              </template>
+                              <template v-else>
+                                {{ Math.round(plate.filamentUsedGrams || 0) }}g
+                              </template>
+                            </div>
                           </v-col>
                           <v-col cols="4">
                             <div class="text-caption text-medium-emphasis">Layers</div>
@@ -321,7 +355,18 @@
                     </v-col>
                     <v-col cols="6" md="3">
                       <div class="text-caption text-medium-emphasis">Nozzle Diameter</div>
-                      <div class="text-body-2">{{ job.metadata.nozzleDiameterMm || 'N/A' }}mm</div>
+                      <div class="text-body-2">
+                        <template v-if="Array.isArray(job.metadata.nozzleDiameterMm)">
+                          <v-chip v-for="(diam, idx) in job.metadata.nozzleDiameterMm" :key="idx" size="small" variant="tonal" color="blue-grey" class="mr-1 mb-1">
+                            {{ diam }}mm
+                          </v-chip>
+                        </template>
+                        <template v-else>
+                          <v-chip size="small" variant="tonal" color="blue-grey">
+                            {{ job.metadata.nozzleDiameterMm || 'N/A' }}mm
+                          </v-chip>
+                        </template>
+                      </div>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -345,7 +390,18 @@
                     </v-col>
                     <v-col cols="6" md="3">
                       <div class="text-caption text-medium-emphasis">Filament Type</div>
-                      <div class="text-body-2">{{ job.metadata.filamentType || 'Unknown' }}</div>
+                      <div class="text-body-2">
+                        <template v-if="Array.isArray(job.metadata.filamentType)">
+                          <v-chip v-for="(type, idx) in job.metadata.filamentType" :key="idx" size="small" variant="tonal" color="orange" class="mr-1 mb-1">
+                            {{ type }}
+                          </v-chip>
+                        </template>
+                        <template v-else>
+                          <v-chip size="small" variant="tonal" color="orange">
+                            {{ job.metadata.filamentType || 'Unknown' }}
+                          </v-chip>
+                        </template>
+                      </div>
                     </v-col>
                     <v-col cols="6" md="3">
                       <div class="text-caption text-medium-emphasis">Total Used</div>
