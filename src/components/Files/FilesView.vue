@@ -104,7 +104,7 @@
               <v-avatar size="40" class="mr-3" rounded>
                 <v-img
                   v-if="item.thumbnailCount > 0"
-                  :src="getThumbnailUrl(item.fileStorageId)"
+                  :src="getThumbnail(item.fileStorageId, 0)"
                   cover
                 >
                   <template #error>
