@@ -473,7 +473,7 @@ const getPrinterCardClass = (printer: any) => {
 
 const getPrinterProgress = (printer: any) => {
   const state = printerStateStore.printerEventsById[printer.id]
-  return state?.current?.payload?.progress?.completion || 0
+  return state?.current?.payload?.progress?.completion?.toFixed(1) || 0
 }
 </script>
 
