@@ -1,5 +1,9 @@
 # Develop
 
+## Client 2.2.6
+
+- Fix progress percentage on dashboard
+
 ## Client 2.2.5
 
 - Remove filament length on Job page / dialog
