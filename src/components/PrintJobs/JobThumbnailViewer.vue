@@ -110,7 +110,7 @@
 
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
-import { PrintJobService, type ThumbnailInfo } from '@/backend/print-job.service'
+import { FileStorageService, type ThumbnailInfo } from '@/backend/file-storage.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 
@@ -123,13 +123,13 @@ const thumbnails = ref<ThumbnailInfo[]>([])
 const thumbnailUrls = ref<Map<number, string>>(new Map())
 const currentIndex = ref(0)
 const loading = ref(false)
-const jobId = ref<number | null>(null)
+const fileStorageId = ref<string | null>(null)
 
 // Load thumbnails when dialog opens
-watch(() => context.value?.jobId, async (newJobId) => {
-  if (newJobId && isOpen.value) {
-    jobId.value = newJobId
-    await loadThumbnails(newJobId)
+watch(() => context.value?.fileStorageId, async (newFileStorageId) => {
+  if (newFileStorageId && isOpen.value) {
+    fileStorageId.value = newFileStorageId
+    await loadThumbnails(newFileStorageId, context.value?.thumbnails || [])
   }
 }, { immediate: true })
 
@@ -139,7 +139,7 @@ watch(isOpen, (value) => {
     thumbnails.value = []
     thumbnailUrls.value.clear()
     currentIndex.value = 0
-    jobId.value = null
+    fileStorageId.value = null
   }
 })
 
@@ -152,13 +152,11 @@ const currentThumbnailUrl = computed(() => {
   return thumbnailUrls.value.get(currentThumbnail.value.index) || ''
 })
 
-const loadThumbnails = async (id: number) => {
+const loadThumbnails = async (storageId: string, thumbsList: ThumbnailInfo[]) => {
   loading.value = true
   try {
-    const thumbs = await PrintJobService.getThumbnails(id)
-
     // Sort thumbnails by resolution (highest first)
-    const sortedThumbs = (thumbs || []).sort((a, b) => {
+    const sortedThumbs = [...thumbsList].sort((a, b) => {
       const aPixels = a.width * a.height
       const bPixels = b.width * b.height
       return bPixels - aPixels
@@ -170,7 +168,7 @@ const loadThumbnails = async (id: number) => {
     // Load URLs for all thumbnails
     thumbnailUrls.value.clear()
     for (const thumb of sortedThumbs) {
-      const url = await PrintJobService.getThumbnailUrl(id, thumb.index)
+      const url = await FileStorageService.getThumbnail(storageId, thumb.index)
       thumbnailUrls.value.set(thumb.index, url)
     }
   } catch (err) {

@@ -120,7 +120,7 @@
                 rounded
               >
                 <v-img
-                  v-if="item.thumbnailCount > 0"
+                  v-if="item.thumbnails?.length > 0"
                   :src="getThumbnailUrl(item.fileStorageId)"
                   cover
                 >
@@ -289,9 +289,9 @@
           </template>
 
           <!-- Thumbnails Column -->
-          <template #item.thumbnailCount="{ item }">
+          <template #item.thumbnails="{ item }">
             <v-chip
-              v-if="item.thumbnailCount > 0"
+              v-if="item.thumbnails?.length > 0"
               size="small"
               color="success"
               variant="tonal"
@@ -301,7 +301,7 @@
                 size="small"
                 >image</v-icon
               >
-              {{ item.thumbnailCount }}
+              {{ item.thumbnails.length }}
             </v-chip>
             <span
               v-else
@@ -493,17 +493,17 @@
             </v-col>
 
             <v-col
-              v-if="selectedFile.thumbnailCount > 0"
+              v-if="selectedFile.thumbnails?.length > 0"
               cols="12"
             >
               <h3 class="text-h6 mb-3">
-                Thumbnails ({{ selectedFile.thumbnailCount }})
+                Thumbnails ({{ selectedFile.thumbnails.length }})
               </h3>
               <div class="d-flex flex-wrap ga-2">
                 <v-img
-                  v-for="i in selectedFile.thumbnailCount"
+                  v-for="(thumb, i) in selectedFile.thumbnails"
                   :key="i"
-                  :src="getGCodeThumbnailUrl(selectedFile.fileStorageId, i - 1)"
+                  :src="getGCodeThumbnailUrl(selectedFile.fileStorageId, thumb.index)"
                   width="150"
                   height="150"
                   cover
@@ -639,6 +639,25 @@ import {
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
 
+const thumbnailCache = ref<Map<string, string>>(new Map())
+
+const getThumbnailUrl = (fileStorageId: string, index: number = 0): string => {
+  const cacheKey = `${fileStorageId}-${index}`
+  if (thumbnailCache.value.has(cacheKey)) {
+    return thumbnailCache.value.get(cacheKey)!
+  }
+  FileStorageService.getThumbnail(fileStorageId, index)
+    .then((base64) => {
+      thumbnailCache.value.set(cacheKey, base64)
+    })
+    .catch(() => {})
+  return ''
+}
+
+const getGCodeThumbnailUrl = (fileStorageId: string, index: number): string => {
+  return getThumbnailUrl(fileStorageId, index)
+}
+
 const files = ref<FileMetadata[]>([])
 const loading = ref(false)
 const searchQuery = ref('')
@@ -666,7 +685,7 @@ const headers = [
   { title: 'Model', key: 'printerModel', sortable: false },
   { title: 'Print Time', key: 'printTime', sortable: false },
   { title: 'Filament', key: 'filament', sortable: false },
-  { title: 'Thumbnails', key: 'thumbnailCount', sortable: false },
+  { title: 'Thumbnails', key: 'thumbnails', sortable: false },
   { title: 'Created', key: 'createdAt', sortable: true },
   { title: 'Actions', key: 'actions', sortable: false, align: 'end' as const }
 ]
@@ -782,7 +801,7 @@ const handleFileSelect = async (e: Event) => {
   const target = e.target as HTMLInputElement
   const selectedFiles = Array.from(target.files || [])
   await uploadFiles(selectedFiles)
-  // Reset input
+
   if (fileInput.value) {
     fileInput.value.value = ''
   }
@@ -882,19 +901,6 @@ const queueToSelectedPrinters = async () => {
   } finally {
     queuing.value = false
   }
-}
-
-const getThumbnailUrl = async (fileStorageId: string, index: number = 0) => {
-  //return FileStorageService.getThumbnailUrl(fileStorageId, index)
-  }
-
-const getGCodeThumbnailUrl = async (fileStorageId: string, index: number = 0) => {
-  const gcodeThumbnail = await FileStorageService.getGcodeThumbnail(
-    fileStorageId,
-    index
-  )
-
-  return gcodeThumbnail
 }
 </script>
 

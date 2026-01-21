@@ -69,7 +69,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { PrinterFileService } from "@/backend";
+import { PrinterRemoteFileService } from "@/backend";
 import { useSnackbar } from "@/shared/snackbar.composable";
 import { useSettingsStore } from "@/store/settings.store";
 import SettingSection from "@/components/Settings/Shared/SettingSection.vue";
@@ -110,7 +110,7 @@ async function updateTimeoutSettings() {
 async function purgeFiles() {
   loading.value.purgeFiles = true;
   try {
-    await PrinterFileService.purgeFiles();
+    await PrinterRemoteFileService.purgeFiles();
     snackbar.openInfoMessage({
       title: `Successfully purged all references to printer files!`,
     });

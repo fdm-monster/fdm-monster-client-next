@@ -401,7 +401,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { generateInitials } from '@/shared/noun-adjectives.data'
-import { PrinterFileService, PrintersService } from '@/backend'
+import { PrinterRemoteFileService, PrintersService } from '@/backend'
 import { PrinterMaintenanceLogService } from '@/backend/printer-maintenance-log.service'
 import { FileDto } from '@/models/printers/printer-file.model'
 import { formatFileSize } from '@/utils/file-size.util'
@@ -504,7 +504,7 @@ const refreshFiles = async () => {
         currentPrinterId
       )
     } else {
-      shownFileCache.value = await PrinterFileService.getFileCache(
+      shownFileCache.value = await PrinterRemoteFileService.getFileCache(
         currentPrinterId
       )
     }
@@ -646,7 +646,7 @@ async function clickPrintFile(file: FileDto) {
 
 function clickDownloadFile(path: string) {
   if (!printerId.value) return
-  PrinterFileService.downloadFile(printerId.value, path)
+  PrinterRemoteFileService.downloadFile(printerId.value, path)
 }
 
 function closeDrawer() {

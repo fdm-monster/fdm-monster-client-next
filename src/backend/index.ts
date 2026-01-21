@@ -1,4 +1,4 @@
-export * from './printer-file.service'
+export * from './printer-remote-file.service'
 export * from './printers.service'
 export * from './printer-maintenance-log.service'
 export * from './print-job.service'
