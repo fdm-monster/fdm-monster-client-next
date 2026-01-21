@@ -125,17 +125,11 @@ const currentIndex = ref(0)
 const loading = ref(false)
 const fileStorageId = ref<string | null>(null)
 
-// Load thumbnails when dialog opens
-watch(() => context.value?.fileStorageId, async (newFileStorageId) => {
-  if (newFileStorageId && isOpen.value) {
-    fileStorageId.value = newFileStorageId
-    await loadThumbnails(newFileStorageId, context.value?.thumbnails || [])
-  }
-}, { immediate: true })
-
-watch(isOpen, (value) => {
-  if (!value) {
-    // Reset state when dialog closes
+watch(isOpen, async (value) => {
+  if (value && context.value?.fileStorageId) {
+    fileStorageId.value = context.value.fileStorageId
+    await loadThumbnails(context.value.fileStorageId, context.value.thumbnails || [])
+  } else if (!value) {
     thumbnails.value = []
     thumbnailUrls.value.clear()
     currentIndex.value = 0
@@ -155,7 +149,6 @@ const currentThumbnailUrl = computed(() => {
 const loadThumbnails = async (storageId: string, thumbsList: ThumbnailInfo[]) => {
   loading.value = true
   try {
-    // Sort thumbnails by resolution (highest first)
     const sortedThumbs = [...thumbsList].sort((a, b) => {
       const aPixels = a.width * a.height
       const bPixels = b.width * b.height
@@ -164,8 +157,7 @@ const loadThumbnails = async (storageId: string, thumbsList: ThumbnailInfo[]) =>
 
     thumbnails.value = sortedThumbs
     currentIndex.value = 0
-
-    // Load URLs for all thumbnails
+    
     thumbnailUrls.value.clear()
     for (const thumb of sortedThumbs) {
       const url = await FileStorageService.getThumbnail(storageId, thumb.index)

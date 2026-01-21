@@ -41,7 +41,8 @@ export interface PrintJobDetailsDialogContext {
 }
 
 export interface JobThumbnailViewerContext {
-  jobId: number
+  fileStorageId: string
+  thumbnails: { index: number; width: number; height: number; format: string; size: number }[]
 }
 
 // Map dialog names to their context types
