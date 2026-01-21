@@ -1,4 +1,5 @@
 import { BaseService } from '@/backend/base.service'
+import * as string_decoder from 'node:string_decoder'
 
 export interface FileMetadata {
   fileStorageId: string
@@ -80,6 +81,19 @@ export class FileStorageService extends BaseService {
       }
     })
     return response.data
+  }
+
+  /**
+   * Get a specific Gcode file thumbnail
+   */
+  static async getGcodeThumbnail(fileId:string, thumbId: number) {
+    const path = `/api/v2/file-storage/${fileId}/thumbnail/${thumbId}`;
+    const response = await this.get<{
+      //id: string
+      thumbnailBase64: string
+    }>(path)
+
+    return response.thumbnailBase64
   }
 }
 

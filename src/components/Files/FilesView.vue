@@ -11,7 +11,12 @@
       @drop.prevent="handleDrop"
     >
       <v-card-text class="text-center pa-6">
-        <v-icon size="64" color="primary" class="mb-4">cloud_upload</v-icon>
+        <v-icon
+          size="64"
+          color="primary"
+          class="mb-4"
+          >cloud_upload</v-icon
+        >
         <h3 class="text-h6 mb-2">Upload Files</h3>
         <p class="text-body-2 text-medium-emphasis mb-4">
           Drag and drop files here or click to browse
@@ -33,7 +38,10 @@
           <v-icon start>folder_open</v-icon>
           Select Files
         </v-btn>
-        <div v-if="uploadProgress.length > 0" class="mt-4">
+        <div
+          v-if="uploadProgress.length > 0"
+          class="mt-4"
+        >
           <v-progress-linear
             v-for="(progress, index) in uploadProgress"
             :key="index"
@@ -44,7 +52,8 @@
           >
             <template #default>
               <div class="text-caption">
-                {{ progress.fileName }} - {{ progress.error || `${progress.percent}%` }}
+                {{ progress.fileName }} -
+                {{ progress.error || `${progress.percent}%` }}
               </div>
             </template>
           </v-progress-linear>
@@ -55,7 +64,11 @@
     <!-- Files Grid -->
     <v-card elevation="2">
       <v-card-title class="d-flex align-center pb-0">
-        <v-icon class="mr-3" color="primary">inventory_2</v-icon>
+        <v-icon
+          class="mr-3"
+          color="primary"
+          >inventory_2</v-icon
+        >
         <span class="text-h6">File Storage</span>
         <v-spacer />
         <v-chip
@@ -75,7 +88,7 @@
           hide-details
           clearable
           class="mr-4"
-          style="max-width: 300px;"
+          style="max-width: 300px"
         />
         <v-btn
           color="primary"
@@ -101,7 +114,11 @@
           <!-- File Name Column -->
           <template #item.fileName="{ item }">
             <div class="d-flex align-center">
-              <v-avatar size="40" class="mr-3" rounded>
+              <v-avatar
+                size="40"
+                class="mr-3"
+                rounded
+              >
                 <v-img
                   v-if="item.thumbnailCount > 0"
                   :src="getThumbnailUrl(item.fileStorageId)"
@@ -111,12 +128,19 @@
                     <v-icon>description</v-icon>
                   </template>
                 </v-img>
-                <v-icon v-else color="primary">description</v-icon>
+                <v-icon
+                  v-else
+                  color="primary"
+                  >description</v-icon
+                >
               </v-avatar>
               <div>
-                <div class="text-body-2 font-weight-medium">{{ item.metadata?._originalFileName || item.fileName }}</div>
+                <div class="text-body-2 font-weight-medium">
+                  {{ item.metadata?._originalFileName || item.fileName }}
+                </div>
                 <div class="text-caption text-medium-emphasis">
-                  {{ item.fileFormat.toUpperCase() }} • {{ formatFileSize(item.fileSize) }}
+                  {{ item.fileFormat.toUpperCase() }} •
+                  {{ formatFileSize(item.fileSize) }}
                 </div>
               </div>
             </div>
@@ -124,10 +148,21 @@
 
           <!-- Printer Type Column -->
           <template #item.printerType="{ item }">
-            <v-avatar size="32" v-if="getPrinterTypeLogo(item.metadata || {}, item.fileFormat)" rounded="0">
-              <v-img :src="getPrinterTypeLogo(item.metadata || {}, item.fileFormat)" contain />
+            <v-avatar
+              size="32"
+              v-if="getPrinterTypeLogo(item.metadata || {}, item.fileFormat)"
+              rounded="0"
+            >
+              <v-img
+                :src="getPrinterTypeLogo(item.metadata || {}, item.fileFormat)"
+                contain
+              />
             </v-avatar>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Material Column -->
@@ -140,12 +175,22 @@
             >
               {{ item.metadata.filamentType }}
             </v-chip>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Temperatures Column -->
           <template #item.temperatures="{ item }">
-            <div v-if="item.metadata?.nozzleTemperature || item.metadata?.bedTemperature" class="text-caption">
+            <div
+              v-if="
+                item.metadata?.nozzleTemperature ||
+                item.metadata?.bedTemperature
+              "
+              class="text-caption"
+            >
               <div v-if="item.metadata.nozzleTemperature">
                 🔥 {{ item.metadata.nozzleTemperature }}°C
               </div>
@@ -153,7 +198,11 @@
                 🛏️ {{ item.metadata.bedTemperature }}°C
               </div>
             </div>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Plates Column -->
@@ -163,47 +212,80 @@
               variant="tonal"
               color="blue"
             >
-              <v-icon start size="small">layers</v-icon>
+              <v-icon
+                start
+                size="small"
+                >layers</v-icon
+              >
               {{ item.metadata?.totalPlates ?? 1 }}
             </v-chip>
           </template>
 
           <!-- Printer Model Column -->
           <template #item.printerModel="{ item }">
-            <div v-if="item.metadata?.printerModel" class="text-caption">
+            <div
+              v-if="item.metadata?.printerModel"
+              class="text-caption"
+            >
               {{ item.metadata.printerModel }}
             </div>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Print Time Column -->
           <template #item.printTime="{ item }">
-            <div v-if="item.metadata?.gcodePrintTimeSeconds" class="text-body-2">
+            <div
+              v-if="item.metadata?.gcodePrintTimeSeconds"
+              class="text-body-2"
+            >
               <v-chip
                 color="info"
                 size="small"
                 variant="tonal"
               >
-                <v-icon start size="small">schedule</v-icon>
+                <v-icon
+                  start
+                  size="small"
+                  >schedule</v-icon
+                >
                 {{ formatDuration(item.metadata.gcodePrintTimeSeconds) }}
               </v-chip>
             </div>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Filament Column -->
           <template #item.filament="{ item }">
-            <div v-if="item.metadata?.filamentUsedGrams" class="text-body-2">
+            <div
+              v-if="item.metadata?.filamentUsedGrams"
+              class="text-body-2"
+            >
               <v-chip
                 color="green"
                 size="small"
                 variant="tonal"
               >
-                <v-icon start size="small">fitness_center</v-icon>
+                <v-icon
+                  start
+                  size="small"
+                  >fitness_center</v-icon
+                >
                 {{ item.metadata.filamentUsedGrams.toFixed(1) }}g
               </v-chip>
             </div>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Thumbnails Column -->
@@ -214,10 +296,18 @@
               color="success"
               variant="tonal"
             >
-              <v-icon start size="small">image</v-icon>
+              <v-icon
+                start
+                size="small"
+                >image</v-icon
+              >
               {{ item.thumbnailCount }}
             </v-chip>
-            <span v-else class="text-medium-emphasis">None</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >None</span
+            >
           </template>
 
           <!-- Created Date Column -->
@@ -240,7 +330,10 @@
               @click="openQueueDialog(item)"
             >
               <v-icon>add_to_queue</v-icon>
-              <v-tooltip activator="parent" location="top">
+              <v-tooltip
+                activator="parent"
+                location="top"
+              >
                 Add to queue
               </v-tooltip>
             </v-btn>
@@ -253,7 +346,10 @@
               :loading="analyzingFiles.has(item.fileStorageId)"
             >
               <v-icon>analytics</v-icon>
-              <v-tooltip activator="parent" location="top">
+              <v-tooltip
+                activator="parent"
+                location="top"
+              >
                 Trigger analysis
               </v-tooltip>
             </v-btn>
@@ -265,7 +361,10 @@
               @click="viewFile(item)"
             >
               <v-icon>visibility</v-icon>
-              <v-tooltip activator="parent" location="top">
+              <v-tooltip
+                activator="parent"
+                location="top"
+              >
                 View details
               </v-tooltip>
             </v-btn>
@@ -277,7 +376,10 @@
               @click="deleteFile(item)"
             >
               <v-icon>delete</v-icon>
-              <v-tooltip activator="parent" location="top">
+              <v-tooltip
+                activator="parent"
+                location="top"
+              >
                 Delete file
               </v-tooltip>
             </v-btn>
@@ -287,70 +389,121 @@
     </v-card>
 
     <!-- File Details Dialog -->
-    <v-dialog v-model="detailsDialog" max-width="800">
+    <v-dialog
+      v-model="detailsDialog"
+      max-width="800"
+    >
       <v-card v-if="selectedFile">
         <v-card-title class="d-flex align-center">
           <v-icon class="mr-2">description</v-icon>
           File Details
           <v-spacer />
-          <v-btn icon="close" variant="text" @click="detailsDialog = false" />
+          <v-btn
+            icon="close"
+            variant="text"
+            @click="detailsDialog = false"
+          />
         </v-card-title>
 
         <v-card-text>
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <h3 class="text-h6 mb-3">File Information</h3>
               <div class="mb-2">
-                <strong>Name:</strong> {{ selectedFile.metadata?._originalFileName || selectedFile.fileName }}
+                <strong>Name:</strong>
+                {{
+                  selectedFile.metadata?._originalFileName ||
+                  selectedFile.fileName
+                }}
               </div>
               <div class="mb-2">
-                <strong>Format:</strong> {{ selectedFile.fileFormat.toUpperCase() }}
+                <strong>Format:</strong>
+                {{ selectedFile.fileFormat.toUpperCase() }}
               </div>
               <div class="mb-2">
-                <strong>Size:</strong> {{ formatFileSize(selectedFile.fileSize) }}
+                <strong>Size:</strong>
+                {{ formatFileSize(selectedFile.fileSize) }}
               </div>
               <div class="mb-2">
                 <strong>Hash:</strong> <code>{{ selectedFile.fileHash }}</code>
               </div>
               <div class="mb-2">
-                <strong>Storage ID:</strong> <code>{{ selectedFile.fileStorageId }}</code>
+                <strong>Storage ID:</strong>
+                <code>{{ selectedFile.fileStorageId }}</code>
               </div>
               <div class="mb-2">
-                <strong>Created:</strong> {{ formatDate(selectedFile.createdAt) }}
+                <strong>Created:</strong>
+                {{ formatDate(selectedFile.createdAt) }}
               </div>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <h3 class="text-h6 mb-3">Print Metadata</h3>
               <div v-if="selectedFile.metadata">
-                <div v-if="selectedFile.metadata.gcodePrintTimeSeconds" class="mb-2">
-                  <strong>Print Time:</strong> {{ formatDuration(selectedFile.metadata.gcodePrintTimeSeconds) }}
+                <div
+                  v-if="selectedFile.metadata.gcodePrintTimeSeconds"
+                  class="mb-2"
+                >
+                  <strong>Print Time:</strong>
+                  {{
+                    formatDuration(selectedFile.metadata.gcodePrintTimeSeconds)
+                  }}
                 </div>
-                <div v-if="selectedFile.metadata.filamentUsedGrams" class="mb-2">
-                  <strong>Filament:</strong> {{ selectedFile.metadata.filamentUsedGrams.toFixed(1) }}g
+                <div
+                  v-if="selectedFile.metadata.filamentUsedGrams"
+                  class="mb-2"
+                >
+                  <strong>Filament:</strong>
+                  {{ selectedFile.metadata.filamentUsedGrams.toFixed(1) }}g
                 </div>
-                <div v-if="selectedFile.metadata.nozzleDiameterMm" class="mb-2">
-                  <strong>Nozzle Diameter:</strong> {{ selectedFile.metadata.nozzleDiameterMm }}mm
+                <div
+                  v-if="selectedFile.metadata.nozzleDiameterMm"
+                  class="mb-2"
+                >
+                  <strong>Nozzle Diameter:</strong>
+                  {{ selectedFile.metadata.nozzleDiameterMm }}mm
                 </div>
-                <div v-if="selectedFile.metadata.layerHeight" class="mb-2">
-                  <strong>Layer Height:</strong> {{ selectedFile.metadata.layerHeight }}mm
+                <div
+                  v-if="selectedFile.metadata.layerHeight"
+                  class="mb-2"
+                >
+                  <strong>Layer Height:</strong>
+                  {{ selectedFile.metadata.layerHeight }}mm
                 </div>
-                <div v-if="selectedFile.metadata.totalLayers" class="mb-2">
-                  <strong>Total Layers:</strong> {{ selectedFile.metadata.totalLayers }}
+                <div
+                  v-if="selectedFile.metadata.totalLayers"
+                  class="mb-2"
+                >
+                  <strong>Total Layers:</strong>
+                  {{ selectedFile.metadata.totalLayers }}
                 </div>
               </div>
-              <div v-else class="text-medium-emphasis">
+              <div
+                v-else
+                class="text-medium-emphasis"
+              >
                 No metadata available
               </div>
             </v-col>
 
-            <v-col v-if="selectedFile.thumbnailCount > 0" cols="12">
-              <h3 class="text-h6 mb-3">Thumbnails ({{ selectedFile.thumbnailCount }})</h3>
+            <v-col
+              v-if="selectedFile.thumbnailCount > 0"
+              cols="12"
+            >
+              <h3 class="text-h6 mb-3">
+                Thumbnails ({{ selectedFile.thumbnailCount }})
+              </h3>
               <div class="d-flex flex-wrap ga-2">
                 <v-img
                   v-for="i in selectedFile.thumbnailCount"
                   :key="i"
-                  :src="getThumbnailUrl(selectedFile.fileStorageId, i - 1)"
+                  :src="getGCodeThumbnailUrl(selectedFile.fileStorageId, i - 1)"
                   width="150"
                   height="150"
                   cover
@@ -363,7 +516,11 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary" variant="text" @click="detailsDialog = false">
+          <v-btn
+            color="primary"
+            variant="text"
+            @click="detailsDialog = false"
+          >
             Close
           </v-btn>
         </v-card-actions>
@@ -371,21 +528,36 @@
     </v-dialog>
 
     <!-- Queue to Printers Dialog -->
-    <v-dialog v-model="queueDialog" max-width="600">
+    <v-dialog
+      v-model="queueDialog"
+      max-width="600"
+    >
       <v-card v-if="selectedFileForQueue">
         <v-card-title class="d-flex align-center">
           <v-icon class="mr-2">add_to_queue</v-icon>
           Queue File to Printers
           <v-spacer />
-          <v-btn icon="close" variant="text" @click="queueDialog = false" />
+          <v-btn
+            icon="close"
+            variant="text"
+            @click="queueDialog = false"
+          />
         </v-card-title>
 
         <v-card-text>
           <div class="mb-4">
-            <strong>File:</strong> {{ selectedFileForQueue.metadata?._originalFileName || selectedFileForQueue.fileName }}
+            <strong>File:</strong>
+            {{
+              selectedFileForQueue.metadata?._originalFileName ||
+              selectedFileForQueue.fileName
+            }}
           </div>
 
-          <v-alert type="info" variant="tonal" class="mb-4">
+          <v-alert
+            type="info"
+            variant="tonal"
+            class="mb-4"
+          >
             Select one or more printers to queue this file to
           </v-alert>
 
@@ -410,14 +582,22 @@
             </v-list-item>
           </v-list>
 
-          <v-alert v-if="availablePrinters.length === 0" type="warning" variant="tonal">
+          <v-alert
+            v-if="availablePrinters.length === 0"
+            type="warning"
+            variant="tonal"
+          >
             No printers available
           </v-alert>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer />
-          <v-btn color="grey" variant="text" @click="queueDialog = false">
+          <v-btn
+            color="grey"
+            variant="text"
+            @click="queueDialog = false"
+          >
             Cancel
           </v-btn>
           <v-btn
@@ -437,14 +617,24 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue'
-import { FileStorageService, type FileMetadata } from '@/backend/file-storage.service'
+import {
+  FileStorageService,
+  type FileMetadata
+} from '@/backend/file-storage.service'
 import { PrintQueueService } from '@/backend/print-queue.service'
 import { PrintJobService } from '@/backend/print-job.service'
 import { usePrinterStore } from '@/store/printer.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
-import { formatFileSize } from "@/utils/file-size.util"
-import { formatDate, formatRelativeTime, formatDuration } from '@/utils/date-time.utils'
-import { getPrinterTypeName, getPrinterTypeLogo } from '@/shared/printer-types.constants'
+import { formatFileSize } from '@/utils/file-size.util'
+import {
+  formatDate,
+  formatRelativeTime,
+  formatDuration
+} from '@/utils/date-time.utils'
+import {
+  getPrinterTypeName,
+  getPrinterTypeLogo
+} from '@/shared/printer-types.constants'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -461,7 +651,9 @@ const queuing = ref(false)
 const uploading = ref(false)
 const isDragging = ref(false)
 const dragDepth = ref(0)
-const uploadProgress = ref<Array<{ fileName: string; percent: number; error?: string }>>([])
+const uploadProgress = ref<
+  Array<{ fileName: string; percent: number; error?: string }>
+>([])
 const fileInput = ref<HTMLInputElement | null>(null)
 const analyzingFiles = ref<Set<string>>(new Set())
 
@@ -482,7 +674,7 @@ const headers = [
 const totalCount = computed(() => files.value.length)
 
 const availablePrinters = computed(() => {
-  return printerStore.printers.filter(p => p.enabled)
+  return printerStore.printers.filter((p) => p.enabled)
 })
 
 const filteredFiles = computed(() => {
@@ -490,10 +682,11 @@ const filteredFiles = computed(() => {
     return files.value
   }
   const query = searchQuery.value.toLowerCase()
-  return files.value.filter(file =>
-    file.fileName.toLowerCase().includes(query) ||
-    file.fileHash.toLowerCase().includes(query) ||
-    file.fileStorageId.toLowerCase().includes(query)
+  return files.value.filter(
+    (file) =>
+      file.fileName.toLowerCase().includes(query) ||
+      file.fileHash.toLowerCase().includes(query) ||
+      file.fileStorageId.toLowerCase().includes(query)
   )
 })
 
@@ -544,7 +737,9 @@ const analyzeFile = async (file: FileMetadata) => {
 
   try {
     const result = await FileStorageService.analyzeFile(file.fileStorageId)
-    snackbar.info(`Analysis complete! Found ${result.thumbnailCount} thumbnail(s)`)
+    snackbar.info(
+      `Analysis complete! Found ${result.thumbnailCount} thumbnail(s)`
+    )
 
     await loadFiles()
   } catch (error) {
@@ -597,7 +792,10 @@ const uploadFiles = async (filesToUpload: File[]) => {
   if (filesToUpload.length === 0) return
 
   uploading.value = true
-  uploadProgress.value = filesToUpload.map(f => ({ fileName: f.name, percent: 0 }))
+  uploadProgress.value = filesToUpload.map((f) => ({
+    fileName: f.name,
+    percent: 0
+  }))
 
   for (let i = 0; i < filesToUpload.length; i++) {
     const file = filesToUpload[i]
@@ -686,8 +884,17 @@ const queueToSelectedPrinters = async () => {
   }
 }
 
-const getThumbnailUrl = (fileStorageId: string, index: number = 0) => {
-  return FileStorageService.getThumbnailUrl(fileStorageId, index)
+const getThumbnailUrl = async (fileStorageId: string, index: number = 0) => {
+  //return FileStorageService.getThumbnailUrl(fileStorageId, index)
+  }
+
+const getGCodeThumbnailUrl = async (fileStorageId: string, index: number = 0) => {
+  const gcodeThumbnail = await FileStorageService.getGcodeThumbnail(
+    fileStorageId,
+    index
+  )
+
+  return gcodeThumbnail
 }
 </script>
 
@@ -707,4 +914,3 @@ const getThumbnailUrl = (fileStorageId: string, index: number = 0) => {
   transform: scale(1.01);
 }
 </style>
-

@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/vue-query";
 import { PrinterFileService } from "@/backend";
 import { ComputedRef } from "vue";
+import { FileStorageService } from '@/backend/file-storage.service'
 
 export const thumbnailQueryKey = "thumbnail";
+export const gcodeThumbnailQueryKey = "gcodeThumbnail";
 
 export const useThumbnailQuery = (
   printerId: ComputedRef<number | undefined>,
@@ -17,3 +19,16 @@ export const useThumbnailQuery = (
     enabled: !!printerId && !!enabled,
   });
 };
+
+export const useGcodeThumbnailQuery = (
+  fileId: ComputedRef<string | undefined>,
+  thumbId: number
+) => {
+  return useQuery({
+    queryKey: [gcodeThumbnailQueryKey, 'gcodeThumbnail-${fileId}-${thumbId}'],
+    queryFn: async () => {
+      if (!fileId.value) return "";
+      return FileStorageService.getGcodeThumbnail(fileId.value, thumbId).then((r ) => r.toString() || "" );
+    }
+  })
+}
