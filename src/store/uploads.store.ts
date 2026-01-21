@@ -3,7 +3,7 @@ import {
   FailedQueuedUpload,
   QueuedUpload
 } from '@/models/uploads/queued-upload.model'
-import { PrinterFileService } from '@/backend'
+import { PrinterRemoteFileService } from '@/backend'
 import { useSnackbar } from '@/shared/snackbar.composable'
 
 export interface UploadsState {
@@ -48,7 +48,7 @@ export const useUploadsStore = defineStore('Uploads', {
       this.queuedUploads.splice(0, 1);
 
       try {
-        await PrinterFileService.uploadFile(printer, file, startPrint);
+        await PrinterRemoteFileService.uploadFile(printer, file, startPrint);
       } catch (e: any) {
         if (e.isAxiosError) {
           const failedUpload: FailedQueuedUpload = {

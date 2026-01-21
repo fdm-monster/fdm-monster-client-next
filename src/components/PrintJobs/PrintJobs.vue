@@ -240,7 +240,7 @@
         >
           <!-- Thumbnail Column (Jobs only) -->
           <template v-if="activeTab === 'jobs'" #item.thumbnail="{ item }">
-            <JobThumbnailCell :job-id="item.id"/>
+            <JobThumbnailCell :file-storage-id="item.fileStorageId" :thumbnails="item.thumbnails || []"/>
           </template>
 
           <!-- Queue Position Column (Queue only) -->
@@ -1238,7 +1238,6 @@ const loadPrintJobs = async () => {
     printJobs.value = response.items
     totalJobs.value = response.count
     console.debug('[LoadJobs] Received', response.items.length, 'jobs')
-    // Thumbnails are now loaded by JobThumbnailCell components using useJobThumbnailQuery
   } catch (error) {
     console.error('Failed to load print jobs:', error)
     printJobs.value = []

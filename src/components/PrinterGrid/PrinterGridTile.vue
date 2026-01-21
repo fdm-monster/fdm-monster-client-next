@@ -358,7 +358,7 @@ import { usePrinterStateStore } from '@/store/printer-state.store'
 import { PrinterDto } from '@/models/printers/printer.model'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
-import { useThumbnailQuery } from '@/queries/thumbnail.query'
+import { usePrinterTileThumbnailQuery } from '@/queries/printer-tile-thumbnail.query'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
 import { dragAppId, INTENT, PrinterPlace, DRAG_EVENTS } from '@/shared/drag.constants'
 import { hasEmergencyStop, hasPrinterControl, hasSerialConnection } from '@/shared/printer-capabilities.constants'
@@ -395,7 +395,7 @@ const tileIconThumbnailSize = computed(() =>
   largeTilesEnabled.value ? '80px' : '40px'
 )
 
-const { data: thumbnail } = useThumbnailQuery(printerId)
+const { data: thumbnail } = usePrinterTileThumbnailQuery(printerId)
 
 const isOnline = computed(() =>
   printerId.value ? printerStateStore.isApiResponding(printerId.value) : false

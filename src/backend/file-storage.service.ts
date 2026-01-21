@@ -1,5 +1,12 @@
 import { BaseService } from '@/backend/base.service'
-import * as string_decoder from 'node:string_decoder'
+
+export interface ThumbnailInfo {
+  index: number
+  width: number
+  height: number
+  format: string
+  size: number
+}
 
 export interface FileMetadata {
   fileStorageId: string
@@ -8,8 +15,7 @@ export interface FileMetadata {
   fileSize: number
   fileHash: string
   createdAt: Date
-  thumbnailCount: number
-  thumbnailsUrl?: string | null
+  thumbnails: ThumbnailInfo[]
   metadata?: {
     gcodePrintTimeSeconds?: number
     filamentUsedGrams?: number
@@ -26,27 +32,17 @@ export interface FilesListResponse {
 }
 
 export class FileStorageService extends BaseService {
-  /**
-   * Get all stored files
-   */
   static async listFiles(): Promise<FilesListResponse> {
-
     return this.get<FilesListResponse>('/api/v2/file-storage')
   }
 
-  /**
-   * Get file metadata
-   */
   static async getFileMetadata(fileStorageId: string): Promise<FileMetadata> {
-    const path = `/api/v2/file-storage/${fileStorageId}`
+    const path = `/api/v2/file-storage/${ fileStorageId }`
     return this.get<FileMetadata>(path)
   }
 
-  /**
-   * Delete a stored file
-   */
   static async deleteFile(fileStorageId: string): Promise<void> {
-    const path = `/api/v2/file-storage/${fileStorageId}`
+    const path = `/api/v2/file-storage/${ fileStorageId }`
     return this.delete(path)
   }
 
@@ -56,20 +52,10 @@ export class FileStorageService extends BaseService {
     metadata: any
     thumbnailCount: number
   }> {
-    const path = `/api/v2/file-storage/${fileStorageId}/analyze`
+    const path = `/api/v2/file-storage/${ fileStorageId }/analyze`
     return this.post(path, {})
   }
 
-  /**
-   * Get thumbnail URL
-   */
-  static getThumbnailUrl(fileStorageId: string, index: number = 0): string {
-    return `/api/v2/file-storage/${fileStorageId}/thumbnail/${index}`
-  }
-
-  /**
-   * Upload a file to storage
-   */
   static async uploadFile(file: File): Promise<any> {
     const formData = new FormData()
     formData.append('file', file)
@@ -83,17 +69,9 @@ export class FileStorageService extends BaseService {
     return response.data
   }
 
-  /**
-   * Get a specific Gcode file thumbnail
-   */
-  static async getGcodeThumbnail(fileId:string, thumbId: number) {
-    const path = `/api/v2/file-storage/${fileId}/thumbnail/${thumbId}`;
-    const response = await this.get<{
-      //id: string
-      thumbnailBase64: string
-    }>(path)
-
+  static async getThumbnail(fileStorageId: string, index: number = 0): Promise<string> {
+    const path = `/api/v2/file-storage/${fileStorageId}/thumbnail/${index}`
+    const response = await this.get<{ thumbnailBase64: string }>(path)
     return response.thumbnailBase64
   }
 }
-
