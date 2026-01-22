@@ -993,7 +993,7 @@ __metadata:
   dependencies:
     "@babel/types": "npm:7.28.6"
     "@hey-api/client-axios": "npm:0.9.1"
-    "@hey-api/openapi-ts": "npm:0.90.6"
+    "@hey-api/openapi-ts": "npm:0.90.8"
     "@mdi/font": "npm:7.4.47"
     "@playwright/test": "npm:1.57.0"
     "@sentry/tracing": "npm:7.120.4"
@@ -1063,15 +1063,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/codegen-core@npm:^0.5.2":
-  version: 0.5.2
-  resolution: "@hey-api/codegen-core@npm:0.5.2"
+"@hey-api/codegen-core@npm:^0.5.4":
+  version: 0.5.4
+  resolution: "@hey-api/codegen-core@npm:0.5.4"
   dependencies:
+    "@hey-api/types": "npm:0.1.1"
     ansi-colors: "npm:4.1.3"
     color-support: "npm:1.1.3"
   peerDependencies:
     typescript: ">=5.5.3"
-  checksum: 10c0/448857f83e7591b2af3daf8a26d23dad5347739f89ba139a513c4db07cd2b8ca2b4ddfbfd7670a7658ff7baf7e6c6dc29a8df9bb5d9bf3d87e59854768f915b6
+  checksum: 10c0/1d89905df2b51c172705aa0fab4d15f3728fec60c8f968557ec69e63edb0508bdc0ed89253514948239c5dea5885c9289d9cad8ebe52e4c0f9b6dd669ecb6f6d
   languageName: node
   linkType: hard
 
@@ -1087,12 +1088,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:0.90.6":
-  version: 0.90.6
-  resolution: "@hey-api/openapi-ts@npm:0.90.6"
+"@hey-api/openapi-ts@npm:0.90.8":
+  version: 0.90.8
+  resolution: "@hey-api/openapi-ts@npm:0.90.8"
   dependencies:
-    "@hey-api/codegen-core": "npm:^0.5.2"
+    "@hey-api/codegen-core": "npm:^0.5.4"
     "@hey-api/json-schema-ref-parser": "npm:1.2.2"
+    "@hey-api/types": "npm:0.1.1"
     ansi-colors: "npm:4.1.3"
     c12: "npm:3.3.3"
     color-support: "npm:1.1.3"
@@ -1103,7 +1105,14 @@ __metadata:
     typescript: ">=5.5.3"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/2faa5f169555314e91b91481d1a7e9cd38dd509807494d7c6cd136a91c8c48c2a95964fce848aae8f1296e05ef72cb2ef79d9e231bdfbb52f3abc00c971341ab
+  checksum: 10c0/a8989121560d81c5e6eed762a39cea2856f7e7fee3612626ef8ffae5fcb02dbb132c4d72b51e1d07b971048f4d74b8c4c2f86267170be971afec2e051212b231
+  languageName: node
+  linkType: hard
+
+"@hey-api/types@npm:0.1.1":
+  version: 0.1.1
+  resolution: "@hey-api/types@npm:0.1.1"
+  checksum: 10c0/d528f945bed61e4446ddeb3f87d66b756affb88d68a2e454c075c17463ad183d1103c91c1cfa6cc700ff46d646dd39e14677eaa8162974738077f5e040ce64ef
   languageName: node
   linkType: hard
 
