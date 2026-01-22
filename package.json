@@ -91,7 +91,7 @@
     "pinia": "3.0.4",
     "playwright": "1.57.0",
     "prettier": "3.8.1",
-    "sass-embedded": "1.97.2",
+    "sass-embedded": "1.97.3",
     "selective-object-reuse": "1.0.6",
     "semver": "7.7.3",
     "socket.io-client": "4.8.3",
