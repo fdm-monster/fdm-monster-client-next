@@ -102,7 +102,281 @@
       </v-card-title>
 
       <v-card-text>
+        <!-- edited by claude on 2026.01.24.14.30 -->
+        <!-- Tree Toolbar -->
+        <div class="d-flex justify-end mb-3">
+          <v-btn
+            size="small"
+            variant="text"
+            @click="expandAll"
+          >
+            <v-icon start>unfold_more</v-icon>
+            Expand All
+          </v-btn>
+          <v-btn
+            size="small"
+            variant="text"
+            @click="collapseAll"
+          >
+            <v-icon start>unfold_less</v-icon>
+            Collapse All
+          </v-btn>
+        </div>
+
+        <!-- Loading State -->
+        <div
+          v-if="loading"
+          class="d-flex justify-center py-8"
+        >
+          <v-progress-circular
+            indeterminate
+            size="48"
+            color="primary"
+          />
+        </div>
+
+        <!-- Tree Table -->
+        <div v-else class="tree-table-container">
+          <!-- Table Header -->
+          <div class="tree-table-header">
+            <div class="tree-cell cell-thumbnail">Thumb</div>
+            <div class="tree-cell cell-name">Name</div>
+            <div class="tree-cell cell-type">Type</div>
+            <div class="tree-cell cell-material">Material</div>
+            <div class="tree-cell cell-temps">Temps</div>
+            <div class="tree-cell cell-plates">Plates</div>
+            <div class="tree-cell cell-time">Print Time</div>
+            <div class="tree-cell cell-filament">Filament</div>
+            <div class="tree-cell cell-actions">Actions</div>
+          </div>
+
+          <!-- Table Body -->
+          <div class="tree-table-body">
+            <!-- No files state -->
+            <div
+              v-if="flattenedTree.length === 0"
+              class="text-center py-8"
+            >
+              <v-icon
+                size="64"
+                color="medium-emphasis"
+                class="mb-2"
+              >
+                folder_open
+              </v-icon>
+              <div class="text-body-1 text-medium-emphasis">
+                No files found
+              </div>
+            </div>
+
+            <!-- Tree Rows -->
+            <div
+              v-for="node in flattenedTree"
+              :key="node.id"
+              class="tree-table-row"
+              :class="{ 'is-folder': node.type === 'folder' }"
+            >
+              <!-- Thumbnail Column -->
+              <div class="tree-cell cell-thumbnail">
+                <!-- edited by claude on 2026.01.24.15.10 -->
+                <v-avatar
+                  v-if="node.type === 'file' && node.file"
+                  size="40"
+                  rounded
+                >
+                  <v-img
+                    v-if="node.file.thumbnails?.length > 0"
+                    :src="getThumbnailUrl(node.file.fileStorageId)"
+                    cover
+                  >
+                    <template #error>
+                      <v-icon size="small">description</v-icon>
+                    </template>
+                  </v-img>
+                  <v-icon
+                    v-else
+                    color="primary"
+                    size="small"
+                    >description</v-icon
+                  >
+                </v-avatar>
+                <span v-else class="text-medium-emphasis">-</span>
+                <!-- End of Claude's edit -->
+              </div>
+
+              <!-- Name Column -->
+              <div class="tree-cell cell-name" :style="{ paddingLeft: `${node.depth * 24}px` }">
+                <!-- edited by claude on 2026.01.24.14.50 -->
+                <div class="d-flex align-center">
+                  <v-btn
+                    v-if="node.type === 'folder'"
+                    icon
+                    size="x-small"
+                    variant="text"
+                    class="mr-1"
+                    @click="toggleExpansion(node.id)"
+                  >
+                    <v-icon size="small">
+                      {{ node.expanded ? 'expand_more' : 'chevron_right' }}
+                    </v-icon>
+                  </v-btn>
+                  <v-icon class="mr-2" :color="node.type === 'folder' ? 'primary' : 'medium-emphasis'">
+                    {{ node.type === 'folder' ? 'folder' : 'description' }}
+                  </v-icon>
+                  <div v-if="node.type === 'file' && node.file">
+                    <div class="text-body-2 font-weight-medium">
+                      {{ node.file.metadata?._originalFileName || node.file.fileName }}
+                    </div>
+                    <div class="text-caption text-medium-emphasis">
+                      {{ node.file.fileFormat.toUpperCase() }} • {{ formatFileSize(node.file.fileSize) }}
+                    </div>
+                  </div>
+                  <span v-else class="text-body-2">{{ node.name }}</span>
+                </div>
+                <!-- End of Claude's edit -->
+              </div>
+
+              <!-- Type Column -->
+              <div class="tree-cell cell-type">
+                <v-avatar
+                  v-if="node.type === 'file' && node.file && getPrinterTypeLogo(node.file.metadata || {}, node.file.fileFormat)"
+                  size="32"
+                  rounded="0"
+                >
+                  <v-img :src="getPrinterTypeLogo(node.file.metadata || {}, node.file.fileFormat)" contain />
+                </v-avatar>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Material Column -->
+              <div class="tree-cell cell-material">
+                <v-chip
+                  v-if="node.type === 'file' && node.file?.metadata?.filamentType"
+                  size="small"
+                  variant="tonal"
+                  color="orange"
+                >
+                  {{ node.file.metadata.filamentType }}
+                </v-chip>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Temperatures Column -->
+              <div class="tree-cell cell-temps">
+                <div v-if="node.type === 'file' && node.file && (node.file.metadata?.nozzleTemperature || node.file.metadata?.bedTemperature)" class="text-caption">
+                  <div v-if="node.file.metadata.nozzleTemperature">
+                    🔥 {{ node.file.metadata.nozzleTemperature }}°C
+                  </div>
+                  <div v-if="node.file.metadata.bedTemperature">
+                    🛏️ {{ node.file.metadata.bedTemperature }}°C
+                  </div>
+                </div>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Plates Column -->
+              <div class="tree-cell cell-plates">
+                <v-chip
+                  v-if="node.type === 'file' && node.file"
+                  size="small"
+                  variant="tonal"
+                  color="blue"
+                >
+                  <v-icon start size="small">layers</v-icon>
+                  {{ node.file.metadata?.totalPlates ?? 1 }}
+                </v-chip>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Print Time Column -->
+              <div class="tree-cell cell-time">
+                <v-chip
+                  v-if="node.type === 'file' && node.file?.metadata?.gcodePrintTimeSeconds"
+                  color="info"
+                  size="small"
+                  variant="tonal"
+                >
+                  <v-icon start size="small">schedule</v-icon>
+                  {{ formatDuration(node.file.metadata.gcodePrintTimeSeconds) }}
+                </v-chip>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Filament Column -->
+              <div class="tree-cell cell-filament">
+                <v-chip
+                  v-if="node.type === 'file' && node.file?.metadata?.filamentUsedGrams"
+                  color="green"
+                  size="small"
+                  variant="tonal"
+                >
+                  <v-icon start size="small">fitness_center</v-icon>
+                  {{ node.file.metadata.filamentUsedGrams.toFixed(1) }}g
+                </v-chip>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Actions Column -->
+              <div class="tree-cell cell-actions">
+                <div v-if="node.type === 'file' && node.file" class="d-flex ga-1">
+                  <v-btn
+                    icon="add_to_queue"
+                    size="small"
+                    variant="text"
+                    color="primary"
+                    @click="openQueueDialog(node.file)"
+                  >
+                    <v-icon>add_to_queue</v-icon>
+                    <v-tooltip activator="parent" location="top">
+                      Add to queue
+                    </v-tooltip>
+                  </v-btn>
+                  <v-btn
+                    icon="analytics"
+                    size="small"
+                    variant="text"
+                    color="info"
+                    @click="analyzeFile(node.file)"
+                    :loading="analyzingFiles.has(node.file.fileStorageId)"
+                  >
+                    <v-icon>analytics</v-icon>
+                    <v-tooltip activator="parent" location="top">
+                      Trigger analysis
+                    </v-tooltip>
+                  </v-btn>
+                  <v-btn
+                    icon="visibility"
+                    size="small"
+                    variant="text"
+                    color="primary"
+                    @click="viewFile(node.file)"
+                  >
+                    <v-icon>visibility</v-icon>
+                    <v-tooltip activator="parent" location="top">
+                      View details
+                    </v-tooltip>
+                  </v-btn>
+                  <v-btn
+                    icon="delete"
+                    size="small"
+                    variant="text"
+                    color="error"
+                    @click="deleteFile(node.file)"
+                  >
+                    <v-icon>delete</v-icon>
+                    <v-tooltip activator="parent" location="top">
+                      Delete file
+                    </v-tooltip>
+                  </v-btn>
+                </div>
+                <div v-else class="text-medium-emphasis">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End of Claude's edit -->
         <v-data-table
+          v-if="false"
           :headers="headers"
           :items="filteredFiles"
           :loading="loading"
@@ -616,6 +890,7 @@
 </template>
 
 <script lang="ts" setup>
+// edited by claude on 2026.01.24.14.35
 import { ref, computed, onMounted } from 'vue'
 import {
   FileStorageService,
@@ -635,6 +910,9 @@ import {
   getPrinterTypeName,
   getPrinterTypeLogo
 } from '@/shared/printer-types.constants'
+// edited by claude on 2026.01.24.15.05
+import { buildFileTree, flattenTree, toggleNodeExpansion, expandAllNodes, collapseAllNodes, type FileTreeNode } from './file-tree-builder.utils'
+// End of Claude's edit
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -676,6 +954,11 @@ const uploadProgress = ref<
 const fileInput = ref<HTMLInputElement | null>(null)
 const analyzingFiles = ref<Set<string>>(new Set())
 
+// edited by claude on 2026.01.24.14.37
+// Tree state management
+const fileTree = ref<FileTreeNode[]>([])
+// End of Claude's edit
+
 const headers = [
   { title: 'File Name', key: 'fileName', sortable: true },
   { title: 'Type', key: 'printerType', sortable: false },
@@ -709,6 +992,31 @@ const filteredFiles = computed(() => {
   )
 })
 
+// edited by claude on 2026.01.24.14.38
+// Tree computed properties
+const filteredTree = computed(() => {
+  if (!searchQuery.value) {
+    return fileTree.value
+  }
+  const query = searchQuery.value.toLowerCase()
+
+  // Filter files first
+  const filtered = files.value.filter(file =>
+    file.fileName.toLowerCase().includes(query) ||
+    (file.metadata?.path || '').toLowerCase().includes(query) ||
+    file.fileHash.toLowerCase().includes(query) ||
+    file.fileStorageId.toLowerCase().includes(query)
+  )
+
+  // Build tree from filtered files
+  return buildFileTree(filtered)
+})
+
+const flattenedTree = computed(() => {
+  return flattenTree(filteredTree.value)
+})
+// End of Claude's edit
+
 onMounted(async () => {
   await loadFiles()
   await printerStore.loadPrinters()
@@ -719,6 +1027,9 @@ const loadFiles = async () => {
   try {
     const response = await FileStorageService.listFiles()
     files.value = response.files
+    // edited by claude on 2026.01.24.14.40
+    fileTree.value = buildFileTree(response.files)
+    // End of Claude's edit
   } catch (error) {
     console.error('Failed to load files:', error)
     snackbar.error('Failed to load files')
@@ -902,6 +1213,21 @@ const queueToSelectedPrinters = async () => {
     queuing.value = false
   }
 }
+
+// edited by claude on 2026.01.24.15.06
+// Tree manipulation functions
+const toggleExpansion = (nodeId: string) => {
+  fileTree.value = toggleNodeExpansion(fileTree.value, nodeId)
+}
+
+const expandAll = () => {
+  fileTree.value = expandAllNodes(fileTree.value)
+}
+
+const collapseAll = () => {
+  fileTree.value = collapseAllNodes(fileTree.value)
+}
+// End of Claude's edit
 </script>
 
 <style scoped>
@@ -919,4 +1245,95 @@ const queueToSelectedPrinters = async () => {
   background-color: rgba(var(--v-theme-primary), 0.05);
   transform: scale(1.01);
 }
+
+/* edited by claude on 2026.01.24.14.43 */
+/* Tree Table Styles */
+.tree-table-container {
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tree-table-header {
+  display: grid;
+  grid-template-columns: 60px minmax(250px, 1fr) 80px 120px 100px 80px 140px 120px 200px;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: rgba(var(--v-theme-on-surface), 0.05);
+  font-weight: 600;
+  border-bottom: 2px solid rgba(var(--v-theme-on-surface), 0.12);
+}
+
+.tree-table-body {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.tree-table-row {
+  display: grid;
+  grid-template-columns: 60px minmax(250px, 1fr) 80px 120px 100px 80px 140px 120px 200px;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+  transition: background-color 0.2s ease;
+}
+
+.tree-table-row:hover {
+  background-color: rgba(var(--v-theme-on-surface), 0.04);
+}
+
+.tree-table-row.is-folder {
+  background-color: rgba(var(--v-theme-primary), 0.02);
+}
+
+.tree-table-row.is-folder:hover {
+  background-color: rgba(var(--v-theme-primary), 0.06);
+}
+
+.tree-cell {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cell-thumbnail {
+  justify-content: center;
+}
+
+.cell-name {
+  min-width: 0;
+}
+
+.cell-type,
+.cell-material,
+.cell-temps,
+.cell-plates,
+.cell-time,
+.cell-filament {
+  justify-content: center;
+}
+
+.cell-actions {
+  justify-content: flex-end;
+}
+
+/* Scrollbar styling */
+.tree-table-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tree-table-body::-webkit-scrollbar-track {
+  background: rgba(var(--v-theme-on-surface), 0.05);
+  border-radius: 4px;
+}
+
+.tree-table-body::-webkit-scrollbar-thumb {
+  background: rgba(var(--v-theme-on-surface), 0.2);
+  border-radius: 4px;
+}
+
+.tree-table-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--v-theme-on-surface), 0.3);
+}
+/* End of Claude's edit */
 </style>
