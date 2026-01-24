@@ -3,7 +3,7 @@
     :model-value="drawerOpened"
     location="right"
     temporary
-    width="420"
+    width="600"
     class="printer-side-nav"
     @update:model-value="closeDrawer"
   >
