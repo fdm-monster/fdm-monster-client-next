@@ -299,68 +299,71 @@
             </div>
           </div>
 
-          <!-- File Items -->
-          <div
-            v-for="(file, index) in filesListed"
-            :key="index"
-            class="file-item"
+          <!-- File Tree -->
+          <v-treeview
+            :items="fileTree"
+            item-value="id"
+            item-title="name"
+            density="compact"
+            class="file-tree"
           >
-            <v-card
-              :class="{ 'file-printing': isFileBeingPrinted(file) }"
-              variant="outlined"
-              class="mb-2"
-              rounded="lg"
-            >
-              <v-card-text class="py-2 px-3">
-                <div class="d-flex align-center">
-                  <v-icon
-                    :color="isFileBeingPrinted(file) ? 'primary' : 'medium-emphasis'"
-                    class="mr-3"
-                  >
-                    {{ isFileBeingPrinted(file) ? 'play_circle' : 'insert_drive_file' }}
-                  </v-icon>
+            <template #prepend="{ item }">
+              <v-icon
+                :color="item.type === 'file' && item.file && isFileBeingPrinted(item.file) ? 'primary' : 'medium-emphasis'"
+              >
+                {{ getTreeIcon(item) }}
+              </v-icon>
+            </template>
 
-                  <div class="flex-grow-1 min-width-0">
-                    <div
-                      :class="{ 'text-primary font-weight-bold': isFileBeingPrinted(file) }"
-                      class="text-body-2 text-truncate"
-                      :title="file.path"
-                    >
-                      {{ file.path }}
-                    </div>
-                    <div class="text-caption text-medium-emphasis">
-                      {{ formatFileSize(file.size) }}
-                    </div>
-                  </div>
+            <template #title="{ item }">
+              <div class="d-flex align-center">
+                <span
+                  :class="{ 'text-primary font-weight-bold': item.type === 'file' && item.file && isFileBeingPrinted(item.file) }"
+                  class="text-body-2"
+                  :title="item.path"
+                >
+                  {{ item.name }}
+                </span>
+                <span
+                  v-if="item.type === 'file' && item.file"
+                  class="text-caption text-medium-emphasis ml-2"
+                >
+                  {{ formatFileSize(item.file.size) }}
+                </span>
+              </div>
+            </template>
 
-                  <div class="d-flex ga-1">
-                    <v-btn
-                      icon="download"
-                      size="x-small"
-                      variant="text"
-                      @click="clickDownloadFile(file.path)"
-                    />
-                    <v-btn
-                      :disabled="isFileBeingPrinted(file)"
-                      icon="play_arrow"
-                      size="x-small"
-                      variant="text"
-                      color="success"
-                      @click="clickPrintFile(file)"
-                    />
-                    <v-btn
-                      :disabled="isFileBeingPrinted(file)"
-                      icon="delete"
-                      size="x-small"
-                      variant="text"
-                      color="error"
-                      @click="deleteFile(file)"
-                    />
-                  </div>
-                </div>
-              </v-card-text>
-            </v-card>
-          </div>
+            <template #append="{ item }">
+              <div
+                v-if="item.type === 'file' && item.file"
+                class="d-flex ga-1"
+                @click.stop
+              >
+                <v-btn
+                  icon="download"
+                  size="x-small"
+                  variant="text"
+                  @click="clickDownloadFile(item.file.path)"
+                />
+                <v-btn
+                  :disabled="isFileBeingPrinted(item.file)"
+                  icon="play_arrow"
+                  size="x-small"
+                  variant="text"
+                  color="success"
+                  @click="clickPrintFile(item.file)"
+                />
+                <v-btn
+                  :disabled="isFileBeingPrinted(item.file)"
+                  icon="delete"
+                  size="x-small"
+                  variant="text"
+                  color="error"
+                  @click="deleteFile(item.file)"
+                />
+              </div>
+            </template>
+          </v-treeview>
         </div>
       </v-card-text>
     </v-card>
@@ -415,6 +418,15 @@ import { hasWebInterface } from '@/shared/printer-capabilities.constants'
 import { useDialog } from '@/shared/dialog.composable'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
 
+interface TreeNode {
+  id: string
+  name: string
+  type: 'file' | 'folder'
+  path: string
+  file?: FileDto
+  children?: TreeNode[]
+}
+
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const fileExplorer = useFileExplorer()
@@ -463,6 +475,62 @@ const filesListed = computed(() => {
         : true
     ) || []
   )
+})
+
+const fileTree = computed(() => {
+  const root: TreeNode[] = []
+  const folderMap = new Map<string, TreeNode>()
+
+  filesListed.value.forEach((file) => {
+    const parts = file.path.split('/')
+    let currentPath = ''
+    let currentLevel = root
+
+    // Build folder hierarchy
+    for (let i = 0; i < parts.length - 1; i++) {
+      const part = parts[i]
+      currentPath = currentPath ? `${currentPath}/${part}` : part
+
+      if (!folderMap.has(currentPath)) {
+        const folderNode: TreeNode = {
+          id: currentPath,
+          name: part,
+          type: 'folder',
+          path: currentPath,
+          children: []
+        }
+        folderMap.set(currentPath, folderNode)
+        currentLevel.push(folderNode)
+        currentLevel = folderNode.children!
+      } else {
+        currentLevel = folderMap.get(currentPath)!.children!
+      }
+    }
+
+    // Add file node
+    const fileName = parts[parts.length - 1]
+    currentLevel.push({
+      id: file.path,
+      name: fileName,
+      type: 'file',
+      path: file.path,
+      file
+    })
+  })
+
+  // Sort: folders first, then alphabetically
+  const sortNodes = (nodes: TreeNode[]) => {
+    nodes.sort((a, b) => {
+      if (a.type !== b.type) return a.type === 'folder' ? -1 : 1
+      return a.name.localeCompare(b.name)
+    })
+    nodes.forEach(node => {
+      if (node.children) sortNodes(node.children)
+    })
+  }
+
+  sortNodes(root)
+  return root
 })
 const isStoppable = computed(() => {
   if (!storedSideNavPrinter.value || !printerId.value) return false
@@ -677,28 +745,25 @@ function getStatusText() {
   if (isOperational.value) return 'Ready'
   return 'Idle'
 }
+
+function getTreeIcon(item: TreeNode) {
+  if (item.type === 'folder') {
+    return 'folder'
+  }
+  if (item.file && isFileBeingPrinted(item.file)) {
+    return 'play_circle'
+  }
+  return 'insert_drive_file'
+}
 </script>
 <style scoped>
 .printer-side-nav {
   background: rgb(var(--v-theme-surface));
 }
 
-.file-printing {
-  border-color: rgb(var(--v-theme-primary)) !important;
-  background: rgba(var(--v-theme-primary), 0.05);
-}
-
 .file-list {
   max-height: 400px;
   overflow-y: auto;
-}
-
-.file-item {
-  transition: all 0.2s ease;
-}
-
-.file-item:hover {
-  transform: translateY(-1px);
 }
 
 .min-width-0 {
@@ -722,5 +787,18 @@ function getStatusText() {
 
 .file-list::-webkit-scrollbar-thumb:hover {
   background: rgba(var(--v-theme-on-surface), 0.3);
+}
+
+/* Tree view customization */
+.file-tree :deep(.v-treeview-item) {
+  transition: all 0.2s ease;
+}
+
+.file-tree :deep(.v-treeview-item:hover) {
+  background: rgba(var(--v-theme-on-surface), 0.05);
+}
+
+.file-tree :deep(.v-treeview-item__content) {
+  padding: 2px 4px;
 }
 </style>
