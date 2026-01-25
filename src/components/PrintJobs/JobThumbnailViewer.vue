@@ -157,10 +157,10 @@ const loadThumbnails = async (storageId: string, thumbsList: ThumbnailInfo[]) =>
 
     thumbnails.value = sortedThumbs
     currentIndex.value = 0
-    
+
     thumbnailUrls.value.clear()
     for (const thumb of sortedThumbs) {
-      const url = await FileStorageService.getThumbnail(storageId, thumb.index)
+      const url = await FileStorageService.getThumbnailBase64(storageId, thumb.index)
       thumbnailUrls.value.set(thumb.index, url)
     }
   } catch (err) {

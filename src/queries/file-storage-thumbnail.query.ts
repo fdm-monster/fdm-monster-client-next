@@ -21,7 +21,7 @@ export const useFileStorageThumbnailQuery = (
           return null;
         }
 
-        return await FileStorageService.getThumbnail(fileStorageId.value, bestThumbnail.index);
+        return await FileStorageService.getThumbnailBase64(fileStorageId.value, bestThumbnail.index);
       } catch (err) {
         console.debug(`Failed to load thumbnail for file ${fileStorageId.value}:`, err);
         return null;

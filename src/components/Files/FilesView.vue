@@ -503,7 +503,7 @@
                 <v-img
                   v-for="(thumb, i) in selectedFile.thumbnails"
                   :key="i"
-                  :src="getGCodeThumbnailUrl(selectedFile.fileStorageId, thumb.index)"
+                  :src="getThumbnailUrl(selectedFile.fileStorageId, thumb.index)"
                   width="150"
                   height="150"
                   cover
@@ -646,16 +646,12 @@ const getThumbnailUrl = (fileStorageId: string, index: number = 0): string => {
   if (thumbnailCache.value.has(cacheKey)) {
     return thumbnailCache.value.get(cacheKey)!
   }
-  FileStorageService.getThumbnail(fileStorageId, index)
+  FileStorageService.getThumbnailBase64(fileStorageId, index)
     .then((base64) => {
       thumbnailCache.value.set(cacheKey, base64)
     })
     .catch(() => {})
   return ''
-}
-
-const getGCodeThumbnailUrl = (fileStorageId: string, index: number): string => {
-  return getThumbnailUrl(fileStorageId, index)
 }
 
 const files = ref<FileMetadata[]>([])
