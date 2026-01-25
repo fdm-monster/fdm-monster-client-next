@@ -970,7 +970,6 @@
     />
     <!-- edited by claude on 2026.01.24.19.08 - use _originalFileName and extract filename only -->
     <!-- End of Claude's edit -->
-    <!-- End of Claude's edit -->
 
     <!-- edited by claude on 2026.01.24.16.35 -->
     <!-- Move Folder Dialog -->

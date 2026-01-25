@@ -35,21 +35,38 @@
 
 ---
 
-## Phase 3: File Moving 📋 PLANNED
-**To Implement:**
-- Move dialog with folder selector
-- Integration with `moveFile()` function
-- Visual feedback during move operation
+## Phase 3: File Moving ✅ COMPLETE
+**Files Created:**
+- `FileMoveDialog.vue` - Move file dialog with path entry and folder selection
+- `FolderMoveDialog.vue` - Move folder dialog with file count display
+
+**Completed:**
+- ✅ Created move dialog with two tabs (manual path entry, folder selection)
+- ✅ Added move button to file management menu
+- ✅ Implemented folder move functionality with circular move prevention
+- ✅ Updated to use new backend API with separate path and fileName fields
+- ✅ Parse paths from _originalFileName when present
+- ✅ Display _originalFileName instead of OID-based fileName
+- ✅ Support moving files and folders to root directory
+- ✅ Fixed root directory move validation
+- ✅ Tested and working
+
+**Implementation Details:**
+- Dialog shows current file/folder path and allows selection or manual entry
+- Validates destination path (no circular moves for folders)
+- Shows preview of new path before moving
+- Uses metadata._path for folder structure (separate from fileName)
+- Root folder represented as empty string ("")
+- Auto-reloads file list after successful move
 
 ---
 
-## Phase 4: Folder Operations 📋 PLANNED
+## Phase 4: Folder Operations 📋 IN PROGRESS
 **To Implement:**
-- Folder context menu (right-click)
-- Rename folder dialog
-- Move folder functionality
-- Create new folder dialog
-- Delete folder with confirmation
+- ⏳ Folder rename dialog
+- ⏳ Create new folder dialog
+- ⏳ Delete folder with confirmation
+- ⏳ Folder context menu enhancements
 
 ---
 
