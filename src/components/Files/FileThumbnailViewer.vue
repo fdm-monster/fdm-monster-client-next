@@ -128,6 +128,7 @@ const context = computed(() => thumbnailViewerDialog.context())
 const thumbnails = ref<ThumbnailInfo[]>([])
 const currentIndex = ref(0)
 const fileStorageId = ref<string | null>(null)
+const carouselThumbnailUrls = ref<Map<number, string>>(new Map())
 
 const currentThumbnailIndex = computed(() => {
   const thumb = thumbnails.value[currentIndex.value]
@@ -167,33 +168,37 @@ const currentThumbnail = computed(() => {
   return thumbnails.value[currentIndex.value] || null
 })
 
-// Prefetch all thumbnails when dialog opens and on navigation
-watch([thumbnails, fileStorageId, isOpen], () => {
-  if (!fileStorageId.value || thumbnails.value.length === 0 || !isOpen.value) return
 
-  const prefetchThumbnail = async (thumb: ThumbnailInfo) => {
-    const queryKey = [fileStorageThumbnailQueryKey, fileStorageId.value, thumb.index]
-
-    await queryClient.prefetchQuery({
-      queryKey,
-      queryFn: () => FileStorageService.getThumbnailBase64(fileStorageId.value!, thumb.index),
-      staleTime: 1000 * 60 * 60,
-    })
+watch([thumbnails, fileStorageId, isOpen], async () => {
+  if (!fileStorageId.value || thumbnails.value.length === 0 || !isOpen.value) {
+    carouselThumbnailUrls.value.clear()
+    return
   }
 
-  // Prefetch all thumbnails for smooth experience
-  thumbnails.value.forEach(thumb => {
-    prefetchThumbnail(thumb)
-  })
+  const loadThumbnail = async (thumb: ThumbnailInfo) => {
+    const queryKey = [fileStorageThumbnailQueryKey, fileStorageId.value, thumb.index]
+
+    try {
+      const url = await queryClient.fetchQuery({
+        queryKey,
+        queryFn: () => FileStorageService.getThumbnailBase64(fileStorageId.value!, thumb.index),
+        staleTime: 1000 * 60 * 60,
+      })
+
+      if (url) {
+        carouselThumbnailUrls.value.set(thumb.index, url)
+      }
+    } catch (err) {
+      console.debug(`Failed to load carousel thumbnail ${thumb.index}:`, err)
+    }
+  }
+
+  carouselThumbnailUrls.value.clear()
+  await Promise.all(thumbnails.value.map(thumb => loadThumbnail(thumb)))
 }, { immediate: true })
 
 const getThumbnailUrl = (index: number): string => {
-  if (!fileStorageId.value) return ''
-
-  const queryKey = [fileStorageThumbnailQueryKey, fileStorageId.value, index]
-  const cachedData = queryClient.getQueryData<string>(queryKey)
-
-  return cachedData || ''
+  return carouselThumbnailUrls.value.get(index) || ''
 }
 
 const nextThumbnail = () => {
