@@ -5,10 +5,10 @@
       class="mb-6 upload-drop-zone"
       elevation="2"
       :class="{ 'drag-over': isDragging }"
-      @dragenter.prevent="handleDragEnter"
-      @dragover.prevent="handleDragOver"
-      @dragleave.prevent="handleDragLeave"
-      @drop.prevent="handleDrop"
+      @dragenter.prevent="handleUploadDragEnter"
+      @dragover.prevent="handleUploadDragOver"
+      @dragleave.prevent="handleUploadDragLeave"
+      @drop.prevent="handleUploadDrop"
     >
       <v-card-text class="text-center pa-6">
         <v-icon
@@ -252,7 +252,8 @@
                     folder
                   </v-icon>
                   <!-- End of Claude's edit -->
-                  <div v-if="node.type === 'file' && node.file">
+                  <!-- edited by claude on 2026.01.24.21.20 - add left padding to align files with folder names -->
+                  <div v-if="node.type === 'file' && node.file" style="margin-left: 48px;">
                     <div class="text-body-2 font-weight-medium">
                       {{ node.file.metadata?._originalFileName || node.file.fileName }}
                     </div>
@@ -260,6 +261,7 @@
                       {{ node.file.fileFormat.toUpperCase() }} • {{ formatFileSize(node.file.fileSize) }}
                     </div>
                   </div>
+                  <!-- End of Claude's edit -->
                   <span v-else class="text-body-2">{{ node.name }}</span>
                 </div>
                 <!-- End of Claude's edit -->
@@ -1319,11 +1321,12 @@ const analyzeFile = async (file: FileMetadata) => {
   }
 }
 
-const handleDragOver = (e: DragEvent) => {
+// edited by claude on 2026.01.24.21.15 - renamed to avoid conflict with tree drag handlers
+const handleUploadDragOver = (e: DragEvent) => {
   e.preventDefault()
 }
 
-const handleDragEnter = (e: DragEvent) => {
+const handleUploadDragEnter = (e: DragEvent) => {
   e.preventDefault()
   dragDepth.value++
   if (dragDepth.value === 1) {
@@ -1331,7 +1334,7 @@ const handleDragEnter = (e: DragEvent) => {
   }
 }
 
-const handleDragLeave = (e: DragEvent) => {
+const handleUploadDragLeave = (e: DragEvent) => {
   e.preventDefault()
   dragDepth.value--
   if (dragDepth.value === 0) {
@@ -1339,13 +1342,14 @@ const handleDragLeave = (e: DragEvent) => {
   }
 }
 
-const handleDrop = async (e: DragEvent) => {
+const handleUploadDrop = async (e: DragEvent) => {
   e.preventDefault()
   dragDepth.value = 0
   isDragging.value = false
   const droppedFiles = Array.from(e.dataTransfer?.files || [])
   await uploadFiles(droppedFiles)
 }
+// End of Claude's edit
 
 const handleFileSelect = async (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -1863,9 +1867,15 @@ const handleDrop = async (targetNode: FileTreeNode, event: DragEvent) => {
   justify-content: center;
 }
 
-.cell-actions {
+/* edited by claude on 2026.01.24.21.20 - center actions header, keep items right-aligned */
+.tree-table-header .cell-actions {
+  justify-content: center;
+}
+
+.tree-table-row .cell-actions {
   justify-content: flex-end;
 }
+/* End of Claude's edit */
 
 /* Scrollbar styling */
 .tree-table-body::-webkit-scrollbar {
