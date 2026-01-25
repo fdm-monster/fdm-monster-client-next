@@ -497,6 +497,10 @@
           no-data-text="No files found"
           :items-per-page="25"
         >
+          <template #item.thumbnail="{ item }">
+            <FileThumbnailCell :file-storage-id="item.fileStorageId" :thumbnails="item.thumbnails || []"/>
+          </template>
+
           <!-- File Name Column -->
           <template #item.fileName="{ item }">
             <div class="d-flex align-center">
@@ -528,6 +532,13 @@
                   {{ item.fileFormat.toUpperCase() }} •
                   {{ formatFileSize(item.fileSize) }}
                 </div>
+            <div>
+              <div class="text-body-2 font-weight-medium">
+                {{ item.metadata?._originalFileName || item.fileName }}
+              </div>
+              <div class="text-caption text-medium-emphasis">
+                {{ item.fileFormat.toUpperCase() }} •
+                {{ formatFileSize(item.fileSize) }}
               </div>
             </div>
           </template>
@@ -693,6 +704,11 @@
               v-else
               class="text-medium-emphasis"
               >None</span
+            >
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
             >
           </template>
 
@@ -889,7 +905,7 @@
                 <v-img
                   v-for="(thumb, i) in selectedFile.thumbnails"
                   :key="i"
-                  :src="getGCodeThumbnailUrl(selectedFile.fileStorageId, thumb.index)"
+                  :src="getThumbnailUrl(selectedFile.fileStorageId, thumb.index)"
                   width="150"
                   height="150"
                   cover
@@ -1091,6 +1107,16 @@ import FolderRenameDialog from './FolderRenameDialog.vue'
 import CreateFolderDialog from './CreateFolderDialog.vue'
 import FileOperationLoadingOverlay from './FileOperationLoadingOverlay.vue'
 // End of Claude's edit
+import { formatFileSize } from '@/utils/file-size.util'
+import {
+  formatDate,
+  formatRelativeTime,
+  formatDuration
+} from '@/utils/date-time.utils'
+import {
+  getPrinterTypeName,
+  getPrinterTypeLogo
+} from '@/shared/printer-types.constants'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -1113,6 +1139,21 @@ const getThumbnailUrl = (fileStorageId: string, index: number = 0): string => {
 
 const getGCodeThumbnailUrl = (fileStorageId: string, index: number): string => {
   return getThumbnailUrl(fileStorageId, index)
+}
+
+const thumbnailCache = ref<Map<string, string>>(new Map())
+
+const getThumbnailUrl = (fileStorageId: string, index: number = 0): string => {
+  const cacheKey = `${fileStorageId}-${index}`
+  if (thumbnailCache.value.has(cacheKey)) {
+    return thumbnailCache.value.get(cacheKey)!
+  }
+  FileStorageService.getThumbnailBase64(fileStorageId, index)
+    .then((base64) => {
+      thumbnailCache.value.set(cacheKey, base64)
+    })
+    .catch(() => {})
+  return ''
 }
 
 const files = ref<FileMetadata[]>([])
@@ -1201,6 +1242,7 @@ const draggingNode = ref<FileTreeNode | null>(null)
 // End of Claude's edit
 
 const headers = [
+  { title: '', key: 'thumbnail', sortable: false, width: '80px' },
   { title: 'File Name', key: 'fileName', sortable: true },
   { title: 'Type', key: 'printerType', sortable: false },
   { title: 'Material', key: 'material', sortable: false },
@@ -1209,7 +1251,6 @@ const headers = [
   { title: 'Model', key: 'printerModel', sortable: false },
   { title: 'Print Time', key: 'printTime', sortable: false },
   { title: 'Filament', key: 'filament', sortable: false },
-  { title: 'Thumbnails', key: 'thumbnails', sortable: false },
   { title: 'Created', key: 'createdAt', sortable: true },
   { title: 'Actions', key: 'actions', sortable: false, align: 'end' as const }
 ]

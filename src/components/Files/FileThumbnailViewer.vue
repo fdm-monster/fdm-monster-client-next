@@ -3,8 +3,8 @@
     <v-card class="thumbnail-viewer-card">
       <v-card-title class="d-flex align-center bg-primary text-on-primary pa-3">
         <v-icon class="mr-2">image</v-icon>
-        <span class="text-subtitle-1">Job Thumbnail</span>
-        <v-spacer />
+        <span class="text-subtitle-1">File Thumbnail</span>
+        <v-spacer/>
         <v-chip
           v-if="thumbnails.length > 1"
           size="small"
@@ -31,6 +31,7 @@
 
         <div v-else class="thumbnail-image-container">
           <img
+            v-if="currentThumbnailUrl"
             :src="currentThumbnailUrl"
             :alt="`Thumbnail ${currentIndex + 1}`"
             class="thumbnail-main-image"
@@ -77,7 +78,7 @@
             </v-col>
             <v-col cols="auto">
               <span class="text-caption text-medium-emphasis">Size:</span>
-              <span class="text-body-2 ml-1">{{ formatBytes(currentThumbnail.size) }}</span>
+              <span class="text-body-2 ml-1">{{ formatFileSize(currentThumbnail.size) }}</span>
             </v-col>
           </v-row>
         </div>
@@ -109,29 +110,61 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
-import { FileStorageService, type ThumbnailInfo } from '@/backend/file-storage.service'
+import { computed, ref, watch } from 'vue'
+import type { ThumbnailInfo } from '@/backend/file-storage.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { formatFileSize } from "@/utils/file-size.util"
+import { useFileStorageThumbnailQuery, fileStorageThumbnailQueryKey } from '@/queries/file-storage-thumbnail.query'
+import { useQueryClient } from '@tanstack/vue-query'
+import { FileStorageService } from '@/backend/file-storage.service'
 
 const thumbnailViewerDialog = useDialog(DialogName.JobThumbnailViewer)
+const queryClient = useQueryClient()
 
 const isOpen = computed(() => thumbnailViewerDialog.isDialogOpened())
 const context = computed(() => thumbnailViewerDialog.context())
 
 const thumbnails = ref<ThumbnailInfo[]>([])
-const thumbnailUrls = ref<Map<number, string>>(new Map())
 const currentIndex = ref(0)
-const loading = ref(false)
 const fileStorageId = ref<string | null>(null)
+const carouselThumbnailUrls = ref<Map<number, string>>(new Map())
+const loading = ref(false)
 
+const currentThumbnailIndex = computed(() => {
+  const thumb = thumbnails.value[currentIndex.value]
+  return thumb?.index
+})
+
+const fileStorageIdComputed = computed(() => fileStorageId.value)
+const thumbnailsComputed = computed(() => thumbnails.value)
+const currentThumbnailIndexComputed = computed(() => currentThumbnailIndex.value)
+
+const { data: currentThumbnailUrl, isLoading: loading } = useFileStorageThumbnailQuery(
+  fileStorageIdComputed,
+  thumbnailsComputed,
+  currentThumbnailIndexComputed,
+  isOpen.value
+)
+
+watch(isOpen, (value) => {
+  if (value && context.value?.fileStorageId) {
+    fileStorageId.value = context.value.fileStorageId
+    const thumbsList = context.value.thumbnails || []
+
+    thumbnails.value = [...thumbsList].sort((a, b) => {
+      const aPixels = a.width * a.height
+      const bPixels = b.width * b.height
+      return bPixels - aPixels
+    })
+    currentIndex.value = 0
+  } else if (!value) {
 watch(isOpen, async (value) => {
   if (value && context.value?.fileStorageId) {
     fileStorageId.value = context.value.fileStorageId
     await loadThumbnails(context.value.fileStorageId, context.value.thumbnails || [])
   } else if (!value) {
     thumbnails.value = []
-    thumbnailUrls.value.clear()
     currentIndex.value = 0
     fileStorageId.value = null
   }
@@ -141,10 +174,12 @@ const currentThumbnail = computed(() => {
   return thumbnails.value[currentIndex.value] || null
 })
 
-const currentThumbnailUrl = computed(() => {
-  if (!currentThumbnail.value) return ''
-  return thumbnailUrls.value.get(currentThumbnail.value.index) || ''
-})
+
+watch([thumbnails, fileStorageId, isOpen], async () => {
+  if (!fileStorageId.value || thumbnails.value.length === 0 || !isOpen.value) {
+    carouselThumbnailUrls.value.clear()
+    return
+  }
 
 const loadThumbnails = async (storageId: string, thumbsList: ThumbnailInfo[]) => {
   loading.value = true
@@ -154,10 +189,9 @@ const loadThumbnails = async (storageId: string, thumbsList: ThumbnailInfo[]) =>
       const bPixels = b.width * b.height
       return bPixels - aPixels
     })
-
     thumbnails.value = sortedThumbs
     currentIndex.value = 0
-    
+
     thumbnailUrls.value.clear()
     for (const thumb of sortedThumbs) {
       const url = await FileStorageService.getThumbnail(storageId, thumb.index)
@@ -172,20 +206,27 @@ const loadThumbnails = async (storageId: string, thumbsList: ThumbnailInfo[]) =>
   }
 }
 
+carouselThumbnailUrls.value.clear()
+await Promise.all(thumbnails.value.map(thumb => loadThumbnail(thumb)))
+
 const getThumbnailUrl = (index: number): string => {
-  return thumbnailUrls.value.get(index) || ''
+  return carouselThumbnailUrls.value.get(index) || ''
 }
 
 const nextThumbnail = () => {
-  if (currentIndex.value < thumbnails.value.length - 1) {
-    currentIndex.value++
+  if (currentIndex.value >= thumbnails.value.length - 1) {
+    return
   }
+
+  currentIndex.value++
 }
 
 const previousThumbnail = () => {
-  if (currentIndex.value > 0) {
-    currentIndex.value--
+  if (currentIndex.value <= 0) {
+    return
   }
+
+  currentIndex.value--
 }
 
 const close = () => {
@@ -193,17 +234,11 @@ const close = () => {
 }
 
 const handleDialogClose = (value: boolean) => {
-  if (!value) {
-    close()
+  if (value) {
+    return
   }
-}
 
-const formatBytes = (bytes: number): string => {
-  if (!bytes) return '0 B'
-  const k = 1024
-  const sizes = ['B', 'KB', 'MB']
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return `${Math.round((bytes / Math.pow(k, i)) * 100) / 100} ${sizes[i]}`
+  close()
 }
 </script>
 
@@ -294,9 +329,5 @@ const formatBytes = (bytes: number): string => {
 
 .thumbnail-carousel-image {
   border-radius: 6px;
-}
-
-:deep(.v-card-title) {
-  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.12);
 }
 </style>

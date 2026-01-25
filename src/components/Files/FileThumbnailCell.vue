@@ -106,7 +106,6 @@ const handleClick = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(var(--v-theme-surface-variant), 0.2);
   border-radius: 8px;
 }
 </style>

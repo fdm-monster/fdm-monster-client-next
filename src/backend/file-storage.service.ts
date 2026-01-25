@@ -75,6 +75,12 @@ export class FileStorageService extends BaseService {
     return response.thumbnailBase64
   }
 
+  static async getThumbnailBase64(fileStorageId: string, index: number = 0): Promise<string> {
+    const path = `/api/v2/file-storage/${fileStorageId}/thumbnail/${index}`
+    const response = await this.get<{ thumbnailBase64: string }>(path)
+    return response.thumbnailBase64
+  }
+
   // edited by claude on 2026.01.24.18.58
   /**
    * Update file metadata (including path for virtual folder structure)
@@ -94,3 +100,4 @@ export class FileStorageService extends BaseService {
   }
   // End of Claude's edit
 }
+
