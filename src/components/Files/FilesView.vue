@@ -102,13 +102,23 @@
       </v-card-title>
 
       <v-card-text>
-        <!-- edited by claude on 2026.01.24.14.30 -->
+        <!-- edited by claude on 2026.01.24.19.32 -->
         <!-- Tree Toolbar -->
-        <div class="d-flex justify-end mb-3">
+        <div class="d-flex justify-space-between mb-3">
           <v-btn
             size="small"
-            variant="text"
-            @click="expandAll"
+            variant="elevated"
+            color="primary"
+            @click="openCreateFolderDialog('')"
+          >
+            <v-icon left>create_new_folder</v-icon>
+            New Folder
+          </v-btn>
+          <div class="d-flex gap-2">
+            <v-btn
+              size="small"
+              variant="text"
+              @click="expandAll"
           >
             <v-icon start>unfold_more</v-icon>
             Expand All
@@ -121,7 +131,9 @@
             <v-icon start>unfold_less</v-icon>
             Collapse All
           </v-btn>
+          </div>
         </div>
+        <!-- End of Claude's edit -->
 
         <!-- Loading State -->
         <div
@@ -403,7 +415,7 @@
                     </v-tooltip>
                   </v-btn>
                 </div>
-                <!-- edited by claude on 2026.01.24.16.33 -->
+                <!-- edited by claude on 2026.01.24.19.30 -->
                 <!-- Folder Actions -->
                 <div v-else-if="node.type === 'folder'" class="d-flex ga-1">
                   <v-menu>
@@ -422,11 +434,30 @@
                       </v-btn>
                     </template>
                     <v-list density="compact">
+                      <v-list-item @click="openFolderRenameDialog(node)">
+                        <template v-slot:prepend>
+                          <v-icon>edit</v-icon>
+                        </template>
+                        <v-list-item-title>Rename Folder</v-list-item-title>
+                      </v-list-item>
                       <v-list-item @click="openFolderMoveDialog(node)">
                         <template v-slot:prepend>
                           <v-icon>drive_file_move</v-icon>
                         </template>
                         <v-list-item-title>Move Folder</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="openCreateFolderDialog(node.path)">
+                        <template v-slot:prepend>
+                          <v-icon>create_new_folder</v-icon>
+                        </template>
+                        <v-list-item-title>New Subfolder</v-list-item-title>
+                      </v-list-item>
+                      <v-divider class="my-1" />
+                      <v-list-item @click="confirmDeleteFolder(node)" class="text-error">
+                        <template v-slot:prepend>
+                          <v-icon color="error">delete</v-icon>
+                        </template>
+                        <v-list-item-title>Delete Folder</v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
@@ -982,6 +1013,24 @@
     />
     <!-- End of Claude's edit -->
 
+    <!-- edited by claude on 2026.01.24.19.35 -->
+    <!-- Folder Rename Dialog -->
+    <FolderRenameDialog
+      v-model="folderRenameDialog"
+      :current-folder-path="selectedFolderForRename?.path || ''"
+      :current-folder-name="selectedFolderForRename?.name || ''"
+      :file-count="selectedFolderForRename?.fileCount || 0"
+      @rename="handleFolderRename"
+    />
+
+    <!-- Create Folder Dialog -->
+    <CreateFolderDialog
+      v-model="createFolderDialog"
+      :parent-path="newFolderParentPath"
+      @create="handleCreateFolder"
+    />
+    <!-- End of Claude's edit -->
+
     <!-- Loading Overlay -->
     <FileOperationLoadingOverlay
       :is-visible="operationFeedback.operationState.value.isLoading"
@@ -1013,13 +1062,15 @@ import {
   getPrinterTypeName,
   getPrinterTypeLogo
 } from '@/shared/printer-types.constants'
-// edited by claude on 2026.01.24.15.05
+// edited by claude on 2026.01.24.19.37
 import { buildFileTree, flattenTree, toggleNodeExpansion, expandAllNodes, collapseAllNodes, type FileTreeNode } from './file-tree-builder.utils'
-import { renameFile, moveFile, moveFolder, getParentPath, getFileName } from './file-management.utils' // edited by claude on 2026.01.24.18.25 - added getFileName
+import { renameFile, moveFile, moveFolder, renameFolder, getParentPath, getFileName } from './file-management.utils'
 import { useFileOperationFeedback } from './file-operations-feedback.composable'
 import FileRenameDialog from './FileRenameDialog.vue'
 import FileMoveDialog from './FileMoveDialog.vue'
-import FolderMoveDialog from './FolderMoveDialog.vue' // edited by claude on 2026.01.24.16.36
+import FolderMoveDialog from './FolderMoveDialog.vue'
+import FolderRenameDialog from './FolderRenameDialog.vue'
+import CreateFolderDialog from './CreateFolderDialog.vue'
 import FileOperationLoadingOverlay from './FileOperationLoadingOverlay.vue'
 // End of Claude's edit
 
@@ -1114,6 +1165,15 @@ const availableFoldersForFolderMove = computed(() => {
     folder !== movingPath && !folder.startsWith(`${movingPath}/`)
   )
 })
+
+// edited by claude on 2026.01.24.19.39
+// Folder rename dialog state
+const folderRenameDialog = ref(false)
+const selectedFolderForRename = ref<{ path: string; name: string; fileCount: number } | null>(null)
+
+// Create folder dialog state
+const createFolderDialog = ref(false)
+const newFolderParentPath = ref('')
 // End of Claude's edit
 
 const headers = [
@@ -1476,6 +1536,100 @@ const handleFolderMove = async (newPath: string) => {
 
   if (result !== null) {
     // Reload files to show updated location
+    await loadFiles()
+  }
+}
+
+// edited by claude on 2026.01.24.19.40
+// Folder rename handlers
+const openFolderRenameDialog = (node: FileTreeNode) => {
+  if (node.type !== 'folder') return
+
+  const folderPath = node.path || node.name
+  const fileCount = files.value.filter(file => {
+    const filePath = file.metadata?._path || ''
+    return filePath === folderPath || filePath.startsWith(`${folderPath}/`)
+  }).length
+
+  selectedFolderForRename.value = {
+    path: folderPath,
+    name: node.name,
+    fileCount
+  }
+  folderRenameDialog.value = true
+}
+
+const handleFolderRename = async (newFolderName: string) => {
+  if (!selectedFolderForRename.value) return
+
+  const folder = selectedFolderForRename.value
+  const result = await operationFeedback.executeOperation(
+    'rename',
+    `Renaming folder with ${folder.fileCount} file(s)...`,
+    `Folder renamed successfully`,
+    async () => {
+      await renameFolder(folder.path, newFolderName, files.value)
+    }
+  )
+
+  if (result !== null) {
+    await loadFiles()
+  }
+}
+
+// Create folder handlers
+const openCreateFolderDialog = (parentPath: string) => {
+  newFolderParentPath.value = parentPath
+  createFolderDialog.value = true
+}
+
+const handleCreateFolder = async (folderPath: string) => {
+  // In virtual file system, folders don't need to be created explicitly
+  // They exist when files are placed in them
+  // Show success message to user
+  operationFeedback.operationState.value = {
+    isLoading: false,
+    operationType: null,
+    loadingMessage: ''
+  }
+  snackbar.info(`Folder "${folderPath}" will be created when you add files to it`)
+}
+
+// Delete folder handler
+const confirmDeleteFolder = async (node: FileTreeNode) => {
+  if (node.type !== 'folder') return
+
+  const folderPath = node.path || node.name
+  const filesInFolder = files.value.filter(file => {
+    const filePath = file.metadata?._path || ''
+    return filePath === folderPath || filePath.startsWith(`${folderPath}/`)
+  })
+
+  if (filesInFolder.length === 0) {
+    snackbar.info('Folder is empty - it will disappear automatically')
+    return
+  }
+
+  // Show confirmation dialog
+  const confirmed = confirm(
+    `Delete folder "${node.name}" and all ${filesInFolder.length} file(s) inside?\n\nThis action cannot be undone.`
+  )
+
+  if (!confirmed) return
+
+  const result = await operationFeedback.executeOperation(
+    'delete',
+    `Deleting ${filesInFolder.length} file(s)...`,
+    `Folder deleted successfully`,
+    async () => {
+      // Delete all files in the folder
+      await Promise.all(
+        filesInFolder.map(file => FileStorageService.deleteFile(file.fileStorageId))
+      )
+    }
+  )
+
+  if (result !== null) {
     await loadFiles()
   }
 }
