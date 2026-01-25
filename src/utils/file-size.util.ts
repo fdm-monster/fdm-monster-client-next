@@ -1,5 +1,7 @@
 export function formatFileSize(bytes?: number, decimals = 2) {
-  if (!bytes) return '0 Bytes'
+  if (!bytes) {
+    return '0 Bytes'
+  }
 
   const k = 1024
   const dm = Math.max(decimals, 0)

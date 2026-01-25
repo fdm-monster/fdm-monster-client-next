@@ -29,22 +29,25 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useJobThumbnailQuery } from '@/queries/job-thumbnail.query'
+import { useFileStorageThumbnailQuery } from '@/queries/file-storage-thumbnail.query'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import type { ThumbnailInfo } from '@/backend/file-storage.service'
 
 const props = defineProps<{
-  jobId: number
+  fileStorageId: string | null
+  thumbnails: ThumbnailInfo[]
 }>()
 
-const jobIdRef = computed(() => props.jobId)
-const { data: thumbnailUrl, isLoading } = useJobThumbnailQuery(jobIdRef)
+const fileStorageIdRef = computed(() => props.fileStorageId)
+const thumbnailsRef = computed(() => props.thumbnails)
+const { data: thumbnailUrl, isLoading } = useFileStorageThumbnailQuery(fileStorageIdRef, thumbnailsRef)
 
 const thumbnailViewerDialog = useDialog(DialogName.JobThumbnailViewer)
 
 const handleClick = () => {
-  if (thumbnailUrl.value) {
-    thumbnailViewerDialog.openDialog({ jobId: props.jobId })
+  if (thumbnailUrl.value && props.fileStorageId) {
+    thumbnailViewerDialog.openDialog({ fileStorageId: props.fileStorageId, thumbnails: props.thumbnails })
   }
 }
 </script>
@@ -103,7 +106,6 @@ const handleClick = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(var(--v-theme-surface-variant), 0.2);
   border-radius: 8px;
 }
 </style>

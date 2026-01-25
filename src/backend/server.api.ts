@@ -17,8 +17,8 @@ export class ServerApi {
   static readonly printJobsSearchRoute = `${ServerApi.printJobsRoute}/search`
   static readonly printJobsSearchPagedRoute = `${ServerApi.printJobsRoute}/search-paged`
   static readonly printQueueRoute = `${ServerApi.base}/print-queue`
-  static readonly printerFilesRoute = `${ServerApi.base}/printer-files`
-  static readonly printerFilesPurgeRoute = `${ServerApi.printerFilesRoute}/purge`
+  static readonly printerRemoteFilesRoute = `${ServerApi.base}/printer-files`
+  static readonly printerFilesPurgeRoute = `${ServerApi.printerRemoteFilesRoute}/purge`
   static readonly printerTagRoute = `${ServerApi.base}/printer-tag`
   static readonly createTagRoute = `${ServerApi.base}/printer-tag`
   static readonly userRoute = `${ServerApi.base}/user`
@@ -76,13 +76,13 @@ export class ServerApi {
   static readonly updatePrinterFloorOrderRoute = (id: number) =>
     `${ServerApi.getFloorRoute(id)}/floor-order`
   static readonly printerFilesClearRoute = (id: number) =>
-    `${ServerApi.printerFilesRoute}/${id}/clear`
+    `${ServerApi.printerRemoteFilesRoute}/${id}/clear`
   static readonly printerFilesStartPrintRoute = (id: number) =>
-    `${ServerApi.printerFilesRoute}/${id}/select`;
+    `${ServerApi.printerRemoteFilesRoute}/${id}/select`;
   static readonly printerFilesUploadRoute = (id: number) =>
-    `${ServerApi.printerFilesRoute}/${id}/upload`
+    `${ServerApi.printerRemoteFilesRoute}/${id}/upload`
   static readonly printerFilesCacheRoute = (id: number) =>
-    `${ServerApi.printerFilesRoute}/${id}/cache`
+    `${ServerApi.printerRemoteFilesRoute}/${id}/cache`
   static readonly printerEnabledRoute = (id: number) => `${ServerApi.getPrinterRoute(id)}/enabled`
   static readonly printerSerialConnectRoute = (id: number) =>
     `${ServerApi.getPrinterRoute(id)}/serial-connect`

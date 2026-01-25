@@ -5,15 +5,15 @@ import { PrinterDto } from "@/models/printers/printer.model";
 import { useSnackbar } from "@/shared/snackbar.composable";
 import { downloadFileByBlob } from "@/utils/download-file.util";
 
-export class PrinterFileService extends BaseService {
+export class PrinterRemoteFileService extends BaseService {
   static async getFiles(printerId: number) {
-    const path = `${ServerApi.printerFilesRoute}/${printerId}`;
+    const path = `${ServerApi.printerRemoteFilesRoute}/${printerId}`;
 
     return await this.get<FileDto[]>(path);
   }
 
   static async getThumbnail(printerId: number) {
-    const path = `${ServerApi.printerFilesRoute}/${printerId}/thumbnail`;
+    const path = `${ServerApi.printerRemoteFilesRoute}/${printerId}/thumbnail`;
 
     return await this.get<{
       id: string
@@ -62,26 +62,24 @@ export class PrinterFileService extends BaseService {
 
   static async clearFiles(printerId: number) {
     const path = `${ServerApi.printerFilesClearRoute(printerId)}`;
-
     return this.delete<ClearedFilesResult>(path);
   }
 
   static async purgeFiles() {
     const path = `${ServerApi.printerFilesPurgeRoute}`;
-
     return this.post(path);
   }
 
   static async deleteFileOrFolder(printerId: number, path: string) {
     const urlPath = `${
-      ServerApi.printerFilesRoute
+      ServerApi.printerRemoteFilesRoute
     }/${printerId}?path=${encodeURIComponent(path)}`;
     return this.delete(urlPath);
   }
 
   static async downloadFile(printerId: number, path: string) {
     const urlPath = `${
-      ServerApi.printerFilesRoute
+      ServerApi.printerRemoteFilesRoute
     }/${printerId}/download/${encodeURIComponent(path)}`;
     const arrayBuffer = await this.getDownload(urlPath);
     downloadFileByBlob(arrayBuffer.data, path);
