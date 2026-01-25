@@ -3,7 +3,7 @@ import { PrinterDto } from '@/models/printers/printer.model'
 import {
   FileDto
 } from '@/models/printers/printer-file.model'
-import { PrinterFileService, PrintersService } from '@/backend'
+import { PrinterRemoteFileService, PrintersService } from '@/backend'
 import { CreatePrinter } from '@/models/printers/create-printer.model'
 import { usePrinterStateStore } from './printer-state.store'
 import {
@@ -153,7 +153,7 @@ export const usePrinterStore = defineStore('Printers', {
       if (!printerId) {
         throw new Error('No printerId was provided')
       }
-      const result = await PrinterFileService.clearFiles(
+      const result = await PrinterRemoteFileService.clearFiles(
         printerId
       )
       if (!result?.failedFiles) {
@@ -165,7 +165,7 @@ export const usePrinterStore = defineStore('Printers', {
       }
     },
     async loadPrinterFiles(printerId: number) {
-      const files = await PrinterFileService.getFiles(printerId)
+      const files = await PrinterRemoteFileService.getFiles(printerId)
 
       files.sort((f1, f2) => {
         return f1.date < f2.date ? 1 : -1
@@ -175,7 +175,7 @@ export const usePrinterStore = defineStore('Printers', {
       return files
     },
     async deletePrinterFile(printerId: number, fullPath: string) {
-      await PrinterFileService.deleteFileOrFolder(printerId, fullPath)
+      await PrinterRemoteFileService.deleteFileOrFolder(printerId, fullPath)
 
       const fileBucket = this.printerFileCache[printerId]
       if (!fileBucket?.length) {

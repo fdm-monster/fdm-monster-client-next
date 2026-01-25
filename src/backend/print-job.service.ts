@@ -1,6 +1,5 @@
 import { BaseService } from '@/backend/base.service'
 import { ServerApi } from '@/backend/server.api'
-import { getBaseUri } from '@/shared/http-client'
 
 // Job lifecycle states
 export type PrintJobStatus =
@@ -55,6 +54,14 @@ export interface PrintStatistics {
   totalLayers?: number
 }
 
+export interface ThumbnailInfo {
+  index: number
+  width: number
+  height: number
+  format: string
+  size: number
+}
+
 export interface PrintJobDto {
   id: number
   printerId: number | null
@@ -72,6 +79,7 @@ export interface PrintJobDto {
   progress: number | null
   metadata: BaseMetadata | null
   statistics: PrintStatistics | null
+  thumbnails: ThumbnailInfo[]
 }
 
 export interface PrintJobSearchParams {
@@ -90,22 +98,6 @@ export interface PrintJobsPagedResponse {
   items: PrintJobDto[]
   count: number
   pages: number
-}
-
-export interface ThumbnailInfo {
-  index: number
-  url: string
-  filename: string
-  width: number
-  height: number
-  format: string
-  size: number
-}
-
-export interface ThumbnailsResponse {
-  jobId: number
-  fileStorageId: string
-  thumbnails: ThumbnailInfo[]
 }
 
 export class PrintJobService extends BaseService {
@@ -168,20 +160,6 @@ export class PrintJobService extends BaseService {
   static async deleteJob(jobId: number, deleteFile: boolean = false): Promise<any> {
     const path = `${ServerApi.printJobsRoute}/${jobId}${deleteFile ? '?deleteFile=true' : ''}`
     return await this.delete(path);
-  }
-
-  static async getThumbnails(jobId: number): Promise<ThumbnailInfo[]> {
-    const path = `${ServerApi.printJobsRoute}/${jobId}/thumbnails`
-    const response = await this.get<ThumbnailsResponse>(path);
-    return response.thumbnails || [];
-  }
-
-  static async getThumbnailUrl(jobId: number, index: number): Promise<string> {
-    const baseUri = await getBaseUri()
-    const path = `${ServerApi.printJobsRoute}/${jobId}/thumbnails/${index}`
-    // Remove trailing slash from baseUri if present to avoid double slashes
-    const cleanBaseUri = baseUri.endsWith('/') ? baseUri.slice(0, -1) : baseUri
-    return `${cleanBaseUri}${path}`
   }
 
   static async createFromFile(fileStorageId: string, printerId: number): Promise<any> {

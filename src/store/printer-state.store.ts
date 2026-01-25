@@ -5,7 +5,7 @@ import {
   SocketState
 } from '@/models/socketio-messages/socketio-message.model'
 import { usePrinterStore } from './printer.store'
-import { PrinterFileService } from '@/backend'
+import { PrinterRemoteFileService } from '@/backend'
 import { useSettingsStore } from './settings.store'
 import { CurrentOrHistoryPayload } from '@/models/printers/printer-current-job.model'
 import {
@@ -240,7 +240,7 @@ export const usePrinterStateStore = defineStore('PrinterState', {
         return
       }
 
-      await PrinterFileService.selectAndPrintFile(printerId, fullPath, true)
+      await PrinterRemoteFileService.selectAndPrintFile(printerId, fullPath, true)
     }
   }
 })

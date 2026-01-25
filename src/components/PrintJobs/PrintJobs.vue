@@ -240,7 +240,7 @@
         >
           <!-- Thumbnail Column (Jobs only) -->
           <template v-if="activeTab === 'jobs'" #item.thumbnail="{ item }">
-            <JobThumbnailCell :job-id="item.id"/>
+            <FileThumbnailCell :file-storage-id="item.fileStorageId" :thumbnails="item.thumbnails || []"/>
           </template>
 
           <!-- Queue Position Column (Queue only) -->
@@ -924,7 +924,6 @@ import { usePrinterFilters } from '@/shared/printer-filter.composable'
 import { interpretStates } from '@/shared/printer-state.constants'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
-import JobThumbnailCell from '@/components/PrintJobs/JobThumbnailCell.vue'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
@@ -1238,7 +1237,6 @@ const loadPrintJobs = async () => {
     printJobs.value = response.items
     totalJobs.value = response.count
     console.debug('[LoadJobs] Received', response.items.length, 'jobs')
-    // Thumbnails are now loaded by JobThumbnailCell components using useJobThumbnailQuery
   } catch (error) {
     console.error('Failed to load print jobs:', error)
     printJobs.value = []
