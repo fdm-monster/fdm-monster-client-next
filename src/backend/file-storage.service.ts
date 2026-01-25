@@ -74,4 +74,23 @@ export class FileStorageService extends BaseService {
     const response = await this.get<{ thumbnailBase64: string }>(path)
     return response.thumbnailBase64
   }
+
+  // edited by claude on 2026.01.24.18.58
+  /**
+   * Update file metadata (including path for virtual folder structure)
+   * @param fileStorageId - UUID of the file
+   * @param updates - Object containing fileName, path, and/or metadata updates
+   */
+  static async updateFileMetadata(
+    fileStorageId: string,
+    updates: {
+      fileName?: string
+      path?: string
+      metadata?: Record<string, any>
+    }
+  ): Promise<FileMetadata> {
+    const path = `/api/v2/file-storage/${fileStorageId}`
+    return this.patch<FileMetadata>(path, updates)
+  }
+  // End of Claude's edit
 }

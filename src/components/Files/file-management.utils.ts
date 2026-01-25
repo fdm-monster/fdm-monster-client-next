@@ -4,29 +4,39 @@
 import { FileStorageService } from '@/backend/file-storage.service'
 
 /**
- * Moves a file to a new path by updating its metadata
+ * Moves a file to a new path by updating metadata._path
  * @param fileStorageId - The storage ID of the file to move
- * @param newPath - The new path for the file (e.g., "projects/prints/model.gcode")
+ * @param newPath - The new folder path (e.g., "projects/boats" or "" for root)
  * @returns Promise that resolves when the file is moved
  */
 export async function moveFile(fileStorageId: string, newPath: string): Promise<void> {
-  // This will need to call a backend API endpoint to update the file's path metadata
-  // For now, this is a placeholder that demonstrates the expected functionality
-  // TODO: Implement backend API call when endpoint is available
-  throw new Error('moveFile: Backend API endpoint not yet implemented')
+  // edited by claude on 2026.01.24.18.42
+  if (!validatePath(newPath)) {
+    throw new Error(`Invalid path: ${newPath}`)
+  }
+
+  await FileStorageService.updateFileMetadata(fileStorageId, {
+    path: newPath
+  })
+  // End of Claude's edit
 }
 
 /**
- * Renames a file by updating its path metadata
+ * Renames a file by updating its fileName field
  * @param fileStorageId - The storage ID of the file to rename
  * @param newName - The new name for the file (just the filename, not the full path)
  * @returns Promise that resolves when the file is renamed
  */
 export async function renameFile(fileStorageId: string, newName: string): Promise<void> {
-  // This will need to call a backend API endpoint to update the file's name in its path
-  // For now, this is a placeholder that demonstrates the expected functionality
-  // TODO: Implement backend API call when endpoint is available
-  throw new Error('renameFile: Backend API endpoint not yet implemented')
+  // edited by claude on 2026.01.24.18.42
+  if (!validateFileName(newName)) {
+    throw new Error(`Invalid filename: ${newName}`)
+  }
+
+  await FileStorageService.updateFileMetadata(fileStorageId, {
+    fileName: newName
+  })
+  // End of Claude's edit
 }
 
 /**
@@ -46,28 +56,69 @@ export async function createFolder(folderPath: string): Promise<void> {
  * Moves a folder and all its contents to a new path
  * @param oldFolderPath - The current path of the folder
  * @param newFolderPath - The new path for the folder
+ * @param allFiles - Array of all file metadata to search for files in this folder
  * @returns Promise that resolves when all files in the folder are moved
  */
-export async function moveFolder(oldFolderPath: string, newFolderPath: string): Promise<void> {
-  // This would need to:
-  // 1. Get all files in the old folder path
-  // 2. Update each file's path metadata to the new folder path
-  // TODO: Implement backend API call when endpoint is available
-  throw new Error('moveFolder: Backend API endpoint not yet implemented')
+export async function moveFolder(
+  oldFolderPath: string,
+  newFolderPath: string,
+  allFiles: Array<{ fileStorageId: string; fileName: string; metadata?: { _path?: string } }>
+): Promise<void> {
+  // edited by claude on 2026.01.24.18.44
+  if (!validatePath(newFolderPath)) {
+    throw new Error(`Invalid folder path: ${newFolderPath}`)
+  }
+
+  // Find all files in the old folder (and subfolders) using metadata._path
+  const filesToMove = allFiles.filter(file => {
+    const filePath = file.metadata?._path || ''
+    return filePath === oldFolderPath || filePath.startsWith(`${oldFolderPath}/`)
+  })
+
+  // Update each file's path
+  const movePromises = filesToMove.map(file => {
+    const currentPath = file.metadata?._path || ''
+    let newPath: string
+
+    if (currentPath === oldFolderPath) {
+      // File is directly in the folder being moved
+      newPath = newFolderPath
+    } else {
+      // File is in a subfolder - preserve relative structure
+      const relativePath = currentPath.substring(oldFolderPath.length + 1)
+      newPath = `${newFolderPath}/${relativePath}`
+    }
+
+    return moveFile(file.fileStorageId, newPath)
+  })
+
+  await Promise.all(movePromises)
+  // End of Claude's edit
 }
 
 /**
  * Renames a folder by updating all file paths within it
  * @param oldFolderPath - The current path of the folder
  * @param newFolderName - The new name for the folder (just the folder name, not full path)
+ * @param allFiles - Array of all file metadata to search for files in this folder
  * @returns Promise that resolves when all files in the folder are updated
  */
-export async function renameFolder(oldFolderPath: string, newFolderName: string): Promise<void> {
-  // This would need to:
-  // 1. Get all files in the folder
-  // 2. Update each file's path to use the new folder name
-  // TODO: Implement backend API call when endpoint is available
-  throw new Error('renameFolder: Backend API endpoint not yet implemented')
+export async function renameFolder(
+  oldFolderPath: string,
+  newFolderName: string,
+  allFiles: Array<{ fileStorageId: string; fileName: string }>
+): Promise<void> {
+  // edited by claude on 2026.01.24.15.22
+  const parentPath = getParentPath(oldFolderPath)
+  const newFolderPath = parentPath ? `${parentPath}/${newFolderName}` : newFolderName
+
+  if (!validatePath(newFolderPath)) {
+    throw new Error(`Invalid folder name: ${newFolderName}`)
+  }
+
+  // Use moveFolder to handle the rename (rename is just a move within the same parent)
+  await moveFolder(oldFolderPath, newFolderPath, allFiles)
+  // End of Claude's edit
 }
 
 /**
@@ -76,11 +127,16 @@ export async function renameFolder(oldFolderPath: string, newFolderName: string)
  * @returns True if the path is valid, false otherwise
  */
 export function validatePath(path: string): boolean {
+  // edited by claude on 2026.01.24.16.30
   // Basic path validation rules:
+  // - Empty string is valid (represents root)
   // - No leading or trailing slashes
   // - No empty segments (double slashes)
   // - No special characters except alphanumeric, dash, underscore, dot, and slash
-  if (!path || path.startsWith('/') || path.endsWith('/')) {
+  if (path === '') {
+    return true // Empty path is valid (root folder)
+  }
+  if (path.startsWith('/') || path.endsWith('/')) {
     return false
   }
 
@@ -92,6 +148,27 @@ export function validatePath(path: string): boolean {
   // Allow alphanumeric, dash, underscore, dot, and space in path segments
   const validPathRegex = /^[a-zA-Z0-9-_. ]+$/
   return segments.every(segment => validPathRegex.test(segment))
+}
+
+/**
+ * Validates a filename (without path)
+ * @param fileName - The filename to validate
+ * @returns True if the filename is valid, false otherwise
+ */
+export function validateFileName(fileName: string): boolean {
+  // edited by claude on 2026.01.24.18.46
+  // Basic filename validation:
+  // - Not empty
+  // - No path separators
+  // - Only safe characters
+  if (!fileName || fileName.includes('/') || fileName.includes('\\')) {
+    return false
+  }
+
+  // Allow alphanumeric, dash, underscore, dot, and space
+  const validFileNameRegex = /^[a-zA-Z0-9-_. ]+$/
+  return validFileNameRegex.test(fileName)
+  // End of Claude's edit
 }
 
 /**

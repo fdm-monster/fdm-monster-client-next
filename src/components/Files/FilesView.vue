@@ -220,9 +220,11 @@
                       {{ node.expanded ? 'expand_more' : 'chevron_right' }}
                     </v-icon>
                   </v-btn>
-                  <v-icon class="mr-2" :color="node.type === 'folder' ? 'primary' : 'medium-emphasis'">
-                    {{ node.type === 'folder' ? 'folder' : 'description' }}
+                  <!-- edited by claude on 2026.01.24.18.35 - only show icon for folders -->
+                  <v-icon v-if="node.type === 'folder'" class="mr-2" color="primary">
+                    folder
                   </v-icon>
+                  <!-- End of Claude's edit -->
                   <div v-if="node.type === 'file' && node.file">
                     <div class="text-body-2 font-weight-medium">
                       {{ node.file.metadata?._originalFileName || node.file.fileName }}
@@ -318,7 +320,39 @@
 
               <!-- Actions Column -->
               <div class="tree-cell cell-actions">
+                <!-- edited by claude on 2026.01.24.16.25 -->
                 <div v-if="node.type === 'file' && node.file" class="d-flex ga-1">
+                  <!-- File Management Menu -->
+                  <v-menu>
+                    <template v-slot:activator="{ props }">
+                      <v-btn
+                        icon="folder_open"
+                        size="small"
+                        variant="text"
+                        color="primary"
+                        v-bind="props"
+                      >
+                        <v-icon>folder_open</v-icon>
+                        <v-tooltip activator="parent" location="top">
+                          File management
+                        </v-tooltip>
+                      </v-btn>
+                    </template>
+                    <v-list density="compact">
+                      <v-list-item @click="openRenameDialog(node.file)">
+                        <template v-slot:prepend>
+                          <v-icon>edit</v-icon>
+                        </template>
+                        <v-list-item-title>Rename</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="openMoveDialog(node.file)">
+                        <template v-slot:prepend>
+                          <v-icon>drive_file_move</v-icon>
+                        </template>
+                        <v-list-item-title>Move</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
                   <v-btn
                     icon="add_to_queue"
                     size="small"
@@ -369,7 +403,36 @@
                     </v-tooltip>
                   </v-btn>
                 </div>
+                <!-- edited by claude on 2026.01.24.16.33 -->
+                <!-- Folder Actions -->
+                <div v-else-if="node.type === 'folder'" class="d-flex ga-1">
+                  <v-menu>
+                    <template v-slot:activator="{ props }">
+                      <v-btn
+                        icon="more_vert"
+                        size="small"
+                        variant="text"
+                        color="primary"
+                        v-bind="props"
+                      >
+                        <v-icon>more_vert</v-icon>
+                        <v-tooltip activator="parent" location="top">
+                          Folder actions
+                        </v-tooltip>
+                      </v-btn>
+                    </template>
+                    <v-list density="compact">
+                      <v-list-item @click="openFolderMoveDialog(node)">
+                        <template v-slot:prepend>
+                          <v-icon>drive_file_move</v-icon>
+                        </template>
+                        <v-list-item-title>Move Folder</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </div>
                 <div v-else class="text-medium-emphasis">-</div>
+                <!-- End of Claude's edit -->
               </div>
             </div>
           </div>
@@ -886,6 +949,47 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!-- edited by claude on 2026.01.24.15.45 -->
+    <!-- Rename File Dialog -->
+    <FileRenameDialog
+      v-model="renameDialog"
+      :current-file-path="selectedFileForRename?.fileName || ''"
+      :current-file-name="selectedFileForRename?.metadata?._originalFileName || selectedFileForRename?.fileName || ''"
+      @rename="handleFileRename"
+    />
+
+    <!-- Move File Dialog -->
+    <!-- edited by claude on 2026.01.24.18.50 -->
+    <FileMoveDialog
+      v-model="moveDialog"
+      :current-folder-path="selectedFileForMove?.metadata?._path || ''"
+      :current-file-name="getFileName(selectedFileForMove?.metadata?._originalFileName || selectedFileForMove?.fileName || '')"
+      :available-folders="availableFoldersForMove"
+      @move="handleFileMove"
+    />
+    <!-- edited by claude on 2026.01.24.19.08 - use _originalFileName and extract filename only -->
+    <!-- End of Claude's edit -->
+    <!-- End of Claude's edit -->
+
+    <!-- edited by claude on 2026.01.24.16.35 -->
+    <!-- Move Folder Dialog -->
+    <FolderMoveDialog
+      v-model="folderMoveDialog"
+      :folder-path="selectedFolderForMove?.path || ''"
+      :file-count="selectedFolderForMove?.fileCount || 0"
+      :available-folders="availableFoldersForFolderMove"
+      @move="handleFolderMove"
+    />
+    <!-- End of Claude's edit -->
+
+    <!-- Loading Overlay -->
+    <FileOperationLoadingOverlay
+      :is-visible="operationFeedback.operationState.value.isLoading"
+      :title="operationFeedback.operationState.value.loadingMessage"
+      :message="'Please wait...'"
+    />
+    <!-- End of Claude's edit -->
   </v-container>
 </template>
 
@@ -912,10 +1016,17 @@ import {
 } from '@/shared/printer-types.constants'
 // edited by claude on 2026.01.24.15.05
 import { buildFileTree, flattenTree, toggleNodeExpansion, expandAllNodes, collapseAllNodes, type FileTreeNode } from './file-tree-builder.utils'
+import { renameFile, moveFile, moveFolder, getParentPath, getFileName } from './file-management.utils' // edited by claude on 2026.01.24.18.25 - added getFileName
+import { useFileOperationFeedback } from './file-operations-feedback.composable'
+import FileRenameDialog from './FileRenameDialog.vue'
+import FileMoveDialog from './FileMoveDialog.vue'
+import FolderMoveDialog from './FolderMoveDialog.vue' // edited by claude on 2026.01.24.16.36
+import FileOperationLoadingOverlay from './FileOperationLoadingOverlay.vue'
 // End of Claude's edit
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
+const operationFeedback = useFileOperationFeedback()
 
 const thumbnailCache = ref<Map<string, string>>(new Map())
 
@@ -957,6 +1068,53 @@ const analyzingFiles = ref<Set<string>>(new Set())
 // edited by claude on 2026.01.24.14.37
 // Tree state management
 const fileTree = ref<FileTreeNode[]>([])
+// End of Claude's edit
+
+// edited by claude on 2026.01.24.15.47
+// Rename dialog state
+const renameDialog = ref(false)
+const selectedFileForRename = ref<FileMetadata | null>(null)
+// End of Claude's edit
+
+// edited by claude on 2026.01.24.16.09
+// Move dialog state
+const moveDialog = ref(false)
+const selectedFileForMove = ref<FileMetadata | null>(null)
+
+// edited by claude on 2026.01.24.18.48
+// Extract unique folder paths from all files using metadata._path
+const availableFoldersForMove = computed(() => {
+  const folders = new Set<string>()
+  files.value.forEach(file => {
+    const folderPath = file.metadata?._path || ''
+    if (folderPath) {
+      folders.add(folderPath)
+      // Also add parent folders
+      let current = folderPath
+      while (current.includes('/')) {
+        current = getParentPath(current)
+        if (current) folders.add(current)
+      }
+    }
+  })
+  return Array.from(folders).sort()
+})
+// End of Claude's edit
+
+// edited by claude on 2026.01.24.16.38
+// Folder move dialog state
+const folderMoveDialog = ref(false)
+const selectedFolderForMove = ref<{ path: string; fileCount: number } | null>(null)
+
+// Get folders excluding the one being moved and its subfolders
+const availableFoldersForFolderMove = computed(() => {
+  if (!selectedFolderForMove.value) return []
+
+  const movingPath = selectedFolderForMove.value.path
+  return availableFoldersForMove.value.filter(folder =>
+    folder !== movingPath && !folder.startsWith(`${movingPath}/`)
+  )
+})
 // End of Claude's edit
 
 const headers = [
@@ -1228,6 +1386,101 @@ const collapseAll = () => {
   fileTree.value = collapseAllNodes(fileTree.value)
 }
 // End of Claude's edit
+
+// edited by claude on 2026.01.24.15.48
+// File rename handlers
+const openRenameDialog = (file: FileMetadata) => {
+  selectedFileForRename.value = file
+  renameDialog.value = true
+}
+
+const handleFileRename = async (newName: string) => {
+  // edited by claude on 2026.01.24.18.56
+  if (!selectedFileForRename.value) return
+
+  const file = selectedFileForRename.value
+  const result = await operationFeedback.executeOperation(
+    'rename',
+    'Renaming file...',
+    `File renamed to "${newName}" successfully`,
+    async () => {
+      await renameFile(file.fileStorageId, newName)
+    }
+  )
+
+  if (result !== null) {
+    // Reload files to show updated name
+    await loadFiles()
+  }
+  // End of Claude's edit
+}
+
+// edited by claude on 2026.01.24.16.10
+// File move handlers
+const openMoveDialog = (file: FileMetadata) => {
+  selectedFileForMove.value = file
+  moveDialog.value = true
+}
+
+const handleFileMove = async (newPath: string) => {
+  if (!selectedFileForMove.value) return
+
+  const file = selectedFileForMove.value
+  const result = await operationFeedback.executeOperation(
+    'move',
+    'Moving file...',
+    `File moved successfully`,
+    async () => {
+      await moveFile(file.fileStorageId, newPath)
+    }
+  )
+
+  if (result !== null) {
+    // Reload files to show updated location
+    await loadFiles()
+  }
+}
+
+// edited by claude on 2026.01.24.16.40
+// Folder move handlers
+const openFolderMoveDialog = (node: FileTreeNode) => {
+  // edited by claude on 2026.01.24.19.00
+  if (node.type !== 'folder') return
+
+  // Count files in this folder using metadata._path
+  const folderPath = node.path || node.name
+  const fileCount = files.value.filter(file => {
+    const filePath = file.metadata?._path || ''
+    return filePath === folderPath || filePath.startsWith(`${folderPath}/`)
+  }).length
+
+  selectedFolderForMove.value = {
+    path: folderPath,
+    fileCount
+  }
+  folderMoveDialog.value = true
+  // End of Claude's edit
+}
+
+const handleFolderMove = async (newPath: string) => {
+  if (!selectedFolderForMove.value) return
+
+  const folder = selectedFolderForMove.value
+  const result = await operationFeedback.executeOperation(
+    'move',
+    `Moving folder with ${folder.fileCount} file(s)...`,
+    `Folder moved successfully`,
+    async () => {
+      await moveFolder(folder.path, newPath, files.value)
+    }
+  )
+
+  if (result !== null) {
+    // Reload files to show updated location
+    await loadFiles()
+  }
+}
+// End of Claude's edit
 </script>
 
 <style scoped>
@@ -1256,7 +1509,7 @@ const collapseAll = () => {
 
 .tree-table-header {
   display: grid;
-  grid-template-columns: 60px minmax(250px, 1fr) 80px 120px 100px 80px 140px 120px 200px;
+  grid-template-columns: 60px minmax(250px, 1fr) 80px 120px 100px 80px 140px 120px 250px; /* edited by claude on 2026.01.24.18.15 - increased actions column from 200px to 250px */
   gap: 8px;
   padding: 12px 16px;
   background-color: rgba(var(--v-theme-on-surface), 0.05);
@@ -1271,7 +1524,7 @@ const collapseAll = () => {
 
 .tree-table-row {
   display: grid;
-  grid-template-columns: 60px minmax(250px, 1fr) 80px 120px 100px 80px 140px 120px 200px;
+  grid-template-columns: 60px minmax(250px, 1fr) 80px 120px 100px 80px 140px 120px 250px; /* edited by claude on 2026.01.24.18.15 - increased actions column from 200px to 250px */
   gap: 8px;
   padding: 8px 16px;
   border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.08);

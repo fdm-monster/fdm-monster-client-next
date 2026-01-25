@@ -24,48 +24,65 @@ export function buildFileTree(files: FileMetadata[]): FileTreeNode[] {
   const folderMap = new Map<string, FileTreeNode>()
 
   files.forEach((file) => {
-    // edited by claude on 2026.01.24.14.55
-    // Use the path from metadata (check common field names), default to fileName if not present
-    const filePath = file.metadata?.path || file.metadata?._path || file.metadata?._originalFileName || file.fileName
-    // End of Claude's edit
-    const parts = filePath.split('/')
+    // edited by claude on 2026.01.24.19.05
+    // Use metadata._path for folder structure and _originalFileName for display
+    let folderPath = file.metadata?._path || '' // e.g., "projects/boats" or "" for root
+    let originalFileName = file.metadata?._originalFileName || file.fileName
+
+    // If _originalFileName contains a path, extract it
+    if (originalFileName.includes('/')) {
+      const lastSlashIndex = originalFileName.lastIndexOf('/')
+      const pathFromFileName = originalFileName.substring(0, lastSlashIndex)
+      const justFileName = originalFileName.substring(lastSlashIndex + 1)
+
+      // If _path is empty but _originalFileName has a path, use it
+      if (!folderPath) {
+        folderPath = pathFromFileName
+      }
+      originalFileName = justFileName
+    }
+
     let currentPath = ''
     let currentLevel = root
 
-    // Build folder hierarchy
-    for (let i = 0; i < parts.length - 1; i++) {
-      const part = parts[i]
-      currentPath = currentPath ? `${currentPath}/${part}` : part
+    // Build folder hierarchy from _path
+    if (folderPath) {
+      const folderParts = folderPath.split('/')
+      for (let i = 0; i < folderParts.length; i++) {
+        const part = folderParts[i]
+        currentPath = currentPath ? `${currentPath}/${part}` : part
 
-      if (!folderMap.has(currentPath)) {
-        const folderNode: FileTreeNode = {
-          id: `folder-${currentPath}`,
-          name: part,
-          type: 'folder',
-          path: currentPath,
-          depth: i,
-          children: [],
-          expanded: false
+        if (!folderMap.has(currentPath)) {
+          const folderNode: FileTreeNode = {
+            id: `folder-${currentPath}`,
+            name: part,
+            type: 'folder',
+            path: currentPath,
+            depth: i,
+            children: [],
+            expanded: false
+          }
+          folderMap.set(currentPath, folderNode)
+          currentLevel.push(folderNode)
+          currentLevel = folderNode.children!
+        } else {
+          currentLevel = folderMap.get(currentPath)!.children!
         }
-        folderMap.set(currentPath, folderNode)
-        currentLevel.push(folderNode)
-        currentLevel = folderNode.children!
-      } else {
-        currentLevel = folderMap.get(currentPath)!.children!
       }
     }
 
     // Add file node
-    const fileName = parts[parts.length - 1]
+    const fullPath = folderPath ? `${folderPath}/${originalFileName}` : originalFileName
     const fileNode: FileTreeNode = {
       id: file.fileStorageId,
-      name: fileName,
+      name: originalFileName,
       type: 'file',
-      path: filePath,
-      depth: parts.length - 1,
+      path: fullPath,
+      depth: folderPath ? folderPath.split('/').length : 0,
       file
     }
     currentLevel.push(fileNode)
+    // End of Claude's edit
   })
 
   // Sort: folders first, then alphabetically
