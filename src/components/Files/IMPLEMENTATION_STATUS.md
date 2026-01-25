@@ -70,12 +70,28 @@
 
 ---
 
-## Phase 5: Drag & Drop (Optional) 📋 PLANNED
-**To Implement:**
-- Drag file/folder to reorder
-- Drop into folders to move
-- Visual drop indicators
-- Drag & drop feedback
+## Phase 5: Drag & Drop ✅ COMPLETE
+**Completed:**
+- ✅ Drag any file or folder
+- ✅ Drop into folders to move
+- ✅ Visual drop indicators (border highlight)
+- ✅ Drag feedback (opacity change, cursor)
+- ✅ Prevents circular folder moves
+- ✅ Automatic reload after drop
+- ✅ Tested and working
+
+**Implementation Details:**
+- All tree rows are draggable
+- Folders are valid drop targets
+- Dragging shows opacity change and grab cursor
+- Drop zones highlighted with dashed primary border
+- Validates drop targets (no folder into itself/subfolders)
+- Uses existing moveFile() and moveFolder() functions
+- Shows loading overlay and success notification
+
+**Known Limitations:**
+- New folder creation disabled (requires backend support for paths without files)
+- New subfolder creation disabled in folder menu
 
 ---
 
@@ -94,11 +110,16 @@
 
 ---
 
-## Next Steps
-1. **TEST Phase 2**: Test file rename functionality with real data
-2. Fix any issues discovered during testing
-3. Once Phase 2 is stable, proceed to Phase 3 (File Moving)
-4. Continue with phases in order
+## Project Status: ✅ ALL PHASES COMPLETE
+
+All planned features have been successfully implemented and tested:
+- ✅ Phase 1: UI Feedback System
+- ✅ Phase 2: File Rename
+- ✅ Phase 3: File & Folder Moving
+- ✅ Phase 4: Folder Operations (rename, delete)
+- ✅ Phase 5: Drag & Drop
+
+The tree view file manager is now fully functional with comprehensive file and folder management capabilities.
 
 ---
 
