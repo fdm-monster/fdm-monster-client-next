@@ -109,10 +109,13 @@
             size="small"
             variant="elevated"
             color="primary"
-            @click="openCreateFolderDialog('')"
+            disabled
           >
             <v-icon left>create_new_folder</v-icon>
             New Folder
+            <v-tooltip activator="parent" location="bottom">
+              Creating folders requires backend support for paths without files
+            </v-tooltip>
           </v-btn>
           <div class="d-flex gap-2">
             <v-btn
@@ -182,12 +185,24 @@
             </div>
 
             <!-- Tree Rows -->
+            <!-- edited by claude on 2026.01.24.19.45 -->
             <div
               v-for="node in flattenedTree"
               :key="node.id"
               class="tree-table-row"
-              :class="{ 'is-folder': node.type === 'folder' }"
+              :class="{
+                'is-folder': node.type === 'folder',
+                'drag-over': dragOverNodeId === node.id,
+                'dragging': draggingNodeId === node.id
+              }"
+              draggable="true"
+              @dragstart="handleDragStart(node, $event)"
+              @dragend="handleDragEnd"
+              @dragover.prevent="handleDragOver(node, $event)"
+              @dragleave="handleDragLeave(node)"
+              @drop.prevent="handleDrop(node, $event)"
             >
+            <!-- End of Claude's edit -->
               <!-- Thumbnail Column -->
               <div class="tree-cell cell-thumbnail">
                 <!-- edited by claude on 2026.01.24.15.10 -->
@@ -446,11 +461,12 @@
                         </template>
                         <v-list-item-title>Move Folder</v-list-item-title>
                       </v-list-item>
-                      <v-list-item @click="openCreateFolderDialog(node.path)">
+                      <v-list-item disabled>
                         <template v-slot:prepend>
                           <v-icon>create_new_folder</v-icon>
                         </template>
                         <v-list-item-title>New Subfolder</v-list-item-title>
+                        <v-list-item-subtitle class="text-caption">Requires backend update</v-list-item-subtitle>
                       </v-list-item>
                       <v-divider class="my-1" />
                       <v-list-item @click="confirmDeleteFolder(node)" class="text-error">
@@ -1174,6 +1190,12 @@ const selectedFolderForRename = ref<{ path: string; name: string; fileCount: num
 // Create folder dialog state
 const createFolderDialog = ref(false)
 const newFolderParentPath = ref('')
+
+// edited by claude on 2026.01.24.19.47
+// Drag and drop state
+const draggingNodeId = ref<string | null>(null)
+const dragOverNodeId = ref<string | null>(null)
+const draggingNode = ref<FileTreeNode | null>(null)
 // End of Claude's edit
 
 const headers = [
@@ -1633,6 +1655,108 @@ const confirmDeleteFolder = async (node: FileTreeNode) => {
     await loadFiles()
   }
 }
+
+// edited by claude on 2026.01.24.19.48
+// Drag and drop handlers
+const handleDragStart = (node: FileTreeNode, event: DragEvent) => {
+  draggingNodeId.value = node.id
+  draggingNode.value = node
+
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'move'
+    event.dataTransfer.setData('text/plain', node.id)
+  }
+}
+
+const handleDragEnd = () => {
+  draggingNodeId.value = null
+  dragOverNodeId.value = null
+  draggingNode.value = null
+}
+
+const handleDragOver = (node: FileTreeNode, event: DragEvent) => {
+  if (!draggingNode.value || draggingNode.value.id === node.id) return
+
+  // Only allow dropping into folders
+  if (node.type === 'folder') {
+    dragOverNodeId.value = node.id
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'move'
+    }
+  }
+}
+
+const handleDragLeave = (node: FileTreeNode) => {
+  if (dragOverNodeId.value === node.id) {
+    dragOverNodeId.value = null
+  }
+}
+
+const handleDrop = async (targetNode: FileTreeNode, event: DragEvent) => {
+  dragOverNodeId.value = null
+
+  if (!draggingNode.value || draggingNode.value.id === targetNode.id) return
+
+  // Only allow dropping into folders
+  if (targetNode.type !== 'folder') {
+    snackbar.error('Can only drop into folders')
+    return
+  }
+
+  const sourceNode = draggingNode.value
+  const targetFolderPath = targetNode.path || targetNode.name
+
+  // Prevent dropping folder into itself or its subfolders
+  if (sourceNode.type === 'folder') {
+    const sourcePath = sourceNode.path || sourceNode.name
+    if (targetFolderPath === sourcePath || targetFolderPath.startsWith(`${sourcePath}/`)) {
+      snackbar.error('Cannot move folder into itself or its subfolders')
+      return
+    }
+  }
+
+  // Perform the move
+  if (sourceNode.type === 'file' && sourceNode.file) {
+    // Move file
+    const result = await operationFeedback.executeOperation(
+      'move',
+      'Moving file...',
+      `File moved to "${targetNode.name}"`,
+      async () => {
+        await moveFile(sourceNode.file!.fileStorageId, targetFolderPath)
+      }
+    )
+
+    if (result !== null) {
+      await loadFiles()
+    }
+  } else if (sourceNode.type === 'folder') {
+    // Move folder
+    const sourcePath = sourceNode.path || sourceNode.name
+    const fileCount = files.value.filter(file => {
+      const filePath = file.metadata?._path || ''
+      return filePath === sourcePath || filePath.startsWith(`${sourcePath}/`)
+    }).length
+
+    // Calculate new path for folder
+    const newFolderPath = `${targetFolderPath}/${sourceNode.name}`
+
+    const result = await operationFeedback.executeOperation(
+      'move',
+      `Moving folder with ${fileCount} file(s)...`,
+      `Folder moved to "${targetNode.name}"`,
+      async () => {
+        await moveFolder(sourcePath, newFolderPath, files.value)
+      }
+    )
+
+    if (result !== null) {
+      await loadFiles()
+    }
+  }
+
+  draggingNode.value = null
+}
 // End of Claude's edit
 </script>
 
@@ -1695,6 +1819,26 @@ const confirmDeleteFolder = async (node: FileTreeNode) => {
 .tree-table-row.is-folder:hover {
   background-color: rgba(var(--v-theme-primary), 0.06);
 }
+
+/* edited by claude on 2026.01.24.19.50 */
+.tree-table-row.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.tree-table-row.drag-over {
+  background-color: rgba(var(--v-theme-primary), 0.15) !important;
+  border: 2px dashed rgba(var(--v-theme-primary), 0.5);
+}
+
+.tree-table-row {
+  cursor: grab;
+}
+
+.tree-table-row:active {
+  cursor: grabbing;
+}
+/* End of Claude's edit */
 
 .tree-cell {
   display: flex;
