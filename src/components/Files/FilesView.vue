@@ -532,13 +532,6 @@
                   {{ item.fileFormat.toUpperCase() }} •
                   {{ formatFileSize(item.fileSize) }}
                 </div>
-            <div>
-              <div class="text-body-2 font-weight-medium">
-                {{ item.metadata?._originalFileName || item.fileName }}
-              </div>
-              <div class="text-caption text-medium-emphasis">
-                {{ item.fileFormat.toUpperCase() }} •
-                {{ formatFileSize(item.fileSize) }}
               </div>
             </div>
           </template>
@@ -700,11 +693,6 @@
               >
               {{ item.thumbnails.length }}
             </v-chip>
-            <span
-              v-else
-              class="text-medium-emphasis"
-              >None</span
-            >
             <span
               v-else
               class="text-medium-emphasis"
@@ -1106,17 +1094,8 @@ import FolderMoveDialog from './FolderMoveDialog.vue'
 import FolderRenameDialog from './FolderRenameDialog.vue'
 import CreateFolderDialog from './CreateFolderDialog.vue'
 import FileOperationLoadingOverlay from './FileOperationLoadingOverlay.vue'
+import FileThumbnailCell from './FileThumbnailCell.vue'
 // End of Claude's edit
-import { formatFileSize } from '@/utils/file-size.util'
-import {
-  formatDate,
-  formatRelativeTime,
-  formatDuration
-} from '@/utils/date-time.utils'
-import {
-  getPrinterTypeName,
-  getPrinterTypeLogo
-} from '@/shared/printer-types.constants'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -1139,21 +1118,6 @@ const getThumbnailUrl = (fileStorageId: string, index: number = 0): string => {
 
 const getGCodeThumbnailUrl = (fileStorageId: string, index: number): string => {
   return getThumbnailUrl(fileStorageId, index)
-}
-
-const thumbnailCache = ref<Map<string, string>>(new Map())
-
-const getThumbnailUrl = (fileStorageId: string, index: number = 0): string => {
-  const cacheKey = `${fileStorageId}-${index}`
-  if (thumbnailCache.value.has(cacheKey)) {
-    return thumbnailCache.value.get(cacheKey)!
-  }
-  FileStorageService.getThumbnailBase64(fileStorageId, index)
-    .then((base64) => {
-      thumbnailCache.value.set(cacheKey, base64)
-    })
-    .catch(() => {})
-  return ''
 }
 
 const files = ref<FileMetadata[]>([])

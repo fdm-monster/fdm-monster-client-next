@@ -140,25 +140,38 @@ const fileStorageIdComputed = computed(() => fileStorageId.value)
 const thumbnailsComputed = computed(() => thumbnails.value)
 const currentThumbnailIndexComputed = computed(() => currentThumbnailIndex.value)
 
-const { data: currentThumbnailUrl, isLoading: loading } = useFileStorageThumbnailQuery(
+const { data: currentThumbnailUrl, isLoading: isLoadingQuery } = useFileStorageThumbnailQuery(
   fileStorageIdComputed,
   thumbnailsComputed,
   currentThumbnailIndexComputed,
   isOpen.value
 )
 
-watch(isOpen, (value) => {
-  if (value && context.value?.fileStorageId) {
-    fileStorageId.value = context.value.fileStorageId
-    const thumbsList = context.value.thumbnails || []
-
-    thumbnails.value = [...thumbsList].sort((a, b) => {
+const loadThumbnails = async (storageId: string, thumbsList: ThumbnailInfo[]) => {
+  loading.value = true
+  try {
+    const sortedThumbs = [...thumbsList].sort((a, b) => {
       const aPixels = a.width * a.height
       const bPixels = b.width * b.height
       return bPixels - aPixels
     })
+    thumbnails.value = sortedThumbs
     currentIndex.value = 0
-  } else if (!value) {
+
+    carouselThumbnailUrls.value.clear()
+    for (const thumb of sortedThumbs) {
+      const url = await FileStorageService.getThumbnail(storageId, thumb.index)
+      carouselThumbnailUrls.value.set(thumb.index, url)
+    }
+  } catch (err) {
+    console.error('Failed to load thumbnails:', err)
+    thumbnails.value = []
+    carouselThumbnailUrls.value.clear()
+  } finally {
+    loading.value = false
+  }
+}
+
 watch(isOpen, async (value) => {
   if (value && context.value?.fileStorageId) {
     fileStorageId.value = context.value.fileStorageId
@@ -173,41 +186,6 @@ watch(isOpen, async (value) => {
 const currentThumbnail = computed(() => {
   return thumbnails.value[currentIndex.value] || null
 })
-
-
-watch([thumbnails, fileStorageId, isOpen], async () => {
-  if (!fileStorageId.value || thumbnails.value.length === 0 || !isOpen.value) {
-    carouselThumbnailUrls.value.clear()
-    return
-  }
-
-const loadThumbnails = async (storageId: string, thumbsList: ThumbnailInfo[]) => {
-  loading.value = true
-  try {
-    const sortedThumbs = [...thumbsList].sort((a, b) => {
-      const aPixels = a.width * a.height
-      const bPixels = b.width * b.height
-      return bPixels - aPixels
-    })
-    thumbnails.value = sortedThumbs
-    currentIndex.value = 0
-
-    thumbnailUrls.value.clear()
-    for (const thumb of sortedThumbs) {
-      const url = await FileStorageService.getThumbnail(storageId, thumb.index)
-      thumbnailUrls.value.set(thumb.index, url)
-    }
-  } catch (err) {
-    console.error('Failed to load thumbnails:', err)
-    thumbnails.value = []
-    thumbnailUrls.value.clear()
-  } finally {
-    loading.value = false
-  }
-}
-
-carouselThumbnailUrls.value.clear()
-await Promise.all(thumbnails.value.map(thumb => loadThumbnail(thumb)))
 
 const getThumbnailUrl = (index: number): string => {
   return carouselThumbnailUrls.value.get(index) || ''
