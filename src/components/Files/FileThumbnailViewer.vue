@@ -31,6 +31,7 @@
 
         <div v-else class="thumbnail-image-container">
           <img
+            v-if="currentThumbnailUrl"
             :src="currentThumbnailUrl"
             :alt="`Thumbnail ${currentIndex + 1}`"
             class="thumbnail-main-image"
@@ -109,30 +110,54 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
-import { FileStorageService, type ThumbnailInfo } from '@/backend/file-storage.service'
+import { computed, ref, watch } from 'vue'
+import type { ThumbnailInfo } from '@/backend/file-storage.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { formatFileSize } from "@/utils/file-size.util";
+import { formatFileSize } from "@/utils/file-size.util"
+import { useFileStorageThumbnailQuery, fileStorageThumbnailQueryKey } from '@/queries/file-storage-thumbnail.query'
+import { useQueryClient } from '@tanstack/vue-query'
+import { FileStorageService } from '@/backend/file-storage.service'
 
 const thumbnailViewerDialog = useDialog(DialogName.JobThumbnailViewer)
+const queryClient = useQueryClient()
 
 const isOpen = computed(() => thumbnailViewerDialog.isDialogOpened())
 const context = computed(() => thumbnailViewerDialog.context())
 
 const thumbnails = ref<ThumbnailInfo[]>([])
-const thumbnailUrls = ref<Map<number, string>>(new Map())
 const currentIndex = ref(0)
-const loading = ref(false)
 const fileStorageId = ref<string | null>(null)
 
-watch(isOpen, async (value) => {
+const currentThumbnailIndex = computed(() => {
+  const thumb = thumbnails.value[currentIndex.value]
+  return thumb?.index
+})
+
+const fileStorageIdComputed = computed(() => fileStorageId.value)
+const thumbnailsComputed = computed(() => thumbnails.value)
+const currentThumbnailIndexComputed = computed(() => currentThumbnailIndex.value)
+
+const { data: currentThumbnailUrl, isLoading: loading } = useFileStorageThumbnailQuery(
+  fileStorageIdComputed,
+  thumbnailsComputed,
+  currentThumbnailIndexComputed,
+  isOpen.value
+)
+
+watch(isOpen, (value) => {
   if (value && context.value?.fileStorageId) {
     fileStorageId.value = context.value.fileStorageId
-    await loadThumbnails(context.value.fileStorageId, context.value.thumbnails || [])
+    const thumbsList = context.value.thumbnails || []
+
+    thumbnails.value = [...thumbsList].sort((a, b) => {
+      const aPixels = a.width * a.height
+      const bPixels = b.width * b.height
+      return bPixels - aPixels
+    })
+    currentIndex.value = 0
   } else if (!value) {
     thumbnails.value = []
-    thumbnailUrls.value.clear()
     currentIndex.value = 0
     fileStorageId.value = null
   }
@@ -142,44 +167,38 @@ const currentThumbnail = computed(() => {
   return thumbnails.value[currentIndex.value] || null
 })
 
-const currentThumbnailUrl = computed(() => {
-  if (!currentThumbnail.value) return ''
-  return thumbnailUrls.value.get(currentThumbnail.value.index) || ''
-})
+// Prefetch all thumbnails when dialog opens and on navigation
+watch([thumbnails, fileStorageId, isOpen], () => {
+  if (!fileStorageId.value || thumbnails.value.length === 0 || !isOpen.value) return
 
-const loadThumbnails = async (storageId: string, thumbsList: ThumbnailInfo[]) => {
-  loading.value = true
-  try {
-    const sortedThumbs = [...thumbsList].sort((a, b) => {
-      const aPixels = a.width * a.height
-      const bPixels = b.width * b.height
-      return bPixels - aPixels
+  const prefetchThumbnail = async (thumb: ThumbnailInfo) => {
+    const queryKey = [fileStorageThumbnailQueryKey, fileStorageId.value, thumb.index]
+
+    await queryClient.prefetchQuery({
+      queryKey,
+      queryFn: () => FileStorageService.getThumbnailBase64(fileStorageId.value!, thumb.index),
+      staleTime: 1000 * 60 * 60,
     })
-
-    thumbnails.value = sortedThumbs
-    currentIndex.value = 0
-
-    thumbnailUrls.value.clear()
-    for (const thumb of sortedThumbs) {
-      const url = await FileStorageService.getThumbnailBase64(storageId, thumb.index)
-      thumbnailUrls.value.set(thumb.index, url)
-    }
-  } catch (err) {
-    console.error('Failed to load thumbnails:', err)
-    thumbnails.value = []
-    thumbnailUrls.value.clear()
-  } finally {
-    loading.value = false
   }
-}
+
+  // Prefetch all thumbnails for smooth experience
+  thumbnails.value.forEach(thumb => {
+    prefetchThumbnail(thumb)
+  })
+}, { immediate: true })
 
 const getThumbnailUrl = (index: number): string => {
-  return thumbnailUrls.value.get(index) || ''
+  if (!fileStorageId.value) return ''
+
+  const queryKey = [fileStorageThumbnailQueryKey, fileStorageId.value, index]
+  const cachedData = queryClient.getQueryData<string>(queryKey)
+
+  return cachedData || ''
 }
 
 const nextThumbnail = () => {
   if (currentIndex.value >= thumbnails.value.length - 1) {
-    return;
+    return
   }
 
   currentIndex.value++
@@ -187,7 +206,7 @@ const nextThumbnail = () => {
 
 const previousThumbnail = () => {
   if (currentIndex.value <= 0) {
-    return;
+    return
   }
 
   currentIndex.value--
@@ -199,7 +218,7 @@ const close = () => {
 
 const handleDialogClose = (value: boolean) => {
   if (value) {
-    return;
+    return
   }
 
   close()
@@ -293,9 +312,5 @@ const handleDialogClose = (value: boolean) => {
 
 .thumbnail-carousel-image {
   border-radius: 6px;
-}
-
-:deep(.v-card-title) {
-  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.12);
 }
 </style>

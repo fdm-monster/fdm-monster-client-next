@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/vue-query";
 import { FileStorageService, ThumbnailInfo } from "@/backend/file-storage.service";
-import { ComputedRef, Ref } from "vue";
+import { ComputedRef, Ref, computed } from "vue";
 
 export const fileStorageThumbnailQueryKey = "file-storage-thumbnail";
 
@@ -10,31 +10,34 @@ export const useFileStorageThumbnailQuery = (
   predeterminedThumbnailIndex?: ComputedRef<number | undefined> | Ref<number | undefined>,
   enabled?: boolean,
 ) => {
+  const thumbnailIndexToFetch = computed(() => {
+    if (predeterminedThumbnailIndex?.value !== undefined && predeterminedThumbnailIndex.value !== null) {
+      return predeterminedThumbnailIndex.value;
+    }
+
+    if (!thumbnails.value?.length) {
+      return null;
+    }
+
+    const bestThumbnail = selectBestThumbnail(thumbnails.value);
+    return bestThumbnail?.index ?? null;
+  });
+
   return useQuery({
-    queryKey: [fileStorageThumbnailQueryKey, fileStorageId],
+    queryKey: [fileStorageThumbnailQueryKey, fileStorageId, thumbnailIndexToFetch],
     queryFn: async () => {
-      if (!fileStorageId.value || !thumbnails.value?.length) {
+      if (!fileStorageId.value || thumbnailIndexToFetch.value === null) {
         return null;
       }
 
-      if (predeterminedThumbnailIndex?.value) {
-        return await FileStorageService.getThumbnailBase64(fileStorageId.value, predeterminedThumbnailIndex.value);
-      }
-
       try {
-        const bestThumbnail = selectBestThumbnail(thumbnails.value);
-
-        if (!bestThumbnail) {
-          return null;
-        }
-
-        return await FileStorageService.getThumbnailBase64(fileStorageId.value, bestThumbnail.index);
+        return await FileStorageService.getThumbnailBase64(fileStorageId.value, thumbnailIndexToFetch.value);
       } catch (err) {
         console.debug(`Failed to load thumbnail for file ${ fileStorageId.value }:`, err);
         return null;
       }
     },
-    enabled: !!fileStorageId.value && !!thumbnails.value?.length && enabled !== false,
+    enabled: !!fileStorageId.value && !!thumbnailIndexToFetch.value && enabled !== false,
     staleTime: 1000 * 60 * 60,
     retry: false,
   });
