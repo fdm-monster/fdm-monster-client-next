@@ -111,37 +111,19 @@
           no-data-text="No files found"
           :items-per-page="25"
         >
+          <template #item.thumbnail="{ item }">
+            <FileThumbnailCell :file-storage-id="item.fileStorageId" :thumbnails="item.thumbnails || []"/>
+          </template>
+
           <!-- File Name Column -->
           <template #item.fileName="{ item }">
-            <div class="d-flex align-center">
-              <v-avatar
-                size="40"
-                class="mr-3"
-                rounded
-              >
-                <v-img
-                  v-if="item.thumbnails?.length > 0"
-                  :src="getThumbnailUrl(item.fileStorageId)"
-                  cover
-                >
-                  <template #error>
-                    <v-icon>description</v-icon>
-                  </template>
-                </v-img>
-                <v-icon
-                  v-else
-                  color="primary"
-                  >description</v-icon
-                >
-              </v-avatar>
-              <div>
-                <div class="text-body-2 font-weight-medium">
-                  {{ item.metadata?._originalFileName || item.fileName }}
-                </div>
-                <div class="text-caption text-medium-emphasis">
-                  {{ item.fileFormat.toUpperCase() }} •
-                  {{ formatFileSize(item.fileSize) }}
-                </div>
+            <div>
+              <div class="text-body-2 font-weight-medium">
+                {{ item.metadata?._originalFileName || item.fileName }}
+              </div>
+              <div class="text-caption text-medium-emphasis">
+                {{ item.fileFormat.toUpperCase() }} •
+                {{ formatFileSize(item.fileSize) }}
               </div>
             </div>
           </template>
@@ -285,28 +267,6 @@
               v-else
               class="text-medium-emphasis"
               >-</span
-            >
-          </template>
-
-          <!-- Thumbnails Column -->
-          <template #item.thumbnails="{ item }">
-            <v-chip
-              v-if="item.thumbnails?.length > 0"
-              size="small"
-              color="success"
-              variant="tonal"
-            >
-              <v-icon
-                start
-                size="small"
-                >image</v-icon
-              >
-              {{ item.thumbnails.length }}
-            </v-chip>
-            <span
-              v-else
-              class="text-medium-emphasis"
-              >None</span
             >
           </template>
 
@@ -673,6 +633,7 @@ const fileInput = ref<HTMLInputElement | null>(null)
 const analyzingFiles = ref<Set<string>>(new Set())
 
 const headers = [
+  { title: '', key: 'thumbnail', sortable: false, width: '80px' },
   { title: 'File Name', key: 'fileName', sortable: true },
   { title: 'Type', key: 'printerType', sortable: false },
   { title: 'Material', key: 'material', sortable: false },
@@ -681,7 +642,6 @@ const headers = [
   { title: 'Model', key: 'printerModel', sortable: false },
   { title: 'Print Time', key: 'printTime', sortable: false },
   { title: 'Filament', key: 'filament', sortable: false },
-  { title: 'Thumbnails', key: 'thumbnails', sortable: false },
   { title: 'Created', key: 'createdAt', sortable: true },
   { title: 'Actions', key: 'actions', sortable: false, align: 'end' as const }
 ]

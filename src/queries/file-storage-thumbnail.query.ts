@@ -7,12 +7,19 @@ export const fileStorageThumbnailQueryKey = "file-storage-thumbnail";
 export const useFileStorageThumbnailQuery = (
   fileStorageId: ComputedRef<string | null | undefined> | Ref<string | null | undefined>,
   thumbnails: ComputedRef<ThumbnailInfo[] | undefined> | Ref<ThumbnailInfo[] | undefined>,
-  enabled?: boolean
+  predeterminedThumbnailIndex?: ComputedRef<number | undefined> | Ref<number | undefined>,
+  enabled?: boolean,
 ) => {
   return useQuery({
     queryKey: [fileStorageThumbnailQueryKey, fileStorageId],
     queryFn: async () => {
-      if (!fileStorageId.value || !thumbnails.value?.length) return null;
+      if (!fileStorageId.value || !thumbnails.value?.length) {
+        return null;
+      }
+
+      if (predeterminedThumbnailIndex?.value) {
+        return await FileStorageService.getThumbnailBase64(fileStorageId.value, predeterminedThumbnailIndex.value);
+      }
 
       try {
         const bestThumbnail = selectBestThumbnail(thumbnails.value);
@@ -23,7 +30,7 @@ export const useFileStorageThumbnailQuery = (
 
         return await FileStorageService.getThumbnailBase64(fileStorageId.value, bestThumbnail.index);
       } catch (err) {
-        console.debug(`Failed to load thumbnail for file ${fileStorageId.value}:`, err);
+        console.debug(`Failed to load thumbnail for file ${ fileStorageId.value }:`, err);
         return null;
       }
     },

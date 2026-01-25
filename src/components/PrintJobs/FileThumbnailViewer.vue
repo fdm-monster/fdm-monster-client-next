@@ -3,8 +3,8 @@
     <v-card class="thumbnail-viewer-card">
       <v-card-title class="d-flex align-center bg-primary text-on-primary pa-3">
         <v-icon class="mr-2">image</v-icon>
-        <span class="text-subtitle-1">Job Thumbnail</span>
-        <v-spacer />
+        <span class="text-subtitle-1">File Thumbnail</span>
+        <v-spacer/>
         <v-chip
           v-if="thumbnails.length > 1"
           size="small"
@@ -77,7 +77,7 @@
             </v-col>
             <v-col cols="auto">
               <span class="text-caption text-medium-emphasis">Size:</span>
-              <span class="text-body-2 ml-1">{{ formatBytes(currentThumbnail.size) }}</span>
+              <span class="text-body-2 ml-1">{{ formatFileSize(currentThumbnail.size) }}</span>
             </v-col>
           </v-row>
         </div>
@@ -113,6 +113,7 @@ import { ref, computed, watch } from 'vue'
 import { FileStorageService, type ThumbnailInfo } from '@/backend/file-storage.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { formatFileSize } from "@/utils/file-size.util";
 
 const thumbnailViewerDialog = useDialog(DialogName.JobThumbnailViewer)
 
@@ -177,15 +178,19 @@ const getThumbnailUrl = (index: number): string => {
 }
 
 const nextThumbnail = () => {
-  if (currentIndex.value < thumbnails.value.length - 1) {
-    currentIndex.value++
+  if (currentIndex.value >= thumbnails.value.length - 1) {
+    return;
   }
+
+  currentIndex.value++
 }
 
 const previousThumbnail = () => {
-  if (currentIndex.value > 0) {
-    currentIndex.value--
+  if (currentIndex.value <= 0) {
+    return;
   }
+
+  currentIndex.value--
 }
 
 const close = () => {
@@ -193,17 +198,11 @@ const close = () => {
 }
 
 const handleDialogClose = (value: boolean) => {
-  if (!value) {
-    close()
+  if (value) {
+    return;
   }
-}
 
-const formatBytes = (bytes: number): string => {
-  if (!bytes) return '0 B'
-  const k = 1024
-  const sizes = ['B', 'KB', 'MB']
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return `${Math.round((bytes / Math.pow(k, i)) * 100) / 100} ${sizes[i]}`
+  close()
 }
 </script>
 
