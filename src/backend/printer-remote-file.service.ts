@@ -21,16 +21,6 @@ export class PrinterRemoteFileService extends BaseService {
     }>(path)
   }
 
-  /**
-   * A nice alternative for offline or disabled printers
-   * @param printerId
-   */
-  static async getFileCache(printerId: number) {
-    const path = `${ServerApi.printerFilesCacheRoute(printerId)}`;
-
-    return await this.get<FileDto[]>(path);
-  }
-
   static async selectAndPrintFile(
     printerId: number,
     filePath: string,
