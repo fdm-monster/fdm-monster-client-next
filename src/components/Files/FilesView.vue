@@ -1092,7 +1092,7 @@ import {
 } from '@/shared/printer-types.constants'
 // edited by claude on 2026.01.25.15.31
 import { buildFileTree, flattenTree, toggleNodeExpansion, expandAllNodes, collapseAllNodes, convertBackendTree, type FileTreeNode } from './file-tree-builder.utils'
-import { renameFile, moveFile, moveFolder, renameFolder, createFolder, deleteFolder, getParentPath, getFileName } from './file-management.utils'
+import { renameFile, moveFile, moveFolder, renameFolder, createFolder, deleteFolder, getFileName } from './file-management.utils'
 import { useFileOperationFeedback } from './file-operations-feedback.composable'
 import FileRenameDialog from './FileRenameDialog.vue'
 import FileMoveDialog from './FileMoveDialog.vue'
@@ -1849,6 +1849,7 @@ const handleDrop = async (targetNode: FileTreeNode, event: DragEvent) => {
   padding: 8px 16px;
   border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.08);
   transition: background-color 0.2s ease;
+  cursor: grab;
 }
 
 .tree-table-row:hover {
@@ -1872,10 +1873,6 @@ const handleDrop = async (targetNode: FileTreeNode, event: DragEvent) => {
 .tree-table-row.drag-over {
   background-color: rgba(var(--v-theme-primary), 0.15) !important;
   border: 2px dashed rgba(var(--v-theme-primary), 0.5);
-}
-
-.tree-table-row {
-  cursor: grab;
 }
 
 .tree-table-row:active {

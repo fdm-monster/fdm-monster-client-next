@@ -195,7 +195,7 @@ export function getParentPath(path: string): string {
  */
 export function getFileName(path: string): string {
   const parts = path.split('/')
-  return parts[parts.length - 1]
+  return parts.at(-1)?.toString() || ''
 }
 
 /**

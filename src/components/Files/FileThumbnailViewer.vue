@@ -115,7 +115,7 @@ import type { ThumbnailInfo } from '@/backend/file-storage.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { formatFileSize } from "@/utils/file-size.util"
-import { useFileStorageThumbnailQuery, fileStorageThumbnailQueryKey } from '@/queries/file-storage-thumbnail.query'
+import { useFileStorageThumbnailQuery} from '@/queries/file-storage-thumbnail.query'
 import { useQueryClient } from '@tanstack/vue-query'
 import { FileStorageService } from '@/backend/file-storage.service'
 

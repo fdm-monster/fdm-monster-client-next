@@ -70,9 +70,7 @@ export class FileStorageService extends BaseService {
   }
 
   static async getThumbnail(fileStorageId: string, index: number = 0): Promise<string> {
-    const path = `/api/v2/file-storage/${fileStorageId}/thumbnail/${index}`
-    const response = await this.get<{ thumbnailBase64: string }>(path)
-    return response.thumbnailBase64
+    return this.getThumbnailBase64(fileStorageId, index)
   }
 
   static async getThumbnailBase64(fileStorageId: string, index: number = 0): Promise<string> {

@@ -54,7 +54,9 @@ export function buildFileTree(files: FileMetadata[]): FileTreeNode[] {
         const part = folderParts[i]
         currentPath = currentPath ? `${currentPath}/${part}` : part
 
-        if (!folderMap.has(currentPath)) {
+        if (folderMap.has(currentPath)) {
+          currentLevel = folderMap.get(currentPath)!.children!
+        } else {
           const folderNode: FileTreeNode = {
             id: `folder-${currentPath}`,
             name: part,
@@ -67,8 +69,6 @@ export function buildFileTree(files: FileMetadata[]): FileTreeNode[] {
           folderMap.set(currentPath, folderNode)
           currentLevel.push(folderNode)
           currentLevel = folderNode.children!
-        } else {
-          currentLevel = folderMap.get(currentPath)!.children!
         }
       }
     }

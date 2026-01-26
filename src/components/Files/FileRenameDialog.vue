@@ -65,7 +65,6 @@
 
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
-import { getFileName } from './file-management.utils'
 
 interface Props {
   modelValue: boolean
@@ -91,13 +90,16 @@ const errorMessage = ref('')
 const warningMessage = ref('')
 
 // Initialize with current filename when dialog opens
-watch(() => props.modelValue, (isOpen) => {
-  if (isOpen) {
-    newName.value = props.currentFileName
-    errorMessage.value = ''
-    warningMessage.value = ''
+watch(
+  () => props.modelValue,
+  (isOpen) => {
+    if (isOpen) {
+      newName.value = props.currentFileName
+      errorMessage.value = ''
+      warningMessage.value = ''
+    }
   }
-})
+)
 
 const isValid = computed(() => {
   if (!newName.value || newName.value.trim() === '') {
@@ -126,10 +128,10 @@ const isValid = computed(() => {
   // Warn if extension changed
   const currentExt = props.currentFileName.split('.').pop()
   const newExt = newName.value.split('.').pop()
-  if (currentExt !== newExt) {
-    warningMessage.value = 'Warning: File extension has changed'
-  } else {
+  if (currentExt == newExt) {
     warningMessage.value = ''
+  } else {
+    warningMessage.value = 'Warning: File extension has changed'
   }
 
   errorMessage.value = ''
