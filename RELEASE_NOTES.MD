@@ -1,5 +1,18 @@
 # Develop
 
+## Client 2.2.7
+
+Features
+
+- Add GCODE file thumbnail support with file-storage backend
+- Implement reactive thumbnail viewer dialog
+- Add FileThumnailCell component with query optimization
+
+Fixes
+
+- Optimize thumbnail viewer implementation and file naming
+- Ensure FileThumnailCell and Viewer use proper query handling
+
 ## Client 2.2.6
 
 - Fix progress percentage on dashboard
