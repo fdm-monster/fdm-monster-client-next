@@ -7,7 +7,7 @@ import { downloadFileByBlob } from "@/utils/download-file.util";
 
 export class PrinterRemoteFileService extends BaseService {
   static async getFiles(printerId: number) {
-    const path = `${ServerApi.printerRemoteFilesRoute}/${printerId}`;
+    const path = `${ServerApi.printerRemoteFilesRoute}/${printerId}?recursive=true`;
 
     return await this.get<FileDto[]>(path);
   }
