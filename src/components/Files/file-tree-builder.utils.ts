@@ -1,7 +1,7 @@
 // Tree building utilities for FilesView
 // Created by Claude on 2026.01.24
 
-import { FileMetadata } from '@/backend/file-storage.service'
+import { FileMetadata, DirectoryTreeNode } from '@/backend/file-storage.service'
 
 export interface FileTreeNode {
   id: string
@@ -12,6 +12,8 @@ export interface FileTreeNode {
   file?: FileMetadata
   children?: FileTreeNode[]
   expanded?: boolean
+  markerId?: string // edited by claude on 2026.01.25.14.50 - For empty virtual directories
+  fileCount?: number // edited by claude on 2026.01.25.14.50 - Number of files in folder
 }
 
 /**
@@ -179,3 +181,83 @@ export function collapseAllNodes(nodes: FileTreeNode[]): FileTreeNode[] {
     return node
   })
 }
+
+/**
+ * Converts backend DirectoryTreeNode to frontend FileTreeNode format
+ * @param backendNode - Node from backend directory-tree endpoint
+ * @param depth - Current depth in tree (0 for root)
+ * @returns Converted FileTreeNode
+ */
+// edited by claude on 2026.01.25.15.28
+export function convertBackendTreeNode(backendNode: DirectoryTreeNode, depth: number = 0): FileTreeNode {
+  const isDirectory = backendNode.type === 'directory'
+
+  const node: FileTreeNode = {
+    id: isDirectory ? `folder-${backendNode.path}` : backendNode.fileStorageId!,
+    name: backendNode.name,
+    type: isDirectory ? 'folder' : 'file',
+    path: backendNode.path,
+    depth,
+    expanded: false
+  }
+
+  // For directories, convert children
+  if (isDirectory && backendNode.children) {
+    node.children = backendNode.children.map(child =>
+      convertBackendTreeNode(child, depth + 1)
+    )
+    node.fileCount = countFilesInNode(node)
+    // edited by claude on 2026.01.25.15.39 - Extract markerId for empty virtual directories
+    if (backendNode.markerId) {
+      node.markerId = backendNode.markerId
+    }
+    // End of Claude's edit
+  }
+
+  // For files, create FileMetadata object from backend data
+  if (!isDirectory && backendNode.fileStorageId) {
+    node.file = {
+      fileStorageId: backendNode.fileStorageId,
+      fileName: backendNode.name,
+      fileFormat: backendNode.name.split('.').pop() || '',
+      fileSize: backendNode.metadata?.fileSize || 0,
+      fileHash: backendNode.metadata?.fileHash || '',
+      createdAt: backendNode.metadata?.createdAt || new Date(),
+      thumbnails: backendNode.metadata?.thumbnails || [],
+      metadata: backendNode.metadata
+    } as FileMetadata
+  }
+
+  return node
+}
+
+/**
+ * Converts backend tree root to array of FileTreeNodes
+ * @param backendTree - Tree from backend directory-tree endpoint
+ * @returns Array of root-level FileTreeNodes
+ */
+export function convertBackendTree(backendTree: DirectoryTreeNode): FileTreeNode[] {
+  // Backend returns a root node with children
+  // We want to return the children as the root array
+  if (backendTree.children) {
+    return backendTree.children.map(child => convertBackendTreeNode(child, 0))
+  }
+  return []
+}
+
+/**
+ * Counts total number of files in a tree node (recursive)
+ */
+function countFilesInNode(node: FileTreeNode): number {
+  let count = 0
+  if (node.type === 'file') {
+    return 1
+  }
+  if (node.children) {
+    for (const child of node.children) {
+      count += countFilesInNode(child)
+    }
+  }
+  return count
+}
+// End of Claude's edit

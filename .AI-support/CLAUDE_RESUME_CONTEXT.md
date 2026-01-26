@@ -68,8 +68,8 @@ function example() {
 - ✅ **Phase 1**: UI Feedback System
 - ✅ **Phase 2**: Basic Rename
 - ✅ **Phase 3**: File & Folder Moving
-- 🔜 **Phase 4**: Folder Operations (rename, create, delete)
-- 🔜 **Phase 5**: Drag & Drop (optional)
+- ✅ **Phase 4**: Folder Operations (rename, create, delete) - **JUST COMPLETED**
+- ✅ **Phase 5**: Drag & Drop
 
 ---
 
@@ -90,6 +90,9 @@ function example() {
 | `FileRenameDialog.vue` | File rename dialog |
 | `FileMoveDialog.vue` | File move dialog (2 tabs: manual + select) |
 | `FolderMoveDialog.vue` | Folder move with circular prevention |
+| `FolderRenameDialog.vue` | Folder rename dialog |
+| `CreateFolderDialog.vue` | Create new folder dialog |
+| `FolderDeleteDialog.vue` | Delete folder confirmation dialog |
 
 ### Key Functions Reference
 
@@ -97,6 +100,9 @@ function example() {
 - `renameFile(fileStorageId, currentPath, newName)` - Rename single file
 - `moveFile(fileStorageId, newPath)` - Move single file
 - `moveFolder(oldPath, newPath, allFiles)` - Move folder + all contents
+- `renameFolder(oldPath, newName, allFiles)` - Rename folder + update all child paths
+- `createFolder(folderPath)` - Create empty virtual directory
+- `deleteFolder(folderPath, allFiles, markerId?)` - Delete folder + all contents
 - `validatePath(path)` - Validate path (allows empty string for root)
 
 **Tree Operations** (`file-tree-builder.utils.ts`):
@@ -114,9 +120,24 @@ function example() {
 
 ## BACKEND INTEGRATION
 
+### File Update Endpoint
 **Endpoint**: `PATCH /api/v2/file-storage/:fileStorageId`
 **Updates**: `fileName` and/or `metadata` fields
 **Service**: `FileStorageService.updateFileMetadata()`
+
+### Virtual Directory Endpoints (Phase 4)
+**Create**: `POST /api/v2/file-storage/virtual-directories`
+- Body: `{ path: "folder/path" }`
+- Returns: `{ markerId, path }`
+
+**Delete**: `DELETE /api/v2/file-storage/virtual-directories/:markerId`
+- Removes empty folder marker
+
+**List**: `GET /api/v2/file-storage/virtual-directories`
+- Returns all empty virtual directories
+
+**Tree**: `GET /api/v2/file-storage/directory-tree`
+- Returns complete hierarchical tree structure
 
 ---
 
@@ -132,23 +153,27 @@ function example() {
 
 ---
 
-## NEXT STEPS (Phase 4)
+## NEXT STEPS
 
-When user confirms Phase 3 testing complete:
+All phases complete! Ready for comprehensive testing:
 
-1. **Folder Rename**
-   - Similar to file rename but updates all child paths
-   - Prevent invalid names
+1. **Test Phase 4 Features**
+   - Create new folder (root and nested) ✅
+   - Create subfolder from folder menu ✅
+   - Rename folder and verify all child paths update
+   - Delete folder with confirmation ✅
+   - Verify empty folder persistence ✅
 
-2. **Create New Folder**
-   - Dialog with path input
-   - Create virtual folder (no actual files initially)
-   - Add to tree structure
-
-3. **Delete Folder**
-   - Confirmation dialog showing file count
-   - Delete all files in folder
-   - Handle empty folders
+2. **Known Issues / Future Enhancements**
+   - **File Move Dialog**: "Select Folder" dropdown only shows top-level directories, not nested folders
+     - Current location: `FilesView.vue:1164-1173` (`availableFoldersForMove` computed)
+     - Shows all folders but may need hierarchical display for better UX
+     - Note: This was recently fixed to show virtual directories, but nested folder display could be improved
+   - Batch operations (multi-select)
+   - Copy/duplicate files
+   - Folder sorting options
+   - Search within folders
+   - Tree expansion state preservation across operations
 
 ---
 

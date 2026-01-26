@@ -102,20 +102,17 @@
       </v-card-title>
 
       <v-card-text>
-        <!-- edited by claude on 2026.01.24.19.32 -->
+        <!-- edited by claude on 2026.01.25.15.10 -->
         <!-- Tree Toolbar -->
         <div class="d-flex justify-space-between mb-3">
           <v-btn
             size="small"
             variant="elevated"
             color="primary"
-            disabled
+            @click="openFolderCreateDialog('')"
           >
             <v-icon left>create_new_folder</v-icon>
             New Folder
-            <v-tooltip activator="parent" location="bottom">
-              Creating folders requires backend support for paths without files
-            </v-tooltip>
           </v-btn>
           <div class="d-flex gap-2">
             <v-btn
@@ -463,12 +460,11 @@
                         </template>
                         <v-list-item-title>Move Folder</v-list-item-title>
                       </v-list-item>
-                      <v-list-item disabled>
+                      <v-list-item @click="openFolderCreateDialog(node.path)">
                         <template v-slot:prepend>
                           <v-icon>create_new_folder</v-icon>
                         </template>
                         <v-list-item-title>New Subfolder</v-list-item-title>
-                        <v-list-item-subtitle class="text-caption">Requires backend update</v-list-item-subtitle>
                       </v-list-item>
                       <v-divider class="my-1" />
                       <v-list-item @click="confirmDeleteFolder(node)" class="text-error">
@@ -1051,6 +1047,16 @@
       :parent-path="newFolderParentPath"
       @create="handleCreateFolder"
     />
+
+    <!-- Delete Folder Dialog -->
+    <!-- edited by claude on 2026.01.25.14.45 -->
+    <FolderDeleteDialog
+      v-model:show="folderDeleteDialog"
+      :folder-path="selectedFolderForDelete?.path || ''"
+      :file-count="selectedFolderForDelete?.fileCount || 0"
+      :folder-count="selectedFolderForDelete?.folderCount || 0"
+      @delete="handleFolderDelete"
+    />
     <!-- End of Claude's edit -->
 
     <!-- Loading Overlay -->
@@ -1084,14 +1090,15 @@ import {
   getPrinterTypeName,
   getPrinterTypeLogo
 } from '@/shared/printer-types.constants'
-// edited by claude on 2026.01.24.19.37
-import { buildFileTree, flattenTree, toggleNodeExpansion, expandAllNodes, collapseAllNodes, type FileTreeNode } from './file-tree-builder.utils'
-import { renameFile, moveFile, moveFolder, renameFolder, getParentPath, getFileName } from './file-management.utils'
+// edited by claude on 2026.01.25.15.31
+import { buildFileTree, flattenTree, toggleNodeExpansion, expandAllNodes, collapseAllNodes, convertBackendTree, type FileTreeNode } from './file-tree-builder.utils'
+import { renameFile, moveFile, moveFolder, renameFolder, createFolder, deleteFolder, getParentPath, getFileName } from './file-management.utils'
 import { useFileOperationFeedback } from './file-operations-feedback.composable'
 import FileRenameDialog from './FileRenameDialog.vue'
 import FileMoveDialog from './FileMoveDialog.vue'
 import FolderMoveDialog from './FolderMoveDialog.vue'
 import FolderRenameDialog from './FolderRenameDialog.vue'
+import FolderDeleteDialog from './FolderDeleteDialog.vue'
 import CreateFolderDialog from './CreateFolderDialog.vue'
 import FileOperationLoadingOverlay from './FileOperationLoadingOverlay.vue'
 import FileThumbnailCell from './FileThumbnailCell.vue'
@@ -1154,23 +1161,14 @@ const selectedFileForRename = ref<FileMetadata | null>(null)
 const moveDialog = ref(false)
 const selectedFileForMove = ref<FileMetadata | null>(null)
 
-// edited by claude on 2026.01.24.18.48
-// Extract unique folder paths from all files using metadata._path
+// edited by claude on 2026.01.25.16.30
+// Extract folder paths from the tree (includes virtual directories)
 const availableFoldersForMove = computed(() => {
-  const folders = new Set<string>()
-  files.value.forEach(file => {
-    const folderPath = file.metadata?._path || ''
-    if (folderPath) {
-      folders.add(folderPath)
-      // Also add parent folders
-      let current = folderPath
-      while (current.includes('/')) {
-        current = getParentPath(current)
-        if (current) folders.add(current)
-      }
-    }
-  })
-  return Array.from(folders).sort()
+  const folders = flattenedTree.value
+    .filter(node => node.type === 'folder')
+    .map(node => node.path)
+    .sort()
+  return folders
 })
 // End of Claude's edit
 
@@ -1271,10 +1269,15 @@ onMounted(async () => {
 const loadFiles = async () => {
   loading.value = true
   try {
-    const response = await FileStorageService.listFiles()
-    files.value = response.files
-    // edited by claude on 2026.01.24.14.40
-    fileTree.value = buildFileTree(response.files)
+    // edited by claude on 2026.01.25.15.52
+    // Load both tree structure (for display with empty folders) and flat list (for operations)
+    const [treeResponse, filesResponse] = await Promise.all([
+      FileStorageService.getDirectoryTree(),
+      FileStorageService.listFiles()
+    ])
+
+    files.value = filesResponse.files
+    fileTree.value = convertBackendTree(treeResponse.tree)
     // End of Claude's edit
   } catch (error) {
     console.error('Failed to load files:', error)
@@ -1609,61 +1612,92 @@ const handleFolderRename = async (newFolderName: string) => {
 }
 
 // Create folder handlers
-const openCreateFolderDialog = (parentPath: string) => {
+// edited by claude on 2026.01.25.14.47
+const openFolderCreateDialog = (parentPath: string = '') => {
   newFolderParentPath.value = parentPath
   createFolderDialog.value = true
 }
+// End of Claude's edit
 
 const handleCreateFolder = async (folderPath: string) => {
-  // In virtual file system, folders don't need to be created explicitly
-  // They exist when files are placed in them
-  // Show success message to user
-  operationFeedback.operationState.value = {
-    isLoading: false,
-    operationType: null,
-    loadingMessage: ''
-  }
-  snackbar.info(`Folder "${folderPath}" will be created when you add files to it`)
-}
-
-// Delete folder handler
-const confirmDeleteFolder = async (node: FileTreeNode) => {
-  if (node.type !== 'folder') return
-
-  const folderPath = node.path || node.name
-  const filesInFolder = files.value.filter(file => {
-    const filePath = file.metadata?._path || ''
-    return filePath === folderPath || filePath.startsWith(`${folderPath}/`)
-  })
-
-  if (filesInFolder.length === 0) {
-    snackbar.info('Folder is empty - it will disappear automatically')
-    return
-  }
-
-  // Show confirmation dialog
-  const confirmed = confirm(
-    `Delete folder "${node.name}" and all ${filesInFolder.length} file(s) inside?\n\nThis action cannot be undone.`
-  )
-
-  if (!confirmed) return
-
+  // edited by claude on 2026.01.25.14.40
   const result = await operationFeedback.executeOperation(
-    'delete',
-    `Deleting ${filesInFolder.length} file(s)...`,
-    `Folder deleted successfully`,
+    'create',
+    'Creating folder...',
+    `Folder "${folderPath}" created successfully`,
     async () => {
-      // Delete all files in the folder
-      await Promise.all(
-        filesInFolder.map(file => FileStorageService.deleteFile(file.fileStorageId))
-      )
+      await createFolder(folderPath)
     }
   )
 
   if (result !== null) {
     await loadFiles()
   }
+  // End of Claude's edit
 }
+
+// Delete folder handler
+// edited by claude on 2026.01.25.14.42
+const selectedFolderForDelete = ref<{ path: string; name: string; fileCount: number; folderCount: number; markerId?: string } | null>(null)
+const folderDeleteDialog = ref(false)
+
+const confirmDeleteFolder = async (node: FileTreeNode) => {
+  if (node.type !== 'folder') return
+
+  // edited by claude on 2026.01.25.15.47
+  // edited by claude on 2026.01.25.16.20
+  const folderPath = node.path || node.name
+
+  // Find all files recursively (including files in subdirectories)
+  const filesInFolder = files.value.filter(file => {
+    const filePath = file.metadata?._path || ''
+    return filePath === folderPath || filePath.startsWith(`${folderPath}/`)
+  })
+
+  // Count all subfolders recursively using flattenedTree
+  const subfolders = flattenedTree.value.filter(n => {
+    if (n.type !== 'folder') return false
+    const nPath = n.path || n.name
+    return nPath !== folderPath && nPath.startsWith(`${folderPath}/`)
+  })
+  // End of Claude's edit
+
+  selectedFolderForDelete.value = {
+    path: folderPath,
+    name: node.name,
+    fileCount: filesInFolder.length,
+    folderCount: subfolders.length,
+    markerId: node.markerId // For empty virtual directories
+  }
+
+  folderDeleteDialog.value = true
+  // End of Claude's edit
+}
+
+const handleFolderDelete = async () => {
+  if (!selectedFolderForDelete.value) return
+
+  // edited by claude on 2026.01.25.15.48
+  const folder = selectedFolderForDelete.value
+  folderDeleteDialog.value = false
+
+  const result = await operationFeedback.executeOperation(
+    'delete',
+    `Deleting folder and ${folder.fileCount} file(s)...`,
+    `Folder deleted successfully`,
+    async () => {
+      // edited by claude on 2026.01.25.16.12 - pass flattenedTree for recursive deletion
+      await deleteFolder(folder.path, files.value, flattenedTree.value, folder.markerId)
+      // End of Claude's edit
+    }
+  )
+
+  if (result !== null) {
+    await loadFiles()
+  }
+  // End of Claude's edit
+}
+// End of Claude's edit
 
 // edited by claude on 2026.01.24.19.48
 // Drag and drop handlers

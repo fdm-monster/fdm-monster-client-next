@@ -61,12 +61,39 @@
 
 ---
 
-## Phase 4: Folder Operations 📋 IN PROGRESS
-**To Implement:**
-- ⏳ Folder rename dialog
-- ⏳ Create new folder dialog
-- ⏳ Delete folder with confirmation
-- ⏳ Folder context menu enhancements
+## Phase 4: Folder Operations ✅ COMPLETE
+**Files Created:**
+- `CreateFolderDialog.vue` - Create new folder dialog
+- `FolderDeleteDialog.vue` - Delete folder confirmation dialog
+
+**Completed:**
+- ✅ Folder rename dialog (already existed)
+- ✅ Create new folder with virtual directory API support
+- ✅ Create nested folders (e.g., "a/b/c") in single operation
+- ✅ Delete folder with confirmation dialog
+- ✅ Recursive folder deletion (deletes all subdirectories and files)
+- ✅ "New Folder" button enabled in toolbar
+- ✅ "New Subfolder" menu item enabled in folder context menu
+- ✅ Updated file-management.utils.ts with new API functions:
+  - `createFolder()` - Creates empty virtual directory (backend handles nested paths)
+  - `deleteFolder()` - Deletes folder and all contents recursively
+- ✅ Virtual directories displayed in folder selection lists
+- ✅ Tested and verified
+
+**Implementation Details:**
+- CreateFolderDialog validates folder paths and supports nested creation (e.g., "a/b/c")
+- FolderDeleteDialog shows accurate file/folder counts and requires "DELETE" confirmation
+- Uses new Virtual Directory API endpoints:
+  - POST `/api/v2/file-storage/virtual-directories` - Create empty folder (creates all intermediate folders)
+  - DELETE `/api/v2/file-storage/virtual-directories/:markerId` - Delete empty folder marker
+  - GET `/api/v2/file-storage/directory-tree` - Get complete tree with markerIds
+- Backend creates markerIds for all intermediate folders when given nested path
+- Frontend recursively deletes all subdirectory markers and files
+- Folders persist even when empty (virtual directory markers)
+- Auto-reloads file list after folder operations
+
+**Known Issues:**
+- File move "Select Folder" dropdown shows all folders but could benefit from hierarchical display
 
 ---
 

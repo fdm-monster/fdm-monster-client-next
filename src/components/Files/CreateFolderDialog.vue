@@ -75,7 +75,7 @@
 
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
-import { validateFileName } from './file-management.utils'
+import { validatePath } from './file-management.utils' // edited by claude on 2026.01.25.16.16
 
 interface Props {
   modelValue: boolean
@@ -123,11 +123,18 @@ const canCreate = computed(() => {
     return false
   }
 
-  // Validate folder name (no path separators, no invalid chars)
-  if (!validateFileName(name)) {
-    errorMessage.value = 'Invalid folder name (no special characters or path separators)'
+  // edited by claude on 2026.01.25.16.15
+  // Validate folder path (allow nested paths with forward slashes)
+  // Build full path first
+  const fullPath = props.parentPath
+    ? `${props.parentPath}/${name}`
+    : name
+
+  if (!validatePath(fullPath)) {
+    errorMessage.value = 'Invalid folder path (use forward slashes for nested folders, e.g., "a/b/c")'
     return false
   }
+  // End of Claude's edit
 
   errorMessage.value = ''
   return true

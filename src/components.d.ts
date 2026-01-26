@@ -42,6 +42,8 @@ declare module 'vue' {
     FileThumbnailViewer: typeof import('./components/Files/FileThumbnailViewer.vue')['default']
     FirstTimeSetupView: typeof import('./components/FirstTimeSetup/FirstTimeSetupView.vue')['default']
     FloorSettings: typeof import('./components/Settings/FloorSettings.vue')['default']
+    FolderCreateDialog: typeof import('./components/Files/FolderCreateDialog.vue')['default']
+    FolderDeleteDialog: typeof import('./components/Files/FolderDeleteDialog.vue')['default']
     FolderMoveDialog: typeof import('./components/Files/FolderMoveDialog.vue')['default']
     FolderRenameDialog: typeof import('./components/Files/FolderRenameDialog.vue')['default']
     GithubIssuesButton: typeof import('./components/Generic/Actions/GithubIssuesButton.vue')['default']

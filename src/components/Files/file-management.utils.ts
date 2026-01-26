@@ -41,15 +41,19 @@ export async function renameFile(fileStorageId: string, newName: string): Promis
 
 /**
  * Creates a new folder in the virtual path structure
- * @param folderPath - The path for the new folder (e.g., "projects/new-folder")
- * @returns Promise that resolves when the folder is created
+ * Backend now handles nested paths automatically, creating all intermediate folders
+ * @param folderPath - The path for the new folder (e.g., "projects/new-folder" or "a/b/c")
+ * @returns Promise that resolves with the markerId when the folder is created
  */
-export async function createFolder(folderPath: string): Promise<void> {
-  // Folders in a virtual path system don't actually exist until files are placed in them
-  // This is a no-op for now, but could be used to validate path structure
-  // or create metadata entries for empty folders if needed
-  // TODO: Implement if backend supports explicit folder creation
-  console.log(`Virtual folder path reserved: ${folderPath}`)
+export async function createFolder(folderPath: string): Promise<{ markerId: string; path: string }> {
+  // edited by claude on 2026.01.25.17.15
+  if (!validatePath(folderPath)) {
+    throw new Error(`Invalid folder path: ${folderPath}`)
+  }
+
+  // Backend now creates all intermediate folders automatically when given nested path
+  return await FileStorageService.createVirtualDirectory(folderPath)
+  // End of Claude's edit
 }
 
 /**
@@ -192,4 +196,46 @@ export function getParentPath(path: string): string {
 export function getFileName(path: string): string {
   const parts = path.split('/')
   return parts[parts.length - 1]
+}
+
+/**
+ * Deletes a folder and all its contents
+ * @param folderPath - The path of the folder to delete
+ * @param allFiles - Array of all file metadata to search for files in this folder
+ * @param allFolders - Array of all folder nodes to find subdirectory markerIds
+ * @param markerId - Optional marker ID for empty virtual directories
+ * @returns Promise that resolves when the folder and all files are deleted
+ */
+export async function deleteFolder(
+  folderPath: string,
+  allFiles: Array<{ fileStorageId: string; fileName: string; metadata?: { _path?: string } }>,
+  allFolders: Array<{ path: string; markerId?: string }>,
+  markerId?: string
+): Promise<void> {
+  // edited by claude on 2026.01.25.16.22
+  // Find all files in this folder (and subfolders)
+  const filesToDelete = allFiles.filter(file => {
+    const filePath = file.metadata?._path || ''
+    return filePath === folderPath || filePath.startsWith(`${folderPath}/`)
+  })
+
+  // Find all subdirectories with markerIds that need to be deleted
+  const foldersToDelete = allFolders.filter(folder => {
+    return (folder.path === folderPath || folder.path.startsWith(`${folderPath}/`)) && folder.markerId
+  })
+
+  // Delete all files in the folder
+  const fileDeletePromises = filesToDelete.map(file =>
+    FileStorageService.deleteFile(file.fileStorageId)
+  )
+
+  await Promise.all(fileDeletePromises)
+
+  // Delete all virtual directory markers (including subdirectories)
+  const folderDeletePromises = foldersToDelete.map(folder =>
+    FileStorageService.deleteVirtualDirectory(folder.markerId!)
+  )
+
+  await Promise.all(folderDeletePromises)
+  // End of Claude's edit
 }

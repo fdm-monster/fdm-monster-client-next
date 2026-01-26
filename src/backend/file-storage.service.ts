@@ -99,5 +99,48 @@ export class FileStorageService extends BaseService {
     return this.patch<FileMetadata>(path, updates)
   }
   // End of Claude's edit
+
+  // edited by claude on 2026.01.25.15.25
+  /**
+   * Get complete directory tree including empty folders
+   * @returns Hierarchical tree structure with files and folders
+   */
+  static async getDirectoryTree(): Promise<{ tree: DirectoryTreeNode }> {
+    return this.get<{ tree: DirectoryTreeNode }>('/api/v2/file-storage/directory-tree')
+  }
+
+  /**
+   * Create a virtual directory (empty folder)
+   * @param folderPath - Path for the new folder (e.g., "projects/new-folder")
+   */
+  static async createVirtualDirectory(folderPath: string): Promise<{ markerId: string; path: string }> {
+    return this.post<{ markerId: string; path: string }>('/api/v2/file-storage/virtual-directories', {
+      path: folderPath
+    })
+  }
+
+  /**
+   * Delete a virtual directory (empty folder marker)
+   * @param markerId - UUID of the virtual directory marker
+   */
+  static async deleteVirtualDirectory(markerId: string): Promise<void> {
+    return this.delete(`/api/v2/file-storage/virtual-directories/${markerId}`)
+  }
+  // End of Claude's edit
 }
+
+// edited by claude on 2026.01.25.15.38
+/**
+ * Tree node structure from backend directory-tree endpoint
+ */
+export interface DirectoryTreeNode {
+  path: string
+  name: string
+  type: 'file' | 'directory'
+  children?: DirectoryTreeNode[]
+  fileStorageId?: string  // Only for files
+  metadata?: FileMetadata['metadata']  // Only for files
+  markerId?: string  // Only for empty virtual directories
+}
+// End of Claude's edit
 

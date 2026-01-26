@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Folder Delete</title>
+</head>
+<body>
+  <h1>Folder Deletion Test</h1>
+  <div id="output"></div>
+
+  <script>
+    const output = document.getElementById('output');
+
+    function log(message, data = null) {
+      const div = document.createElement('div');
+      div.style.marginBottom = '10px';
+      div.style.padding = '10px';
+      div.style.border = '1px solid #ccc';
+      div.innerHTML = `<strong>${message}</strong>`;
+      if (data) {
+        const pre = document.createElement('pre');
+        pre.textContent = JSON.stringify(data, null, 2);
+        div.appendChild(pre);
+      }
+      output.appendChild(div);
+    }
+
+    async function testFolderDeletion() {
+      try {
+        // Step 1: Create a test folder
+        log('Step 1: Creating test folder "test-delete-folder"');
+        const createResponse = await fetch('/api/v2/file-storage/virtual-directories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: 'test-delete-folder' })
+        });
+
+        if (!createResponse.ok) {
+          throw new Error(`Create failed: ${createResponse.statusText}`);
+        }
+
+        const createData = await createResponse.json();
+        log('✅ Folder created', createData);
+        const markerId = createData.markerId;
+
+        // Step 2: Get tree to verify folder exists
+        log('Step 2: Getting directory tree to verify folder exists');
+        const treeResponse1 = await fetch('/api/v2/file-storage/directory-tree');
+        const treeData1 = await treeResponse1.json();
+
+        function findInTree(node, path) {
+          if (node.path === path) return node;
+          if (node.children) {
+            for (const child of node.children) {
+              const found = findInTree(child, path);
+              if (found) return found;
+            }
+          }
+          return null;
+        }
+
+        const foundFolder = findInTree(treeData1.tree, 'test-delete-folder');
+        if (foundFolder) {
+          log('✅ Folder found in tree', foundFolder);
+        } else {
+          log('❌ Folder NOT found in tree');
+        }
+
+        // Step 3: Delete the folder
+        log(`Step 3: Deleting folder with markerId: ${markerId}`);
+        const deleteResponse = await fetch(`/api/v2/file-storage/virtual-directories/${markerId}`, {
+          method: 'DELETE'
+        });
+
+        if (!deleteResponse.ok) {
+          throw new Error(`Delete failed: ${deleteResponse.statusText}`);
+        }
+
+        const deleteData = await deleteResponse.json();
+        log('✅ Folder deleted', deleteData);
+
+        // Step 4: Get tree again to verify folder is gone
+        log('Step 4: Getting directory tree to verify folder is gone');
+        const treeResponse2 = await fetch('/api/v2/file-storage/directory-tree');
+        const treeData2 = await treeResponse2.json();
+
+        const stillThere = findInTree(treeData2.tree, 'test-delete-folder');
+        if (stillThere) {
+          log('❌ PROBLEM: Folder still exists in tree after delete!', stillThere);
+        } else {
+          log('✅ SUCCESS: Folder properly removed from tree');
+        }
+
+        log('=== Full tree after delete ===', treeData2.tree);
+
+      } catch (error) {
+        log('❌ ERROR', { message: error.message, stack: error.stack });
+      }
+    }
+
+    // Run test on page load
+    testFolderDeletion();
+  </script>
+</body>
+</html>
