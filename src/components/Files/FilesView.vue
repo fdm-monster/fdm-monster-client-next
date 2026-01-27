@@ -5,10 +5,10 @@
       class="mb-6 upload-drop-zone"
       elevation="2"
       :class="{ 'drag-over': isDragging }"
-      @dragenter.prevent="handleDragEnter"
-      @dragover.prevent="handleDragOver"
-      @dragleave.prevent="handleDragLeave"
-      @drop.prevent="handleDrop"
+      @dragenter.prevent="handleUploadDragEnter"
+      @dragover.prevent="handleUploadDragOver"
+      @dragleave.prevent="handleUploadDragLeave"
+      @drop.prevent="handleUploadDrop"
     >
       <v-card-text class="text-center pa-6">
         <v-icon
@@ -102,7 +102,389 @@
       </v-card-title>
 
       <v-card-text>
+        <!-- edited by claude on 2026.01.25.15.10 -->
+        <!-- Tree Toolbar -->
+        <div class="d-flex justify-space-between mb-3">
+          <v-btn
+            size="small"
+            variant="elevated"
+            color="primary"
+            @click="openFolderCreateDialog('')"
+          >
+            <v-icon left>create_new_folder</v-icon>
+            New Folder
+          </v-btn>
+          <div class="d-flex gap-2">
+            <v-btn
+              size="small"
+              variant="text"
+              @click="expandAll"
+          >
+            <v-icon start>unfold_more</v-icon>
+            Expand All
+          </v-btn>
+          <v-btn
+            size="small"
+            variant="text"
+            @click="collapseAll"
+          >
+            <v-icon start>unfold_less</v-icon>
+            Collapse All
+          </v-btn>
+          </div>
+        </div>
+        <!-- End of Claude's edit -->
+
+        <!-- Loading State -->
+        <div
+          v-if="loading"
+          class="d-flex justify-center py-8"
+        >
+          <v-progress-circular
+            indeterminate
+            size="48"
+            color="primary"
+          />
+        </div>
+
+        <!-- Tree Table -->
+        <div v-else class="tree-table-container">
+          <!-- Table Header -->
+          <div class="tree-table-header">
+            <div class="tree-cell cell-thumbnail">Thumb</div>
+            <div class="tree-cell cell-name">Name</div>
+            <div class="tree-cell cell-type">Type</div>
+            <div class="tree-cell cell-material">Material</div>
+            <div class="tree-cell cell-temps">Temps</div>
+            <div class="tree-cell cell-plates">Plates</div>
+            <div class="tree-cell cell-time">Print Time</div>
+            <div class="tree-cell cell-filament">Filament</div>
+            <div class="tree-cell cell-actions">Actions</div>
+          </div>
+
+          <!-- Table Body -->
+          <div class="tree-table-body">
+            <!-- No files state -->
+            <div
+              v-if="flattenedTree.length === 0"
+              class="text-center py-8"
+            >
+              <v-icon
+                size="64"
+                color="medium-emphasis"
+                class="mb-2"
+              >
+                folder_open
+              </v-icon>
+              <div class="text-body-1 text-medium-emphasis">
+                No files found
+              </div>
+            </div>
+
+            <!-- Tree Rows -->
+            <!-- edited by claude on 2026.01.24.19.45 -->
+            <div
+              v-for="node in flattenedTree"
+              :key="node.id"
+              class="tree-table-row"
+              :class="{
+                'is-folder': node.type === 'folder',
+                'drag-over': dragOverNodeId === node.id,
+                'dragging': draggingNodeId === node.id
+              }"
+              draggable="true"
+              @dragstart="handleDragStart(node, $event)"
+              @dragend="handleDragEnd"
+              @dragover.prevent="handleDragOver(node, $event)"
+              @dragleave="handleDragLeave(node)"
+              @drop.prevent="handleDrop(node, $event)"
+            >
+            <!-- End of Claude's edit -->
+              <!-- Thumbnail Column -->
+              <div class="tree-cell cell-thumbnail">
+                <!-- edited by claude on 2026.01.24.15.10 -->
+                <v-avatar
+                  v-if="node.type === 'file' && node.file"
+                  size="40"
+                  rounded
+                >
+                  <v-img
+                    v-if="node.file.thumbnails?.length > 0"
+                    :src="getThumbnailUrl(node.file.fileStorageId)"
+                    cover
+                  >
+                    <template #error>
+                      <v-icon size="small">description</v-icon>
+                    </template>
+                  </v-img>
+                  <v-icon
+                    v-else
+                    color="primary"
+                    size="small"
+                    >description</v-icon
+                  >
+                </v-avatar>
+                <span v-else class="text-medium-emphasis">-</span>
+                <!-- End of Claude's edit -->
+              </div>
+
+              <!-- Name Column -->
+              <div class="tree-cell cell-name" :style="{ paddingLeft: `${node.depth * 24}px` }">
+                <!-- edited by claude on 2026.01.24.14.50 -->
+                <div class="d-flex align-center">
+                  <v-btn
+                    v-if="node.type === 'folder'"
+                    icon
+                    size="x-small"
+                    variant="text"
+                    class="mr-1"
+                    @click="toggleExpansion(node.id)"
+                  >
+                    <v-icon size="small">
+                      {{ node.expanded ? 'expand_more' : 'chevron_right' }}
+                    </v-icon>
+                  </v-btn>
+                  <!-- edited by claude on 2026.01.24.18.35 - only show icon for folders -->
+                  <v-icon v-if="node.type === 'folder'" class="mr-2" color="primary">
+                    folder
+                  </v-icon>
+                  <!-- End of Claude's edit -->
+                  <!-- edited by claude on 2026.01.24.21.20 - add left padding to align files with folder names -->
+                  <div v-if="node.type === 'file' && node.file" style="margin-left: 48px;">
+                    <div class="text-body-2 font-weight-medium">
+                      {{ node.file.metadata?._originalFileName || node.file.fileName }}
+                    </div>
+                    <div class="text-caption text-medium-emphasis">
+                      {{ node.file.fileFormat.toUpperCase() }} • {{ formatFileSize(node.file.fileSize) }}
+                    </div>
+                  </div>
+                  <!-- End of Claude's edit -->
+                  <span v-else class="text-body-2">{{ node.name }}</span>
+                </div>
+                <!-- End of Claude's edit -->
+              </div>
+
+              <!-- Type Column -->
+              <div class="tree-cell cell-type">
+                <v-avatar
+                  v-if="node.type === 'file' && node.file && getPrinterTypeLogo(node.file.metadata || {}, node.file.fileFormat)"
+                  size="32"
+                  rounded="0"
+                >
+                  <v-img :src="getPrinterTypeLogo(node.file.metadata || {}, node.file.fileFormat)" contain />
+                </v-avatar>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Material Column -->
+              <div class="tree-cell cell-material">
+                <v-chip
+                  v-if="node.type === 'file' && node.file?.metadata?.filamentType"
+                  size="small"
+                  variant="tonal"
+                  color="orange"
+                >
+                  {{ node.file.metadata.filamentType }}
+                </v-chip>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Temperatures Column -->
+              <div class="tree-cell cell-temps">
+                <div v-if="node.type === 'file' && node.file && (node.file.metadata?.nozzleTemperature || node.file.metadata?.bedTemperature)" class="text-caption">
+                  <div v-if="node.file.metadata.nozzleTemperature">
+                    🔥 {{ node.file.metadata.nozzleTemperature }}°C
+                  </div>
+                  <div v-if="node.file.metadata.bedTemperature">
+                    🛏️ {{ node.file.metadata.bedTemperature }}°C
+                  </div>
+                </div>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Plates Column -->
+              <div class="tree-cell cell-plates">
+                <v-chip
+                  v-if="node.type === 'file' && node.file"
+                  size="small"
+                  variant="tonal"
+                  color="blue"
+                >
+                  <v-icon start size="small">layers</v-icon>
+                  {{ node.file.metadata?.totalPlates ?? 1 }}
+                </v-chip>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Print Time Column -->
+              <div class="tree-cell cell-time">
+                <v-chip
+                  v-if="node.type === 'file' && node.file?.metadata?.gcodePrintTimeSeconds"
+                  color="info"
+                  size="small"
+                  variant="tonal"
+                >
+                  <v-icon start size="small">schedule</v-icon>
+                  {{ formatDuration(node.file.metadata.gcodePrintTimeSeconds) }}
+                </v-chip>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Filament Column -->
+              <div class="tree-cell cell-filament">
+                <v-chip
+                  v-if="node.type === 'file' && node.file?.metadata?.filamentUsedGrams"
+                  color="green"
+                  size="small"
+                  variant="tonal"
+                >
+                  <v-icon start size="small">fitness_center</v-icon>
+                  {{ node.file.metadata.filamentUsedGrams.toFixed(1) }}g
+                </v-chip>
+                <span v-else class="text-medium-emphasis">-</span>
+              </div>
+
+              <!-- Actions Column -->
+              <div class="tree-cell cell-actions">
+                <!-- edited by claude on 2026.01.24.16.25 -->
+                <div v-if="node.type === 'file' && node.file" class="d-flex ga-1">
+                  <!-- File Management Menu -->
+                  <v-menu>
+                    <template v-slot:activator="{ props }">
+                      <v-btn
+                        icon="folder_open"
+                        size="small"
+                        variant="text"
+                        color="primary"
+                        v-bind="props"
+                      >
+                        <v-icon>folder_open</v-icon>
+                        <v-tooltip activator="parent" location="top">
+                          File management
+                        </v-tooltip>
+                      </v-btn>
+                    </template>
+                    <v-list density="compact">
+                      <v-list-item @click="openRenameDialog(node.file)">
+                        <template v-slot:prepend>
+                          <v-icon>edit</v-icon>
+                        </template>
+                        <v-list-item-title>Rename</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="openMoveDialog(node.file)">
+                        <template v-slot:prepend>
+                          <v-icon>drive_file_move</v-icon>
+                        </template>
+                        <v-list-item-title>Move</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                  <v-btn
+                    icon="add_to_queue"
+                    size="small"
+                    variant="text"
+                    color="primary"
+                    @click="openQueueDialog(node.file)"
+                  >
+                    <v-icon>add_to_queue</v-icon>
+                    <v-tooltip activator="parent" location="top">
+                      Add to queue
+                    </v-tooltip>
+                  </v-btn>
+                  <v-btn
+                    icon="analytics"
+                    size="small"
+                    variant="text"
+                    color="info"
+                    @click="analyzeFile(node.file)"
+                    :loading="analyzingFiles.has(node.file.fileStorageId)"
+                  >
+                    <v-icon>analytics</v-icon>
+                    <v-tooltip activator="parent" location="top">
+                      Trigger analysis
+                    </v-tooltip>
+                  </v-btn>
+                  <v-btn
+                    icon="visibility"
+                    size="small"
+                    variant="text"
+                    color="primary"
+                    @click="viewFile(node.file)"
+                  >
+                    <v-icon>visibility</v-icon>
+                    <v-tooltip activator="parent" location="top">
+                      View details
+                    </v-tooltip>
+                  </v-btn>
+                  <v-btn
+                    icon="delete"
+                    size="small"
+                    variant="text"
+                    color="error"
+                    @click="deleteFile(node.file)"
+                  >
+                    <v-icon>delete</v-icon>
+                    <v-tooltip activator="parent" location="top">
+                      Delete file
+                    </v-tooltip>
+                  </v-btn>
+                </div>
+                <!-- edited by claude on 2026.01.24.19.30 -->
+                <!-- Folder Actions -->
+                <div v-else-if="node.type === 'folder'" class="d-flex ga-1">
+                  <v-menu>
+                    <template v-slot:activator="{ props }">
+                      <v-btn
+                        icon="more_vert"
+                        size="small"
+                        variant="text"
+                        color="primary"
+                        v-bind="props"
+                      >
+                        <v-icon>more_vert</v-icon>
+                        <v-tooltip activator="parent" location="top">
+                          Folder actions
+                        </v-tooltip>
+                      </v-btn>
+                    </template>
+                    <v-list density="compact">
+                      <v-list-item @click="openFolderRenameDialog(node)">
+                        <template v-slot:prepend>
+                          <v-icon>edit</v-icon>
+                        </template>
+                        <v-list-item-title>Rename Folder</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="openFolderMoveDialog(node)">
+                        <template v-slot:prepend>
+                          <v-icon>drive_file_move</v-icon>
+                        </template>
+                        <v-list-item-title>Move Folder</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="openFolderCreateDialog(node.path)">
+                        <template v-slot:prepend>
+                          <v-icon>create_new_folder</v-icon>
+                        </template>
+                        <v-list-item-title>New Subfolder</v-list-item-title>
+                      </v-list-item>
+                      <v-divider class="my-1" />
+                      <v-list-item @click="confirmDeleteFolder(node)" class="text-error">
+                        <template v-slot:prepend>
+                          <v-icon color="error">delete</v-icon>
+                        </template>
+                        <v-list-item-title>Delete Folder</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </div>
+                <div v-else class="text-medium-emphasis">-</div>
+                <!-- End of Claude's edit -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End of Claude's edit -->
         <v-data-table
+          v-if="false"
           :headers="headers"
           :items="filteredFiles"
           :loading="loading"
@@ -117,13 +499,35 @@
 
           <!-- File Name Column -->
           <template #item.fileName="{ item }">
-            <div>
-              <div class="text-body-2 font-weight-medium">
-                {{ item.metadata?._originalFileName || item.fileName }}
-              </div>
-              <div class="text-caption text-medium-emphasis">
-                {{ item.fileFormat.toUpperCase() }} •
-                {{ formatFileSize(item.fileSize) }}
+            <div class="d-flex align-center">
+              <v-avatar
+                size="40"
+                class="mr-3"
+                rounded
+              >
+                <v-img
+                  v-if="item.thumbnails?.length > 0"
+                  :src="getThumbnailUrl(item.fileStorageId)"
+                  cover
+                >
+                  <template #error>
+                    <v-icon>description</v-icon>
+                  </template>
+                </v-img>
+                <v-icon
+                  v-else
+                  color="primary"
+                  >description</v-icon
+                >
+              </v-avatar>
+              <div>
+                <div class="text-body-2 font-weight-medium">
+                  {{ item.metadata?._originalFileName || item.fileName }}
+                </div>
+                <div class="text-caption text-medium-emphasis">
+                  {{ item.fileFormat.toUpperCase() }} •
+                  {{ formatFileSize(item.fileSize) }}
+                </div>
               </div>
             </div>
           </template>
@@ -263,6 +667,28 @@
                 {{ item.metadata.filamentUsedGrams.toFixed(1) }}g
               </v-chip>
             </div>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
+          </template>
+
+          <!-- Thumbnails Column -->
+          <template #item.thumbnails="{ item }">
+            <v-chip
+              v-if="item.thumbnails?.length > 0"
+              size="small"
+              color="success"
+              variant="tonal"
+            >
+              <v-icon
+                start
+                size="small"
+                >image</v-icon
+              >
+              {{ item.thumbnails.length }}
+            </v-chip>
             <span
               v-else
               class="text-medium-emphasis"
@@ -572,10 +998,79 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!-- edited by claude on 2026.01.24.15.45 -->
+    <!-- Rename File Dialog -->
+    <FileRenameDialog
+      v-model="renameDialog"
+      :current-file-path="selectedFileForRename?.fileName || ''"
+      :current-file-name="selectedFileForRename?.metadata?._originalFileName || selectedFileForRename?.fileName || ''"
+      @rename="handleFileRename"
+    />
+
+    <!-- Move File Dialog -->
+    <!-- edited by claude on 2026.01.24.18.50 -->
+    <FileMoveDialog
+      v-model="moveDialog"
+      :current-folder-path="selectedFileForMove?.metadata?._path || ''"
+      :current-file-name="getFileName(selectedFileForMove?.metadata?._originalFileName || selectedFileForMove?.fileName || '')"
+      :available-folders="availableFoldersForMove"
+      @move="handleFileMove"
+    />
+    <!-- edited by claude on 2026.01.24.19.08 - use _originalFileName and extract filename only -->
+    <!-- End of Claude's edit -->
+
+    <!-- edited by claude on 2026.01.24.16.35 -->
+    <!-- Move Folder Dialog -->
+    <FolderMoveDialog
+      v-model="folderMoveDialog"
+      :folder-path="selectedFolderForMove?.path || ''"
+      :file-count="selectedFolderForMove?.fileCount || 0"
+      :available-folders="availableFoldersForFolderMove"
+      @move="handleFolderMove"
+    />
+    <!-- End of Claude's edit -->
+
+    <!-- edited by claude on 2026.01.24.19.35 -->
+    <!-- Folder Rename Dialog -->
+    <FolderRenameDialog
+      v-model="folderRenameDialog"
+      :current-folder-path="selectedFolderForRename?.path || ''"
+      :current-folder-name="selectedFolderForRename?.name || ''"
+      :file-count="selectedFolderForRename?.fileCount || 0"
+      @rename="handleFolderRename"
+    />
+
+    <!-- Create Folder Dialog -->
+    <CreateFolderDialog
+      v-model="createFolderDialog"
+      :parent-path="newFolderParentPath"
+      @create="handleCreateFolder"
+    />
+
+    <!-- Delete Folder Dialog -->
+    <!-- edited by claude on 2026.01.25.14.45 -->
+    <FolderDeleteDialog
+      v-model:show="folderDeleteDialog"
+      :folder-path="selectedFolderForDelete?.path || ''"
+      :file-count="selectedFolderForDelete?.fileCount || 0"
+      :folder-count="selectedFolderForDelete?.folderCount || 0"
+      @delete="handleFolderDelete"
+    />
+    <!-- End of Claude's edit -->
+
+    <!-- Loading Overlay -->
+    <FileOperationLoadingOverlay
+      :is-visible="operationFeedback.operationState.value.isLoading"
+      :title="operationFeedback.operationState.value.loadingMessage"
+      :message="'Please wait...'"
+    />
+    <!-- End of Claude's edit -->
   </v-container>
 </template>
 
 <script lang="ts" setup>
+// edited by claude on 2026.01.24.14.35
 import { ref, computed, onMounted } from 'vue'
 import {
   FileStorageService,
@@ -595,9 +1090,23 @@ import {
   getPrinterTypeName,
   getPrinterTypeLogo
 } from '@/shared/printer-types.constants'
+// edited by claude on 2026.01.25.15.31
+import { buildFileTree, flattenTree, toggleNodeExpansion, expandAllNodes, collapseAllNodes, convertBackendTree, type FileTreeNode } from './file-tree-builder.utils'
+import { renameFile, moveFile, moveFolder, renameFolder, createFolder, deleteFolder, getFileName } from './file-management.utils'
+import { useFileOperationFeedback } from './file-operations-feedback.composable'
+import FileRenameDialog from './FileRenameDialog.vue'
+import FileMoveDialog from './FileMoveDialog.vue'
+import FolderMoveDialog from './FolderMoveDialog.vue'
+import FolderRenameDialog from './FolderRenameDialog.vue'
+import FolderDeleteDialog from './FolderDeleteDialog.vue'
+import CreateFolderDialog from './CreateFolderDialog.vue'
+import FileOperationLoadingOverlay from './FileOperationLoadingOverlay.vue'
+import FileThumbnailCell from './FileThumbnailCell.vue'
+// End of Claude's edit
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
+const operationFeedback = useFileOperationFeedback()
 
 const thumbnailCache = ref<Map<string, string>>(new Map())
 
@@ -606,12 +1115,16 @@ const getThumbnailUrl = (fileStorageId: string, index: number = 0): string => {
   if (thumbnailCache.value.has(cacheKey)) {
     return thumbnailCache.value.get(cacheKey)!
   }
-  FileStorageService.getThumbnailBase64(fileStorageId, index)
+  FileStorageService.getThumbnail(fileStorageId, index)
     .then((base64) => {
       thumbnailCache.value.set(cacheKey, base64)
     })
     .catch(() => {})
   return ''
+}
+
+const getGCodeThumbnailUrl = (fileStorageId: string, index: number): string => {
+  return getThumbnailUrl(fileStorageId, index)
 }
 
 const files = ref<FileMetadata[]>([])
@@ -631,6 +1144,64 @@ const uploadProgress = ref<
 >([])
 const fileInput = ref<HTMLInputElement | null>(null)
 const analyzingFiles = ref<Set<string>>(new Set())
+
+// edited by claude on 2026.01.24.14.37
+// Tree state management
+const fileTree = ref<FileTreeNode[]>([])
+// End of Claude's edit
+
+// edited by claude on 2026.01.24.15.47
+// Rename dialog state
+const renameDialog = ref(false)
+const selectedFileForRename = ref<FileMetadata | null>(null)
+// End of Claude's edit
+
+// edited by claude on 2026.01.24.16.09
+// Move dialog state
+const moveDialog = ref(false)
+const selectedFileForMove = ref<FileMetadata | null>(null)
+
+// edited by claude on 2026.01.25.16.30
+// Extract folder paths from the tree (includes virtual directories)
+const availableFoldersForMove = computed(() => {
+  const folders = flattenedTree.value
+    .filter(node => node.type === 'folder')
+    .map(node => node.path)
+    .sort()
+  return folders
+})
+// End of Claude's edit
+
+// edited by claude on 2026.01.24.16.38
+// Folder move dialog state
+const folderMoveDialog = ref(false)
+const selectedFolderForMove = ref<{ path: string; fileCount: number } | null>(null)
+
+// Get folders excluding the one being moved and its subfolders
+const availableFoldersForFolderMove = computed(() => {
+  if (!selectedFolderForMove.value) return []
+
+  const movingPath = selectedFolderForMove.value.path
+  return availableFoldersForMove.value.filter(folder =>
+    folder !== movingPath && !folder.startsWith(`${movingPath}/`)
+  )
+})
+
+// edited by claude on 2026.01.24.19.39
+// Folder rename dialog state
+const folderRenameDialog = ref(false)
+const selectedFolderForRename = ref<{ path: string; name: string; fileCount: number } | null>(null)
+
+// Create folder dialog state
+const createFolderDialog = ref(false)
+const newFolderParentPath = ref('')
+
+// edited by claude on 2026.01.24.19.47
+// Drag and drop state
+const draggingNodeId = ref<string | null>(null)
+const dragOverNodeId = ref<string | null>(null)
+const draggingNode = ref<FileTreeNode | null>(null)
+// End of Claude's edit
 
 const headers = [
   { title: '', key: 'thumbnail', sortable: false, width: '80px' },
@@ -665,6 +1236,31 @@ const filteredFiles = computed(() => {
   )
 })
 
+// edited by claude on 2026.01.24.14.38
+// Tree computed properties
+const filteredTree = computed(() => {
+  if (!searchQuery.value) {
+    return fileTree.value
+  }
+  const query = searchQuery.value.toLowerCase()
+
+  // Filter files first
+  const filtered = files.value.filter(file =>
+    file.fileName.toLowerCase().includes(query) ||
+    (file.metadata?.path || '').toLowerCase().includes(query) ||
+    file.fileHash.toLowerCase().includes(query) ||
+    file.fileStorageId.toLowerCase().includes(query)
+  )
+
+  // Build tree from filtered files
+  return buildFileTree(filtered)
+})
+
+const flattenedTree = computed(() => {
+  return flattenTree(filteredTree.value)
+})
+// End of Claude's edit
+
 onMounted(async () => {
   await loadFiles()
   await printerStore.loadPrinters()
@@ -673,8 +1269,16 @@ onMounted(async () => {
 const loadFiles = async () => {
   loading.value = true
   try {
-    const response = await FileStorageService.listFiles()
-    files.value = response.files
+    // edited by claude on 2026.01.25.15.52
+    // Load both tree structure (for display with empty folders) and flat list (for operations)
+    const [treeResponse, filesResponse] = await Promise.all([
+      FileStorageService.getDirectoryTree(),
+      FileStorageService.listFiles()
+    ])
+
+    files.value = filesResponse.files
+    fileTree.value = convertBackendTree(treeResponse.tree)
+    // End of Claude's edit
   } catch (error) {
     console.error('Failed to load files:', error)
     snackbar.error('Failed to load files')
@@ -725,11 +1329,12 @@ const analyzeFile = async (file: FileMetadata) => {
   }
 }
 
-const handleDragOver = (e: DragEvent) => {
+// edited by claude on 2026.01.24.21.15 - renamed to avoid conflict with tree drag handlers
+const handleUploadDragOver = (e: DragEvent) => {
   e.preventDefault()
 }
 
-const handleDragEnter = (e: DragEvent) => {
+const handleUploadDragEnter = (e: DragEvent) => {
   e.preventDefault()
   dragDepth.value++
   if (dragDepth.value === 1) {
@@ -737,7 +1342,7 @@ const handleDragEnter = (e: DragEvent) => {
   }
 }
 
-const handleDragLeave = (e: DragEvent) => {
+const handleUploadDragLeave = (e: DragEvent) => {
   e.preventDefault()
   dragDepth.value--
   if (dragDepth.value === 0) {
@@ -745,13 +1350,14 @@ const handleDragLeave = (e: DragEvent) => {
   }
 }
 
-const handleDrop = async (e: DragEvent) => {
+const handleUploadDrop = async (e: DragEvent) => {
   e.preventDefault()
   dragDepth.value = 0
   isDragging.value = false
   const droppedFiles = Array.from(e.dataTransfer?.files || [])
   await uploadFiles(droppedFiles)
 }
+// End of Claude's edit
 
 const handleFileSelect = async (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -858,6 +1464,343 @@ const queueToSelectedPrinters = async () => {
     queuing.value = false
   }
 }
+
+// edited by claude on 2026.01.24.15.06
+// Tree manipulation functions
+const toggleExpansion = (nodeId: string) => {
+  fileTree.value = toggleNodeExpansion(fileTree.value, nodeId)
+}
+
+const expandAll = () => {
+  fileTree.value = expandAllNodes(fileTree.value)
+}
+
+const collapseAll = () => {
+  fileTree.value = collapseAllNodes(fileTree.value)
+}
+// End of Claude's edit
+
+// edited by claude on 2026.01.24.15.48
+// File rename handlers
+const openRenameDialog = (file: FileMetadata) => {
+  selectedFileForRename.value = file
+  renameDialog.value = true
+}
+
+const handleFileRename = async (newName: string) => {
+  // edited by claude on 2026.01.24.18.56
+  if (!selectedFileForRename.value) return
+
+  const file = selectedFileForRename.value
+  const result = await operationFeedback.executeOperation(
+    'rename',
+    'Renaming file...',
+    `File renamed to "${newName}" successfully`,
+    async () => {
+      await renameFile(file.fileStorageId, newName)
+    }
+  )
+
+  if (result !== null) {
+    // Reload files to show updated name
+    await loadFiles()
+  }
+  // End of Claude's edit
+}
+
+// edited by claude on 2026.01.24.16.10
+// File move handlers
+const openMoveDialog = (file: FileMetadata) => {
+  selectedFileForMove.value = file
+  moveDialog.value = true
+}
+
+const handleFileMove = async (newPath: string) => {
+  if (!selectedFileForMove.value) return
+
+  const file = selectedFileForMove.value
+  const result = await operationFeedback.executeOperation(
+    'move',
+    'Moving file...',
+    `File moved successfully`,
+    async () => {
+      await moveFile(file.fileStorageId, newPath)
+    }
+  )
+
+  if (result !== null) {
+    // Reload files to show updated location
+    await loadFiles()
+  }
+}
+
+// edited by claude on 2026.01.24.16.40
+// Folder move handlers
+const openFolderMoveDialog = (node: FileTreeNode) => {
+  // edited by claude on 2026.01.24.19.00
+  if (node.type !== 'folder') return
+
+  // Count files in this folder using metadata._path
+  const folderPath = node.path || node.name
+  const fileCount = files.value.filter(file => {
+    const filePath = file.metadata?._path || ''
+    return filePath === folderPath || filePath.startsWith(`${folderPath}/`)
+  }).length
+
+  selectedFolderForMove.value = {
+    path: folderPath,
+    fileCount
+  }
+  folderMoveDialog.value = true
+  // End of Claude's edit
+}
+
+const handleFolderMove = async (newPath: string) => {
+  if (!selectedFolderForMove.value) return
+
+  const folder = selectedFolderForMove.value
+  const result = await operationFeedback.executeOperation(
+    'move',
+    `Moving folder with ${folder.fileCount} file(s)...`,
+    `Folder moved successfully`,
+    async () => {
+      await moveFolder(folder.path, newPath, files.value)
+    }
+  )
+
+  if (result !== null) {
+    // Reload files to show updated location
+    await loadFiles()
+  }
+}
+
+// edited by claude on 2026.01.24.19.40
+// Folder rename handlers
+const openFolderRenameDialog = (node: FileTreeNode) => {
+  if (node.type !== 'folder') return
+
+  const folderPath = node.path || node.name
+  const fileCount = files.value.filter(file => {
+    const filePath = file.metadata?._path || ''
+    return filePath === folderPath || filePath.startsWith(`${folderPath}/`)
+  }).length
+
+  selectedFolderForRename.value = {
+    path: folderPath,
+    name: node.name,
+    fileCount
+  }
+  folderRenameDialog.value = true
+}
+
+const handleFolderRename = async (newFolderName: string) => {
+  if (!selectedFolderForRename.value) return
+
+  const folder = selectedFolderForRename.value
+  const result = await operationFeedback.executeOperation(
+    'rename',
+    `Renaming folder with ${folder.fileCount} file(s)...`,
+    `Folder renamed successfully`,
+    async () => {
+      await renameFolder(folder.path, newFolderName, files.value)
+    }
+  )
+
+  if (result !== null) {
+    await loadFiles()
+  }
+}
+
+// Create folder handlers
+// edited by claude on 2026.01.25.14.47
+const openFolderCreateDialog = (parentPath: string = '') => {
+  newFolderParentPath.value = parentPath
+  createFolderDialog.value = true
+}
+// End of Claude's edit
+
+const handleCreateFolder = async (folderPath: string) => {
+  // edited by claude on 2026.01.25.14.40
+  const result = await operationFeedback.executeOperation(
+    'create',
+    'Creating folder...',
+    `Folder "${folderPath}" created successfully`,
+    async () => {
+      await createFolder(folderPath)
+    }
+  )
+
+  if (result !== null) {
+    await loadFiles()
+  }
+  // End of Claude's edit
+}
+
+// Delete folder handler
+// edited by claude on 2026.01.25.14.42
+const selectedFolderForDelete = ref<{ path: string; name: string; fileCount: number; folderCount: number; markerId?: string } | null>(null)
+const folderDeleteDialog = ref(false)
+
+const confirmDeleteFolder = async (node: FileTreeNode) => {
+  if (node.type !== 'folder') return
+
+  // edited by claude on 2026.01.25.15.47
+  // edited by claude on 2026.01.25.16.20
+  const folderPath = node.path || node.name
+
+  // Find all files recursively (including files in subdirectories)
+  const filesInFolder = files.value.filter(file => {
+    const filePath = file.metadata?._path || ''
+    return filePath === folderPath || filePath.startsWith(`${folderPath}/`)
+  })
+
+  // Count all subfolders recursively using flattenedTree
+  const subfolders = flattenedTree.value.filter(n => {
+    if (n.type !== 'folder') return false
+    const nPath = n.path || n.name
+    return nPath !== folderPath && nPath.startsWith(`${folderPath}/`)
+  })
+  // End of Claude's edit
+
+  selectedFolderForDelete.value = {
+    path: folderPath,
+    name: node.name,
+    fileCount: filesInFolder.length,
+    folderCount: subfolders.length,
+    markerId: node.markerId // For empty virtual directories
+  }
+
+  folderDeleteDialog.value = true
+  // End of Claude's edit
+}
+
+const handleFolderDelete = async () => {
+  if (!selectedFolderForDelete.value) return
+
+  // edited by claude on 2026.01.25.15.48
+  const folder = selectedFolderForDelete.value
+  folderDeleteDialog.value = false
+
+  const result = await operationFeedback.executeOperation(
+    'delete',
+    `Deleting folder and ${folder.fileCount} file(s)...`,
+    `Folder deleted successfully`,
+    async () => {
+      // edited by claude on 2026.01.25.16.12 - pass flattenedTree for recursive deletion
+      await deleteFolder(folder.path, files.value, flattenedTree.value, folder.markerId)
+      // End of Claude's edit
+    }
+  )
+
+  if (result !== null) {
+    await loadFiles()
+  }
+  // End of Claude's edit
+}
+// End of Claude's edit
+
+// edited by claude on 2026.01.24.19.48
+// Drag and drop handlers
+const handleDragStart = (node: FileTreeNode, event: DragEvent) => {
+  draggingNodeId.value = node.id
+  draggingNode.value = node
+
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'move'
+    event.dataTransfer.setData('text/plain', node.id)
+  }
+}
+
+const handleDragEnd = () => {
+  draggingNodeId.value = null
+  dragOverNodeId.value = null
+  draggingNode.value = null
+}
+
+const handleDragOver = (node: FileTreeNode, event: DragEvent) => {
+  if (!draggingNode.value || draggingNode.value.id === node.id) return
+
+  // Only allow dropping into folders
+  if (node.type === 'folder') {
+    dragOverNodeId.value = node.id
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'move'
+    }
+  }
+}
+
+const handleDragLeave = (node: FileTreeNode) => {
+  if (dragOverNodeId.value === node.id) {
+    dragOverNodeId.value = null
+  }
+}
+
+const handleDrop = async (targetNode: FileTreeNode, event: DragEvent) => {
+  dragOverNodeId.value = null
+
+  if (!draggingNode.value || draggingNode.value.id === targetNode.id) return
+
+  // Only allow dropping into folders
+  if (targetNode.type !== 'folder') {
+    snackbar.error('Can only drop into folders')
+    return
+  }
+
+  const sourceNode = draggingNode.value
+  const targetFolderPath = targetNode.path || targetNode.name
+
+  // Prevent dropping folder into itself or its subfolders
+  if (sourceNode.type === 'folder') {
+    const sourcePath = sourceNode.path || sourceNode.name
+    if (targetFolderPath === sourcePath || targetFolderPath.startsWith(`${sourcePath}/`)) {
+      snackbar.error('Cannot move folder into itself or its subfolders')
+      return
+    }
+  }
+
+  // Perform the move
+  if (sourceNode.type === 'file' && sourceNode.file) {
+    // Move file
+    const result = await operationFeedback.executeOperation(
+      'move',
+      'Moving file...',
+      `File moved to "${targetNode.name}"`,
+      async () => {
+        await moveFile(sourceNode.file!.fileStorageId, targetFolderPath)
+      }
+    )
+
+    if (result !== null) {
+      await loadFiles()
+    }
+  } else if (sourceNode.type === 'folder') {
+    // Move folder
+    const sourcePath = sourceNode.path || sourceNode.name
+    const fileCount = files.value.filter(file => {
+      const filePath = file.metadata?._path || ''
+      return filePath === sourcePath || filePath.startsWith(`${sourcePath}/`)
+    }).length
+
+    // Calculate new path for folder
+    const newFolderPath = `${targetFolderPath}/${sourceNode.name}`
+
+    const result = await operationFeedback.executeOperation(
+      'move',
+      `Moving folder with ${fileCount} file(s)...`,
+      `Folder moved to "${targetNode.name}"`,
+      async () => {
+        await moveFolder(sourcePath, newFolderPath, files.value)
+      }
+    )
+
+    if (result !== null) {
+      await loadFiles()
+    }
+  }
+
+  draggingNode.value = null
+}
+// End of Claude's edit
 </script>
 
 <style scoped>
@@ -875,4 +1818,118 @@ const queueToSelectedPrinters = async () => {
   background-color: rgba(var(--v-theme-primary), 0.05);
   transform: scale(1.01);
 }
+
+/* edited by claude on 2026.01.24.14.43 */
+/* Tree Table Styles */
+.tree-table-container {
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tree-table-header {
+  display: grid;
+  grid-template-columns: 60px minmax(250px, 1fr) 80px 120px 100px 80px 140px 120px 250px; /* edited by claude on 2026.01.24.18.15 - increased actions column from 200px to 250px */
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: rgba(var(--v-theme-on-surface), 0.05);
+  font-weight: 600;
+  border-bottom: 2px solid rgba(var(--v-theme-on-surface), 0.12);
+}
+
+.tree-table-body {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.tree-table-row {
+  display: grid;
+  grid-template-columns: 60px minmax(250px, 1fr) 80px 120px 100px 80px 140px 120px 250px; /* edited by claude on 2026.01.24.18.15 - increased actions column from 200px to 250px */
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+  transition: background-color 0.2s ease;
+  cursor: grab;
+}
+
+.tree-table-row:hover {
+  background-color: rgba(var(--v-theme-on-surface), 0.04);
+}
+
+.tree-table-row.is-folder {
+  background-color: rgba(var(--v-theme-primary), 0.02);
+}
+
+.tree-table-row.is-folder:hover {
+  background-color: rgba(var(--v-theme-primary), 0.06);
+}
+
+/* edited by claude on 2026.01.24.19.50 */
+.tree-table-row.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.tree-table-row.drag-over {
+  background-color: rgba(var(--v-theme-primary), 0.15) !important;
+  border: 2px dashed rgba(var(--v-theme-primary), 0.5);
+}
+
+.tree-table-row:active {
+  cursor: grabbing;
+}
+/* End of Claude's edit */
+
+.tree-cell {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cell-thumbnail {
+  justify-content: center;
+}
+
+.cell-name {
+  min-width: 0;
+}
+
+.cell-type,
+.cell-material,
+.cell-temps,
+.cell-plates,
+.cell-time,
+.cell-filament {
+  justify-content: center;
+}
+
+/* edited by claude on 2026.01.24.21.20 - center actions header, keep items right-aligned */
+.tree-table-header .cell-actions {
+  justify-content: center;
+}
+
+.tree-table-row .cell-actions {
+  justify-content: flex-end;
+}
+/* End of Claude's edit */
+
+/* Scrollbar styling */
+.tree-table-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tree-table-body::-webkit-scrollbar-track {
+  background: rgba(var(--v-theme-on-surface), 0.05);
+  border-radius: 4px;
+}
+
+.tree-table-body::-webkit-scrollbar-thumb {
+  background: rgba(var(--v-theme-on-surface), 0.2);
+  border-radius: 4px;
+}
+
+.tree-table-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--v-theme-on-surface), 0.3);
+}
+/* End of Claude's edit */
 </style>

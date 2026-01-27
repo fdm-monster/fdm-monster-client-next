@@ -8,7 +8,7 @@ export const useFileStorageThumbnailQuery = (
   fileStorageId: ComputedRef<string | null | undefined> | Ref<string | null | undefined>,
   thumbnails: ComputedRef<ThumbnailInfo[] | undefined> | Ref<ThumbnailInfo[] | undefined>,
   predeterminedThumbnailIndex?: ComputedRef<number | undefined> | Ref<number | undefined>,
-  enabled?: boolean,
+  enabled?: boolean
 ) => {
   const thumbnailIndexToFetch = computed(() => {
     if (predeterminedThumbnailIndex?.value !== undefined && predeterminedThumbnailIndex.value !== null) {
