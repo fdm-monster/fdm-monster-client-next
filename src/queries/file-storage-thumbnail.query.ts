@@ -37,7 +37,7 @@ export const useFileStorageThumbnailQuery = (
         return null;
       }
     },
-    enabled: !!fileStorageId.value && !!thumbnailIndexToFetch.value && enabled !== false,
+    enabled: !!fileStorageId.value && thumbnailIndexToFetch.value !== null && thumbnailIndexToFetch.value !== undefined && enabled !== false,
     staleTime: 1000 * 60 * 60,
     retry: false,
   });

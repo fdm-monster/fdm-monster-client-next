@@ -374,25 +374,31 @@
 
           <!-- Filament Column -->
           <template #item.filament="{ item }">
-            <div v-if="activeTab === 'jobs' && item.metadata?.filamentUsedGrams"
+            <div v-if="activeTab === 'jobs' && item.metadata?.filamentUsedGrams !== undefined && item.metadata?.filamentUsedGrams !== null"
                  class="filament-info">
-              <v-chip
-                color="green"
-                size="small"
-                variant="tonal"
-              >
+              <v-chip color="green" size="small" variant="tonal">
                 <v-icon start size="small">fitness_center</v-icon>
-                {{ Math.round(item.metadata.filamentUsedGrams) }}g
+                <template v-if="Array.isArray(item.metadata.filamentUsedGrams)">
+                  <span v-for="(val, idx) in item.metadata.filamentUsedGrams" :key="idx">
+                    {{ val != null ? Math.round(val) : '-' }}g<span v-if="Number(idx) < item.metadata.filamentUsedGrams.length - 1">, </span>
+                  </span>
+                </template>
+                <template v-else>
+                  {{ Math.round(item.metadata.filamentUsedGrams) }}g
+                </template>
               </v-chip>
             </div>
-            <div v-else-if="activeTab === 'queue' && item.filamentGrams" class="text-body-2">
-              <v-chip
-                color="purple"
-                size="small"
-                variant="tonal"
-              >
+            <div v-else-if="activeTab === 'queue' && item.filamentGrams !== undefined && item.filamentGrams !== null" class="text-body-2">
+              <v-chip color="purple" size="small" variant="tonal">
                 <v-icon start size="small">science</v-icon>
-                {{ item.filamentGrams.toFixed(1) }}g
+                <template v-if="Array.isArray(item.filamentGrams)">
+                  <span v-for="(val, idx) in item.filamentGrams" :key="idx">
+                    {{ val != null ? val.toFixed(1) : '-' }}g<span v-if="Number(idx) < item.filamentGrams.length - 1">, </span>
+                  </span>
+                </template>
+                <template v-else>
+                  {{ item.filamentGrams.toFixed(1) }}g
+                </template>
               </v-chip>
             </div>
             <span v-else class="text-medium-emphasis">-</span>

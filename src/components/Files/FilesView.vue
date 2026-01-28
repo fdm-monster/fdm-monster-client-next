@@ -149,19 +149,26 @@
 
           <!-- Material Column -->
           <template #item.material="{ item }">
-            <v-chip
-              v-if="item.metadata?.filamentType"
-              size="small"
-              variant="tonal"
-              color="orange"
-            >
-              {{ item.metadata.filamentType }}
-            </v-chip>
-            <span
-              v-else
-              class="text-medium-emphasis"
-              >-</span
-            >
+            <template v-if="item.metadata?.filamentType">
+              <template v-if="Array.isArray(item.metadata.filamentType)">
+                <v-chip
+                  v-for="(type, idx) in item.metadata.filamentType"
+                  :key="idx"
+                  size="small"
+                  variant="tonal"
+                  color="orange"
+                  class="mr-1 mb-1"
+                >
+                  {{ type }}
+                </v-chip>
+              </template>
+              <template v-else>
+                <v-chip size="small" variant="tonal" color="orange">
+                  {{ item.metadata.filamentType }}
+                </v-chip>
+              </template>
+            </template>
+            <span v-else class="text-medium-emphasis">-</span>
           </template>
 
           <!-- Temperatures Column -->
@@ -246,21 +253,17 @@
 
           <!-- Filament Column -->
           <template #item.filament="{ item }">
-            <div
-              v-if="item.metadata?.filamentUsedGrams"
-              class="text-body-2"
-            >
-              <v-chip
-                color="green"
-                size="small"
-                variant="tonal"
-              >
-                <v-icon
-                  start
-                  size="small"
-                  >fitness_center</v-icon
-                >
-                {{ item.metadata.filamentUsedGrams.toFixed(1) }}g
+            <div v-if="item.metadata?.filamentUsedGrams !== undefined && item.metadata?.filamentUsedGrams !== null" class="text-body-2">
+              <v-chip color="green" size="small" variant="tonal">
+                <v-icon start size="small">fitness_center</v-icon>
+                <template v-if="Array.isArray(item.metadata.filamentUsedGrams)">
+                  <span v-for="(val, idx) in item.metadata.filamentUsedGrams" :key="idx">
+                    {{ val != null ? val.toFixed(1) : '-' }}g<span v-if="idx < item.metadata.filamentUsedGrams.length - 1">, </span>
+                  </span>
+                </template>
+                <template v-else>
+                  {{ item.metadata.filamentUsedGrams.toFixed(1) }}g
+                </template>
               </v-chip>
             </div>
             <span
