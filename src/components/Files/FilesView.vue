@@ -348,230 +348,15 @@
       </v-card-text>
     </v-card>
 
-    <!-- File Details Dialog -->
-    <v-dialog
+    <FileDetailsDialog
       v-model="detailsDialog"
-      max-width="800"
-    >
-      <v-card v-if="selectedFile">
-        <v-card-title class="d-flex align-center">
-          <v-icon class="mr-2">description</v-icon>
-          File Details
-          <v-spacer />
-          <v-btn
-            icon="close"
-            variant="text"
-            @click="detailsDialog = false"
-          />
-        </v-card-title>
+      :file="selectedFile"
+    />
 
-        <v-card-text>
-          <v-row>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <h3 class="text-h6 mb-3">File Information</h3>
-              <div class="mb-2">
-                <strong>Name:</strong>
-                {{
-                  selectedFile.metadata?._originalFileName ||
-                  selectedFile.fileName
-                }}
-              </div>
-              <div class="mb-2">
-                <strong>Format:</strong>
-                {{ selectedFile.fileFormat.toUpperCase() }}
-              </div>
-              <div class="mb-2">
-                <strong>Size:</strong>
-                {{ formatFileSize(selectedFile.fileSize) }}
-              </div>
-              <div class="mb-2">
-                <strong>Hash:</strong> <code>{{ selectedFile.fileHash }}</code>
-              </div>
-              <div class="mb-2">
-                <strong>Storage ID:</strong>
-                <code>{{ selectedFile.fileStorageId }}</code>
-              </div>
-              <div class="mb-2">
-                <strong>Created:</strong>
-                {{ formatDate(selectedFile.createdAt) }}
-              </div>
-            </v-col>
-
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <h3 class="text-h6 mb-3">Print Metadata</h3>
-              <div v-if="selectedFile.metadata">
-                <div
-                  v-if="selectedFile.metadata.gcodePrintTimeSeconds"
-                  class="mb-2"
-                >
-                  <strong>Print Time:</strong>
-                  {{
-                    formatDuration(selectedFile.metadata.gcodePrintTimeSeconds)
-                  }}
-                </div>
-                <div
-                  v-if="selectedFile.metadata.filamentUsedGrams"
-                  class="mb-2"
-                >
-                  <strong>Filament:</strong>
-                  {{ selectedFile.metadata.filamentUsedGrams.toFixed(1) }}g
-                </div>
-                <div
-                  v-if="selectedFile.metadata.nozzleDiameterMm"
-                  class="mb-2"
-                >
-                  <strong>Nozzle Diameter:</strong>
-                  {{ selectedFile.metadata.nozzleDiameterMm }}mm
-                </div>
-                <div
-                  v-if="selectedFile.metadata.layerHeight"
-                  class="mb-2"
-                >
-                  <strong>Layer Height:</strong>
-                  {{ selectedFile.metadata.layerHeight }}mm
-                </div>
-                <div
-                  v-if="selectedFile.metadata.totalLayers"
-                  class="mb-2"
-                >
-                  <strong>Total Layers:</strong>
-                  {{ selectedFile.metadata.totalLayers }}
-                </div>
-              </div>
-              <div
-                v-else
-                class="text-medium-emphasis"
-              >
-                No metadata available
-              </div>
-            </v-col>
-
-            <v-col
-              v-if="selectedFile.thumbnails?.length > 0"
-              cols="12"
-            >
-              <h3 class="text-h6 mb-3">
-                Thumbnails ({{ selectedFile.thumbnails.length }})
-              </h3>
-              <div class="d-flex flex-wrap ga-2">
-                <v-img
-                  v-for="(thumb, i) in selectedFile.thumbnails"
-                  :key="i"
-                  :src="getThumbnailUrl(selectedFile.fileStorageId, thumb.index)"
-                  width="150"
-                  height="150"
-                  cover
-                  class="rounded"
-                />
-              </div>
-            </v-col>
-          </v-row>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            variant="text"
-            @click="detailsDialog = false"
-          >
-            Close
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <!-- Queue to Printers Dialog -->
-    <v-dialog
+    <QueueFileDialog
       v-model="queueDialog"
-      max-width="600"
-    >
-      <v-card v-if="selectedFileForQueue">
-        <v-card-title class="d-flex align-center">
-          <v-icon class="mr-2">add_to_queue</v-icon>
-          Queue File to Printers
-          <v-spacer />
-          <v-btn
-            icon="close"
-            variant="text"
-            @click="queueDialog = false"
-          />
-        </v-card-title>
-
-        <v-card-text>
-          <div class="mb-4">
-            <strong>File:</strong>
-            {{
-              selectedFileForQueue.metadata?._originalFileName ||
-              selectedFileForQueue.fileName
-            }}
-          </div>
-
-          <v-alert
-            type="info"
-            variant="tonal"
-            class="mb-4"
-          >
-            Select one or more printers to queue this file to
-          </v-alert>
-
-          <v-list>
-            <v-list-item
-              v-for="printer in availablePrinters"
-              :key="printer.id"
-              @click="togglePrinterSelection(printer.id)"
-            >
-              <template #prepend>
-                <v-checkbox
-                  :model-value="selectedPrinters.includes(printer.id)"
-                  @click.stop="togglePrinterSelection(printer.id)"
-                />
-              </template>
-              <v-list-item-title>
-                {{ printer.name }}
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                {{ getPrinterTypeName(printer.printerType) }}
-              </v-list-item-subtitle>
-            </v-list-item>
-          </v-list>
-
-          <v-alert
-            v-if="availablePrinters.length === 0"
-            type="warning"
-            variant="tonal"
-          >
-            No printers available
-          </v-alert>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="grey"
-            variant="text"
-            @click="queueDialog = false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="primary"
-            variant="elevated"
-            :disabled="selectedPrinters.length === 0"
-            @click="queueToSelectedPrinters"
-            :loading="queuing"
-          >
-            Queue to {{ selectedPrinters.length }} Printer(s)
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+      :file="selectedFileForQueue"
+    />
   </v-container>
 </template>
 
@@ -581,40 +366,16 @@ import {
   FileStorageService,
   type FileMetadata
 } from '@/backend/file-storage.service'
-import { PrintQueueService } from '@/backend/print-queue.service'
-import { PrintJobService } from '@/backend/print-job.service'
 import { usePrinterStore } from '@/store/printer.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { formatFileSize } from '@/utils/file-size.util'
-import {
-  formatDate,
-  formatRelativeTime,
-  formatDuration
-} from '@/utils/date-time.utils'
-import {
-  getPrinterTypeName,
-  getPrinterTypeLogo
-} from '@/shared/printer-types.constants'
-import { useInvalidateGlobalQueue } from '@/queries/global-queue.query'
+import { formatDate, formatRelativeTime, formatDuration } from '@/utils/date-time.utils'
+import { getPrinterTypeLogo } from '@/shared/printer-types.constants'
+import FileDetailsDialog from './FileDetailsDialog.vue'
+import QueueFileDialog from './QueueFileDialog.vue'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
-const invalidateGlobalQueue = useInvalidateGlobalQueue()
-
-const thumbnailCache = ref<Map<string, string>>(new Map())
-
-const getThumbnailUrl = (fileStorageId: string, index: number = 0): string => {
-  const cacheKey = `${fileStorageId}-${index}`
-  if (thumbnailCache.value.has(cacheKey)) {
-    return thumbnailCache.value.get(cacheKey)!
-  }
-  FileStorageService.getThumbnailBase64(fileStorageId, index)
-    .then((base64) => {
-      thumbnailCache.value.set(cacheKey, base64)
-    })
-    .catch(() => {})
-  return ''
-}
 
 const files = ref<FileMetadata[]>([])
 const loading = ref(false)
@@ -623,8 +384,6 @@ const detailsDialog = ref(false)
 const selectedFile = ref<FileMetadata | null>(null)
 const queueDialog = ref(false)
 const selectedFileForQueue = ref<FileMetadata | null>(null)
-const selectedPrinters = ref<number[]>([])
-const queuing = ref(false)
 const uploading = ref(false)
 const isDragging = ref(false)
 const dragDepth = ref(0)
@@ -649,10 +408,6 @@ const headers = [
 ]
 
 const totalCount = computed(() => files.value.length)
-
-const availablePrinters = computed(() => {
-  return printerStore.printers.filter((p) => p.enabled)
-})
 
 const filteredFiles = computed(() => {
   if (!searchQuery.value) {
@@ -801,65 +556,7 @@ const uploadFiles = async (filesToUpload: File[]) => {
 
 const openQueueDialog = (file: FileMetadata) => {
   selectedFileForQueue.value = file
-  selectedPrinters.value = []
   queueDialog.value = true
-}
-
-const togglePrinterSelection = (printerId: number) => {
-  const index = selectedPrinters.value.indexOf(printerId)
-  if (index > -1) {
-    selectedPrinters.value.splice(index, 1)
-  } else {
-    selectedPrinters.value.push(printerId)
-  }
-}
-
-const queueToSelectedPrinters = async () => {
-  if (!selectedFileForQueue.value || selectedPrinters.value.length === 0) {
-    return
-  }
-
-  queuing.value = true
-  let successCount = 0
-  let failCount = 0
-
-  try {
-    // First, create a pending job for this file (without a printer)
-    // We'll need to call the backend to create a job from the file storage
-    for (const printerId of selectedPrinters.value) {
-      try {
-        // Create a print job from the file
-        const job = await PrintJobService.createFromFile(
-          selectedFileForQueue.value.fileStorageId,
-          printerId
-        )
-
-        // Add the job to the printer's queue
-        await PrintQueueService.addToQueue(printerId, job.id)
-        successCount++
-      } catch (error) {
-        console.error(`Failed to queue to printer ${printerId}:`, error)
-        failCount++
-      }
-    }
-
-    if (successCount > 0) {
-      snackbar.info(`Queued file to ${successCount} printer(s)`)
-      await invalidateGlobalQueue()
-    }
-    if (failCount > 0) {
-      snackbar.error(`Failed to queue to ${failCount} printer(s)`)
-    }
-
-    queueDialog.value = false
-    selectedFileForQueue.value = null
-    selectedPrinters.value = []
-  } catch (error) {
-    console.error('Failed to queue file:', error)
-    snackbar.error('Failed to queue file')
-  } finally {
-    queuing.value = false
-  }
 }
 </script>
 

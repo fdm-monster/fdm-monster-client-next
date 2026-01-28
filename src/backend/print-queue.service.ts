@@ -36,73 +36,46 @@ export interface PrinterQueueResponse {
 }
 
 export class PrintQueueService extends BaseService {
-  /**
-   * Get global queue across all printers with pagination
-   */
   static async getGlobalQueue(page: number = 1, pageSize: number = 50): Promise<GlobalQueueResponse> {
     const path = `${ServerApi.printQueueRoute}?page=${page}&pageSize=${pageSize}`
     return this.get<GlobalQueueResponse>(path)
   }
 
-  /**
-   * Get queue for specific printer
-   */
   static async getPrinterQueue(printerId: number): Promise<PrinterQueueResponse> {
     const path = `${ServerApi.printQueueRoute}/${printerId}`
     return this.get<PrinterQueueResponse>(path)
   }
 
-  /**
-   * Add job to printer queue
-   */
   static async addToQueue(printerId: number, jobId: number, position?: number): Promise<PrinterQueueResponse> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/add/${jobId}`
     return this.post<PrinterQueueResponse>(path, { position })
   }
 
-  /**
-   * Remove job from queue
-   */
   static async removeFromQueue(printerId: number, jobId: number): Promise<PrinterQueueResponse> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/${jobId}`
     return this.delete<PrinterQueueResponse>(path)
   }
 
-  /**
-   * Reorder queue for a printer
-   */
   static async reorderQueue(printerId: number, jobIds: number[]): Promise<PrinterQueueResponse> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/reorder`
     return this.put<PrinterQueueResponse>(path, { jobIds })
   }
 
-  /**
-   * Clear all jobs from printer queue
-   */
   static async clearQueue(printerId: number): Promise<{ message: string; printerId: number }> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/clear`
     return this.delete<{ message: string; printerId: number }>(path)
   }
 
-  /**
-   * Get next job in queue
-   */
   static async getNextInQueue(printerId: number): Promise<{ printerId: number; nextJob: QueuedJob | null }> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/next`
     return this.get<{ printerId: number; nextJob: QueuedJob | null }>(path)
   }
 
-  /**
-   * Process queue - start next job
-   */
   static async processQueue(printerId: number): Promise<{ message: string; printerId: number; nextJob: QueuedJob | null }> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/process`
     return this.post<{ message: string; printerId: number; nextJob: QueuedJob | null }>(path)
   }
 
-  /**
-   * Submit job directly to printer for immediate printing
-   */
   static async submitToPrinter(jobId: number, printerId: number): Promise<{ message: string; jobId: number; printerId: number }> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/submit/${jobId}`
     return this.post<{ message: string; jobId: number; printerId: number }>(path)
