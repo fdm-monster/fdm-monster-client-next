@@ -1,5 +1,9 @@
 # Develop
 
+## Fixes
+
+- Queue panel in top bar now updates immediately when queueing prints from Files page
+
 ## Client 2.2.7
 
 Features
