@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/vue-query";
+import { useQuery, useQueryClient } from "@tanstack/vue-query";
 import { PrintQueueService, GlobalQueueResponse } from "@/backend/print-queue.service";
 
 export const globalQueueQueryKey = "global-queue";
@@ -65,5 +65,13 @@ export const useGlobalQueueQuery = (enabled = true) => {
     staleTime: 1000 * 30, // 30 seconds - queue changes frequently
     refetchInterval: 1000 * 60, // Refetch every minute
   });
+};
+
+export const useInvalidateGlobalQueue = () => {
+  const queryClient = useQueryClient();
+
+  return async () => {
+    await queryClient.invalidateQueries({ queryKey: [globalQueueQueryKey] });
+  };
 };
 

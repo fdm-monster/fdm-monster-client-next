@@ -595,9 +595,11 @@ import {
   getPrinterTypeName,
   getPrinterTypeLogo
 } from '@/shared/printer-types.constants'
+import { useInvalidateGlobalQueue } from '@/queries/global-queue.query'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
+const invalidateGlobalQueue = useInvalidateGlobalQueue()
 
 const thumbnailCache = ref<Map<string, string>>(new Map())
 
@@ -843,6 +845,7 @@ const queueToSelectedPrinters = async () => {
 
     if (successCount > 0) {
       snackbar.info(`Queued file to ${successCount} printer(s)`)
+      await invalidateGlobalQueue()
     }
     if (failCount > 0) {
       snackbar.error(`Failed to queue to ${failCount} printer(s)`)
