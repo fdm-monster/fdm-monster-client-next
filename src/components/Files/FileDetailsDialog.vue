@@ -146,9 +146,7 @@ interface Props {
   file: FileMetadata | null
 }
 
-interface Emits {
-  (e: 'update:modelValue', value: boolean): void
-}
+type Emits = (e: 'update:modelValue', value: boolean) => void
 
 defineProps<Props>()
 defineEmits<Emits>()
