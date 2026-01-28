@@ -256,7 +256,7 @@
                             <div class="text-body-2">
                               <template v-if="Array.isArray(plate.filamentUsedGrams)">
                                 <span v-for="(val, idx) in plate.filamentUsedGrams" :key="idx">
-                                  {{ val != null ? Math.round(val) : '-' }}g<span v-if="idx < plate.filamentUsedGrams.length - 1">, </span>
+                                  {{ val != null ? Math.round(val) : '-' }}g<span v-if="Number(idx) < plate.filamentUsedGrams.length - 1">, </span>
                                 </span>
                               </template>
                               <template v-else>

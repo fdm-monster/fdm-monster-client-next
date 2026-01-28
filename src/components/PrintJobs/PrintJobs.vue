@@ -380,7 +380,7 @@
                 <v-icon start size="small">fitness_center</v-icon>
                 <template v-if="Array.isArray(item.metadata.filamentUsedGrams)">
                   <span v-for="(val, idx) in item.metadata.filamentUsedGrams" :key="idx">
-                    {{ val != null ? Math.round(val) : '-' }}g<span v-if="idx < item.metadata.filamentUsedGrams.length - 1">, </span>
+                    {{ val != null ? Math.round(val) : '-' }}g<span v-if="Number(idx) < item.metadata.filamentUsedGrams.length - 1">, </span>
                   </span>
                 </template>
                 <template v-else>
@@ -393,7 +393,7 @@
                 <v-icon start size="small">science</v-icon>
                 <template v-if="Array.isArray(item.filamentGrams)">
                   <span v-for="(val, idx) in item.filamentGrams" :key="idx">
-                    {{ val != null ? val.toFixed(1) : '-' }}g<span v-if="idx < item.filamentGrams.length - 1">, </span>
+                    {{ val != null ? val.toFixed(1) : '-' }}g<span v-if="Number(idx) < item.filamentGrams.length - 1">, </span>
                   </span>
                 </template>
                 <template v-else>
