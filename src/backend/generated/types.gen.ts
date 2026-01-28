@@ -710,62 +710,6 @@ export type PostApiV2PrintJobsByIdReAnalyzeResponses = {
   200: unknown
 }
 
-export type GetApiV2PrintJobsByIdThumbnailsData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/v2/print-jobs/{id}/thumbnails'
-}
-
-export type GetApiV2PrintJobsByIdThumbnailsResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type GetApiV2PrintJobsByIdThumbnailsByIndexData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-    /**
-     * The index parameter
-     */
-    index: string
-  }
-  query?: never
-  url: '/api/v2/print-jobs/{id}/thumbnails/{index}'
-}
-
-export type GetApiV2PrintJobsByIdThumbnailsByIndexResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type PostApiV2PrintJobsFromFileData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/v2/print-jobs/from-file'
-}
-
-export type PostApiV2PrintJobsFromFileResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
 export type GetApiV2PrintQueueByPrinterIdData = {
   body?: never
   path: {
@@ -901,6 +845,25 @@ export type PostApiV2PrintQueueByPrinterIdProcessData = {
 }
 
 export type PostApiV2PrintQueueByPrinterIdProcessResponses = {
+  /**
+   * Successful response
+   */
+  200: unknown
+}
+
+export type PostApiV2PrintQueueByPrinterIdFromFileData = {
+  body?: never
+  path: {
+    /**
+     * The printerId parameter
+     */
+    printerId: string
+  }
+  query?: never
+  url: '/api/v2/print-queue/{printerId}/from-file'
+}
+
+export type PostApiV2PrintQueueByPrinterIdFromFileResponses = {
   /**
    * Successful response
    */

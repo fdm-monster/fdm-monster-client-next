@@ -1,5 +1,11 @@
 # Develop
 
+## Client 2.3.0
+
+## Fixes
+
+- Use new simplified dequeue from file endpoint
+
 ## Client 2.2.8
 
 ## Fixes
