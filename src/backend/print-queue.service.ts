@@ -80,4 +80,13 @@ export class PrintQueueService extends BaseService {
     const path = `${ServerApi.printQueueRoute}/${printerId}/submit/${jobId}`
     return this.post<{ message: string; jobId: number; printerId: number }>(path)
   }
+
+  static async createJobFromFile(printerId: number, fileStorageId: string, position?: number): Promise<PrinterQueueResponse> {
+    const path = `${ServerApi.printQueueRoute}/${printerId}/from-file`
+    return this.post<PrinterQueueResponse>(path, {
+      fileStorageId,
+      addToQueue: true,
+      position
+    })
+  }
 }

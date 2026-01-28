@@ -87,7 +87,6 @@
 import { ref, computed, watch } from 'vue'
 import type { FileMetadata } from '@/backend/file-storage.service'
 import { PrintQueueService } from '@/backend/print-queue.service'
-import { PrintJobService } from '@/backend/print-job.service'
 import { usePrinterStore } from '@/store/printer.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { getPrinterTypeName } from '@/shared/printer-types.constants'
@@ -148,12 +147,10 @@ const queueToSelectedPrinters = async () => {
   try {
     for (const printerId of selectedPrinters.value) {
       try {
-        const job = await PrintJobService.createFromFile(
-          props.file.fileStorageId,
-          printerId
+        await PrintQueueService.createJobFromFile(
+          printerId,
+          props.file.fileStorageId
         )
-
-        await PrintQueueService.addToQueue(printerId, job.id)
         successCount++
       } catch (error) {
         console.error(`Failed to queue to printer ${printerId}:`, error)

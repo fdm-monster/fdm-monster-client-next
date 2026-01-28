@@ -90,10 +90,6 @@ import type {
   GetApiV2PrinterTagResponses,
   GetApiV2PrintJobsByIdData,
   GetApiV2PrintJobsByIdResponses,
-  GetApiV2PrintJobsByIdThumbnailsByIndexData,
-  GetApiV2PrintJobsByIdThumbnailsByIndexResponses,
-  GetApiV2PrintJobsByIdThumbnailsData,
-  GetApiV2PrintJobsByIdThumbnailsResponses,
   GetApiV2PrintJobsSearchData,
   GetApiV2PrintJobsSearchPagedData,
   GetApiV2PrintJobsSearchPagedResponses,
@@ -253,10 +249,10 @@ import type {
   PostApiV2PrintJobsByIdSetFailedResponses,
   PostApiV2PrintJobsByIdSetUnknownData,
   PostApiV2PrintJobsByIdSetUnknownResponses,
-  PostApiV2PrintJobsFromFileData,
-  PostApiV2PrintJobsFromFileResponses,
   PostApiV2PrintQueueByPrinterIdAddByJobIdData,
   PostApiV2PrintQueueByPrinterIdAddByJobIdResponses,
+  PostApiV2PrintQueueByPrinterIdFromFileData,
+  PostApiV2PrintQueueByPrinterIdFromFileResponses,
   PostApiV2PrintQueueByPrinterIdProcessData,
   PostApiV2PrintQueueByPrinterIdProcessResponses,
   PostApiV2PrintQueueByPrinterIdSubmitByJobIdData,
@@ -675,7 +671,7 @@ export class FileStorageController {
   }
 
   /**
-   * getThumbnail
+   * getThumbnailByIndex
    */
   public static getApiV2FileStorageByFileStorageIdThumbnailByIndex<
     ThrowOnError extends boolean = false
@@ -1077,59 +1073,6 @@ export class PrintJobController {
       ...options
     })
   }
-
-  /**
-   * getThumbnails
-   */
-  public static getApiV2PrintJobsByIdThumbnails<
-    ThrowOnError extends boolean = false
-  >(options: Options<GetApiV2PrintJobsByIdThumbnailsData, ThrowOnError>) {
-    return (options.client ?? client).get<
-      GetApiV2PrintJobsByIdThumbnailsResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/v2/print-jobs/{id}/thumbnails',
-      ...options
-    })
-  }
-
-  /**
-   * getThumbnail
-   */
-  public static getApiV2PrintJobsByIdThumbnailsByIndex<
-    ThrowOnError extends boolean = false
-  >(
-    options: Options<GetApiV2PrintJobsByIdThumbnailsByIndexData, ThrowOnError>
-  ) {
-    return (options.client ?? client).get<
-      GetApiV2PrintJobsByIdThumbnailsByIndexResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/v2/print-jobs/{id}/thumbnails/{index}',
-      ...options
-    })
-  }
-
-  /**
-   * createJobFromFile
-   */
-  public static postApiV2PrintJobsFromFile<
-    ThrowOnError extends boolean = false
-  >(options?: Options<PostApiV2PrintJobsFromFileData, ThrowOnError>) {
-    return (options?.client ?? client).post<
-      PostApiV2PrintJobsFromFileResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/v2/print-jobs/from-file',
-      ...options
-    })
-  }
 }
 
 export class PrintQueueController {
@@ -1252,6 +1195,25 @@ export class PrintQueueController {
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
       url: '/api/v2/print-queue/{printerId}/process',
+      ...options
+    })
+  }
+
+  /**
+   * createJobFromFile
+   */
+  public static postApiV2PrintQueueByPrinterIdFromFile<
+    ThrowOnError extends boolean = false
+  >(
+    options: Options<PostApiV2PrintQueueByPrinterIdFromFileData, ThrowOnError>
+  ) {
+    return (options.client ?? client).post<
+      PostApiV2PrintQueueByPrinterIdFromFileResponses,
+      unknown,
+      ThrowOnError
+    >({
+      security: [{ scheme: 'bearer', type: 'http' }],
+      url: '/api/v2/print-queue/{printerId}/from-file',
       ...options
     })
   }
