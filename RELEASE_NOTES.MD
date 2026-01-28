@@ -1,5 +1,12 @@
 # Develop
 
+## Client 2.3.1
+
+## Fixes
+
+- Fix MMU support causing UI errors
+- Fix index 0 thumbnail not disabling query and failing to load
+
 ## Client 2.3.0
 
 ## Fixes
