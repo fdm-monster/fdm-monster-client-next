@@ -1,6 +1,3 @@
-/**
- * @deprecated THIS FILE IS DEPRECATED. Move API routes to services.
- */
 export class ServerApi {
   static readonly base = "/api/v2"
   static readonly firstTimeSetupRoute = `${ServerApi.base}/first-time-setup`
@@ -81,8 +78,6 @@ export class ServerApi {
     `${ServerApi.printerRemoteFilesRoute}/${id}/select`;
   static readonly printerFilesUploadRoute = (id: number) =>
     `${ServerApi.printerRemoteFilesRoute}/${id}/upload`
-  static readonly printerFilesCacheRoute = (id: number) =>
-    `${ServerApi.printerRemoteFilesRoute}/${id}/cache`
   static readonly printerEnabledRoute = (id: number) => `${ServerApi.getPrinterRoute(id)}/enabled`
   static readonly printerSerialConnectRoute = (id: number) =>
     `${ServerApi.getPrinterRoute(id)}/serial-connect`

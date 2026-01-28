@@ -7,7 +7,7 @@ import { downloadFileByBlob } from "@/utils/download-file.util";
 
 export class PrinterRemoteFileService extends BaseService {
   static async getFiles(printerId: number) {
-    const path = `${ServerApi.printerRemoteFilesRoute}/${printerId}`;
+    const path = `${ServerApi.printerRemoteFilesRoute}/${printerId}?recursive=true`;
 
     return await this.get<FileDto[]>(path);
   }
@@ -19,16 +19,6 @@ export class PrinterRemoteFileService extends BaseService {
       id: string
       thumbnailBase64: string
     }>(path)
-  }
-
-  /**
-   * A nice alternative for offline or disabled printers
-   * @param printerId
-   */
-  static async getFileCache(printerId: number) {
-    const path = `${ServerApi.printerFilesCacheRoute(printerId)}`;
-
-    return await this.get<FileDto[]>(path);
   }
 
   static async selectAndPrintFile(
