@@ -5,7 +5,7 @@ export interface FileDto {
   dir: boolean
 }
 
-export interface ClearedFilesResult {
-  failedFiles: FileDto[]
-  succeededFiles: FileDto[]
+export interface FilesDto {
+  dirs: FileDto[]
+  files: FileDto[]
 }

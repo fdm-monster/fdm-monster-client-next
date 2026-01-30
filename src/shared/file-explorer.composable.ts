@@ -7,6 +7,7 @@ export interface FileExplorerState {
   loading: boolean
   error: boolean
   lastLoadedPrinterId?: number
+  currentPath: string
 }
 
 const state = ref<FileExplorerState>({
@@ -14,7 +15,8 @@ const state = ref<FileExplorerState>({
   currentPrinterId: undefined,
   loading: true,
   error: false,
-  lastLoadedPrinterId: undefined
+  lastLoadedPrinterId: undefined,
+  currentPath: ''
 })
 
 export function useFileExplorer() {
@@ -23,6 +25,7 @@ export function useFileExplorer() {
   const loading = computed(() => state.value.loading)
   const error = computed(() => state.value.error)
   const lastLoadedPrinterId = computed(() => state.value.lastLoadedPrinterId)
+  const currentPath = computed(() => state.value.currentPath)
 
   const openFileExplorer = (printer: PrinterDto) => {
     // Only update state if it's a different printer or first time opening
@@ -34,6 +37,7 @@ export function useFileExplorer() {
     if (shouldRefresh) {
       state.value.error = false
       state.value.lastLoadedPrinterId = printer.id
+      state.value.currentPath = ''
     }
   }
 
@@ -42,6 +46,7 @@ export function useFileExplorer() {
     state.value.currentPrinterId = undefined
     state.value.error = false
     state.value.lastLoadedPrinterId = undefined
+    state.value.currentPath = ''
   }
 
   const setLoading = (isLoading: boolean) => {
@@ -50,6 +55,10 @@ export function useFileExplorer() {
 
   const setError = (hasError: boolean) => {
     state.value.error = hasError
+  }
+
+  const setCurrentPath = (path: string) => {
+    state.value.currentPath = path
   }
 
   const resetForPrinter = (printerId: number) => {
@@ -66,12 +75,14 @@ export function useFileExplorer() {
     loading,
     error,
     lastLoadedPrinterId,
+    currentPath,
 
     // Actions
     openFileExplorer,
     closeFileExplorer,
     setLoading,
     setError,
+    setCurrentPath,
     resetForPrinter
   }
 }

@@ -149,25 +149,13 @@ export const usePrinterStore = defineStore('Printers', {
 
       this.printers[printerIndex] = printer
     },
-    async deletePrinterFiles(printerId: number) {
-      if (!printerId) {
-        throw new Error('No printerId was provided')
-      }
-      const result = await PrinterRemoteFileService.clearFiles(
-        printerId
-      )
-      if (!result?.failedFiles) {
-        throw new Error('No failed files were returned')
-      }
-      const bucket = this.printerFileCache[printerId]
-      if (bucket) {
-        this.printerFileCache[printerId] = result.failedFiles
-      }
-    },
     async loadPrinterFiles(printerId: number, recursive = false, startDir?: string) {
-      const files = await PrinterRemoteFileService.getFiles(printerId, recursive, startDir)
+      const response = await PrinterRemoteFileService.getFiles(printerId, recursive, startDir)
+      const files = [...response.dirs, ...response.files]
 
       files.sort((f1, f2) => {
+        if (f1.dir !== f2.dir) return f1.dir ? -1 : 1
+
         if (f1.date === null && f2.date === null) return 0
         if (f1.date === null) return 1
         if (f2.date === null) return -1
