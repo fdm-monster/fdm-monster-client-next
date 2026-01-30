@@ -502,7 +502,7 @@ const fileTree = computed(() => {
       name: file.path.split('/').pop() || file.path,
       type: file.dir ? 'folder' : 'file',
       path: file.path,
-      file: !file.dir ? file : undefined
+      file: file.dir ? undefined : file
     }
     items.push(node)
   })
