@@ -3,8 +3,8 @@
     :model-value="drawerOpened"
     location="right"
     temporary
-    width="420"
-    class="printer-side-nav"
+    width="600"
+    class="printer-side-nav d-flex flex-column"
     @update:model-value="closeDrawer"
   >
     <!-- Printer Header Card -->
@@ -194,6 +194,15 @@
             <v-icon start>{{ isUnderMaintenance ? 'build_circle' : 'build' }}</v-icon>
             {{ isUnderMaintenance ? 'Update' : 'Maintenance' }}
           </v-btn>
+
+          <v-btn
+            size="small"
+            variant="outlined"
+            @click="clickSettings()"
+          >
+            <v-icon start>settings</v-icon>
+            Settings
+          </v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -239,9 +248,10 @@
 
     <!-- Files Section -->
     <v-card
-      class="ma-3 mb-4 flex-grow-1"
-      elevation="1"
+      class="ma-3 flex-grow-1 d-flex flex-column files-card"
+      elevation="0"
       rounded="lg"
+      style="min-height: 0;"
     >
       <v-card-title class="d-flex align-center py-3">
         <span class="text-subtitle-1">Files</span>
@@ -256,7 +266,38 @@
 
       <v-divider />
 
-      <v-card-text class="pt-3">
+      <v-card-text class="pt-3 pb-0 flex-grow-1 d-flex flex-column" style="min-height: 0;">
+        <!-- Breadcrumb Navigation -->
+        <div class="breadcrumb-container mb-3 d-flex align-center flex-shrink-0">
+          <v-btn
+            size="x-small"
+            variant="text"
+            :disabled="breadcrumbParts.length === 0"
+            @click="fileExplorer.setCurrentPath(''); refreshFiles()"
+          >
+            <v-icon start>home</v-icon>
+            Root
+          </v-btn>
+          <template
+            v-for="(part, index) in breadcrumbParts"
+            :key="index"
+          >
+            <v-icon
+              size="small"
+              class="mx-1"
+            >
+              chevron_right
+            </v-icon>
+            <v-btn
+              size="x-small"
+              variant="text"
+              @click="navigateToBreadcrumb(index)"
+            >
+              {{ part }}
+            </v-btn>
+          </template>
+        </div>
+
         <!-- Search Field -->
         <v-text-field
           v-model="fileSearch"
@@ -266,11 +307,11 @@
           density="compact"
           clearable
           hide-details
-          class="mb-3"
+          class="mb-3 flex-shrink-0"
         />
 
         <!-- File List -->
-        <div class="file-list">
+        <div class="file-list flex-grow-1">
           <!-- Loading State -->
           <div
             v-if="loading"
@@ -299,102 +340,79 @@
             </div>
           </div>
 
-          <!-- File Items -->
-          <div
-            v-for="(file, index) in filesListed"
-            :key="index"
-            class="file-item"
+          <!-- File List -->
+          <v-list
+            density="compact"
+            class="file-tree"
           >
-            <v-card
-              :class="{ 'file-printing': isFileBeingPrinted(file) }"
-              variant="outlined"
-              class="mb-2"
-              rounded="lg"
+            <v-list-item
+              v-for="item in fileTree"
+              :key="item.id"
+              :class="{ 'cursor-pointer': item.type === 'folder' }"
+              @click="item.type === 'folder' ? navigateToDir(item.path) : undefined"
             >
-              <v-card-text class="py-2 px-3">
+              <template #prepend>
+                <v-icon
+                  :color="item.type === 'file' && item.file && isFileBeingPrinted(item.file) ? 'primary' : 'medium-emphasis'"
+                >
+                  {{ getTreeIcon(item) }}
+                </v-icon>
+              </template>
+
+              <v-list-item-title>
                 <div class="d-flex align-center">
-                  <v-icon
-                    :color="isFileBeingPrinted(file) ? 'primary' : 'medium-emphasis'"
-                    class="mr-3"
+                  <span
+                    :class="{ 'text-primary font-weight-bold': item.type === 'file' && item.file && isFileBeingPrinted(item.file) }"
+                    class="text-body-2"
+                    :title="item.path"
                   >
-                    {{ isFileBeingPrinted(file) ? 'play_circle' : 'insert_drive_file' }}
-                  </v-icon>
-
-                  <div class="flex-grow-1 min-width-0">
-                    <div
-                      :class="{ 'text-primary font-weight-bold': isFileBeingPrinted(file) }"
-                      class="text-body-2 text-truncate"
-                      :title="file.path"
-                    >
-                      {{ file.path }}
-                    </div>
-                    <div class="text-caption text-medium-emphasis">
-                      {{ formatFileSize(file.size) }}
-                    </div>
-                  </div>
-
-                  <div class="d-flex ga-1">
-                    <v-btn
-                      icon="download"
-                      size="x-small"
-                      variant="text"
-                      @click="clickDownloadFile(file.path)"
-                    />
-                    <v-btn
-                      :disabled="isFileBeingPrinted(file)"
-                      icon="play_arrow"
-                      size="x-small"
-                      variant="text"
-                      color="success"
-                      @click="clickPrintFile(file)"
-                    />
-                    <v-btn
-                      :disabled="isFileBeingPrinted(file)"
-                      icon="delete"
-                      size="x-small"
-                      variant="text"
-                      color="error"
-                      @click="deleteFile(file)"
-                    />
-                  </div>
+                    {{ item.name }}
+                  </span>
+                  <span
+                    v-if="item.type === 'file' && item.file"
+                    class="text-caption text-medium-emphasis ml-2"
+                  >
+                    {{ formatFileSize(item.file.size ?? undefined) }}
+                  </span>
                 </div>
-              </v-card-text>
-            </v-card>
-          </div>
+              </v-list-item-title>
+
+              <template #append>
+                <div
+                  v-if="item.type === 'file' && item.file"
+                  class="d-flex ga-1"
+                  @click.stop
+                >
+                  <v-btn
+                    icon="download"
+                    size="x-small"
+                    variant="text"
+                    @click="clickDownloadFile(item.file.path)"
+                  />
+                  <v-btn
+                    :disabled="isFileBeingPrinted(item.file)"
+                    icon="play_arrow"
+                    size="x-small"
+                    variant="text"
+                    color="success"
+                    @click="clickPrintFile(item.file)"
+                  />
+                  <v-btn
+                    :disabled="isFileBeingPrinted(item.file)"
+                    icon="delete"
+                    size="x-small"
+                    variant="text"
+                    color="error"
+                    @click="deleteFile(item.file)"
+                  />
+                </div>
+              </template>
+            </v-list-item>
+          </v-list>
         </div>
       </v-card-text>
     </v-card>
 
-    <!-- Bottom Actions -->
-    <v-card
-      class="ma-3"
-      elevation="1"
-      rounded="lg"
-    >
-      <v-card-text class="py-3">
-        <div class="d-flex flex-wrap ga-2">
-          <v-btn
-            :disabled="!canBeCleared"
-            color="error"
-            size="small"
-            variant="outlined"
-            @click="clickDeleteAllFiles()"
-          >
-            <v-icon start>delete_sweep</v-icon>
-            Clear All
-          </v-btn>
-
-          <v-btn
-            size="small"
-            variant="outlined"
-            @click="clickSettings()"
-          >
-            <v-icon start>settings</v-icon>
-            Settings
-          </v-btn>
-        </div>
-      </v-card-text>
-    </v-card>
   </v-navigation-drawer>
 </template>
 
@@ -415,16 +433,26 @@ import { hasWebInterface } from '@/shared/printer-capabilities.constants'
 import { useDialog } from '@/shared/dialog.composable'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
 
+interface TreeNode {
+  id: string
+  name: string
+  type: 'file' | 'folder'
+  path: string
+  file?: FileDto
+  children?: TreeNode[]
+}
+
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const fileExplorer = useFileExplorer()
 
 const fileSearch = ref<string | undefined>(undefined)
-const shownFileCache = ref<FileDto[] | undefined>(undefined)
+const fileList = ref<FileDto[] | undefined>(undefined)
 const drawerOpened = fileExplorer.isOpen
 const loading = fileExplorer.loading
 const fileLoadError = fileExplorer.error
 const printerId = fileExplorer.currentPrinterId
+const currentPath = fileExplorer.currentPath
 
 const storedSideNavPrinter = computed(() => {
   if (!printerId.value) return undefined
@@ -455,14 +483,37 @@ const isPrinting = computed(() => {
     : false
 })
 const filesListed = computed(() => {
-  if (!shownFileCache.value?.length) return []
+  if (!fileList.value?.length) return []
   return (
-    shownFileCache.value.filter((f) =>
+    fileList.value.filter((f) =>
       fileSearch.value?.length
         ? `${f.path}`.toLowerCase().includes(fileSearch.value)
         : true
     ) || []
   )
+})
+
+const fileTree = computed(() => {
+  const items: TreeNode[] = []
+
+  filesListed.value.forEach((file) => {
+    const node: TreeNode = {
+      id: file.path,
+      name: file.path.split('/').pop() || file.path,
+      type: file.dir ? 'folder' : 'file',
+      path: file.path,
+      file: file.dir ? undefined : file
+    }
+    items.push(node)
+  })
+
+  // Sort: folders first, then alphabetically
+  items.sort((a, b) => {
+    if (a.type !== b.type) return a.type === 'folder' ? -1 : 1
+    return a.name.localeCompare(b.name)
+  })
+
+  return items
 })
 const isStoppable = computed(() => {
   if (!storedSideNavPrinter.value || !printerId.value) return false
@@ -471,15 +522,6 @@ const isStoppable = computed(() => {
 const isPaused = computed(() => {
   if (!storedSideNavPrinter.value || !printerId.value) return false
   return printerStateStore.isPrinterPaused(printerId.value)
-})
-const canBeCleared = computed(() => {
-  if (!printerId.value) {
-    return false
-  }
-  return (
-    shownFileCache.value?.length &&
-    printerStateStore.isApiResponding(printerId.value)
-  )
 })
 const currentJob = computed(() => {
   if (!printerId.value) {
@@ -499,24 +541,33 @@ const refreshFiles = async () => {
   const currentPrinterId = printerId.value
   if (!currentPrinterId) return
   try {
-    if (printerStateStore.isApiResponding(currentPrinterId)) {
-      shownFileCache.value = await printersStore.loadPrinterFiles(
-        currentPrinterId
-      )
-    } else {
-      shownFileCache.value = await PrinterRemoteFileService.getFileCache(
-        currentPrinterId
-      )
-    }
+    const startDir = currentPath.value || undefined
+    fileList.value = await printersStore.loadPrinterFiles(currentPrinterId, false, startDir)
   } catch (error) {
     console.warn('Failed to load printer files:', error)
     fileExplorer.setError(true)
-    // Fallback to empty array to show "No files to show" message
-    shownFileCache.value = []
+    fileList.value = []
   } finally {
     fileExplorer.setLoading(false)
   }
 }
+
+const navigateToDir = async (dirPath: string) => {
+  fileExplorer.setCurrentPath(dirPath)
+  await refreshFiles()
+}
+
+const navigateToBreadcrumb = async (index: number) => {
+  const pathParts = currentPath.value.split('/').filter(p => p.length > 0)
+  const newPath = pathParts.slice(0, index + 1).join('/')
+  fileExplorer.setCurrentPath(newPath)
+  await refreshFiles()
+}
+
+const breadcrumbParts = computed(() => {
+  if (!currentPath.value) return []
+  return currentPath.value.split('/').filter(p => p.length > 0)
+})
 const deleteFile = async (file: FileDto) => {
   if (!printerId.value) return
   await printersStore.deletePrinterFile(printerId.value, file.path)
@@ -526,7 +577,7 @@ watch(printerId, async (newPrinterId, oldPrinterId) => {
   if (newPrinterId && newPrinterId !== oldPrinterId) {
     await refreshFiles()
   } else if (!newPrinterId) {
-    shownFileCache.value = undefined
+    fileList.value = undefined
   }
 })
 
@@ -618,18 +669,6 @@ async function clickResumePrint() {
   await PrintersService.resumePrintJob(printerId.value)
 }
 
-async function clickDeleteAllFiles() {
-  if (!printerId.value) return
-  if (!confirm('Are you sure to delete all files for this printer?')) {
-    return
-  }
-
-  fileExplorer.setLoading(true)
-  await printersStore.deletePrinterFiles(printerId.value)
-  fileExplorer.setLoading(false)
-  shownFileCache.value = printersStore.printerFiles(printerId.value)
-}
-
 function clickSettings() {
   if (!storedSideNavPrinter.value) return
   useDialog(DialogName.AddOrUpdatePrinterDialog).openDialog({ id: storedSideNavPrinter.value.id })
@@ -677,32 +716,83 @@ function getStatusText() {
   if (isOperational.value) return 'Ready'
   return 'Idle'
 }
+
+function getTreeIcon(item: TreeNode) {
+  if (item.type === 'folder') {
+    return 'folder'
+  }
+  if (item.file && isFileBeingPrinted(item.file)) {
+    return 'play_circle'
+  }
+  return 'insert_drive_file'
+}
 </script>
 <style scoped>
 .printer-side-nav {
   background: rgb(var(--v-theme-surface));
+  height: 100vh;
 }
 
-.file-printing {
-  border-color: rgb(var(--v-theme-primary)) !important;
-  background: rgba(var(--v-theme-primary), 0.05);
+.printer-side-nav :deep(.v-navigation-drawer__content) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.files-card {
+  overflow: hidden;
+}
+
+.files-card :deep(.v-card-text) {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Prevent search field from expanding */
+.files-card :deep(.v-text-field) {
+  flex: 0 0 auto !important;
+}
+
+/* Fixed height breadcrumb container */
+.breadcrumb-container {
+  min-height: 32px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.breadcrumb-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.breadcrumb-container::-webkit-scrollbar-track {
+  background: rgba(var(--v-theme-on-surface), 0.05);
+  border-radius: 2px;
+}
+
+.breadcrumb-container::-webkit-scrollbar-thumb {
+  background: rgba(var(--v-theme-on-surface), 0.2);
+  border-radius: 2px;
 }
 
 .file-list {
-  max-height: 400px;
   overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
-.file-item {
-  transition: all 0.2s ease;
-}
-
-.file-item:hover {
-  transform: translateY(-1px);
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .min-width-0 {
   min-width: 0;
+}
+
+/* Ensure v-list fills the container */
+.file-tree {
+  height: 100%;
 }
 
 /* Scrollbar styling */
@@ -722,5 +812,18 @@ function getStatusText() {
 
 .file-list::-webkit-scrollbar-thumb:hover {
   background: rgba(var(--v-theme-on-surface), 0.3);
+}
+
+/* List view customization */
+.file-tree :deep(.v-list-item) {
+  transition: all 0.2s ease;
+}
+
+.file-tree :deep(.v-list-item:hover) {
+  background: rgba(var(--v-theme-on-surface), 0.05);
+}
+
+.file-tree :deep(.v-list-item__content) {
+  padding: 2px 4px;
 }
 </style>

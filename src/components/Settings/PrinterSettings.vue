@@ -42,34 +42,12 @@
           width="4"
         />
       </SettingSection>
-
-      <v-divider />
-
-      <SettingSection
-        title="Clean File References"
-        tooltip="Clear out file references without removing them from OctoPrint."
-      >
-        <v-btn
-          color="primary"
-          @click="purgeFiles()"
-        >
-          Purge File References
-        </v-btn>
-        <v-progress-circular
-          v-if="loading.purgeFiles"
-          class="ml-2"
-          indeterminate
-          size="30"
-          width="4"
-        />
-      </SettingSection>
     </v-card-text>
   </v-card>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { PrinterRemoteFileService } from "@/backend";
 import { useSnackbar } from "@/shared/snackbar.composable";
 import { useSettingsStore } from "@/store/settings.store";
 import SettingSection from "@/components/Settings/Shared/SettingSection.vue";
@@ -79,7 +57,6 @@ const snackbar = useSnackbar();
 
 const loading = ref({
   timeoutSettings: false,
-  purgeFiles: false,
 });
 
 async function updateTimeoutSettings() {
@@ -104,18 +81,6 @@ async function updateTimeoutSettings() {
     } finally {
       loading.value.timeoutSettings = false;
     }
-  }
-}
-
-async function purgeFiles() {
-  loading.value.purgeFiles = true;
-  try {
-    await PrinterRemoteFileService.purgeFiles();
-    snackbar.openInfoMessage({
-      title: `Successfully purged all references to printer files!`,
-    });
-  } finally {
-    loading.value.purgeFiles = false;
   }
 }
 </script>

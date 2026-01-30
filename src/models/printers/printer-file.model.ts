@@ -1,10 +1,11 @@
 export interface FileDto {
   path: string
-  size: number
-  date: number
+  size: number | null
+  date: number | null
+  dir: boolean
 }
 
-export interface ClearedFilesResult {
-  failedFiles: FileDto[]
-  succeededFiles: FileDto[]
+export interface FilesDto {
+  dirs: FileDto[]
+  files: FileDto[]
 }

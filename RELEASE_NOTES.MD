@@ -1,5 +1,20 @@
 # Develop
 
+## Client 2.3.2
+
+Features
+
+- File explorer: Add breadcrumb navigation for directory traversal
+- File explorer: Enable directory navigation by clicking folders
+- File explorer: Maximize file list height to use available space
+- File explorer: Move Settings button to Quick Actions section
+
+Fixes
+
+- File explorer: Update to handle new backend API response format with separated directories and files
+- File explorer: Remove Clear All button
+- File explorer: Improve layout consistency and fix search field sizing
+
 ## Client 2.3.1
 
 ## Fixes

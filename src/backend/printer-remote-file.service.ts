@@ -1,15 +1,18 @@
 import { BaseService } from "@/backend/base.service";
 import { ServerApi } from "@/backend/server.api";
-import { ClearedFilesResult, FileDto } from "@/models/printers/printer-file.model";
+import { FilesDto } from "@/models/printers/printer-file.model";
 import { PrinterDto } from "@/models/printers/printer.model";
 import { useSnackbar } from "@/shared/snackbar.composable";
 import { downloadFileByBlob } from "@/utils/download-file.util";
 
 export class PrinterRemoteFileService extends BaseService {
-  static async getFiles(printerId: number) {
-    const path = `${ServerApi.printerRemoteFilesRoute}/${printerId}`;
+  static async getFiles(printerId: number, recursive = false, startDir?: string) {
+    let path = `${ServerApi.printerRemoteFilesRoute}/${printerId}?recursive=${recursive}`;
+    if (startDir) {
+      path += `&startDir=${encodeURIComponent(startDir)}`;
+    }
 
-    return await this.get<FileDto[]>(path);
+    return await this.get<FilesDto>(path);
   }
 
   static async getThumbnail(printerId: number) {
@@ -19,16 +22,6 @@ export class PrinterRemoteFileService extends BaseService {
       id: string
       thumbnailBase64: string
     }>(path)
-  }
-
-  /**
-   * A nice alternative for offline or disabled printers
-   * @param printerId
-   */
-  static async getFileCache(printerId: number) {
-    const path = `${ServerApi.printerFilesCacheRoute(printerId)}`;
-
-    return await this.get<FileDto[]>(path);
   }
 
   static async selectAndPrintFile(
@@ -58,16 +51,6 @@ export class PrinterRemoteFileService extends BaseService {
         );
       },
     });
-  }
-
-  static async clearFiles(printerId: number) {
-    const path = `${ServerApi.printerFilesClearRoute(printerId)}`;
-    return this.delete<ClearedFilesResult>(path);
-  }
-
-  static async purgeFiles() {
-    const path = `${ServerApi.printerFilesPurgeRoute}`;
-    return this.post(path);
   }
 
   static async deleteFileOrFolder(printerId: number, path: string) {
