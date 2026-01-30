@@ -13,8 +13,6 @@ import type {
   DeleteApiV2FloorByIdResponses,
   DeleteApiV2PrinterByIdData,
   DeleteApiV2PrinterByIdResponses,
-  DeleteApiV2PrinterFilesByIdClearData,
-  DeleteApiV2PrinterFilesByIdClearResponses,
   DeleteApiV2PrinterFilesByIdData,
   DeleteApiV2PrinterFilesByIdResponses,
   DeleteApiV2PrinterMaintenanceLogByIdData,
@@ -65,8 +63,6 @@ import type {
   GetApiV2PrinterByIdSocketData,
   GetApiV2PrinterByIdSocketResponses,
   GetApiV2PrinterData,
-  GetApiV2PrinterFilesByIdCacheData,
-  GetApiV2PrinterFilesByIdCacheResponses,
   GetApiV2PrinterFilesByIdData,
   GetApiV2PrinterFilesByIdDownloadByPathData,
   GetApiV2PrinterFilesByIdDownloadByPathResponses,
@@ -224,8 +220,6 @@ import type {
   PostApiV2PrinterFilesByIdSelectResponses,
   PostApiV2PrinterFilesByIdUploadData,
   PostApiV2PrinterFilesByIdUploadResponses,
-  PostApiV2PrinterFilesPurgeData,
-  PostApiV2PrinterFilesPurgeResponses,
   PostApiV2PrinterMaintenanceLogByIdCompleteData,
   PostApiV2PrinterMaintenanceLogByIdCompleteResponses,
   PostApiV2PrinterMaintenanceLogData,
@@ -1243,23 +1237,6 @@ export class PrintQueueController {
 
 export class PrinterFilesController {
   /**
-   * purgeIndexedFiles
-   */
-  public static postApiV2PrinterFilesPurge<
-    ThrowOnError extends boolean = false
-  >(options?: Options<PostApiV2PrinterFilesPurgeData, ThrowOnError>) {
-    return (options?.client ?? client).post<
-      PostApiV2PrinterFilesPurgeResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/v2/printer-files/purge',
-      ...options
-    })
-  }
-
-  /**
    * getThumbnails
    */
   public static getApiV2PrinterFilesThumbnails<
@@ -1345,23 +1322,6 @@ export class PrinterFilesController {
   }
 
   /**
-   * getFilesCache
-   */
-  public static getApiV2PrinterFilesByIdCache<
-    ThrowOnError extends boolean = false
-  >(options: Options<GetApiV2PrinterFilesByIdCacheData, ThrowOnError>) {
-    return (options.client ?? client).get<
-      GetApiV2PrinterFilesByIdCacheResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/v2/printer-files/{id}/cache',
-      ...options
-    })
-  }
-
-  /**
    * downloadFile
    */
   public static getApiV2PrinterFilesByIdDownloadByPath<
@@ -1376,23 +1336,6 @@ export class PrinterFilesController {
     >({
       security: [{ scheme: 'bearer', type: 'http' }],
       url: '/api/v2/printer-files/{id}/download/{path}',
-      ...options
-    })
-  }
-
-  /**
-   * clearPrinterFiles
-   */
-  public static deleteApiV2PrinterFilesByIdClear<
-    ThrowOnError extends boolean = false
-  >(options: Options<DeleteApiV2PrinterFilesByIdClearData, ThrowOnError>) {
-    return (options.client ?? client).delete<
-      DeleteApiV2PrinterFilesByIdClearResponses,
-      unknown,
-      ThrowOnError
-    >({
-      security: [{ scheme: 'bearer', type: 'http' }],
-      url: '/api/v2/printer-files/{id}/clear',
       ...options
     })
   }

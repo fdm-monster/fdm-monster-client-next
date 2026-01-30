@@ -893,20 +893,6 @@ export type PostApiV2PrintQueueByPrinterIdSubmitByJobIdResponses = {
   200: unknown
 }
 
-export type PostApiV2PrinterFilesPurgeData = {
-  body?: never
-  path?: never
-  query?: never
-  url: '/api/v2/printer-files/purge'
-}
-
-export type PostApiV2PrinterFilesPurgeResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
 export type GetApiV2PrinterFilesThumbnailsData = {
   body?: never
   path?: never
@@ -997,25 +983,6 @@ export type PostApiV2PrinterFilesByIdSelectResponses = {
   200: unknown
 }
 
-export type GetApiV2PrinterFilesByIdCacheData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/v2/printer-files/{id}/cache'
-}
-
-export type GetApiV2PrinterFilesByIdCacheResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
 export type GetApiV2PrinterFilesByIdDownloadByPathData = {
   body?: never
   path: {
@@ -1033,25 +1000,6 @@ export type GetApiV2PrinterFilesByIdDownloadByPathData = {
 }
 
 export type GetApiV2PrinterFilesByIdDownloadByPathResponses = {
-  /**
-   * Successful response
-   */
-  200: unknown
-}
-
-export type DeleteApiV2PrinterFilesByIdClearData = {
-  body?: never
-  path: {
-    /**
-     * The id parameter
-     */
-    id: string
-  }
-  query?: never
-  url: '/api/v2/printer-files/{id}/clear'
-}
-
-export type DeleteApiV2PrinterFilesByIdClearResponses = {
   /**
    * Successful response
    */
