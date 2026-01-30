@@ -328,7 +328,7 @@
                   v-if="item.type === 'file' && item.file"
                   class="text-caption text-medium-emphasis ml-2"
                 >
-                  {{ formatFileSize(item.file.size) }}
+                  {{ formatFileSize(item.file.size ?? undefined) }}
                 </span>
               </div>
             </template>
@@ -432,7 +432,7 @@ const printerStateStore = usePrinterStateStore()
 const fileExplorer = useFileExplorer()
 
 const fileSearch = ref<string | undefined>(undefined)
-const shownFileCache = ref<FileDto[] | undefined>(undefined)
+const fileList = ref<FileDto[] | undefined>(undefined)
 const drawerOpened = fileExplorer.isOpen
 const loading = fileExplorer.loading
 const fileLoadError = fileExplorer.error
@@ -467,9 +467,9 @@ const isPrinting = computed(() => {
     : false
 })
 const filesListed = computed(() => {
-  if (!shownFileCache.value?.length) return []
+  if (!fileList.value?.length) return []
   return (
-    shownFileCache.value.filter((f) =>
+    fileList.value.filter((f) =>
       fileSearch.value?.length
         ? `${f.path}`.toLowerCase().includes(fileSearch.value)
         : true
@@ -545,7 +545,7 @@ const canBeCleared = computed(() => {
     return false
   }
   return (
-    shownFileCache.value?.length &&
+    fileList.value?.length &&
     printerStateStore.isApiResponding(printerId.value)
   )
 })
@@ -567,20 +567,11 @@ const refreshFiles = async () => {
   const currentPrinterId = printerId.value
   if (!currentPrinterId) return
   try {
-    if (printerStateStore.isApiResponding(currentPrinterId)) {
-      shownFileCache.value = await printersStore.loadPrinterFiles(
-        currentPrinterId
-      )
-    } else {
-      shownFileCache.value = await PrinterRemoteFileService.getFileCache(
-        currentPrinterId
-      )
-    }
+    fileList.value = await printersStore.loadPrinterFiles(currentPrinterId)
   } catch (error) {
     console.warn('Failed to load printer files:', error)
     fileExplorer.setError(true)
-    // Fallback to empty array to show "No files to show" message
-    shownFileCache.value = []
+    fileList.value = []
   } finally {
     fileExplorer.setLoading(false)
   }
@@ -594,7 +585,7 @@ watch(printerId, async (newPrinterId, oldPrinterId) => {
   if (newPrinterId && newPrinterId !== oldPrinterId) {
     await refreshFiles()
   } else if (!newPrinterId) {
-    shownFileCache.value = undefined
+    fileList.value = undefined
   }
 })
 
@@ -695,7 +686,7 @@ async function clickDeleteAllFiles() {
   fileExplorer.setLoading(true)
   await printersStore.deletePrinterFiles(printerId.value)
   fileExplorer.setLoading(false)
-  shownFileCache.value = printersStore.printerFiles(printerId.value)
+  fileList.value = printersStore.printerFiles(printerId.value)
 }
 
 function clickSettings() {

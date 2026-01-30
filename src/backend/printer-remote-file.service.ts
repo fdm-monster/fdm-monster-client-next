@@ -6,8 +6,11 @@ import { useSnackbar } from "@/shared/snackbar.composable";
 import { downloadFileByBlob } from "@/utils/download-file.util";
 
 export class PrinterRemoteFileService extends BaseService {
-  static async getFiles(printerId: number) {
-    const path = `${ServerApi.printerRemoteFilesRoute}/${printerId}?recursive=true`;
+  static async getFiles(printerId: number, recursive = false, startDir?: string) {
+    let path = `${ServerApi.printerRemoteFilesRoute}/${printerId}?recursive=${recursive}`;
+    if (startDir) {
+      path += `&startDir=${encodeURIComponent(startDir)}`;
+    }
 
     return await this.get<FileDto[]>(path);
   }
