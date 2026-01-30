@@ -491,7 +491,9 @@ const fileTree = computed(() => {
       const part = parts[i]
       currentPath = currentPath ? `${currentPath}/${part}` : part
 
-      if (!folderMap.has(currentPath)) {
+      if (folderMap.has(currentPath)) {
+        currentLevel = folderMap.get(currentPath)!.children!
+      } else {
         const folderNode: TreeNode = {
           id: currentPath,
           name: part,
@@ -502,8 +504,6 @@ const fileTree = computed(() => {
         folderMap.set(currentPath, folderNode)
         currentLevel.push(folderNode)
         currentLevel = folderNode.children!
-      } else {
-        currentLevel = folderMap.get(currentPath)!.children!
       }
     }
 
