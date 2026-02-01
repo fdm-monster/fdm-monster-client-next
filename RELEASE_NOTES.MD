@@ -1,5 +1,11 @@
 # Develop
 
+## Client 2.3.3
+
+Fixes
+
+- ID shown instead of original filename in alert when deleting file on Files page
+
 ## Client 2.3.2
 
 Features
