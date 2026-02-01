@@ -449,7 +449,7 @@ const viewFile = (file: FileMetadata) => {
 }
 
 const deleteFile = async (file: FileMetadata) => {
-  if (!confirm(`Delete file "${file.fileName}"? This cannot be undone.`)) {
+  if (!confirm(`Delete file "${file.metadata?._originalFileName || file.fileName}"? This cannot be undone.`)) {
     return
   }
 
