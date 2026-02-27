@@ -53,7 +53,7 @@
   "devDependencies": {
     "@babel/types": "7.29.0",
     "@hey-api/client-axios": "0.9.1",
-    "@hey-api/openapi-ts": "0.93.0",
+    "@hey-api/openapi-ts": "0.93.1",
     "@mdi/font": "7.4.47",
     "@playwright/test": "1.58.2",
     "@sentry/tracing": "7.120.4",
