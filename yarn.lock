@@ -1043,7 +1043,7 @@ __metadata:
     eslint-plugin-prettier: "npm:5.5.5"
     eslint-plugin-promise: "npm:7.2.1"
     eslint-plugin-vue: "npm:10.8.0"
-    eslint-plugin-vuetify: "npm:2.5.3"
+    eslint-plugin-vuetify: "npm:2.6.0"
     jsdom: "npm:28.1.0"
     jwt-decode: "npm:4.0.0"
     material-design-icons-iconfont: "npm:6.7.0"
@@ -4838,7 +4838,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:10.8.0":
+"eslint-plugin-vue@npm:10.8.0, eslint-plugin-vue@npm:^10.8.0":
   version: 10.8.0
   resolution: "eslint-plugin-vue@npm:10.8.0"
   dependencies:
@@ -4862,33 +4862,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:>=9.6.0":
-  version: 10.0.0
-  resolution: "eslint-plugin-vue@npm:10.0.0"
+"eslint-plugin-vuetify@npm:2.6.0":
+  version: 2.6.0
+  resolution: "eslint-plugin-vuetify@npm:2.6.0"
   dependencies:
-    "@eslint-community/eslint-utils": "npm:^4.4.0"
-    natural-compare: "npm:^1.4.0"
-    nth-check: "npm:^2.1.1"
-    postcss-selector-parser: "npm:^6.0.15"
-    semver: "npm:^7.6.3"
-    xml-name-validator: "npm:^4.0.0"
-  peerDependencies:
-    eslint: ^8.57.0 || ^9.0.0
-    vue-eslint-parser: ^10.0.0
-  checksum: 10c0/068ae9e4661f4cf18ab947d7bbbd10025b184ee06491991163d4edefb47cf31124e90326dc5f92a6306666d6b062b59b681c14f50a2ad4cfb98324c466d28139
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-vuetify@npm:2.5.3":
-  version: 2.5.3
-  resolution: "eslint-plugin-vuetify@npm:2.5.3"
-  dependencies:
-    eslint-plugin-vue: "npm:>=9.6.0"
+    eslint-plugin-vue: "npm:^10.8.0"
     requireindex: "npm:^1.2.0"
   peerDependencies:
-    eslint: ^8.0.0 || ^9.0.0
+    eslint: ^8.0.0 || ^9.0.0 || ^10.0.0
     vuetify: ^3.0.0
-  checksum: 10c0/ffd74c2e6fb532a3cb60591abefecf9a366ccfb5c6360e79421bd190186be0207dd0cbab5bdf523b621aebcc3a6d9e0779b7c75517f6482d3e4c64e3d500a8be
+  checksum: 10c0/386434f6de4dba2ba9797ab71284e6f98000e58196270865f4162ca880b36eb8cddc226fdd6565dfbc085c83a68d799f70a53bd4ed1af39ec29fbaffac56a73c
   languageName: node
   linkType: hard
 
@@ -7393,16 +7376,6 @@ __metadata:
   version: 1.0.0
   resolution: "possible-typed-array-names@npm:1.0.0"
   checksum: 10c0/d9aa22d31f4f7680e20269db76791b41c3a32c01a373e25f8a4813b4d45f7456bfc2b6d68f752dc4aab0e0bb0721cb3d76fb678c9101cb7a16316664bc2c73fd
-  languageName: node
-  linkType: hard
-
-"postcss-selector-parser@npm:^6.0.15":
-  version: 6.0.16
-  resolution: "postcss-selector-parser@npm:6.0.16"
-  dependencies:
-    cssesc: "npm:^3.0.0"
-    util-deprecate: "npm:^1.0.2"
-  checksum: 10c0/0e11657cb3181aaf9ff67c2e59427c4df496b4a1b6a17063fae579813f80af79d444bf38f82eeb8b15b4679653fd3089e66ef0283f9aab01874d885e6cf1d2cf
   languageName: node
   linkType: hard
 
