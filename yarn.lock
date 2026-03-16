@@ -882,7 +882,7 @@ __metadata:
   dependencies:
     "@babel/types": "npm:7.29.0"
     "@hey-api/client-axios": "npm:0.9.1"
-    "@hey-api/openapi-ts": "npm:0.94.1"
+    "@hey-api/openapi-ts": "npm:0.94.2"
     "@mdi/font": "npm:7.4.47"
     "@playwright/test": "npm:1.58.2"
     "@sentry/tracing": "npm:7.120.4"
@@ -952,17 +952,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/codegen-core@npm:0.7.2":
-  version: 0.7.2
-  resolution: "@hey-api/codegen-core@npm:0.7.2"
+"@hey-api/codegen-core@npm:0.7.3":
+  version: 0.7.3
+  resolution: "@hey-api/codegen-core@npm:0.7.3"
   dependencies:
-    "@hey-api/types": "npm:0.1.3"
+    "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
     c12: "npm:3.3.3"
     color-support: "npm:1.1.3"
-  peerDependencies:
-    typescript: ">=5.5.3"
-  checksum: 10c0/2fe8b27929020050f19db59f00407eb84de81b4e2f4106fbe4a93c9942e2fb5a6963c7695c0e41c088e4c3208fe7d43e6bf50fb989269f86a1ddb6b2bd6c6ee3
+  checksum: 10c0/8374adcb83d068e954e6ea8e882f4cb722134f15ed485e5e4d3378f132afb84a40baa6831cdc3ee1568c64418d97ae534a61150704e635b4471ff4412d21cdb1
   languageName: node
   linkType: hard
 
@@ -977,48 +975,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hey-api/openapi-ts@npm:0.94.1":
-  version: 0.94.1
-  resolution: "@hey-api/openapi-ts@npm:0.94.1"
+"@hey-api/openapi-ts@npm:0.94.2":
+  version: 0.94.2
+  resolution: "@hey-api/openapi-ts@npm:0.94.2"
   dependencies:
-    "@hey-api/codegen-core": "npm:0.7.2"
+    "@hey-api/codegen-core": "npm:0.7.3"
     "@hey-api/json-schema-ref-parser": "npm:1.3.1"
-    "@hey-api/shared": "npm:0.2.3"
-    "@hey-api/types": "npm:0.1.3"
+    "@hey-api/shared": "npm:0.2.4"
+    "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
     color-support: "npm:1.1.3"
     commander: "npm:14.0.3"
+    get-tsconfig: "npm:4.13.6"
   peerDependencies:
-    typescript: ">=5.5.3"
+    typescript: ">=5.5.3 || 6.0.1-rc"
   bin:
     openapi-ts: bin/run.js
-  checksum: 10c0/b4024321001e4a682a86c6c6c2a56bc5bd10d5a50b7d7fad3c68c4216e4e4c111c436845c9b66e539573f28c5f1e2a6e1939cefb2f2cb70112e3947469db22c0
+  checksum: 10c0/60a110e106bb44c11df161637c92aa70135ecc6a3f3f1c06ac1553a27628fe434a824d78b4028fe034a607dfeb1e259656f83becfef35ebaf743d182357e63eb
   languageName: node
   linkType: hard
 
-"@hey-api/shared@npm:0.2.3":
-  version: 0.2.3
-  resolution: "@hey-api/shared@npm:0.2.3"
+"@hey-api/shared@npm:0.2.4":
+  version: 0.2.4
+  resolution: "@hey-api/shared@npm:0.2.4"
   dependencies:
-    "@hey-api/codegen-core": "npm:0.7.2"
+    "@hey-api/codegen-core": "npm:0.7.3"
     "@hey-api/json-schema-ref-parser": "npm:1.3.1"
-    "@hey-api/types": "npm:0.1.3"
+    "@hey-api/types": "npm:0.1.4"
     ansi-colors: "npm:4.1.3"
     cross-spawn: "npm:7.0.6"
     open: "npm:11.0.0"
     semver: "npm:7.7.3"
-  peerDependencies:
-    typescript: ">=5.5.3"
-  checksum: 10c0/98bf32a4133707dc74c912b8657a2d65d5244fb83cf418200a181eb450c33e7c04588412cd425fa7944b489ad3fff38d611fa258632eccf8697e9c0dbb1b9c0e
+  checksum: 10c0/fcf697cd0713e699ccebb4a8450b4e2605a8768df30f4e0945b7a3b0135a0ea38812b41b40fe0076b8ed1cc5597931b4ef9984436e82a6c87193f5e513d7a55b
   languageName: node
   linkType: hard
 
-"@hey-api/types@npm:0.1.3":
-  version: 0.1.3
-  resolution: "@hey-api/types@npm:0.1.3"
-  peerDependencies:
-    typescript: ">=5.5.3"
-  checksum: 10c0/346862e300068cfa3c4c91b95adb11bd37b2e8eedf9db5ee37ccd8fcbd4919e32caa7b12630091d1a4e8924821b7595d9f12deb2ea37f7d0f255e424d9e7d726
+"@hey-api/types@npm:0.1.4":
+  version: 0.1.4
+  resolution: "@hey-api/types@npm:0.1.4"
+  checksum: 10c0/9c7ae0a8b479728466bd3e129ae5e1de74bae89a21fd5b54e90682ad0ab7e2f7c9d4579af2c9419db62f101b06fabc2b20f016380c6eae11b204d4dd10e9f605
   languageName: node
   linkType: hard
 
@@ -5348,6 +5343,15 @@ __metadata:
     es-errors: "npm:^1.3.0"
     get-intrinsic: "npm:^1.2.6"
   checksum: 10c0/d6a7d6afca375779a4b307738c9e80dbf7afc0bdbe5948768d54ab9653c865523d8920e670991a925936eb524b7cb6a6361d199a760b21d0ca7620194455aa4b
+  languageName: node
+  linkType: hard
+
+"get-tsconfig@npm:4.13.6":
+  version: 4.13.6
+  resolution: "get-tsconfig@npm:4.13.6"
+  dependencies:
+    resolve-pkg-maps: "npm:^1.0.0"
+  checksum: 10c0/bab6937302f542f97217cbe7cbbdfa7e85a56a377bc7a73e69224c1f0b7c9ae8365918e55752ae8648265903f506c1705f63c0de1d4bab1ec2830fef3e539a1a
   languageName: node
   linkType: hard
 
