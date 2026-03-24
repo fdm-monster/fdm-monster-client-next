@@ -30,7 +30,7 @@
       </v-card-title>
 
       <v-card-text class="py-3">
-        <v-row dense>
+        <v-row density="compact">
           <v-col
             cols="12"
             md="4"
@@ -79,7 +79,7 @@
 
         <v-row
           v-if="tags.length"
-          dense
+          density="compact"
           class="mt-2"
         >
           <v-col cols="12">

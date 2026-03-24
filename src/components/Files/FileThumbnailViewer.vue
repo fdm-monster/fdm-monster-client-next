@@ -99,7 +99,7 @@
           v-if="currentThumbnail"
           class="thumbnail-info pa-3"
         >
-          <v-row dense>
+          <v-row density="compact">
             <v-col cols="auto">
               <span class="text-caption text-medium-emphasis">Resolution:</span>
               <span class="text-body-2 ml-1"

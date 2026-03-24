@@ -65,7 +65,7 @@
                   Basic Information
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col
                       cols="6"
                       md="4"
@@ -151,7 +151,7 @@
                   Timestamps
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col
                       cols="6"
                       md="3"
@@ -212,7 +212,7 @@
                   Progress & Duration
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col
                       cols="12"
                       md="6"
@@ -286,7 +286,7 @@
                   Filament Usage
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col
                       cols="6"
                       md="4"
@@ -419,7 +419,7 @@
                   3MF Multi-Plate Information
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col cols="4">
                       <div class="text-caption text-medium-emphasis">
                         Total Plates
@@ -473,7 +473,7 @@
                         </div>
                       </v-expansion-panel-title>
                       <v-expansion-panel-text>
-                        <v-row dense>
+                        <v-row density="compact">
                           <v-col cols="4">
                             <div class="text-caption text-medium-emphasis">
                               Print Time
@@ -551,7 +551,7 @@
                   File Information
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col
                       cols="12"
                       md="8"
@@ -625,7 +625,7 @@
                   Print Settings
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col
                       cols="6"
                       md="3"
@@ -751,7 +751,7 @@
                   Filament Details
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col
                       cols="6"
                       md="3"
@@ -848,7 +848,7 @@
                   Time Statistics
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col
                       cols="6"
                       md="3"
@@ -912,7 +912,7 @@
                   Layer Information
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col cols="6">
                       <div class="text-caption text-medium-emphasis">
                         Current Layer
@@ -971,7 +971,7 @@
                   Multi-Tool Information
                 </v-card-title>
                 <v-card-text>
-                  <v-row dense>
+                  <v-row density="compact">
                     <v-col cols="12">
                       <div class="text-caption text-medium-emphasis">
                         Tool Changes

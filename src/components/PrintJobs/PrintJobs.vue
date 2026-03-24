@@ -70,7 +70,7 @@
       </v-card-title>
 
       <v-card-text class="py-3">
-        <v-row dense>
+        <v-row density="compact">
           <v-col
             cols="12"
             md="6"
@@ -120,7 +120,7 @@
         </v-row>
 
         <v-row
-          dense
+          density="compact"
           class="mt-2"
         >
           <v-col
@@ -176,7 +176,7 @@
         </v-row>
 
         <v-row
-          dense
+          density="compact"
           class="mt-2"
         >
           <v-col

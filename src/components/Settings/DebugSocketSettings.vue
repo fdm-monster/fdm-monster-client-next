@@ -55,7 +55,7 @@
 
         <v-text-field
           v-model="filterText"
-          dense
+          density="compact"
           hide-details
           outlined
           placeholder="Filter..."
@@ -67,7 +67,7 @@
 
         <v-checkbox
           v-model="autoScroll"
-          dense
+          density="compact"
           hide-details
           label="Auto-scroll"
           class="mt-0 pt-0"

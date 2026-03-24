@@ -85,7 +85,7 @@ const hoverBorder = '1px solid red'
 export function getFileDropDirective(): Directive {
   return {
     // When the bound element is inserted into the DOM...
-    mounted: (el, binding, vnode) => {
+    mounted: (el, binding) => {
       el.style.border = defaultBorder
       el.style.transition = defaultTransition
 
@@ -103,10 +103,10 @@ export function getFileDropDirective(): Directive {
       }
 
       // The bound printer is not set
-      bindDropConditionally(el, binding.value?.printers, vnode.appContext)
+      bindDropConditionally(el, binding.value?.printers)
     },
-    beforeUpdate: (el, binding, vnode) => {
-      bindDropConditionally(el, binding.value?.printers, vnode.appContext)
+    beforeUpdate: (el, binding) => {
+      bindDropConditionally(el, binding.value?.printers)
     }
   }
 }

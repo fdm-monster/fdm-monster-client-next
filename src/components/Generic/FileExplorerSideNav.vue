@@ -282,8 +282,7 @@
             variant="text"
             :disabled="breadcrumbParts.length === 0"
             @click="
-              fileExplorer.setCurrentPath('')
-              refreshFiles()
+              navigateToDir('')
             "
           >
             <v-icon start>home</v-icon>
@@ -534,26 +533,31 @@ const fileTree = computed(() => {
 
   return items
 })
+
 const isStoppable = computed(() => {
   if (!storedSideNavPrinter.value || !printerId.value) return false
   return printerStateStore.isPrinterStoppable(printerId.value)
 })
+
 const isPaused = computed(() => {
   if (!storedSideNavPrinter.value || !printerId.value) return false
   return printerStateStore.isPrinterPaused(printerId.value)
 })
+
 const currentJob = computed(() => {
   if (!printerId.value) {
     throw new Error('Printer ID not set, cannot get current job')
   }
   return printerStateStore.printerJobsById[printerId.value]
 })
+
 const currentPrintingFilePath = computed(() => {
   if (!printerId.value) {
     throw new Error('Printer ID not set, cannot get current printing file name')
   }
   return printerStateStore.printingFilePathsByPrinterId[printerId.value]
 })
+
 const refreshFiles = async () => {
   fileExplorer.setLoading(true)
   fileExplorer.setError(false)

@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect, beforeEach } from 'vite-plus/test'
-import LoginView from '@/components/Login/LoginView.vue' // Adjust the path as necessary
+import LoginView from '@/components/Login/LoginView.vue'
 import LoginForm from '@/components/Login/LoginForm.vue'
 import Logo from '@/components/Login/Logo.vue'
 import { createPinia } from 'pinia'
@@ -9,7 +9,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const pinia = createPinia()
 const vuetify = createVuetify()
-// Create a router for testing
 const routes = [{ path: '/', component: LoginView }]
 const router = createRouter({
   history: createWebHistory(),
@@ -38,8 +37,8 @@ describe('LoginView.vue', () => {
   })
 
   it('displays the correct title', () => {
-    const title = wrapper.find('.text-uppercase.text-red') // Using the class selector
-    expect(title.exists()).toBe(true) // Check if the title exists
+    const title = wrapper.find('.text-uppercase.text-red')
+    expect(title.exists()).toBe(true)
     expect(title.text()).toContain('FDM')
     expect(title.text()).toContain('Monster')
   })

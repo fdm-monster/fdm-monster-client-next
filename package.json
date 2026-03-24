@@ -3,6 +3,7 @@
   "version": "2.3.3",
   "description": "FDM Monster Client Next is the Vue3 frontend for FDM Monster.",
   "license": "AGPL-3.0-or-later",
+  "type": "module",
   "author": "David Zwart",
   "repository": {
     "type": "git",
