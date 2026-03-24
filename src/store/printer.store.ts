@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 import { PrinterDto } from '@/models/printers/printer.model'
-import {
-  FileDto
-} from '@/models/printers/printer-file.model'
+import { FileDto } from '@/models/printers/printer-file.model'
 import { PrinterRemoteFileService, PrintersService } from '@/backend'
 import { CreatePrinter } from '@/models/printers/create-printer.model'
 import { usePrinterStateStore } from './printer-state.store'
@@ -122,15 +120,15 @@ export const usePrinterStore = defineStore('Printers', {
           'Printer was not popped as it did not occur in state',
           printerId
         )
-        return;
+        return
       }
 
       this.printers.splice(printerIndex, 1)
     },
     _replacePrinter({
-                      printerId,
-                      printer
-                    }: {
+      printerId,
+      printer
+    }: {
       printerId: number
       printer: PrinterDto
     }) {
@@ -143,14 +141,21 @@ export const usePrinterStore = defineStore('Printers', {
           'Printer was not purged as it did not occur in state',
           printerId
         )
-        return;
+        return
       }
-
 
       this.printers[printerIndex] = printer
     },
-    async loadPrinterFiles(printerId: number, recursive = false, startDir?: string) {
-      const response = await PrinterRemoteFileService.getFiles(printerId, recursive, startDir)
+    async loadPrinterFiles(
+      printerId: number,
+      recursive = false,
+      startDir?: string
+    ) {
+      const response = await PrinterRemoteFileService.getFiles(
+        printerId,
+        recursive,
+        startDir
+      )
       const files = [...response.dirs, ...response.files]
 
       files.sort((f1, f2) => {
@@ -177,8 +182,11 @@ export const usePrinterStore = defineStore('Printers', {
       const deletedFileIndex = fileBucket.findIndex((f) => f.path === fullPath)
 
       if (deletedFileIndex === -1) {
-        console.warn('File was not purged as it did not occur in state', fullPath)
-        return;
+        console.warn(
+          'File was not purged as it did not occur in state',
+          fullPath
+        )
+        return
       }
 
       fileBucket.splice(deletedFileIndex, 1)

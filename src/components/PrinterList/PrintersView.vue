@@ -24,7 +24,7 @@
             style="width: 220px"
           />
         </div>
-        <v-spacer/>
+        <v-spacer />
         <div class="d-flex align-center ga-2">
           <v-btn
             variant="elevated"
@@ -77,7 +77,7 @@
             <h3 v-else>
               No printer has been found. Adjust your filters or search criteria.
             </h3>
-            <PrinterCreateAction/>
+            <PrinterCreateAction />
           </div>
         </template>
         <template #item.enabled="{ item }">
@@ -107,10 +107,17 @@
               @click="openFloorEditDialog(floorOfPrinter(item.id)?.id)"
               @click:close="removePrinterFromFloor(item.id)"
             >
-              <v-icon start size="x-small">layers</v-icon>
+              <v-icon
+                start
+                size="x-small"
+                >layers</v-icon
+              >
               {{ floorOfPrinter(item.id)?.name }}
             </v-chip>
-            <span v-else class="text-caption text-medium-emphasis">
+            <span
+              v-else
+              class="text-caption text-medium-emphasis"
+            >
               No floor
             </span>
 
@@ -126,13 +133,20 @@
                 </v-btn>
               </template>
 
-              <v-list density="compact" min-width="200">
+              <v-list
+                density="compact"
+                min-width="200"
+              >
                 <v-list-item
                   prepend-icon="grid_on"
                   @click="goToPrinterGrid(item.id)"
                 >
                   <v-list-item-title>
-                    {{ floorOfPrinter(item.id) ? 'View Floor Grid' : 'View Printer Grid' }}
+                    {{
+                      floorOfPrinter(item.id)
+                        ? 'View Floor Grid'
+                        : 'View Printer Grid'
+                    }}
                   </v-list-item-title>
                 </v-list-item>
                 <v-list-item
@@ -163,7 +177,11 @@
               @click="openCameraEditDialog(camera.id)"
               @click:close="detachCameraFromPrinter(camera.id)"
             >
-              <v-icon start size="x-small">videocam</v-icon>
+              <v-icon
+                start
+                size="x-small"
+                >videocam</v-icon
+              >
               {{ camera.name }}
             </v-chip>
             <v-chip
@@ -173,7 +191,10 @@
             >
               +{{ camerasOfPrinter(item.id).length - 2 }} more
             </v-chip>
-            <span v-if="!camerasOfPrinter(item.id).length" class="text-caption text-medium-emphasis">
+            <span
+              v-if="!camerasOfPrinter(item.id).length"
+              class="text-caption text-medium-emphasis"
+            >
               No cameras
             </span>
 
@@ -190,7 +211,10 @@
                 </v-btn>
               </template>
 
-              <v-list density="compact" min-width="180">
+              <v-list
+                density="compact"
+                min-width="180"
+              >
                 <v-list-subheader>Attach Camera</v-list-subheader>
                 <v-list-item
                   v-for="camera in availableCamerasForPrinter(item.id)"
@@ -198,12 +222,23 @@
                   @click="attachCameraToPrinter(camera.id!, item.id)"
                 >
                   <template v-slot:prepend>
-                    <v-icon class="mr-2" size="small">videocam</v-icon>
+                    <v-icon
+                      class="mr-2"
+                      size="small"
+                      >videocam</v-icon
+                    >
                   </template>
-                  <v-list-item-title>{{ camera.name || camera.streamURL }}</v-list-item-title>
+                  <v-list-item-title>{{
+                    camera.name || camera.streamURL
+                  }}</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="!availableCamerasForPrinter(item.id).length" disabled>
-                  <v-list-item-title class="text-caption">No available cameras</v-list-item-title>
+                <v-list-item
+                  v-if="!availableCamerasForPrinter(item.id).length"
+                  disabled
+                >
+                  <v-list-item-title class="text-caption"
+                    >No available cameras</v-list-item-title
+                  >
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -221,7 +256,11 @@
               @click="openManageTagsDialogAndEdit(tag.id)"
               @click:close="deletePrinterFromTag(tag.id, item.id)"
             >
-              <v-icon start size="x-small">label</v-icon>
+              <v-icon
+                start
+                size="x-small"
+                >label</v-icon
+              >
               {{ tag.name }}
             </v-chip>
 
@@ -238,7 +277,10 @@
                 </v-btn>
               </template>
 
-              <v-list density="compact" min-width="150">
+              <v-list
+                density="compact"
+                min-width="150"
+              >
                 <v-list-subheader>Add Tag</v-list-subheader>
                 <v-list-item
                   v-for="(tag, index) in nonTagsOfPrinter(item.id)"
@@ -257,8 +299,13 @@
                   </template>
                   <v-list-item-title>{{ tag.name }}</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="!nonTagsOfPrinter(item.id).length" disabled>
-                  <v-list-item-title class="text-caption">All tags assigned</v-list-item-title>
+                <v-list-item
+                  v-if="!nonTagsOfPrinter(item.id).length"
+                  disabled
+                >
+                  <v-list-item-title class="text-caption"
+                    >All tags assigned</v-list-item-title
+                  >
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -268,17 +315,17 @@
           <div class="d-flex align-center">
             <!-- Core actions -->
             <div class="d-flex ga-1">
-              <FileExplorerAction :printer="item"/>
+              <FileExplorerAction :printer="item" />
               <PrinterSettingsAction
                 :printer="item"
                 @update:show="openEditDialog(item)"
               />
-              <PrinterDeleteAction :printer="item"/>
-              <PrinterMaintenanceAction :printer="item"/>
-              <PrinterUrlAction :printer="item"/>
-              <PrinterQuickStopAction :printer="item"/>
-              <PrinterConnectionAction :printer="item"/>
-              <SyncPrinterNameAction :printer="item"/>
+              <PrinterDeleteAction :printer="item" />
+              <PrinterMaintenanceAction :printer="item" />
+              <PrinterUrlAction :printer="item" />
+              <PrinterQuickStopAction :printer="item" />
+              <PrinterConnectionAction :printer="item" />
+              <SyncPrinterNameAction :printer="item" />
             </div>
           </div>
         </template>
@@ -291,7 +338,7 @@
         </template>
         <template #expanded-row="{ item, columns }">
           <td :colspan="columns.length">
-            <PrinterDetails :printer="item"/>
+            <PrinterDetails :printer="item" />
           </td>
         </template>
       </v-data-table>
@@ -419,11 +466,11 @@ const floorOfPrinter = (printerId: number) => {
 }
 
 const camerasOfPrinter = (printerId: number) => {
-  return cameras.value.filter(camera => camera.printerId === printerId)
+  return cameras.value.filter((camera) => camera.printerId === printerId)
 }
 
 const availableCamerasForPrinter = (printerId: number) => {
-  return cameras.value.filter(camera => camera.printerId !== printerId)
+  return cameras.value.filter((camera) => camera.printerId !== printerId)
 }
 
 const openEditDialog = (printer: PrinterDto) => {
@@ -447,7 +494,7 @@ const openManageTagsDialog = () => {
 }
 
 const openManageTagsDialogAndEdit = (tagId: number) => {
-  const tag = tagsWithPrinters.value.find(t => t.id === tagId)
+  const tag = tagsWithPrinters.value.find((t) => t.id === tagId)
   if (tag) {
     const manageTagsDialog = useDialog(DialogName.ManageTagsDialog)
     manageTagsDialog.openDialog({ tagId, tagName: tag.name })
@@ -472,13 +519,18 @@ const goToFloorSettings = () => {
 
 const openFloorEditDialog = (floorId?: number) => {
   if (floorId) {
-    useDialog(DialogName.AddOrUpdateFloorDialog).openDialog({ printerFloorId: floorId })
+    useDialog(DialogName.AddOrUpdateFloorDialog).openDialog({
+      printerFloorId: floorId
+    })
   }
 }
 
 const openCameraEditDialog = (cameraId?: number) => {
   if (cameraId) {
-    useDialog(DialogName.AddOrUpdateCameraDialog).openDialog({ addOrUpdate: 'update', cameraId })
+    useDialog(DialogName.AddOrUpdateCameraDialog).openDialog({
+      addOrUpdate: 'update',
+      cameraId
+    })
   }
 }
 
@@ -501,7 +553,7 @@ const removePrinterFromFloor = async (printerId: number) => {
     return
   }
 
-  if (!confirm(`Remove printer from floor "${ floor.name }"?`)) {
+  if (!confirm(`Remove printer from floor "${floor.name}"?`)) {
     return
   }
 
@@ -522,7 +574,7 @@ const toggleEnabled = async (printer: PrinterDto) => {
 }
 
 const attachCameraToPrinter = async (cameraId: number, printerId: number) => {
-  const camera = cameras.value.find(c => c.id === cameraId)
+  const camera = cameras.value.find((c) => c.id === cameraId)
   if (!camera) {
     snackbar.error('Camera not found')
     return
@@ -543,7 +595,7 @@ const attachCameraToPrinter = async (cameraId: number, printerId: number) => {
 }
 
 const detachCameraFromPrinter = async (cameraId: number) => {
-  const camera = cameras.value.find(c => c.id === cameraId)
+  const camera = cameras.value.find((c) => c.id === cameraId)
   if (!camera) {
     snackbar.error('Camera not found')
     return

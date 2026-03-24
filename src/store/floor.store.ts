@@ -99,14 +99,19 @@ export const useFloorStore = defineStore('Floors', {
         return []
       }
 
-      const matrix = createEmptyMatrix(settingsStore.gridCols, settingsStore.gridRows)
+      const matrix = createEmptyMatrix(
+        settingsStore.gridCols,
+        settingsStore.gridRows
+      )
       const positions = this.selectedFloor.printers
 
       for (let x = 0; x < settingsStore.gridCols; x++) {
         for (let y = 0; y < settingsStore.gridRows; y++) {
           const position = positions.find((p) => p.x === x && p.y === y)
           if (position) {
-            const printer = printersStore.printers.find((p) => p.id === position.printerId)
+            const printer = printersStore.printers.find(
+              (p) => p.id === position.printerId
+            )
             if (printer) {
               matrix[x][y] = printer
             }
@@ -124,18 +129,31 @@ export const useFloorStore = defineStore('Floors', {
           return []
         }
 
-        const floorPrinterIds = new Set(this.selectedFloor.printers.map(p => p.printerId))
+        const floorPrinterIds = new Set(
+          this.selectedFloor.printers.map((p) => p.printerId)
+        )
         const sourcePrinters = filteredPrinters ?? printersStore.printers
-        const floorPrinters = sourcePrinters.filter(p => floorPrinterIds.has(p.id))
+        const floorPrinters = sourcePrinters.filter((p) =>
+          floorPrinterIds.has(p.id)
+        )
 
         floorPrinters.sort((a, b) => a.name.localeCompare(b.name))
 
-        const matrix = createEmptyMatrix(settingsStore.gridCols, settingsStore.gridRows)
-        const fillFunction = settingsStore.gridNameSortDirection === 'vertical'
-          ? fillMatrixVertically
-          : fillMatrixHorizontally
+        const matrix = createEmptyMatrix(
+          settingsStore.gridCols,
+          settingsStore.gridRows
+        )
+        const fillFunction =
+          settingsStore.gridNameSortDirection === 'vertical'
+            ? fillMatrixVertically
+            : fillMatrixHorizontally
 
-        fillFunction(matrix, floorPrinters, settingsStore.gridCols, settingsStore.gridRows)
+        fillFunction(
+          matrix,
+          floorPrinters,
+          settingsStore.gridCols,
+          settingsStore.gridRows
+        )
 
         return matrix
       }

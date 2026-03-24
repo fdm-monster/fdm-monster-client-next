@@ -3,21 +3,21 @@
  */
 
 export interface WizardSettingsDto {
-  wizardCompleted: boolean;
-  wizardVersion: number;
-  latestWizardVersion: number;
+  wizardCompleted: boolean
+  wizardVersion: number
+  latestWizardVersion: number
 }
 
 export interface LoginRequiredResponse {
-  loginRequired: boolean;
-  registration: boolean;
-  wizardState: WizardSettingsDto;
-  isDemoMode: boolean;
+  loginRequired: boolean
+  registration: boolean
+  wizardState: WizardSettingsDto
+  isDemoMode: boolean
 }
 
 export interface LoginResponse {
-  token: string;
-  refreshToken: string;
+  token: string
+  refreshToken: string
 }
 
 export const mockLoginRequired: LoginRequiredResponse = {
@@ -26,10 +26,10 @@ export const mockLoginRequired: LoginRequiredResponse = {
   wizardState: {
     wizardCompleted: true,
     wizardVersion: 1,
-    latestWizardVersion: 1,
+    latestWizardVersion: 1
   },
-  isDemoMode: false,
-};
+  isDemoMode: false
+}
 
 export const mockLoginRequiredTrue: LoginRequiredResponse = {
   loginRequired: true,
@@ -37,10 +37,10 @@ export const mockLoginRequiredTrue: LoginRequiredResponse = {
   wizardState: {
     wizardCompleted: true,
     wizardVersion: 1,
-    latestWizardVersion: 1,
+    latestWizardVersion: 1
   },
-  isDemoMode: false,
-};
+  isDemoMode: false
+}
 
 export const mockRegistrationEnabled: LoginRequiredResponse = {
   loginRequired: false,
@@ -48,10 +48,10 @@ export const mockRegistrationEnabled: LoginRequiredResponse = {
   wizardState: {
     wizardCompleted: true,
     wizardVersion: 1,
-    latestWizardVersion: 1,
+    latestWizardVersion: 1
   },
-  isDemoMode: false,
-};
+  isDemoMode: false
+}
 
 export const mockLoginRequiredWithWizard: LoginRequiredResponse = {
   loginRequired: false,
@@ -59,21 +59,21 @@ export const mockLoginRequiredWithWizard: LoginRequiredResponse = {
   wizardState: {
     wizardCompleted: false,
     wizardVersion: 0,
-    latestWizardVersion: 1,
+    latestWizardVersion: 1
   },
-  isDemoMode: false,
-};
+  isDemoMode: false
+}
 
 export const mockLoginResponse: LoginResponse = {
   token: 'mock-jwt-token-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-  refreshToken: 'mock-refresh-token-abcd1234efgh5678ijkl9012',
-};
+  refreshToken: 'mock-refresh-token-abcd1234efgh5678ijkl9012'
+}
 
 export const mockVerifyResponse = {
   valid: true,
-  userId: 1,
-};
+  userId: 1
+}
 
 export const mockRefreshResponse = {
-  token: 'mock-new-jwt-token-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-};
+  token: 'mock-new-jwt-token-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+}

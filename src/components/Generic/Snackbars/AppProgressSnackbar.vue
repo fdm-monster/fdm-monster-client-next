@@ -34,7 +34,13 @@
               color="white"
               size="16"
             >
-              {{ progress.completed ? 'check' : progress.timeoutAt ? 'pause' : 'schedule' }}
+              {{
+                progress.completed
+                  ? 'check'
+                  : progress.timeoutAt
+                    ? 'pause'
+                    : 'schedule'
+              }}
             </v-icon>
             <span class="text-body-2 text-white">{{ progress.title }}</span>
             <v-spacer />
@@ -183,4 +189,3 @@ onMounted(() => {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
 }
 </style>
-

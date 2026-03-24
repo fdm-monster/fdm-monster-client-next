@@ -26,7 +26,7 @@ yarn build            # TypeScript check + Build for production (preferred for v
 vue-tsc --noEmit      # TypeScript type checking only
 yarn test:unit        # Run unit tests
 yarn test:coverage    # Run tests with coverage
-yarn lint             # Run ESLint
+yarn lint             # Run oxclint
 yarn dev              # Start development server (use sparingly)
 ```
 

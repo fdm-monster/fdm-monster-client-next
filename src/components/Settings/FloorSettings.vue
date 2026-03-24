@@ -1,7 +1,10 @@
 <template>
   <v-card>
     <v-card-text>
-      <SettingSection title="Manage Floors" :usecols="false">
+      <SettingSection
+        title="Manage Floors"
+        :usecols="false"
+      >
         <div class="mb-4 d-flex align-center ga-3">
           <v-btn
             color="primary"
@@ -11,7 +14,11 @@
             Create New Floor
           </v-btn>
           <div class="text-caption text-medium-emphasis">
-            <v-icon size="small" class="mr-1">drag_indicator</v-icon>
+            <v-icon
+              size="small"
+              class="mr-1"
+              >drag_indicator</v-icon
+            >
             Drag floors to reorder them
           </div>
         </div>
@@ -29,105 +36,145 @@
             >
               <v-expansion-panel>
                 <v-expansion-panel-title>
-                  <div class="d-flex align-center justify-space-between" style="width: 100%">
+                  <div
+                    class="d-flex align-center justify-space-between"
+                    style="width: 100%"
+                  >
                     <div class="d-flex align-center">
-                      <v-icon class="drag-handle mr-2" style="cursor: move">drag_indicator</v-icon>
+                      <v-icon
+                        class="drag-handle mr-2"
+                        style="cursor: move"
+                        >drag_indicator</v-icon
+                      >
                       <v-icon class="mr-3">layers</v-icon>
                       <div>
-                        <div class="text-subtitle-1 font-weight-medium">{{ floor.name }}</div>
+                        <div class="text-subtitle-1 font-weight-medium">
+                          {{ floor.name }}
+                        </div>
                         <div class="text-caption text-medium-emphasis">
-                          Floor Order #{{ floor.order }} • {{ floor.printers.length }} printer(s) assigned
+                          Floor Order #{{ floor.order }} •
+                          {{ floor.printers.length }} printer(s) assigned
                         </div>
                       </div>
                     </div>
                   </div>
                 </v-expansion-panel-title>
 
-            <v-expansion-panel-text>
-              <!-- Floor details and actions -->
-              <div class="mb-4">
-                <v-row>
-                  <v-col cols="6">
-                    <v-text-field
-                      :model-value="floor.name"
-                      label="Floor Name"
-                      variant="outlined"
-                      density="compact"
-                      hide-details
-                      @blur="updateFloorName(floor.id, $event.target.value)"
-                    />
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                      :model-value="floor.order"
-                      label="Floor Order"
-                      type="number"
-                      variant="outlined"
-                      density="compact"
-                      hide-details
-                      @blur="updateFloorOrder(floor.id, Number($event.target.value))"
-                    />
-                  </v-col>
-                </v-row>
-              </div>
+                <v-expansion-panel-text>
+                  <!-- Floor details and actions -->
+                  <div class="mb-4">
+                    <v-row>
+                      <v-col cols="6">
+                        <v-text-field
+                          :model-value="floor.name"
+                          label="Floor Name"
+                          variant="outlined"
+                          density="compact"
+                          hide-details
+                          @blur="updateFloorName(floor.id, $event.target.value)"
+                        />
+                      </v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          :model-value="floor.order"
+                          label="Floor Order"
+                          type="number"
+                          variant="outlined"
+                          density="compact"
+                          hide-details
+                          @blur="
+                            updateFloorOrder(
+                              floor.id,
+                              Number($event.target.value)
+                            )
+                          "
+                        />
+                      </v-col>
+                    </v-row>
+                  </div>
 
-              <!-- Manage on grid button -->
-              <div class="mb-4">
-                <v-btn
-                  color="primary"
-                  variant="tonal"
-                  prepend-icon="grid_on"
-                  @click="goToGridForFloor(floor.id)"
-                >
-                  Manage Printers on Grid
-                </v-btn>
-              </div>
+                  <!-- Manage on grid button -->
+                  <div class="mb-4">
+                    <v-btn
+                      color="primary"
+                      variant="tonal"
+                      prepend-icon="grid_on"
+                      @click="goToGridForFloor(floor.id)"
+                    >
+                      Manage Printers on Grid
+                    </v-btn>
+                  </div>
 
-              <v-divider class="my-3" />
+                  <v-divider class="my-3" />
 
-              <!-- Assigned printers -->
-              <div v-if="floor.printers.length > 0" class="mb-3">
-                <div class="text-subtitle-2 mb-2">Assigned Printers:</div>
-                <div class="d-flex flex-wrap ga-2">
-                  <v-chip
-                    v-for="printerPos in floor.printers"
-                    :key="printerPos.printerId"
-                    closable
-                    size="small"
-                    @click:close="removePrinterFromFloor(floor.id, printerPos.printerId)"
+                  <!-- Assigned printers -->
+                  <div
+                    v-if="floor.printers.length > 0"
+                    class="mb-3"
                   >
-                    <v-icon start size="x-small">print</v-icon>
-                    {{ getPrinterName(printerPos.printerId) }}
-                    <v-chip size="x-small" variant="flat" class="ml-1">
-                      {{ printerPos.x }},{{ printerPos.y }}
-                    </v-chip>
-                  </v-chip>
-                </div>
-              </div>
-              <div v-else class="text-caption text-medium-emphasis mb-3">
-                No printers assigned to this floor yet.
-              </div>
+                    <div class="text-subtitle-2 mb-2">Assigned Printers:</div>
+                    <div class="d-flex flex-wrap ga-2">
+                      <v-chip
+                        v-for="printerPos in floor.printers"
+                        :key="printerPos.printerId"
+                        closable
+                        size="small"
+                        @click:close="
+                          removePrinterFromFloor(floor.id, printerPos.printerId)
+                        "
+                      >
+                        <v-icon
+                          start
+                          size="x-small"
+                          >print</v-icon
+                        >
+                        {{ getPrinterName(printerPos.printerId) }}
+                        <v-chip
+                          size="x-small"
+                          variant="flat"
+                          class="ml-1"
+                        >
+                          {{ printerPos.x }},{{ printerPos.y }}
+                        </v-chip>
+                      </v-chip>
+                    </div>
+                  </div>
+                  <div
+                    v-else
+                    class="text-caption text-medium-emphasis mb-3"
+                  >
+                    No printers assigned to this floor yet.
+                  </div>
 
-              <!-- Delete floor -->
-              <v-divider class="my-3" />
-              <v-btn
-                color="error"
-                variant="outlined"
-                size="small"
-                prepend-icon="delete"
-                @click="deleteFloor(floor.id)"
-              >
-                Delete Floor
-              </v-btn>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-        </v-expansion-panels>
+                  <!-- Delete floor -->
+                  <v-divider class="my-3" />
+                  <v-btn
+                    color="error"
+                    variant="outlined"
+                    size="small"
+                    prepend-icon="delete"
+                    @click="deleteFloor(floor.id)"
+                  >
+                    Delete Floor
+                  </v-btn>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </v-expansion-panels>
           </template>
         </Draggable>
 
-        <div v-if="!floors.length" class="text-center pa-8 text-medium-emphasis">
-          <v-icon size="large" class="mb-2">layers_clear</v-icon>
-          <div>No floors created yet. Click "Create New Floor" to get started.</div>
+        <div
+          v-if="!floors.length"
+          class="text-center pa-8 text-medium-emphasis"
+        >
+          <v-icon
+            size="large"
+            class="mb-2"
+            >layers_clear</v-icon
+          >
+          <div>
+            No floors created yet. Click "Create New Floor" to get started.
+          </div>
         </div>
       </SettingSection>
     </v-card-text>
@@ -155,9 +202,13 @@ const addOrUpdateFloorDialog = useDialog(DialogName.AddOrUpdateFloorDialog)
 const floors = computed(() => floorStore.floors)
 const localFloors = ref<FloorDto[]>([])
 
-watch(floors, (newFloors) => {
-  localFloors.value = [...newFloors]
-}, { immediate: true })
+watch(
+  floors,
+  (newFloors) => {
+    localFloors.value = [...newFloors]
+  },
+  { immediate: true }
+)
 
 const sortableFloors = computed({
   get: () => localFloors.value,
@@ -167,7 +218,7 @@ const sortableFloors = computed({
 })
 
 function getPrinterName(printerId: number) {
-  const printer = printerStore.printers.find(p => p.id === printerId)
+  const printer = printerStore.printers.find((p) => p.id === printerId)
   return printer?.name || `Printer ${printerId}`
 }
 
@@ -195,7 +246,12 @@ async function updateFloorOrder(floorId: number, order: number) {
 }
 
 async function deleteFloor(floorId: number) {
-  if (!confirm('Are you sure you want to delete this floor? Printers will not be deleted.')) return
+  if (
+    !confirm(
+      'Are you sure you want to delete this floor? Printers will not be deleted.'
+    )
+  )
+    return
   await floorStore.deleteFloor(floorId)
   snackbar.info('Floor deleted')
 }
@@ -217,7 +273,9 @@ async function onDragEnd(event: any) {
   localFloors.value.forEach((floor: FloorDto, index: number) => {
     const newOrder = index + 1
     if (floor.order !== newOrder) {
-      updates.push(floorStore.updateFloorOrder({ floorId: floor.id, order: newOrder }))
+      updates.push(
+        floorStore.updateFloorOrder({ floorId: floor.id, order: newOrder })
+      )
     }
   })
 

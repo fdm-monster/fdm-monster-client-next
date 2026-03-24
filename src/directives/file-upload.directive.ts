@@ -6,14 +6,10 @@ import {
 import { usePrinterStore } from '@/store/printer.store'
 import { useUploadsStore } from '@/store/uploads.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
-import { AppContext, Directive } from 'vue'
-import { QueuedUpload } from "@/models/uploads/queued-upload.model";
+import { Directive } from 'vue'
+import { QueuedUpload } from '@/models/uploads/queued-upload.model'
 
-const bindDropConditionally = (
-  el: HTMLElement,
-  printers: PrinterDto[],
-  context?: AppContext | null
-) => {
+const bindDropConditionally = (el: HTMLElement, printers: PrinterDto[]) => {
   const printersStore = usePrinterStore()
   const uploadsStore = useUploadsStore()
   const snackbar = useSnackbar()
@@ -57,14 +53,18 @@ const bindDropConditionally = (
           clonedFiles.length
         )
         const clonedFile = clonedFiles[0]
-        convertedUploads = convertMultiPrinterFileToQueue(printers, clonedFile, true)
+        convertedUploads = convertMultiPrinterFileToQueue(
+          printers,
+          clonedFile,
+          true
+        )
       }
 
       uploadsStore.queueUploads(convertedUploads)
 
       printersStore.clearSelectedPrinters()
     }
-    return;
+    return
   }
 
   el.ondrop = async (e) => {
@@ -85,7 +85,7 @@ const hoverBorder = '1px solid red'
 export function getFileDropDirective(): Directive {
   return {
     // When the bound element is inserted into the DOM...
-    mounted: (el, binding, vnode) => {
+    mounted: (el, binding) => {
       el.style.border = defaultBorder
       el.style.transition = defaultTransition
 
@@ -103,10 +103,10 @@ export function getFileDropDirective(): Directive {
       }
 
       // The bound printer is not set
-      bindDropConditionally(el, binding.value?.printers, vnode.appContext)
+      bindDropConditionally(el, binding.value?.printers)
     },
-    beforeUpdate: (el, binding, vnode) => {
-      bindDropConditionally(el, binding.value?.printers, vnode.appContext)
+    beforeUpdate: (el, binding) => {
+      bindDropConditionally(el, binding.value?.printers)
     }
   }
 }

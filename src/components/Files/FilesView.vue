@@ -112,7 +112,10 @@
           :items-per-page="25"
         >
           <template #item.thumbnail="{ item }">
-            <FileThumbnailCell :file-storage-id="item.fileStorageId" :thumbnails="item.thumbnails || []"/>
+            <FileThumbnailCell
+              :file-storage-id="item.fileStorageId"
+              :thumbnails="item.thumbnails || []"
+            />
           </template>
 
           <!-- File Name Column -->
@@ -163,12 +166,20 @@
                 </v-chip>
               </template>
               <template v-else>
-                <v-chip size="small" variant="tonal" color="orange">
+                <v-chip
+                  size="small"
+                  variant="tonal"
+                  color="orange"
+                >
                   {{ item.metadata.filamentType }}
                 </v-chip>
               </template>
             </template>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Temperatures Column -->
@@ -253,12 +264,32 @@
 
           <!-- Filament Column -->
           <template #item.filament="{ item }">
-            <div v-if="item.metadata?.filamentUsedGrams !== undefined && item.metadata?.filamentUsedGrams !== null" class="text-body-2">
-              <v-chip color="green" size="small" variant="tonal">
-                <v-icon start size="small">fitness_center</v-icon>
+            <div
+              v-if="
+                item.metadata?.filamentUsedGrams !== undefined &&
+                item.metadata?.filamentUsedGrams !== null
+              "
+              class="text-body-2"
+            >
+              <v-chip
+                color="green"
+                size="small"
+                variant="tonal"
+              >
+                <v-icon
+                  start
+                  size="small"
+                  >fitness_center</v-icon
+                >
                 <template v-if="Array.isArray(item.metadata.filamentUsedGrams)">
-                  <span v-for="(val, idx) in item.metadata.filamentUsedGrams" :key="idx">
-                    {{ val != null ? val.toFixed(1) : '-' }}g<span v-if="idx < item.metadata.filamentUsedGrams.length - 1">, </span>
+                  <span
+                    v-for="(val, idx) in item.metadata.filamentUsedGrams"
+                    :key="idx"
+                  >
+                    {{ val != null ? val.toFixed(1) : '-' }}g<span
+                      v-if="idx < item.metadata.filamentUsedGrams.length - 1"
+                      >,
+                    </span>
                   </span>
                 </template>
                 <template v-else>
@@ -372,7 +403,11 @@ import {
 import { usePrinterStore } from '@/store/printer.store'
 import { useSnackbar } from '@/shared/snackbar.composable'
 import { formatFileSize } from '@/utils/file-size.util'
-import { formatDate, formatRelativeTime, formatDuration } from '@/utils/date-time.utils'
+import {
+  formatDate,
+  formatRelativeTime,
+  formatDuration
+} from '@/utils/date-time.utils'
 import { getPrinterTypeLogo } from '@/shared/printer-types.constants'
 import FileDetailsDialog from './FileDetailsDialog.vue'
 import QueueFileDialog from './QueueFileDialog.vue'
@@ -449,7 +484,11 @@ const viewFile = (file: FileMetadata) => {
 }
 
 const deleteFile = async (file: FileMetadata) => {
-  if (!confirm(`Delete file "${file.metadata?._originalFileName || file.fileName}"? This cannot be undone.`)) {
+  if (
+    !confirm(
+      `Delete file "${file.metadata?._originalFileName || file.fileName}"? This cannot be undone.`
+    )
+  ) {
     return
   }
 

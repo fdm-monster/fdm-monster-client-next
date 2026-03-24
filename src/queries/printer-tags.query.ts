@@ -1,5 +1,8 @@
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
-import { PrinterTagService, TagWithPrintersDto } from '@/backend/printer-tag.service'
+import {
+  PrinterTagService,
+  TagWithPrintersDto
+} from '@/backend/printer-tag.service'
 
 export const printerTagsQueryKey = 'printerTags'
 
@@ -19,4 +22,3 @@ export const useInvalidatePrinterTags = () => {
     await queryClient.invalidateQueries({ queryKey: [printerTagsQueryKey] })
   }
 }
-

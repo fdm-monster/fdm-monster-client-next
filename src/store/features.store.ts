@@ -53,7 +53,7 @@ export const useFeatureStore = defineStore('Feature', {
       try {
         const features = await AppService.getFeatures()
         this.setFeatures(features)
-      } catch (error) {
+      } catch {
         this.features = {}
       }
     },

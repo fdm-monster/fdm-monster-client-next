@@ -8,7 +8,10 @@
         style="margin: 250px; position: absolute"
       />
 
-      <SettingSection title="User Management" :usecols="false">
+      <SettingSection
+        title="User Management"
+        :usecols="false"
+      >
         <div class="mb-4">
           <v-btn
             :disabled="!profile?.isRootUser"
@@ -20,14 +23,42 @@
           </v-btn>
         </div>
 
-        <v-table theme="dark" hover>
+        <v-table
+          theme="dark"
+          hover
+        >
           <thead>
             <tr>
-              <th scope="col" class="text-left">Username</th>
-              <th scope="col" class="text-left">Status</th>
-              <th scope="col" class="text-left">Roles</th>
-              <th scope="col" class="text-left">Created</th>
-              <th scope="col" class="text-right">Actions</th>
+              <th
+                scope="col"
+                class="text-left"
+              >
+                Username
+              </th>
+              <th
+                scope="col"
+                class="text-left"
+              >
+                Status
+              </th>
+              <th
+                scope="col"
+                class="text-left"
+              >
+                Roles
+              </th>
+              <th
+                scope="col"
+                class="text-left"
+              >
+                Created
+              </th>
+              <th
+                scope="col"
+                class="text-right"
+              >
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -67,9 +98,14 @@
                 </div>
               </td>
               <td>
-                <div v-if="profile?.isRootUser" style="min-width: 200px">
+                <div
+                  v-if="profile?.isRootUser"
+                  style="min-width: 200px"
+                >
                   <v-select
-                    :items="roles.map((r) => ({ title: r.name, value: r.name }))"
+                    :items="
+                      roles.map((r) => ({ title: r.name, value: r.name }))
+                    "
                     v-model="user.roles"
                     multiple
                     chips
@@ -78,15 +114,25 @@
                     hide-details
                     @update:model-value="updateUserRoles(user)"
                   >
-                    <template v-slot:prepend-item v-if="user.isRootUser">
+                    <template
+                      v-slot:prepend-item
+                      v-if="user.isRootUser"
+                    >
                       <v-list-item>
-                        <v-chip size="small" color="error">OWNER</v-chip>
+                        <v-chip
+                          size="small"
+                          color="error"
+                          >OWNER</v-chip
+                        >
                       </v-list-item>
                       <v-divider />
                     </template>
                   </v-select>
                 </div>
-                <div v-else class="d-flex align-center ga-1 flex-wrap">
+                <div
+                  v-else
+                  class="d-flex align-center ga-1 flex-wrap"
+                >
                   <v-chip
                     v-if="user.isRootUser"
                     size="x-small"
@@ -108,7 +154,13 @@
               </td>
               <td>
                 <div class="d-flex justify-end ga-1">
-                  <v-tooltip :text="user.isVerified ? 'Set user to unverified' : 'Set user to verified'">
+                  <v-tooltip
+                    :text="
+                      user.isVerified
+                        ? 'Set user to unverified'
+                        : 'Set user to verified'
+                    "
+                  >
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
@@ -119,7 +171,9 @@
                         variant="text"
                         @click="verifyUser(user, !user.isVerified)"
                       >
-                        <v-icon>{{ user.isVerified ? 'shield_off' : 'shield' }}</v-icon>
+                        <v-icon>{{
+                          user.isVerified ? 'shield_off' : 'shield'
+                        }}</v-icon>
                       </v-btn>
                     </template>
                   </v-tooltip>
@@ -128,14 +182,18 @@
                     <template v-slot:activator="{ props }">
                       <v-btn
                         v-bind="props"
-                        :disabled="isCurrentAccount(user) || !profile?.isRootUser"
+                        :disabled="
+                          isCurrentAccount(user) || !profile?.isRootUser
+                        "
                         :color="user.isRootUser ? 'warning' : 'primary'"
                         size="small"
                         icon
                         variant="text"
                         @click="setRootUser(user, !user.isRootUser)"
                       >
-                        <v-icon>{{ user.isRootUser ? 'key_off' : 'key' }}</v-icon>
+                        <v-icon>{{
+                          user.isRootUser ? 'key_off' : 'key'
+                        }}</v-icon>
                       </v-btn>
                     </template>
                   </v-tooltip>

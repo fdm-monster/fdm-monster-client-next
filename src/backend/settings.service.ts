@@ -19,13 +19,13 @@ export class SettingsService extends BaseService {
   }
 
   static async updateLoginRequiredSettings(loginRequired: boolean) {
-    const path = `${ ServerApi.updateLoginRequiredRoute }`
+    const path = `${ServerApi.updateLoginRequiredRoute}`
 
     return await this.put<SettingsDto>(path, { loginRequired })
   }
 
   static async updateRegistrationEnabledSettings(registrationEnabled: boolean) {
-    const path = `${ ServerApi.updateRegistrationEnabledRoute }`
+    const path = `${ServerApi.updateRegistrationEnabledRoute}`
 
     return await this.put<SettingsDto>(path, { registrationEnabled })
   }
@@ -35,7 +35,7 @@ export class SettingsService extends BaseService {
     refreshTokenAttempts: number,
     refreshTokenExpiry: number
   ) {
-    const path = `${ ServerApi.updateCredentialSettings }`
+    const path = `${ServerApi.updateCredentialSettings}`
 
     return await this.put(path, {
       jwtExpiresIn,
@@ -45,18 +45,18 @@ export class SettingsService extends BaseService {
   }
 
   static async updateFrontendSettings(frontendSettings: FrontendSettings) {
-    const path = `${ ServerApi.updateFrontendSettingsRoute }`
+    const path = `${ServerApi.updateFrontendSettingsRoute}`
 
     return await this.put<SettingsDto>(path, frontendSettings)
   }
 
   static async setSentryDiagnosticsSettings(enabled: boolean) {
-    const path = `${ ServerApi.serverSentryDiagnosticsSettingRoute }`
+    const path = `${ServerApi.serverSentryDiagnosticsSettingRoute}`
     return await this.patch(path, { enabled })
   }
 
   static async updateTimeoutSettings(subSettings: TimeoutSettings) {
-    const path = `${ ServerApi.updateTimeoutSettingRoute }`
+    const path = `${ServerApi.updateTimeoutSettingRoute}`
 
     return await this.put<SettingsDto>(path, subSettings)
   }
@@ -67,7 +67,7 @@ export class SettingsService extends BaseService {
   }
 
   static async updateExperimentalPrusaLinkSupport(enabled: boolean) {
-    const path = ServerApi.updateExperimentalPrusaLinkSupportRoute;
+    const path = ServerApi.updateExperimentalPrusaLinkSupportRoute
     return await this.put<SettingsDto>(path, { enabled })
   }
 
@@ -77,10 +77,10 @@ export class SettingsService extends BaseService {
   }
 
   static async updateExperimentalThumbnailSupport(enabled: boolean) {
-    const path = ServerApi.updateExperimentalThumbnailSupportRoute;
+    const path = ServerApi.updateExperimentalThumbnailSupportRoute
     return await this.put<SettingsDto>(path, { enabled })
   }
- static async getSlicerApiKey() {
+  static async getSlicerApiKey() {
     const path = ServerApi.slicerApiKeyRoute
     return await this.get<{ slicerApiKey: string | null }>(path)
   }

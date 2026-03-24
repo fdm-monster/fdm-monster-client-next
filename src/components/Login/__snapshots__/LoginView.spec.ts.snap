@@ -5,7 +5,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
   class="v-row v-row--no-gutters position-relative"
 >
   <div
-    class="v-col-lg-12 v-col-12"
+    class="v-col v-col--cols-lg-12 v-col--cols-12"
   >
     <div
       class="v-container v-locale--is-ltr"
@@ -15,14 +15,13 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
         style="min-height: calc(100vh - 148px);"
       >
         <div
-          class="v-row justify-center align-content-center"
+          class="v-row justify--center v-row--density-default justify-center align-content-center"
         >
           <div
             class="pt-6 pl-6 d-flex flex-column align-center"
           >
             <div
               class="v-responsive v-img v-img--booting shrink mr-1 pt-3 ml-1"
-              contain=""
               style="width: 150px; opacity: 0.85;"
             >
               <div
@@ -88,7 +87,7 @@ exports[`LoginView.vue > renders with the correct structure 1`] = `
             </div>
           </div>
           <div
-            class="v-col-md-12 v-col-12"
+            class="v-col v-col--cols-md-12 v-col--cols-12"
           >
             <div
               class="v-card v-theme--light v-card--density-default elevation-10 v-card--variant-elevated pa-4 login-card"

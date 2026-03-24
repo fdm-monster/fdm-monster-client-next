@@ -21,14 +21,23 @@
             width="4"
             class="ml-2"
           />
-          <v-icon v-if="showMoonrakerSuccess" color="success" class="ml-2">
+          <v-icon
+            v-if="showMoonrakerSuccess"
+            color="success"
+            class="ml-2"
+          >
             check_circle
           </v-icon>
         </div>
 
-        <v-alert v-if="experimentalMoonrakerSupport" color="warning" variant="tonal" class="mb-2">
-          Disabling Moonraker support will disable all printers of type Moonraker. You need to
-          re-enable them after re-enabling this feature.
+        <v-alert
+          v-if="experimentalMoonrakerSupport"
+          color="warning"
+          variant="tonal"
+          class="mb-2"
+        >
+          Disabling Moonraker support will disable all printers of type
+          Moonraker. You need to re-enable them after re-enabling this feature.
         </v-alert>
 
         <div class="d-flex align-center mb-2">
@@ -46,7 +55,11 @@
             width="4"
             class="ml-2"
           />
-          <v-icon v-if="showPrusaLinkSuccess" color="success" class="ml-2">
+          <v-icon
+            v-if="showPrusaLinkSuccess"
+            color="success"
+            class="ml-2"
+          >
             check_circle
           </v-icon>
         </div>
@@ -66,7 +79,11 @@
             width="4"
             class="ml-2"
           />
-          <v-icon v-if="showBambuSuccess" color="success" class="ml-2">
+          <v-icon
+            v-if="showBambuSuccess"
+            color="success"
+            class="ml-2"
+          >
             check_circle
           </v-icon>
         </div>
@@ -92,8 +109,10 @@ const showBambuSuccess = ref(false)
 
 async function loadSettings() {
   const settings = await SettingsService.getSettings()
-  experimentalMoonrakerSupport.value = settings.server.experimentalMoonrakerSupport
-  experimentalPrusaLinkSupport.value = settings.server.experimentalPrusaLinkSupport
+  experimentalMoonrakerSupport.value =
+    settings.server.experimentalMoonrakerSupport
+  experimentalPrusaLinkSupport.value =
+    settings.server.experimentalPrusaLinkSupport
   experimentalBambuSupport.value = settings.server.experimentalBambuSupport
 }
 
@@ -106,7 +125,9 @@ const updateMoonrakerSupport = async () => {
   showMoonrakerSuccess.value = false
 
   try {
-    await SettingsService.updateExperimentalMoonrakerSupport(experimentalMoonrakerSupport.value)
+    await SettingsService.updateExperimentalMoonrakerSupport(
+      experimentalMoonrakerSupport.value
+    )
     await loadSettings()
     setTimeout(() => {
       isMoonrakerSupportLoading.value = false
@@ -128,7 +149,9 @@ const updatePrusaLinkSupport = async () => {
   showPrusaLinkSuccess.value = false
 
   try {
-    await SettingsService.updateExperimentalPrusaLinkSupport(experimentalPrusaLinkSupport.value)
+    await SettingsService.updateExperimentalPrusaLinkSupport(
+      experimentalPrusaLinkSupport.value
+    )
     await loadSettings()
     setTimeout(() => {
       isPrusaLinkSupportLoading.value = false
@@ -150,7 +173,9 @@ const updateBambuSupport = async () => {
   showBambuSuccess.value = false
 
   try {
-    await SettingsService.updateExperimentalBambuSupport(experimentalBambuSupport.value)
+    await SettingsService.updateExperimentalBambuSupport(
+      experimentalBambuSupport.value
+    )
     await loadSettings()
     setTimeout(() => {
       isBambuSupportLoading.value = false

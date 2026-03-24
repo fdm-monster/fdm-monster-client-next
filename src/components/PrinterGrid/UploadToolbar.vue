@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useDialog } from "@/shared/dialog.composable";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
-import { convertMultiPrinterFileToQueue } from "@/utils/uploads-state.utils";
-import { PrinterDto } from "@/models/printers/printer.model";
-import { PrintersService } from "@/backend";
-import { usePrinterStore } from "@/store/printer.store";
-import { usePrinterStateStore } from "@/store/printer-state.store";
-import { useUploadsStore } from "@/store/uploads.store";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { formatFileSize } from "@/utils/file-size.util";
+import { computed } from 'vue'
+import { useDialog } from '@/shared/dialog.composable'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
+import { convertMultiPrinterFileToQueue } from '@/utils/uploads-state.utils'
+import { PrinterDto } from '@/models/printers/printer.model'
+import { PrintersService } from '@/backend'
+import { usePrinterStore } from '@/store/printer.store'
+import { usePrinterStateStore } from '@/store/printer-state.store'
+import { useUploadsStore } from '@/store/uploads.store'
+import { useSnackbar } from '@/shared/snackbar.composable'
+import { formatFileSize } from '@/utils/file-size.util'
 
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
@@ -86,9 +86,7 @@ const openPrinter = (printer: PrinterDto) => {
 </script>
 
 <template>
-  <v-banner
-    v-drop-upload="{ printers: selectedPrinters }"
-  >
+  <v-banner v-drop-upload="{ printers: selectedPrinters }">
     <v-row style="margin-bottom: -5px">
       <v-col style="padding: 5px 0 0 15px">
         <v-chip-group class="d-inline-block">
@@ -137,7 +135,11 @@ const openPrinter = (printer: PrinterDto) => {
           size="small"
           @click="batchReprintFiles()"
         >
-          <v-icon class="pr-2" size="small">refresh</v-icon>
+          <v-icon
+            class="pr-2"
+            size="small"
+            >refresh</v-icon
+          >
           Batch reprint
         </v-btn>
         <v-btn
@@ -147,7 +149,11 @@ const openPrinter = (printer: PrinterDto) => {
           size="small"
           @click="clearSelectedPrinters()"
         >
-          <v-icon class="pr-2" size="small">delete</v-icon>
+          <v-icon
+            class="pr-2"
+            size="small"
+            >delete</v-icon
+          >
           Clear all ({{ selectedPrinters.length }})
         </v-btn>
         <v-btn

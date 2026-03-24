@@ -31,7 +31,11 @@
       @dragleave.prevent="onDragLeaveRemove"
       @drop.prevent="onDropRemove"
     >
-      <v-icon size="large" class="mr-2">delete_forever</v-icon>
+      <v-icon
+        size="large"
+        class="mr-2"
+        >delete_forever</v-icon
+      >
       <span class="text-h6">Drop here to remove from grid</span>
     </div>
 
@@ -107,7 +111,7 @@ const largeTileMode = computed(() => settingsStore.largeTiles)
 const totalCells = computed(() => rows.value * columns.value)
 const gridStyle = computed(() => ({
   display: 'grid',
-  gridTemplateColumns: `repeat(${ columns.value }, 1fr)`,
+  gridTemplateColumns: `repeat(${columns.value}, 1fr)`,
   gap: props.gap
 }))
 
@@ -142,13 +146,15 @@ async function onDropRemove(ev: DragEvent) {
     if (!printerId || !floorStore.selectedFloor) return
 
     // Remove printer from floor
-    await FloorService.deletePrinterFromFloor(floorStore.selectedFloor.id, printerId)
+    await FloorService.deletePrinterFromFloor(
+      floorStore.selectedFloor.id,
+      printerId
+    )
     await floorStore.loadFloors()
   } catch (e) {
     console.error('Failed to remove printer from grid:', e)
   }
 }
-
 </script>
 
 <style scoped>

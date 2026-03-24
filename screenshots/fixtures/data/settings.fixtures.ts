@@ -3,27 +3,27 @@
  */
 
 export interface ServerSettings {
-  sentryDiagnosticsEnabled: boolean;
-  whitelistEnabled: boolean;
-  loginRequired: boolean;
-  registration: boolean;
+  sentryDiagnosticsEnabled: boolean
+  whitelistEnabled: boolean
+  loginRequired: boolean
+  registration: boolean
 }
 
 export interface User {
-  id: number;
-  username: string;
-  isRootUser: boolean;
-  isVerified: boolean;
-  needsPasswordChange: boolean;
-  roles: string[];
+  id: number
+  username: string
+  isRootUser: boolean
+  isVerified: boolean
+  needsPasswordChange: boolean
+  roles: string[]
 }
 
 export const mockServerSettings: ServerSettings = {
   sentryDiagnosticsEnabled: false,
   whitelistEnabled: false,
   loginRequired: false,
-  registration: false,
-};
+  registration: false
+}
 
 export const mockUsers: User[] = [
   {
@@ -32,7 +32,7 @@ export const mockUsers: User[] = [
     isRootUser: true,
     isVerified: true,
     needsPasswordChange: false,
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator']
   },
   {
     id: 2,
@@ -40,7 +40,7 @@ export const mockUsers: User[] = [
     isRootUser: false,
     isVerified: true,
     needsPasswordChange: false,
-    roles: ['operator'],
+    roles: ['operator']
   },
   {
     id: 3,
@@ -48,9 +48,9 @@ export const mockUsers: User[] = [
     isRootUser: false,
     isVerified: true,
     needsPasswordChange: false,
-    roles: ['viewer'],
-  },
-];
+    roles: ['viewer']
+  }
+]
 
 export const mockCurrentUser: User = {
   id: 1,
@@ -58,5 +58,5 @@ export const mockCurrentUser: User = {
   isRootUser: true,
   isVerified: true,
   needsPasswordChange: false,
-  roles: ['admin', 'operator'],
-};
+  roles: ['admin', 'operator']
+}

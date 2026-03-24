@@ -36,11 +36,14 @@
 </template>
 
 <script setup lang="ts">
-const props = withDefaults(defineProps<{
-  title: string
-  tooltip?: string
-  usecols?: boolean
-}>(), {
-  usecols: true
-})
+const props = withDefaults(
+  defineProps<{
+    title: string
+    tooltip?: string
+    usecols?: boolean
+  }>(),
+  {
+    usecols: true
+  }
+)
 </script>

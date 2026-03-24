@@ -26,29 +26,39 @@ defineOptions({
   inheritAttrs: false
 })
 
-withDefaults(defineProps<{
-  modelValue: number[]
-  label?: string
-  prependInnerIcon?: string
-  prependIcon?: string
-  variant?: "filled" | "outlined" | "plain" | "solo" | "solo-filled" | "solo-inverted" | "underlined"
-  density?: null | 'default' | 'comfortable' | 'compact'
-  multiple?: boolean
-  chips?: boolean
-  closableChips?: boolean
-  clearable?: boolean
-  hideDetails?: boolean
-}>(), {
-  label: 'Filter by type',
-  prependInnerIcon: 'category',
-  variant: 'outlined',
-  density: 'compact',
-  multiple: true,
-  chips: true,
-  closableChips: true,
-  clearable: true,
-  hideDetails: true
-})
+withDefaults(
+  defineProps<{
+    modelValue: number[]
+    label?: string
+    prependInnerIcon?: string
+    prependIcon?: string
+    variant?:
+      | 'filled'
+      | 'outlined'
+      | 'plain'
+      | 'solo'
+      | 'solo-filled'
+      | 'solo-inverted'
+      | 'underlined'
+    density?: null | 'default' | 'comfortable' | 'compact'
+    multiple?: boolean
+    chips?: boolean
+    closableChips?: boolean
+    clearable?: boolean
+    hideDetails?: boolean
+  }>(),
+  {
+    label: 'Filter by type',
+    prependInnerIcon: 'category',
+    variant: 'outlined',
+    density: 'compact',
+    multiple: true,
+    chips: true,
+    closableChips: true,
+    clearable: true,
+    hideDetails: true
+  }
+)
 
 const printerTypes = PRINTER_TYPES
 

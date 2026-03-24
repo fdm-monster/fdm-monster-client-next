@@ -50,32 +50,42 @@ defineOptions({
   inheritAttrs: false
 })
 
-withDefaults(defineProps<{
-  modelValue: number[]
-  tags: TagDto[]
-  label?: string
-  prependInnerIcon?: string
-  prependIcon?: string
-  variant?: "filled" | "outlined" | "plain" | "solo" | "solo-filled" | "solo-inverted" | "underlined"
-  density?: null | 'default' | 'comfortable' | 'compact'
-  multiple?: boolean
-  chips?: boolean
-  closableChips?: boolean
-  clearable?: boolean
-  hideDetails?: boolean
-  hideWhenEmpty?: boolean
-}>(), {
-  label: 'Filter by tags',
-  prependInnerIcon: 'label',
-  variant: 'outlined',
-  density: 'compact',
-  multiple: true,
-  chips: true,
-  closableChips: true,
-  clearable: true,
-  hideDetails: true,
-  hideWhenEmpty: true
-})
+withDefaults(
+  defineProps<{
+    modelValue: number[]
+    tags: TagDto[]
+    label?: string
+    prependInnerIcon?: string
+    prependIcon?: string
+    variant?:
+      | 'filled'
+      | 'outlined'
+      | 'plain'
+      | 'solo'
+      | 'solo-filled'
+      | 'solo-inverted'
+      | 'underlined'
+    density?: null | 'default' | 'comfortable' | 'compact'
+    multiple?: boolean
+    chips?: boolean
+    closableChips?: boolean
+    clearable?: boolean
+    hideDetails?: boolean
+    hideWhenEmpty?: boolean
+  }>(),
+  {
+    label: 'Filter by tags',
+    prependInnerIcon: 'label',
+    variant: 'outlined',
+    density: 'compact',
+    multiple: true,
+    chips: true,
+    closableChips: true,
+    clearable: true,
+    hideDetails: true,
+    hideWhenEmpty: true
+  }
+)
 
 defineEmits<{
   'update:modelValue': [value: number[]]

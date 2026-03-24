@@ -45,9 +45,17 @@
               class="mt-4"
             />
 
-            <v-alert v-if="errorMessage" type="error" class="mt-4" closable>
+            <v-alert
+              v-if="errorMessage"
+              type="error"
+              class="mt-4"
+              closable
+            >
               <div class="font-weight-bold">{{ errorMessage }}</div>
-              <div v-if="errorDetailedMessage" class="text-caption mt-2">
+              <div
+                v-if="errorDetailedMessage"
+                class="text-caption mt-2"
+              >
                 {{ errorDetailedMessage }}
               </div>
             </v-alert>
@@ -250,7 +258,9 @@ const validateImportFile = async () => {
     importSummary.value = {
       version: parsed.version || 'Unknown',
       databaseType: parsed.databaseType || 'Unknown',
-      exportedAt: parsed.exportedAt ? new Date(parsed.exportedAt).toLocaleString() : 'Unknown',
+      exportedAt: parsed.exportedAt
+        ? new Date(parsed.exportedAt).toLocaleString()
+        : 'Unknown',
       printersCount: parsed.printers?.length || 0,
       floorsCount: parsed.floors?.length || 0,
       groupsCount: parsed.groups?.length || 0,

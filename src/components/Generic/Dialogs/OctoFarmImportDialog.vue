@@ -70,7 +70,7 @@
                     elevation="10"
                   />
 
-                  <v-divider class="mt-10"/>
+                  <v-divider class="mt-10" />
 
                   <v-file-input
                     class="mt-8"
@@ -91,7 +91,9 @@
                   >
                     <div class="d-flex align-center">
                       <div>
-                        <div class="font-weight-bold">Validation successful</div>
+                        <div class="font-weight-bold">
+                          Validation successful
+                        </div>
                         <div>{{ numPrinters }} valid printer(s) found</div>
                       </div>
                     </div>
@@ -106,9 +108,16 @@
                     <div class="d-flex align-center">
                       <v-icon class="mr-2">mdi:mdi-alert-circle</v-icon>
                       <div class="flex-grow-1">
-                        <div class="font-weight-bold mb-1">{{ errorMessage }}</div>
+                        <div class="font-weight-bold mb-1">
+                          {{ errorMessage }}
+                        </div>
                         <div v-if="errorDetailedMessage">
-                          <div v-if="!showFullErrorDetails && errorDetailedMessage.length > 150">
+                          <div
+                            v-if="
+                              !showFullErrorDetails &&
+                              errorDetailedMessage.length > 150
+                            "
+                          >
                             {{ errorDetailedMessage.slice(0, 150) }}...
                             <v-btn
                               size="x-small"
@@ -123,7 +132,10 @@
                           <div v-else>
                             {{ errorDetailedMessage }}
                             <v-btn
-                              v-if="showFullErrorDetails && errorDetailedMessage.length > 150"
+                              v-if="
+                                showFullErrorDetails &&
+                                errorDetailedMessage.length > 150
+                              "
                               size="x-small"
                               color="error"
                               variant="text"
@@ -145,7 +157,8 @@
                       @click="stepProgress = 2"
                     >
                       <v-icon class="mr-1">mdi:mdi-alert</v-icon>
-                      Continue with {{ committedPrinters.length }} valid printer(s)
+                      Continue with {{ committedPrinters.length }} valid
+                      printer(s)
                     </v-btn>
                   </v-alert>
                 </v-stepper-vertical-item>
@@ -167,7 +180,8 @@
                       <div>
                         <strong>Import state: </strong>
                         <span>
-                          {{ validationStatus ? 'success' : 'failed' }}, {{ numPrinters }} printer(s) found
+                          {{ validationStatus ? 'success' : 'failed' }},
+                          {{ numPrinters }} printer(s) found
                         </span>
                       </div>
                     </div>
@@ -182,9 +196,16 @@
                     <div class="d-flex align-center">
                       <v-icon class="mr-2">mdi:mdi-alert-circle</v-icon>
                       <div class="flex-grow-1">
-                        <div class="font-weight-bold mb-1">{{ errorMessage }}</div>
+                        <div class="font-weight-bold mb-1">
+                          {{ errorMessage }}
+                        </div>
                         <div v-if="errorDetailedMessage">
-                          <div v-if="!showFullErrorDetails && errorDetailedMessage.length > 150">
+                          <div
+                            v-if="
+                              !showFullErrorDetails &&
+                              errorDetailedMessage.length > 150
+                            "
+                          >
                             {{ errorDetailedMessage.slice(0, 150) }}...
                             <v-btn
                               size="x-small"
@@ -200,7 +221,10 @@
                           <div v-else>
                             {{ errorDetailedMessage }}
                             <v-btn
-                              v-if="showFullErrorDetails && errorDetailedMessage.length > 150"
+                              v-if="
+                                showFullErrorDetails &&
+                                errorDetailedMessage.length > 150
+                              "
                               size="x-small"
                               color="error"
                               variant="text"
@@ -224,12 +248,15 @@
                       @click="stepProgress = 2"
                     >
                       <v-icon class="mr-1">mdi:mdi-alert</v-icon>
-                      Continue with {{ committedPrinters.length }} valid printer(s)
+                      Continue with {{ committedPrinters.length }} valid
+                      printer(s)
                     </v-btn>
                   </v-alert>
 
                   <div class="d-flex justify-space-between align-center mb-3">
-                    <h4 class="text-subtitle-1 font-weight-medium">Found printers</h4>
+                    <h4 class="text-subtitle-1 font-weight-medium">
+                      Found printers
+                    </h4>
                     <v-btn
                       @click="toggleSelected"
                       size="small"
@@ -265,11 +292,18 @@
                         <v-list-item-subtitle>
                           <div class="d-flex flex-column">
                             <span class="text-caption">
-                              <strong>URL:</strong> {{ committedPrinter.printerURL }}
+                              <strong>URL:</strong>
+                              {{ committedPrinter.printerURL }}
                             </span>
                             <span class="text-caption">
-                              <strong>Enabled:</strong> {{ committedPrinter.enabled }}
-                              <span class="ml-4"><strong>API Key:</strong> {{ committedPrinter.apiKey.slice(0, 20) }}...</span>
+                              <strong>Enabled:</strong>
+                              {{ committedPrinter.enabled }}
+                              <span class="ml-4"
+                                ><strong>API Key:</strong>
+                                {{
+                                  committedPrinter.apiKey.slice(0, 20)
+                                }}...</span
+                              >
                             </span>
                           </div>
                         </v-list-item-subtitle>
@@ -284,7 +318,8 @@
                     class="mb-4"
                   >
                     <div class="text-caption">
-                      <strong>Properties to import:</strong> enabled, name, printerURL, apiKey
+                      <strong>Properties to import:</strong> enabled, name,
+                      printerURL, apiKey
                     </div>
                   </v-alert>
 
@@ -295,7 +330,9 @@
                       :disabled="!selectedPrinters?.length"
                     >
                       <v-icon class="mr-2">mdi:mdi-upload</v-icon>
-                      Submit {{ selectedPrinters?.length }} printer{{ selectedPrinters?.length !== 1 ? 's' : '' }}
+                      Submit {{ selectedPrinters?.length }} printer{{
+                        selectedPrinters?.length !== 1 ? 's' : ''
+                      }}
                     </v-btn>
                   </template>
                 </v-stepper-vertical-item>
@@ -349,8 +386,7 @@ function onBeforeDialogOpened() {
   importCompletedSuccessfully.value = false
 }
 
-async function onDialogOpened() {
-}
+async function onDialogOpened() {}
 
 const parsedPrinters = async () => {
   // Reset validation state
@@ -360,7 +396,8 @@ const parsedPrinters = async () => {
 
   if (!importFile.value) {
     errorMessage.value = 'No file selected'
-    errorDetailedMessage.value = 'Please select a PrintersDB.json file to import'
+    errorDetailedMessage.value =
+      'Please select a PrintersDB.json file to import'
     return []
   }
 
@@ -377,7 +414,8 @@ const parsedPrinters = async () => {
     const data = jsonData.databases
     if (!data) {
       errorMessage.value = 'Invalid OctoFarm export format'
-      errorDetailedMessage.value = 'Missing "databases" property in the JSON file'
+      errorDetailedMessage.value =
+        'Missing "databases" property in the JSON file'
       return []
     }
 
@@ -404,7 +442,8 @@ const parsedPrinters = async () => {
 
     if (!Array.isArray(printers) || !printers.length) {
       errorMessage.value = 'No printers found in export'
-      errorDetailedMessage.value = 'The export file does not contain any printer data'
+      errorDetailedMessage.value =
+        'The export file does not contain any printer data'
       return []
     }
 
@@ -462,7 +501,11 @@ const parsedPrinters = async () => {
       // Validate URL format
       if (printer.printerURL && printer.printerURL.trim().length > 0) {
         try {
-          const url = new URL(printer.printerURL.startsWith('http') ? printer.printerURL : `http://${printer.printerURL}`)
+          const url = new URL(
+            printer.printerURL.startsWith('http')
+              ? printer.printerURL
+              : `http://${printer.printerURL}`
+          )
           if (!url.hostname) {
             validationErrors.push('invalid URL format')
           }
@@ -473,7 +516,9 @@ const parsedPrinters = async () => {
 
       if (validationErrors.length > 0) {
         const printerName = printer.name || `Printer ${i + 1}`
-        failedPrinterDetails.push(`${printerName}: ${validationErrors.join(', ')}`)
+        failedPrinterDetails.push(
+          `${printerName}: ${validationErrors.join(', ')}`
+        )
         validationFailed = true
       } else {
         validPrinters.push(printer)
@@ -489,7 +534,6 @@ const parsedPrinters = async () => {
 
     validationStatus.value = true
     return transformedPrinters
-
   } catch (parseError: any) {
     errorMessage.value = 'Failed to parse JSON file'
     errorDetailedMessage.value = `Parse error: ${parseError?.message || 'Unknown error'}`
@@ -519,25 +563,30 @@ const clickValidateAndNext = async () => {
       // If no printers at all, don't proceed to next step
       if (!errorMessage.value) {
         errorMessage.value = 'No valid printers found'
-        errorDetailedMessage.value = 'The import file contains no valid printer data'
+        errorDetailedMessage.value =
+          'The import file contains no valid printer data'
       }
       return
     }
 
     // Set up selection for valid printers
-    selectedPrinters.value = Array.from({ length: printers.length }, (_, i) => i)
+    selectedPrinters.value = Array.from(
+      { length: printers.length },
+      (_, i) => i
+    )
     committedPrinters.value = printers
 
     // Only proceed to next step if validation was successful
     if (validationStatus.value) {
       stepProgress.value = 2
     } else {
-      console.log('[OctoFarm] Validation failed but have valid printers, staying on step 1')
+      console.log(
+        '[OctoFarm] Validation failed but have valid printers, staying on step 1'
+      )
       // Validation failed but we have some valid printers
       // Stay on current step to show validation errors
       // The user can see the errors and decide whether to continue with partial data
     }
-
   } catch (error: any) {
     errorMessage.value = 'Validation failed'
     errorDetailedMessage.value = `Error during validation: ${error?.message || 'Unknown error'}`
@@ -560,7 +609,10 @@ const toggleSelected = () => {
   if (isOneSelected) {
     selectedPrinters.value = []
   } else {
-    selectedPrinters.value = Array.from({ length: committedPrinters.value.length }, (_, i) => i)
+    selectedPrinters.value = Array.from(
+      { length: committedPrinters.value.length },
+      (_, i) => i
+    )
   }
 }
 

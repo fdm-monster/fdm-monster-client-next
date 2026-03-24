@@ -4,9 +4,16 @@
     class="text-center pa-4 clickable-first-time"
     @click.stop="openCreatePrinterDialog()"
   >
-    <v-icon size="large" color="primary" class="mb-2">add_circle</v-icon>
+    <v-icon
+      size="large"
+      color="primary"
+      class="mb-2"
+      >add_circle</v-icon
+    >
     <div class="text-subtitle-2 mb-2">No printers placed</div>
-    <div class="text-caption text-medium-emphasis">Click here to add your first printer</div>
+    <div class="text-caption text-medium-emphasis">
+      Click here to add your first printer
+    </div>
   </div>
   <v-btn
     v-else

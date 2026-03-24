@@ -21,7 +21,11 @@
             {{ isUpdating ? 'Update Camera Stream' : 'Add New Camera Stream' }}
           </div>
           <div class="text-caption text-medium-emphasis">
-            {{ isUpdating ? 'Modify camera stream settings' : 'Connect a new camera to your printer farm' }}
+            {{
+              isUpdating
+                ? 'Modify camera stream settings'
+                : 'Connect a new camera to your printer farm'
+            }}
           </div>
         </div>
       </v-card-title>
@@ -74,7 +78,11 @@
           <!-- Camera Settings Section -->
           <v-divider class="my-4" />
           <div class="text-subtitle-2 font-weight-bold mb-3">
-            <v-icon start size="small">tune</v-icon>
+            <v-icon
+              start
+              size="small"
+              >tune</v-icon
+            >
             Camera Settings
           </div>
 
@@ -128,13 +136,18 @@
             rounded="lg"
             color="surface"
           >
-            <div class="d-flex align-center justify-space-between pa-3 preview-header">
+            <div
+              class="d-flex align-center justify-space-between pa-3 preview-header"
+            >
               <div class="d-flex align-center">
                 <v-icon
                   size="small"
                   class="mr-2"
-                >preview</v-icon>
-                <span class="text-subtitle-2 font-weight-medium">Stream Preview</span>
+                  >preview</v-icon
+                >
+                <span class="text-subtitle-2 font-weight-medium"
+                  >Stream Preview</span
+                >
               </div>
               <v-btn
                 size="small"
@@ -176,9 +189,14 @@
                   <v-icon
                     size="64"
                     color="error"
-                  >error_outline</v-icon>
-                  <div class="text-body-2 font-weight-bold mt-2">Unable to load camera stream</div>
-                  <div class="text-caption text-medium-emphasis mt-1">Check the URL and try again</div>
+                    >error_outline</v-icon
+                  >
+                  <div class="text-body-2 font-weight-bold mt-2">
+                    Unable to load camera stream
+                  </div>
+                  <div class="text-caption text-medium-emphasis mt-1">
+                    Check the URL and try again
+                  </div>
                 </div>
               </div>
             </v-card-text>
@@ -192,9 +210,13 @@
             class="mt-4"
           >
             <div class="text-caption">
-              <strong>Tip:</strong> Most 3D printer cameras use MJPEG streams. Common URLs:
+              <strong>Tip:</strong> Most 3D printer cameras use MJPEG streams.
+              Common URLs:
               <ul class="mt-2 ml-4">
-                <li><code>http://[ip]:8080/webcam/?action=stream</code> (OctoPrint/Klipper)</li>
+                <li>
+                  <code>http://[ip]:8080/webcam/?action=stream</code>
+                  (OctoPrint/Klipper)
+                </li>
                 <li><code>http://[ip]/mjpeg_stream</code> (IP cameras)</li>
               </ul>
             </div>
@@ -299,10 +321,7 @@ const printerOptions = computed(() => {
 
 // Form validation - Allow saving even if preview fails to load
 const isFormValid = computed(() => {
-  return (
-    cameraStream.value.name?.trim() &&
-    cameraStream.value.streamURL?.trim()
-  )
+  return cameraStream.value.name?.trim() && cameraStream.value.streamURL?.trim()
 })
 
 // Computed style for camera preview with transformations
@@ -379,9 +398,12 @@ watch(
       cameraStream.value.streamURL = stream.cameraStream.streamURL || ''
       cameraStream.value.printerId = stream.cameraStream.printerId
       cameraStream.value.aspectRatio = stream.cameraStream.aspectRatio || '16:9'
-      cameraStream.value.rotationClockwise = stream.cameraStream.rotationClockwise ?? 0
-      cameraStream.value.flipHorizontal = stream.cameraStream.flipHorizontal ?? false
-      cameraStream.value.flipVertical = stream.cameraStream.flipVertical ?? false
+      cameraStream.value.rotationClockwise =
+        stream.cameraStream.rotationClockwise ?? 0
+      cameraStream.value.flipHorizontal =
+        stream.cameraStream.flipHorizontal ?? false
+      cameraStream.value.flipVertical =
+        stream.cameraStream.flipVertical ?? false
     }
   }
 )

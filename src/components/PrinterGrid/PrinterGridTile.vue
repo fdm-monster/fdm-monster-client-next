@@ -28,10 +28,16 @@
         v-if="printer && (toolTemp || bedTemp)"
         class="temperature-overlay"
       >
-        <small v-if="toolTemp" class="temp-item">
+        <small
+          v-if="toolTemp"
+          class="temp-item"
+        >
           🔥 {{ toolTemp }}
         </small>
-        <small v-if="bedTemp" class="temp-item">
+        <small
+          v-if="bedTemp"
+          class="temp-item"
+        >
           🛏️ {{ bedTemp }}
         </small>
       </div>
@@ -42,7 +48,11 @@
         :style="{
           height: largeTilesEnabled ? 'calc(120px - 20px)' : 'calc(84px - 20px)'
         }"
-        :class="isFirstTile&& noPrintersExist ? 'plus-always-visible': 'plus-hover-icon'"
+        :class="
+          isFirstTile && noPrintersExist
+            ? 'plus-always-visible'
+            : 'plus-hover-icon'
+        "
         style="position: absolute"
       >
         <div
@@ -135,9 +145,7 @@
               <v-icon size="16">work</v-icon>
             </v-btn>
           </template>
-          <template v-slot:default>
-            View Printer Jobs
-          </template>
+          <template v-slot:default> View Printer Jobs </template>
         </v-tooltip>
       </div>
 
@@ -178,7 +186,10 @@
           <template v-slot:default>Move and home printer</template>
         </v-tooltip>
 
-        <v-tooltip v-if="hasSerialConnection(printer.printerType)" top>
+        <v-tooltip
+          v-if="hasSerialConnection(printer.printerType)"
+          top
+        >
           <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               v-if="!isOperational && isOnline"
@@ -195,7 +206,10 @@
           <template v-slot:default>Connect USB (only for OctoPrint)</template>
         </v-tooltip>
 
-        <v-tooltip v-if="hasPrinterControl(printer.printerType)" top>
+        <v-tooltip
+          v-if="hasPrinterControl(printer.printerType)"
+          top
+        >
           <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               :size="largeTilesEnabled ? 'small' : 'x-small'"
@@ -209,11 +223,14 @@
             </v-btn>
           </template>
           <template v-slot:default
-          >Reload printer connection and refresh all states
+            >Reload printer connection and refresh all states
           </template>
         </v-tooltip>
 
-        <v-tooltip v-if="hasPrinterControl(printer.printerType)" top>
+        <v-tooltip
+          v-if="hasPrinterControl(printer.printerType)"
+          top
+        >
           <template v-slot:activator="{ props: tooltipProps }">
             <v-btn
               :disabled="!isOnline || (!isPaused && !isPrinting)"
@@ -236,7 +253,10 @@
         </v-tooltip>
 
         <v-tooltip
-          v-if="hasPrinterControl(printer.printerType) && (hasEmergencyStop(printer.printerType) || preferCancelOverQuickStop)"
+          v-if="
+            hasPrinterControl(printer.printerType) &&
+            (hasEmergencyStop(printer.printerType) || preferCancelOverQuickStop)
+          "
           top
         >
           <template v-slot:activator="{ props: tooltipProps }">
@@ -255,12 +275,12 @@
               "
             >
               <v-icon
-              >{{ preferCancelOverQuickStop ? 'stop' : 'dangerous' }}
+                >{{ preferCancelOverQuickStop ? 'stop' : 'dangerous' }}
               </v-icon>
             </v-btn>
           </template>
           <template v-slot:default
-          >{{
+            >{{
               preferCancelOverQuickStop
                 ? 'Cancel current print gracefully'
                 : 'Perform quick stop of printer'
@@ -316,7 +336,7 @@
                     class="d-none d-xl-inline"
                     color="primary"
                     small
-                  >info</v-icon
+                    >info</v-icon
                   >
                 </span>
                 <span v-else>
@@ -360,8 +380,17 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 import { useDialog } from '@/shared/dialog.composable'
 import { usePrinterTileThumbnailQuery } from '@/queries/printer-tile-thumbnail.query'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
-import { dragAppId, INTENT, PrinterPlace, DRAG_EVENTS } from '@/shared/drag.constants'
-import { hasEmergencyStop, hasPrinterControl, hasSerialConnection } from '@/shared/printer-capabilities.constants'
+import {
+  dragAppId,
+  INTENT,
+  PrinterPlace,
+  DRAG_EVENTS
+} from '@/shared/drag.constants'
+import {
+  hasEmergencyStop,
+  hasPrinterControl,
+  hasSerialConnection
+} from '@/shared/printer-capabilities.constants'
 import logoPng from '@/assets/logo.png'
 
 const defaultColor = 'rgba(100,100,100,0.1)'
@@ -470,21 +499,30 @@ const currentPrintingFilePath = computed(() => {
 const currentTemperatures = computed(() => {
   if (!printerId.value) return null
   const printerEvents = printerStateStore.printerEventsById[printerId.value]
-  if (!printerEvents?.current?.payload?.temps || printerEvents.current.payload.temps.length === 0) {
+  if (
+    !printerEvents?.current?.payload?.temps ||
+    printerEvents.current.payload.temps.length === 0
+  ) {
     return null
   }
   // Get the most recent temperature reading
-  return printerEvents.current.payload.temps[printerEvents.current.payload.temps.length - 1]
+  return printerEvents.current.payload.temps[
+    printerEvents.current.payload.temps.length - 1
+  ]
 })
 
 const toolTemp = computed(() => {
   const temps = currentTemperatures.value
-  return temps?.tool0 ? `${Math.round(temps.tool0.actual)}°/${Math.round(temps.tool0.target)}°` : null
+  return temps?.tool0
+    ? `${Math.round(temps.tool0.actual)}°/${Math.round(temps.tool0.target)}°`
+    : null
 })
 
 const bedTemp = computed(() => {
   const temps = currentTemperatures.value
-  return temps?.bed ? `${Math.round(temps.bed.actual)}°/${Math.round(temps.bed.target)}°` : null
+  return temps?.bed
+    ? `${Math.round(temps.bed.actual)}°/${Math.round(temps.bed.target)}°`
+    : null
 })
 
 const clickStop = async () => {

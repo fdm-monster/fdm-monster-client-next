@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useOverlayStore } from "@/store/overlay.store";
-import { useSnackbar } from "@/shared/snackbar.composable";
+import { useOverlayStore } from '@/store/overlay.store'
+import { useSnackbar } from '@/shared/snackbar.composable'
 
-const appLoaderStore = useOverlayStore();
-const snackbar = useSnackbar();
+const appLoaderStore = useOverlayStore()
+const snackbar = useSnackbar()
 
 function reloadPage() {
   globalThis.location.reload()
@@ -26,7 +26,7 @@ function copyError() {
       max-width="700"
       elevation="12"
     >
-      <div class="mb-6 text-center" >
+      <div class="mb-6 text-center">
         <v-icon
           size="80"
           color="error"
@@ -36,7 +36,8 @@ function copyError() {
         </v-icon>
         <h1 class="text-h4 font-weight-bold mb-3">Server Error</h1>
         <p class="text-body-1 text-medium-emphasis mb-0">
-          The server returned an unexpected response. Please check your configuration and logs.
+          The server returned an unexpected response. Please check your
+          configuration and logs.
         </p>
       </div>
 
@@ -49,18 +50,31 @@ function copyError() {
             </div>
           </v-expansion-panel-title>
           <v-expansion-panel-text>
-            <v-card variant="outlined" class="pa-4">
+            <v-card
+              variant="outlined"
+              class="pa-4"
+            >
               <div class="mb-3">
                 <strong>Error:</strong>
-                <pre class="text-caption mt-1">{{ JSON.stringify(appLoaderStore.errorCaught, null, 2) }}</pre>
+                <pre class="text-caption mt-1">{{
+                  JSON.stringify(appLoaderStore.errorCaught, null, 2)
+                }}</pre>
               </div>
-              <div v-if="appLoaderStore.errorUrl" class="mb-3">
+              <div
+                v-if="appLoaderStore.errorUrl"
+                class="mb-3"
+              >
                 <strong>URL:</strong>
                 <code class="text-caption">{{ appLoaderStore.errorUrl }}</code>
               </div>
-              <div v-if="appLoaderStore.errorResponse" class="mb-3">
+              <div
+                v-if="appLoaderStore.errorResponse"
+                class="mb-3"
+              >
                 <strong>Response:</strong>
-                <pre class="text-caption mt-1">{{ appLoaderStore.errorResponse }}</pre>
+                <pre class="text-caption mt-1">{{
+                  appLoaderStore.errorResponse
+                }}</pre>
               </div>
             </v-card>
           </v-expansion-panel-text>

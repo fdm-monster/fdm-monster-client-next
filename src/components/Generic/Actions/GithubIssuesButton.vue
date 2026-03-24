@@ -8,7 +8,11 @@
     :size="size"
     :block="block"
   >
-    <v-icon v-if="!iconOnly" class="mr-2">mdi:mdi-github</v-icon>
+    <v-icon
+      v-if="!iconOnly"
+      class="mr-2"
+      >mdi:mdi-github</v-icon
+    >
     <v-icon v-else>mdi:mdi-github</v-icon>
     <span v-if="!iconOnly">{{ label }}</span>
   </v-btn>

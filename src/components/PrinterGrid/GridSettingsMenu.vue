@@ -10,7 +10,11 @@
     </template>
     <v-card min-width="280">
       <v-card-title class="text-subtitle-1">
-        <v-icon class="mr-2" size="small">settings</v-icon>
+        <v-icon
+          class="mr-2"
+          size="small"
+          >settings</v-icon
+        >
         Grid Settings
       </v-card-title>
       <v-card-text>

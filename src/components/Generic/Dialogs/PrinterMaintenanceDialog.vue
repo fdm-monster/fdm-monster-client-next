@@ -6,7 +6,11 @@
   >
     <v-card>
       <v-card-title class="d-flex align-center py-3 px-4 bg-warning">
-        <v-icon class="mr-2" size="large">build_circle</v-icon>
+        <v-icon
+          class="mr-2"
+          size="large"
+          >build_circle</v-icon
+        >
         <div>
           <div class="text-h6">Create Maintenance Log</div>
           <div class="text-caption">{{ printer?.name }}</div>
@@ -25,7 +29,11 @@
         <!-- Issue/Cause Section -->
         <div class="mb-4">
           <div class="text-subtitle-1 font-weight-bold mb-2">
-            <v-icon class="mr-1" color="warning">warning</v-icon>
+            <v-icon
+              class="mr-1"
+              color="warning"
+              >warning</v-icon
+            >
             What's the issue?
           </div>
 
@@ -78,7 +86,11 @@
         <!-- Parts Section -->
         <div class="mb-4">
           <div class="text-subtitle-1 font-weight-bold mb-2">
-            <v-icon class="mr-1" color="info">build</v-icon>
+            <v-icon
+              class="mr-1"
+              color="info"
+              >build</v-icon
+            >
             Parts Involved
           </div>
 
@@ -104,7 +116,11 @@
                 size="small"
                 closable
               >
-                <v-icon start size="x-small">build</v-icon>
+                <v-icon
+                  start
+                  size="x-small"
+                  >build</v-icon
+                >
                 {{ item.title }}
               </v-chip>
             </template>
@@ -116,7 +132,11 @@
         <!-- Additional Notes -->
         <div>
           <div class="text-subtitle-1 font-weight-bold mb-2">
-            <v-icon class="mr-1" color="secondary">note</v-icon>
+            <v-icon
+              class="mr-1"
+              color="secondary"
+              >note</v-icon
+            >
             Additional Notes
           </div>
 
@@ -143,7 +163,9 @@
           <template #prepend>
             <v-icon>info</v-icon>
           </template>
-          This will disable the printer and create a maintenance log. The printer will remain disabled until the maintenance is marked as completed.
+          This will disable the printer and create a maintenance log. The
+          printer will remain disabled until the maintenance is marked as
+          completed.
         </v-alert>
       </v-card-text>
 
@@ -239,7 +261,9 @@ const printersStore = usePrinterStore()
 const dialog = useDialog(DialogName.PrinterMaintenanceDialog)
 const printer = computed(() => {
   const context = dialog.context()
-  return context?.printerId ? printersStore.printer(context.printerId) : undefined
+  return context?.printerId
+    ? printersStore.printer(context.printerId)
+    : undefined
 })
 
 const updateCauseFromSelection = () => {
@@ -281,4 +305,3 @@ const closeDialog = () => {
   background-color: rgba(var(--v-theme-warning), 0.1);
 }
 </style>
-

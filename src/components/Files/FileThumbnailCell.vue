@@ -11,11 +11,22 @@
       class="thumbnail-image"
     >
       <div class="thumbnail-overlay">
-        <v-icon color="white" size="x-small">zoom_in</v-icon>
+        <v-icon
+          color="white"
+          size="x-small"
+          >zoom_in</v-icon
+        >
       </div>
     </v-img>
-    <div v-else-if="!isLoading && !thumbnailUrl" class="thumbnail-placeholder">
-      <v-icon size="small" color="grey-darken-1">image_not_supported</v-icon>
+    <div
+      v-else-if="!isLoading && !thumbnailUrl"
+      class="thumbnail-placeholder"
+    >
+      <v-icon
+        size="small"
+        color="grey-darken-1"
+        >image_not_supported</v-icon
+      >
     </div>
     <v-progress-circular
       v-else
@@ -41,13 +52,19 @@ const props = defineProps<{
 
 const fileStorageIdRef = computed(() => props.fileStorageId)
 const thumbnailsRef = computed(() => props.thumbnails)
-const { data: thumbnailUrl, isLoading } = useFileStorageThumbnailQuery(fileStorageIdRef, thumbnailsRef)
+const { data: thumbnailUrl, isLoading } = useFileStorageThumbnailQuery(
+  fileStorageIdRef,
+  thumbnailsRef
+)
 
 const thumbnailViewerDialog = useDialog(DialogName.JobThumbnailViewer)
 
 const handleClick = () => {
   if (thumbnailUrl.value && props.fileStorageId) {
-    thumbnailViewerDialog.openDialog({ fileStorageId: props.fileStorageId, thumbnails: props.thumbnails })
+    thumbnailViewerDialog.openDialog({
+      fileStorageId: props.fileStorageId,
+      thumbnails: props.thumbnails
+    })
   }
 }
 </script>
@@ -109,4 +126,3 @@ const handleClick = () => {
   border-radius: 8px;
 }
 </style>
-

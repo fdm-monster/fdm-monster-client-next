@@ -3,23 +3,68 @@ import Components from 'unplugin-vue-components/vite'
 import Fonts from 'unplugin-fonts/vite'
 import Vue from '@vitejs/plugin-vue'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite-plus'
 import { fileURLToPath, URL } from 'node:url'
-import packageJson from './package.json'
+import packageJson from './package.json' with { type: 'json' }
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 // https://vitejs.dev/config/
-// As advised by vite 7 docs, we now use sass-embedded for increased vuetify/sass performance
 export default defineConfig({
+  staged: {
+    '*': 'vp check --fix'
+  },
+  lint: {
+    options: {
+      typeAware: false,
+      typeCheck: false
+    },
+    ignorePatterns: [
+      'openapi-ts.config.ts',
+      '**/screenshots/**',
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/coverage/**',
+      '**/public/**',
+      '**/build/**',
+      '**/.git/**',
+      '**/.idea/**'
+    ]
+  },
+  fmt: {
+    semi: false,
+    singleQuote: true,
+    tabWidth: 2,
+    trailingComma: 'none',
+    singleAttributePerLine: true,
+    printWidth: 80,
+    sortPackageJson: true,
+    ignorePatterns: [
+      '**/*.md',
+      '**/*.json',
+      '**/*.yml',
+      'public/**',
+      '.all-contributorsrc',
+      'src/auto-imports.d.ts',
+      'src/backend/generated/**',
+      '.idea',
+      '.git',
+      '.yarn',
+      '**/coverage',
+      '**/.github',
+      '**/docs',
+      '**/images',
+      '**/node_modules',
+      '**/assets',
+      '**/dist',
+      '**/README.md'
+    ]
+  },
   // Avoid console jumping around:
   clearScreen: false,
   plugins: [
     AutoImport({
       imports: ['vue'],
       dts: 'src/auto-imports.d.ts',
-      eslintrc: {
-        enabled: true
-      },
       vueTemplate: true
     }),
     // https://github.com/unplugin/unplugin-vue-components
@@ -27,7 +72,7 @@ export default defineConfig({
       dts: 'src/components.d.ts'
     }),
     Vue({
-      template: {transformAssetUrls}
+      template: { transformAssetUrls }
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
@@ -47,7 +92,7 @@ export default defineConfig({
       // Optionally uncomment the line below to override automatic release name detection
       release: {
         name: packageJson.version
-      },
+      }
     }),
     Fonts({
       google: {
@@ -60,6 +105,24 @@ export default defineConfig({
       }
     })
   ],
+  test: {
+    globals: true,
+    setupFiles: ['./test/setup-axios-mock.ts'],
+    environment: 'jsdom',
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/cypress/**',
+      '**/.{idea,git,cache,output,temp}/**',
+      '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*',
+      '**/screenshots/**' // Exclude Playwright screenshot tests
+    ],
+    server: {
+      deps: {
+        inline: ['vuetify']
+      }
+    }
+  },
   define: {
     'process.env': {},
     'import.meta.env.PACKAGE_VERSION': JSON.stringify(packageJson.version)

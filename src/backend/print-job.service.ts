@@ -101,10 +101,13 @@ export interface PrintJobsPagedResponse {
 }
 
 export class PrintJobService extends BaseService {
-  static async searchJobs(params: PrintJobSearchParams = {}): Promise<PrintJobDto[]> {
+  static async searchJobs(
+    params: PrintJobSearchParams = {}
+  ): Promise<PrintJobDto[]> {
     const searchParams = new URLSearchParams()
 
-    if (params.searchPrinter) searchParams.set('searchPrinter', params.searchPrinter)
+    if (params.searchPrinter)
+      searchParams.set('searchPrinter', params.searchPrinter)
     if (params.searchFile) searchParams.set('searchFile', params.searchFile)
     if (params.startDate) searchParams.set('startDate', params.startDate)
     if (params.endDate) searchParams.set('endDate', params.endDate)
@@ -113,56 +116,67 @@ export class PrintJobService extends BaseService {
     return (await this.get(path)) as PrintJobDto[]
   }
 
-  static async searchJobsPaged(params: PrintJobSearchPagedParams = {}): Promise<PrintJobsPagedResponse> {
+  static async searchJobsPaged(
+    params: PrintJobSearchPagedParams = {}
+  ): Promise<PrintJobsPagedResponse> {
     const searchParams = new URLSearchParams()
 
-    if (params.searchPrinter) searchParams.set('searchPrinter', params.searchPrinter)
+    if (params.searchPrinter)
+      searchParams.set('searchPrinter', params.searchPrinter)
     if (params.searchFile) searchParams.set('searchFile', params.searchFile)
     if (params.startDate) searchParams.set('startDate', params.startDate)
     if (params.endDate) searchParams.set('endDate', params.endDate)
-    if (params.page !== undefined) searchParams.set('page', params.page.toString())
-    if (params.pageSize !== undefined) searchParams.set('pageSize', params.pageSize.toString())
+    if (params.page !== undefined)
+      searchParams.set('page', params.page.toString())
+    if (params.pageSize !== undefined)
+      searchParams.set('pageSize', params.pageSize.toString())
 
     const path = `${ServerApi.printJobsSearchPagedRoute}?${searchParams.toString()}`
-    return await this.get<PrintJobsPagedResponse>(path);
+    return await this.get<PrintJobsPagedResponse>(path)
   }
 
   static async getJob(jobId: number): Promise<PrintJobDto> {
     const path = `${ServerApi.printJobsRoute}/${jobId}`
-    return await this.get<PrintJobDto>(path);
+    return await this.get<PrintJobDto>(path)
   }
 
   static async reAnalyzeJob(jobId: number): Promise<PrintJobDto> {
     const path = `${ServerApi.printJobsRoute}/${jobId}/re-analyze`
-    return await this.post<PrintJobDto>(path);
+    return await this.post<PrintJobDto>(path)
   }
 
   static async setJobCompleted(jobId: number): Promise<PrintJobDto> {
     const path = `${ServerApi.printJobsRoute}/${jobId}/set-completed`
-    return await this.post<PrintJobDto>(path);
+    return await this.post<PrintJobDto>(path)
   }
 
   static async setJobFailed(jobId: number): Promise<PrintJobDto> {
     const path = `${ServerApi.printJobsRoute}/${jobId}/set-failed`
-    return await this.post<PrintJobDto>(path);
+    return await this.post<PrintJobDto>(path)
   }
 
   static async setJobCancelled(jobId: number): Promise<PrintJobDto> {
     const path = `${ServerApi.printJobsRoute}/${jobId}/set-cancelled`
-    return await this.post<PrintJobDto>(path);
+    return await this.post<PrintJobDto>(path)
   }
 
   static async setJobUnknown(jobId: number): Promise<PrintJobDto> {
     const path = `${ServerApi.printJobsRoute}/${jobId}/set-unknown`
-    return await this.post<PrintJobDto>(path);
+    return await this.post<PrintJobDto>(path)
   }
 
-  static async deleteJob(jobId: number, deleteFile: boolean = false): Promise<any> {
+  static async deleteJob(
+    jobId: number,
+    deleteFile: boolean = false
+  ): Promise<any> {
     const path = `${ServerApi.printJobsRoute}/${jobId}${deleteFile ? '?deleteFile=true' : ''}`
-    return await this.delete(path);
+    return await this.delete(path)
   }
 
-  static async createFromFile(fileStorageId: string, printerId: number): Promise<any> {
+  static async createFromFile(
+    fileStorageId: string,
+    printerId: number
+  ): Promise<any> {
     const path = `${ServerApi.printJobsRoute}/from-file`
     return this.post(path, { fileStorageId, printerId })
   }

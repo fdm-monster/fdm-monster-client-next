@@ -73,8 +73,8 @@ export function interpretStates(
       text: authFail
         ? 'API key wrong'
         : noResponse
-        ? 'API unreachable'
-        : socketState?.api || '-'
+          ? 'API unreachable'
+          : socketState?.api || '-'
     }
   }
 

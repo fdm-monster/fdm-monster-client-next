@@ -20,12 +20,22 @@
       </v-icon>
 
       <div class="flex-grow-1 min-width-0">
-        <div :class="isWarning ? 'text-body-1 font-weight-medium text-black' : 'text-body-1 font-weight-medium text-white'">
+        <div
+          :class="
+            isWarning
+              ? 'text-body-1 font-weight-medium text-black'
+              : 'text-body-1 font-weight-medium text-white'
+          "
+        >
           {{ infoTitle }}
         </div>
         <div
           v-if="infoSubtitle?.length"
-          :class="isWarning ? 'text-body-2 text-black opacity-90 mt-1' : 'text-body-2 text-white opacity-90 mt-1'"
+          :class="
+            isWarning
+              ? 'text-body-2 text-black opacity-90 mt-1'
+              : 'text-body-2 text-white opacity-90 mt-1'
+          "
         >
           {{ infoSubtitle }}
         </div>
@@ -84,4 +94,3 @@ onMounted(() => {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
 }
 </style>
-

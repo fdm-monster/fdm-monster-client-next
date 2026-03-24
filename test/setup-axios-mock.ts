@@ -1,4 +1,4 @@
-import { beforeAll, afterAll } from 'vitest'
+import { beforeAll, afterAll } from 'vite-plus/test'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 

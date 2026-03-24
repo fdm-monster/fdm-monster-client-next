@@ -36,52 +36,88 @@ export interface PrinterQueueResponse {
 }
 
 export class PrintQueueService extends BaseService {
-  static async getGlobalQueue(page: number = 1, pageSize: number = 50): Promise<GlobalQueueResponse> {
+  static async getGlobalQueue(
+    page: number = 1,
+    pageSize: number = 50
+  ): Promise<GlobalQueueResponse> {
     const path = `${ServerApi.printQueueRoute}?page=${page}&pageSize=${pageSize}`
     return this.get<GlobalQueueResponse>(path)
   }
 
-  static async getPrinterQueue(printerId: number): Promise<PrinterQueueResponse> {
+  static async getPrinterQueue(
+    printerId: number
+  ): Promise<PrinterQueueResponse> {
     const path = `${ServerApi.printQueueRoute}/${printerId}`
     return this.get<PrinterQueueResponse>(path)
   }
 
-  static async addToQueue(printerId: number, jobId: number, position?: number): Promise<PrinterQueueResponse> {
+  static async addToQueue(
+    printerId: number,
+    jobId: number,
+    position?: number
+  ): Promise<PrinterQueueResponse> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/add/${jobId}`
     return this.post<PrinterQueueResponse>(path, { position })
   }
 
-  static async removeFromQueue(printerId: number, jobId: number): Promise<PrinterQueueResponse> {
+  static async removeFromQueue(
+    printerId: number,
+    jobId: number
+  ): Promise<PrinterQueueResponse> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/${jobId}`
     return this.delete<PrinterQueueResponse>(path)
   }
 
-  static async reorderQueue(printerId: number, jobIds: number[]): Promise<PrinterQueueResponse> {
+  static async reorderQueue(
+    printerId: number,
+    jobIds: number[]
+  ): Promise<PrinterQueueResponse> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/reorder`
     return this.put<PrinterQueueResponse>(path, { jobIds })
   }
 
-  static async clearQueue(printerId: number): Promise<{ message: string; printerId: number }> {
+  static async clearQueue(
+    printerId: number
+  ): Promise<{ message: string; printerId: number }> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/clear`
     return this.delete<{ message: string; printerId: number }>(path)
   }
 
-  static async getNextInQueue(printerId: number): Promise<{ printerId: number; nextJob: QueuedJob | null }> {
+  static async getNextInQueue(
+    printerId: number
+  ): Promise<{ printerId: number; nextJob: QueuedJob | null }> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/next`
     return this.get<{ printerId: number; nextJob: QueuedJob | null }>(path)
   }
 
-  static async processQueue(printerId: number): Promise<{ message: string; printerId: number; nextJob: QueuedJob | null }> {
+  static async processQueue(printerId: number): Promise<{
+    message: string
+    printerId: number
+    nextJob: QueuedJob | null
+  }> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/process`
-    return this.post<{ message: string; printerId: number; nextJob: QueuedJob | null }>(path)
+    return this.post<{
+      message: string
+      printerId: number
+      nextJob: QueuedJob | null
+    }>(path)
   }
 
-  static async submitToPrinter(jobId: number, printerId: number): Promise<{ message: string; jobId: number; printerId: number }> {
+  static async submitToPrinter(
+    jobId: number,
+    printerId: number
+  ): Promise<{ message: string; jobId: number; printerId: number }> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/submit/${jobId}`
-    return this.post<{ message: string; jobId: number; printerId: number }>(path)
+    return this.post<{ message: string; jobId: number; printerId: number }>(
+      path
+    )
   }
 
-  static async createJobFromFile(printerId: number, fileStorageId: string, position?: number): Promise<PrinterQueueResponse> {
+  static async createJobFromFile(
+    printerId: number,
+    fileStorageId: string,
+    position?: number
+  ): Promise<PrinterQueueResponse> {
     const path = `${ServerApi.printQueueRoute}/${printerId}/from-file`
     return this.post<PrinterQueueResponse>(path, {
       fileStorageId,

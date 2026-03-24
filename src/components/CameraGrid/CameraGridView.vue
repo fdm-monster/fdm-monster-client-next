@@ -105,7 +105,9 @@
             <v-icon
               start
               size="small"
-            >videocam</v-icon>
+            >
+              videocam
+            </v-icon>
             {{ filteredCameras.length }} cameras
           </v-chip>
           <v-chip
@@ -115,7 +117,9 @@
             <v-icon
               start
               size="small"
-            >error_outline</v-icon>
+            >
+              error_outline
+            </v-icon>
             {{ unavailableCount }} unavailable
           </v-chip>
         </v-col>
@@ -183,9 +187,7 @@
               >
                 <v-icon size="32">add_a_photo</v-icon>
               </v-avatar>
-              <div class="text-h6 font-weight-bold mb-2">
-                Get Started
-              </div>
+              <div class="text-h6 font-weight-bold mb-2">Get Started</div>
               <div class="text-body-2 text-medium-emphasis mb-4 px-4">
                 Add your first camera stream to monitor your 3D printers
               </div>
@@ -230,7 +232,11 @@
               <div class="flex-grow-1 text-truncate">
                 <div class="d-flex align-center gap-2 mb-1">
                   <div class="text-subtitle-2 font-weight-bold text-truncate">
-                    {{ camera.cameraStream.name || camera.printer?.name || 'Camera' }}
+                    {{
+                      camera.cameraStream.name ||
+                      camera.printer?.name ||
+                      'Camera'
+                    }}
                   </div>
                 </div>
                 <div
@@ -258,7 +264,11 @@
               <img
                 v-if="camera.cameraStream.id"
                 alt="Camera stream"
-                v-show="camera.cameraStream.id && !cameraErrors[camera.cameraStream.id] && !cameraLoading[camera.cameraStream.id]"
+                v-show="
+                  camera.cameraStream.id &&
+                  !cameraErrors[camera.cameraStream.id] &&
+                  !cameraLoading[camera.cameraStream.id]
+                "
                 :src="camera.cameraStream.streamURL"
                 class="camera-stream"
                 :style="getCameraTransformStyle(camera.cameraStream)"
@@ -266,7 +276,11 @@
                 @load="handleCameraLoad(camera.cameraStream.id)"
               />
               <div
-                v-if="camera.cameraStream.id && cameraLoading[camera.cameraStream.id] && !cameraErrors[camera.cameraStream.id]"
+                v-if="
+                  camera.cameraStream.id &&
+                  cameraLoading[camera.cameraStream.id] &&
+                  !cameraErrors[camera.cameraStream.id]
+                "
                 class="camera-loading"
               >
                 <v-progress-circular
@@ -277,15 +291,22 @@
                 <div class="text-caption mt-2">Connecting...</div>
               </div>
               <div
-                v-if="camera.cameraStream.id && cameraErrors[camera.cameraStream.id]"
+                v-if="
+                  camera.cameraStream.id && cameraErrors[camera.cameraStream.id]
+                "
                 class="camera-unavailable"
               >
                 <v-icon
                   size="48"
                   color="error"
-                >videocam_off</v-icon>
-                <div class="text-body-2 font-weight-bold mt-2">Camera stream unavailable</div>
-                <div class="text-caption text-medium-emphasis mt-1">Unable to connect to stream</div>
+                  >videocam_off
+                </v-icon>
+                <div class="text-body-2 font-weight-bold mt-2">
+                  Camera stream unavailable
+                </div>
+                <div class="text-caption text-medium-emphasis mt-1">
+                  Unable to connect to stream
+                </div>
               </div>
             </div>
 
@@ -348,13 +369,8 @@ const printerStore = usePrinterStore()
 const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
 const fileExplorer = useFileExplorer()
 
-const {
-  selectedTags,
-  selectedPrinterTypes,
-  tags,
-  loadTags,
-  matchesPrinter
-} = usePrinterFilters()
+const { selectedTags, selectedPrinterTypes, tags, loadTags, matchesPrinter } =
+  usePrinterFilters()
 
 // Reactive state
 const searchQuery = ref('')
@@ -436,14 +452,19 @@ const filteredCameras = computed(() => {
     // Printer filter (tags and type)
     const matchesPrinterFilter = camera.printer
       ? matchesPrinter(camera.printer)
-      : (selectedTags.value.length === 0 && selectedPrinterTypes.value.length === 0)
+      : selectedTags.value.length === 0 &&
+        selectedPrinterTypes.value.length === 0
 
     // Unavailable filter
     const matchesAvailability =
-      !showOnlyUnavailable.value ||
-      cameraErrors[camera.cameraStream.id!]
+      !showOnlyUnavailable.value || cameraErrors[camera.cameraStream.id!]
 
-    return matchesSearch && matchesSpecificPrinter && matchesPrinterFilter && matchesAvailability
+    return (
+      matchesSearch &&
+      matchesSpecificPrinter &&
+      matchesPrinterFilter &&
+      matchesAvailability
+    )
   })
 })
 
@@ -493,7 +514,10 @@ watch(
   (cameras) => {
     if (cameras) {
       cameras.forEach((camera) => {
-        if (camera.cameraStream.id && cameraLoading[camera.cameraStream.id] === undefined) {
+        if (
+          camera.cameraStream.id &&
+          cameraLoading[camera.cameraStream.id] === undefined
+        ) {
           cameraLoading[camera.cameraStream.id] = true
         }
       })
@@ -575,7 +599,9 @@ function getCameraTransformStyle(cameraStream: any) {
   height: 100%;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .camera-stream-container {

@@ -10,11 +10,16 @@ export class CameraStreamService extends BaseService {
   }
 
   static async createCameraStream(cameraStreamDto: CreateCameraStreamDto) {
-    return await this.post<CameraStream>('/api/v2/camera-stream/', cameraStreamDto)
+    return await this.post<CameraStream>(
+      '/api/v2/camera-stream/',
+      cameraStreamDto
+    )
   }
 
   static async getCameraStream(cameraStreamId: string | number) {
-    return await this.get<CameraStream>(`/api/v2/camera-stream/${cameraStreamId}`)
+    return await this.get<CameraStream>(
+      `/api/v2/camera-stream/${cameraStreamId}`
+    )
   }
 
   static async updateCameraStream(

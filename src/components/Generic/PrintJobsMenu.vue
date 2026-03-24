@@ -28,8 +28,12 @@
         <v-card-title class="d-flex align-center">
           <v-icon class="mr-2">work</v-icon>
           Active Print Jobs
-          <v-spacer/>
-          <v-chip size="small" color="success">{{ activePrintCount }}</v-chip>
+          <v-spacer />
+          <v-chip
+            size="small"
+            color="success"
+            >{{ activePrintCount }}</v-chip
+          >
         </v-card-title>
 
         <v-card-text class="pa-3">
@@ -62,7 +66,7 @@
           </div>
         </v-card-text>
 
-        <v-divider/>
+        <v-divider />
 
         <v-list style="overflow-y: auto; flex-shrink: 1">
           <v-list-item v-if="!activePrintCount"> No active prints</v-list-item>
@@ -90,16 +94,20 @@
 
             <v-list-item-subtitle>
               Elapsed: {{ formatDuration(job?.progress.printTime ?? 0) }} /
-              Remaining: {{ formatDuration(job?.progress.printTimeLeft ?? 0) }} <br/>
+              Remaining: {{ formatDuration(job?.progress.printTimeLeft ?? 0) }}
+              <br />
               Printer: {{ printer.name }}
             </v-list-item-subtitle>
           </v-list-item>
         </v-list>
 
         <v-card-actions>
-          <v-spacer/>
+          <v-spacer />
 
-          <v-btn variant="tonal" @click="menu = false">
+          <v-btn
+            variant="tonal"
+            @click="menu = false"
+          >
             <v-icon class="mr-2">close</v-icon>
             Close
           </v-btn>
@@ -115,7 +123,7 @@ import { usePrinterStateStore } from '@/store/printer-state.store'
 import { usePrinterFilters } from '@/shared/printer-filter.composable'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
 import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
-import { formatDuration } from "@/utils/date-time.utils";
+import { formatDuration } from '@/utils/date-time.utils'
 
 const printerStateStore = usePrinterStateStore()
 const searchString = ref('')
@@ -141,8 +149,10 @@ const activePrintJobs = computed(() => {
     const fileNameSearch = fileName?.toLowerCase() || ''
     const printerUrlSearch = p.printer.printerURL?.toLowerCase() || ''
     const searchSearch = p.printer.name?.toLowerCase() || ''
-    const combineSearch = `${ fileNameSearch } ${ printerUrlSearch } ${ searchSearch }`
-    const matchesSearch = !searchString.value || combineSearch.includes(searchString.value.toLowerCase())
+    const combineSearch = `${fileNameSearch} ${printerUrlSearch} ${searchSearch}`
+    const matchesSearch =
+      !searchString.value ||
+      combineSearch.includes(searchString.value.toLowerCase())
     const matchesTags = matchesTagFilter(p.printer.id)
     const matchesType = matchesPrinterTypeFilter(p.printer)
     return matchesSearch && matchesTags && matchesType

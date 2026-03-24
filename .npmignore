@@ -19,19 +19,15 @@ npm-debug.log
 .all-contributorsrc
 .dockerignore
 .editorconfig
-.eslintignore
-.eslintrc.js
-.prettierrc.json
-.prettierignore
 .whitesource
 renovate.json
-jest.config.js
 
 # Custom
 *.ps1
 coverage
 src
 src/**/*
+screenshots/**/*
 test/**/*
 test
 .github

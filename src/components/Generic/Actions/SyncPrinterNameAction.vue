@@ -1,5 +1,8 @@
 <template>
-  <v-tooltip v-if="canSyncName(printer.printerType)" location="top">
+  <v-tooltip
+    v-if="canSyncName(printer.printerType)"
+    location="top"
+  >
     <template #activator="{ props }">
       <v-btn
         v-bind="props"
