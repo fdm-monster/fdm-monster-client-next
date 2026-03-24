@@ -14,4 +14,3 @@ export const appConstants: Readonly<AppConstants> = Object.freeze({
   minFloorNameLength: 3,
   minUsernameLength: 3
 }) as Readonly<AppConstants>
-

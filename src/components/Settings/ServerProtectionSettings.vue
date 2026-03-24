@@ -1,16 +1,29 @@
 <template>
   <v-card>
     <v-card-text>
-      <SettingSection :usecols="false" title="Login and registration">
+      <SettingSection
+        :usecols="false"
+        title="Login and registration"
+      >
         <v-row>
-          <v-col cols="4" lg="3" sm="12" xl="2">
+          <v-col
+            cols="4"
+            lg="3"
+            sm="12"
+            xl="2"
+          >
             <v-checkbox
               v-model="loginRequired"
               label="Require Login"
               @change="setLoginRequired"
             />
           </v-col>
-          <v-col cols="4" lg="3" sm="12" xl="2">
+          <v-col
+            cols="4"
+            lg="3"
+            sm="12"
+            xl="2"
+          >
             <v-checkbox
               v-model="registrationEnabled"
               label="Enable Registration"
@@ -22,15 +35,26 @@
 
       <v-divider />
 
-      <SettingSection :usecols="false" title="Login expiry settings (advanced)">
-        <v-alert class="mb-6" color="secondary">
+      <SettingSection
+        :usecols="false"
+        title="Login expiry settings (advanced)"
+      >
+        <v-alert
+          class="mb-6"
+          color="secondary"
+        >
           <v-icon>info</v-icon> &nbsp; Be cautious, setting the wrong expiry
-          could make you lose access to the server or make your user
-          experience highly degraded!
+          could make you lose access to the server or make your user experience
+          highly degraded!
         </v-alert>
 
         <v-row>
-          <v-col cols="4" lg="3" sm="12" xl="2">
+          <v-col
+            cols="4"
+            lg="3"
+            sm="12"
+            xl="2"
+          >
             <v-text-field
               v-model="jwtExpiresIn"
               :rules="[(val) => !!val && val >= 120 && val <= 120 * 60]"
@@ -40,7 +64,12 @@
         </v-row>
 
         <v-row>
-          <v-col cols="4" lg="3" sm="12" xl="2">
+          <v-col
+            cols="4"
+            lg="3"
+            sm="12"
+            xl="2"
+          >
             <v-checkbox
               v-model="refreshTokenAttemptsEnabled"
               label="Enable Refresh Token Attempts"
@@ -48,7 +77,12 @@
             />
           </v-col>
 
-          <v-col cols="4" lg="3" sm="12" xl="2">
+          <v-col
+            cols="4"
+            lg="3"
+            sm="12"
+            xl="2"
+          >
             <v-text-field
               v-model="refreshTokenAttempts"
               :disabled="!refreshTokenAttemptsEnabled"
@@ -58,7 +92,12 @@
             />
           </v-col>
 
-          <v-col cols="4" lg="3" sm="12" xl="2">
+          <v-col
+            cols="4"
+            lg="3"
+            sm="12"
+            xl="2"
+          >
             <v-text-field
               v-model="refreshTokenExpiry"
               :rules="[(val) => !!val && val >= 1 && val <= 30]"
@@ -68,7 +107,12 @@
         </v-row>
 
         <v-row>
-          <v-col cols="4" lg="3" sm="12" xl="2">
+          <v-col
+            cols="4"
+            lg="3"
+            sm="12"
+            xl="2"
+          >
             <v-btn
               color="primary"
               @click="saveLoginExpirySettings()"
@@ -76,7 +120,12 @@
               save login expiry settings
             </v-btn>
           </v-col>
-          <v-col cols="4" lg="3" sm="12" xl="2">
+          <v-col
+            cols="4"
+            lg="3"
+            sm="12"
+            xl="2"
+          >
             <v-btn
               color="default"
               @click="resetLoginExpirySettingsToDefault()"
@@ -181,9 +230,15 @@ async function resetLoginExpirySettingsToDefault() {
 
 async function saveLoginExpirySettings() {
   jwtExpiresIn.value = Number.parseInt((jwtExpiresIn.value ?? '')?.toString())
-  refreshTokenAttempts.value = Number.parseInt((refreshTokenAttempts.value ?? '').toString())
+  refreshTokenAttempts.value = Number.parseInt(
+    (refreshTokenAttempts.value ?? '').toString()
+  )
 
-  if (!jwtExpiresIn.value || jwtExpiresIn.value < 120 || jwtExpiresIn.value > 120 * 60) {
+  if (
+    !jwtExpiresIn.value ||
+    jwtExpiresIn.value < 120 ||
+    jwtExpiresIn.value > 120 * 60
+  ) {
     throw new Error('JWT Expiry must be between 2 and 120 minutes')
   }
   if (!refreshTokenAttemptsEnabled.value) {

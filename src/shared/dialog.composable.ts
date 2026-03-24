@@ -29,7 +29,8 @@ export function useDialog<
     dialogStore,
     openDialog,
     context: () => dialogStore.getContext(dialogId) as TContext,
-    closeDialog: (output?: TOutput) => dialogStore.closeDialog(dialogId, output),
+    closeDialog: (output?: TOutput) =>
+      dialogStore.closeDialog(dialogId, output),
     isDialogOpened: () => dialogStore.isDialogOpened(dialogId),
     handleAsync: async (input: TContext): Promise<TOutput> => {
       await openDialog(input)

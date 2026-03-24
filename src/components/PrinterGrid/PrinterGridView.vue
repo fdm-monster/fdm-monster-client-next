@@ -1,11 +1,20 @@
 <template>
   <div>
     <!-- Show empty state when no floors exist -->
-    <v-card v-if="!floorStore.floors.length" class="ma-4 pa-8 text-center">
-      <v-icon size="80" color="primary" class="mb-4">layers_clear</v-icon>
+    <v-card
+      v-if="!floorStore.floors.length"
+      class="ma-4 pa-8 text-center"
+    >
+      <v-icon
+        size="80"
+        color="primary"
+        class="mb-4"
+        >layers_clear</v-icon
+      >
       <h2 class="text-h5 mb-2">No Floors Yet</h2>
       <p class="text-body-1 text-medium-emphasis mb-6">
-        Create your first floor to start organizing your printers in a grid layout.
+        Create your first floor to start organizing your printers in a grid
+        layout.
       </p>
       <v-btn
         color="primary"
@@ -19,11 +28,11 @@
 
     <!-- Show normal grid when floors exist -->
     <template v-else>
-      <HomeToolbar/>
+      <HomeToolbar />
 
-      <UploadToolbar/>
+      <UploadToolbar />
 
-      <PrinterGrid class="ma-2"/>
+      <PrinterGrid class="ma-2" />
     </template>
   </div>
 </template>
@@ -46,7 +55,9 @@ onMounted(() => {
   // Check for floor query parameter
   const floorId = route.query.floor
   if (floorId) {
-    const floorIndex = floorStore.floors.findIndex(f => f.id === Number(floorId))
+    const floorIndex = floorStore.floors.findIndex(
+      (f) => f.id === Number(floorId)
+    )
     if (floorIndex >= 0) {
       floorStore.changeSelectedFloorByIndex(floorIndex)
     }

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useOverlayStore } from "@/store/overlay.store";
+import { useOverlayStore } from '@/store/overlay.store'
 import DiscordInviteButton from '@/components/Generic/Actions/DiscordInviteButton.vue'
 import GithubIssuesButton from '@/components/Generic/Actions/GithubIssuesButton.vue'
 
-const appLoaderStore = useOverlayStore();
+const appLoaderStore = useOverlayStore()
 const countdown = ref(0)
 let intervalId: NodeJS.Timeout | null = null
 
@@ -13,7 +13,10 @@ function updateCountdown() {
     countdown.value = 0
     return
   }
-  countdown.value = Math.max(0, Math.ceil((appLoaderStore.nextRetryTime - Date.now()) / 1000))
+  countdown.value = Math.max(
+    0,
+    Math.ceil((appLoaderStore.nextRetryTime - Date.now()) / 1000)
+  )
 }
 
 onMounted(() => {
@@ -46,19 +49,33 @@ onUnmounted(() => {
         </v-icon>
         <h1 class="text-h4 font-weight-bold mb-4">Server Disconnected</h1>
         <p class="text-body-1 text-medium-emphasis mb-0">
-          Cannot connect to FDM Monster server. Please ensure the server is running and try again.
+          Cannot connect to FDM Monster server. Please ensure the server is
+          running and try again.
         </p>
 
-        <div v-if="appLoaderStore.isRetrying" class="mt-6">
+        <div
+          v-if="appLoaderStore.isRetrying"
+          class="mt-6"
+        >
           <v-chip
             color="primary"
             outline
             size="large"
             class="px-4"
           >
-            <v-icon v-if="!appLoaderStore.isTestingConnection" class="mr-2">mdi:mdi-refresh</v-icon>
-            <v-icon v-if="appLoaderStore.isTestingConnection" class="mr-2">mdi:mdi-timer</v-icon>
-            <span v-if="appLoaderStore.isTestingConnection">Testing connection</span>
+            <v-icon
+              v-if="!appLoaderStore.isTestingConnection"
+              class="mr-2"
+              >mdi:mdi-refresh</v-icon
+            >
+            <v-icon
+              v-if="appLoaderStore.isTestingConnection"
+              class="mr-2"
+              >mdi:mdi-timer</v-icon
+            >
+            <span v-if="appLoaderStore.isTestingConnection"
+              >Testing connection</span
+            >
             <span v-else>Retrying in {{ countdown }}s</span>
           </v-chip>
           <v-progress-linear
@@ -82,7 +99,9 @@ onUnmounted(() => {
 
       <div class="d-flex flex-column align-center ga-4">
         <v-btn
-          :disabled="!appLoaderStore.isRetrying || appLoaderStore.isTestingConnection"
+          :disabled="
+            !appLoaderStore.isRetrying || appLoaderStore.isTestingConnection
+          "
           color="primary"
           size="large"
           variant="elevated"
@@ -94,12 +113,10 @@ onUnmounted(() => {
         </v-btn>
       </div>
 
-      <v-divider class="my-8"/>
+      <v-divider class="my-8" />
 
       <div class="text-center">
-        <p class="text-caption text-medium-emphasis mb-3">
-          Helpful links:
-        </p>
+        <p class="text-caption text-medium-emphasis mb-3">Helpful links:</p>
         <div class="d-flex ga-3 flex-wrap justify-center mb-6">
           <v-btn
             color="surface-variant"
@@ -123,13 +140,23 @@ onUnmounted(() => {
           />
         </div>
 
-        <p class="text-caption text-medium-emphasis mb-3">
-          Common solutions:
-        </p>
+        <p class="text-caption text-medium-emphasis mb-3">Common solutions:</p>
         <div class="d-flex flex-wrap justify-center ga-2">
-          <v-chip size="small" variant="outlined">Check server status</v-chip>
-          <v-chip size="small" variant="outlined">Verify network connection</v-chip>
-          <v-chip size="small" variant="outlined">Review server logs</v-chip>
+          <v-chip
+            size="small"
+            variant="outlined"
+            >Check server status</v-chip
+          >
+          <v-chip
+            size="small"
+            variant="outlined"
+            >Verify network connection</v-chip
+          >
+          <v-chip
+            size="small"
+            variant="outlined"
+            >Review server logs</v-chip
+          >
         </div>
       </div>
     </v-card>

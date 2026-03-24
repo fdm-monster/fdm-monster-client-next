@@ -6,12 +6,19 @@
         tooltip="Configure API key authentication for slicer file uploads. This allows PrusaSlicer and other slicers to upload files directly to FDM Monster."
         :usecols="false"
       >
-        <v-alert color="info" variant="tonal" class="mb-4" density="compact">
+        <v-alert
+          color="info"
+          variant="tonal"
+          class="mb-4"
+          density="compact"
+        >
           <div class="text-body-2">
-            <strong>Setup:</strong> Configure PrusaSlicer → <strong>Print Host</strong> with:
+            <strong>Setup:</strong> Configure PrusaSlicer →
+            <strong>Print Host</strong> with:
             <div class="mt-1 ml-2">
-              • Host Type: <strong>OctoPrint</strong><br>
-              • Hostname: <strong>{{ serverUrl }}</strong><br>
+              • Host Type: <strong>OctoPrint</strong><br />
+              • Hostname: <strong>{{ serverUrl }}</strong
+              ><br />
               • API Key: <em>(copy from below)</em>
             </div>
           </div>
@@ -20,13 +27,29 @@
         <div class="d-flex flex-column">
           <div class="text-subtitle-2 mb-2">Slicer API Key</div>
 
-          <div v-if="isLoading" class="d-flex align-center">
-            <v-progress-circular indeterminate size="24" width="3" class="mr-2" />
+          <div
+            v-if="isLoading"
+            class="d-flex align-center"
+          >
+            <v-progress-circular
+              indeterminate
+              size="24"
+              width="3"
+              class="mr-2"
+            />
             <span>Loading...</span>
           </div>
 
-          <div v-else-if="!slicerApiKey" class="d-flex flex-column align-center">
-            <v-alert color="warning" variant="tonal" class="mb-4 text-center" density="compact">
+          <div
+            v-else-if="!slicerApiKey"
+            class="d-flex flex-column align-center"
+          >
+            <v-alert
+              color="warning"
+              variant="tonal"
+              class="mb-4 text-center"
+              density="compact"
+            >
               No API key generated yet.
             </v-alert>
             <v-btn
@@ -37,13 +60,16 @@
               @click="generateApiKey"
               prepend-icon="vpn_key"
               class="px-8"
-              style="min-width: 240px; max-width: 300px;"
+              style="min-width: 240px; max-width: 300px"
             >
               Generate API Key
             </v-btn>
           </div>
 
-          <div v-else class="d-flex flex-column">
+          <div
+            v-else
+            class="d-flex flex-column"
+          >
             <div class="d-flex align-center mb-3">
               <v-text-field
                 v-model="displayApiKey"
@@ -52,7 +78,7 @@
                 variant="outlined"
                 density="compact"
                 hide-details
-                style="font-family: monospace; max-width: 400px;"
+                style="font-family: monospace; max-width: 400px"
               >
                 <template #append-inner>
                   <v-btn
@@ -62,7 +88,9 @@
                     @click="showApiKey = !showApiKey"
                     :title="showApiKey ? 'Hide' : 'Show'"
                   >
-                    <v-icon>{{ showApiKey ? 'visibility_off' : 'visibility' }}</v-icon>
+                    <v-icon>{{
+                      showApiKey ? 'visibility_off' : 'visibility'
+                    }}</v-icon>
                   </v-btn>
                 </template>
               </v-text-field>
@@ -112,7 +140,12 @@
               </v-btn>
             </div>
 
-            <v-alert v-if="showSuccess" color="success" variant="tonal" class="mt-3">
+            <v-alert
+              v-if="showSuccess"
+              color="success"
+              variant="tonal"
+              class="mt-3"
+            >
               {{ successMessage }}
             </v-alert>
           </div>
@@ -121,31 +154,55 @@
     </v-card-text>
 
     <!-- Regenerate Confirmation Dialog -->
-    <v-dialog v-model="showRegenerateDialog" max-width="450">
+    <v-dialog
+      v-model="showRegenerateDialog"
+      max-width="450"
+    >
       <v-card>
         <v-card-title>Regenerate API Key?</v-card-title>
         <v-card-text>
-          This will invalidate the current API key. You will need to update the key in your slicer settings.
+          This will invalidate the current API key. You will need to update the
+          key in your slicer settings.
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="text" @click="showRegenerateDialog = false">Cancel</v-btn>
-          <v-btn color="warning" @click="regenerateApiKey">Regenerate</v-btn>
+          <v-btn
+            variant="text"
+            @click="showRegenerateDialog = false"
+            >Cancel</v-btn
+          >
+          <v-btn
+            color="warning"
+            @click="regenerateApiKey"
+            >Regenerate</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <!-- Delete Confirmation Dialog -->
-    <v-dialog v-model="showDeleteDialog" max-width="450">
+    <v-dialog
+      v-model="showDeleteDialog"
+      max-width="450"
+    >
       <v-card>
         <v-card-title>Delete API Key?</v-card-title>
         <v-card-text>
-          This will disable API key authentication for slicer uploads. Slicers will no longer be able to upload files using this key.
+          This will disable API key authentication for slicer uploads. Slicers
+          will no longer be able to upload files using this key.
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="text" @click="showDeleteDialog = false">Cancel</v-btn>
-          <v-btn color="error" @click="deleteApiKey">Delete</v-btn>
+          <v-btn
+            variant="text"
+            @click="showDeleteDialog = false"
+            >Cancel</v-btn
+          >
+          <v-btn
+            color="error"
+            @click="deleteApiKey"
+            >Delete</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -261,4 +318,3 @@ onMounted(async () => {
   await loadApiKey()
 })
 </script>
-

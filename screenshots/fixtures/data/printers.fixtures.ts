@@ -3,18 +3,18 @@
  */
 
 export interface PrinterDto {
-  id: number;
-  printerType: number;
-  correlationToken?: string;
-  enabled: boolean;
-  dateAdded: number;
-  disabledReason: string;
-  name: string;
-  webSocketURL: string;
-  apiKey: string;
-  username: string;
-  password: string;
-  printerURL: string;
+  id: number
+  printerType: number
+  correlationToken?: string
+  enabled: boolean
+  dateAdded: number
+  disabledReason: string
+  name: string
+  webSocketURL: string
+  apiKey: string
+  username: string
+  password: string
+  printerURL: string
 }
 
 export const mockPrinters: PrinterDto[] = [
@@ -30,7 +30,7 @@ export const mockPrinters: PrinterDto[] = [
     apiKey: 'mock-api-key-1',
     username: '',
     password: '',
-    correlationToken: 'token-1',
+    correlationToken: 'token-1'
   },
   {
     id: 2,
@@ -44,7 +44,7 @@ export const mockPrinters: PrinterDto[] = [
     apiKey: 'mock-api-key-2',
     username: '',
     password: '',
-    correlationToken: 'token-2',
+    correlationToken: 'token-2'
   },
   {
     id: 3,
@@ -58,7 +58,7 @@ export const mockPrinters: PrinterDto[] = [
     apiKey: 'mock-api-key-3',
     username: '',
     password: '',
-    correlationToken: 'token-3',
+    correlationToken: 'token-3'
   },
   {
     id: 4,
@@ -72,11 +72,11 @@ export const mockPrinters: PrinterDto[] = [
     apiKey: 'mock-api-key-4',
     username: '',
     password: '',
-    correlationToken: 'token-4',
-  },
-];
+    correlationToken: 'token-4'
+  }
+]
 
-export const mockPrinterEmpty: PrinterDto[] = [];
+export const mockPrinterEmpty: PrinterDto[] = []
 
 export const mockPrinterStates = {
   operational: {
@@ -86,9 +86,9 @@ export const mockPrinterStates = {
         operational: true,
         printing: false,
         paused: false,
-        error: false,
-      },
-    },
+        error: false
+      }
+    }
   },
   printing: {
     state: {
@@ -97,15 +97,15 @@ export const mockPrinterStates = {
         operational: true,
         printing: true,
         paused: false,
-        error: false,
-      },
+        error: false
+      }
     },
     progress: {
       completion: 45.5,
       filepos: 1234567,
       printTime: 3600,
-      printTimeLeft: 4200,
-    },
+      printTimeLeft: 4200
+    }
   },
   paused: {
     state: {
@@ -114,9 +114,9 @@ export const mockPrinterStates = {
         operational: true,
         printing: true,
         paused: true,
-        error: false,
-      },
-    },
+        error: false
+      }
+    }
   },
   error: {
     state: {
@@ -125,8 +125,8 @@ export const mockPrinterStates = {
         operational: false,
         printing: false,
         paused: false,
-        error: true,
-      },
-    },
-  },
-};
+        error: true
+      }
+    }
+  }
+}

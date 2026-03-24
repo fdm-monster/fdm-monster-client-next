@@ -1,4 +1,4 @@
- import { DialogName } from './dialog.constants'
+import { DialogName } from './dialog.constants'
 import { PrinterDto } from '@/models/printers/printer.model'
 
 // Context types for each dialog
@@ -42,7 +42,13 @@ export interface PrintJobDetailsDialogContext {
 
 export interface JobThumbnailViewerContext {
   fileStorageId: string
-  thumbnails: { index: number; width: number; height: number; format: string; size: number }[]
+  thumbnails: {
+    index: number
+    width: number
+    height: number
+    format: string
+    size: number
+  }[]
 }
 
 // Map dialog names to their context types
@@ -64,4 +70,3 @@ export interface DialogContextTypeMap {
 
 // Helper type to get context type for a specific dialog
 export type DialogContextType<T extends DialogName> = DialogContextTypeMap[T]
-

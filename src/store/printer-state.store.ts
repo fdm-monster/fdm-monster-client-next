@@ -240,7 +240,11 @@ export const usePrinterStateStore = defineStore('PrinterState', {
         return
       }
 
-      await PrinterRemoteFileService.selectAndPrintFile(printerId, fullPath, true)
+      await PrinterRemoteFileService.selectAndPrintFile(
+        printerId,
+        fullPath,
+        true
+      )
     }
   }
 })

@@ -4,20 +4,27 @@
  */
 
 export interface PrintJobDto {
-  id: number;
-  printerId: number;
-  printerName: string;
-  fileName: string;
-  filePath: string;
-  createdAt: string;
-  startedAt?: string;
-  endedAt?: string;
-  status: 'QUEUED' | 'STARTING' | 'PRINTING' | 'PAUSED' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
-  progress?: number;
+  id: number
+  printerId: number
+  printerName: string
+  fileName: string
+  filePath: string
+  createdAt: string
+  startedAt?: string
+  endedAt?: string
+  status:
+    | 'QUEUED'
+    | 'STARTING'
+    | 'PRINTING'
+    | 'PAUSED'
+    | 'COMPLETED'
+    | 'FAILED'
+    | 'CANCELLED'
+  progress?: number
   statistics?: {
-    actualPrintTimeSeconds?: number;
-    estimatedPrintTimeSeconds?: number;
-  };
+    actualPrintTimeSeconds?: number
+    estimatedPrintTimeSeconds?: number
+  }
 }
 
 // Mock jobs with various statuses for testing dashboard statistics
@@ -35,8 +42,8 @@ export const mockJobs: PrintJobDto[] = [
     progress: 45,
     statistics: {
       estimatedPrintTimeSeconds: 7200, // 2 hours
-      actualPrintTimeSeconds: 3600, // 1 hour so far
-    },
+      actualPrintTimeSeconds: 3600 // 1 hour so far
+    }
   },
   // Completed job from 1 day ago
   {
@@ -51,8 +58,8 @@ export const mockJobs: PrintJobDto[] = [
     status: 'COMPLETED',
     progress: 100,
     statistics: {
-      actualPrintTimeSeconds: 1800, // 30 minutes
-    },
+      actualPrintTimeSeconds: 1800 // 30 minutes
+    }
   },
   // Completed job from 2 days ago
   {
@@ -67,8 +74,8 @@ export const mockJobs: PrintJobDto[] = [
     status: 'COMPLETED',
     progress: 100,
     statistics: {
-      actualPrintTimeSeconds: 5400, // 1.5 hours
-    },
+      actualPrintTimeSeconds: 5400 // 1.5 hours
+    }
   },
   // Failed job from 3 days ago
   {
@@ -83,8 +90,8 @@ export const mockJobs: PrintJobDto[] = [
     status: 'FAILED',
     progress: 75,
     statistics: {
-      actualPrintTimeSeconds: 3000, // 50 minutes
-    },
+      actualPrintTimeSeconds: 3000 // 50 minutes
+    }
   },
   // Completed job from 12 hours ago
   {
@@ -99,12 +106,12 @@ export const mockJobs: PrintJobDto[] = [
     status: 'COMPLETED',
     progress: 100,
     statistics: {
-      actualPrintTimeSeconds: 14400, // 4 hours
-    },
-  },
-];
+      actualPrintTimeSeconds: 14400 // 4 hours
+    }
+  }
+]
 
-export const mockJobsEmpty: PrintJobDto[] = [];
+export const mockJobsEmpty: PrintJobDto[] = []
 
 export const mockJobDetails: PrintJobDto = {
   id: 1,
@@ -118,21 +125,21 @@ export const mockJobDetails: PrintJobDto = {
   progress: 45,
   statistics: {
     estimatedPrintTimeSeconds: 7200,
-    actualPrintTimeSeconds: 3600,
-  },
-};
+    actualPrintTimeSeconds: 3600
+  }
+}
 
 // Mock print queue items (GlobalQueueResponse items structure)
 export interface QueueItemDto {
-  jobId: number;
-  fileName: string;
-  printerId: number;
-  printerName?: string;
-  queuePosition: number;
-  status: string;
-  createdAt: string;
-  estimatedTimeSeconds?: number;
-  filamentGrams?: number;
+  jobId: number
+  fileName: string
+  printerId: number
+  printerName?: string
+  queuePosition: number
+  status: string
+  createdAt: string
+  estimatedTimeSeconds?: number
+  filamentGrams?: number
 }
 
 export const mockQueue: QueueItemDto[] = [
@@ -145,7 +152,7 @@ export const mockQueue: QueueItemDto[] = [
     status: 'queued',
     createdAt: new Date().toISOString(),
     estimatedTimeSeconds: 3600,
-    filamentGrams: 15.5,
+    filamentGrams: 15.5
   },
   {
     jobId: 11,
@@ -156,7 +163,7 @@ export const mockQueue: QueueItemDto[] = [
     status: 'queued',
     createdAt: new Date().toISOString(),
     estimatedTimeSeconds: 5400,
-    filamentGrams: 22.3,
+    filamentGrams: 22.3
   },
   {
     jobId: 12,
@@ -167,6 +174,6 @@ export const mockQueue: QueueItemDto[] = [
     status: 'queued',
     createdAt: new Date().toISOString(),
     estimatedTimeSeconds: 7200,
-    filamentGrams: 30.0,
-  },
-];
+    filamentGrams: 30.0
+  }
+]

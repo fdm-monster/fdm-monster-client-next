@@ -9,7 +9,7 @@
         !appLoaderStore.loading &&
         authStore.wizardState?.wizardCompleted &&
         ((authStore.hasAuthToken && !authStore.isLoginExpired) ||
-        !authStore.loginRequired)
+          !authStore.loginRequired)
       "
     />
     <TopBar
@@ -17,7 +17,7 @@
         !appLoaderStore.loading &&
         authStore.wizardState?.wizardCompleted &&
         ((authStore.hasAuthToken && !authStore.isLoginExpired) ||
-        !authStore.loginRequired)
+          !authStore.loginRequired)
       "
     />
 
@@ -64,7 +64,7 @@ watch(queuedUploads, async () => {
 
 onMounted(() => {
   console.debug(
-    `App.vue mounted. Logged in: ${ authStore.hasAuthToken }, Expired: ${ authStore.isLoginExpired }`
+    `App.vue mounted. Logged in: ${authStore.hasAuthToken}, Expired: ${authStore.isLoginExpired}`
   )
   uploadProgressTest(false)
 })

@@ -1,11 +1,16 @@
-import { OctoPrintType, MoonrakerType, PrusaLinkType, BambuType } from './printer-types.constants'
+import {
+  OctoPrintType,
+  MoonrakerType,
+  PrusaLinkType,
+  BambuType
+} from './printer-types.constants'
 
 export interface PrinterCapabilities {
-  hasSerialConnection: boolean      // Can connect/disconnect via serial/USB
-  canSyncName: boolean               // Can sync name from FDM Monster to printer
-  hasWebInterface: boolean           // Has accessible web interface to redirect to
-  hasEmergencyStop: boolean          // Has emergency/quick stop (more aggressive than normal stop)
-  hasPrinterControl: boolean         // Can control printer remotely (pause, resume, etc.)
+  hasSerialConnection: boolean // Can connect/disconnect via serial/USB
+  canSyncName: boolean // Can sync name from FDM Monster to printer
+  hasWebInterface: boolean // Has accessible web interface to redirect to
+  hasEmergencyStop: boolean // Has emergency/quick stop (more aggressive than normal stop)
+  hasPrinterControl: boolean // Can control printer remotely (pause, resume, etc.)
 }
 
 const OCTOPRINT_CAPABILITIES: PrinterCapabilities = {
@@ -29,7 +34,7 @@ const PRUSALINK_CAPABILITIES: PrinterCapabilities = {
   canSyncName: false,
   hasWebInterface: true,
   hasEmergencyStop: false,
-  hasPrinterControl: false         // PrusaLink doesn't support remote control
+  hasPrinterControl: false // PrusaLink doesn't support remote control
 }
 
 const BAMBU_CAPABILITIES: PrinterCapabilities = {

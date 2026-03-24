@@ -11,5 +11,5 @@ export const RouteNames = {
   About: 'About',
   PermissionDenied: 'PermissionDenied',
   NotFound: 'NotFound',
-  FirstTimeSetup: 'FirstTimeSetup',
+  FirstTimeSetup: 'FirstTimeSetup'
 }

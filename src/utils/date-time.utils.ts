@@ -9,7 +9,9 @@ export function formatIntlDate(dateString: string | Date) {
  * @param dateString - Date to format
  * @returns Formatted date string (MM/DD/YYYY, HH:MM)
  */
-export function formatDate(dateString: Date | string | null | undefined): string {
+export function formatDate(
+  dateString: Date | string | null | undefined
+): string {
   if (!dateString) return 'N/A'
   return new Date(dateString).toLocaleString('en-US', {
     year: 'numeric',
@@ -28,19 +30,21 @@ export function formatDate(dateString: Date | string | null | undefined): string
 export function formatRelativeTime(dateString: Date | string): string {
   const now = new Date()
   const date = new Date(dateString)
-  const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
+  const diffInMinutes = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60)
+  )
 
   if (diffInMinutes < 1) return 'Just now'
-  if (diffInMinutes < 60) return `${ diffInMinutes }m ago`
+  if (diffInMinutes < 60) return `${diffInMinutes}m ago`
 
   const diffInHours = Math.floor(diffInMinutes / 60)
-  if (diffInHours < 24) return `${ diffInHours }h ago`
+  if (diffInHours < 24) return `${diffInHours}h ago`
 
   const diffInDays = Math.floor(diffInHours / 24)
-  if (diffInDays < 7) return `${ diffInDays }d ago`
+  if (diffInDays < 7) return `${diffInDays}d ago`
 
   const diffInWeeks = Math.floor(diffInDays / 7)
-  return `${ diffInWeeks }w ago`
+  return `${diffInWeeks}w ago`
 }
 
 /**
@@ -56,9 +60,9 @@ export function formatDuration(seconds: number | null | undefined): string {
   const secs = Math.floor(seconds % 60)
 
   if (hours > 0) {
-    return `${ hours }h ${ minutes }m ${ secs }s`
+    return `${hours}h ${minutes}m ${secs}s`
   } else if (minutes > 0) {
-    return `${ minutes }m ${ secs }s`
+    return `${minutes}m ${secs}s`
   }
-  return `${ secs }s`
+  return `${secs}s`
 }

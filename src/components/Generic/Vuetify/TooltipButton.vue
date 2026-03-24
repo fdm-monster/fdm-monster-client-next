@@ -31,7 +31,7 @@ defineEmits(['click'])
 export interface Props {
   tooltip: string
   color?: string | 'success' | 'warning' | 'danger' | 'primary' | 'secondary'
-  variant?: "elevated" | "flat" | "outlined" | "plain" | "text" | "tonal"
+  variant?: 'elevated' | 'flat' | 'outlined' | 'plain' | 'text' | 'tonal'
   icon?: string
   iconClass?: string
   text?: string

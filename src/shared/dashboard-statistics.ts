@@ -21,17 +21,27 @@ export interface JobPerformanceMetrics {
  * @param timeWindowHours - Time window in hours (default 24)
  * @returns Success rate as a percentage (0-100)
  */
-export function calculateSuccessRate(jobs: PrintJobDto[], timeWindowHours: number = 24): number {
+export function calculateSuccessRate(
+  jobs: PrintJobDto[],
+  timeWindowHours: number = 24
+): number {
   const cutoffTime = Date.now() - timeWindowHours * 60 * 60 * 1000
 
-  const recentJobs = jobs.filter(job => {
-    const jobTime = job.endedAt ? new Date(job.endedAt).getTime() : new Date(job.createdAt).getTime()
-    return jobTime >= cutoffTime && (job.status === 'COMPLETED' || job.status === 'FAILED')
+  const recentJobs = jobs.filter((job) => {
+    const jobTime = job.endedAt
+      ? new Date(job.endedAt).getTime()
+      : new Date(job.createdAt).getTime()
+    return (
+      jobTime >= cutoffTime &&
+      (job.status === 'COMPLETED' || job.status === 'FAILED')
+    )
   })
 
   if (recentJobs.length === 0) return 0
 
-  const successfulJobs = recentJobs.filter(job => job.status === 'COMPLETED').length
+  const successfulJobs = recentJobs.filter(
+    (job) => job.status === 'COMPLETED'
+  ).length
   return Math.round((successfulJobs / recentJobs.length) * 100)
 }
 
@@ -41,8 +51,8 @@ export function calculateSuccessRate(jobs: PrintJobDto[], timeWindowHours: numbe
  * @returns Number of active jobs
  */
 export function countActiveJobs(jobs: PrintJobDto[]): number {
-  return jobs.filter(job =>
-    job.status === 'PRINTING' || job.status === 'STARTING'
+  return jobs.filter(
+    (job) => job.status === 'PRINTING' || job.status === 'STARTING'
   ).length
 }
 
@@ -60,9 +70,11 @@ export function countJobsByStatus(
 ): number {
   const cutoffTime = Date.now() - timeWindowHours * 60 * 60 * 1000
 
-  return jobs.filter(job => {
+  return jobs.filter((job) => {
     if (job.status !== status) return false
-    const jobTime = job.endedAt ? new Date(job.endedAt).getTime() : new Date(job.createdAt).getTime()
+    const jobTime = job.endedAt
+      ? new Date(job.endedAt).getTime()
+      : new Date(job.createdAt).getTime()
     return jobTime >= cutoffTime
   }).length
 }
@@ -73,19 +85,26 @@ export function countJobsByStatus(
  * @param timeWindowHours - Time window in hours (default 24)
  * @returns Average print time in hours
  */
-export function calculateAveragePrintTime(jobs: PrintJobDto[], timeWindowHours: number = 24): number {
+export function calculateAveragePrintTime(
+  jobs: PrintJobDto[],
+  timeWindowHours: number = 24
+): number {
   const cutoffTime = Date.now() - timeWindowHours * 60 * 60 * 1000
 
-  const completedJobs = jobs.filter(job => {
-    if (job.status !== 'COMPLETED' || !job.statistics?.actualPrintTimeSeconds) return false
-    const jobTime = job.endedAt ? new Date(job.endedAt).getTime() : new Date(job.createdAt).getTime()
+  const completedJobs = jobs.filter((job) => {
+    if (job.status !== 'COMPLETED' || !job.statistics?.actualPrintTimeSeconds)
+      return false
+    const jobTime = job.endedAt
+      ? new Date(job.endedAt).getTime()
+      : new Date(job.createdAt).getTime()
     return jobTime >= cutoffTime
   })
 
   if (completedJobs.length === 0) return 0
 
-  const totalSeconds = completedJobs.reduce((sum, job) =>
-    sum + (job.statistics?.actualPrintTimeSeconds || 0), 0
+  const totalSeconds = completedJobs.reduce(
+    (sum, job) => sum + (job.statistics?.actualPrintTimeSeconds || 0),
+    0
   )
 
   return totalSeconds / completedJobs.length / 3600 // Convert to hours
@@ -97,17 +116,23 @@ export function calculateAveragePrintTime(jobs: PrintJobDto[], timeWindowHours: 
  * @param timeWindowHours - Time window in hours (default 24)
  * @returns Total print time in hours
  */
-export function calculateTotalPrintTime(jobs: PrintJobDto[], timeWindowHours: number = 24): number {
+export function calculateTotalPrintTime(
+  jobs: PrintJobDto[],
+  timeWindowHours: number = 24
+): number {
   const cutoffTime = Date.now() - timeWindowHours * 60 * 60 * 1000
 
-  const recentJobs = jobs.filter(job => {
+  const recentJobs = jobs.filter((job) => {
     if (!job.statistics?.actualPrintTimeSeconds) return false
-    const jobTime = job.endedAt ? new Date(job.endedAt).getTime() : new Date(job.createdAt).getTime()
+    const jobTime = job.endedAt
+      ? new Date(job.endedAt).getTime()
+      : new Date(job.createdAt).getTime()
     return jobTime >= cutoffTime
   })
 
-  const totalSeconds = recentJobs.reduce((sum, job) =>
-    sum + (job.statistics?.actualPrintTimeSeconds || 0), 0
+  const totalSeconds = recentJobs.reduce(
+    (sum, job) => sum + (job.statistics?.actualPrintTimeSeconds || 0),
+    0
   )
 
   return totalSeconds / 3600 // Convert to hours
@@ -148,4 +173,3 @@ export function calculateJobPerformanceMetrics(
     totalPrintTimeHours: calculateTotalPrintTime(jobs, timeWindowHours)
   }
 }
-

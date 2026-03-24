@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import OctoFarmImportDialog from '@/components/Generic/Dialogs/OctoFarmImportDialog.vue'
 import { createPinia } from 'pinia'
 import { createVuetify } from 'vuetify'
@@ -19,26 +19,28 @@ vi.mock('@/backend', () => ({
 }))
 
 import { PrintersService } from '@/backend'
-import { VStepperVertical, VStepperVerticalItem } from "vuetify/labs/components";
+import { VStepperVertical, VStepperVerticalItem } from 'vuetify/labs/components'
 const mockBatchImport = PrintersService.batchImportPrinters as any
 
 const testData = {
-  databases: [[
-    {
-      _id: '1',
-      disabled: false,
-      apikey: 'KEY1',
-      printerURL: 'http://192.168.1.100',
-      settingsAppearance: { name: 'Ender 3' }
-    },
-    {
-      _id: '2',
-      disabled: false,
-      apikey: 'KEY2',
-      printerURL: 'http://192.168.1.101',
-      settingsAppearance: { name: 'Prusa MK3S' }
-    }
-  ]]
+  databases: [
+    [
+      {
+        _id: '1',
+        disabled: false,
+        apikey: 'KEY1',
+        printerURL: 'http://192.168.1.100',
+        settingsAppearance: { name: 'Ender 3' }
+      },
+      {
+        _id: '2',
+        disabled: false,
+        apikey: 'KEY2',
+        printerURL: 'http://192.168.1.101',
+        settingsAppearance: { name: 'Prusa MK3S' }
+      }
+    ]
+  ]
 }
 
 describe('OctoFarm Import Dialog', () => {
@@ -48,12 +50,15 @@ describe('OctoFarm Import Dialog', () => {
     vi.clearAllMocks()
     wrapper = mount(OctoFarmImportDialog, {
       global: {
-        plugins: [createVuetify({
-          components: {
-            VStepperVerticalItem,
-            VStepperVertical
-          }
-        }), createPinia()]
+        plugins: [
+          createVuetify({
+            components: {
+              VStepperVerticalItem,
+              VStepperVertical
+            }
+          }),
+          createPinia()
+        ]
       }
     })
   })

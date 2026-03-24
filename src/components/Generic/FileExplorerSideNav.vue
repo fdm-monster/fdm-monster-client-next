@@ -36,7 +36,10 @@
           </div>
 
           <v-btn
-            v-if="storedSideNavPrinter && hasWebInterface(storedSideNavPrinter.printerType)"
+            v-if="
+              storedSideNavPrinter &&
+              hasWebInterface(storedSideNavPrinter.printerType)
+            "
             icon="open_in_new"
             variant="text"
             size="small"
@@ -115,7 +118,9 @@
         </template>
         <div>
           <div class="font-weight-bold">Under Maintenance</div>
-          <div class="text-caption">{{ storedSideNavPrinter.disabledReason }}</div>
+          <div class="text-caption">
+            {{ storedSideNavPrinter.disabledReason }}
+          </div>
         </div>
       </v-alert>
 
@@ -149,9 +154,7 @@
       elevation="1"
       rounded="lg"
     >
-      <v-card-title class="text-subtitle-1 py-3">
-        Quick Actions
-      </v-card-title>
+      <v-card-title class="text-subtitle-1 py-3"> Quick Actions </v-card-title>
 
       <v-card-text class="pt-0">
         <div class="d-flex flex-wrap ga-2">
@@ -191,7 +194,9 @@
             variant="outlined"
             @click="toggleMaintenance()"
           >
-            <v-icon start>{{ isUnderMaintenance ? 'build_circle' : 'build' }}</v-icon>
+            <v-icon start>{{
+              isUnderMaintenance ? 'build_circle' : 'build'
+            }}</v-icon>
             {{ isUnderMaintenance ? 'Update' : 'Maintenance' }}
           </v-btn>
 
@@ -214,9 +219,7 @@
       elevation="1"
       rounded="lg"
     >
-      <v-card-title class="text-subtitle-1 py-3">
-        Print Controls
-      </v-card-title>
+      <v-card-title class="text-subtitle-1 py-3"> Print Controls </v-card-title>
 
       <v-card-text class="pt-0">
         <div class="d-flex flex-wrap ga-2">
@@ -251,7 +254,7 @@
       class="ma-3 flex-grow-1 d-flex flex-column files-card"
       elevation="0"
       rounded="lg"
-      style="min-height: 0;"
+      style="min-height: 0"
     >
       <v-card-title class="d-flex align-center py-3">
         <span class="text-subtitle-1">Files</span>
@@ -266,14 +269,22 @@
 
       <v-divider />
 
-      <v-card-text class="pt-3 pb-0 flex-grow-1 d-flex flex-column" style="min-height: 0;">
+      <v-card-text
+        class="pt-3 pb-0 flex-grow-1 d-flex flex-column"
+        style="min-height: 0"
+      >
         <!-- Breadcrumb Navigation -->
-        <div class="breadcrumb-container mb-3 d-flex align-center flex-shrink-0">
+        <div
+          class="breadcrumb-container mb-3 d-flex align-center flex-shrink-0"
+        >
           <v-btn
             size="x-small"
             variant="text"
             :disabled="breadcrumbParts.length === 0"
-            @click="fileExplorer.setCurrentPath(''); refreshFiles()"
+            @click="
+              fileExplorer.setCurrentPath('')
+              refreshFiles()
+            "
           >
             <v-icon start>home</v-icon>
             Root
@@ -335,9 +346,7 @@
             >
               folder_open
             </v-icon>
-            <div class="text-body-2 text-medium-emphasis">
-              No files found
-            </div>
+            <div class="text-body-2 text-medium-emphasis">No files found</div>
           </div>
 
           <!-- File List -->
@@ -349,11 +358,19 @@
               v-for="item in fileTree"
               :key="item.id"
               :class="{ 'cursor-pointer': item.type === 'folder' }"
-              @click="item.type === 'folder' ? navigateToDir(item.path) : undefined"
+              @click="
+                item.type === 'folder' ? navigateToDir(item.path) : undefined
+              "
             >
               <template #prepend>
                 <v-icon
-                  :color="item.type === 'file' && item.file && isFileBeingPrinted(item.file) ? 'primary' : 'medium-emphasis'"
+                  :color="
+                    item.type === 'file' &&
+                    item.file &&
+                    isFileBeingPrinted(item.file)
+                      ? 'primary'
+                      : 'medium-emphasis'
+                  "
                 >
                   {{ getTreeIcon(item) }}
                 </v-icon>
@@ -362,7 +379,12 @@
               <v-list-item-title>
                 <div class="d-flex align-center">
                   <span
-                    :class="{ 'text-primary font-weight-bold': item.type === 'file' && item.file && isFileBeingPrinted(item.file) }"
+                    :class="{
+                      'text-primary font-weight-bold':
+                        item.type === 'file' &&
+                        item.file &&
+                        isFileBeingPrinted(item.file)
+                    }"
                     class="text-body-2"
                     :title="item.path"
                   >
@@ -412,7 +434,6 @@
         </div>
       </v-card-text>
     </v-card>
-
   </v-navigation-drawer>
 </template>
 
@@ -426,9 +447,7 @@ import { formatFileSize } from '@/utils/file-size.util'
 import { usePrinterStore } from '@/store/printer.store'
 import { DialogName } from './Dialogs/dialog.constants'
 import { usePrinterStateStore } from '@/store/printer-state.store'
-import {
-  getPrinterTypeName,
-} from "@/shared/printer-types.constants";
+import { getPrinterTypeName } from '@/shared/printer-types.constants'
 import { hasWebInterface } from '@/shared/printer-capabilities.constants'
 import { useDialog } from '@/shared/dialog.composable'
 import { useFileExplorer } from '@/shared/file-explorer.composable'
@@ -542,7 +561,11 @@ const refreshFiles = async () => {
   if (!currentPrinterId) return
   try {
     const startDir = currentPath.value || undefined
-    fileList.value = await printersStore.loadPrinterFiles(currentPrinterId, false, startDir)
+    fileList.value = await printersStore.loadPrinterFiles(
+      currentPrinterId,
+      false,
+      startDir
+    )
   } catch (error) {
     console.warn('Failed to load printer files:', error)
     fileExplorer.setError(true)
@@ -558,7 +581,7 @@ const navigateToDir = async (dirPath: string) => {
 }
 
 const navigateToBreadcrumb = async (index: number) => {
-  const pathParts = currentPath.value.split('/').filter(p => p.length > 0)
+  const pathParts = currentPath.value.split('/').filter((p) => p.length > 0)
   const newPath = pathParts.slice(0, index + 1).join('/')
   fileExplorer.setCurrentPath(newPath)
   await refreshFiles()
@@ -566,7 +589,7 @@ const navigateToBreadcrumb = async (index: number) => {
 
 const breadcrumbParts = computed(() => {
   if (!currentPath.value) return []
-  return currentPath.value.split('/').filter(p => p.length > 0)
+  return currentPath.value.split('/').filter((p) => p.length > 0)
 })
 const deleteFile = async (file: FileDto) => {
   if (!printerId.value) return
@@ -635,13 +658,17 @@ async function toggleMaintenance() {
     throw new Error('Cant toggle enabled, sidenav printer unset')
   }
   if (isUnderMaintenance.value) {
-    const activeLog = await PrinterMaintenanceLogService.getActiveByPrinterId(printerId.value)
+    const activeLog = await PrinterMaintenanceLogService.getActiveByPrinterId(
+      printerId.value
+    )
     if (activeLog) {
       await PrinterMaintenanceLogService.complete(activeLog.id, {})
     }
     return
   }
-  await useDialog(DialogName.PrinterMaintenanceDialog).openDialog({ printerId: printerId.value })
+  await useDialog(DialogName.PrinterMaintenanceDialog).openDialog({
+    printerId: printerId.value
+  })
 
   closeDrawer()
 }
@@ -671,7 +698,9 @@ async function clickResumePrint() {
 
 function clickSettings() {
   if (!storedSideNavPrinter.value) return
-  useDialog(DialogName.AddOrUpdatePrinterDialog).openDialog({ id: storedSideNavPrinter.value.id })
+  useDialog(DialogName.AddOrUpdatePrinterDialog).openDialog({
+    id: storedSideNavPrinter.value.id
+  })
   closeDrawer()
 }
 

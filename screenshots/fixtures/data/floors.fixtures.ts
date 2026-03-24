@@ -3,17 +3,17 @@
  */
 
 export interface FloorDto {
-  id: number;
-  name: string;
-  order: number;
-  printers: PositionDto[];
+  id: number
+  name: string
+  order: number
+  printers: PositionDto[]
 }
 
 export interface PositionDto {
-  x: number;
-  y: number;
-  printerId: number;
-  floorId: number;
+  x: number
+  y: number
+  printerId: number
+  floorId: number
 }
 
 export const mockFloors: FloorDto[] = [
@@ -23,17 +23,15 @@ export const mockFloors: FloorDto[] = [
     order: 1,
     printers: [
       { x: 0, y: 0, printerId: 1, floorId: 1 },
-      { x: 1, y: 0, printerId: 2, floorId: 1 },
-    ],
+      { x: 1, y: 0, printerId: 2, floorId: 1 }
+    ]
   },
   {
     id: 2,
     name: 'Test Lab',
     order: 2,
-    printers: [
-      { x: 0, y: 0, printerId: 3, floorId: 2 },
-    ],
-  },
-];
+    printers: [{ x: 0, y: 0, printerId: 3, floorId: 2 }]
+  }
+]
 
-export const mockFloorsEmpty: FloorDto[] = [];
+export const mockFloorsEmpty: FloorDto[] = []

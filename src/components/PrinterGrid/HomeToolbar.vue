@@ -80,7 +80,10 @@
     </v-btn>
 
     <!-- Unplaced printers menu -->
-    <v-menu v-if="floorStore.floorlessPrinters.length" :close-on-content-click="false">
+    <v-menu
+      v-if="floorStore.floorlessPrinters.length"
+      :close-on-content-click="false"
+    >
       <template v-slot:activator="{ props }">
         <v-btn
           v-bind="props"
@@ -95,7 +98,11 @@
       </template>
       <v-card min-width="300">
         <v-card-title class="text-subtitle-1">
-          <v-icon class="mr-2" color="warning">warning</v-icon>
+          <v-icon
+            class="mr-2"
+            color="warning"
+            >warning</v-icon
+          >
           Unplaced Printers
         </v-card-title>
         <v-card-text>
@@ -112,9 +119,18 @@
               style="cursor: move"
               @dragstart="onUnplacedDragStart(printer, $event)"
             >
-              <v-icon start size="x-small">drag_indicator</v-icon>
+              <v-icon
+                start
+                size="x-small"
+                >drag_indicator</v-icon
+              >
               <span class="font-weight-medium">{{ printer.name }}</span>
-              <v-chip size="x-small" variant="flat" class="ml-2 px-2" style="height: 18px">
+              <v-chip
+                size="x-small"
+                variant="flat"
+                class="ml-2 px-2"
+                style="height: 18px"
+              >
                 {{ getPrinterTypeName(printer.printerType) }}
               </v-chip>
             </v-chip>
@@ -123,13 +139,13 @@
       </v-card>
     </v-menu>
 
-    <v-spacer/>
+    <v-spacer />
 
     <!-- Grid size controls - always visible -->
-    <GridSizeControl class="ml-4"/>
+    <GridSizeControl class="ml-4" />
 
     <!-- Grid settings menu -->
-    <GridSettingsMenu class="ml-4"/>
+    <GridSettingsMenu class="ml-4" />
   </v-toolbar>
 </template>
 
@@ -152,12 +168,8 @@ const gridStore = useGridStore()
 const settingsStore = useSettingsStore()
 const autoPlacing = ref(false)
 
-const {
-  selectedTags,
-  selectedPrinterTypes,
-  tags,
-  loadTags
-} = usePrinterFilters()
+const { selectedTags, selectedPrinterTypes, tags, loadTags } =
+  usePrinterFilters()
 
 const selectedFloorToggleIndex = computed(() => floorStore.selectedFloorIndex)
 
@@ -221,14 +233,14 @@ async function autoPlacePrinters() {
 
     // Get occupied positions
     const occupiedPositions = new Set(
-      floorStore.selectedFloor.printers.map(p => `${ p.x },${ p.y }`)
+      floorStore.selectedFloor.printers.map((p) => `${p.x},${p.y}`)
     )
 
     // Find available positions
     const availablePositions: { x: number; y: number }[] = []
     for (let y = 0; y < gridRows; y++) {
       for (let x = 0; x < gridCols; x++) {
-        const posKey = `${ x },${ y }`
+        const posKey = `${x},${y}`
         if (!occupiedPositions.has(posKey)) {
           availablePositions.push({ x, y })
         }
@@ -236,7 +248,10 @@ async function autoPlacePrinters() {
     }
 
     // Place each printer in the next available position
-    const printersToPlace = Math.min(sortedPrinters.length, availablePositions.length)
+    const printersToPlace = Math.min(
+      sortedPrinters.length,
+      availablePositions.length
+    )
     for (let i = 0; i < printersToPlace; i++) {
       const printer = sortedPrinters[i]
       const position = availablePositions[i]

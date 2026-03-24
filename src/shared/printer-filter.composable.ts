@@ -1,6 +1,10 @@
 import { ref, computed } from 'vue'
 import type { PrinterDto } from '@/models/printers/printer.model'
-import { PrinterTagService, TagDto, TagWithPrintersDto } from "@/backend/printer-tag.service"
+import {
+  PrinterTagService,
+  TagDto,
+  TagWithPrintersDto
+} from '@/backend/printer-tag.service'
 import { useGridStore } from '@/store/grid.store'
 
 export function usePrinterFilters() {
@@ -19,7 +23,11 @@ export function usePrinterFilters() {
 
   const loadTags = async () => {
     tagsWithPrinters.value = await PrinterTagService.getTagsWithPrinters()
-    tags.value = tagsWithPrinters.value.map(t => ({ id: t.id, name: t.name, color: t.color }))
+    tags.value = tagsWithPrinters.value.map((t) => ({
+      id: t.id,
+      name: t.name,
+      color: t.color
+    }))
   }
 
   // Build a Map for O(1) printer->tags lookup
@@ -42,7 +50,7 @@ export function usePrinterFilters() {
     const printerTags = printerTagsMap.value.get(printerId)
     if (!printerTags) return false
 
-    return selectedTags.value.every(tagId => printerTags.has(tagId))
+    return selectedTags.value.every((tagId) => printerTags.has(tagId))
   }
 
   const matchesPrinterTypeFilter = (printer: PrinterDto): boolean => {
@@ -58,7 +66,9 @@ export function usePrinterFilters() {
     return printers.filter(matchesPrinter)
   }
 
-  const filterPrinterMatrix = (matrix: (PrinterDto | undefined)[][]): (PrinterDto | undefined)[][] => {
+  const filterPrinterMatrix = (
+    matrix: (PrinterDto | undefined)[][]
+  ): (PrinterDto | undefined)[][] => {
     const hasTagFilter = selectedTags.value.length > 0
     const hasPrinterTypeFilter = selectedPrinterTypes.value.length > 0
 
@@ -66,8 +76,8 @@ export function usePrinterFilters() {
       return matrix
     }
 
-    return matrix.map(row =>
-      row.map(printer => {
+    return matrix.map((row) =>
+      row.map((printer) => {
         if (!printer) return undefined
         return matchesPrinter(printer) ? printer : undefined
       })

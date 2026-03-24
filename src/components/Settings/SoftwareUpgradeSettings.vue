@@ -1,15 +1,16 @@
 <template>
   <v-card>
     <v-card-text>
-      <SettingSection title="Current versions in use" :usecols="false">
+      <SettingSection
+        title="Current versions in use"
+        :usecols="false"
+      >
         <div>Your server's version is: {{ serverVersion }}</div>
         <div>Your client's version is: {{ version }}</div>
         <div v-if="monsterPiVersion">
           Your MonsterPi version is: {{ monsterPiVersion }}
         </div>
-        <div v-else>
-          MonsterPi: No MonsterPi distro was detected.
-        </div>
+        <div v-else>MonsterPi: No MonsterPi distro was detected.</div>
       </SettingSection>
 
       <v-divider />
@@ -71,8 +72,8 @@
           max-width="500px"
           class="mb-3"
         >
-          You are viewing prereleases, please install such versions at your
-          own risk!
+          You are viewing prereleases, please install such versions at your own
+          risk!
         </v-alert>
 
         <v-checkbox

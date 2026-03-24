@@ -18,12 +18,22 @@
 
       <v-divider class="mb-4" />
 
-      <div v-if="getEvents().length === 0" class="text-center py-6 text-medium-emphasis">
-        <v-icon icon="mdi:mdi-information-outline" size="32" class="mb-2 opacity-50" />
+      <div
+        v-if="getEvents().length === 0"
+        class="text-center py-6 text-medium-emphasis"
+      >
+        <v-icon
+          icon="mdi:mdi-information-outline"
+          size="32"
+          class="mb-2 opacity-50"
+        />
         <div class="text-caption">No test results yet</div>
       </div>
 
-      <div v-else class="checks-list">
+      <div
+        v-else
+        class="checks-list"
+      >
         <div
           v-for="(item, index) of getEvents()"
           :key="index"
@@ -31,7 +41,9 @@
         >
           <v-icon
             :color="item.color"
-            :icon="item.failure ? 'mdi:mdi-close-circle' : 'mdi:mdi-check-circle'"
+            :icon="
+              item.failure ? 'mdi:mdi-close-circle' : 'mdi:mdi-check-circle'
+            "
             size="18"
             class="mt-1 mr-3"
           />
@@ -49,7 +61,10 @@
         </div>
       </div>
 
-      <v-divider v-if="getEvents().length > 0" class="mt-4 mb-3" />
+      <v-divider
+        v-if="getEvents().length > 0"
+        class="mt-4 mb-3"
+      />
 
       <div class="d-flex justify-center">
         <slot />
@@ -82,6 +97,6 @@ const getEvents = () => {
 }
 
 const hasFailures = computed(() => {
-  return getEvents().some(e => e.failure)
+  return getEvents().some((e) => e.failure)
 })
 </script>

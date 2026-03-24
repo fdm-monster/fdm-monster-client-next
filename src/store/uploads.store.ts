@@ -42,21 +42,21 @@ export const useUploadsStore = defineStore('Uploads', {
       const snackbar = useSnackbar()
       // Dont upload when queue empty
       if (!this.queuedUploads?.length) return
-      this.uploadingNow = true;
-      const { file, printer, startPrint } = this.nextUpload;
+      this.uploadingNow = true
+      const { file, printer, startPrint } = this.nextUpload
       // We'd rather fail fast and avoid the same upload failing many times
-      this.queuedUploads.splice(0, 1);
+      this.queuedUploads.splice(0, 1)
 
       try {
-        await PrinterRemoteFileService.uploadFile(printer, file, startPrint);
+        await PrinterRemoteFileService.uploadFile(printer, file, startPrint)
       } catch (e: any) {
         if (e.isAxiosError) {
           const failedUpload: FailedQueuedUpload = {
             file,
             printer,
             error: e,
-            startPrint: false,
-          };
+            startPrint: false
+          }
           this.failedUploads.push(failedUpload)
           snackbar.openErrorMessage({
             title: 'Upload failure',

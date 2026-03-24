@@ -1,5 +1,8 @@
 <template>
-  <v-tooltip v-if="hasEmergencyStop(printer.printerType)" location="top">
+  <v-tooltip
+    v-if="hasEmergencyStop(printer.printerType)"
+    location="top"
+  >
     <template v-slot:activator="{ props }">
       <v-badge
         v-if="printer.enabled"
@@ -26,7 +29,7 @@
 <script lang="ts" setup>
 import { PrinterDto } from '@/models/printers/printer.model'
 import { hasEmergencyStop } from '@/shared/printer-capabilities.constants'
-import { PrintersService } from "@/backend";
+import { PrintersService } from '@/backend'
 
 const props = defineProps<{
   printer: PrinterDto

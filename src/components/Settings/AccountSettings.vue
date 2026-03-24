@@ -1,13 +1,21 @@
 <template>
   <v-card>
     <v-card-text>
-      <v-alert v-if="!loginEnabled" color="primary" variant="tonal" class="mb-4">
+      <v-alert
+        v-if="!loginEnabled"
+        color="primary"
+        variant="tonal"
+        class="mb-4"
+      >
         Login is currently disabled. To adjust your username and password,
-        please enable that setting at the Server Protection settings page.
-        Then log in and visit this page.
+        please enable that setting at the Server Protection settings page. Then
+        log in and visit this page.
       </v-alert>
 
-      <SettingSection title="Change Username" :usecols="false">
+      <SettingSection
+        title="Change Username"
+        :usecols="false"
+      >
         <v-text-field
           v-model="formData.username"
           :disabled="!loginEnabled"
@@ -25,7 +33,10 @@
 
       <v-divider />
 
-      <SettingSection title="Change Password" :usecols="false">
+      <SettingSection
+        title="Change Password"
+        :usecols="false"
+      >
         <v-text-field
           v-model="formData.oldPassword"
           :disabled="!loginEnabled"

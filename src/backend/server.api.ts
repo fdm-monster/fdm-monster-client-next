@@ -1,5 +1,5 @@
 export class ServerApi {
-  static readonly base = "/api/v2"
+  static readonly base = '/api/v2'
   static readonly firstTimeSetupRoute = `${ServerApi.base}/first-time-setup`
   static readonly completeFirstTimeSetupRoute = `${ServerApi.firstTimeSetupRoute}/complete`
   static readonly printerRoute = `${ServerApi.base}/printer`
@@ -35,7 +35,8 @@ export class ServerApi {
   static readonly slicerApiKeyRoute = `${ServerApi.settingsRoute}/slicer-api-key`
   static readonly regenerateSlicerApiKeyRoute = `${ServerApi.slicerApiKeyRoute}/regenerate`
 
-  static readonly deleteTagRoute = (id: number) => `${ServerApi.base}/printer-tag/${id}`
+  static readonly deleteTagRoute = (id: number) =>
+    `${ServerApi.base}/printer-tag/${id}`
 
   static readonly updateTagNameRoute = (id: number) =>
     `${ServerApi.base}/printer-tag/${id}/name`
@@ -48,7 +49,8 @@ export class ServerApi {
 
   static readonly deletePrinterFromTagRoute = ServerApi.addPrinterToTagRoute
 
-  static readonly getPrinterRoute = (id: number) => `${ServerApi.printerRoute}/${id}`
+  static readonly getPrinterRoute = (id: number) =>
+    `${ServerApi.printerRoute}/${id}`
   static readonly postPrinterDisabledReasonRoute = (id: number) =>
     `${ServerApi.printerRoute}/${id}/disabled-reason`
   static readonly getPrinterLoginDetailsRoute = (id: number) =>
@@ -62,7 +64,8 @@ export class ServerApi {
     `${ServerApi.printerSettingsRoute}/${id}`
   static readonly syncPrinterNameSettingRoute = (id: number) =>
     `${ServerApi.getPrinterSettingsRoute(id)}/sync-printername`
-  static readonly getFloorRoute = (id: number) => `${ServerApi.floorRoute}/${id}`
+  static readonly getFloorRoute = (id: number) =>
+    `${ServerApi.floorRoute}/${id}`
   static readonly addOrRemovePrinterFromFloorRoute = (id: number) =>
     `${ServerApi.getFloorRoute(id)}/printer`
   static readonly sendQuickStopM112Route = (id: number) =>
@@ -74,27 +77,35 @@ export class ServerApi {
   static readonly printerFilesClearRoute = (id: number) =>
     `${ServerApi.printerRemoteFilesRoute}/${id}/clear`
   static readonly printerFilesStartPrintRoute = (id: number) =>
-    `${ServerApi.printerRemoteFilesRoute}/${id}/print`;
+    `${ServerApi.printerRemoteFilesRoute}/${id}/print`
   static readonly printerFilesUploadRoute = (id: number) =>
     `${ServerApi.printerRemoteFilesRoute}/${id}/upload`
-  static readonly printerEnabledRoute = (id: number) => `${ServerApi.getPrinterRoute(id)}/enabled`
+  static readonly printerEnabledRoute = (id: number) =>
+    `${ServerApi.getPrinterRoute(id)}/enabled`
   static readonly printerSerialConnectRoute = (id: number) =>
     `${ServerApi.getPrinterRoute(id)}/serial-connect`
-  static readonly printerJogCommandRoute = (id: number) => `${ServerApi.getPrinterRoute(id)}/jog`
-  static readonly printerHomeCommandRoute = (id: number) => `${ServerApi.getPrinterRoute(id)}/home`
+  static readonly printerJogCommandRoute = (id: number) =>
+    `${ServerApi.getPrinterRoute(id)}/jog`
+  static readonly printerHomeCommandRoute = (id: number) =>
+    `${ServerApi.getPrinterRoute(id)}/home`
   static readonly printerSerialDisconnectRoute = (id: number) =>
     `${ServerApi.getPrinterRoute(id)}/serial-disconnect`
 
-  static readonly printerJobRoute = (id: number) => `${ServerApi.getPrinterRoute(id)}/job`
-  static readonly printerStopJobRoute = (id: number) => `${ServerApi.printerJobRoute(id)}/stop`
-  static readonly printerPauseJobRoute = (id: number) => `${ServerApi.printerJobRoute(id)}/pause`
-  static readonly printerResumeJobRoute = (id: number) => `${ServerApi.printerJobRoute(id)}/resume`
+  static readonly printerJobRoute = (id: number) =>
+    `${ServerApi.getPrinterRoute(id)}/job`
+  static readonly printerStopJobRoute = (id: number) =>
+    `${ServerApi.printerJobRoute(id)}/stop`
+  static readonly printerPauseJobRoute = (id: number) =>
+    `${ServerApi.printerJobRoute(id)}/pause`
+  static readonly printerResumeJobRoute = (id: number) =>
+    `${ServerApi.printerJobRoute(id)}/resume`
 
   static readonly userChangeUsernameRoute = (id: number) =>
     `${ServerApi.userRoute}/${id}/change-username`
   static readonly userChangePasswordRoute = (id: number) =>
     `${ServerApi.userRoute}/${id}/change-password`
-  static readonly userDeleteRoute = (id: number) => `${ServerApi.userRoute}/${id}`
+  static readonly userDeleteRoute = (id: number) =>
+    `${ServerApi.userRoute}/${id}`
   static readonly userSetVerifiedRoute = (id: number) =>
     `${ServerApi.userRoute}/${id}/set-verified`
   static readonly userSetRootUserRoute = (id: number) =>

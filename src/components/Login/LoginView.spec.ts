@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vite-plus/test'
 import LoginView from '@/components/Login/LoginView.vue' // Adjust the path as necessary
 import LoginForm from '@/components/Login/LoginForm.vue'
 import Logo from '@/components/Login/Logo.vue'

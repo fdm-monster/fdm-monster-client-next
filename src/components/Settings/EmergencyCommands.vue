@@ -117,19 +117,15 @@ const printerStore = usePrinterStore()
 const isLoading = ref(false)
 
 const hasUsbPrinters = computed(() => {
-  return printerStore.printers.some(p => hasSerialConnection(p.printerType))
+  return printerStore.printers.some((p) => hasSerialConnection(p.printerType))
 })
 
 const noPrintersOrAllDisabled = computed(() => {
-  return (
-    printerStore.printers.every((printer) => !printer.enabled)
-  )
+  return printerStore.printers.every((printer) => !printer.enabled)
 })
 
 const noPrintersOrAllEnabled = computed(() => {
-  return (
-    printerStore.printers.every((printer) => !!printer.enabled)
-  )
+  return printerStore.printers.every((printer) => !!printer.enabled)
 })
 
 async function batchToggleEnabled(enabled: boolean) {

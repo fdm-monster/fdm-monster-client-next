@@ -1,5 +1,8 @@
 <template>
-  <v-tooltip v-if="hasSerialConnection(printer.printerType)" location="top">
+  <v-tooltip
+    v-if="hasSerialConnection(printer.printerType)"
+    location="top"
+  >
     <template v-slot:activator="{ props }">
       <v-badge
         v-if="printer.enabled"

@@ -6,9 +6,13 @@
   >
     <v-card v-if="log">
       <v-card-title class="d-flex align-center py-3 px-4">
-        <v-icon class="mr-2" color="primary">info</v-icon>
+        <v-icon
+          class="mr-2"
+          color="primary"
+          >info</v-icon
+        >
         <span class="text-h6">Maintenance Log Details</span>
-        <v-spacer/>
+        <v-spacer />
         <v-btn
           icon="close"
           variant="text"
@@ -16,7 +20,7 @@
         />
       </v-card-title>
 
-      <v-divider/>
+      <v-divider />
 
       <v-card-text class="py-4">
         <v-row>
@@ -33,10 +37,17 @@
           </v-col>
 
           <!-- Printer Information -->
-          <v-col cols="12" md="6">
+          <v-col
+            cols="12"
+            md="6"
+          >
             <div class="text-subtitle-2 text-medium-emphasis mb-2">Printer</div>
             <div class="d-flex align-center">
-              <v-avatar size="32" class="mr-2" color="primary">
+              <v-avatar
+                size="32"
+                class="mr-2"
+                color="primary"
+              >
                 <v-icon>print</v-icon>
               </v-avatar>
               <div>
@@ -51,10 +62,17 @@
           </v-col>
 
           <!-- Created Information -->
-          <v-col cols="12" md="6">
+          <v-col
+            cols="12"
+            md="6"
+          >
             <div class="text-subtitle-2 text-medium-emphasis mb-2">Created</div>
             <div class="d-flex align-center">
-              <v-avatar size="32" class="mr-2" color="secondary">
+              <v-avatar
+                size="32"
+                class="mr-2"
+                color="secondary"
+              >
                 <v-icon>person</v-icon>
               </v-avatar>
               <div>
@@ -69,10 +87,20 @@
           </v-col>
 
           <!-- Completed Information -->
-          <v-col v-if="log.completed && log.completedBy" cols="12" md="6">
-            <div class="text-subtitle-2 text-medium-emphasis mb-2">Completed</div>
+          <v-col
+            v-if="log.completed && log.completedBy"
+            cols="12"
+            md="6"
+          >
+            <div class="text-subtitle-2 text-medium-emphasis mb-2">
+              Completed
+            </div>
             <div class="d-flex align-center">
-              <v-avatar size="32" class="mr-2" color="secondary">
+              <v-avatar
+                size="32"
+                class="mr-2"
+                color="secondary"
+              >
                 <v-icon>person</v-icon>
               </v-avatar>
               <div>
@@ -87,8 +115,13 @@
           </v-col>
 
           <!-- Duration -->
-          <v-col cols="12" md="6">
-            <div class="text-subtitle-2 text-medium-emphasis mb-2">Duration</div>
+          <v-col
+            cols="12"
+            md="6"
+          >
+            <div class="text-subtitle-2 text-medium-emphasis mb-2">
+              Duration
+            </div>
             <v-chip
               :color="log.completed ? 'info' : 'warning'"
               prepend-icon="schedule"
@@ -99,13 +132,16 @@
           </v-col>
 
           <v-col cols="12">
-            <v-divider/>
+            <v-divider />
           </v-col>
 
           <!-- Cause -->
           <v-col cols="12">
             <div class="text-subtitle-2 text-medium-emphasis mb-2">Cause</div>
-            <v-card variant="tonal" color="warning">
+            <v-card
+              variant="tonal"
+              color="warning"
+            >
               <v-card-text>
                 <div class="text-body-1">
                   {{ log.metadata?.cause || 'No cause specified' }}
@@ -115,8 +151,13 @@
           </v-col>
 
           <!-- Parts Involved -->
-          <v-col v-if="log.metadata?.partsInvolved?.length" cols="12">
-            <div class="text-subtitle-2 text-medium-emphasis mb-2">Parts Involved</div>
+          <v-col
+            v-if="log.metadata?.partsInvolved?.length"
+            cols="12"
+          >
+            <div class="text-subtitle-2 text-medium-emphasis mb-2">
+              Parts Involved
+            </div>
             <div class="d-flex flex-wrap ga-2">
               <v-chip
                 v-for="(part, index) in log.metadata.partsInvolved"
@@ -131,11 +172,17 @@
           </v-col>
 
           <!-- Notes -->
-          <v-col v-if="log.metadata?.notes" cols="12">
+          <v-col
+            v-if="log.metadata?.notes"
+            cols="12"
+          >
             <div class="text-subtitle-2 text-medium-emphasis mb-2">Notes</div>
             <v-card variant="outlined">
               <v-card-text>
-                <div class="text-body-1" style="white-space: pre-wrap;">
+                <div
+                  class="text-body-1"
+                  style="white-space: pre-wrap"
+                >
                   {{ log.metadata.notes }}
                 </div>
               </v-card-text>
@@ -143,11 +190,22 @@
           </v-col>
 
           <!-- Completion Notes -->
-          <v-col v-if="log.metadata?.completionNotes" cols="12">
-            <div class="text-subtitle-2 text-medium-emphasis mb-2">Completion Notes</div>
-            <v-card variant="tonal" color="success">
+          <v-col
+            v-if="log.metadata?.completionNotes"
+            cols="12"
+          >
+            <div class="text-subtitle-2 text-medium-emphasis mb-2">
+              Completion Notes
+            </div>
+            <v-card
+              variant="tonal"
+              color="success"
+            >
               <v-card-text>
-                <div class="text-body-1" style="white-space: pre-wrap;">
+                <div
+                  class="text-body-1"
+                  style="white-space: pre-wrap"
+                >
                   {{ log.metadata.completionNotes }}
                 </div>
               </v-card-text>
@@ -156,10 +214,10 @@
         </v-row>
       </v-card-text>
 
-      <v-divider/>
+      <v-divider />
 
       <v-card-actions class="px-4 py-3">
-        <v-spacer/>
+        <v-spacer />
         <v-btn
           variant="text"
           @click="close"
@@ -195,7 +253,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
-  'updated': []
+  updated: []
 }>()
 
 function close() {
@@ -212,7 +270,9 @@ function calculateDuration() {
   if (!props.log) return '-'
 
   const start = new Date(props.log.createdAt)
-  const end = props.log.completedAt ? new Date(props.log.completedAt) : new Date()
+  const end = props.log.completedAt
+    ? new Date(props.log.completedAt)
+    : new Date()
 
   const diffSeconds = Math.floor((end.getTime() - start.getTime()) / 1000)
   return formatDuration(diffSeconds)

@@ -46,16 +46,36 @@ export function getPrinterTypeName(printerType?: number) {
  * @param fileFormat - File format (optional)
  * @returns Logo image URL or undefined
  */
-export function getPrinterTypeLogo(metadata: { printerModel?: string; [key: string]: any } | Record<string, any>, fileFormat?: string): string | undefined {
+export function getPrinterTypeLogo(
+  metadata: { printerModel?: string; [key: string]: any } | Record<string, any>,
+  fileFormat?: string
+): string | undefined {
   const printerModel = metadata?.printerModel?.toLowerCase() || ''
 
-  if (printerModel.includes('bambu') || printerModel.includes('x1') || printerModel.includes('p1')) {
+  if (
+    printerModel.includes('bambu') ||
+    printerModel.includes('x1') ||
+    printerModel.includes('p1')
+  ) {
     return bambuLogo
-  } else if (printerModel.includes('klipper') || printerModel.includes('voron') || printerModel.includes('ratrig')) {
+  } else if (
+    printerModel.includes('klipper') ||
+    printerModel.includes('voron') ||
+    printerModel.includes('ratrig')
+  ) {
     return klipperLogo
-  } else if (printerModel.includes('prusa') || printerModel.includes('mk3') || printerModel.includes('mk4') || printerModel.includes('mini')) {
+  } else if (
+    printerModel.includes('prusa') ||
+    printerModel.includes('mk3') ||
+    printerModel.includes('mk4') ||
+    printerModel.includes('mini')
+  ) {
     return prusaLinkLogo
-  } else if (printerModel.includes('ender') || printerModel.includes('creality') || fileFormat === 'gcode') {
+  } else if (
+    printerModel.includes('ender') ||
+    printerModel.includes('creality') ||
+    fileFormat === 'gcode'
+  ) {
     return octoprintLogo
   }
 

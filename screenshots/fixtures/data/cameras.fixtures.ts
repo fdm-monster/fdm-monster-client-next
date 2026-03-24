@@ -3,14 +3,14 @@
  */
 
 export interface CameraStream {
-  id: number;
-  printerId?: number;
-  streamURL: string;
-  name?: string;
-  aspectRatio?: string;
-  rotationClockwise?: number;
-  flipHorizontal?: boolean;
-  flipVertical?: boolean;
+  id: number
+  printerId?: number
+  streamURL: string
+  name?: string
+  aspectRatio?: string
+  rotationClockwise?: number
+  flipHorizontal?: boolean
+  flipVertical?: boolean
 }
 
 export const mockCameras: CameraStream[] = [
@@ -22,7 +22,7 @@ export const mockCameras: CameraStream[] = [
     aspectRatio: '16:9',
     rotationClockwise: 0,
     flipHorizontal: false,
-    flipVertical: false,
+    flipVertical: false
   },
   {
     id: 2,
@@ -32,7 +32,7 @@ export const mockCameras: CameraStream[] = [
     aspectRatio: '16:9',
     rotationClockwise: 0,
     flipHorizontal: false,
-    flipVertical: false,
+    flipVertical: false
   },
   {
     id: 3,
@@ -41,8 +41,8 @@ export const mockCameras: CameraStream[] = [
     aspectRatio: '16:9',
     rotationClockwise: 0,
     flipHorizontal: false,
-    flipVertical: false,
-  },
-];
+    flipVertical: false
+  }
+]
 
-export const mockCamerasEmpty: CameraStream[] = [];
+export const mockCamerasEmpty: CameraStream[] = []

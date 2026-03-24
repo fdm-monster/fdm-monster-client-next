@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { useDialogsStore } from "@/store/dialog.store";
-import { useFileExplorer } from "@/shared/file-explorer.composable";
+import { useDialogsStore } from '@/store/dialog.store'
+import { useFileExplorer } from '@/shared/file-explorer.composable'
 
 export interface OverlayState {
   loading: boolean
@@ -53,7 +53,11 @@ export const useOverlayStore = defineStore('Overlay', {
         this.loading = false
       }
     },
-    setError(error: string | null, url: string | null = null, response: any | null = null) {
+    setError(
+      error: string | null,
+      url: string | null = null,
+      response: any | null = null
+    ) {
       this.errorCaught = error
       this.errorUrl = url
       this.errorResponse = response

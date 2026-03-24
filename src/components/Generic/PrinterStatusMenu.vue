@@ -30,7 +30,11 @@
             </template>
             <v-list-item-title>Printing</v-list-item-title>
             <template #append>
-              <v-chip size="small" color="success">{{ printingCount }}</v-chip>
+              <v-chip
+                size="small"
+                color="success"
+                >{{ printingCount }}</v-chip
+              >
             </template>
           </v-list-item>
 
@@ -40,7 +44,11 @@
             </template>
             <v-list-item-title>Operational</v-list-item-title>
             <template #append>
-              <v-chip size="small" color="info">{{ operationalCount }}</v-chip>
+              <v-chip
+                size="small"
+                color="info"
+                >{{ operationalCount }}</v-chip
+              >
             </template>
           </v-list-item>
 
@@ -50,7 +58,11 @@
             </template>
             <v-list-item-title>Maintenance</v-list-item-title>
             <template #append>
-              <v-chip size="small" color="warning">{{ maintenanceCount }}</v-chip>
+              <v-chip
+                size="small"
+                color="warning"
+                >{{ maintenanceCount }}</v-chip
+              >
             </template>
           </v-list-item>
 
@@ -60,7 +72,11 @@
             </template>
             <v-list-item-title>Disconnected</v-list-item-title>
             <template #append>
-              <v-chip size="small" color="error">{{ disconnectedCount }}</v-chip>
+              <v-chip
+                size="small"
+                color="error"
+                >{{ disconnectedCount }}</v-chip
+              >
             </template>
           </v-list-item>
 
@@ -104,7 +120,9 @@ const printerStateStore = usePrinterStateStore()
 
 const totalPrinters = computed(() => printerStore.printers.length)
 const printingCount = computed(() => printerStateStore.printingCount)
-const operationalCount = computed(() => printerStateStore.operationalNotPrintingCount)
+const operationalCount = computed(
+  () => printerStateStore.operationalNotPrintingCount
+)
 const maintenanceCount = computed(() => printerStore.maintenanceCount)
 const disconnectedCount = computed(() => printerStore.disconnectedCount)
 const disabledCount = computed(() => printerStore.disabledCount)

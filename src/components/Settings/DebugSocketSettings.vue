@@ -8,10 +8,12 @@
           small
           @click="toggleCapture"
         >
-          <v-icon small class="mr-1">{{
-            debugStore.enabled ? "mdi:mdi-stop" : "mdi:mdi-play"
-          }}</v-icon>
-          {{ debugStore.enabled ? "Stop" : "Start" }}
+          <v-icon
+            small
+            class="mr-1"
+            >{{ debugStore.enabled ? 'mdi:mdi-stop' : 'mdi:mdi-play' }}</v-icon
+          >
+          {{ debugStore.enabled ? 'Stop' : 'Start' }}
         </v-btn>
 
         <v-btn
@@ -20,20 +22,33 @@
           small
           @click="debugStore.togglePause()"
         >
-          <v-icon small class="mr-1">{{
-            debugStore.paused ? "play_arrow" : "pause"
-          }}</v-icon>
-          {{ debugStore.paused ? "Resume" : "Pause" }}
+          <v-icon
+            small
+            class="mr-1"
+            >{{ debugStore.paused ? 'play_arrow' : 'pause' }}</v-icon
+          >
+          {{ debugStore.paused ? 'Resume' : 'Pause' }}
         </v-btn>
 
-        <v-btn small color="default" @click="debugStore.clearMessages()">
-          <v-icon small class="mr-1">delete</v-icon>
+        <v-btn
+          small
+          color="default"
+          @click="debugStore.clearMessages()"
+        >
+          <v-icon
+            small
+            class="mr-1"
+            >delete</v-icon
+          >
           Clear
         </v-btn>
 
         <v-spacer />
 
-        <v-chip small outlined>
+        <v-chip
+          small
+          outlined
+        >
           {{ debugStore.filteredMessages.length }} /
           {{ debugStore.messageCount }} messages
         </v-chip>
@@ -60,7 +75,10 @@
       </div>
 
       <!-- Messages List -->
-      <div ref="messagesContainer" class="messages-container">
+      <div
+        ref="messagesContainer"
+        class="messages-container"
+      >
         <div
           v-for="msg in debugStore.filteredMessages"
           :key="msg.id"
@@ -73,19 +91,26 @@
             :color="msg.direction === 'in' ? 'blue' : 'green'"
             class="msg-direction"
           >
-            {{ msg.direction === "in" ? "IN" : "OUT" }}
+            {{ msg.direction === 'in' ? 'IN' : 'OUT' }}
           </v-chip>
           <span class="msg-event">{{ msg.event }}</span>
           <span class="msg-preview">{{ getPreview(msg.data) }}</span>
         </div>
 
-        <div v-if="debugStore.filteredMessages.length === 0" class="no-messages">
-          <v-icon large color="grey">speaker_notes_off</v-icon>
+        <div
+          v-if="debugStore.filteredMessages.length === 0"
+          class="no-messages"
+        >
+          <v-icon
+            large
+            color="grey"
+            >speaker_notes_off</v-icon
+          >
           <div class="mt-2 grey--text">
             {{
               debugStore.enabled
-                ? "Waiting for messages..."
-                : "Click Start to begin capturing"
+                ? 'Waiting for messages...'
+                : 'Click Start to begin capturing'
             }}
           </div>
         </div>
@@ -95,65 +120,65 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, nextTick, onMounted } from "vue";
-import { useDebugSocketStore, SocketMessage } from "@/store/debug-socket.store";
-import { useDialog } from "@/shared/dialog.composable";
-import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
+import { ref, watch, nextTick, onMounted } from 'vue'
+import { useDebugSocketStore, SocketMessage } from '@/store/debug-socket.store'
+import { useDialog } from '@/shared/dialog.composable'
+import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 
-const debugStore = useDebugSocketStore();
-const jsonViewerDialog = useDialog(DialogName.JsonViewerDialog);
+const debugStore = useDebugSocketStore()
+const jsonViewerDialog = useDialog(DialogName.JsonViewerDialog)
 
-const filterText = ref("");
-const autoScroll = ref(true);
-const messagesContainer = ref<HTMLElement | null>(null);
+const filterText = ref('')
+const autoScroll = ref(true)
+const messagesContainer = ref<HTMLElement | null>(null)
 
 // Auto-start listening when page loads
 onMounted(() => {
   if (!debugStore.enabled) {
-    debugStore.enable();
+    debugStore.enable()
   }
-});
+})
 
 function toggleCapture() {
   if (debugStore.enabled) {
-    debugStore.disable();
+    debugStore.disable()
     // Reset pause state when stopping
     if (debugStore.paused) {
-      debugStore.togglePause();
+      debugStore.togglePause()
     }
   } else {
-    debugStore.enable();
+    debugStore.enable()
   }
 }
 
 function onFilterChange() {
-  debugStore.setFilter(filterText.value || "");
+  debugStore.setFilter(filterText.value || '')
 }
 
 function formatTime(date: Date): string {
-  return date.toLocaleTimeString("en-US", {
+  return date.toLocaleTimeString('en-US', {
     hour12: false,
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    fractionalSecondDigits: 3,
-  });
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    fractionalSecondDigits: 3
+  })
 }
 
 function getPreview(data: unknown): string {
   try {
-    const str = JSON.stringify(data);
-    return str.length > 100 ? str.substring(0, 100) + "..." : str;
+    const str = JSON.stringify(data)
+    return str.length > 100 ? str.substring(0, 100) + '...' : str
   } catch {
-    return String(data);
+    return String(data)
   }
 }
 
 function openJsonViewer(msg: SocketMessage) {
   jsonViewerDialog.openDialog({
-    title: `${msg.event} (${msg.direction === "in" ? "Received" : "Sent"})`,
-    data: msg.data,
-  });
+    title: `${msg.event} (${msg.direction === 'in' ? 'Received' : 'Sent'})`,
+    data: msg.data
+  })
 }
 
 // Auto-scroll when new messages arrive
@@ -161,11 +186,11 @@ watch(
   () => debugStore.messages.length,
   async () => {
     if (autoScroll.value && messagesContainer.value) {
-      await nextTick();
-      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+      await nextTick()
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
     }
   }
-);
+)
 </script>
 
 <style scoped>
@@ -175,7 +200,7 @@ watch(
   overflow-y: auto;
   background-color: #1a1a1a;
   border-radius: 4px;
-  font-family: "Fira Code", "Consolas", monospace;
+  font-family: 'Fira Code', 'Consolas', monospace;
   font-size: 11px;
 }
 

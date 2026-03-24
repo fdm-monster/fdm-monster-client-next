@@ -6,7 +6,10 @@
         <strong> Monster </strong>
       </span>
       <template v-if="pageTitle">
-        <span class="text-h6 font-weight-light text-uppercase ml-1 pl-2 page-title-divider">{{ pageTitle }}</span>
+        <span
+          class="text-h6 font-weight-light text-uppercase ml-1 pl-2 page-title-divider"
+          >{{ pageTitle }}</span
+        >
       </template>
     </v-toolbar-title>
 
@@ -54,7 +57,10 @@
           link
         />
         <v-divider v-if="isDevEnv" />
-        <v-list-item v-if="isDevEnv && expiry" disabled>
+        <v-list-item
+          v-if="isDevEnv && expiry"
+          disabled
+        >
           <template #prepend>
             <v-icon>schedule</v-icon>
           </template>
@@ -62,12 +68,18 @@
             Auth Expiry: {{ expiry }}
           </v-list-item-title>
         </v-list-item>
-        <v-list-item v-if="isDevEnv" disabled>
+        <v-list-item
+          v-if="isDevEnv"
+          disabled
+        >
           <template #prepend>
             <v-icon>wifi</v-icon>
           </template>
           <v-list-item-title class="text-caption font-monospace">
-            SocketIO: S{{ socketState.setup ? 1 : 0 }} C{{ socketState.connected ? 1 : 0 }} A{{ socketState.active ? 1 : 0 }}
+            SocketIO: S{{ socketState.setup ? 1 : 0 }} C{{
+              socketState.connected ? 1 : 0
+            }}
+            A{{ socketState.active ? 1 : 0 }}
           </v-list-item-title>
           <v-list-item-subtitle class="text-caption">
             {{ socketState.id }}
@@ -100,7 +112,7 @@ import { useAuthStore } from '@/store/auth.store'
 import { useProfileStore } from '@/store/profile.store'
 import { routeToLogin } from '@/router/utils'
 import { isDevEnv, isProdEnv } from '@/shared/app.constants'
-import { socketState } from "@/shared/socketio.service";
+import { socketState } from '@/shared/socketio.service'
 
 const profileStore = useProfileStore()
 const authStore = useAuthStore()
@@ -115,22 +127,22 @@ const pageTitles: Record<string, { title: string; subtitle?: string }> = {
   'Print Queue': {
     title: 'Print Queue'
   },
-  'CameraGridView': {
+  CameraGridView: {
     title: 'Cameras'
   },
-  'PrintersView': {
+  PrintersView: {
     title: 'Printer List'
   },
-  'PrinterGrid': {
+  PrinterGrid: {
     title: 'Printer Grid'
   },
-  'Settings': {
+  Settings: {
     title: 'Settings'
   },
-  "Files": {
+  Files: {
     title: 'Files'
   },
-  "MaintenanceLogs": {
+  MaintenanceLogs: {
     title: 'Maintenance Logs'
   }
   // Add more page titles as needed

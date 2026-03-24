@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test'
 
 /**
  * Playwright configuration for automated documentation screenshots
@@ -21,10 +21,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
 
   // Reporters
-  reporter: [
-    ['html', { outputFolder: 'playwright-report' }],
-    ['list']
-  ],
+  reporter: [['html', { outputFolder: 'playwright-report' }], ['list']],
 
   // Shared settings for all projects
   use: {
@@ -44,7 +41,7 @@ export default defineConfig({
     viewport: { width: 1920, height: 1080 },
 
     // Allow more time for screenshot operations
-    actionTimeout: 10 * 1000,
+    actionTimeout: 10 * 1000
   },
 
   // CHROME ONLY - Desktop focus, no mobile/tablet matrix (for now)
@@ -55,16 +52,18 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
         // Enable headed mode via HEADED=1 environment variable for debugging
-        headless: !process.env.HEADED,
-      },
-    },
+        headless: !process.env.HEADED
+      }
+    }
   ],
 
   // Conditional webServer - skip if SKIP_DEV_SERVER=1 (for CI where server runs separately)
-  webServer: process.env.SKIP_DEV_SERVER ? undefined : {
-    command: 'yarn dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
-  },
-});
+  webServer: process.env.SKIP_DEV_SERVER
+    ? undefined
+    : {
+        command: 'yarn dev',
+        url: 'http://localhost:3000',
+        reuseExistingServer: !process.env.CI,
+        timeout: 120 * 1000
+      }
+})

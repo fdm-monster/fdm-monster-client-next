@@ -39,4 +39,3 @@ export interface MaintenanceLogsResponse {
   page: number
   pageSize: number
 }
-

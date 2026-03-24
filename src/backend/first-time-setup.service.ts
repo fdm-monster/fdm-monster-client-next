@@ -16,8 +16,12 @@ export class FirstTimeSetupService extends BaseService {
   }
 
   static async postYamlImport(file: File) {
-    const formData = new FormData();
-    formData.append("file", file);
-    return await this.postUpload("api/v2/first-time-setup/yaml-import", formData, {});
+    const formData = new FormData()
+    formData.append('file', file)
+    return await this.postUpload(
+      'api/v2/first-time-setup/yaml-import',
+      formData,
+      {}
+    )
   }
 }

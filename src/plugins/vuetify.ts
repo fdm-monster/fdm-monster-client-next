@@ -9,10 +9,10 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import { aliases, md } from 'vuetify/iconsets/md'
-import { mdi } from "vuetify/iconsets/mdi";
+import { mdi } from 'vuetify/iconsets/mdi'
 import { createVuetify } from 'vuetify'
-import { VStepperVertical, VStepperVerticalItem } from "vuetify/labs/components";
-import discordIcon from "@/assets/Discord-Symbol-Blurple.svg"
+import { VStepperVertical, VStepperVerticalItem } from 'vuetify/labs/components'
+import discordIcon from '@/assets/Discord-Symbol-Blurple.svg'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export const vuetify = createVuetify({
@@ -49,14 +49,14 @@ export const vuetify = createVuetify({
     defaultSet: 'md',
     aliases: {
       ...aliases,
-      discord: discordIcon,
+      discord: discordIcon
     },
     sets: {
       md,
       mdi,
       custom: {
-        component: (props) => props.icon,
-      },
+        component: (props) => props.icon
+      }
     }
   },
   components: {

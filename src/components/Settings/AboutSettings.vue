@@ -9,7 +9,9 @@
       <p class="mt-4">
         <strong>Server version:</strong> {{ serverVersion }}<br />
         <strong>Client version:</strong> {{ version }}<br />
-        <strong v-if="monsterPiVersion">MonsterPi version: {{ monsterPiVersion }}</strong>
+        <strong v-if="monsterPiVersion"
+          >MonsterPi version: {{ monsterPiVersion }}</strong
+        >
         <strong v-else>No MonsterPi distro detected.</strong>
       </p>
       <v-btn

@@ -37,12 +37,12 @@ export class FileStorageService extends BaseService {
   }
 
   static async getFileMetadata(fileStorageId: string): Promise<FileMetadata> {
-    const path = `/api/v2/file-storage/${ fileStorageId }`
+    const path = `/api/v2/file-storage/${fileStorageId}`
     return this.get<FileMetadata>(path)
   }
 
   static async deleteFile(fileStorageId: string): Promise<void> {
-    const path = `/api/v2/file-storage/${ fileStorageId }`
+    const path = `/api/v2/file-storage/${fileStorageId}`
     return this.delete(path)
   }
 
@@ -52,7 +52,7 @@ export class FileStorageService extends BaseService {
     metadata: any
     thumbnailCount: number
   }> {
-    const path = `/api/v2/file-storage/${ fileStorageId }/analyze`
+    const path = `/api/v2/file-storage/${fileStorageId}/analyze`
     return this.post(path, {})
   }
 
@@ -69,7 +69,10 @@ export class FileStorageService extends BaseService {
     return response.data
   }
 
-  static async getThumbnailBase64(fileStorageId: string, index: number = 0): Promise<string> {
+  static async getThumbnailBase64(
+    fileStorageId: string,
+    index: number = 0
+  ): Promise<string> {
     const path = `/api/v2/file-storage/${fileStorageId}/thumbnail/${index}`
     const response = await this.get<{ thumbnailBase64: string }>(path)
     return response.thumbnailBase64

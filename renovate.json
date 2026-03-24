@@ -1,28 +1,15 @@
 {
-  "extends": [
-    "config:base"
-  ],
-  "assignees": [
-    "davidzwa"
-  ],
-  "labels": [
-    "renovate"
-  ],
+  "extends": ["config:base"],
+  "assignees": ["davidzwa"],
+  "labels": ["renovate"],
   "automerge": true,
   "packageRules": [
     {
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
     },
     {
-      "matchPackagePatterns": [
-        "@vueuse/*"
-      ],
+      "matchPackagePatterns": ["@vueuse/*"],
       "groupName": "@vueuse",
       "automerge": true
     },

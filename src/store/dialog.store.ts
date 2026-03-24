@@ -80,7 +80,7 @@ export const useDialogsStore = defineStore('Dialog', {
       for (const dialogId of this.ids) {
         const dialog = this.dialogsById[dialogId]
         if (dialog?.opened) {
-          this.closeDialog(dialogId);
+          this.closeDialog(dialogId)
         }
       }
     },

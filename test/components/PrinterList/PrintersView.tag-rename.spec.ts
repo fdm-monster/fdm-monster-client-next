@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vite-plus/test'
 import { mount } from '@vue/test-utils'
 import { createPinia } from 'pinia'
 import { createVuetify } from 'vuetify'
@@ -65,16 +65,19 @@ describe('ManageTagsDialog - Tag Rename Functionality', () => {
     queryClient = new QueryClient({
       defaultOptions: {
         queries: {
-          retry: false,
-        },
-      },
+          retry: false
+        }
+      }
     })
 
     router = createRouter({
       history: createMemoryHistory(),
       routes: [
         { path: '/', component: { template: '<div>Home</div>' } },
-        { path: '/printer-grid', component: { template: '<div>Printers Grid</div>' } },
+        {
+          path: '/printer-grid',
+          component: { template: '<div>Printers Grid</div>' }
+        },
         { path: '/cameras', component: { template: '<div>Cameras</div>' } }
       ]
     })
@@ -118,7 +121,10 @@ describe('ManageTagsDialog - Tag Rename Functionality', () => {
 
     await wrapper.vm.updateTagName(1)
 
-    expect(PrinterTagService.updateTagName).toHaveBeenCalledWith(1, 'New Workshop Name')
+    expect(PrinterTagService.updateTagName).toHaveBeenCalledWith(
+      1,
+      'New Workshop Name'
+    )
   })
 
   it('should clear editing state after successful tag update', async () => {
@@ -137,7 +143,10 @@ describe('ManageTagsDialog - Tag Rename Functionality', () => {
 
     await wrapper.vm.updateTagName(1)
 
-    expect(PrinterTagService.updateTagName).toHaveBeenCalledWith(1, 'Trimmed Name')
+    expect(PrinterTagService.updateTagName).toHaveBeenCalledWith(
+      1,
+      'Trimmed Name'
+    )
   })
 
   it('should not update tag with empty name', async () => {
@@ -148,4 +157,3 @@ describe('ManageTagsDialog - Tag Rename Functionality', () => {
     expect(PrinterTagService.updateTagName).not.toHaveBeenCalled()
   })
 })
-

@@ -1,10 +1,14 @@
 <template>
-  <v-dialog v-model="isOpen" max-width="900px" @update:model-value="handleDialogClose">
+  <v-dialog
+    v-model="isOpen"
+    max-width="900px"
+    @update:model-value="handleDialogClose"
+  >
     <v-card class="thumbnail-viewer-card">
       <v-card-title class="d-flex align-center bg-primary text-on-primary pa-3">
         <v-icon class="mr-2">image</v-icon>
         <span class="text-subtitle-1">File Thumbnail</span>
-        <v-spacer/>
+        <v-spacer />
         <v-chip
           v-if="thumbnails.length > 1"
           size="small"
@@ -14,22 +18,47 @@
         >
           {{ currentIndex + 1 }} / {{ thumbnails.length }}
         </v-chip>
-        <v-btn icon variant="text" @click="close" color="on-primary" size="small">
+        <v-btn
+          icon
+          variant="text"
+          @click="close"
+          color="on-primary"
+          size="small"
+        >
           <v-icon>close</v-icon>
         </v-btn>
       </v-card-title>
 
       <v-card-text class="pa-0 position-relative">
-        <div v-if="loading" class="thumbnail-loading-container">
-          <v-progress-circular indeterminate size="64" color="primary" />
+        <div
+          v-if="loading"
+          class="thumbnail-loading-container"
+        >
+          <v-progress-circular
+            indeterminate
+            size="64"
+            color="primary"
+          />
         </div>
 
-        <div v-else-if="thumbnails.length === 0" class="thumbnail-empty-container">
-          <v-icon size="64" color="grey">image_not_supported</v-icon>
-          <p class="text-body-1 text-medium-emphasis mt-3">No thumbnails available</p>
+        <div
+          v-else-if="thumbnails.length === 0"
+          class="thumbnail-empty-container"
+        >
+          <v-icon
+            size="64"
+            color="grey"
+            >image_not_supported</v-icon
+          >
+          <p class="text-body-1 text-medium-emphasis mt-3">
+            No thumbnails available
+          </p>
         </div>
 
-        <div v-else class="thumbnail-image-container">
+        <div
+          v-else
+          class="thumbnail-image-container"
+        >
           <img
             v-if="currentThumbnailUrl"
             :src="currentThumbnailUrl"
@@ -66,26 +95,40 @@
         </div>
 
         <!-- Thumbnail Info -->
-        <div v-if="currentThumbnail" class="thumbnail-info pa-3">
+        <div
+          v-if="currentThumbnail"
+          class="thumbnail-info pa-3"
+        >
           <v-row dense>
             <v-col cols="auto">
               <span class="text-caption text-medium-emphasis">Resolution:</span>
-              <span class="text-body-2 ml-1">{{ currentThumbnail.width }}x{{ currentThumbnail.height }}</span>
+              <span class="text-body-2 ml-1"
+                >{{ currentThumbnail.width }}x{{
+                  currentThumbnail.height
+                }}</span
+              >
             </v-col>
             <v-col cols="auto">
               <span class="text-caption text-medium-emphasis">Format:</span>
-              <span class="text-body-2 ml-1">{{ currentThumbnail.format?.toUpperCase() || 'Unknown' }}</span>
+              <span class="text-body-2 ml-1">{{
+                currentThumbnail.format?.toUpperCase() || 'Unknown'
+              }}</span>
             </v-col>
             <v-col cols="auto">
               <span class="text-caption text-medium-emphasis">Size:</span>
-              <span class="text-body-2 ml-1">{{ formatFileSize(currentThumbnail.size) }}</span>
+              <span class="text-body-2 ml-1">{{
+                formatFileSize(currentThumbnail.size)
+              }}</span>
             </v-col>
           </v-row>
         </div>
       </v-card-text>
 
       <!-- Thumbnail Carousel for multiple images -->
-      <v-card-actions v-if="thumbnails.length > 1" class="thumbnail-carousel pa-2">
+      <v-card-actions
+        v-if="thumbnails.length > 1"
+        class="thumbnail-carousel pa-2"
+      >
         <div class="d-flex gap-2 overflow-x-auto pa-2">
           <div
             v-for="(thumb, index) in thumbnails"
@@ -114,8 +157,11 @@ import { computed, ref, watch } from 'vue'
 import type { ThumbnailInfo } from '@/backend/file-storage.service'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { formatFileSize } from "@/utils/file-size.util"
-import { useFileStorageThumbnailQuery, fileStorageThumbnailQueryKey } from '@/queries/file-storage-thumbnail.query'
+import { formatFileSize } from '@/utils/file-size.util'
+import {
+  useFileStorageThumbnailQuery,
+  fileStorageThumbnailQueryKey
+} from '@/queries/file-storage-thumbnail.query'
 import { useQueryClient } from '@tanstack/vue-query'
 import { FileStorageService } from '@/backend/file-storage.service'
 
@@ -137,14 +183,17 @@ const currentThumbnailIndex = computed(() => {
 
 const fileStorageIdComputed = computed(() => fileStorageId.value)
 const thumbnailsComputed = computed(() => thumbnails.value)
-const currentThumbnailIndexComputed = computed(() => currentThumbnailIndex.value)
-
-const { data: currentThumbnailUrl, isLoading: loading } = useFileStorageThumbnailQuery(
-  fileStorageIdComputed,
-  thumbnailsComputed,
-  currentThumbnailIndexComputed,
-  isOpen.value
+const currentThumbnailIndexComputed = computed(
+  () => currentThumbnailIndex.value
 )
+
+const { data: currentThumbnailUrl, isLoading: loading } =
+  useFileStorageThumbnailQuery(
+    fileStorageIdComputed,
+    thumbnailsComputed,
+    currentThumbnailIndexComputed,
+    isOpen.value
+  )
 
 watch(isOpen, (value) => {
   if (value && context.value?.fileStorageId) {
@@ -168,34 +217,49 @@ const currentThumbnail = computed(() => {
   return thumbnails.value[currentIndex.value] || null
 })
 
-
-watch([thumbnails, fileStorageId, isOpen], async () => {
-  if (!fileStorageId.value || thumbnails.value.length === 0 || !isOpen.value) {
-    carouselThumbnailUrls.value.clear()
-    return
-  }
-
-  const loadThumbnail = async (thumb: ThumbnailInfo) => {
-    const queryKey = [fileStorageThumbnailQueryKey, fileStorageId.value, thumb.index]
-
-    try {
-      const url = await queryClient.fetchQuery({
-        queryKey,
-        queryFn: () => FileStorageService.getThumbnailBase64(fileStorageId.value!, thumb.index),
-        staleTime: 1000 * 60 * 60,
-      })
-
-      if (url) {
-        carouselThumbnailUrls.value.set(thumb.index, url)
-      }
-    } catch (err) {
-      console.debug(`Failed to load carousel thumbnail ${thumb.index}:`, err)
+watch(
+  [thumbnails, fileStorageId, isOpen],
+  async () => {
+    if (
+      !fileStorageId.value ||
+      thumbnails.value.length === 0 ||
+      !isOpen.value
+    ) {
+      carouselThumbnailUrls.value.clear()
+      return
     }
-  }
 
-  carouselThumbnailUrls.value.clear()
-  await Promise.all(thumbnails.value.map(thumb => loadThumbnail(thumb)))
-}, { immediate: true })
+    const loadThumbnail = async (thumb: ThumbnailInfo) => {
+      const queryKey = [
+        fileStorageThumbnailQueryKey,
+        fileStorageId.value,
+        thumb.index
+      ]
+
+      try {
+        const url = await queryClient.fetchQuery({
+          queryKey,
+          queryFn: () =>
+            FileStorageService.getThumbnailBase64(
+              fileStorageId.value!,
+              thumb.index
+            ),
+          staleTime: 1000 * 60 * 60
+        })
+
+        if (url) {
+          carouselThumbnailUrls.value.set(thumb.index, url)
+        }
+      } catch (err) {
+        console.debug(`Failed to load carousel thumbnail ${thumb.index}:`, err)
+      }
+    }
+
+    carouselThumbnailUrls.value.clear()
+    await Promise.all(thumbnails.value.map((thumb) => loadThumbnail(thumb)))
+  },
+  { immediate: true }
+)
 
 const getThumbnailUrl = (index: number): string => {
   return carouselThumbnailUrls.value.get(index) || ''

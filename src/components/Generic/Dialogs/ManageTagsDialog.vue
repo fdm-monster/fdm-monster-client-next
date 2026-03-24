@@ -26,7 +26,11 @@
               @click="startEditingTag(tag.id, tag.name)"
               @click:close="deleteTag(tag.id)"
             >
-              <v-icon start size="x-small">label</v-icon>
+              <v-icon
+                start
+                size="x-small"
+                >label</v-icon
+              >
               {{ tag.name }}
             </v-chip>
             <v-chip
@@ -40,7 +44,13 @@
         </div>
 
         <!-- Edit mode - full width when active -->
-        <v-card v-if="editingTagId !== null" variant="elevated" elevation="10" color="secondary" class="mb-3 pa-3">
+        <v-card
+          v-if="editingTagId !== null"
+          variant="elevated"
+          elevation="10"
+          color="secondary"
+          class="mb-3 pa-3"
+        >
           <div class="text-caption mb-2">Editing Tag:</div>
           <div class="mb-3">
             <v-text-field
@@ -83,7 +93,7 @@
           </div>
         </v-card>
 
-        <v-divider class="my-4"/>
+        <v-divider class="my-4" />
 
         <div>
           <div class="text-subtitle-2 mb-2">Create New Tag:</div>
@@ -118,7 +128,7 @@
         </div>
       </v-card-text>
       <v-card-actions>
-        <v-spacer/>
+        <v-spacer />
         <v-btn @click="closeDialog()">Close</v-btn>
       </v-card-actions>
     </v-card>
@@ -130,7 +140,10 @@ import { ref } from 'vue'
 import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { useSnackbar } from '@/shared/snackbar.composable'
-import { PrinterTagService, TagWithPrintersDto } from '@/backend/printer-tag.service'
+import {
+  PrinterTagService,
+  TagWithPrintersDto
+} from '@/backend/printer-tag.service'
 import BaseDialog from '@/components/Generic/Dialogs/BaseDialog.vue'
 import { useInvalidatePrinterTags } from '@/queries/printer-tags.query'
 import { DEFAULT_TAG_COLOR } from '@/shared/tag.constants'
@@ -164,7 +177,10 @@ const closeDialog = () => {
   newTagColor.value = DEFAULT_TAG_COLOR
 }
 
-const onDialogOpened = async (context?: { tagId?: number; tagName?: string }) => {
+const onDialogOpened = async (context?: {
+  tagId?: number
+  tagName?: string
+}) => {
   await loadTags()
 
   if (context?.tagId && context?.tagName) {
@@ -220,7 +236,7 @@ const deleteTag = async (tagId: number) => {
 }
 
 const startEditingTag = (tagId: number, currentName: string) => {
-  const tag = tagsWithPrinters.value.find(t => t.id === tagId)
+  const tag = tagsWithPrinters.value.find((t) => t.id === tagId)
   editingTagId.value = tagId
   editingTagName.value = currentName
   editingTagColor.value = tag?.color || DEFAULT_TAG_COLOR
@@ -251,4 +267,3 @@ const updateTagName = async (tagId: number) => {
   snackbar.info('Updated tag')
 }
 </script>
-

@@ -8,7 +8,6 @@ export function uploadProgressTest(enabled: boolean) {
   let i = 0
   let j = 0
   let interval: any
-  // eslint-disable-next-line prefer-const
   interval = setInterval(() => {
     i += 2
     j += 3

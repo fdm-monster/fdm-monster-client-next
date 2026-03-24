@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex align-start" style="gap: 12px;">
+  <div
+    class="d-flex align-start"
+    style="gap: 12px"
+  >
     <v-icon color="info">help_outline</v-icon>
     <div>
       <div class="text-body-2 mb-3">{{ message }}</div>

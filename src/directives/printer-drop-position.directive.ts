@@ -5,7 +5,7 @@ import {
 import { FloorService } from '@/backend/floor.service'
 import { useFloorStore } from '@/store/floor.store'
 import { PrinterDto } from '@/models/printers/printer.model'
-import { AppContext, Directive } from 'vue'
+import { Directive } from 'vue'
 
 interface PrinterBindingValue {
   printerSet: PrinterDto | null
@@ -18,8 +18,7 @@ const hoverBorder = '2px dashed rgba(255, 255, 255, 0.4)'
 
 const bindDropConditionally = (
   el: HTMLElement,
-  bindingValue: PrinterBindingValue,
-  context?: AppContext | null
+  bindingValue: PrinterBindingValue
 ) => {
   const printerSet = bindingValue?.printerSet
 
@@ -50,10 +49,10 @@ const bindDropConditionally = (
     if (printerSet && printerSet.id !== printerId) {
       const targetPrinter = printerSet
       const targetPosition = floorStore.selectedFloor?.printers.find(
-        p => p.printerId === targetPrinter.id
+        (p) => p.printerId === targetPrinter.id
       )
       const draggedPosition = floorStore.selectedFloor?.printers.find(
-        p => p.printerId === printerId
+        (p) => p.printerId === printerId
       )
 
       if (targetPosition && draggedPosition) {
@@ -95,11 +94,11 @@ const bindDropConditionally = (
 
 export function getDropPrinterPositionDirective(): Directive {
   return {
-    mounted: (el, binding, vnode) => {
-      bindDropConditionally(el, binding.value, vnode.appContext)
+    mounted: (el, binding) => {
+      bindDropConditionally(el, binding.value)
     },
-    beforeUpdate: (el, binding, vnode) => {
-      bindDropConditionally(el, binding.value, vnode.appContext)
+    beforeUpdate: (el, binding) => {
+      bindDropConditionally(el, binding.value)
     }
   }
 }

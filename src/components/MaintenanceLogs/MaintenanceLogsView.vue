@@ -1,5 +1,8 @@
 <template>
-  <v-container fluid class="pa-0">
+  <v-container
+    fluid
+    class="pa-0"
+  >
     <MaintenanceLogs />
   </v-container>
 </template>
@@ -13,4 +16,3 @@ export default defineComponent({
   components: { MaintenanceLogs }
 })
 </script>
-

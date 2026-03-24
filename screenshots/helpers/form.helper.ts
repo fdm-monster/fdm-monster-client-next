@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from '@playwright/test'
 
 /**
  * Helper utilities for filling forms
@@ -14,39 +14,42 @@ export class FormHelper {
    * @param value Value to fill
    */
   async fillTextField(selector: string, value: string): Promise<void> {
-    const input = this.page.locator(selector).first();
-    await input.clear();
-    await input.fill(value);
+    const input = this.page.locator(selector).first()
+    await input.clear()
+    await input.fill(value)
   }
 
   /**
    * Fill printer form fields
    */
   async fillPrinterForm(data: {
-    name?: string;
-    printerURL?: string;
-    apiKey?: string;
-    printerType?: number;
-    username?: string;
-    password?: string;
+    name?: string
+    printerURL?: string
+    apiKey?: string
+    printerType?: number
+    username?: string
+    password?: string
   }): Promise<void> {
     if (data.name !== undefined) {
-      await this.fillTextField('[name="name"]', data.name);
+      await this.fillTextField('[name="name"]', data.name)
     }
     if (data.printerURL !== undefined) {
-      await this.fillTextField('[name="printerURL"]', data.printerURL);
+      await this.fillTextField('[name="printerURL"]', data.printerURL)
     }
     if (data.apiKey !== undefined) {
-      await this.fillTextField('[name="apiKey"]', data.apiKey);
+      await this.fillTextField('[name="apiKey"]', data.apiKey)
     }
     if (data.username !== undefined) {
-      await this.fillTextField('[name="username"]', data.username);
+      await this.fillTextField('[name="username"]', data.username)
     }
     if (data.password !== undefined) {
-      await this.fillTextField('[name="password"]', data.password);
+      await this.fillTextField('[name="password"]', data.password)
     }
     if (data.printerType !== undefined) {
-      await this.selectDropdownOption('[name="printerType"]', data.printerType.toString());
+      await this.selectDropdownOption(
+        '[name="printerType"]',
+        data.printerType.toString()
+      )
     }
   }
 
@@ -55,10 +58,10 @@ export class FormHelper {
    */
   async fillFloorForm(data: { name?: string; order?: string }): Promise<void> {
     if (data.name !== undefined) {
-      await this.fillTextField('[name="name"]', data.name);
+      await this.fillTextField('[name="name"]', data.name)
     }
     if (data.order !== undefined) {
-      await this.fillTextField('[name="order"]', data.order);
+      await this.fillTextField('[name="order"]', data.order)
     }
   }
 
@@ -66,18 +69,21 @@ export class FormHelper {
    * Fill camera form fields
    */
   async fillCameraForm(data: {
-    name?: string;
-    streamURL?: string;
-    printerId?: number;
+    name?: string
+    streamURL?: string
+    printerId?: number
   }): Promise<void> {
     if (data.name !== undefined) {
-      await this.fillTextField('[name="name"]', data.name);
+      await this.fillTextField('[name="name"]', data.name)
     }
     if (data.streamURL !== undefined) {
-      await this.fillTextField('[name="streamURL"]', data.streamURL);
+      await this.fillTextField('[name="streamURL"]', data.streamURL)
     }
     if (data.printerId !== undefined) {
-      await this.selectDropdownOption('[name="printerId"]', data.printerId.toString());
+      await this.selectDropdownOption(
+        '[name="printerId"]',
+        data.printerId.toString()
+      )
     }
   }
 
@@ -85,8 +91,8 @@ export class FormHelper {
    * Fill login form
    */
   async fillLoginForm(username: string, password: string): Promise<void> {
-    await this.fillTextField('[name="username"]', username);
-    await this.fillTextField('[name="password"]', password);
+    await this.fillTextField('[name="username"]', username)
+    await this.fillTextField('[name="password"]', password)
   }
 
   /**
@@ -97,10 +103,10 @@ export class FormHelper {
     password: string,
     confirmPassword?: string
   ): Promise<void> {
-    await this.fillTextField('[name="username"]', username);
-    await this.fillTextField('[name="password"]', password);
+    await this.fillTextField('[name="username"]', username)
+    await this.fillTextField('[name="password"]', password)
     if (confirmPassword !== undefined) {
-      await this.fillTextField('[name="confirmPassword"]', confirmPassword);
+      await this.fillTextField('[name="confirmPassword"]', confirmPassword)
     }
   }
 
@@ -111,23 +117,23 @@ export class FormHelper {
    */
   async selectDropdownOption(selector: string, value: string): Promise<void> {
     // Click to open the select
-    const select = this.page.locator(selector).first();
-    await select.click();
+    const select = this.page.locator(selector).first()
+    await select.click()
 
     // Wait for menu to appear
-    await this.page.waitForSelector('.v-menu--active', { state: 'visible' });
+    await this.page.waitForSelector('.v-menu--active', { state: 'visible' })
 
     // Try to click by value or text
     const option = this.page
       .locator('.v-menu--active .v-list-item')
       .filter({ hasText: value })
-      .first();
+      .first()
 
     if (await option.isVisible()) {
-      await option.click();
+      await option.click()
     } else {
       // Fallback: click first option if no match found
-      await this.page.locator('.v-menu--active .v-list-item').first().click();
+      await this.page.locator('.v-menu--active .v-list-item').first().click()
     }
   }
 
@@ -137,11 +143,11 @@ export class FormHelper {
    * @param checked Desired state (true for checked, false for unchecked)
    */
   async toggleCheckbox(selector: string, checked: boolean): Promise<void> {
-    const checkbox = this.page.locator(selector).first();
-    const isChecked = await checkbox.isChecked();
+    const checkbox = this.page.locator(selector).first()
+    const isChecked = await checkbox.isChecked()
 
     if (isChecked !== checked) {
-      await checkbox.click();
+      await checkbox.click()
     }
   }
 
@@ -151,11 +157,11 @@ export class FormHelper {
    * @param enabled Desired state (true for on, false for off)
    */
   async toggleSwitch(selector: string, enabled: boolean): Promise<void> {
-    const switchElement = this.page.locator(selector).first();
-    const isEnabled = await switchElement.getAttribute('aria-checked');
+    const switchElement = this.page.locator(selector).first()
+    const isEnabled = await switchElement.getAttribute('aria-checked')
 
     if ((isEnabled === 'true') !== enabled) {
-      await switchElement.click();
+      await switchElement.click()
     }
   }
 
@@ -164,13 +170,13 @@ export class FormHelper {
    * Waits for error messages to appear or disappear
    */
   async waitForValidation(timeout = 2000): Promise<void> {
-    await this.page.waitForTimeout(500);
+    await this.page.waitForTimeout(500)
     // Wait for any validation messages to settle
     await this.page
       .locator('.v-messages__message')
       .first()
       .waitFor({ state: 'visible', timeout })
-      .catch(() => {});
+      .catch(() => {})
   }
 
   /**
@@ -178,24 +184,22 @@ export class FormHelper {
    * @param fieldSelector Field selector
    */
   async getFieldError(fieldSelector: string): Promise<string | null> {
-    const field = this.page.locator(fieldSelector).first();
-    const errorMessage = field
-      .locator('.. >> .v-messages__message')
-      .first();
+    const field = this.page.locator(fieldSelector).first()
+    const errorMessage = field.locator('.. >> .v-messages__message').first()
 
     if (await errorMessage.isVisible().catch(() => false)) {
-      return await errorMessage.textContent();
+      return await errorMessage.textContent()
     }
 
-    return null;
+    return null
   }
 
   /**
    * Check if form has any validation errors
    */
   async hasValidationErrors(): Promise<boolean> {
-    const errorMessages = this.page.locator('.v-messages__message.error--text');
-    return (await errorMessages.count()) > 0;
+    const errorMessages = this.page.locator('.v-messages__message.error--text')
+    return (await errorMessages.count()) > 0
   }
 }
 
@@ -203,5 +207,5 @@ export class FormHelper {
  * Create a form helper instance for a page
  */
 export function createFormHelper(page: Page): FormHelper {
-  return new FormHelper(page);
+  return new FormHelper(page)
 }

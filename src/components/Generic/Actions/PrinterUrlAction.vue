@@ -1,5 +1,8 @@
 <template>
-  <v-tooltip v-if="hasWebInterface(printer.printerType)" location="top">
+  <v-tooltip
+    v-if="hasWebInterface(printer.printerType)"
+    location="top"
+  >
     <template v-slot:activator="{ props }">
       <v-btn
         v-bind="props"

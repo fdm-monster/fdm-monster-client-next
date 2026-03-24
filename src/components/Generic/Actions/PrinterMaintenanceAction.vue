@@ -9,11 +9,17 @@
         rounded
         @click.stop="toggleMaintenance"
       >
-        <v-icon>{{ isPrinterInMaintenance(printer) ? 'build_circle' : 'build' }}</v-icon>
+        <v-icon>{{
+          isPrinterInMaintenance(printer) ? 'build_circle' : 'build'
+        }}</v-icon>
       </v-btn>
     </template>
     <template v-slot:default>
-      {{ isPrinterInMaintenance(printer) ? 'Update maintenance' : 'Set maintenance' }}
+      {{
+        isPrinterInMaintenance(printer)
+          ? 'Update maintenance'
+          : 'Set maintenance'
+      }}
     </template>
   </v-tooltip>
 </template>
@@ -35,14 +41,17 @@ async function toggleMaintenance() {
   }
 
   if (props.printer?.disabledReason?.length) {
-    const activeLog = await PrinterMaintenanceLogService.getActiveByPrinterId(props.printer.id)
+    const activeLog = await PrinterMaintenanceLogService.getActiveByPrinterId(
+      props.printer.id
+    )
     if (activeLog) {
       await PrinterMaintenanceLogService.complete(activeLog.id, {})
     }
     return
   }
 
-  await useDialog(DialogName.PrinterMaintenanceDialog).openDialog({ printerId: props.printer.id })
+  await useDialog(DialogName.PrinterMaintenanceDialog).openDialog({
+    printerId: props.printer.id
+  })
 }
 </script>
-

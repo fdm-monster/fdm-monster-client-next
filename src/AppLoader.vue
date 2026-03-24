@@ -1,6 +1,6 @@
 <template>
   <!-- Shows Vue router content -->
-  <slot v-if="!appLoaderStore.overlay"/>
+  <slot v-if="!appLoaderStore.overlay" />
 
   <v-overlay
     v-model="appLoaderStore.overlay"
@@ -11,13 +11,13 @@
     class="align-center justify-center"
   >
     <!-- Loading State -->
-    <AppLoadingMessage/>
+    <AppLoadingMessage />
 
     <!-- Server Disconnected State -->
-    <ServerDisconnectedMessage/>
+    <ServerDisconnectedMessage />
 
     <!-- Error State (token refresh failed) -->
-    <ErrorStateMessage/>
+    <ErrorStateMessage />
   </v-overlay>
 </template>
 
@@ -42,18 +42,18 @@ import {
   PermissionDeniedEvent
 } from '@/shared/auth.constants'
 import { SocketIoService } from '@/shared/socketio.service'
-import AppLoadingMessage from "@/components/Generic/Loaders/AppLoadingMessage.vue";
-import ServerDisconnectedMessage from "@/components/Generic/Loaders/ServerDisconnectedMessage.vue";
-import ErrorStateMessage from "@/components/Generic/Loaders/ErrorStateMessage.vue";
+import AppLoadingMessage from '@/components/Generic/Loaders/AppLoadingMessage.vue'
+import ServerDisconnectedMessage from '@/components/Generic/Loaders/ServerDisconnectedMessage.vue'
+import ErrorStateMessage from '@/components/Generic/Loaders/ErrorStateMessage.vue'
 
-const authStore = useAuthStore();
-const appLoaderStore = useOverlayStore();
-const settingsStore = useSettingsStore();
-const featureStore = useFeatureStore();
-const profileStore = useProfileStore();
-const router = useRouter();
-const snackbar = useSnackbar();
-const socketIoClient: SocketIoService = new SocketIoService();
+const authStore = useAuthStore()
+const appLoaderStore = useOverlayStore()
+const settingsStore = useSettingsStore()
+const featureStore = useFeatureStore()
+const profileStore = useProfileStore()
+const router = useRouter()
+const snackbar = useSnackbar()
+const socketIoClient: SocketIoService = new SocketIoService()
 
 // Store the initial route on mount to preserve it during auth flows
 // Initialize as empty, will be set in onBeforeMount when router is ready
@@ -98,7 +98,7 @@ function retryBackendConnection() {
   retryIntervalId = globalThis.setInterval(async () => {
     const nextRetryTime = appLoaderStore.nextRetryTime || 0
     if (Date.now() >= nextRetryTime && nextRetryTime > 0) {
-      console.log(`[AppLoader] Retry attempt at ${ Date.now() }`)
+      console.log(`[AppLoader] Retry attempt at ${Date.now()}`)
       // Set nextRetryTime to 0 to prevent multiple simultaneous tests
       appLoaderStore.nextRetryTime = 0
       await testConnection()
@@ -166,15 +166,19 @@ authPermissionDeniedKey.on(async (event) => {
 const authFailKey = useEventBus('auth:failure')
 authFailKey.on(async (event: any) => {
   console.debug(
-    `[AppLoader] Event received: 'auth:failure', going back to login, context: ${ event }`
+    `[AppLoader] Event received: 'auth:failure', going back to login, context: ${event}`
   )
   setOverlay(true, 'Authentication failed, going back to login')
 
   if (router.currentRoute.value.name !== RouteNames.Login) {
-    const redirectPath = initialRoute.value && initialRoute.value !== '/'
-      ? initialRoute.value
-      : router.currentRoute.value.fullPath
-    console.debug('[AppLoader] Redirecting to login with redirect:', redirectPath)
+    const redirectPath =
+      initialRoute.value && initialRoute.value !== '/'
+        ? initialRoute.value
+        : router.currentRoute.value.fullPath
+    console.debug(
+      '[AppLoader] Redirecting to login with redirect:',
+      redirectPath
+    )
     await router.push({
       name: RouteNames.Login,
       query: { redirect: redirectPath }
@@ -193,11 +197,11 @@ loginEventKey.on(async () => {
 
 // Emitted by auth.store.ts handleAndEmitAuthenticationError
 const accountNotVerifiedEventKey = useEventBus(
-  `auth:${ AUTH_ERROR_REASON.AccountNotVerified }`
+  `auth:${AUTH_ERROR_REASON.AccountNotVerified}`
 )
 accountNotVerifiedEventKey.on(async () => {
   console.debug(
-    `[AppLoader] Event received: 'auth:${ AUTH_ERROR_REASON.AccountNotVerified }', going to login`
+    `[AppLoader] Event received: 'auth:${AUTH_ERROR_REASON.AccountNotVerified}', going to login`
   )
   snackbar.error(
     'Account not verified, please ask an administrator to verify your account.'
@@ -207,9 +211,10 @@ accountNotVerifiedEventKey.on(async () => {
     'Account not verified, please ask an administrator to verify your account.'
   )
   if (router.currentRoute.value.name !== RouteNames.Login) {
-    const redirectPath = initialRoute.value && initialRoute.value !== '/'
-      ? initialRoute.value
-      : router.currentRoute.value.fullPath
+    const redirectPath =
+      initialRoute.value && initialRoute.value !== '/'
+        ? initialRoute.value
+        : router.currentRoute.value.fullPath
     await router.push({
       name: RouteNames.Login,
       query: { redirect: redirectPath }
@@ -220,18 +225,19 @@ accountNotVerifiedEventKey.on(async () => {
 
 // Emitted by auth.store.ts handleAndEmitAuthenticationError
 const passwordChangeRequiredEventKey = useEventBus(
-  `auth:${ AUTH_ERROR_REASON.PasswordChangeRequired }`
+  `auth:${AUTH_ERROR_REASON.PasswordChangeRequired}`
 )
 passwordChangeRequiredEventKey.on(async () => {
   console.debug(
-    `[AppLoader] Event received: 'auth:${ AUTH_ERROR_REASON.PasswordChangeRequired }', going to login`
+    `[AppLoader] Event received: 'auth:${AUTH_ERROR_REASON.PasswordChangeRequired}', going to login`
   )
   snackbar.error('Password change required, please change your password.')
   setOverlay(true, 'Password change required, please change your password.')
   if (router.currentRoute.value.name !== RouteNames.Login) {
-    const redirectPath = initialRoute.value && initialRoute.value !== '/'
-      ? initialRoute.value
-      : router.currentRoute.value.fullPath
+    const redirectPath =
+      initialRoute.value && initialRoute.value !== '/'
+        ? initialRoute.value
+        : router.currentRoute.value.fullPath
     await router.push({
       name: RouteNames.Login,
       query: { redirect: redirectPath }
@@ -243,26 +249,38 @@ passwordChangeRequiredEventKey.on(async () => {
 // Emitted by socketio.service.ts when socket disconnects
 const backendRetryEventKey = useEventBus('backend:start-retry')
 backendRetryEventKey.on(() => {
-  console.debug('[AppLoader] Event received: backend:start-retry, starting retry loop')
+  console.debug(
+    '[AppLoader] Event received: backend:start-retry, starting retry loop'
+  )
   appLoaderStore.startRetry(RETRY_DELAY_MS)
   retryBackendConnection()
 })
 
 // Watch for wizard completion to trigger app loading (e.g., after YAML import or manual setup)
-watch(() => authStore.wizardState?.wizardCompleted, async (completed, wasCompleted) => {
-  if (completed && !wasCompleted) {
-    const currentRoute = router.currentRoute.value.name
+watch(
+  () => authStore.wizardState?.wizardCompleted,
+  async (completed, wasCompleted) => {
+    if (completed && !wasCompleted) {
+      const currentRoute = router.currentRoute.value.name
 
-    // Skip if already on Login or Registration pages - those handle their own navigation
-    if (currentRoute === RouteNames.Login || currentRoute === RouteNames.Registration) {
-      console.debug('[AppLoader] Wizard completed but already on auth page, skipping loadApp')
-      return
+      // Skip if already on Login or Registration pages - those handle their own navigation
+      if (
+        currentRoute === RouteNames.Login ||
+        currentRoute === RouteNames.Registration
+      ) {
+        console.debug(
+          '[AppLoader] Wizard completed but already on auth page, skipping loadApp'
+        )
+        return
+      }
+
+      console.debug(
+        '[AppLoader] Wizard completed detected, triggering app load'
+      )
+      await loadApp()
     }
-
-    console.debug('[AppLoader] Wizard completed detected, triggering app load')
-    await loadApp()
   }
-})
+)
 
 onUnmounted(() => {
   stopRetryLoop()
@@ -297,13 +315,13 @@ async function loadApp() {
   setOverlay(true, message)
 
   try {
-    await AppService.test();
+    await AppService.test()
   } catch (e) {
-    appLoaderStore.setServerDisconnected(true);
-    captureException(e);
-    appLoaderStore.startRetry(5000);
-    retryBackendConnection();
-    return;
+    appLoaderStore.setServerDisconnected(true)
+    captureException(e)
+    appLoaderStore.startRetry(5000)
+    retryBackendConnection()
+    return
   }
 
   // If the route is wrong about login requirements, an error will be shown
@@ -350,10 +368,14 @@ async function loadApp() {
       setOverlay(true, 'Login expired, going back to login')
 
       if (router.currentRoute.value.name !== RouteNames.Login) {
-        const redirectPath = initialRoute.value && initialRoute.value !== '/'
-          ? initialRoute.value
-          : router.currentRoute.value.fullPath
-        console.debug('[AppLoader] Token refresh failed, redirecting to login with redirect:', redirectPath)
+        const redirectPath =
+          initialRoute.value && initialRoute.value !== '/'
+            ? initialRoute.value
+            : router.currentRoute.value.fullPath
+        console.debug(
+          '[AppLoader] Token refresh failed, redirecting to login with redirect:',
+          redirectPath
+        )
         await router.push({
           name: RouteNames.Login,
           query: { redirect: redirectPath }

@@ -1,6 +1,6 @@
-import { Page } from '@playwright/test';
-import * as path from 'node:path';
-import * as fs from 'node:fs';
+import { Page } from '@playwright/test'
+import * as path from 'node:path'
+import * as fs from 'node:fs'
 
 /**
  * Utility functions for taking documentation screenshots
@@ -11,7 +11,7 @@ import * as fs from 'node:fs';
  */
 export function ensureDir(dirPath: string): void {
   if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
+    fs.mkdirSync(dirPath, { recursive: true })
   }
 }
 
@@ -19,18 +19,21 @@ export function ensureDir(dirPath: string): void {
  * Get screenshot output path
  */
 export function getScreenshotPath(filename: string, subdir?: string): string {
-  const baseDir = path.join(__dirname, 'output');
-  const targetDir = subdir ? path.join(baseDir, subdir) : baseDir;
-  ensureDir(targetDir);
-  return path.join(targetDir, filename);
+  const baseDir = path.join(__dirname, 'output')
+  const targetDir = subdir ? path.join(baseDir, subdir) : baseDir
+  ensureDir(targetDir)
+  return path.join(targetDir, filename)
 }
 
 /**
  * Wait for page to be fully loaded and animations to complete
  */
-export async function waitForPageReady(page: Page, timeout = 1000): Promise<void> {
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(timeout); // Allow animations to complete
+export async function waitForPageReady(
+  page: Page,
+  timeout = 1000
+): Promise<void> {
+  await page.waitForLoadState('networkidle')
+  await page.waitForTimeout(timeout) // Allow animations to complete
 }
 
 /**
@@ -41,11 +44,11 @@ export async function captureFullPage(
   filename: string,
   subdir?: string
 ): Promise<void> {
-  await waitForPageReady(page);
+  await waitForPageReady(page)
   await page.screenshot({
     path: getScreenshotPath(filename, subdir),
-    fullPage: true,
-  });
+    fullPage: true
+  })
 }
 
 /**
@@ -56,11 +59,11 @@ export async function captureViewport(
   filename: string,
   subdir?: string
 ): Promise<void> {
-  await waitForPageReady(page);
+  await waitForPageReady(page)
   await page.screenshot({
     path: getScreenshotPath(filename, subdir),
-    fullPage: false,
-  });
+    fullPage: false
+  })
 }
 
 /**
@@ -72,17 +75,17 @@ export async function captureElement(
   filename: string,
   subdir?: string
 ): Promise<void> {
-  await waitForPageReady(page);
-  const element = page.locator(selector).first();
+  await waitForPageReady(page)
+  const element = page.locator(selector).first()
 
-  if (await element.count() === 0) {
-    console.warn(`Element not found: ${selector}`);
-    return;
+  if ((await element.count()) === 0) {
+    console.warn(`Element not found: ${selector}`)
+    return
   }
 
   await element.screenshot({
-    path: getScreenshotPath(filename, subdir),
-  });
+    path: getScreenshotPath(filename, subdir)
+  })
 }
 
 /**
@@ -90,13 +93,13 @@ export async function captureElement(
  */
 export async function setupAuth(page: Page, token?: string): Promise<void> {
   if (token) {
-    await page.goto('/');
+    await page.goto('/')
     await page.evaluate((authToken) => {
-      localStorage.setItem('auth-token', authToken);
-    }, token);
+      localStorage.setItem('auth-token', authToken)
+    }, token)
   } else {
     // Default login flow
-    await page.goto('/login');
+    await page.goto('/login')
     // Add your login logic here
   }
 }
@@ -112,15 +115,18 @@ export async function captureResponsive(
   subdir?: string
 ): Promise<void> {
   for (const viewport of viewports) {
-    await page.setViewportSize({ width: viewport.width, height: viewport.height });
-    await page.goto(route);
-    await waitForPageReady(page);
+    await page.setViewportSize({
+      width: viewport.width,
+      height: viewport.height
+    })
+    await page.goto(route)
+    await waitForPageReady(page)
 
-    const filename = `${baseFilename}-${viewport.name}.png`;
+    const filename = `${baseFilename}-${viewport.name}.png`
     await page.screenshot({
       path: getScreenshotPath(filename, subdir),
-      fullPage: false,
-    });
+      fullPage: false
+    })
   }
 }
 
@@ -135,8 +141,8 @@ export const VIEWPORTS = {
   TABLET_LANDSCAPE: { width: 1024, height: 768, name: 'tablet-landscape' },
   MOBILE_IPHONE_SE: { width: 375, height: 667, name: 'mobile-iphone-se' },
   MOBILE_IPHONE_12: { width: 390, height: 844, name: 'mobile-iphone-12' },
-  MOBILE_PIXEL_5: { width: 393, height: 851, name: 'mobile-pixel-5' },
-};
+  MOBILE_PIXEL_5: { width: 393, height: 851, name: 'mobile-pixel-5' }
+}
 
 /**
  * Capture both light and dark theme screenshots
@@ -148,52 +154,58 @@ export async function captureBothThemes(
   themeToggleSelector: string,
   subdir?: string
 ): Promise<void> {
-  await page.goto(route);
-  await waitForPageReady(page);
+  await page.goto(route)
+  await waitForPageReady(page)
 
   // Capture light theme
   await page.screenshot({
     path: getScreenshotPath(`${baseFilename}-light.png`, subdir),
-    fullPage: false,
-  });
+    fullPage: false
+  })
 
   // Toggle to dark theme
-  const themeToggle = page.locator(themeToggleSelector);
-  if (await themeToggle.count() > 0) {
-    await themeToggle.click();
-    await page.waitForTimeout(500); // Wait for theme transition
+  const themeToggle = page.locator(themeToggleSelector)
+  if ((await themeToggle.count()) > 0) {
+    await themeToggle.click()
+    await page.waitForTimeout(500) // Wait for theme transition
 
     // Capture dark theme
     await page.screenshot({
       path: getScreenshotPath(`${baseFilename}-dark.png`, subdir),
-      fullPage: false,
-    });
+      fullPage: false
+    })
   }
 }
 
 /**
  * Hide elements before taking screenshot (useful for hiding dynamic content)
  */
-export async function hideElements(page: Page, selectors: string[]): Promise<void> {
+export async function hideElements(
+  page: Page,
+  selectors: string[]
+): Promise<void> {
   for (const selector of selectors) {
     await page.locator(selector).evaluateAll((elements) => {
       elements.forEach((el: HTMLElement) => {
-        el.style.visibility = 'hidden';
-      });
-    });
+        el.style.visibility = 'hidden'
+      })
+    })
   }
 }
 
 /**
  * Mask sensitive data in screenshots
  */
-export async function maskElements(page: Page, selectors: string[]): Promise<void> {
+export async function maskElements(
+  page: Page,
+  selectors: string[]
+): Promise<void> {
   for (const selector of selectors) {
     await page.locator(selector).evaluateAll((elements) => {
       elements.forEach((el: HTMLElement) => {
-        el.style.filter = 'blur(10px)';
-      });
-    });
+        el.style.filter = 'blur(10px)'
+      })
+    })
   }
 }
 
@@ -206,11 +218,10 @@ export async function waitForElement(
   timeout = 5000
 ): Promise<boolean> {
   try {
-    await page.waitForSelector(selector, { timeout, state: 'visible' });
-    return true;
+    await page.waitForSelector(selector, { timeout, state: 'visible' })
+    return true
   } catch {
-    console.warn(`Element not visible within timeout: ${selector}`);
-    return false;
+    console.warn(`Element not visible within timeout: ${selector}`)
+    return false
   }
 }
-

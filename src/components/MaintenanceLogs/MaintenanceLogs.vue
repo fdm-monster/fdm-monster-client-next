@@ -1,11 +1,22 @@
 <template>
-  <v-container fluid class="maintenance-logs-container">
+  <v-container
+    fluid
+    class="maintenance-logs-container"
+  >
     <!-- Search and Filters Section -->
-    <v-card class="mb-4 mt-4" elevation="1">
+    <v-card
+      class="mb-4 mt-4"
+      elevation="1"
+    >
       <v-card-title class="d-flex align-center py-2">
-        <v-icon class="mr-2" color="primary" size="small">search</v-icon>
+        <v-icon
+          class="mr-2"
+          color="primary"
+          size="small"
+          >search</v-icon
+        >
         <span class="text-subtitle-1">Search & Filters</span>
-        <v-spacer/>
+        <v-spacer />
 
         <v-btn
           color="primary"
@@ -20,7 +31,10 @@
 
       <v-card-text class="py-3">
         <v-row dense>
-          <v-col cols="12" md="4">
+          <v-col
+            cols="12"
+            md="4"
+          >
             <v-autocomplete
               v-model="selectedPrinterId"
               :items="allPrinters"
@@ -35,7 +49,10 @@
               @update:model-value="debouncedSearch"
             />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col
+            cols="12"
+            md="4"
+          >
             <v-select
               v-model="selectedStatus"
               :items="statusOptions"
@@ -48,7 +65,10 @@
               @update:model-value="debouncedSearch"
             />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col
+            cols="12"
+            md="4"
+          >
             <PrinterTypeFilter
               v-model="selectedPrinterTypes"
               label="Filter by Type"
@@ -57,7 +77,11 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="tags.length" dense class="mt-2">
+        <v-row
+          v-if="tags.length"
+          dense
+          class="mt-2"
+        >
           <v-col cols="12">
             <PrinterTagFilter
               v-model="selectedTags"
@@ -73,12 +97,23 @@
     <!-- Results Section -->
     <v-card elevation="1">
       <v-card-title class="d-flex align-center py-2">
-        <v-icon class="mr-2" color="primary" size="small">list_alt</v-icon>
+        <v-icon
+          class="mr-2"
+          color="primary"
+          size="small"
+          >list_alt</v-icon
+        >
         <span class="text-subtitle-1">Maintenance Logs</span>
-        <v-spacer/>
+        <v-spacer />
 
-        <div v-if="!loading && totalLogs > 0" class="text-caption text-medium-emphasis">
-          {{ ((currentPage - 1) * itemsPerPage) + 1 }}-{{ Math.min(currentPage * itemsPerPage, totalLogs) }} of
+        <div
+          v-if="!loading && totalLogs > 0"
+          class="text-caption text-medium-emphasis"
+        >
+          {{ (currentPage - 1) * itemsPerPage + 1 }}-{{
+            Math.min(currentPage * itemsPerPage, totalLogs)
+          }}
+          of
           {{ totalLogs }}
         </div>
       </v-card-title>
@@ -120,19 +155,30 @@
 
           <!-- Completed Date Column -->
           <template #item.completedAt="{ item }">
-            <div v-if="item.completedAt" class="text-body-2">
+            <div
+              v-if="item.completedAt"
+              class="text-body-2"
+            >
               <div>{{ formatDate(item.completedAt) }}</div>
               <div class="text-caption text-medium-emphasis">
                 {{ formatRelativeTime(item.completedAt) }}
               </div>
             </div>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Printer Name Column -->
           <template #item.printerName="{ item }">
             <div class="d-flex align-center">
-              <v-avatar size="24" class="mr-2" color="primary">
+              <v-avatar
+                size="24"
+                class="mr-2"
+                color="primary"
+              >
                 <v-icon size="small">print</v-icon>
               </v-avatar>
               <div>
@@ -148,15 +194,25 @@
 
           <!-- Cause Column -->
           <template #item.cause="{ item }">
-            <div v-if="item.metadata?.cause" class="text-body-2">
+            <div
+              v-if="item.metadata?.cause"
+              class="text-body-2"
+            >
               {{ item.metadata.cause }}
             </div>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Parts Involved Column -->
           <template #item.partsInvolved="{ item }">
-            <div v-if="item.metadata?.partsInvolved?.length" class="d-flex flex-wrap ga-1">
+            <div
+              v-if="item.metadata?.partsInvolved?.length"
+              class="d-flex flex-wrap ga-1"
+            >
               <v-chip
                 v-for="(part, index) in item.metadata.partsInvolved.slice(0, 3)"
                 :key="index"
@@ -175,13 +231,21 @@
                 +{{ item.metadata.partsInvolved.length - 3 }}
               </v-chip>
             </div>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Created By Column -->
           <template #item.createdBy="{ item }">
             <div class="d-flex align-center">
-              <v-avatar size="24" class="mr-2" color="secondary">
+              <v-avatar
+                size="24"
+                class="mr-2"
+                color="secondary"
+              >
                 <v-icon size="small">person</v-icon>
               </v-avatar>
               <div class="text-body-2">
@@ -192,15 +256,26 @@
 
           <!-- Completed By Column -->
           <template #item.completedBy="{ item }">
-            <div v-if="item.completedBy" class="d-flex align-center">
-              <v-avatar size="24" class="mr-2" color="secondary">
+            <div
+              v-if="item.completedBy"
+              class="d-flex align-center"
+            >
+              <v-avatar
+                size="24"
+                class="mr-2"
+                color="secondary"
+              >
                 <v-icon size="small">person</v-icon>
               </v-avatar>
               <div class="text-body-2">
                 {{ item.completedBy }}
               </div>
             </div>
-            <span v-else class="text-medium-emphasis">-</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+              >-</span
+            >
           </template>
 
           <!-- Actions Column -->
@@ -234,7 +309,7 @@
                   <v-list-item-title>Mark as Completed</v-list-item-title>
                 </v-list-item>
 
-                <v-divider/>
+                <v-divider />
 
                 <v-list-item
                   @click="deleteLog(item)"
@@ -276,7 +351,8 @@ import MaintenanceLogDetailsDialog from './MaintenanceLogDetailsDialog.vue'
 
 const printerStore = usePrinterStore()
 const floorStore = useFloorStore()
-const { tags, selectedTags, selectedPrinterTypes, filterPrinters, loadTags } = usePrinterFilters()
+const { tags, selectedTags, selectedPrinterTypes, filterPrinters, loadTags } =
+  usePrinterFilters()
 
 // State
 const logs = ref<PrinterMaintenanceLog[]>([])
@@ -303,24 +379,37 @@ const headers = [
   { title: 'Status', key: 'completed', sortable: false, width: '120px' },
   { title: 'Printer', key: 'printerName', sortable: false, width: '200px' },
   { title: 'Cause', key: 'cause', sortable: false, width: '250px' },
-  { title: 'Parts Involved', key: 'partsInvolved', sortable: false, width: '200px' },
+  {
+    title: 'Parts Involved',
+    key: 'partsInvolved',
+    sortable: false,
+    width: '200px'
+  },
   { title: 'Created', key: 'createdAt', sortable: false, width: '180px' },
   { title: 'Created By', key: 'createdBy', sortable: false, width: '150px' },
   { title: 'Completed', key: 'completedAt', sortable: false, width: '180px' },
-  { title: 'Completed By', key: 'completedBy', sortable: false, width: '150px' },
-  { title: 'Actions', key: 'actions', sortable: false, align: 'end' as const, width: '100px' }
+  {
+    title: 'Completed By',
+    key: 'completedBy',
+    sortable: false,
+    width: '150px'
+  },
+  {
+    title: 'Actions',
+    key: 'actions',
+    sortable: false,
+    align: 'end' as const,
+    width: '100px'
+  }
 ]
 
 // Methods
 async function loadLogs() {
   loading.value = true
   try {
-    const completedFalsy = selectedStatus.value === 'completed'
-      ? true
-      : undefined
-    const completed = selectedStatus.value === 'active'
-      ? false
-      : completedFalsy
+    const completedFalsy =
+      selectedStatus.value === 'completed' ? true : undefined
+    const completed = selectedStatus.value === 'active' ? false : completedFalsy
 
     const response = await PrinterMaintenanceLogService.listLogs({
       printerId: selectedPrinterId.value,
@@ -408,4 +497,3 @@ onMounted(() => {
   background-color: rgba(var(--v-theme-surface-variant), 0.3);
 }
 </style>
-

@@ -30,38 +30,71 @@
           <v-icon class="mr-2">queue</v-icon>
           Print Queue - Global Plate View
           <v-spacer />
-          <v-chip size="small" color="primary">{{ totalPlates }} Plates</v-chip>
+          <v-chip
+            size="small"
+            color="primary"
+            >{{ totalPlates }} Plates</v-chip
+          >
         </v-card-title>
 
         <v-divider />
 
-        <v-card-text v-if="isLoading" class="text-center py-8">
-          <v-progress-circular indeterminate color="primary" />
+        <v-card-text
+          v-if="isLoading"
+          class="text-center py-8"
+        >
+          <v-progress-circular
+            indeterminate
+            color="primary"
+          />
           <p class="text-body-2 mt-4">Loading queue...</p>
         </v-card-text>
 
-        <v-card-text v-else-if="error" class="text-center py-8">
-          <v-icon size="64" color="error" class="mb-4">error</v-icon>
+        <v-card-text
+          v-else-if="error"
+          class="text-center py-8"
+        >
+          <v-icon
+            size="64"
+            color="error"
+            class="mb-4"
+            >error</v-icon
+          >
           <h3 class="text-h6 mb-2">Failed to Load Queue</h3>
           <p class="text-body-2 text-medium-emphasis">{{ error }}</p>
         </v-card-text>
 
-        <v-card-text v-else-if="queueCount === 0" class="text-center py-8">
-          <v-icon size="64" color="surface-variant" class="mb-4">inbox</v-icon>
+        <v-card-text
+          v-else-if="queueCount === 0"
+          class="text-center py-8"
+        >
+          <v-icon
+            size="64"
+            color="surface-variant"
+            class="mb-4"
+            >inbox</v-icon
+          >
           <h3 class="text-h6 mb-2">Queue is Empty</h3>
           <p class="text-body-2 text-medium-emphasis">
             No jobs are currently queued for printing.
           </p>
         </v-card-text>
 
-        <v-list v-else class="queue-list" style="max-height: 400px; overflow-y: auto">
+        <v-list
+          v-else
+          class="queue-list"
+          style="max-height: 400px; overflow-y: auto"
+        >
           <v-list-item
             v-for="plate in plates"
             :key="plate.jobId"
             lines="two"
           >
             <template #prepend>
-              <v-avatar color="primary" size="48">
+              <v-avatar
+                color="primary"
+                size="48"
+              >
                 <strong>{{ plate.skuCount }}</strong>
               </v-avatar>
             </template>
@@ -74,13 +107,17 @@
               SKU Count: {{ plate.skuCount }} | Queued: {{ plate.totalQueued }}x
               <br />
               <span class="text-caption">
-                Printers: {{ plate.printers.map(p => p.printerName).join(', ') }}
+                Printers:
+                {{ plate.printers.map((p) => p.printerName).join(', ') }}
               </span>
             </v-list-item-subtitle>
 
             <template #append>
               <div class="d-flex align-center ga-2">
-                <v-chip size="small" color="info">
+                <v-chip
+                  size="small"
+                  color="info"
+                >
                   {{ plate.totalQueued }}
                 </v-chip>
 
@@ -98,17 +135,24 @@
                     </v-btn>
                   </template>
 
-                  <v-list density="compact" min-width="200">
+                  <v-list
+                    density="compact"
+                    min-width="200"
+                  >
                     <v-list-subheader>Submit to Printer</v-list-subheader>
                     <v-list-item
                       v-for="printer in plate.printers"
                       :key="printer.printerId"
-                      @click="submitJobToPrinter(plate.jobId, printer.printerId)"
+                      @click="
+                        submitJobToPrinter(plate.jobId, printer.printerId)
+                      "
                     >
                       <template #prepend>
                         <v-icon size="small">print</v-icon>
                       </template>
-                      <v-list-item-title>{{ printer.printerName }}</v-list-item-title>
+                      <v-list-item-title>{{
+                        printer.printerName
+                      }}</v-list-item-title>
                     </v-list-item>
                   </v-list>
                 </v-menu>
@@ -120,8 +164,15 @@
         <v-divider v-if="queueCount > 0" />
 
         <v-card-actions>
-          <v-chip size="small" variant="text">
-            <v-icon size="small" class="mr-1">inventory</v-icon>
+          <v-chip
+            size="small"
+            variant="text"
+          >
+            <v-icon
+              size="small"
+              class="mr-1"
+              >inventory</v-icon
+            >
             {{ totalJobs }} total jobs
           </v-chip>
           <v-spacer />
@@ -146,7 +197,12 @@ import { useSnackbar } from '@/shared/snackbar.composable'
 const menu = ref(false)
 const snackbar = useSnackbar()
 
-const { data: queueData, isLoading, error: queryError, refetch } = useGlobalQueueQuery()
+const {
+  data: queueData,
+  isLoading,
+  error: queryError,
+  refetch
+} = useGlobalQueueQuery()
 
 const queueCount = computed(() => queueData.value?.totalJobs || 0)
 const totalPlates = computed(() => queueData.value?.totalPlates || 0)

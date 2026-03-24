@@ -47,39 +47,47 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { useSnackbar } from "@/shared/snackbar.composable";
-import { useSettingsStore } from "@/store/settings.store";
-import SettingSection from "@/components/Settings/Shared/SettingSection.vue";
+import { ref } from 'vue'
+import { useSnackbar } from '@/shared/snackbar.composable'
+import { useSettingsStore } from '@/store/settings.store'
+import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
 
-const settingsStore = useSettingsStore();
-const snackbar = useSnackbar();
+const settingsStore = useSettingsStore()
+const snackbar = useSnackbar()
 
 const loading = ref({
-  timeoutSettings: false,
-});
+  timeoutSettings: false
+})
 
 async function updateTimeoutSettings() {
-  settingsStore.settings!.timeout.apiTimeout = Number.parseInt(settingsStore.settings!.timeout.apiTimeout.toString());
-  settingsStore.settings!.timeout.apiUploadTimeout = Number.parseInt(settingsStore.settings!.timeout.apiUploadTimeout.toString());
+  settingsStore.settings!.timeout.apiTimeout = Number.parseInt(
+    settingsStore.settings!.timeout.apiTimeout.toString()
+  )
+  settingsStore.settings!.timeout.apiUploadTimeout = Number.parseInt(
+    settingsStore.settings!.timeout.apiUploadTimeout.toString()
+  )
   if (!settingsStore.settings?.timeout?.apiTimeout) {
-    snackbar.error("Timeout not set");
-    return;
+    snackbar.error('Timeout not set')
+    return
   }
   if (settingsStore.settings.timeout.apiTimeout < 1000) {
-    snackbar.error("Timeout is too low - please set it to at least 1000 milliseconds");
-    settingsStore.settings.timeout.apiTimeout = 1000;
+    snackbar.error(
+      'Timeout is too low - please set it to at least 1000 milliseconds'
+    )
+    settingsStore.settings.timeout.apiTimeout = 1000
   }
   if (settingsStore.settings.timeout.apiUploadTimeout < 10000) {
-    snackbar.error("Upload timeout is too low - please set it to at least 10000 milliseconds");
-    settingsStore.settings.timeout.apiUploadTimeout = 10000;
+    snackbar.error(
+      'Upload timeout is too low - please set it to at least 10000 milliseconds'
+    )
+    settingsStore.settings.timeout.apiUploadTimeout = 10000
   } else {
-    loading.value.timeoutSettings = true;
+    loading.value.timeoutSettings = true
     try {
-      await settingsStore.updateTimeoutSettings(settingsStore.settings.timeout);
-      snackbar.info("Timeout settings updated");
+      await settingsStore.updateTimeoutSettings(settingsStore.settings.timeout)
+      snackbar.info('Timeout settings updated')
     } finally {
-      loading.value.timeoutSettings = false;
+      loading.value.timeoutSettings = false
     }
   }
 }

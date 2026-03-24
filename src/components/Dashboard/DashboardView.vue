@@ -1,5 +1,8 @@
 <template>
-  <v-container fluid class="pa-4">
+  <v-container
+    fluid
+    class="pa-4"
+  >
     <!-- Welcome Header -->
     <v-row class="mb-6">
       <v-col>
@@ -14,38 +17,97 @@
 
     <!-- Quick Stats Cards -->
     <v-row class="mb-6">
-      <v-col cols="12" sm="6" md="3">
-        <v-card class="text-center pa-4" elevation="2">
-          <v-icon color="green" size="48" class="mb-2">print</v-icon>
-          <h2 class="text-h4 font-weight-bold text-green">{{ printingCount }}</h2>
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
+        <v-card
+          class="text-center pa-4"
+          elevation="2"
+        >
+          <v-icon
+            color="green"
+            size="48"
+            class="mb-2"
+            >print</v-icon
+          >
+          <h2 class="text-h4 font-weight-bold text-green">
+            {{ printingCount }}
+          </h2>
           <p class="text-subtitle-2">Currently Printing</p>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="3">
-        <v-card class="text-center pa-4" elevation="2">
-          <v-icon color="blue" size="48" class="mb-2">settings</v-icon>
-          <h2 class="text-h4 font-weight-bold text-blue">{{ operationalCount }}</h2>
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
+        <v-card
+          class="text-center pa-4"
+          elevation="2"
+        >
+          <v-icon
+            color="blue"
+            size="48"
+            class="mb-2"
+            >settings</v-icon
+          >
+          <h2 class="text-h4 font-weight-bold text-blue">
+            {{ operationalCount }}
+          </h2>
           <p class="text-subtitle-2">Ready to Print</p>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="3">
-        <v-card class="text-center pa-4" elevation="2">
-          <v-icon color="orange" size="48" class="mb-2">warning</v-icon>
-          <h2 class="text-h4 font-weight-bold text-orange">{{ offlineCount }}</h2>
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
+        <v-card
+          class="text-center pa-4"
+          elevation="2"
+        >
+          <v-icon
+            color="orange"
+            size="48"
+            class="mb-2"
+            >warning</v-icon
+          >
+          <h2 class="text-h4 font-weight-bold text-orange">
+            {{ offlineCount }}
+          </h2>
           <p class="text-subtitle-2">Offline / Issues</p>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="3">
-        <v-card class="text-center pa-4" elevation="2">
-          <v-icon color="purple" size="48" class="mb-2">inventory</v-icon>
-          <h2 class="text-h4 font-weight-bold text-purple">{{ totalPrinters }}</h2>
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
+        <v-card
+          class="text-center pa-4"
+          elevation="2"
+        >
+          <v-icon
+            color="purple"
+            size="48"
+            class="mb-2"
+            >inventory</v-icon
+          >
+          <h2 class="text-h4 font-weight-bold text-purple">
+            {{ totalPrinters }}
+          </h2>
           <p class="text-subtitle-2">Total Printers</p>
         </v-card>
       </v-col>
     </v-row>
 
     <!-- New User Onboarding -->
-    <v-row v-if="isNewUser" class="mb-6">
+    <v-row
+      v-if="isNewUser"
+      class="mb-6"
+    >
       <v-col>
         <v-alert
           type="info"
@@ -55,7 +117,8 @@
         >
           <v-alert-title class="mb-2">Welcome to FDM Monster!</v-alert-title>
           <p class="mb-3">
-            It looks like you're just getting started. Let's help you set up your 3D print farm.
+            It looks like you're just getting started. Let's help you set up
+            your 3D print farm.
           </p>
           <v-btn
             color="primary"
@@ -80,7 +143,10 @@
     <!-- Quick Actions -->
     <v-row class="mb-6">
       <v-col>
-        <v-card class="pa-4" elevation="2">
+        <v-card
+          class="pa-4"
+          elevation="2"
+        >
           <h3 class="text-h6 mb-4 d-flex align-center">
             <v-icon class="mr-2">flash_on</v-icon>
             Quick Actions
@@ -141,8 +207,14 @@
 
     <!-- Recent Activity & Status Overview -->
     <v-row>
-      <v-col cols="12" md="8">
-        <v-card class="pa-4 fill-height" elevation="2">
+      <v-col
+        cols="12"
+        md="8"
+      >
+        <v-card
+          class="pa-4 fill-height"
+          elevation="2"
+        >
           <div class="d-flex align-center justify-space-between mb-4">
             <h3 class="text-h6 d-flex align-center">
               <v-icon class="mr-2">timeline</v-icon>
@@ -164,7 +236,10 @@
           </div>
 
           <!-- Printer Status Grid -->
-          <div v-if="totalPrinters > 0" class="printer-status-grid">
+          <div
+            v-if="totalPrinters > 0"
+            class="printer-status-grid"
+          >
             <div
               v-for="printer in filteredPrinters.slice(0, 8)"
               :key="printer.id"
@@ -176,7 +251,9 @@
                 :class="getPrinterCardClass(printer)"
                 elevation="1"
               >
-                <div class="printer-name text-subtitle-2 font-weight-medium mb-1">
+                <div
+                  class="printer-name text-subtitle-2 font-weight-medium mb-1"
+                >
                   {{ printer.name }}
                 </div>
                 <v-chip
@@ -186,7 +263,10 @@
                 >
                   {{ getPrinterStatus(printer) }}
                 </v-chip>
-                <div v-if="isPrinterPrintingState(printer)" class="mt-2">
+                <div
+                  v-if="isPrinterPrintingState(printer)"
+                  class="mt-2"
+                >
                   <v-progress-linear
                     :model-value="getPrinterProgress(printer)"
                     height="4"
@@ -201,7 +281,10 @@
             </div>
 
             <!-- Show more link if there are more printers -->
-            <div v-if="totalPrinters > 8" class="text-center mt-3">
+            <div
+              v-if="totalPrinters > 8"
+              class="text-center mt-3"
+            >
               <v-btn
                 variant="outlined"
                 size="small"
@@ -213,7 +296,10 @@
           </div>
 
           <!-- Empty state -->
-          <div v-else class="text-center py-8">
+          <div
+            v-else
+            class="text-center py-8"
+          >
             <v-icon
               size="80"
               color="surface-variant"
@@ -237,8 +323,14 @@
         </v-card>
       </v-col>
 
-      <v-col cols="12" md="4">
-        <v-card class="pa-4 fill-height" elevation="2">
+      <v-col
+        cols="12"
+        md="4"
+      >
+        <v-card
+          class="pa-4 fill-height"
+          elevation="2"
+        >
           <h3 class="text-h6 mb-4 d-flex align-center">
             <v-icon class="mr-2">trending_up</v-icon>
             Performance Insights
@@ -336,13 +428,8 @@ const recentJobs = ref<PrintJobDto[]>([])
 // Queue data
 const { data: queueData } = useGlobalQueueQuery()
 
-const {
-  selectedTags,
-  selectedPrinterTypes,
-  tags,
-  loadTags,
-  filterPrinters
-} = usePrinterFilters()
+const { selectedTags, selectedPrinterTypes, tags, loadTags, filterPrinters } =
+  usePrinterFilters()
 
 onMounted(async () => {
   await loadTags()
@@ -374,12 +461,15 @@ const printers = computed(() => printerStore.printers)
 const filteredPrinters = computed(() => filterPrinters(printers.value))
 const totalPrinters = computed(() => printers.value.length)
 const printingCount = computed(() => printerStateStore.printingCount)
-const operationalCount = computed(() => printerStateStore.operationalNotPrintingCount)
-const offlineCount = computed(() =>
-  printers.value.filter(p => {
-    const state = printerStateStore.printerEventsById[p.id]
-    return isPrinterDisconnected(p, state) || isPrinterInMaintenance(p)
-  }).length
+const operationalCount = computed(
+  () => printerStateStore.operationalNotPrintingCount
+)
+const offlineCount = computed(
+  () =>
+    printers.value.filter((p) => {
+      const state = printerStateStore.printerEventsById[p.id]
+      return isPrinterDisconnected(p, state) || isPrinterInMaintenance(p)
+    }).length
 )
 
 const isNewUser = computed(() => totalPrinters.value === 0)
@@ -397,7 +487,9 @@ const jobMetrics = computed(() => {
 const successRate = computed(() => jobMetrics.value.successRate)
 const activeJobs = computed(() => jobMetrics.value.activeJobs)
 const queueLength = computed(() => queueData.value?.totalJobs || 0)
-const avgPrintTime = computed(() => formatPrintTime(jobMetrics.value.averagePrintTimeHours))
+const avgPrintTime = computed(() =>
+  formatPrintTime(jobMetrics.value.averagePrintTimeHours)
+)
 
 // Navigation methods
 const goToPrinterGrid = () => {
@@ -451,12 +543,18 @@ const getPrinterStatus = (printer: any) => {
 const getPrinterStatusColor = (printer: any) => {
   const status = getPrinterStatus(printer)
   switch (status) {
-    case 'PRINTING': return 'success'
-    case 'READY': return 'primary'
-    case 'MAINTENANCE': return 'warning'
-    case 'OFFLINE': return 'error'
-    case 'DISABLED': return 'secondary'
-    default: return 'surface'
+    case 'PRINTING':
+      return 'success'
+    case 'READY':
+      return 'primary'
+    case 'MAINTENANCE':
+      return 'warning'
+    case 'OFFLINE':
+      return 'error'
+    case 'DISABLED':
+      return 'secondary'
+    default:
+      return 'surface'
   }
 }
 

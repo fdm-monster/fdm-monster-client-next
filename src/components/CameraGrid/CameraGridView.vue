@@ -105,7 +105,9 @@
             <v-icon
               start
               size="small"
-            >videocam</v-icon>
+            >
+              videocam
+            </v-icon>
             {{ filteredCameras.length }} cameras
           </v-chip>
           <v-chip
@@ -115,7 +117,9 @@
             <v-icon
               start
               size="small"
-            >error_outline</v-icon>
+            >
+              error_outline
+            </v-icon>
             {{ unavailableCount }} unavailable
           </v-chip>
         </v-col>
@@ -183,9 +187,7 @@
               >
                 <v-icon size="32">add_a_photo</v-icon>
               </v-avatar>
-              <div class="text-h6 font-weight-bold mb-2">
-                Get Started
-              </div>
+              <div class="text-h6 font-weight-bold mb-2">Get Started</div>
               <div class="text-body-2 text-medium-emphasis mb-4 px-4">
                 Add your first camera stream to monitor your 3D printers
               </div>
@@ -224,13 +226,17 @@
                 class="mr-2"
               >
                 <v-icon size="20">
-                  {{ camera.cameraStream.printerId ? 'print' : 'videocam' }}
+                  {{ camera.cameraStream.printerId ? "print" : "videocam" }}
                 </v-icon>
               </v-avatar>
               <div class="flex-grow-1 text-truncate">
                 <div class="d-flex align-center gap-2 mb-1">
                   <div class="text-subtitle-2 font-weight-bold text-truncate">
-                    {{ camera.cameraStream.name || camera.printer?.name || 'Camera' }}
+                    {{
+                      camera.cameraStream.name ||
+                      camera.printer?.name ||
+                      "Camera"
+                    }}
                   </div>
                 </div>
                 <div
@@ -258,7 +264,11 @@
               <img
                 v-if="camera.cameraStream.id"
                 alt="Camera stream"
-                v-show="camera.cameraStream.id && !cameraErrors[camera.cameraStream.id] && !cameraLoading[camera.cameraStream.id]"
+                v-show="
+                  camera.cameraStream.id &&
+                  !cameraErrors[camera.cameraStream.id] &&
+                  !cameraLoading[camera.cameraStream.id]
+                "
                 :src="camera.cameraStream.streamURL"
                 class="camera-stream"
                 :style="getCameraTransformStyle(camera.cameraStream)"
@@ -266,7 +276,11 @@
                 @load="handleCameraLoad(camera.cameraStream.id)"
               />
               <div
-                v-if="camera.cameraStream.id && cameraLoading[camera.cameraStream.id] && !cameraErrors[camera.cameraStream.id]"
+                v-if="
+                  camera.cameraStream.id &&
+                  cameraLoading[camera.cameraStream.id] &&
+                  !cameraErrors[camera.cameraStream.id]
+                "
                 class="camera-loading"
               >
                 <v-progress-circular
@@ -277,15 +291,23 @@
                 <div class="text-caption mt-2">Connecting...</div>
               </div>
               <div
-                v-if="camera.cameraStream.id && cameraErrors[camera.cameraStream.id]"
+                v-if="
+                  camera.cameraStream.id && cameraErrors[camera.cameraStream.id]
+                "
                 class="camera-unavailable"
               >
                 <v-icon
                   size="48"
                   color="error"
-                >videocam_off</v-icon>
-                <div class="text-body-2 font-weight-bold mt-2">Camera stream unavailable</div>
-                <div class="text-caption text-medium-emphasis mt-1">Unable to connect to stream</div>
+                >videocam_off
+                </v-icon
+                >
+                <div class="text-body-2 font-weight-bold mt-2">
+                  Camera stream unavailable
+                </div>
+                <div class="text-caption text-medium-emphasis mt-1">
+                  Unable to connect to stream
+                </div>
               </div>
             </div>
 
@@ -328,93 +350,88 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref, watch, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { CameraStreamService } from '@/backend/camera-stream.service'
-import { useDialog } from '@/shared/dialog.composable'
-import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
-import { useMutation, useQuery } from '@tanstack/vue-query'
-import { CameraWithPrinter } from '@/models/camera-streams/camera-stream'
-import { usePrinterStore } from '@/store/printer.store'
-import { useFileExplorer } from '@/shared/file-explorer.composable'
-import type { PrinterDto } from '@/models/printers/printer.model'
-import { getPrinterTypeName } from '@/shared/printer-types.constants'
-import { usePrinterFilters } from '@/shared/printer-filter.composable'
-import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'
-import PrinterTypeFilter from '@/components/Generic/Filters/PrinterTypeFilter.vue'
+import { computed, reactive, ref, watch, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { CameraStreamService } from "@/backend/camera-stream.service";
+import { useDialog } from "@/shared/dialog.composable";
+import { DialogName } from "@/components/Generic/Dialogs/dialog.constants";
+import { useMutation, useQuery } from "@tanstack/vue-query";
+import { CameraWithPrinter } from "@/models/camera-streams/camera-stream";
+import { usePrinterStore } from "@/store/printer.store";
+import { useFileExplorer } from "@/shared/file-explorer.composable";
+import type { PrinterDto } from "@/models/printers/printer.model";
+import { getPrinterTypeName } from "@/shared/printer-types.constants";
+import { usePrinterFilters } from "@/shared/printer-filter.composable";
+import PrinterTagFilter from "@/components/Generic/Filters/PrinterTagFilter.vue";
+import PrinterTypeFilter from "@/components/Generic/Filters/PrinterTypeFilter.vue";
 
-const route = useRoute()
-const printerStore = usePrinterStore()
-const dialog = useDialog(DialogName.AddOrUpdateCameraDialog)
-const fileExplorer = useFileExplorer()
+const route = useRoute();
+const printerStore = usePrinterStore();
+const dialog = useDialog(DialogName.AddOrUpdateCameraDialog);
+const fileExplorer = useFileExplorer();
 
-const {
-  selectedTags,
-  selectedPrinterTypes,
-  tags,
-  loadTags,
-  matchesPrinter
-} = usePrinterFilters()
+const { selectedTags, selectedPrinterTypes, tags, loadTags, matchesPrinter } =
+  usePrinterFilters();
 
 // Reactive state
-const searchQuery = ref('')
-const filterPrinter = ref<number | null>(null)
-const showOnlyUnavailable = ref(false)
-const cameraErrors = reactive<Record<number, boolean>>({})
-const cameraLoading = reactive<Record<number, boolean>>({})
+const searchQuery = ref("");
+const filterPrinter = ref<number | null>(null);
+const showOnlyUnavailable = ref(false);
+const cameraErrors = reactive<Record<number, boolean>>({});
+const cameraLoading = reactive<Record<number, boolean>>({});
 
 onMounted(async () => {
-  await loadTags()
+  await loadTags();
 
   // Check for printer query parameter
-  const printerParam = route.query.printer
+  const printerParam = route.query.printer;
   if (printerParam) {
-    filterPrinter.value = Number(printerParam)
+    filterPrinter.value = Number(printerParam);
   }
-})
+});
 
 // Fetch cameras with printer data
 const camerasWithPrinter = async (): Promise<CameraWithPrinter[]> => {
-  const streams = await CameraStreamService.listCameraStreams()
+  const streams = await CameraStreamService.listCameraStreams();
   return streams.map((cameraStream) => ({
     printer: printerStore.printers.find(
-      (printer) => printer.id === cameraStream.printerId
+      (printer) => printer.id === cameraStream.printerId,
     ),
-    cameraStream
-  })) as CameraWithPrinter[]
-}
+    cameraStream,
+  })) as CameraWithPrinter[];
+};
 
 const query = useQuery({
-  queryKey: ['cameraStream'],
-  queryFn: camerasWithPrinter
-})
+  queryKey: ["cameraStream"],
+  queryFn: camerasWithPrinter,
+});
 
 const deleteMutation = useMutation({
   mutationFn: (cameraId: number) =>
     CameraStreamService.deleteCameraStream(cameraId),
-  onSuccess: () => query.refetch()
-})
+  onSuccess: () => query.refetch(),
+});
 
 // Printer filter options
 const printerFilterOptions = computed(() => {
   const options: { title: string; value: number | null }[] = [
-    { title: 'All Cameras', value: null },
-    { title: 'Unassigned Cameras', value: -1 }
-  ]
+    { title: "All Cameras", value: null },
+    { title: "Unassigned Cameras", value: -1 },
+  ];
 
   printerStore.printers.forEach((printer) => {
     options.push({
       title: printer.name,
-      value: printer.id as number
-    })
-  })
+      value: printer.id as number,
+    });
+  });
 
-  return options
-})
+  return options;
+});
 
 // Filtered cameras based on search and filters
 const filteredCameras = computed(() => {
-  if (!query.data.value) return []
+  if (!query.data.value) return [];
 
   return query.data.value.filter((camera) => {
     // Search filter
@@ -425,32 +442,37 @@ const filteredCameras = computed(() => {
         .includes(searchQuery.value.toLowerCase()) ||
       camera.printer?.name
         ?.toLowerCase()
-        .includes(searchQuery.value.toLowerCase())
+        .includes(searchQuery.value.toLowerCase());
 
     // Printer filter
     const matchesSpecificPrinter =
       filterPrinter.value === null ||
       (filterPrinter.value === -1 && !camera.cameraStream.printerId) ||
-      camera.cameraStream.printerId === filterPrinter.value
+      camera.cameraStream.printerId === filterPrinter.value;
 
     // Printer filter (tags and type)
     const matchesPrinterFilter = camera.printer
       ? matchesPrinter(camera.printer)
-      : (selectedTags.value.length === 0 && selectedPrinterTypes.value.length === 0)
+      : selectedTags.value.length === 0 &&
+      selectedPrinterTypes.value.length === 0;
 
     // Unavailable filter
     const matchesAvailability =
-      !showOnlyUnavailable.value ||
-      cameraErrors[camera.cameraStream.id!]
+      !showOnlyUnavailable.value || cameraErrors[camera.cameraStream.id!];
 
-    return matchesSearch && matchesSpecificPrinter && matchesPrinterFilter && matchesAvailability
-  })
-})
+    return (
+      matchesSearch &&
+      matchesSpecificPrinter &&
+      matchesPrinterFilter &&
+      matchesAvailability
+    );
+  });
+});
 
 // Count unavailable cameras
 const unavailableCount = computed(() => {
-  return Object.values(cameraErrors).filter(Boolean).length
-})
+  return Object.values(cameraErrors).filter(Boolean).length;
+});
 
 // Check if filters are active
 const hasActiveFilters = computed(() => {
@@ -459,31 +481,31 @@ const hasActiveFilters = computed(() => {
     showOnlyUnavailable.value ||
     selectedTags.value.length > 0 ||
     selectedPrinterTypes.value.length > 0
-  )
-})
+  );
+});
 
 // Count active filters
 const activeFilterCount = computed(() => {
-  let count = 0
-  if (filterPrinter.value !== null && filterPrinter.value !== undefined) count++
-  if (showOnlyUnavailable.value) count++
-  if (selectedTags.value.length > 0) count++
-  if (selectedPrinterTypes.value.length > 0) count++
-  return count
-})
+  let count = 0;
+  if (filterPrinter.value !== null && filterPrinter.value !== undefined) count++;
+  if (showOnlyUnavailable.value) count++;
+  if (selectedTags.value.length > 0) count++;
+  if (selectedPrinterTypes.value.length > 0) count++;
+  return count;
+});
 
 // Camera error and loading handling
 function handleCameraError(cameraId?: number) {
   if (cameraId) {
-    cameraErrors[cameraId] = true
-    cameraLoading[cameraId] = false
+    cameraErrors[cameraId] = true;
+    cameraLoading[cameraId] = false;
   }
 }
 
 function handleCameraLoad(cameraId?: number) {
   if (cameraId) {
-    cameraErrors[cameraId] = false
-    cameraLoading[cameraId] = false
+    cameraErrors[cameraId] = false;
+    cameraLoading[cameraId] = false;
   }
 }
 
@@ -493,74 +515,77 @@ watch(
   (cameras) => {
     if (cameras) {
       cameras.forEach((camera) => {
-        if (camera.cameraStream.id && cameraLoading[camera.cameraStream.id] === undefined) {
-          cameraLoading[camera.cameraStream.id] = true
+        if (
+          camera.cameraStream.id &&
+          cameraLoading[camera.cameraStream.id] === undefined
+        ) {
+          cameraLoading[camera.cameraStream.id] = true;
         }
-      })
+      });
     }
   },
-  { immediate: true }
-)
+  { immediate: true },
+);
 
 // Clear all filters
 function clearFilters() {
-  filterPrinter.value = null
-  showOnlyUnavailable.value = false
-  selectedTags.value = []
-  selectedPrinterTypes.value = []
+  filterPrinter.value = null;
+  showOnlyUnavailable.value = false;
+  selectedTags.value = [];
+  selectedPrinterTypes.value = [];
 }
 
 // Dialog actions
 function addCamera() {
-  dialog.openDialog({ addOrUpdate: 'add' })
+  dialog.openDialog({ addOrUpdate: "add" });
 }
 
 function updateCamera(cameraId?: number) {
-  if (!cameraId) return
-  dialog.openDialog({ addOrUpdate: 'update', cameraId })
+  if (!cameraId) return;
+  dialog.openDialog({ addOrUpdate: "update", cameraId });
 }
 
 function confirmDeleteCamera(camera: CameraWithPrinter) {
   const cameraName =
-    camera.cameraStream.name || camera.printer?.name || 'this camera'
+    camera.cameraStream.name || camera.printer?.name || "this camera";
   if (confirm(`Are you sure you want to delete ${cameraName}?`)) {
-    deleteCamera(camera.cameraStream.id)
+    deleteCamera(camera.cameraStream.id);
   }
 }
 
 function deleteCamera(cameraId?: number) {
-  if (!cameraId) return
-  deleteMutation.mutateAsync(cameraId)
+  if (!cameraId) return;
+  deleteMutation.mutateAsync(cameraId);
 }
 
 function openPrinterSideNav(printer: PrinterDto) {
-  fileExplorer.openFileExplorer(printer)
+  fileExplorer.openFileExplorer(printer);
 }
 
 // Get camera container style (aspect ratio)
 function getCameraContainerStyle(cameraStream: any) {
-  const aspectRatio = cameraStream.aspectRatio || '16:9'
+  const aspectRatio = cameraStream.aspectRatio || "16:9";
   return {
-    aspectRatio: aspectRatio.replace(':', ' / ')
-  }
+    aspectRatio: aspectRatio.replace(":", " / "),
+  };
 }
 
 // Get camera transform style based on settings
 function getCameraTransformStyle(cameraStream: any) {
-  const transforms = []
+  const transforms = [];
 
   if (cameraStream.rotationClockwise) {
-    transforms.push(`rotate(${cameraStream.rotationClockwise}deg)`)
+    transforms.push(`rotate(${cameraStream.rotationClockwise}deg)`);
   }
 
-  const scaleX = cameraStream.flipHorizontal ? -1 : 1
-  const scaleY = cameraStream.flipVertical ? -1 : 1
+  const scaleX = cameraStream.flipHorizontal ? -1 : 1;
+  const scaleY = cameraStream.flipVertical ? -1 : 1;
 
   if (scaleX !== 1 || scaleY !== 1) {
-    transforms.push(`scale(${scaleX}, ${scaleY})`)
+    transforms.push(`scale(${scaleX}, ${scaleY})`);
   }
 
-  return transforms.length > 0 ? { transform: transforms.join(' ') } : {}
+  return transforms.length > 0 ? { transform: transforms.join(" ") } : {};
 }
 </script>
 
@@ -575,7 +600,8 @@ function getCameraTransformStyle(cameraStream: any) {
   height: 100%;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease,
+  box-shadow 0.2s ease;
 }
 
 .camera-stream-container {

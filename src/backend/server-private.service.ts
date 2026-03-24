@@ -21,11 +21,7 @@ export class ServerPrivateService extends BaseService {
   public static async uploadAndImportYaml(file: File) {
     const formData = new FormData()
     formData.append('file', file)
-    return await this.postUpload(
-      'api/v2/server/yaml-import',
-      formData,
-      {}
-    )
+    return await this.postUpload('api/v2/server/yaml-import', formData, {})
   }
 
   public static async downloadLogDump() {
