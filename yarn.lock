@@ -912,7 +912,7 @@ __metadata:
     eslint-plugin-n: "npm:17.24.0"
     eslint-plugin-prettier: "npm:5.5.5"
     eslint-plugin-promise: "npm:7.2.1"
-    eslint-plugin-vue: "npm:10.8.0"
+    eslint-plugin-vue: "npm:10.9.0"
     eslint-plugin-vuetify: "npm:2.7.2"
     jsdom: "npm:29.0.2"
     jwt-decode: "npm:4.0.0"
@@ -4763,7 +4763,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:10.8.0, eslint-plugin-vue@npm:^10.8.0":
+"eslint-plugin-vue@npm:10.9.0":
+  version: 10.9.0
+  resolution: "eslint-plugin-vue@npm:10.9.0"
+  dependencies:
+    "@eslint-community/eslint-utils": "npm:^4.4.0"
+    natural-compare: "npm:^1.4.0"
+    nth-check: "npm:^2.1.1"
+    postcss-selector-parser: "npm:^7.1.0"
+    semver: "npm:^7.6.3"
+    xml-name-validator: "npm:^4.0.0"
+  peerDependencies:
+    "@stylistic/eslint-plugin": ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
+    "@typescript-eslint/parser": ^7.0.0 || ^8.0.0
+    eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
+    vue-eslint-parser: ^10.0.0
+  peerDependenciesMeta:
+    "@stylistic/eslint-plugin":
+      optional: true
+    "@typescript-eslint/parser":
+      optional: true
+  checksum: 10c0/c8288cf7f7c1551ce7638bca206d0220db872b8fd1371f408a8aa434d0c4c02c3121ed7d0fae6ba9c65fec32ec05fe61f3ca85acbd2ead584a6f2567b77e1381
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-vue@npm:^10.8.0":
   version: 10.8.0
   resolution: "eslint-plugin-vue@npm:10.8.0"
   dependencies:
