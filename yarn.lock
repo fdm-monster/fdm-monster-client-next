@@ -898,7 +898,7 @@ __metadata:
     "@vitest/ui": "npm:4.1.5"
     "@vitest/web-worker": "npm:4.1.5"
     "@vue/eslint-config-typescript": "npm:14.7.0"
-    "@vue/test-utils": "npm:2.4.6"
+    "@vue/test-utils": "npm:2.4.8"
     "@vueuse/core": "npm:14.2.1"
     "@vueuse/integrations": "npm:14.2.1"
     axios: "npm:1.15.2"
@@ -2917,7 +2917,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/test-utils@npm:2.4.6, @vue/test-utils@npm:^2.4.1":
+"@vue/test-utils@npm:2.4.8":
+  version: 2.4.8
+  resolution: "@vue/test-utils@npm:2.4.8"
+  dependencies:
+    js-beautify: "npm:^1.14.9"
+    vue-component-type-helpers: "npm:^3.0.0"
+  peerDependencies:
+    "@vue/compiler-dom": 3.x
+    "@vue/server-renderer": 3.x
+    vue: 3.x
+  peerDependenciesMeta:
+    "@vue/server-renderer":
+      optional: true
+  checksum: 10c0/3de2f5cf86763af2acf28f74cdc3d5f6c72b640b928e1ce0dbc9d7abad9f90816f0ed6d28a433ec17a525913fd5036588a616a572489106080754ae1d750dfc4
+  languageName: node
+  linkType: hard
+
+"@vue/test-utils@npm:^2.4.1":
   version: 2.4.6
   resolution: "@vue/test-utils@npm:2.4.6"
   dependencies:
@@ -9656,6 +9673,13 @@ __metadata:
   version: 2.1.8
   resolution: "vue-component-type-helpers@npm:2.1.8"
   checksum: 10c0/fa19b9c69d76a3579e5164dfb8da981bd8bb7980dc42e2f31dbb1058cf5812694b22cf611189fd297f5e76c6a7090cf2853f16d4701cdb0b4f5438d622010cb0
+  languageName: node
+  linkType: hard
+
+"vue-component-type-helpers@npm:^3.0.0":
+  version: 3.2.7
+  resolution: "vue-component-type-helpers@npm:3.2.7"
+  checksum: 10c0/598e14feee291484c68c9d5d3fcb9c5b0f2ea5cf528681ce30822af86ab521100015f8311efff5ec2c58afef2af826060a769e11113bd02392866a48d8d64bb5
   languageName: node
   linkType: hard
 
