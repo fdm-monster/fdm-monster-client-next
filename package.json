@@ -59,7 +59,7 @@
     "@sentry/tracing": "7.120.4",
     "@sentry/vite-plugin": "5.2.0",
     "@sentry/vue": "10.50.0",
-    "@tanstack/vue-query": "5.100.3",
+    "@tanstack/vue-query": "5.100.5",
     "@testing-library/vue": "8.1.0",
     "@types/js-yaml": "4.0.9",
     "@types/jsdom": "28.0.1",
