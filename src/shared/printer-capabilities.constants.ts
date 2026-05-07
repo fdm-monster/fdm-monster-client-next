@@ -19,7 +19,7 @@ const OCTOPRINT_CAPABILITIES: PrinterCapabilities = {
 const MOONRAKER_CAPABILITIES: PrinterCapabilities = {
   hasSerialConnection: false,
   canSyncName: false,
-  hasWebInterface: false,
+  hasWebInterface: true,
   hasEmergencyStop: true,
   hasPrinterControl: true
 }
