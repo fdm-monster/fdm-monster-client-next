@@ -49,43 +49,63 @@
           <span>Loading API keys…</span>
         </div>
 
-        <v-table v-else-if="keys.length" density="compact">
-          <thead>
-            <tr>
-              <th class="text-left">Label</th>
-              <th class="text-left">Prefix</th>
-              <th class="text-left">Created</th>
-              <th class="text-left">Last used</th>
-              <th class="text-left">Status</th>
-              <th class="text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="key in keys" :key="key.id">
-              <td>{{ key.label }}</td>
-              <td style="font-family: monospace;">fdmm_pat_{{ key.prefix.slice(0, 6) }}…</td>
-              <td>{{ formatDate(key.createdAt) }}</td>
-              <td>{{ key.lastUsedAt ? formatDate(key.lastUsedAt) : '—' }}</td>
-              <td>
-                <v-chip v-if="key.revokedAt" size="x-small" color="error" variant="tonal">Revoked</v-chip>
-                <v-chip v-else size="x-small" color="success" variant="tonal">Active</v-chip>
-              </td>
-              <td class="text-right">
-                <v-btn
-                  v-if="!key.revokedAt"
-                  size="small"
-                  variant="text"
-                  color="error"
-                  prepend-icon="delete"
-                  :loading="revokingId === key.id"
-                  @click="confirmRevoke(key)"
-                >
-                  Revoke
-                </v-btn>
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
+        <template v-else-if="keys.length">
+          <div class="d-flex align-center mb-2">
+            <span class="text-caption text-medium-emphasis">
+              {{ activeKeyCount }} active{{ revokedKeyCount > 0 ? `, ${revokedKeyCount} revoked` : '' }}
+            </span>
+            <v-spacer />
+            <v-checkbox
+              v-if="revokedKeyCount > 0"
+              v-model="showRevoked"
+              :label="`Show revoked (${revokedKeyCount})`"
+              density="compact"
+              hide-details
+            />
+          </div>
+
+          <v-table density="compact">
+            <thead>
+              <tr>
+                <th class="text-left">Label</th>
+                <th class="text-left">Prefix</th>
+                <th class="text-left">Created</th>
+                <th class="text-left">Last used</th>
+                <th class="text-left">Status</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="key in visibleKeys" :key="key.id">
+                <td>{{ key.label }}</td>
+                <td style="font-family: monospace;">fdmm_pat_{{ key.prefix.slice(0, 6) }}…</td>
+                <td>{{ formatDate(key.createdAt) }}</td>
+                <td>{{ key.lastUsedAt ? formatDate(key.lastUsedAt) : '—' }}</td>
+                <td>
+                  <v-chip v-if="key.revokedAt" size="x-small" color="error" variant="tonal">Revoked</v-chip>
+                  <v-chip v-else size="x-small" color="success" variant="tonal">Active</v-chip>
+                </td>
+                <td class="text-right">
+                  <v-btn
+                    v-if="!key.revokedAt"
+                    size="small"
+                    variant="text"
+                    color="error"
+                    prepend-icon="delete"
+                    :loading="revokingId === key.id"
+                    @click="confirmRevoke(key)"
+                  >
+                    Revoke
+                  </v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
+
+          <v-alert v-if="!visibleKeys.length" color="info" variant="tonal" density="compact" class="text-center mt-3">
+            All your keys are revoked. Toggle "Show revoked" above to view them.
+          </v-alert>
+        </template>
 
         <v-alert v-else color="warning" variant="tonal" density="compact" class="text-center">
           No API keys yet. Create one above to give an external script or dashboard programmatic access.
@@ -150,7 +170,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { ApiKeyService } from '@/backend'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
 import type { ApiKeyDto } from '@/models/api-key/api-key.dto'
@@ -166,6 +186,16 @@ const createdToken = ref('')
 const copied = ref(false)
 const showRevokeDialog = ref(false)
 const keyToRevoke = ref<ApiKeyDto | null>(null)
+const showRevoked = ref(false)
+
+// Active rows always show; revoked rows only when the toggle is on. Revoked
+// entries are kept around for the audit trail (operators can correlate
+// `fdmm_pat_<prefix>` hits in request logs back to the key that minted them).
+const activeKeyCount = computed(() => keys.value.filter((k) => !k.revokedAt).length)
+const revokedKeyCount = computed(() => keys.value.filter((k) => !!k.revokedAt).length)
+const visibleKeys = computed(() =>
+  keys.value.filter((k) => !k.revokedAt || showRevoked.value),
+)
 
 async function loadKeys() {
   isLoading.value = true
