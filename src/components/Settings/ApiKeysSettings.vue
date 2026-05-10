@@ -63,7 +63,7 @@
           <tbody>
             <tr v-for="key in keys" :key="key.id">
               <td>{{ key.label }}</td>
-              <td style="font-family: monospace;">fdmm_pat_{{ key.prefix }}…</td>
+              <td style="font-family: monospace;">fdmm_pat_{{ key.prefix.slice(0, 6) }}…</td>
               <td>{{ formatDate(key.createdAt) }}</td>
               <td>{{ key.lastUsedAt ? formatDate(key.lastUsedAt) : '—' }}</td>
               <td>
