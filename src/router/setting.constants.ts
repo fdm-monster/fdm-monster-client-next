@@ -9,6 +9,7 @@ export const settingPage = {
   diagnostics: "diagnostics",
   experimental: "experimental",
   slicer: "slicer",
+  apiKeys: "apiKeys",
   debugSocket: "debugSocket",
   about: "about",
 } as const;
@@ -73,6 +74,12 @@ export const settingsPage = {
     icon: "print",
     path: "/settings/slicer",
     divider: false, },
+  [settingPage.apiKeys]: {
+    title: "API Keys",
+    icon: "vpn_key",
+    path: "/settings/api-keys",
+    divider: false,
+  },
   [settingPage.debugSocket]: {
     title: "SocketIO Debug",
     icon: "wifi_tethering",

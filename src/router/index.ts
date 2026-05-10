@@ -24,6 +24,7 @@ import MaintenanceLogsView from '../components/MaintenanceLogs/MaintenanceLogsVi
 import FilesView from '../components/Files/FilesView.vue'
 import ExperimentalSettings from '@/components/Settings/ExperimentalSettings.vue'
 import SlicerSettings from '@/components/Settings/SlicerSettings.vue'
+import ApiKeysSettings from '@/components/Settings/ApiKeysSettings.vue'
 import DebugSocketSettings from "@/components/Settings/DebugSocketSettings.vue";
 import AboutSettings from "@/components/Settings/AboutSettings.vue";
 
@@ -145,6 +146,11 @@ const router = createRouter({
           path: 'slicer',
           meta: NeedsAuth,
           component: SlicerSettings
+        },
+        {
+          path: 'api-keys',
+          meta: NeedsAuth,
+          component: ApiKeysSettings
         },
         {
           path: "debug-socket",
