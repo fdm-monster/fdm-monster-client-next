@@ -67,12 +67,12 @@
           <v-table density="compact">
             <thead>
               <tr>
-                <th class="text-left">Label</th>
-                <th class="text-left">Prefix</th>
-                <th class="text-left">Created</th>
-                <th class="text-left">Last used</th>
-                <th class="text-left">Status</th>
-                <th class="text-right">Actions</th>
+                <th scope="col" class="text-left">Label</th>
+                <th scope="col" class="text-left">Prefix</th>
+                <th scope="col" class="text-left">Created</th>
+                <th scope="col" class="text-left">Last used</th>
+                <th scope="col" class="text-left">Status</th>
+                <th scope="col" class="text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
