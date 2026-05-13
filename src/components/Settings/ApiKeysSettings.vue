@@ -109,7 +109,7 @@
             <tbody>
               <tr v-for="key in keys" :key="key.id">
                 <td>{{ key.label }}</td>
-                <td style="font-family: monospace;">fdmm_pat_{{ key.prefix.slice(0, 6) }}…</td>
+                <td style="font-family: monospace;">fdmm_api_{{ key.prefix.slice(0, 6) }}…</td>
                 <td>
                   <v-chip
                     v-for="role in key.roles"
