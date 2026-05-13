@@ -45,12 +45,12 @@ onMounted(async () => {
 })
 
 // Filter out admin-only settings entries when the user lacks ADMIN.
-const ADMIN_ONLY: string[] = [settingPage.apiKeys]
+const ADMIN_ONLY = new Set<string>([settingPage.apiKeys])
 const visibleItems = computed(() => {
   if (profileStore.isAdmin) return settingsPage
   const filtered: Record<string, (typeof settingsPage)[keyof typeof settingsPage]> = {}
   for (const [key, value] of Object.entries(settingsPage)) {
-    if (!ADMIN_ONLY.includes(key)) filtered[key] = value
+    if (!ADMIN_ONLY.has(key)) filtered[key] = value
   }
   return filtered as typeof settingsPage
 })

@@ -205,8 +205,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { ApiKeyService, UserService } from '@/backend'
-import { SettingsService } from '@/backend'
+import { ApiKeyService, SettingsService, UserService } from '@/backend'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
 import type { ApiKeyDto } from '@/models/api-key/api-key.dto'
 import type { Role } from '@/models/user.model'
