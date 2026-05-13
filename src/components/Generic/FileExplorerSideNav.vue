@@ -340,75 +340,79 @@
             </div>
           </div>
 
-          <!-- File List -->
-          <v-list
-            density="compact"
+          <!-- File List (virtualized so an SD card with hundreds of gcodes
+               stays responsive and the inner scroll is contained) -->
+          <v-virtual-scroll
+            :items="fileTree"
+            item-height="48"
             class="file-tree"
           >
-            <v-list-item
-              v-for="item in fileTree"
-              :key="item.id"
-              :class="{ 'cursor-pointer': item.type === 'folder' }"
-              @click="item.type === 'folder' ? navigateToDir(item.path) : undefined"
-            >
-              <template #prepend>
-                <v-icon
-                  :color="item.type === 'file' && item.file && isFileBeingPrinted(item.file) ? 'primary' : 'medium-emphasis'"
-                >
-                  {{ getTreeIcon(item) }}
-                </v-icon>
-              </template>
-
-              <v-list-item-title>
-                <div class="d-flex align-center">
-                  <span
-                    :class="{ 'text-primary font-weight-bold': item.type === 'file' && item.file && isFileBeingPrinted(item.file) }"
-                    class="text-body-2"
-                    :title="item.path"
+            <template #default="{ item }">
+              <v-list-item
+                :key="item.id"
+                density="compact"
+                :class="{ 'cursor-pointer': item.type === 'folder' }"
+                @click="item.type === 'folder' ? navigateToDir(item.path) : undefined"
+              >
+                <template #prepend>
+                  <v-icon
+                    :color="item.type === 'file' && item.file && isFileBeingPrinted(item.file) ? 'primary' : 'medium-emphasis'"
                   >
-                    {{ item.name }}
-                  </span>
-                  <span
+                    {{ getTreeIcon(item) }}
+                  </v-icon>
+                </template>
+
+                <v-list-item-title>
+                  <div class="d-flex align-center">
+                    <span
+                      :class="{ 'text-primary font-weight-bold': item.type === 'file' && item.file && isFileBeingPrinted(item.file) }"
+                      class="text-body-2"
+                      :title="item.path"
+                    >
+                      {{ item.name }}
+                    </span>
+                    <span
+                      v-if="item.type === 'file' && item.file"
+                      class="text-caption text-medium-emphasis ml-2"
+                    >
+                      {{ formatFileSize(item.file.size ?? undefined) }}
+                    </span>
+                  </div>
+                </v-list-item-title>
+
+                <template #append>
+                  <div
                     v-if="item.type === 'file' && item.file"
-                    class="text-caption text-medium-emphasis ml-2"
+                    class="d-flex ga-1"
+                    @click.stop
                   >
-                    {{ formatFileSize(item.file.size ?? undefined) }}
-                  </span>
-                </div>
-              </v-list-item-title>
-
-              <template #append>
-                <div
-                  v-if="item.type === 'file' && item.file"
-                  class="d-flex ga-1"
-                  @click.stop
-                >
-                  <v-btn
-                    icon="download"
-                    size="x-small"
-                    variant="text"
-                    @click="clickDownloadFile(item.file.path)"
-                  />
-                  <v-btn
-                    :disabled="isFileBeingPrinted(item.file)"
-                    icon="play_arrow"
-                    size="x-small"
-                    variant="text"
-                    color="success"
-                    @click="clickPrintFile(item.file)"
-                  />
-                  <v-btn
-                    :disabled="isFileBeingPrinted(item.file)"
-                    icon="delete"
-                    size="x-small"
-                    variant="text"
-                    color="error"
-                    @click="deleteFile(item.file)"
-                  />
-                </div>
-              </template>
-            </v-list-item>
-          </v-list>
+                    <v-btn
+                      icon="download"
+                      size="x-small"
+                      variant="text"
+                      @click="clickDownloadFile(item.file.path)"
+                    />
+                    <v-btn
+                      :disabled="isFileBeingPrinted(item.file)"
+                      icon="play_arrow"
+                      size="x-small"
+                      variant="text"
+                      color="success"
+                      @click="clickPrintFile(item.file)"
+                    />
+                    <v-btn
+                      :disabled="isFileBeingPrinted(item.file)"
+                      icon="delete"
+                      size="x-small"
+                      variant="text"
+                      color="error"
+                      @click="deleteFile(item.file)"
+                    />
+                  </div>
+                </template>
+              </v-list-item>
+            </template>
+          </v-virtual-scroll>
         </div>
       </v-card-text>
     </v-card>
@@ -783,9 +787,12 @@ function getTreeIcon(item: TreeNode) {
 }
 
 .file-list {
-  overflow-y: auto;
-  flex: 1 1 auto;
+  /* v-virtual-scroll manages its own scrolling; we just need a bounded box. */
+  overflow: hidden;
+  flex: 1 1 0;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .cursor-pointer {
