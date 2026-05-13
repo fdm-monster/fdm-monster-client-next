@@ -1,6 +1,6 @@
 # Develop
 
-## Client 2.3.5
+## Client 2.4.0
 
 Features
 
