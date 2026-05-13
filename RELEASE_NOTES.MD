@@ -2,9 +2,15 @@
 
 ## Client 2.3.5
 
+Features
+
+- API keys management UI for user-managed programmatic access by administrators
+
 ## Client 2.3.4
 
+Fixes
 
+- Re-enable redirect to moonraker
 
 ## Client 2.3.3
 
