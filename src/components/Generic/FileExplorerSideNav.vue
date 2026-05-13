@@ -588,8 +588,9 @@ watch(printerId, async (newPrinterId, oldPrinterId) => {
 // bookmark, share-link, and browser back/forward all do the right thing.
 
 function parseRouteSidenav() {
-  const idRaw = route.query.sidenav
-  const id = idRaw != null ? Number(idRaw) : NaN
+  // Number(undefined) -> NaN and Number(null) -> 0, both caught by `id > 0`
+  // and Number.isFinite below — no need for an explicit nullish branch.
+  const id = Number(route.query.sidenav)
   const path = typeof route.query.path === 'string' ? route.query.path : ''
   return {
     id: Number.isFinite(id) && id > 0 ? id : undefined,
