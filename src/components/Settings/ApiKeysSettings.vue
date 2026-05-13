@@ -3,123 +3,157 @@
     <v-card-text>
       <SettingSection
         title="API Keys"
-        tooltip="Long-lived bearer credentials for external scripts, dashboards, and automations. Keys inherit your role and permissions."
+        tooltip="Long-lived bearer credentials for external scripts, dashboards, and automations. Each key carries its own role assignment — keys are not user impersonation."
         :usecols="false"
       >
-        <v-alert color="info" variant="tonal" class="mb-4" density="compact">
+        <v-alert v-if="!isAdmin && profileLoaded" color="warning" variant="tonal" density="compact" class="mb-2">
           <div class="text-body-2">
-            Use API keys instead of your password to grant external software access to FDM Monster. Send the key as
-            <strong>Authorization: Bearer &lt;token&gt;</strong> on any request. Each key is shown
-            <strong>once</strong> at creation — copy it then; it cannot be recovered later.
+            <strong>Admin role required.</strong> Only users with the ADMIN role can create or manage API keys.
           </div>
         </v-alert>
 
-        <div class="d-flex align-center mb-3">
-          <v-text-field
-            v-model="newKeyLabel"
-            label="Label (e.g. 'home-dashboard')"
+        <template v-else-if="isAdmin">
+          <v-alert color="info" variant="tonal" class="mb-4" density="compact">
+            <div class="text-body-2">
+              Send the token as <strong>Authorization: Bearer &lt;token&gt;</strong> on any request. Each key is shown
+              <strong>once</strong> at creation — copy it then; it cannot be recovered later. Keys are scoped by the
+              roles you assign at creation.
+            </div>
+          </v-alert>
+
+          <v-alert
+            v-if="!loginRequiredEnabled && loginRequiredChecked"
+            color="warning"
+            variant="tonal"
             density="compact"
-            hide-details
-            variant="outlined"
-            maxlength="80"
-            counter="80"
-            style="max-width: 360px;"
-            :disabled="isCreating"
-            @keyup.enter="createKey"
-          />
-          <v-btn
-            class="ml-2"
-            color="primary"
-            variant="elevated"
-            prepend-icon="add"
-            :disabled="!newKeyLabel.trim().length || isCreating"
-            :loading="isCreating"
-            @click="createKey"
+            class="mb-4"
           >
-            Create API key
-          </v-btn>
-        </div>
+            <div class="text-body-2">
+              <strong>Login is currently disabled</strong> in Server Protection settings. API keys are an authenticated
+              feature and cannot be created until login is enabled.
+              <router-link to="/settings/server-protection" class="text-primary">Go to Server Protection →</router-link>
+            </div>
+          </v-alert>
 
-        <v-alert v-if="errorMessage" color="error" variant="tonal" class="mb-3" density="compact">
-          {{ errorMessage }}
-        </v-alert>
+          <v-divider class="mb-4" />
 
-        <div v-if="isLoading" class="d-flex align-center my-4">
-          <v-progress-circular indeterminate size="24" width="3" class="mr-2" />
-          <span>Loading API keys…</span>
-        </div>
+          <div class="text-subtitle-2 mb-2">Create new API key</div>
 
-        <template v-else-if="keys.length">
-          <div class="d-flex align-center mb-2">
-            <span class="text-caption text-medium-emphasis">
-              {{ activeKeyCount }} active{{ revokedKeyCount > 0 ? `, ${revokedKeyCount} revoked` : '' }}
-            </span>
-            <v-spacer />
-            <v-checkbox
-              v-if="revokedKeyCount > 0"
-              v-model="showRevoked"
-              :label="`Show revoked (${revokedKeyCount})`"
-              density="compact"
-              hide-details
-            />
+          <v-row class="mb-2" no-gutters>
+            <v-col cols="12" md="5" class="pr-md-2 mb-2 mb-md-0">
+              <v-text-field
+                v-model="newKeyLabel"
+                label="Label (e.g. 'home-dashboard')"
+                density="compact"
+                variant="outlined"
+                hide-details
+                maxlength="80"
+                counter="80"
+                :disabled="isCreating || !loginRequiredEnabled"
+              />
+            </v-col>
+            <v-col cols="12" md="5" class="pr-md-2 mb-2 mb-md-0">
+              <v-select
+                v-model="newKeyRoleIds"
+                :items="availableRoles"
+                item-title="name"
+                item-value="id"
+                label="Roles"
+                multiple
+                chips
+                density="compact"
+                variant="outlined"
+                hide-details
+                :disabled="isCreating || !loginRequiredEnabled"
+              />
+            </v-col>
+            <v-col cols="12" md="2" class="d-flex align-center">
+              <v-btn
+                color="primary"
+                variant="elevated"
+                prepend-icon="add"
+                :disabled="!canCreate"
+                :loading="isCreating"
+                block
+                @click="createKey"
+              >
+                Create
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          <v-alert v-if="errorMessage" color="error" variant="tonal" class="mb-3" density="compact">
+            {{ errorMessage }}
+          </v-alert>
+
+          <v-divider class="my-4" />
+
+          <div class="text-subtitle-2 mb-2">Existing keys</div>
+
+          <div v-if="isLoading" class="d-flex align-center my-4">
+            <v-progress-circular indeterminate size="24" width="3" class="mr-2" />
+            <span>Loading API keys…</span>
           </div>
 
-          <v-table density="compact">
+          <v-table v-else-if="keys.length" density="compact">
             <thead>
               <tr>
                 <th scope="col" class="text-left">Label</th>
                 <th scope="col" class="text-left">Prefix</th>
+                <th scope="col" class="text-left">Roles</th>
                 <th scope="col" class="text-left">Created</th>
                 <th scope="col" class="text-left">Last used</th>
-                <th scope="col" class="text-left">Status</th>
                 <th scope="col" class="text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="key in visibleKeys" :key="key.id">
+              <tr v-for="key in keys" :key="key.id">
                 <td>{{ key.label }}</td>
                 <td style="font-family: monospace;">fdmm_pat_{{ key.prefix.slice(0, 6) }}…</td>
+                <td>
+                  <v-chip
+                    v-for="role in key.roles"
+                    :key="role"
+                    size="x-small"
+                    variant="tonal"
+                    color="primary"
+                    class="mr-1"
+                  >
+                    {{ role }}
+                  </v-chip>
+                </td>
                 <td>{{ formatDate(key.createdAt) }}</td>
                 <td>{{ key.lastUsedAt ? formatDate(key.lastUsedAt) : '—' }}</td>
-                <td>
-                  <v-chip v-if="key.revokedAt" size="x-small" color="error" variant="tonal">Revoked</v-chip>
-                  <v-chip v-else size="x-small" color="success" variant="tonal">Active</v-chip>
-                </td>
                 <td class="text-right">
                   <v-btn
-                    v-if="!key.revokedAt"
                     size="small"
                     variant="text"
                     color="error"
                     prepend-icon="delete"
-                    :loading="revokingId === key.id"
-                    @click="confirmRevoke(key)"
+                    :loading="deletingId === key.id"
+                    @click="confirmDelete(key)"
                   >
-                    Revoke
+                    Delete
                   </v-btn>
                 </td>
               </tr>
             </tbody>
           </v-table>
 
-          <v-alert v-if="!visibleKeys.length" color="info" variant="tonal" density="compact" class="text-center mt-3">
-            All your keys are revoked. Toggle "Show revoked" above to view them.
+          <v-alert v-else color="warning" variant="tonal" density="compact" class="text-center">
+            No API keys yet. Create one above to give an external script or dashboard programmatic access.
           </v-alert>
         </template>
-
-        <v-alert v-else color="warning" variant="tonal" density="compact" class="text-center">
-          No API keys yet. Create one above to give an external script or dashboard programmatic access.
-        </v-alert>
       </SettingSection>
     </v-card-text>
 
-    <!-- One-time token reveal dialog -->
-    <v-dialog v-model="showCreatedDialog" max-width="600" persistent>
+    <!-- One-time token reveal -->
+    <v-dialog v-model="showCreatedDialog" max-width="640" persistent>
       <v-card>
         <v-card-title>API key created</v-card-title>
         <v-card-text>
           <v-alert color="warning" variant="tonal" class="mb-4" density="compact">
-            <strong>Copy this token now.</strong> It will not be shown again. If you lose it, revoke this key and
+            <strong>Copy this token now.</strong> It will not be shown again. If you lose it, delete this key and
             create a new one.
           </v-alert>
 
@@ -151,18 +185,18 @@
       </v-card>
     </v-dialog>
 
-    <!-- Revoke confirmation -->
-    <v-dialog v-model="showRevokeDialog" max-width="450">
+    <!-- Delete confirmation -->
+    <v-dialog v-model="showDeleteDialog" max-width="450">
       <v-card>
-        <v-card-title>Revoke API key?</v-card-title>
+        <v-card-title>Delete API key?</v-card-title>
         <v-card-text>
-          Revoking <strong>{{ keyToRevoke?.label }}</strong> immediately invalidates the token. Any external software
+          Deleting <strong>{{ keyToDelete?.label }}</strong> immediately invalidates the token. Any external software
           using it will start receiving 401 responses. This cannot be undone.
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="text" @click="showRevokeDialog = false">Cancel</v-btn>
-          <v-btn color="error" @click="revokeKey">Revoke</v-btn>
+          <v-btn variant="text" @click="showDeleteDialog = false">Cancel</v-btn>
+          <v-btn color="error" @click="deleteKey">Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -171,31 +205,74 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { ApiKeyService } from '@/backend'
+import { ApiKeyService, UserService } from '@/backend'
+import { SettingsService } from '@/backend'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
 import type { ApiKeyDto } from '@/models/api-key/api-key.dto'
+import type { Role } from '@/models/user.model'
+import { useProfileStore } from '@/store/profile.store'
+
+const profileStore = useProfileStore()
 
 const keys = ref<ApiKeyDto[]>([])
+const availableRoles = ref<Role[]>([])
 const newKeyLabel = ref('')
+const newKeyRoleIds = ref<number[]>([])
 const isLoading = ref(true)
 const isCreating = ref(false)
-const revokingId = ref<number | null>(null)
+const deletingId = ref<number | null>(null)
 const errorMessage = ref<string | null>(null)
 const showCreatedDialog = ref(false)
 const createdToken = ref('')
 const copied = ref(false)
-const showRevokeDialog = ref(false)
-const keyToRevoke = ref<ApiKeyDto | null>(null)
-const showRevoked = ref(false)
+const showDeleteDialog = ref(false)
+const keyToDelete = ref<ApiKeyDto | null>(null)
+const profileLoaded = ref(false)
+const loginRequiredEnabled = ref(false)
+const loginRequiredChecked = ref(false)
 
-// Active rows always show; revoked rows only when the toggle is on. Revoked
-// entries are kept around for the audit trail (operators can correlate
-// `fdmm_pat_<prefix>` hits in request logs back to the key that minted them).
-const activeKeyCount = computed(() => keys.value.filter((k) => !k.revokedAt).length)
-const revokedKeyCount = computed(() => keys.value.filter((k) => !!k.revokedAt).length)
-const visibleKeys = computed(() =>
-  keys.value.filter((k) => !k.revokedAt || showRevoked.value),
+const isAdmin = computed(() => profileStore.isAdmin)
+
+const canCreate = computed(
+  () =>
+    !!newKeyLabel.value.trim().length &&
+    newKeyRoleIds.value.length > 0 &&
+    !isCreating.value &&
+    loginRequiredEnabled.value,
 )
+
+async function loadProfile() {
+  try {
+    await profileStore.getProfile()
+  } catch (error) {
+    console.error('Failed to load profile:', error)
+  } finally {
+    profileLoaded.value = true
+  }
+}
+
+async function loadLoginRequired() {
+  try {
+    const settings = await SettingsService.getSettings()
+    loginRequiredEnabled.value = settings.server.loginRequired
+  } catch (error) {
+    console.error('Failed to load loginRequired setting:', error)
+  } finally {
+    loginRequiredChecked.value = true
+  }
+}
+
+async function loadRoles() {
+  try {
+    availableRoles.value = await UserService.listRoles()
+    // Default selection — the user's current roles. They can untick to narrow.
+    newKeyRoleIds.value = availableRoles.value
+      .filter((r) => profileStore.roles.includes(r.name))
+      .map((r) => r.id)
+  } catch (error) {
+    console.error('Failed to load roles:', error)
+  }
+}
 
 async function loadKeys() {
   isLoading.value = true
@@ -210,15 +287,18 @@ async function loadKeys() {
 }
 
 async function createKey() {
-  const label = newKeyLabel.value.trim()
-  if (!label.length) return
+  if (!canCreate.value) return
   isCreating.value = true
   errorMessage.value = null
   try {
-    const created = await ApiKeyService.create(label)
+    const created = await ApiKeyService.create(newKeyLabel.value.trim(), newKeyRoleIds.value)
     createdToken.value = created.token
     showCreatedDialog.value = true
     newKeyLabel.value = ''
+    // Reset role selection to defaults
+    newKeyRoleIds.value = availableRoles.value
+      .filter((r) => profileStore.roles.includes(r.name))
+      .map((r) => r.id)
     await loadKeys()
   } catch (error) {
     errorMessage.value = (error as Error)?.message ?? 'Failed to create API key'
@@ -227,25 +307,25 @@ async function createKey() {
   }
 }
 
-function confirmRevoke(key: ApiKeyDto) {
-  keyToRevoke.value = key
-  showRevokeDialog.value = true
+function confirmDelete(key: ApiKeyDto) {
+  keyToDelete.value = key
+  showDeleteDialog.value = true
 }
 
-async function revokeKey() {
-  const key = keyToRevoke.value
-  showRevokeDialog.value = false
+async function deleteKey() {
+  const key = keyToDelete.value
+  showDeleteDialog.value = false
   if (!key) return
-  revokingId.value = key.id
+  deletingId.value = key.id
   errorMessage.value = null
   try {
-    await ApiKeyService.revoke(key.id)
+    await ApiKeyService.deleteKey(key.id)
     await loadKeys()
   } catch (error) {
-    errorMessage.value = (error as Error)?.message ?? 'Failed to revoke API key'
+    errorMessage.value = (error as Error)?.message ?? 'Failed to delete API key'
   } finally {
-    revokingId.value = null
-    keyToRevoke.value = null
+    deletingId.value = null
+    keyToDelete.value = null
   }
 }
 
@@ -258,15 +338,14 @@ async function copyToken() {
       copied.value = false
     }, 2000)
   } catch (error) {
-    console.error('Failed to copy token to clipboard:', error)
+    console.error('Failed to copy token:', error)
   }
 }
 
 function dismissCreatedDialog() {
   showCreatedDialog.value = false
-  // Wipe the token from memory once the user dismisses the dialog — there's
-  // no recovery path on the server, so we shouldn't keep it lying around in
-  // component state either.
+  // Wipe the cleartext token from component state; no recovery path on the
+  // server, so we shouldn't keep it in memory either.
   createdToken.value = ''
   copied.value = false
 }
@@ -280,5 +359,13 @@ function formatDate(value: string | Date | null) {
   }
 }
 
-onMounted(loadKeys)
+onMounted(async () => {
+  await loadProfile()
+  await loadLoginRequired()
+  if (isAdmin.value && loginRequiredEnabled.value) {
+    await Promise.all([loadRoles(), loadKeys()])
+  } else {
+    isLoading.value = false
+  }
+})
 </script>

@@ -5,10 +5,10 @@ export interface ApiKeyDto {
   prefix: string
   createdAt: string
   lastUsedAt: string | null
-  revokedAt: string | null
+  roles: string[]
 }
 
-/** Server returns the cleartext token only on the create response — show, copy, never persist. */
+/** Server returns the cleartext token only on create. */
 export interface CreatedApiKeyDto extends ApiKeyDto {
   token: string
 }

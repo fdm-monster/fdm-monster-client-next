@@ -35,7 +35,7 @@ export class ServerApi {
   static readonly slicerApiKeyRoute = `${ServerApi.settingsRoute}/slicer-api-key`
   static readonly regenerateSlicerApiKeyRoute = `${ServerApi.slicerApiKeyRoute}/regenerate`
   static readonly apiKeysRoute = `${ServerApi.base}/api-keys`
-  static readonly apiKeyRevokeRoute = (id: number) => `${ServerApi.apiKeysRoute}/${id}`
+  static readonly apiKeyRoute = (id: number) => `${ServerApi.apiKeysRoute}/${id}`
 
   static readonly deleteTagRoute = (id: number) => `${ServerApi.base}/printer-tag/${id}`
 

@@ -7,16 +7,11 @@ export class ApiKeyService extends BaseService {
     return await this.get<ApiKeyDto[]>(ServerApi.apiKeysRoute)
   }
 
-  /**
-   * Mints a new API key. The returned object contains a `token` field that is
-   * the cleartext bearer credential — the server never persists it, so it must
-   * be shown to the user once and then discarded from memory.
-   */
-  static async create(label: string) {
-    return await this.post<CreatedApiKeyDto>(ServerApi.apiKeysRoute, { label })
+  static async create(label: string, roleIds: number[]) {
+    return await this.post<CreatedApiKeyDto>(ServerApi.apiKeysRoute, { label, roleIds })
   }
 
-  static async revoke(id: number) {
-    return await this.delete<ApiKeyDto>(ServerApi.apiKeyRevokeRoute(id))
+  static async deleteKey(id: number) {
+    return await this.delete<void>(ServerApi.apiKeyRoute(id))
   }
 }
