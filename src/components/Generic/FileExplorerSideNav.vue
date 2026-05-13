@@ -737,6 +737,12 @@ function getTreeIcon(item: TreeNode) {
   display: flex;
   flex-direction: column;
   height: 100%;
+  /* Override Vuetify's default overflow-y: auto on the drawer content. With
+     a long file list (e.g. an SD card with hundreds of gcodes), the default
+     would let the entire drawer scroll as one block, so the inner file-list
+     never gets to use its own overflow:auto. Constrain the drawer to its
+     viewport height and let .file-list scroll inside. */
+  overflow: hidden;
 }
 
 .files-card {
