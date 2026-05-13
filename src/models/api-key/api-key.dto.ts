@@ -1,6 +1,6 @@
 export interface ApiKeyDto {
   id: number
-  userId: number
+  createdByUserId: number
   label: string
   prefix: string
   createdAt: string
