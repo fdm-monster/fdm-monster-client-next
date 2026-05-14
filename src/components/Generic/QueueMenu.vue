@@ -7,22 +7,26 @@
       width="600"
     >
       <template #activator="{ props }">
-        <v-btn
-          :color="queueCount ? 'primary' : ''"
-          variant="tonal"
-          class="mr-2"
-          v-bind="props"
-        >
-          <v-icon class="mr-2">queue</v-icon>
-          Queue ({{ queueCount }})
-          <v-badge
-            v-if="queueCount > 0"
-            :content="queueCount"
-            color="primary"
-            inline
-            class="ml-2"
-          />
-        </v-btn>
+        <v-tooltip location="bottom" :text="`Queue (${queueCount})`">
+          <template #activator="{ props: tooltipProps }">
+            <v-btn
+              :color="queueCount ? 'primary' : ''"
+              variant="tonal"
+              class="mr-2"
+              v-bind="mergeProps(props, tooltipProps)"
+            >
+              <v-icon>queue</v-icon>
+              <span class="d-none d-lg-inline ml-2">Queue ({{ queueCount }})</span>
+              <v-badge
+                v-if="queueCount > 0"
+                :content="queueCount"
+                color="primary"
+                inline
+                class="ml-2 d-lg-none"
+              />
+            </v-btn>
+          </template>
+        </v-tooltip>
       </template>
 
       <v-card>
@@ -138,7 +142,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, mergeProps } from "vue";
 import { useGlobalQueueQuery } from '@/queries/global-queue.query'
 import { PrintQueueService } from '@/backend/print-queue.service'
 import { useSnackbar } from '@/shared/snackbar.composable'

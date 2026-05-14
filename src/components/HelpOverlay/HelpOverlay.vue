@@ -15,8 +15,8 @@
             class="ml-2 mr-6"
             v-bind="{ ...dialogActivatorProps, ...tooltipProps }"
           >
-            <v-icon icon="mdi:mdi-help" class="mr-2"></v-icon>
-            help
+            <v-icon icon="mdi:mdi-help"></v-icon>
+            <span class="d-none d-lg-inline ml-2">help</span>
           </v-btn>
         </template>
         <span> Load the online documentation webpage </span>

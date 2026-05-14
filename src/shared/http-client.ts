@@ -8,7 +8,7 @@ import {
 import { captureException } from "@sentry/vue";
 
 export async function getBaseUri() {
-  const urlBaseOverride = import.meta.env.VITE_API_BASE as string | undefined;
+  const urlBaseOverride = import.meta.env.VITE_API_BASE;
   if (urlBaseOverride?.length) {
     return urlBaseOverride;
   }

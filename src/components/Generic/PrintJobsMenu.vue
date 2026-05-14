@@ -7,21 +7,25 @@
       width="800"
     >
       <template #activator="{ props }">
-        <v-btn
-          :color="activePrintCount ? 'success' : ''"
-          variant="tonal"
-          v-bind="props"
-        >
-          <v-icon class="mr-2">work</v-icon>
-          Active Jobs ({{ activePrintCount }})
-          <v-badge
-            v-if="activePrintCount > 0"
-            :content="activePrintCount"
-            color="success"
-            inline
-            class="ml-2"
-          />
-        </v-btn>
+        <v-tooltip location="bottom" :text="`Active Jobs (${activePrintCount})`">
+          <template #activator="{ props: tooltipProps }">
+            <v-btn
+              :color="activePrintCount ? 'success' : ''"
+              variant="tonal"
+              v-bind="mergeProps(props, tooltipProps)"
+            >
+              <v-icon>work</v-icon>
+              <span class="d-none d-lg-inline ml-2">Active Jobs ({{ activePrintCount }})</span>
+              <v-badge
+                v-if="activePrintCount > 0"
+                :content="activePrintCount"
+                color="success"
+                inline
+                class="ml-2 d-lg-none"
+              />
+            </v-btn>
+          </template>
+        </v-tooltip>
       </template>
 
       <v-card>
@@ -110,7 +114,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, mergeProps } from "vue";
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import { usePrinterFilters } from '@/shared/printer-filter.composable'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'

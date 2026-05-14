@@ -1,23 +1,28 @@
 <template>
-  <v-app-bar elevation="0">
-    <v-toolbar-title class="text-white d-flex align-center">
-      <span class="text-uppercase">
-        <span class="font-weight-light"> FDM </span>
-        <strong> Monster </strong>
-      </span>
-      <template v-if="pageTitle">
-        <span class="text-h6 font-weight-light text-uppercase ml-1 pl-2 page-title-divider">{{ pageTitle }}</span>
-      </template>
-    </v-toolbar-title>
+  <v-app-bar :color="badge.palette.value ?? undefined" elevation="0">
+    <div class="d-none d-xl-flex align-center flex-shrink-0 text-h6 text-uppercase pl-4">
+      <span class="font-weight-light">FDM&nbsp;</span>
+      <strong>Monster</strong>
+    </div>
+
+    <v-chip
+      v-if="badge.chipText.value"
+      color="yellow"
+      variant="elevated"
+      size="small"
+      class="ml-3 mr-3 flex-shrink-0 text-black font-weight-bold text-uppercase"
+    >
+      {{ badge.chipText.value }}
+    </v-chip>
+
+    <span
+      v-if="pageTitle"
+      class="text-h6 font-weight-light text-uppercase pl-2 page-title-divider flex-shrink-0"
+    >
+      {{ pageTitle }}
+    </span>
 
     <v-spacer />
-
-    <h2
-      v-if="isDemoMode"
-      class="text-uppercase text--white mr-4"
-    >
-      DEMO MODE
-    </h2>
 
     <PrinterStatusMenu />
 
@@ -33,15 +38,18 @@
       transition="slide-y-transition"
     >
       <template #activator="{ props }">
-        <!--Theme?-->
-        <v-btn
-          class="ml-2"
-          variant="tonal"
-          v-bind="props"
-        >
-          <v-icon class="mr-2">mdi:mdi-account</v-icon>
-          {{ username }}
-        </v-btn>
+        <v-tooltip location="bottom" :text="username ?? 'Account'">
+          <template #activator="{ props: tooltipProps }">
+            <v-btn
+              class="ml-2"
+              variant="tonal"
+              v-bind="mergeProps(props, tooltipProps)"
+            >
+              <v-icon>mdi:mdi-account</v-icon>
+              <span class="d-none d-lg-inline ml-2">{{ username }}</span>
+            </v-btn>
+          </template>
+        </v-tooltip>
       </template>
 
       <v-list>
@@ -80,6 +88,7 @@
       v-if="authStore.loginRequired === true"
       tooltip="Go back to login"
       text="Logout"
+      text-class="d-none d-lg-inline"
       icon="logout"
       variant="tonal"
       @click="logout()"
@@ -90,7 +99,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, mergeProps, ref } from "vue";
 import { useRouter, useRoute } from 'vue-router'
 import { useIntervalFn } from '@vueuse/core'
 import PrinterStatusMenu from '@/components/Generic/PrinterStatusMenu.vue'
@@ -101,11 +110,13 @@ import { useProfileStore } from '@/store/profile.store'
 import { routeToLogin } from '@/router/utils'
 import { isDevEnv, isProdEnv } from '@/shared/app.constants'
 import { socketState } from "@/shared/socketio.service";
+import { useDevInstanceBadge } from '@/shared/dev-instance-badge.composable'
 
 const profileStore = useProfileStore()
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
+const badge = useDevInstanceBadge()
 
 // Page titles and subtitles based on route
 const pageTitles: Record<string, { title: string; subtitle?: string }> = {
@@ -187,10 +198,6 @@ const username = computed(() => {
   return profileStore.username
 })
 
-const isDemoMode = computed(() => {
-  return authStore.isDemoMode
-})
-
 async function logout() {
   await authStore.logout(true)
   await routeToLogin(router)
@@ -210,12 +217,7 @@ async function logout() {
   border-left: 2px solid rgb(var(--v-theme-primary));
 }
 
-:deep(.v-app-bar) {
-  overflow-x: auto !important;
-}
-
 :deep(.v-toolbar__content) {
   flex-wrap: nowrap !important;
-  overflow-x: auto !important;
 }
 </style>
