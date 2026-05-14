@@ -26,7 +26,8 @@ export function useDevInstanceBadge() {
   const chipText = computed(() => {
     const label = backendLabel.value
     if (isDevClient) {
-      return `DEV CLIENT → ${label ? `${label} SERVER` : 'PROD SERVER'}`
+      const serverLabel = label ? `${label} SERVER` : 'PROD SERVER'
+      return `DEV CLIENT → ${serverLabel}`
     }
     return label ? `${label} SERVER` : null
   })
