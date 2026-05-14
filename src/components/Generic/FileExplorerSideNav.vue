@@ -417,8 +417,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed, ref, watch } from 'vue'
 import { generateInitials } from '@/shared/noun-adjectives.data'
 import { PrinterRemoteFileService, PrintersService } from '@/backend'
 import { PrinterMaintenanceLogService } from '@/backend/printer-maintenance-log.service'
@@ -446,8 +445,6 @@ interface TreeNode {
 const printersStore = usePrinterStore()
 const printerStateStore = usePrinterStateStore()
 const fileExplorer = useFileExplorer()
-const route = useRoute()
-const router = useRouter()
 
 const fileSearch = ref<string | undefined>(undefined)
 const fileList = ref<FileDto[] | undefined>(undefined)
@@ -582,83 +579,6 @@ watch(printerId, async (newPrinterId, oldPrinterId) => {
   } else if (!newPrinterId) {
     fileList.value = undefined
   }
-})
-
-// URL <-> drawer state sync. We use the URL as the source of truth so reload,
-// bookmark, share-link, and browser back/forward all do the right thing.
-
-function parseRouteSidenav() {
-  // Number(undefined) -> NaN and Number(null) -> 0, both caught by `id > 0`
-  // and Number.isFinite below — no need for an explicit nullish branch.
-  const id = Number(route.query.sidenav)
-  const path = typeof route.query.path === 'string' ? route.query.path : ''
-  return {
-    id: Number.isFinite(id) && id > 0 ? id : undefined,
-    path,
-  }
-}
-
-function applyRouteToState() {
-  const { id, path } = parseRouteSidenav()
-  if (!id) {
-    if (printerId.value) fileExplorer.closeFileExplorer()
-    return
-  }
-  const printer = printersStore.printer(id)
-  // Printer not loaded yet (or deleted). For "not loaded yet" we'll retry once
-  // the store hydrates; for "deleted" we just leave the URL as-is on this tick
-  // and the next router change will eventually clear it.
-  if (!printer) return
-  // openFileExplorer resets currentPath when the printer changes — set the
-  // path AFTER opening so the URL's path survives the printer switch.
-  if (printerId.value !== id) fileExplorer.openFileExplorer(printer)
-  if (path !== currentPath.value) fileExplorer.setCurrentPath(path)
-}
-
-let suppressUrlWrite = false
-
-function writeStateToRoute() {
-  if (suppressUrlWrite) return
-  const query: Record<string, string | undefined> = { ...route.query } as any
-  if (printerId.value) {
-    query.sidenav = String(printerId.value)
-    query.path = currentPath.value || undefined
-  } else {
-    query.sidenav = undefined
-    query.path = undefined
-  }
-  // Skip the router call when nothing actually changed — prevents an infinite
-  // ping-pong with the route watcher below.
-  const sameSidenav = String(route.query.sidenav ?? '') === String(query.sidenav ?? '')
-  const samePath = String(route.query.path ?? '') === String(query.path ?? '')
-  if (sameSidenav && samePath) return
-  router.replace({ query })
-}
-
-// State changed (user opened/closed/navigated within drawer) → push to URL.
-watch([printerId, currentPath], writeStateToRoute)
-
-// Route changed externally (back/forward, manual edit, restore on mount) →
-// reflect into drawer state.
-watch(
-  () => [route.query.sidenav, route.query.path] as const,
-  () => {
-    suppressUrlWrite = true
-    applyRouteToState()
-    // Allow the writeStateToRoute watch to fire again on the next tick.
-    queueMicrotask(() => { suppressUrlWrite = false })
-  },
-)
-
-// The printer store loads asynchronously after mount, so an early restore can
-// fail with "printer doesn't exist yet". Re-attempt whenever the list grows.
-watch(
-  () => printersStore.printers.length,
-  () => applyRouteToState(),
-)
-
-onMounted(() => {
-  applyRouteToState()
 })
 
 function truncateProgress(progress?: number) {
