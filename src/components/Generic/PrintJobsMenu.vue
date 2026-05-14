@@ -15,13 +15,13 @@
               v-bind="{ ...props, ...tooltipProps }"
             >
               <v-icon>work</v-icon>
-              <span class="d-none d-md-inline ml-2">Active Jobs ({{ activePrintCount }})</span>
+              <span class="d-none d-lg-inline ml-2">Active Jobs ({{ activePrintCount }})</span>
               <v-badge
                 v-if="activePrintCount > 0"
                 :content="activePrintCount"
                 color="success"
                 inline
-                class="ml-2 d-md-none"
+                class="ml-2 d-lg-none"
               />
             </v-btn>
           </template>

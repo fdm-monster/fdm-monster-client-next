@@ -14,7 +14,7 @@
             class="mr-2"
           >
             <v-icon>dashboard</v-icon>
-            <span class="d-none d-md-inline ml-2">{{ totalPrinters }} Printers</span>
+            <span class="d-none d-lg-inline ml-2">{{ totalPrinters }} Printers</span>
           </v-btn>
         </template>
       </v-tooltip>

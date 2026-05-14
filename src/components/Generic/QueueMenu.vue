@@ -16,13 +16,13 @@
               v-bind="{ ...props, ...tooltipProps }"
             >
               <v-icon>queue</v-icon>
-              <span class="d-none d-md-inline ml-2">Queue ({{ queueCount }})</span>
+              <span class="d-none d-lg-inline ml-2">Queue ({{ queueCount }})</span>
               <v-badge
                 v-if="queueCount > 0"
                 :content="queueCount"
                 color="primary"
                 inline
-                class="ml-2 d-md-none"
+                class="ml-2 d-lg-none"
               />
             </v-btn>
           </template>

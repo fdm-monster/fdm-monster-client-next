@@ -1,6 +1,6 @@
 <template>
   <v-app-bar :color="badge.palette.value ?? undefined" elevation="0">
-    <div class="d-none d-md-flex align-center flex-shrink-0 text-h6 text-uppercase pl-4">
+    <div class="d-none d-xl-flex align-center flex-shrink-0 text-h6 text-uppercase pl-4">
       <span class="font-weight-light">FDM&nbsp;</span>
       <strong>Monster</strong>
     </div>
@@ -46,7 +46,7 @@
               v-bind="{ ...props, ...tooltipProps }"
             >
               <v-icon>mdi:mdi-account</v-icon>
-              <span class="d-none d-md-inline ml-2">{{ username }}</span>
+              <span class="d-none d-lg-inline ml-2">{{ username }}</span>
             </v-btn>
           </template>
         </v-tooltip>
@@ -88,7 +88,7 @@
       v-if="authStore.loginRequired === true"
       tooltip="Go back to login"
       text="Logout"
-      text-class="d-none d-md-inline"
+      text-class="d-none d-lg-inline"
       icon="logout"
       variant="tonal"
       @click="logout()"
