@@ -1,6 +1,6 @@
 <template>
   <v-app-bar :color="badge.palette.value ?? undefined" elevation="0">
-    <div :class="['d-flex', 'align-center', 'flex-shrink-0', 'text-h6', 'text-uppercase', 'pl-4', `text-${badge.onPalette.value}`]">
+    <div :class="['d-none', 'd-md-flex', 'align-center', 'flex-shrink-0', 'text-h6', 'text-uppercase', 'pl-4', `text-${badge.onPalette.value}`]">
       <span class="font-weight-light">FDM&nbsp;</span>
       <strong>Monster</strong>
     </div>
@@ -17,7 +17,7 @@
 
     <span
       v-if="pageTitle"
-      :class="['text-h6', 'font-weight-light', 'text-uppercase', 'pl-2', 'page-title-divider', 'text-truncate', 'd-none', 'd-md-block', `text-${badge.onPalette.value}`]"
+      :class="['text-h6', 'font-weight-light', 'text-uppercase', 'pl-2', 'page-title-divider', 'flex-shrink-0', `text-${badge.onPalette.value}`]"
     >
       {{ pageTitle }}
     </span>
@@ -85,6 +85,7 @@
       v-if="authStore.loginRequired === true"
       tooltip="Go back to login"
       text="Logout"
+      text-class="d-none d-md-inline"
       icon="logout"
       variant="tonal"
       :color="badge.onPalette.value"

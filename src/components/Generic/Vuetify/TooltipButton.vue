@@ -15,7 +15,12 @@
           >
             {{ props.icon }}
           </v-icon>
-          {{ props.text }}
+          <span
+            v-if="props.text?.length"
+            :class="props.textClass"
+          >
+            {{ props.text }}
+          </span>
         </slot>
       </v-btn>
     </template>
@@ -35,6 +40,7 @@ export interface Props {
   icon?: string
   iconClass?: string
   text?: string
+  textClass?: string
   location?: 'start' | 'end' | 'left' | 'right' | 'top' | 'bottom'
 }
 
@@ -43,6 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
   icon: '',
   iconClass: '',
   text: '',
+  textClass: '',
   location: 'bottom',
   variant: 'elevated'
 })
