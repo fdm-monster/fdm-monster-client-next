@@ -1,4 +1,11 @@
-# Develop
+# fdm-monster-client-next release notes
+
+## Client 2.4.1
+
+Fixes
+
+- File explorer performance optimized.
+- File explorer scroll bar works again.
 
 ## Client 2.4.0
 
