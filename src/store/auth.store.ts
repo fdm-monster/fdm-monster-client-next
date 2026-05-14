@@ -16,6 +16,7 @@ export interface IClaims extends JwtPayload {
 
 export interface AuthState {
   isDemoMode: boolean | null
+  instanceLabel: string | null
   loginRequired: boolean | null
   refreshToken: string | null
   registration: boolean | null
@@ -27,6 +28,7 @@ export interface AuthState {
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
     isDemoMode: null,
+    instanceLabel: null,
     token: null,
     refreshToken: null,
     loginRequired: null,
@@ -42,6 +44,7 @@ export const useAuthStore = defineStore('auth', {
           this.wizardState = response.data.wizardState
           this.registration = response.data.registration
           this.isDemoMode = response.data.isDemoMode
+          this.instanceLabel = response.data.instanceLabel ?? null
           return {
             loginRequired: this.loginRequired,
             wizardState: this.wizardState,

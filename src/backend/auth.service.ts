@@ -11,6 +11,7 @@ export interface LoginRequiredResponse {
   registration: boolean
   wizardState: WizardSettingsDto
   isDemoMode: boolean
+  instanceLabel?: string | null
 }
 
 export class AuthService {

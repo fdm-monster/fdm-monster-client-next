@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar elevation="0">
+  <v-app-bar :color="badge.palette.value ?? undefined" elevation="0">
     <v-toolbar-title class="text-white d-flex align-center">
       <span class="text-uppercase">
         <span class="font-weight-light"> FDM </span>
@@ -11,6 +11,26 @@
     </v-toolbar-title>
 
     <v-spacer />
+
+    <v-chip
+      v-if="badge.serverChip.value"
+      color="amber-darken-3"
+      variant="elevated"
+      size="small"
+      class="mr-2 font-weight-bold text-uppercase"
+    >
+      {{ badge.serverChip.value }}
+    </v-chip>
+
+    <v-chip
+      v-if="badge.clientChip.value"
+      :color="badge.palette.value === 'red' ? 'red-darken-2' : 'amber-darken-3'"
+      variant="elevated"
+      size="small"
+      class="mr-2 font-weight-bold text-uppercase"
+    >
+      {{ badge.clientChip.value }}
+    </v-chip>
 
     <h2
       v-if="isDemoMode"
@@ -101,11 +121,13 @@ import { useProfileStore } from '@/store/profile.store'
 import { routeToLogin } from '@/router/utils'
 import { isDevEnv, isProdEnv } from '@/shared/app.constants'
 import { socketState } from "@/shared/socketio.service";
+import { useDevInstanceBadge } from '@/shared/dev-instance-badge.composable'
 
 const profileStore = useProfileStore()
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
+const badge = useDevInstanceBadge()
 
 // Page titles and subtitles based on route
 const pageTitles: Record<string, { title: string; subtitle?: string }> = {
