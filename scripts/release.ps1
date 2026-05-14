@@ -55,23 +55,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Success "gh authenticated"
 
-$null = & gh repo set-default --view 2>$null
-if ($LASTEXITCODE -ne 0) {
-    Write-Warn "No default GitHub remote set for this repo."
-    Write-Host "  Available remotes:" -ForegroundColor DarkCyan
-    & git remote -v 2>$null | Select-Object -Unique | ForEach-Object { Write-Host "    $_" -ForegroundColor Gray }
-    Write-Host ""
-    $remoteInput = Read-Host "  Enter the repo to use as default (e.g. owner/repo)"
-    $null = & gh repo set-default $remoteInput
-    if ($LASTEXITCODE -ne 0) {
-        Write-Err "Failed to set default repo. Aborting."
-        exit 1
-    }
-    Write-Success "Default repo set: $remoteInput"
-} else {
-    $defaultRepo = & gh repo set-default --view 2>$null
-    Write-Success "gh default repo: $defaultRepo"
-}
+gh repo set-default fdm-monster/fdm-monster-client-next
 
 # --- Guard: must be on main ---------------------------------------------------
 Write-Header "Checking current branch"
