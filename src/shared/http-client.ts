@@ -11,6 +11,9 @@ import { captureException } from '@sentry/vue'
  * Made async for future possibility of getting base URI externally or asynchronously
  */
 export async function getBaseUri() {
+  // Override via .env.local: VITE_API_BASE=https://your-server.example/
+  const override = import.meta.env.VITE_API_BASE as string | undefined
+  if (override?.length) return override
   // return process.env.NODE_ENV === "development" ? "https://demo.fdm-monster.net" : "";
   return process.env.NODE_ENV === 'development' ? 'http://localhost:4000/' : '/' // Same-origin policy
 }
