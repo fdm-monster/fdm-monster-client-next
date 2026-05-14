@@ -1,25 +1,26 @@
 <template>
   <v-app-bar :color="badge.palette.value ?? undefined" elevation="0">
-    <v-toolbar-title :class="['d-flex', 'align-center', `text-${badge.onPalette.value}`]">
-      <span class="text-uppercase">
-        <span class="font-weight-light"> FDM </span>
-        <strong> Monster </strong>
-      </span>
+    <div :class="['d-flex', 'align-center', 'flex-shrink-0', 'text-h6', 'text-uppercase', 'pl-4', `text-${badge.onPalette.value}`]">
+      <span class="font-weight-light">FDM&nbsp;</span>
+      <strong>Monster</strong>
+    </div>
 
-      <v-chip
-        v-if="badge.chipText.value"
-        color="yellow"
-        variant="elevated"
-        size="small"
-        class="ml-3 text-black font-weight-bold text-uppercase"
-      >
-        {{ badge.chipText.value }}
-      </v-chip>
+    <v-chip
+      v-if="badge.chipText.value"
+      color="yellow"
+      variant="elevated"
+      size="small"
+      class="ml-3 mr-3 flex-shrink-0 text-black font-weight-bold text-uppercase"
+    >
+      {{ badge.chipText.value }}
+    </v-chip>
 
-      <template v-if="pageTitle">
-        <span class="text-h6 font-weight-light text-uppercase ml-1 pl-2 page-title-divider">{{ pageTitle }}</span>
-      </template>
-    </v-toolbar-title>
+    <span
+      v-if="pageTitle"
+      :class="['text-h6', 'font-weight-light', 'text-uppercase', 'pl-2', 'page-title-divider', 'text-truncate', 'd-none', 'd-md-block', `text-${badge.onPalette.value}`]"
+    >
+      {{ pageTitle }}
+    </span>
 
     <v-spacer />
 
@@ -213,12 +214,7 @@ async function logout() {
   border-left: 2px solid rgb(var(--v-theme-primary));
 }
 
-:deep(.v-app-bar) {
-  overflow-x: auto !important;
-}
-
 :deep(.v-toolbar__content) {
   flex-wrap: nowrap !important;
-  overflow-x: auto !important;
 }
 </style>
