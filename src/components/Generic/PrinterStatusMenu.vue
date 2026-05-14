@@ -10,7 +10,7 @@
         <template #activator="{ props: tooltipProps }">
           <v-btn
             variant="tonal"
-            v-bind="{ ...props, ...tooltipProps }"
+            v-bind="mergeProps(props, tooltipProps)"
             class="mr-2"
           >
             <v-icon>dashboard</v-icon>
@@ -96,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, mergeProps } from "vue";
 import { useRouter } from 'vue-router'
 import { usePrinterStore } from '@/store/printer.store'
 import { usePrinterStateStore } from '@/store/printer-state.store'

@@ -43,7 +43,7 @@
             <v-btn
               class="ml-2"
               variant="tonal"
-              v-bind="{ ...props, ...tooltipProps }"
+              v-bind="mergeProps(props, tooltipProps)"
             >
               <v-icon>mdi:mdi-account</v-icon>
               <span class="d-none d-lg-inline ml-2">{{ username }}</span>
@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, mergeProps, ref } from "vue";
 import { useRouter, useRoute } from 'vue-router'
 import { useIntervalFn } from '@vueuse/core'
 import PrinterStatusMenu from '@/components/Generic/PrinterStatusMenu.vue'

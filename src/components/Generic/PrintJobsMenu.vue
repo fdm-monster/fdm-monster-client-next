@@ -12,7 +12,7 @@
             <v-btn
               :color="activePrintCount ? 'success' : ''"
               variant="tonal"
-              v-bind="{ ...props, ...tooltipProps }"
+              v-bind="mergeProps(props, tooltipProps)"
             >
               <v-icon>work</v-icon>
               <span class="d-none d-lg-inline ml-2">Active Jobs ({{ activePrintCount }})</span>
@@ -114,7 +114,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, mergeProps } from "vue";
 import { usePrinterStateStore } from '@/store/printer-state.store'
 import { usePrinterFilters } from '@/shared/printer-filter.composable'
 import PrinterTagFilter from '@/components/Generic/Filters/PrinterTagFilter.vue'

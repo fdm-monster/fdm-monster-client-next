@@ -13,7 +13,7 @@
               :color="queueCount ? 'primary' : ''"
               variant="tonal"
               class="mr-2"
-              v-bind="{ ...props, ...tooltipProps }"
+              v-bind="mergeProps(props, tooltipProps)"
             >
               <v-icon>queue</v-icon>
               <span class="d-none d-lg-inline ml-2">Queue ({{ queueCount }})</span>
@@ -142,7 +142,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, mergeProps } from "vue";
 import { useGlobalQueueQuery } from '@/queries/global-queue.query'
 import { PrintQueueService } from '@/backend/print-queue.service'
 import { useSnackbar } from '@/shared/snackbar.composable'
