@@ -1,6 +1,6 @@
 <template>
   <v-app-bar :color="badge.palette.value ?? undefined" elevation="0">
-    <div class="d-none d-lg-flex align-center flex-shrink-0 text-h6 text-uppercase pl-4">
+    <div class="d-none d-xl-flex align-center flex-shrink-0 text-h6 text-uppercase pl-4">
       <span class="font-weight-light">FDM&nbsp;</span>
       <strong>Monster</strong>
     </div>
