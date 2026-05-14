@@ -7,22 +7,26 @@
       width="600"
     >
       <template #activator="{ props }">
-        <v-btn
-          :color="queueCount ? 'primary' : ''"
-          variant="tonal"
-          class="mr-2"
-          v-bind="props"
-        >
-          <v-icon class="mr-2">queue</v-icon>
-          Queue ({{ queueCount }})
-          <v-badge
-            v-if="queueCount > 0"
-            :content="queueCount"
-            color="primary"
-            inline
-            class="ml-2"
-          />
-        </v-btn>
+        <v-tooltip location="bottom" :text="`Queue (${queueCount})`">
+          <template #activator="{ props: tooltipProps }">
+            <v-btn
+              :color="queueCount ? 'primary' : ''"
+              variant="tonal"
+              class="mr-2"
+              v-bind="{ ...props, ...tooltipProps }"
+            >
+              <v-icon>queue</v-icon>
+              <span class="d-none d-md-inline ml-2">Queue ({{ queueCount }})</span>
+              <v-badge
+                v-if="queueCount > 0"
+                :content="queueCount"
+                color="primary"
+                inline
+                class="ml-2 d-md-none"
+              />
+            </v-btn>
+          </template>
+        </v-tooltip>
       </template>
 
       <v-card>

@@ -7,21 +7,25 @@
       width="800"
     >
       <template #activator="{ props }">
-        <v-btn
-          :color="activePrintCount ? 'success' : ''"
-          variant="tonal"
-          v-bind="props"
-        >
-          <v-icon class="mr-2">work</v-icon>
-          Active Jobs ({{ activePrintCount }})
-          <v-badge
-            v-if="activePrintCount > 0"
-            :content="activePrintCount"
-            color="success"
-            inline
-            class="ml-2"
-          />
-        </v-btn>
+        <v-tooltip location="bottom" :text="`Active Jobs (${activePrintCount})`">
+          <template #activator="{ props: tooltipProps }">
+            <v-btn
+              :color="activePrintCount ? 'success' : ''"
+              variant="tonal"
+              v-bind="{ ...props, ...tooltipProps }"
+            >
+              <v-icon>work</v-icon>
+              <span class="d-none d-md-inline ml-2">Active Jobs ({{ activePrintCount }})</span>
+              <v-badge
+                v-if="activePrintCount > 0"
+                :content="activePrintCount"
+                color="success"
+                inline
+                class="ml-2 d-md-none"
+              />
+            </v-btn>
+          </template>
+        </v-tooltip>
       </template>
 
       <v-card>

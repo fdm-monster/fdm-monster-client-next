@@ -6,14 +6,18 @@
     min-width="300"
   >
     <template #activator="{ props }">
-      <v-btn
-        variant="tonal"
-        v-bind="props"
-        class="mr-2"
-      >
-        <v-icon class="mr-2">dashboard</v-icon>
-        {{ totalPrinters }} Printers
-      </v-btn>
+      <v-tooltip location="bottom" :text="`${totalPrinters} Printers`">
+        <template #activator="{ props: tooltipProps }">
+          <v-btn
+            variant="tonal"
+            v-bind="{ ...props, ...tooltipProps }"
+            class="mr-2"
+          >
+            <v-icon>dashboard</v-icon>
+            <span class="d-none d-md-inline ml-2">{{ totalPrinters }} Printers</span>
+          </v-btn>
+        </template>
+      </v-tooltip>
     </template>
 
     <v-card>

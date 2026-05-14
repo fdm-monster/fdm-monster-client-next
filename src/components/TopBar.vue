@@ -38,15 +38,19 @@
       transition="slide-y-transition"
     >
       <template #activator="{ props }">
-        <v-btn
-          class="ml-2"
-          variant="tonal"
-          :color="badge.onPalette.value"
-          v-bind="props"
-        >
-          <v-icon class="mr-2">mdi:mdi-account</v-icon>
-          {{ username }}
-        </v-btn>
+        <v-tooltip location="bottom" :text="username ?? 'Account'">
+          <template #activator="{ props: tooltipProps }">
+            <v-btn
+              class="ml-2"
+              variant="tonal"
+              :color="badge.onPalette.value"
+              v-bind="{ ...props, ...tooltipProps }"
+            >
+              <v-icon>mdi:mdi-account</v-icon>
+              <span class="d-none d-md-inline ml-2">{{ username }}</span>
+            </v-btn>
+          </template>
+        </v-tooltip>
       </template>
 
       <v-list>
