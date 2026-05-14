@@ -37,10 +37,10 @@
       transition="slide-y-transition"
     >
       <template #activator="{ props }">
-        <!--Theme?-->
         <v-btn
           class="ml-2"
           variant="tonal"
+          :color="badge.onPalette.value"
           v-bind="props"
         >
           <v-icon class="mr-2">mdi:mdi-account</v-icon>
