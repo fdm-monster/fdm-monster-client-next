@@ -263,6 +263,16 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Success "Checked out $releaseBranch"
 
+# --- Stage any pre-existing uncommitted files ---------------------------------
+Write-Header "Staging uncommitted files"
+$dirtyFiles = git status --porcelain 2>&1 | Where-Object { $_ -match "^\s?[MADRCU?!]" }
+if ($dirtyFiles) {
+    $null = & git add -A
+    Write-Success "Staged all uncommitted changes"
+} else {
+    Write-Step "Nothing extra to stage"
+}
+
 # --- Commit -------------------------------------------------------------------
 Write-Header "Committing release files"
 if ($hasContent) {
