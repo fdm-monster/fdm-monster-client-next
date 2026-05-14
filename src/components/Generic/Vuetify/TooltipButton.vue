@@ -45,7 +45,7 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  color: 'white',
+  color: undefined,
   icon: '',
   iconClass: '',
   text: '',

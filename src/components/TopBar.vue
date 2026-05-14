@@ -1,6 +1,6 @@
 <template>
   <v-app-bar :color="badge.palette.value ?? undefined" elevation="0">
-    <div :class="['d-none', 'd-md-flex', 'align-center', 'flex-shrink-0', 'text-h6', 'text-uppercase', 'pl-4', `text-${badge.onPalette.value}`]">
+    <div class="d-none d-md-flex align-center flex-shrink-0 text-h6 text-uppercase pl-4">
       <span class="font-weight-light">FDM&nbsp;</span>
       <strong>Monster</strong>
     </div>
@@ -17,7 +17,7 @@
 
     <span
       v-if="pageTitle"
-      :class="['text-h6', 'font-weight-light', 'text-uppercase', 'pl-2', 'page-title-divider', 'flex-shrink-0', `text-${badge.onPalette.value}`]"
+      class="text-h6 font-weight-light text-uppercase pl-2 page-title-divider flex-shrink-0"
     >
       {{ pageTitle }}
     </span>
@@ -43,7 +43,6 @@
             <v-btn
               class="ml-2"
               variant="tonal"
-              :color="badge.onPalette.value"
               v-bind="{ ...props, ...tooltipProps }"
             >
               <v-icon>mdi:mdi-account</v-icon>
@@ -92,7 +91,6 @@
       text-class="d-none d-md-inline"
       icon="logout"
       variant="tonal"
-      :color="badge.onPalette.value"
       @click="logout()"
     />
 
