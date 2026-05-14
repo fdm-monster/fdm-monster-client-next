@@ -108,6 +108,8 @@
               :counter="apiKeyRules.length"
               class="ma-1"
               type="password"
+              :placeholder="isUpdating ? '••••••••••••••••' : undefined"
+              :persistent-placeholder="isUpdating"
               :hint="isUpdating
                 ? 'Hidden for security — leave blank to keep the current value'
                 : 'User or Application Key with 32 or 43 characters (Global API key will fail)'"
@@ -131,6 +133,8 @@
               v-model="formData.password"
               class="ma-1"
               type="password"
+              :placeholder="isUpdating ? '••••••••••••••••' : undefined"
+              :persistent-placeholder="isUpdating"
               :hint="isUpdating
                 ? 'Hidden for security — leave blank to keep the current value'
                 : (formData.printerType === BambuType ? 'Access code from printer settings' : 'Password (visit your printer settings)')"
