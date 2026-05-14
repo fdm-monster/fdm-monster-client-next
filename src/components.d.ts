@@ -16,6 +16,7 @@ declare module 'vue' {
     AddOrUpdateCameraStreamDialog: typeof import('./components/Generic/Dialogs/AddOrUpdateCameraStreamDialog.vue')['default']
     AddOrUpdateFloorDialog: typeof import('./components/Generic/Dialogs/AddOrUpdateFloorDialog.vue')['default']
     AddOrUpdatePrinterDialog: typeof import('./components/Generic/Dialogs/AddOrUpdatePrinterDialog.vue')['default']
+    ApiKeysSettings: typeof import('./components/Settings/ApiKeysSettings.vue')['default']
     AppErrorSnackbar: typeof import('./components/Generic/Snackbars/AppErrorSnackbar.vue')['default']
     AppInfoSnackbar: typeof import('./components/Generic/Snackbars/AppInfoSnackbar.vue')['default']
     AppLoadingMessage: typeof import('./components/Generic/Loaders/AppLoadingMessage.vue')['default']
