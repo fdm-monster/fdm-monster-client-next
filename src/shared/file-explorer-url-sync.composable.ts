@@ -76,14 +76,20 @@ export function useFileExplorerUrlSync() {
     () => [route.query.sidenav, route.query.path] as const,
     () => {
       suppressUrlWrite = true
-      applyRouteToState()
-      queueMicrotask(() => {
-        suppressUrlWrite = false
-      })
+      try {
+        applyRouteToState()
+      } finally {
+        queueMicrotask(() => {
+          suppressUrlWrite = false
+        })
+      }
     },
   )
 
-  watch(() => printersStore.printers.length, applyRouteToState)
+  watch(
+    () => printersStore.printers.map((p) => p.id).join(','),
+    applyRouteToState,
+  )
 
   onMounted(applyRouteToState)
 }
