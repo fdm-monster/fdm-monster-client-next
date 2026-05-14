@@ -31,11 +31,11 @@ export function useDevInstanceBadge() {
   })
 
   const chipText = computed(() => {
-    const serverPart = backendLabel.value ? `${backendLabel.value} SERVER` : 'PROD SERVER'
+    const label = backendLabel.value
     if (isDevClient) {
-      return `DEV CLIENT → ${serverPart}`
+      return `DEV CLIENT → ${label ? `${label} SERVER` : 'PROD SERVER'}`
     }
-    return backendLabel.value ? serverPart : null
+    return label ? `${label} SERVER` : null
   })
 
   const onPalette = computed<'white' | 'black'>(() => {
