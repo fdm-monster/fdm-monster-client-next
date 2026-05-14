@@ -1,5 +1,15 @@
 # fdm-monster-client-next release notes
 
+## Client 2.4.2
+
+Features
+
+- dev/staging instance badge in the navbar
+
+Chores
+
+- allow overriding the API base URL via VITE_API_BASE
+
 ## Client 2.4.1
 
 Fixes

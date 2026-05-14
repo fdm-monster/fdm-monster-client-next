@@ -223,8 +223,8 @@ if ($hasContent) {
 
     $newBlock = $lines -join "`n"
 
-    # Insert after the H1 heading
-    $rnContent = Get-Content $rnPath -Raw
+    # FIX: cast to [string] to release the read handle before writing back
+    $rnContent = [string](Get-Content $rnPath -Raw)
     $heading = "# fdm-monster-client-next release notes"
     if ($rnContent -notmatch [regex]::Escape($heading)) {
         Write-Warn "H1 heading not found in RELEASE_NOTES.md - prepending it."
@@ -239,7 +239,8 @@ if ($hasContent) {
 
 # --- Update package.json and yarn.lock ----------------------------------------
 Write-Header "Updating package.json and yarn.lock"
-$pkgRaw = Get-Content $pkgPath -Raw
+# FIX: cast to [string] to release the read handle before writing back
+$pkgRaw = [string](Get-Content $pkgPath -Raw)
 $pkgRaw = $pkgRaw -replace '"version"\s*:\s*"[^"]+"', "`"version`": `"$newVersion`""
 Set-Content -Path $pkgPath -Value $pkgRaw -NoNewline
 Write-Success "package.json updated"
@@ -261,6 +262,16 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 Write-Success "Checked out $releaseBranch"
+
+# --- Stage any pre-existing uncommitted files ---------------------------------
+Write-Header "Staging uncommitted files"
+$dirtyFiles = git status --porcelain 2>&1 | Where-Object { $_ -match "^\s?[MADRCU?!]" }
+if ($dirtyFiles) {
+    $null = & git add -A
+    Write-Success "Staged all uncommitted changes"
+} else {
+    Write-Step "Nothing extra to stage"
+}
 
 # --- Commit -------------------------------------------------------------------
 Write-Header "Committing release files"
