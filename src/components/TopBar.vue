@@ -32,13 +32,6 @@
       {{ badge.clientChip.value }}
     </v-chip>
 
-    <h2
-      v-if="isDemoMode"
-      class="text-uppercase text--white mr-4"
-    >
-      DEMO MODE
-    </h2>
-
     <PrinterStatusMenu />
 
     <QueueMenu />
@@ -207,10 +200,6 @@ const expiry = computed(() => {
 
 const username = computed(() => {
   return profileStore.username
-})
-
-const isDemoMode = computed(() => {
-  return authStore.isDemoMode
 })
 
 async function logout() {

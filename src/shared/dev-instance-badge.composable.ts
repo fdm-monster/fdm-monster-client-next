@@ -6,20 +6,22 @@ const isDevClient = import.meta.env.DEV
 export function useDevInstanceBadge() {
   const authStore = useAuthStore()
 
-  const instanceLabel = computed(() => {
-    const raw = authStore.instanceLabel
-    return raw?.trim() || null
-  })
-
-  const danger = computed(() => isDevClient && !instanceLabel.value)
-
-  const palette = computed<'red' | 'amber' | null>(() => {
-    if (danger.value) return 'red'
-    if (instanceLabel.value) return 'amber'
+  const backendLabel = computed(() => {
+    const explicit = authStore.instanceLabel?.trim()
+    if (explicit) return explicit
+    if (authStore.isDemoMode) return 'DEMO'
     return null
   })
 
-  const serverChip = computed(() => instanceLabel.value)
+  const danger = computed(() => isDevClient && !backendLabel.value)
+
+  const palette = computed<'red' | 'amber' | null>(() => {
+    if (danger.value) return 'red'
+    if (backendLabel.value) return 'amber'
+    return null
+  })
+
+  const serverChip = computed(() => backendLabel.value)
 
   const clientChip = computed(() => {
     if (!isDevClient) return null
