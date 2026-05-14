@@ -1,36 +1,27 @@
 <template>
   <v-app-bar :color="badge.palette.value ?? undefined" elevation="0">
-    <v-toolbar-title class="text-white d-flex align-center">
+    <v-toolbar-title :class="['d-flex', 'align-center', `text-${badge.onPalette.value}`]">
       <span class="text-uppercase">
         <span class="font-weight-light"> FDM </span>
         <strong> Monster </strong>
       </span>
+
+      <v-chip
+        v-if="badge.chipText.value"
+        color="yellow"
+        variant="elevated"
+        size="small"
+        class="ml-3 text-black font-weight-bold text-uppercase"
+      >
+        {{ badge.chipText.value }}
+      </v-chip>
+
       <template v-if="pageTitle">
         <span class="text-h6 font-weight-light text-uppercase ml-1 pl-2 page-title-divider">{{ pageTitle }}</span>
       </template>
     </v-toolbar-title>
 
     <v-spacer />
-
-    <v-chip
-      v-if="badge.serverChip.value"
-      color="amber-darken-3"
-      variant="elevated"
-      size="small"
-      class="mr-2 font-weight-bold text-uppercase"
-    >
-      {{ badge.serverChip.value }}
-    </v-chip>
-
-    <v-chip
-      v-if="badge.clientChip.value"
-      :color="badge.palette.value === 'red' ? 'red-darken-2' : 'amber-darken-3'"
-      variant="elevated"
-      size="small"
-      class="mr-2 font-weight-bold text-uppercase"
-    >
-      {{ badge.clientChip.value }}
-    </v-chip>
 
     <PrinterStatusMenu />
 
@@ -95,6 +86,7 @@
       text="Logout"
       icon="logout"
       variant="tonal"
+      :color="badge.onPalette.value"
       @click="logout()"
     />
 
