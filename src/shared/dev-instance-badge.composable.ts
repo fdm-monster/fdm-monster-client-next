@@ -2,7 +2,7 @@ import { computed } from 'vue'
 import { useAuthStore } from '@/store/auth.store'
 
 const isDevClient = import.meta.env.DEV
-const envInstanceLabel = (import.meta.env.VITE_INSTANCE_LABEL as string | undefined)?.trim() || null
+const envInstanceLabel = (import.meta.env.VITE_SERVER_INSTANCE_LABEL as string | undefined)?.trim() || null
 
 export function useDevInstanceBadge() {
   const authStore = useAuthStore()
