@@ -1201,7 +1201,9 @@ const debouncedSearch = useDebounceFn(() => {
 
 // Poll the queue tab so routed/added jobs show up without a manual refresh
 const queuePollIntervalMs = 5000
-let queuePollTimer: number | undefined
+let queuePollTimer: ReturnType<typeof setInterval> | undefined
+// Tracked separately from loadingQueue so a slow silent poll cannot stack
+let loadingQueueSilent = false
 
 onMounted(async () => {
   // Load printers first
@@ -1217,8 +1219,8 @@ onMounted(async () => {
   await loadPrintJobs()
   await loadTags()
 
-  queuePollTimer = window.setInterval(() => {
-    if (activeTab.value === 'queue' && !loadingQueue.value) {
+  queuePollTimer = globalThis.setInterval(() => {
+    if (activeTab.value === 'queue' && !loadingQueue.value && !loadingQueueSilent) {
       loadQueue(true)
     }
   }, queuePollIntervalMs)
@@ -1226,7 +1228,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   if (queuePollTimer !== undefined) {
-    window.clearInterval(queuePollTimer)
+    globalThis.clearInterval(queuePollTimer)
   }
 })
 
@@ -1272,6 +1274,8 @@ const loadPrintJobs = async () => {
 const loadQueue = async (silent = false) => {
   if (!silent) {
     loadingQueue.value = true
+  } else {
+    loadingQueueSilent = true
   }
   try {
     const response = await PrintQueueService.getGlobalQueue(queueCurrentPage.value, queuePageSize.value)
@@ -1287,6 +1291,8 @@ const loadQueue = async (silent = false) => {
   } finally {
     if (!silent) {
       loadingQueue.value = false
+    } else {
+      loadingQueueSilent = false
     }
   }
 }

@@ -130,24 +130,33 @@ const invalidateGlobalQueue = useInvalidateGlobalQueue()
 const loading = ref(false)
 const queuing = ref(false)
 const resolution = ref<RoutingResolution | null>(null)
+// Bumped on every open/close so a slow resolve cannot overwrite newer state
+let resolveRequestId = 0
 
 const canQueue = computed(() => resolution.value?.printerIds.length === 1)
 
 watch(
   () => props.modelValue,
   async (isOpen) => {
+    const requestId = ++resolveRequestId
     if (!isOpen || !props.file) {
       return
     }
     resolution.value = null
     loading.value = true
     try {
-      resolution.value = await RoutingService.resolve(props.file.fileStorageId)
+      const resolved = await RoutingService.resolve(props.file.fileStorageId)
+      if (requestId !== resolveRequestId) {
+        return
+      }
+      resolution.value = resolved
     } catch (error) {
       console.error('Failed to resolve routing:', error)
       snackbar.error('Failed to resolve routing')
     } finally {
-      loading.value = false
+      if (requestId === resolveRequestId) {
+        loading.value = false
+      }
     }
   }
 )

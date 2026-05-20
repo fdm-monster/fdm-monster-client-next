@@ -134,6 +134,8 @@ const loading = ref(false)
 const routing = ref(false)
 const resolution = ref<RoutingResolution | null>(null)
 const selectedPrinterId = ref<number | null>(null)
+// Bumped on every open/close so a slow resolve cannot overwrite newer state
+let resolveRequestId = 0
 
 // A tag resolves to its member printers; an unmatched file can go anywhere
 const candidatePrinters = computed(() => {
@@ -147,6 +149,7 @@ const candidatePrinters = computed(() => {
 watch(
   () => props.modelValue,
   async (isOpen) => {
+    const requestId = ++resolveRequestId
     if (!isOpen || !props.job) {
       return
     }
@@ -157,12 +160,18 @@ watch(
     }
     loading.value = true
     try {
-      resolution.value = await RoutingService.resolve(props.job.fileStorageId)
+      const resolved = await RoutingService.resolve(props.job.fileStorageId)
+      if (requestId !== resolveRequestId) {
+        return
+      }
+      resolution.value = resolved
     } catch (error) {
       console.error('Failed to resolve routing:', error)
       snackbar.error('Failed to resolve routing')
     } finally {
-      loading.value = false
+      if (requestId === resolveRequestId) {
+        loading.value = false
+      }
     }
   }
 )
