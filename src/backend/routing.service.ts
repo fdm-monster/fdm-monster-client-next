@@ -3,7 +3,7 @@ import { ServerApi } from '@/backend/server.api'
 
 export interface RoutingResolution {
   routingTarget: string | null
-  kind: 'printer' | 'tag' | 'none'
+  kind: 'printer' | 'tag' | 'none' | 'ambiguous'
   matchedName: string | null
   printerIds: number[]
 }

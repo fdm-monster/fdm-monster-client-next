@@ -45,6 +45,15 @@
           </v-alert>
 
           <v-alert
+            v-else-if="resolution.kind === 'ambiguous'"
+            type="warning"
+            variant="tonal"
+          >
+            Routing target "{{ resolution.routingTarget }}" matches both a
+            printer and a tag — assign this file manually.
+          </v-alert>
+
+          <v-alert
             v-else
             type="info"
             variant="tonal"

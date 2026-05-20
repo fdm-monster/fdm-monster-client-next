@@ -39,6 +39,15 @@
             of its {{ candidatePrinters.length }} printer(s) to queue it on.
           </v-alert>
           <v-alert
+            v-else-if="resolution && resolution.kind === 'ambiguous'"
+            type="warning"
+            variant="tonal"
+            class="mb-4"
+          >
+            <strong>{{ resolution.routingTarget }}</strong> matches both a printer
+            and a tag — pick the printer you want to queue it on.
+          </v-alert>
+          <v-alert
             v-else
             type="warning"
             variant="tonal"

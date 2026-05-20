@@ -19,7 +19,10 @@
         :key="job.id"
       >
         <v-list-item-title>{{ job.fileName }}</v-list-item-title>
-        <v-list-item-subtitle v-if="routingTargetOf(job)">
+        <v-list-item-subtitle v-if="job.statusReason">
+          {{ job.statusReason }}
+        </v-list-item-subtitle>
+        <v-list-item-subtitle v-else-if="routingTargetOf(job)">
           routing target: {{ routingTargetOf(job) }}
         </v-list-item-subtitle>
         <template #append>
