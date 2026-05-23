@@ -111,7 +111,7 @@ describe('UnassignedJobsPanel', () => {
     expect(wrapper.vm.someSelected).toBe(true)
 
     wrapper.vm.toggleSelect(2)
-    expect([...wrapper.vm.selectedIds].sort()).toEqual([1, 2])
+    expect([...wrapper.vm.selectedIds].sort((a: number, b: number) => a - b)).toEqual([1, 2])
 
     wrapper.vm.toggleSelect(1)
     expect(wrapper.vm.selectedIds.has(1)).toBe(false)
@@ -144,7 +144,7 @@ describe('UnassignedJobsPanel', () => {
     await flushPromises()
 
     expect(deleteJobMock).toHaveBeenCalledTimes(2)
-    expect(deleteJobMock.mock.calls.map((c: any[]) => c[0]).sort()).toEqual([1, 2])
+    expect(deleteJobMock.mock.calls.map((c: any[]) => c[0]).sort((a: number, b: number) => a - b)).toEqual([1, 2])
     expect(wrapper.vm.confirmDismissOpen).toBe(false)
   })
 
