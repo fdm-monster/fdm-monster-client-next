@@ -56,18 +56,20 @@
             No matching routing target — pick any printer to queue it on.
           </v-alert>
 
-          <v-radio-group
+          <v-autocomplete
             v-if="candidatePrinters.length"
             v-model="selectedPrinterId"
+            :items="candidatePrinters"
+            item-title="name"
+            item-value="id"
+            label="Pick a printer"
+            prepend-inner-icon="search"
+            variant="outlined"
+            density="compact"
+            autofocus
             hide-details
-          >
-            <v-radio
-              v-for="printer in candidatePrinters"
-              :key="printer.id"
-              :label="printer.name"
-              :value="printer.id"
-            />
-          </v-radio-group>
+            auto-select-first
+          />
           <v-alert
             v-else
             type="error"
