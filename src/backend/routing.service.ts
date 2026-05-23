@@ -18,13 +18,13 @@ export interface RoutingQueueResult {
 export class RoutingService extends BaseService {
   static async resolve(fileStorageId: string): Promise<RoutingResolution> {
     return this.get<RoutingResolution>(
-      ServerApi.resolveRoutingRoute(fileStorageId)
+      ServerApi.resolvePrintFileRoutingRoute(fileStorageId)
     )
   }
 
   static async queue(fileStorageId: string): Promise<RoutingQueueResult> {
     return this.post<RoutingQueueResult>(
-      ServerApi.queueRoutingRoute(fileStorageId),
+      ServerApi.queuePrintFileRoutingRoute(fileStorageId),
       {}
     )
   }
