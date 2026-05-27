@@ -51,7 +51,7 @@
     "vuetify": "3.12.6"
   },
   "devDependencies": {
-    "@babel/types": "7.29.0",
+    "@babel/types": "7.29.7",
     "@hey-api/client-axios": "0.9.1",
     "@hey-api/openapi-ts": "0.97.2",
     "@mdi/font": "7.4.47",
