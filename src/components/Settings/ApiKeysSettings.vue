@@ -333,9 +333,11 @@ async function copyToken() {
   if (!createdToken.value) return
   const ok = await writeToClipboard(createdToken.value)
   if (!ok) {
-    console.error('Failed to copy token: clipboard write was rejected')
+    errorMessage.value =
+      'Could not copy the token. Select it and copy manually before closing this dialog.'
     return
   }
+  errorMessage.value = null
   copied.value = true
   setTimeout(() => {
     copied.value = false
