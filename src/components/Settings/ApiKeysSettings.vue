@@ -210,6 +210,7 @@ import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
 import type { ApiKeyDto } from '@/models/api-key/api-key.dto'
 import type { Role } from '@/models/user.model'
 import { useProfileStore } from '@/store/profile.store'
+import { writeToClipboard } from '@/shared/clipboard.util'
 
 const profileStore = useProfileStore()
 
@@ -330,15 +331,15 @@ async function deleteKey() {
 
 async function copyToken() {
   if (!createdToken.value) return
-  try {
-    await navigator.clipboard.writeText(createdToken.value)
-    copied.value = true
-    setTimeout(() => {
-      copied.value = false
-    }, 2000)
-  } catch (error) {
-    console.error('Failed to copy token:', error)
+  const ok = await writeToClipboard(createdToken.value)
+  if (!ok) {
+    console.error('Failed to copy token: clipboard write was rejected')
+    return
   }
+  copied.value = true
+  setTimeout(() => {
+    copied.value = false
+  }, 2000)
 }
 
 function dismissCreatedDialog() {

@@ -156,6 +156,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { SettingsService } from '@/backend'
 import SettingSection from '@/components/Settings/Shared/SettingSection.vue'
+import { writeToClipboard } from '@/shared/clipboard.util'
 
 const slicerApiKey = ref<string | null>(null)
 const isLoading = ref(true)
@@ -237,16 +238,15 @@ async function deleteApiKey() {
 
 async function copyApiKey() {
   if (!slicerApiKey.value) return
-
-  try {
-    await navigator.clipboard.writeText(slicerApiKey.value)
-    copied.value = true
-    setTimeout(() => {
-      copied.value = false
-    }, 2000)
-  } catch (error) {
-    console.error('Failed to copy to clipboard:', error)
+  const ok = await writeToClipboard(slicerApiKey.value)
+  if (!ok) {
+    console.error('Failed to copy to clipboard: clipboard write was rejected')
+    return
   }
+  copied.value = true
+  setTimeout(() => {
+    copied.value = false
+  }, 2000)
 }
 
 function showSuccessMessage(message: string) {

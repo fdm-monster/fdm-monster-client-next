@@ -1,0 +1,56 @@
+/**
+ * Write `text` to the clipboard, falling back to the legacy
+ * document.execCommand('copy') path when navigator.clipboard is unavailable.
+ *
+ * navigator.clipboard requires a "secure context" (HTTPS or localhost). When
+ * the app is reached over plain HTTP from a LAN IP — common for local dev
+ * served at http://<lan-ip>:3000 — navigator.clipboard is undefined and the
+ * modern path fails silently. The fallback uses a transient textarea + the
+ * legacy copy command, which works in non-secure contexts as long as the
+ * call originates from a real user gesture (click).
+ *
+ * @returns true if the copy succeeded, false otherwise.
+ */
+export async function writeToClipboard(text: string): Promise<boolean> {
+  if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text)
+      return true
+    } catch {
+      // fall through to legacy
+    }
+  }
+
+  if (typeof document === 'undefined') return false
+
+  const ta = document.createElement('textarea')
+  ta.value = text
+  ta.setAttribute('readonly', '')
+  ta.style.position = 'fixed'
+  ta.style.top = '0'
+  ta.style.left = '0'
+  ta.style.width = '1px'
+  ta.style.height = '1px'
+  ta.style.opacity = '0'
+  ta.style.pointerEvents = 'none'
+  document.body.appendChild(ta)
+
+  const selection = document.getSelection()
+  const previousRange = selection?.rangeCount ? selection.getRangeAt(0) : null
+  ta.focus()
+  ta.select()
+
+  let ok = false
+  try {
+    ok = document.execCommand('copy')
+  } catch {
+    ok = false
+  } finally {
+    document.body.removeChild(ta)
+    if (previousRange && selection) {
+      selection.removeAllRanges()
+      selection.addRange(previousRange)
+    }
+  }
+  return ok
+}
