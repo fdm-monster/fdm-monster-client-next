@@ -25,20 +25,23 @@ export async function writeToClipboard(text: string): Promise<boolean> {
 
   const ta = document.createElement('textarea')
   ta.value = text
+  // readonly + position off-screen avoids the iOS Safari keyboard and the
+  // page-zoom that triggers below 12pt font-size on focus
   ta.setAttribute('readonly', '')
-  ta.style.position = 'fixed'
+  ta.style.position = 'absolute'
+  ta.style.left = '-9999px'
   ta.style.top = '0'
-  ta.style.left = '0'
-  ta.style.width = '1px'
-  ta.style.height = '1px'
+  ta.style.fontSize = '12pt'
   ta.style.opacity = '0'
   ta.style.pointerEvents = 'none'
   document.body.appendChild(ta)
 
   const selection = document.getSelection()
   const previousRange = selection?.rangeCount ? selection.getRangeAt(0) : null
+  // iOS Safari ignores ta.select() on a readonly textarea; setSelectionRange
+  // is the documented workaround
   ta.focus()
-  ta.select()
+  ta.setSelectionRange(0, ta.value.length)
 
   let ok = false
   try {
