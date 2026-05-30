@@ -42,11 +42,11 @@ export async function writeToClipboard(text: string): Promise<boolean> {
 
   let ok = false
   try {
-    ok = document.execCommand('copy')
+    ok = document.execCommand('copy') // NOSONAR S1874 - intentional legacy fallback for non-secure contexts
   } catch {
     ok = false
   } finally {
-    document.body.removeChild(ta)
+    ta.remove()
     if (previousRange && selection) {
       selection.removeAllRanges()
       selection.addRange(previousRange)
