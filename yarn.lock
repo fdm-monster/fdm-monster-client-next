@@ -982,7 +982,7 @@ __metadata:
     roboto-fontface: "npm:*"
     sass-embedded: "npm:1.100.0"
     selective-object-reuse: "npm:1.0.6"
-    semver: "npm:7.8.2"
+    semver: "npm:7.8.4"
     socket.io-client: "npm:4.8.3"
     typescript: "npm:6.0.3"
     unplugin-auto-import: "npm:21.0.0"
@@ -8253,6 +8253,15 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10c0/8e8c193fa75b938e5b3ccf6707c6447e4b34f73e493e72b03f3185393489f45e049144052f624217c346d6c6e0a301dda8eeab2f14413e337218ecb1cbd2de16
+  languageName: node
+  linkType: hard
+
+"semver@npm:7.8.4":
+  version: 7.8.4
+  resolution: "semver@npm:7.8.4"
+  bin:
+    semver: bin/semver.js
+  checksum: 10c0/81b7c296fd7927b80f67fa516b75fa1017caac8167795320de28e76ccbc6f7f01763c30ecd10d6a0d8fd089708ab0548a5aebb94b0870e99c2a2b4600a46389b
   languageName: node
   linkType: hard
 
