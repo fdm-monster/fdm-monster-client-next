@@ -103,18 +103,22 @@
             />
 
             <v-text-field
-              v-if="formData.printerType === OctoPrintType"
+              v-if="formData.printerType === OctoPrintType || formData.printerType === MoonrakerType"
               v-model="formData.apiKey"
               :counter="apiKeyRules.length"
               class="ma-1"
-              hint="User or Application Key with 32 or 43 characters (Global API key will fail)"
+              :hint="
+                formData.printerType === OctoPrintType
+                  ? 'User or Application Key with 32 or 43 characters (Global API key will fail)'
+                  : 'Optional — only needed if your Moonraker instance requires authorization (find it under API Key in Mainsail/Fluidd settings)'
+              "
               :label="
-                formData.printerType === OctoPrintType || formData.printerType === MoonrakerType
+                formData.printerType === OctoPrintType
                   ? 'API Key (required)*'
-                  : 'API Key (unsupported)'
+                  : 'API Key (optional)'
               "
               persistent-hint
-              required
+              :required="formData.printerType === OctoPrintType"
             />
 
             <v-text-field
@@ -483,7 +487,7 @@ async function submit() {
 
   const createdPrinter = formData.value as CreatePrinter;
 
-  if (isMoonrakerType(createdPrinter.printerType) || isPrusaLinkType(createdPrinter.printerType) || isBambuType(createdPrinter.printerType)) {
+  if (isPrusaLinkType(createdPrinter.printerType) || isBambuType(createdPrinter.printerType)) {
     createdPrinter.apiKey = "";
   }
 
