@@ -297,17 +297,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-validator-identifier@npm:^8.0.0":
-  version: 8.0.2
-  resolution: "@babel/helper-validator-identifier@npm:8.0.2"
-  checksum: 10c0/629eda2a0a99442a1628bbef5f9fd8e26c1aa21ddbf02760d1c482b737932b1bb21fb1f89aacf9c3cf0642b481b810e39f94b8ae9aa44fc4f5516ebec6798b7b
-  languageName: node
-  linkType: hard
-
 "@babel/helper-validator-identifier@npm:^8.0.0-rc.5":
   version: 8.0.0-rc.5
   resolution: "@babel/helper-validator-identifier@npm:8.0.0-rc.5"
   checksum: 10c0/734bdc5ad5e99155574f68c9b0cf95a8b64d98b551cbe345f4f4b8dce3fbae20e9dec13eb70b8decb88ba1df8a54655f432fd9b741172c2faf4012ec9389b613
+  languageName: node
+  linkType: hard
+
+"@babel/helper-validator-identifier@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "@babel/helper-validator-identifier@npm:8.0.4"
+  checksum: 10c0/9d3c639a42b70613016fda026487a3b8056df918cb40221a48ef666a3bd2574475e315ee509c552baef4bef55a627ee8ea530e9af5b376512ab248c37aeab336
   languageName: node
   linkType: hard
 
@@ -432,13 +432,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:8.0.0":
-  version: 8.0.0
-  resolution: "@babel/types@npm:8.0.0"
+"@babel/types@npm:8.0.4":
+  version: 8.0.4
+  resolution: "@babel/types@npm:8.0.4"
   dependencies:
     "@babel/helper-string-parser": "npm:^8.0.0"
-    "@babel/helper-validator-identifier": "npm:^8.0.0"
-  checksum: 10c0/f4130b88818cf9fd0fb653dd35459f58794018416bc0cee0eccefd364c2d146ae90611ae3ae19d91c2f0bbd1e0e440840832baf9a3d5eb5fed077a52f0bcc001
+    "@babel/helper-validator-identifier": "npm:^8.0.4"
+  checksum: 10c0/c1549372b5544a797c9dd3cfba27c17e0c986cfadb1c4a99246743073e3be99c7c671572326be1739b313a2194e3bfe5a74b1bd213d80c4bbc2c520c8cb4ff1f
   languageName: node
   linkType: hard
 
@@ -950,7 +950,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@fdm-monster/client-next@workspace:."
   dependencies:
-    "@babel/types": "npm:8.0.0"
+    "@babel/types": "npm:8.0.4"
     "@hey-api/client-axios": "npm:0.9.1"
     "@hey-api/openapi-ts": "npm:0.99.0"
     "@mdi/font": "npm:7.4.47"
