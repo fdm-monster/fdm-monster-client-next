@@ -95,7 +95,7 @@
     "selective-object-reuse": "1.0.6",
     "semver": "7.8.5",
     "socket.io-client": "4.8.3",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "unplugin-auto-import": "21.0.0",
     "unplugin-fonts": "2.0.0",
     "unplugin-vue-components": "32.1.0",
