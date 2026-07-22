@@ -48,7 +48,7 @@
     "material-design-icons-iconfont": "6.7.0",
     "roboto-fontface": "*",
     "vue": "3.5.40",
-    "vuetify": "3.12.10"
+    "vuetify": "3.12.11"
   },
   "devDependencies": {
     "@babel/types": "8.0.4",
