@@ -611,6 +611,7 @@ import { useDialog } from '@/shared/dialog.composable'
 import { DialogName } from '@/components/Generic/Dialogs/dialog.constants'
 import { formatFileSize } from "@/utils/file-size.util";
 import { formatDate, formatDuration } from "@/utils/date-time.utils";
+import { writeToClipboard } from '@/shared/clipboard.util'
 
 const jobDetailsDialog = useDialog(DialogName.PrintJobDetailsDialog)
 const { info, error } = useSnackbar()
@@ -764,12 +765,8 @@ const getProgressColor = (progress: number | null | undefined): string => {
 }
 
 const copyToClipboard = async () => {
-  try {
-    await navigator.clipboard.writeText(formattedJson.value)
-    // Could add a toast notification here
-  } catch (err) {
-    console.error('Failed to copy:', err)
-  }
+  const ok = await writeToClipboard(formattedJson.value)
+  if (!ok) console.error('Failed to copy: clipboard write was rejected')
 }
 </script>
 
