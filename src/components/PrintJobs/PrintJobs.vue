@@ -918,7 +918,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, computed, watch } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { PrintJobService, type PrintJobDto, type PrintJobSearchPagedParams } from '@/backend/print-job.service'
 import { PrintQueueService } from '@/backend/print-queue.service'
@@ -1199,6 +1199,12 @@ const debouncedSearch = useDebounceFn(() => {
   loadPrintJobs()
 }, 500)
 
+// Poll the queue tab so routed/added jobs show up without a manual refresh
+const queuePollIntervalMs = 5000
+let queuePollTimer: ReturnType<typeof setInterval> | undefined
+// Tracked separately from loadingQueue so a slow silent poll cannot stack
+let loadingQueueSilent = false
+
 onMounted(async () => {
   // Load printers first
   await printerStore.loadPrinters()
@@ -1212,6 +1218,18 @@ onMounted(async () => {
 
   await loadPrintJobs()
   await loadTags()
+
+  queuePollTimer = globalThis.setInterval(() => {
+    if (activeTab.value === 'queue' && !loadingQueue.value && !loadingQueueSilent) {
+      loadQueue(true)
+    }
+  }, queuePollIntervalMs)
+})
+
+onBeforeUnmount(() => {
+  if (queuePollTimer !== undefined) {
+    globalThis.clearInterval(queuePollTimer)
+  }
 })
 
 const loadPrintJobs = async () => {
@@ -1253,18 +1271,29 @@ const loadPrintJobs = async () => {
 }
 
 // Queue functions
-const loadQueue = async () => {
-  loadingQueue.value = true
+const loadQueue = async (silent = false) => {
+  if (!silent) {
+    loadingQueue.value = true
+  } else {
+    loadingQueueSilent = true
+  }
   try {
     const response = await PrintQueueService.getGlobalQueue(queueCurrentPage.value, queuePageSize.value)
     queueItems.value = response.items
     queueCount.value = response.totalCount
   } catch (error) {
     console.error('Failed to load queue:', error)
-    queueItems.value = []
-    queueCount.value = 0
+    // A transient poll failure should not blank the table the user is looking at
+    if (!silent) {
+      queueItems.value = []
+      queueCount.value = 0
+    }
   } finally {
-    loadingQueue.value = false
+    if (!silent) {
+      loadingQueue.value = false
+    } else {
+      loadingQueueSilent = false
+    }
   }
 }
 
