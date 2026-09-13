@@ -389,13 +389,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:8.0.4":
-  version: 8.0.4
-  resolution: "@babel/types@npm:8.0.4"
+"@babel/types@npm:8.0.5":
+  version: 8.0.5
+  resolution: "@babel/types@npm:8.0.5"
   dependencies:
     "@babel/helper-string-parser": "npm:^8.0.0"
     "@babel/helper-validator-identifier": "npm:^8.0.4"
-  checksum: 10c0/c1549372b5544a797c9dd3cfba27c17e0c986cfadb1c4a99246743073e3be99c7c671572326be1739b313a2194e3bfe5a74b1bd213d80c4bbc2c520c8cb4ff1f
+  checksum: 10c0/23d0178fa77f0a59933eaaacf2d846321899747950f505fee304533c4418ecef1c38038ee22a7e4aee50e03bc38eda905e40f191504cee2d438c921d710e4854
   languageName: node
   linkType: hard
 
@@ -901,7 +901,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@fdm-monster/client-next@workspace:."
   dependencies:
-    "@babel/types": "npm:8.0.4"
+    "@babel/types": "npm:8.0.5"
     "@hey-api/client-axios": "npm:0.9.1"
     "@hey-api/openapi-ts": "npm:0.99.0"
     "@mdi/font": "npm:7.4.47"
