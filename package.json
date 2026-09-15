@@ -67,7 +67,7 @@
     "@types/semver": "7.8.0",
     "@typescript-eslint/eslint-plugin": "8.70.0",
     "@typescript-eslint/parser": "8.70.0",
-    "@vitejs/plugin-vue": "6.0.8",
+    "@vitejs/plugin-vue": "6.0.9",
     "@vitest/ui": "5.0.0",
     "@vitest/web-worker": "5.0.0",
     "@vue/eslint-config-typescript": "14.9.0",
