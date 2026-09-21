@@ -58,7 +58,7 @@
     "@playwright/test": "1.63.0",
     "@sentry/tracing": "7.120.4",
     "@sentry/vite-plugin": "5.4.0",
-    "@sentry/vue": "10.74.0",
+    "@sentry/vue": "10.75.0",
     "@tanstack/vue-query": "5.102.8",
     "@testing-library/vue": "8.1.0",
     "@types/js-yaml": "4.0.9",
