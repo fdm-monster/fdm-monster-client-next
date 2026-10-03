@@ -947,7 +947,7 @@ __metadata:
     sass-embedded: "npm:1.104.1"
     selective-object-reuse: "npm:1.0.6"
     semver: "npm:7.8.5"
-    socket.io-client: "npm:4.8.3"
+    socket.io-client: "npm:4.8.4"
     typescript: "npm:6.0.3"
     unplugin-auto-import: "npm:21.1.0"
     unplugin-fonts: "npm:2.0.0"
@@ -8284,15 +8284,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"socket.io-client@npm:4.8.3":
-  version: 4.8.3
-  resolution: "socket.io-client@npm:4.8.3"
+"socket.io-client@npm:4.8.4":
+  version: 4.8.4
+  resolution: "socket.io-client@npm:4.8.4"
   dependencies:
     "@socket.io/component-emitter": "npm:~3.1.0"
     debug: "npm:~4.4.1"
     engine.io-client: "npm:~6.6.1"
     socket.io-parser: "npm:~4.2.4"
-  checksum: 10c0/76c0d86de0b636d0bf5011cf3425212c900f43dac632db6eb493816920cd035af7ddd92fea9a106b45eb347405953c0414eb3a5d465b180215e46fc8b61420b3
+  checksum: 10c0/53f6266d85e375902f1ca417fb2c9ad523463fcd9c4b7aa66fb31792809c4b0d7b81cb760e9fac1b7cbb7bc4283feb39b37867e8ef2a5dcad99302f71ca2346f
   languageName: node
   linkType: hard
 
