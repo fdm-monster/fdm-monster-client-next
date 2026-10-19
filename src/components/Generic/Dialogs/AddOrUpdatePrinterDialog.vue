@@ -107,14 +107,15 @@
               v-model="formData.apiKey"
               :counter="apiKeyRules.length"
               class="ma-1"
-              hint="User or Application Key with 32 or 43 characters (Global API key will fail)"
-              :label="
-                formData.printerType === OctoPrintType || formData.printerType === MoonrakerType
-                  ? 'API Key (required)*'
-                  : 'API Key (unsupported)'
-              "
+              type="password"
+              :placeholder="isUpdating ? '••••••••••••••••' : undefined"
+              :persistent-placeholder="isUpdating"
+              :hint="isUpdating
+                ? 'Hidden for security — leave blank to keep the current value'
+                : 'User or Application Key with 32 or 43 characters (Global API key will fail)'"
+              :label="isUpdating ? 'API Key (leave blank to keep)' : 'API Key (required)*'"
               persistent-hint
-              required
+              :required="!isUpdating"
             />
 
             <v-text-field
@@ -131,10 +132,17 @@
               v-if="formData.printerType === PrusaLinkType || formData.printerType === BambuType"
               v-model="formData.password"
               class="ma-1"
-              :hint="formData.printerType === BambuType ? 'Access code from printer settings' : 'Password (visit your printer settings)'"
-              :label="formData.printerType === BambuType ? 'AccessCode' : 'Password'"
+              type="password"
+              :placeholder="isUpdating ? '••••••••••••••••' : undefined"
+              :persistent-placeholder="isUpdating"
+              :hint="isUpdating
+                ? 'Hidden for security — leave blank to keep the current value'
+                : (formData.printerType === BambuType ? 'Access code from printer settings' : 'Password (visit your printer settings)')"
+              :label="isUpdating
+                ? (formData.printerType === BambuType ? 'AccessCode (leave blank to keep)' : 'Password (leave blank to keep)')
+                : (formData.printerType === BambuType ? 'AccessCode' : 'Password')"
               persistent-hint
-              required
+              :required="!isUpdating"
             />
           </v-col>
 
@@ -359,6 +367,10 @@ async function onDialogOpened() {
   const printer = printersStore.printer(printerId.value) as CreatePrinter;
   if (printer) {
     formData.value = PrintersService.convertPrinterToCreateForm(printer);
+    // Don't display existing credentials in the edit form. They're restored
+    // from the store at submit time if the user leaves the field blank.
+    formData.value.apiKey = "";
+    formData.value.password = "";
   }
 }
 
@@ -435,10 +447,14 @@ const isValid = () => {
   if (isMoonrakerType(form.printerType)) {
     return form.printerURL?.length && form.name?.length;
   }
+  // When editing, the apiKey/password fields may be left blank to keep the
+  // existing value — submit() will restore them from the store.
   if (isPrusaLinkType(form.printerType) || isBambuType(form.printerType)) {
-    return form.printerURL?.length && form.name?.length && form.username?.length && form.password?.length;
+    const passwordOk = form.password?.length || isUpdating.value;
+    return form.printerURL?.length && form.name?.length && form.username?.length && passwordOk;
   }
-  return form.printerURL?.length && form.name?.length && form.apiKey?.length;
+  const apiKeyOk = form.apiKey?.length || isUpdating.value;
+  return form.printerURL?.length && form.name?.length && apiKeyOk;
 };
 
 async function createPrinter(newPrinterData: CreatePrinter) {
@@ -485,6 +501,16 @@ async function submit() {
 
   if (isMoonrakerType(createdPrinter.printerType) || isPrusaLinkType(createdPrinter.printerType) || isBambuType(createdPrinter.printerType)) {
     createdPrinter.apiKey = "";
+  }
+
+  // On edit, a blank credential field means "keep current". Pull the existing
+  // value from the store before sending the update.
+  if (isUpdating.value && printerId.value) {
+    const existing = printersStore.printer(printerId.value);
+    if (existing) {
+      if (!createdPrinter.apiKey?.length) createdPrinter.apiKey = existing.apiKey ?? "";
+      if (!createdPrinter.password?.length) createdPrinter.password = existing.password ?? "";
+    }
   }
 
   try {
