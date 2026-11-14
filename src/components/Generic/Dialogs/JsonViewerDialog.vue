@@ -26,6 +26,7 @@ import { computed } from "vue";
 import { DialogName } from "./dialog.constants";
 import { useDialog } from "@/shared/dialog.composable";
 import { useSnackbar } from "@/shared/snackbar.composable";
+import { writeToClipboard } from "@/shared/clipboard.util";
 
 const dialogId = DialogName.JsonViewerDialog;
 const dialog = useDialog(dialogId);
@@ -51,12 +52,9 @@ function closeDialog() {
 }
 
 async function copyToClipboard() {
-  try {
-    await navigator.clipboard.writeText(formattedJson.value);
-    snackbar.info("Copied to clipboard");
-  } catch {
-    snackbar.error("Failed to copy to clipboard");
-  }
+  const ok = await writeToClipboard(formattedJson.value);
+  if (ok) snackbar.info("Copied to clipboard");
+  else snackbar.error("Failed to copy to clipboard");
 }
 </script>
 
