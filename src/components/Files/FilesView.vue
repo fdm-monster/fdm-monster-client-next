@@ -301,6 +301,21 @@
               </v-tooltip>
             </v-btn>
             <v-btn
+              icon="alt_route"
+              size="small"
+              variant="text"
+              color="primary"
+              @click="openRoutingDialog(item)"
+            >
+              <v-icon>alt_route</v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top"
+              >
+                Resolve routing
+              </v-tooltip>
+            </v-btn>
+            <v-btn
               icon="analytics"
               size="small"
               variant="text"
@@ -360,6 +375,11 @@
       v-model="queueDialog"
       :file="selectedFileForQueue"
     />
+
+    <PrintFileRoutingDialog
+      v-model="routingDialog"
+      :file="selectedFileForRouting"
+    />
   </v-container>
 </template>
 
@@ -376,6 +396,7 @@ import { formatDate, formatRelativeTime, formatDuration } from '@/utils/date-tim
 import { getPrinterTypeLogo } from '@/shared/printer-types.constants'
 import FileDetailsDialog from './FileDetailsDialog.vue'
 import QueueFileDialog from './QueueFileDialog.vue'
+import PrintFileRoutingDialog from './PrintFileRoutingDialog.vue'
 
 const snackbar = useSnackbar()
 const printerStore = usePrinterStore()
@@ -387,6 +408,8 @@ const detailsDialog = ref(false)
 const selectedFile = ref<FileMetadata | null>(null)
 const queueDialog = ref(false)
 const selectedFileForQueue = ref<FileMetadata | null>(null)
+const routingDialog = ref(false)
+const selectedFileForRouting = ref<FileMetadata | null>(null)
 const uploading = ref(false)
 const isDragging = ref(false)
 const dragDepth = ref(0)
@@ -446,6 +469,11 @@ const loadFiles = async () => {
 const viewFile = (file: FileMetadata) => {
   selectedFile.value = file
   detailsDialog.value = true
+}
+
+const openRoutingDialog = (file: FileMetadata) => {
+  selectedFileForRouting.value = file
+  routingDialog.value = true
 }
 
 const deleteFile = async (file: FileMetadata) => {
