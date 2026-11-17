@@ -71,7 +71,7 @@
     "@vitest/ui": "5.1.0",
     "@vitest/web-worker": "5.1.0",
     "@vue/eslint-config-typescript": "14.9.0",
-    "@vue/test-utils": "2.5.1",
+    "@vue/test-utils": "2.6.0",
     "@vueuse/core": "15.0.0",
     "@vueuse/integrations": "15.0.0",
     "axios": "1.21.1",
