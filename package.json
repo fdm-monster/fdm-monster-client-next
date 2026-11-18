@@ -90,7 +90,7 @@
     "jwt-decode": "4.0.0",
     "pinia": "4.1.0",
     "playwright": "1.65.1",
-    "prettier": "3.9.10",
+    "prettier": "3.10.1",
     "sass-embedded": "1.108.2",
     "selective-object-reuse": "1.0.6",
     "semver": "7.8.6",
