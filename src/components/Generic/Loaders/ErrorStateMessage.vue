@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useOverlayStore } from "@/store/overlay.store";
 import { useSnackbar } from "@/shared/snackbar.composable";
+import { writeToClipboard } from "@/shared/clipboard.util";
 
 const appLoaderStore = useOverlayStore();
 const snackbar = useSnackbar();
@@ -9,12 +10,19 @@ function reloadPage() {
   globalThis.location.reload()
 }
 
-function copyError() {
-  navigator.clipboard.writeText(JSON.stringify(appLoaderStore.errorCaught))
-  snackbar.openInfoMessage({
-    title: 'Copied',
-    subtitle: 'Error copied to clipboard'
-  })
+async function copyError() {
+  const ok = await writeToClipboard(JSON.stringify(appLoaderStore.errorCaught))
+  if (ok) {
+    snackbar.openInfoMessage({
+      title: 'Copied',
+      subtitle: 'Error copied to clipboard'
+    })
+  } else {
+    snackbar.openInfoMessage({
+      title: 'Failed to copy',
+      subtitle: 'Clipboard write was rejected'
+    })
+  }
 }
 </script>
 
