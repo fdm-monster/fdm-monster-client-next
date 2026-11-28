@@ -948,7 +948,7 @@ __metadata:
     vite-plugin-vuetify: "npm:2.1.3"
     vitest: "npm:5.1.2"
     vue: "npm:3.5.46"
-    vue-router: "npm:5.5.1"
+    vue-router: "npm:5.5.3"
     vue-tsc: "npm:3.3.13"
     vuedraggable: "npm:4.1.0"
     vuetify: "npm:3.13.8"
@@ -6895,6 +6895,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"muggle-string@npm:^1.0.4":
+  version: 1.0.5
+  resolution: "muggle-string@npm:1.0.5"
+  checksum: 10c0/c357d7f8bf4641422c6052ddf3500ba267e417828fa3968fbfa5320cf9c56743d510c0693365512509177a5350f928e9f4b3c5c735c5058ab2370bc8e35cbf16
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:^3.3.11":
   version: 3.3.11
   resolution: "nanoid@npm:3.3.11"
@@ -9591,9 +9598,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-router@npm:5.5.1":
-  version: 5.5.1
-  resolution: "vue-router@npm:5.5.1"
+"vue-router@npm:5.5.3":
+  version: 5.5.3
+  resolution: "vue-router@npm:5.5.3"
   dependencies:
     "@vue-macros/common": "npm:^3.1.4"
     "@vue/devtools-api": "npm:^8.2.1"
@@ -9603,7 +9610,7 @@ __metadata:
     local-pkg: "npm:^2.0.0"
     magic-string: "npm:^1.4.5"
     mlly: "npm:^1.8.2"
-    muggle-string: "npm:^0.4.1"
+    muggle-string: "npm:^1.0.4"
     nostics: "npm:^1.3.0"
     pathe: "npm:^2.0.3"
     picomatch: "npm:^4.0.7"
@@ -9613,10 +9620,10 @@ __metadata:
     unplugin-utils: "npm:^0.3.2"
   peerDependencies:
     "@pinia/colada": ">=0.21.2"
-    "@vue/compiler-sfc": ^3.5.34 || ^4.0.0
+    "@vue/compiler-sfc": ^3.5.34 || ^3.6.0-0 || ^4.0.0
     pinia: ^3.0.4 || ^4.0.2
     vite: ^7.3.0 || ^8.0.0
-    vue: ^3.5.34 || ^4.0.0
+    vue: ^3.5.34 || ^3.6.0-0 || ^4.0.0
   peerDependenciesMeta:
     "@pinia/colada":
       optional: true
@@ -9626,7 +9633,7 @@ __metadata:
       optional: true
     vite:
       optional: true
-  checksum: 10c0/8c68e73c3e885c3730ac693f4601840fce947a434492390b7552b667e069f24ad02b73ff6fa405265a5eefc63187b350d44669bb0d1631a02c71839c9b617259
+  checksum: 10c0/381525a5ef6b082776891c7ebd2b102530dd0daf52dfc78eea13ac31d98610ca99227166113568fbb9892e7d0b90ae8adf70deb12588c55931b3b865bb3d25d2
   languageName: node
   linkType: hard
 
