@@ -37,6 +37,12 @@ export class ServerApi {
   static readonly apiKeysRoute = `${ServerApi.base}/api-keys`
   static readonly apiKeyRoute = (id: number) => `${ServerApi.apiKeysRoute}/${id}`
 
+  static readonly printFileRoutingRoute = `${ServerApi.base}/print-file-routing`
+  static readonly resolvePrintFileRoutingRoute = (fileStorageId: string) =>
+    `${ServerApi.printFileRoutingRoute}/resolve/${fileStorageId}`
+  static readonly queuePrintFileRoutingRoute = (fileStorageId: string) =>
+    `${ServerApi.printFileRoutingRoute}/queue/${fileStorageId}`
+
   static readonly deleteTagRoute = (id: number) => `${ServerApi.base}/printer-tag/${id}`
 
   static readonly updateTagNameRoute = (id: number) =>
