@@ -50,11 +50,14 @@ import { useUploadsStore } from './store/uploads.store'
 import { uploadProgressTest } from './utils/test.util'
 import { useAuthStore } from './store/auth.store'
 import { useOverlayStore } from './store/overlay.store'
+import { useFileExplorerUrlSync } from './shared/file-explorer-url-sync.composable'
 import AppLoader from './AppLoader.vue'
 
 const uploadsStore = useUploadsStore()
 const authStore = useAuthStore()
 const appLoaderStore = useOverlayStore()
+
+useFileExplorerUrlSync()
 
 const queuedUploads = uploadsStore.queuedUploads
 
